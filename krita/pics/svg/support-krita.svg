@@ -1,1 +1,41 @@
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="svg8" version="1.1" viewBox="0 0 6.3499999 6.3500002" height="24" width="24"><defs id="defs2"><radialGradient gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.71555 -.02245 .02121 1.62052 -8.282 -182.52)" r="2.3057513" fy="293.16159" fx="2.158057" cy="293.16159" cx="2.158057" id="radialGradient873" xlink:href="#linearGradient869"/><linearGradient id="linearGradient869"><stop id="stop865" offset="0" style="stop-color:#df5b68;stop-opacity:1"/><stop id="stop867" offset="1" style="stop-color:#da4453;stop-opacity:1"/></linearGradient></defs><metadata id="metadata5"><rdf:RDF><cc:Work><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/><dc:title/></cc:Work></rdf:RDF></metadata><g transform="translate(0 -290.65)" id="layer1"><path style="opacity:1;fill:url(#radialGradient873);fill-opacity:1;stroke:#b21b1b;stroke-width:.13229167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" d="M.348 292.942c-.007-.873.534-1.61 1.476-1.67.757-.048 1.351.798 1.351.798s.594-.846 1.35-.798c.943.06 1.484.797 1.477 1.67-.012 1.435-1.577 2.623-2.827 3.422-1.25-.799-2.815-1.987-2.827-3.422z" id="path836"/></g></svg>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog and Dmitrii Utkin</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<path d="M1.31526 8.66269C1.2888 5.36316 3.33352 2.57772 6.89384 2.35094C9.75494 2.16953 12 5.36702 12 5.36702C12 5.36702 14.245 2.16953 17.1023 2.35094C20.6664 2.57772 22.7112 5.36316 22.6847 8.66269C22.6393 14.0863 16.7244 18.5765 12 21.5963C7.27557 18.5765 1.36061 14.0863 1.31526 8.66269Z" fill="url(#paint0_radial_850_2)" stroke="#D72375" stroke-width="0.5"/>
+<defs>
+<radialGradient id="paint0_radial_850_2" cx="0" cy="0" r="1" gradientTransform="matrix(14.9504 -0.195644 0.184838 14.1223 6.19165 7.01403)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FCA2CB"/>
+<stop offset="1" stop-color="#FE4B9C"/>
+</radialGradient>
+</defs>
+</svg>

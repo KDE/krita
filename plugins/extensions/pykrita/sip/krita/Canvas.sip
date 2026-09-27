@@ -17,6 +17,13 @@ class Canvas : QObject
 
     Canvas(const Canvas & __0);
 public:    
+    enum ZoomMode
+    {
+        ZOOM_CONSTANT = 0,
+        ZOOM_PAGE     = 1,
+        ZOOM_WIDTH    = 2,
+        ZOOM_HEIGHT   = 16,
+    };
     bool operator==(const Canvas &other) const;
     bool operator!=(const Canvas &other) const;
 public Q_SLOTS:
@@ -37,5 +44,17 @@ public Q_SLOTS:
     bool levelOfDetailMode() const;
     View *view() const /Factory/;
 Q_SIGNALS:
+    void removed();
+    void offsetChanged();
+    void cursorPositionChanged(const QPoint &position);
+    void documentCursorPositionChanged(const QPointF &position);
+    void sizeChanged(const QSize &size);
+    void documentOffsetChanged(const QPointF &oldOffset, const QPointF &newOffset);
+    void effectiveZoomChanged(qreal effectiveZoom);
+    void zoomStateChanged(const ZoomMode zoomMode, qreal zoom, qreal minZoom, qreal maxZoom);
+    void documentRectInWidgetPixelsChanged(const QRectF &documentRectInWidgetPixels);
+    void rotationChanged(qreal angle);
+    void mirrorChanged(bool mirrorX, bool mirrorY);
+    void stateChanged();
 private:
 };

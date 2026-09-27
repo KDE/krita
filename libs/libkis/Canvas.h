@@ -13,6 +13,7 @@
 
 class KoCanvasBase;
 class KisDisplayColorConverter;
+class KoZoomState;
 
 /**
  * Canvas wraps the canvas inside a view on an image/document.
@@ -24,6 +25,14 @@ class KRITALIBKIS_EXPORT Canvas : public QObject
     Q_OBJECT
 
 public:
+    enum ZoomMode
+    {
+        ZOOM_CONSTANT = 0,  // zoom x %
+        ZOOM_PAGE     = 1,  // zoom to page
+        ZOOM_WIDTH    = 2,  // zoom to width
+        ZOOM_HEIGHT   = 16, // zoom to height
+    };
+
     explicit Canvas(KoCanvasBase *canvas, QObject *parent = 0);
     ~Canvas() override;
 
@@ -114,6 +123,93 @@ public Q_SLOTS:
      */
     View *view() const;
 
+private Q_SLOTS:
+    void emitZoomStateChanged(const KoZoomState &zoomState);
+
+Q_SIGNALS:
+
+/**
+ * Emitted when the canvas is about to be removed.
+ */
+void removed();
+
+/**
+ * Emitted when the canvas is panned.
+ * See \ref documentOffsetChanged
+ */
+void offsetChanged();
+
+/**
+ * Emitted when the cursor is moved over the canvas widget.
+ * @param position the position in view coordinates (pixels).
+ */
+void cursorPositionChanged(const QPoint &position);
+
+/**
+ * Emitted when the cursor is moved over the canvas widget.
+ * @param position the position in document coordinates.
+ *
+ * Use \ref cursorPositionChanged to get the position
+ * in view coordinates.
+ */
+void documentCursorPositionChanged(const QPointF &position);
+
+/**
+ * Emitted when the viewport size changes.
+ * @param size the size in widget pixels.
+ */
+void sizeChanged(const QSize &size);
+
+/**
+ * Emitted whenever the canvas is panned.
+ *
+ * @param point the new top-left point from which the document should
+ * be drawn.
+ */
+void documentOffsetChanged(const QPointF &oldOffset, const QPointF &newOffset);
+
+/**
+ * Emitted whenever the effective zoom level changes.
+ *
+ * @param effectiveZoom In pixel size display mode, zoom * 1 / display scaling.
+ * In print size display mode, zoom * display DPI / image PPI.
+ */
+void effectiveZoomChanged(qreal effectiveZoom);
+
+/**
+ * Emitted whenever the zoom state changes.
+ *
+ * @param zoomMode \ref ZoomMode
+ * @param zoom zoom level, 1.0 is 100%
+ * @param minZoom the minimum allowed zoom level
+ * @param maxZoom the maximum allowed zoom level
+ */
+void zoomStateChanged(const ZoomMode zoomMode, qreal zoom, qreal minZoom, qreal maxZoom);
+
+/**
+ * Emitted whenever the document's position or size within the viewport widget changes.
+ *
+ * @param documentRectInWidgetPixels rect with position of documentOffset and size of document size * effective zoom.
+ */
+void documentRectInWidgetPixelsChanged(const QRectF &documentRectInWidgetPixels);
+
+/**
+ * Emitted when rotation changes.
+ * @param angle the angle in degrees
+ */
+void rotationChanged(qreal angle);
+
+/**
+ * Emitted when mirrored status changes.
+ * @param mirrorX whether the canvas's view is mirrored horizontally (reversed)
+ * @param mirrorY whether the canvas's view is mirrored vertically (inverted)
+ */
+void mirrorChanged(bool mirrorX, bool mirrorY);
+
+/**
+ * Emitted when this canvas's zoom, rotation, mirror, offset, or viewport change.
+ */
+void stateChanged();
 
 private:
 

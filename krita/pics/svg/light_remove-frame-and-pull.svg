@@ -1,0 +1,37 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"  xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<path d="M16 7V9H10V10.5L6.5 8L10 5.5V7H16Z" fill="#D2D2D2"/>
+<path d="M5 11L3 14H5L7 11H5ZM9 5H11L13 2H11L9 5Z" fill="#D2D2D2"/>
+<path d="M7.79785 5H5V9.19727L4 10.6973V10H2V12H3.13184L2.46484 13H1V3H9.13184L7.79785 5ZM12 12H14V10H15V13H6.86816L8.20215 11H11V10H12V12ZM2 9H4V7H2V9ZM2 6H4V4H2V6ZM15 6H14V4H12.8682L13.5352 3H15V6ZM12 6H11.5352L12 5.30273V6Z" fill="#D2D2D2"/>
+</svg>

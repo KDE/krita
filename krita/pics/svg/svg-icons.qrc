@@ -519,5 +519,25 @@
         <file>light_system-information.svg</file>
         <file>dark_document-information.svg</file>
         <file>dark_system-information.svg</file>
+        <file>dark_add-clone-frame.svg</file>
+        <file>dark_add-multiple-frames.svg</file>
+        <file>dark_add-multiple-hold-frames.svg</file>
+        <file>dark_insert-frame-left.svg</file>
+        <file>dark_insert-frame-right.svg</file>
+        <file>dark_insert-hold-frame.svg</file>
+        <file>dark_mirror-frames.svg</file>
+        <file>dark_remove-frame-and-pull.svg</file>
+        <file>dark_remove-hold-frame.svg</file>
+        <file>dark_remove-multiple-hold-frames.svg</file>
+        <file>light_add-clone-frame.svg</file>
+        <file>light_add-multiple-frames.svg</file>
+        <file>light_add-multiple-hold-frames.svg</file>
+        <file>light_insert-frame-left.svg</file>
+        <file>light_insert-frame-right.svg</file>
+        <file>light_insert-hold-frame.svg</file>
+        <file>light_mirror-frames.svg</file>
+        <file>light_remove-frame-and-pull.svg</file>
+        <file>light_remove-hold-frame.svg</file>
+        <file>light_remove-multiple-hold-frames.svg</file>
     </qresource>
 </RCC>

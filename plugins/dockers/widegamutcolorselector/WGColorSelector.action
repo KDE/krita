@@ -63,7 +63,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="wgcs_increase_saturation">
-      <icon></icon>
+      <icon>saturation-increase</icon>
       <text>Increase color saturation</text>
       <whatsThis></whatsThis>
       <toolTip>Increase saturation of the selected color</toolTip>
@@ -73,7 +73,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="wgcs_decrease_saturation">
-      <icon></icon>
+      <icon>saturation-decrease</icon>
       <text>Decrease color saturation</text>
       <whatsThis></whatsThis>
       <toolTip>Decrease saturation of the selected color</toolTip>

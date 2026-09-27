@@ -470,7 +470,7 @@
       <statusTip/>
     </Action>
     <Action name="increase_flow">
-      <icon></icon>
+      <icon>flow-increase</icon>
       <text>Increase Flow</text>
       <whatsThis/>
       <toolTip>Increase brush Flow</toolTip>
@@ -482,7 +482,7 @@
       <statusTip/>
     </Action>
     <Action name="decrease_flow">
-      <icon></icon>
+      <icon>flow-decrease</icon>
       <text>Decrease Flow</text>
       <whatsThis/>
       <toolTip>Decrease brush Flow</toolTip>
@@ -494,7 +494,7 @@
       <statusTip/>
     </Action>
     <Action name="increase_fade">
-      <icon></icon>
+      <icon>fade-increase</icon>
       <text>Increase Fade</text>
       <whatsThis/>
       <toolTip>Increase brush Fade</toolTip>
@@ -506,7 +506,7 @@
       <statusTip/>
     </Action>
     <Action name="decrease_fade">
-      <icon></icon>
+      <icon>fade-decrease</icon>
       <text>Decrease Fade</text>
       <whatsThis/>
       <toolTip>Decrease brush Fade</toolTip>
@@ -518,7 +518,7 @@
       <statusTip/>
     </Action>
     <Action name="increase_scatter">
-      <icon></icon>
+      <icon>scatter-increase</icon>
       <text>Increase Scatter</text>
       <whatsThis/>
       <toolTip>Increase brush Scatter strength</toolTip>
@@ -530,7 +530,7 @@
       <statusTip/>
     </Action>
     <Action name="decrease_scatter">
-      <icon></icon>
+      <icon>scatter-decrease</icon>
       <text>Decrease Scatter</text>
       <whatsThis/>
       <toolTip>Decrease brush Scatter strength</toolTip>
@@ -873,7 +873,7 @@
       <statusTip/>
     </Action>
     <Action name="decrease_brush_size">
-      <icon>brushsize-decrease</icon>
+      <icon>brush-size-decrease</icon>
       <text>Decrease Brush Size</text>
       <whatsThis/>
       <toolTip>Decrease Brush Size</toolTip>
@@ -895,7 +895,7 @@
       <statusTip/>
     </Action>
     <Action name="increase_brush_size">
-      <icon>brushsize-increase</icon>
+      <icon>brush-size-increase</icon>
       <text>Increase Brush Size</text>
       <whatsThis/>
       <toolTip>Increase Brush Size</toolTip>

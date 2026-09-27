@@ -553,5 +553,37 @@
         <file>light_brush-option-slider-3.svg</file>
         <file>light_brush-option-slider-4.svg</file>
         <file>light_brush-option-slider-5.svg</file>
+        <file>dark_brush-size-decrease.svg</file>
+        <file>dark_brush-size-increase.svg</file>
+        <file>dark_fade-decrease.svg</file>
+        <file>dark_fade-increase.svg</file>
+        <file>dark_flow-decrease.svg</file>
+        <file>dark_flow-increase.svg</file>
+        <file>dark_font-decrease.svg</file>
+        <file>dark_font-increase.svg</file>
+        <file>dark_lightness-decrease.svg</file>
+        <file>dark_lightness-increase.svg</file>
+        <file>dark_opacity-decrease.svg</file>
+        <file>dark_opacity-increase.svg</file>
+        <file>dark_saturation-decrease.svg</file>
+        <file>dark_saturation-increase.svg</file>
+        <file>dark_scatter-decrease.svg</file>
+        <file>dark_scatter-increase.svg</file>
+        <file>light_brush-size-decrease.svg</file>
+        <file>light_brush-size-increase.svg</file>
+        <file>light_fade-decrease.svg</file>
+        <file>light_fade-increase.svg</file>
+        <file>light_flow-decrease.svg</file>
+        <file>light_flow-increase.svg</file>
+        <file>light_font-decrease.svg</file>
+        <file>light_font-increase.svg</file>
+        <file>light_lightness-decrease.svg</file>
+        <file>light_lightness-increase.svg</file>
+        <file>light_opacity-decrease.svg</file>
+        <file>light_opacity-increase.svg</file>
+        <file>light_saturation-decrease.svg</file>
+        <file>light_saturation-increase.svg</file>
+        <file>light_scatter-decrease.svg</file>
+        <file>light_scatter-increase.svg</file>
     </qresource>
 </RCC>

@@ -343,7 +343,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     btnNewsOptions->setFlat(true);
 
     supportKritaIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("support-krita")));
-    userManualIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("bookmarks")));
+    userManualIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("help-contents")));
     gettingStartedIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("get_started")));
     userCommunityIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("comunity")));
     kritaWebsiteIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("website")));

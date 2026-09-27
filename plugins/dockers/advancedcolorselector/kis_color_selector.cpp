@@ -85,8 +85,10 @@ void KisColorSelector::setConfiguration(KisColorSelectorConfiguration conf)
         m_mainComponent->setGeometry(0, 0, 0, 0);
         m_subComponent->setGeometry(0, 0, 0, 0);
 
-        m_mainComponent->disconnect();
-        m_subComponent->disconnect();
+        m_mainComponent->disconnect(m_subComponent);
+        m_subComponent->disconnect(m_mainComponent);
+        m_mainComponent->disconnect(m_signalCompressor);
+        m_subComponent->disconnect(m_signalCompressor);
     }
 
     switch (m_configuration.mainType) {

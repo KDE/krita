@@ -56,15 +56,15 @@ void KisMirrorManager::setup(KisKActionCollection * collection)
 void KisMirrorManager::setView(QPointer<KisView> imageView)
 {
     if (m_imageView) {
-        m_mirrorCanvas->disconnect();
-        m_mirrorCanvasAroundCursor->disconnect();
-        m_mirrorCanvasAroundCanvas->disconnect();
+        m_mirrorCanvas->disconnect(SIGNAL(toggled(bool)));
+        m_mirrorCanvasAroundCursor->disconnect(SIGNAL(toggled(bool)));
+        m_mirrorCanvasAroundCanvas->disconnect(SIGNAL(toggled(bool)));
 
         m_imageView->document()->disconnect(this);
 
         KisMirrorAxisSP canvasDecoration = this->decoration();
         if (canvasDecoration) {
-            canvasDecoration->disconnect();
+            canvasDecoration->disconnect(this);
         }
     }
 

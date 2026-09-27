@@ -45,8 +45,8 @@ void KisDecorationsManager::setView(QPointer<KisView> imageView)
     // set view is called twice when a document is open, so we need to disconnect the original signals
     // if m_imageView has already been created. This prevents double signal events firing
     if (m_imageView) {
-        m_toggleAssistant->disconnect();
-        m_togglePreview->disconnect();
+        m_toggleAssistant->disconnect(SIGNAL(triggered()));
+        m_togglePreview->disconnect(SIGNAL(triggered()));
 
         if (assistantsDecoration()) {
             assistantsDecoration()->disconnect(this);

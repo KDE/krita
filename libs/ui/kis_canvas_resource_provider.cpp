@@ -43,7 +43,6 @@ KisCanvasResourceProvider::KisCanvasResourceProvider(KisViewManager * view)
 
 KisCanvasResourceProvider::~KisCanvasResourceProvider()
 {
-    disconnect(); // in case Qt gets confused
 }
 
 KoCanvasResourceProvider* KisCanvasResourceProvider::resourceManager()

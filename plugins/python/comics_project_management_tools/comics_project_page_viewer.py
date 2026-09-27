@@ -149,19 +149,19 @@ class comics_project_page_viewer(QDialog):
         if 'readingDirection' in self.setupDictionary:
             if self.setupDictionary['readingDirection'] == "leftToRight":
                 self.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
-                self.left_shortcut.disconnect()
-                self.right_shortcut.disconnect()
+                self.left_shortcut.activated.disconnect()
+                self.right_shortcut.activated.disconnect()
                 self.left_shortcut.activated.connect(self.prev_page)
                 self.right_shortcut.activated.connect(self.next_page)
             else:
-                self.left_shortcut.disconnect()
-                self.right_shortcut.disconnect()
+                self.left_shortcut.activated.disconnect()
+                self.right_shortcut.activated.disconnect()
                 self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
                 self.left_shortcut.activated.connect(self.next_page)
                 self.right_shortcut.activated.connect(self.prev_page)
         else:
-            self.left_shortcut.disconnect()
-            self.right_shortcut.disconnect()
+            self.left_shortcut.activated.disconnect()
+            self.right_shortcut.activated.disconnect()
             self.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
             self.left_shortcut.activated.connect(self.prev_page)
             self.right_shortcut.activated.connect(self.next_page)

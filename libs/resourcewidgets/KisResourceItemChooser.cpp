@@ -295,7 +295,6 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
 KisResourceItemChooser::~KisResourceItemChooser()
 {
-    disconnect();
     delete d;
 }
 

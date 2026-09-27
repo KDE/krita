@@ -556,9 +556,9 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         connect(d->helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
     }
 
-    // KDE' libs 4''s help contents action is broken outside kde, for some reason... We can handle it just as easily ourselves
+    // Custom handling of help action for manual URL outside docs.kde.org.
     QAction *helpAction = actionCollection()->action("help_contents");
-    helpAction->disconnect();
+    helpAction->disconnect(SIGNAL(triggered()));
     connect(helpAction, SIGNAL(triggered()), this, SLOT(showManual()));
 
 #if 0

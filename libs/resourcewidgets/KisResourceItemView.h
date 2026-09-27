@@ -34,7 +34,6 @@ public:
     };
 
     explicit KisResourceItemView(QWidget *parent = 0);
-    ~KisResourceItemView() override { disconnect(); }
 
 public Q_SLOTS:
     void slotScrollerStateChange(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }

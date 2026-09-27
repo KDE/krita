@@ -358,7 +358,6 @@ KisImage::~KisImage()
     waitForDone();
 
     delete m_d;
-    disconnect(); // in case Qt gets confused
 }
 
 KisImageSP KisImage::fromQImage(const QImage &image, KisUndoStore *undoStore)

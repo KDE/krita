@@ -709,7 +709,7 @@ void KisDlgAnimationRenderer::updateWarnings()
     if (warnings.isEmpty()) {
         m_page->lblWarnings->hide();
     } else {
-        QString text = QString("<p><b>%1</b>").arg(i18n("Warning(s):"));
+        QString text = QString("<p><b>%1</b>").arg(i18np("Warning:", "Warnings:", warnings.size()));
         text.append("<ul>");
         Q_FOREACH (const QString &warning, warnings) {
             text.append("<li>");

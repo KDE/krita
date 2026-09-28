@@ -359,6 +359,35 @@ The usage of custom patches in Qt
        be tracked on CI via `CMakeConfigureLog.yaml` file, which is available as an
        artifact of the build.
 
+On menu action names: "Group layers" vs "Group layer(s)"
+
+    tldr; use simple plural form "Group layers" instead of "Group layer(s)"
+          when you don't know how many items the action is going to process
+
+    Sometimes, the meaning of a user-facing action depends on the actual
+    number of items the user selected, e.g. the number of selected layers
+    or vector shapes. So we cannot prepare a precise wording for this
+    action upfront. In this case, use the following rules to name the
+    action:
+
+    * if an action is defined in an `.action` file, i.e. present
+      `Configure Shortcuts` dialog, just use a simple plural form
+      "Group Layers".
+
+      Do not use the form with "(s)" in the end (e.g. "Group layer(s)"),
+      because it is impossible to translate that correctly into
+      non-English languages.
+
+      Also try to avoid adjusting the name of such action at runtime
+      using `i18ncp` call, because it will also change the name of the
+      action in `Configure Shortcuts` dialog.
+
+    * if the action is created at runtime, and is not present
+      in `Configure Shortcuts` dialog, just use `i18np` to handle
+      plural forms correctly:
+
+      i18ncp("@action:inmenu", "Group layer", "Group layers")
+
 With Krita now supporting Python scripting, we need guidelines for these as well.
 These guidelines are preliminary and may be further refined in the future.
 

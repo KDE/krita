@@ -557,7 +557,7 @@ void RecorderExport::setup()
                                         .arg(settings->imageSize.height())
                                         .arg(i18nc("Pixel dimension suffix", "px"))
                                         .arg(settings->framesCount)
-                                        .arg(i18nc("The suffix after number of frames", "frame(s)"))
+                                        .arg(i18ncp("The suffix after number of frames", "frame", "frames", settings->framesCount))
                                        );
     }
 

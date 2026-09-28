@@ -2418,7 +2418,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     if (openglWarnings.isEmpty()) {
         grpOpenGLWarnings->setVisible(false);
     } else {
-        QString text = QString("<p><b>%1</b>").arg(i18n("Warning(s):"));
+        QString text = QString("<p><b>%1</b>").arg(i18np("Warning:", "Warnings:", openglWarnings.size()));
         text.append("<ul>");
         Q_FOREACH (const QString &warning, openglWarnings) {
             text.append("<li>");

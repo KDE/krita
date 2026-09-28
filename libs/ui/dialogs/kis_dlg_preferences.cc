@@ -2983,6 +2983,11 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
             cfg.setCanvasSurfaceBitDepthMode(m_colorSettings->m_canvasSurfaceBitDepth->currentData()
                                                  .value<ColorSettingsTab::CanvasSurfaceBitDepthMode>());
         }
+        else {
+            for (int i = 0; i < QApplication::screens().count(); ++i) {
+                cfg.setMonitorProfile(i, m_colorSettings->m_monitorProfileWidgets[i]->currentUnsqueezedText());
+            }
+        }
         cfg.setUseDefaultColorSpace(m_colorSettings->m_page->useDefColorSpace->isChecked());
         if (cfg.useDefaultColorSpace())
         {

@@ -11,6 +11,7 @@
 #include <KLocalizedString>
 #include <QFile>
 #include <QStandardPaths>
+#include <QLabel>
 
 #include <kis_debug.h>
 #include <kis_global.h>
@@ -18,6 +19,10 @@
 #include "kis_splash_screen.h"
 #include "ui_wdgaboutapplication.h"
 #include <KisPortingUtils.h>
+
+#ifdef Q_OS_MACOS
+#include "libs/macosutils/KisMacosEntitlements.h"
+#endif
 
 class Q_DECL_HIDDEN WdgAboutApplication : public QWidget, public Ui::WdgAboutApplication
 {
@@ -37,11 +42,43 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     WdgAboutApplication *wdgTab = new WdgAboutApplication(this);
 
-    KisSplashScreen *splash = new KisSplashScreen(true);
-    splash->setWindowFlags(Qt::Widget);
-    splash->displayLinks(true);
+    KisSplashScreen *splash = new KisSplashScreen(320, this, Qt::Widget);
+
+    QStringList lblLinksText;
+    lblLinksText    << "<html>"
+                    << "<head/>"
+                    << "<body><table style=\"width:100%\" cellpadding=\"30\"><tr><td>"
+                    << i18n("<p><b>Using Krita</b></p>");
+
+#ifdef Q_OS_MACOS
+    // macOS store version should not contain external links containing donation buttons or forms
+    if (!KisMacosEntitlements().sandbox()) {
+#endif
+
+        lblLinksText    << i18n("<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline;\">Support Krita's Development!</span></a></p>")
+                        << i18n("<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;\">Krita Website</span></a></p>");
+#ifdef Q_OS_MACOS
+    }
+#endif
+    lblLinksText    << i18n("<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style=\" text-decoration: underline;\">Getting Started</span></a></p>")
+                    << i18n("<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline;\">Manual</span></a></p>")
+                    << "</td><td>"
+                    << i18n("<p><b>Coding Krita</b></p>")
+                    << i18n("<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: underline;\">User Community</span></a></p>")
+                    << i18n("<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-decoration: underline;;\">Source Code</span></a></p>")
+                    << i18n("<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" text-decoration: underline;\">Scripting API</span></a></p>")
+                    << i18n("<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" text-decoration: underline;;\">Scripting School</span></a></p>")
+                    << "</td></tr></table></body>"
+                    << "</html>";
+
+
+    QLabel* lblLinks = new QLabel();
+    lblLinks->setTextFormat(Qt::RichText);
+    lblLinks->setText(lblLinksText.join(""));
+    lblLinks->setOpenExternalLinks(true);
 
     wdgTab->aboutTab->layout()->addWidget(splash);
+    wdgTab->aboutTab->layout()->addWidget(lblLinks);
 
     QString authors = i18n("<html>"
                           "<head/>"

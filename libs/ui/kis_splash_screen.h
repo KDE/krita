@@ -10,14 +10,13 @@
 #include <QWidget>
 #include <QTimer>
 
-#include "ui_wdgsplash.h"
-
 class QPixmap;
 class QSvgWidget;
+class QLabel;
 
 #include "kritaui_export.h"
 
-class KRITAUI_EXPORT KisSplashScreen : public QWidget, public Ui::WdgSplash
+class KRITAUI_EXPORT KisSplashScreen : public QWidget
 {
     Q_OBJECT
 public:
@@ -26,36 +25,25 @@ public:
         QString artistCredit;
     };
 
-    explicit KisSplashScreen(bool themed = false, QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit KisSplashScreen(int height, QWidget *parent = 0,
+        Qt::WindowFlags f = Qt::WindowFlags(Qt::SplashScreen | Qt::FramelessWindowHint));
 
     void repaint();
 
     void show();
-    void displayLinks(bool show);
-    void displayRecentFiles(bool show);
 
     void setLoadingText(QString text);
 
     static Source getImageSource();
 
-private Q_SLOTS:
-
-    void toggleShowAtStartup(bool toggle);
-    void linkClicked(const QString &link);
-
-protected:
-    void resizeEvent(QResizeEvent *event) override;
-
 private:
-    void updateText();
-    QString colorString() const;
-    void updateSplashImage();
+    void updateSplashImage(const int height);
 
 private:
 
     QTimer m_timer;
-    bool m_themed;
     bool m_displayLinks { false };
+    QLabel* m_lblSplash;
     QSvgWidget *m_brandingSvg;
     QSvgWidget *m_bannerSvg;
     QLabel *m_loadingTextLabel;

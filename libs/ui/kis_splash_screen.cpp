@@ -17,6 +17,8 @@
 #include <QScreen>
 #include <QWindow>
 #include <QSvgWidget>
+#include <QVBoxLayout>
+#include <QLabel>
 
 #include <KisPart.h>
 #include <KisApplication.h>
@@ -28,10 +30,6 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
-#ifdef Q_OS_MACOS
-#include "libs/macosutils/KisMacosEntitlements.h"
-#endif
-
 static void addDropShadow(QWidget *widget)
 {
     QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(widget);
@@ -41,70 +39,51 @@ static void addDropShadow(QWidget *widget)
     widget->setGraphicsEffect(effect);
 }
 
-KisSplashScreen::KisSplashScreen(bool themed, QWidget *parent, Qt::WindowFlags f)
-    : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)
-      , m_themed(themed)
+KisSplashScreen::KisSplashScreen(int height, QWidget *parent, Qt::WindowFlags f)
+    : QWidget(parent, f)
       , m_versionHtml(qApp->applicationVersion().toHtmlEscaped())
 {
-
-    setupUi(this);
+    setWindowTitle(i18n("Krita"));
 #ifndef Q_OS_MACOS
     setWindowIcon(KisIconUtils::loadIcon("krita-branding"));
 #endif
 
-    m_loadingTextLabel = new QLabel(lblSplash);
+    setLayout(new QVBoxLayout());
+    layout()->setContentsMargins(QMargins());
+    m_lblSplash = new QLabel();
+    m_lblSplash->setFrameShape(QFrame::NoFrame);
+    layout()->addWidget(m_lblSplash);
+
+    m_loadingTextLabel = new QLabel(m_lblSplash);
     m_loadingTextLabel->setTextFormat(Qt::RichText);
     m_loadingTextLabel->setStyleSheet(QStringLiteral("QLabel { color: #fff; background-color: transparent; }"));
     m_loadingTextLabel->setAlignment(Qt::AlignRight | Qt::AlignTop);
     addDropShadow(m_loadingTextLabel);
 
-    m_brandingSvg = new QSvgWidget(QStringLiteral(":/krita-branding.svgz"), lblSplash);
-    m_bannerSvg = new QSvgWidget(QStringLiteral(":/splash/banner.svg"), lblSplash);
+    m_brandingSvg = new QSvgWidget(QStringLiteral(":/krita-branding.svgz"), m_lblSplash);
+    m_bannerSvg = new QSvgWidget(QStringLiteral(":/splash/banner.svg"), m_lblSplash);
     addDropShadow(m_bannerSvg);
 
-    m_artCreditsLabel = new QLabel(lblSplash);
+    m_artCreditsLabel = new QLabel(m_lblSplash);
     m_artCreditsLabel->setTextFormat(Qt::PlainText);
     m_artCreditsLabel->setStyleSheet(QStringLiteral("QLabel { color: #fff; background-color: transparent; font: 10pt; }"));
     m_artCreditsLabel->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     addDropShadow(m_artCreditsLabel);
 
-    updateSplashImage();
-    setLoadingText(QString());
+    updateSplashImage(height);
+    setLoadingText(QString()); // the version string is set here too
 
-    bnClose->hide();
-    connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));
-    chkShowAtStartup->hide();
-    connect(chkShowAtStartup, SIGNAL(toggled(bool)), this, SLOT(toggleShowAtStartup(bool)));
-
-    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
-    bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
-    chkShowAtStartup->setChecked(hideSplash);
-
-    connect(lblRecent, SIGNAL(linkActivated(QString)), SLOT(linkClicked(QString)));
     connect(&m_timer, SIGNAL(timeout()), SLOT(raise()));
-
-    // hide these labels by default
-    displayLinks(false);
-    displayRecentFiles(false);
 
     m_timer.setSingleShot(true);
     m_timer.start(10);
 }
 
-void KisSplashScreen::updateSplashImage()
+void KisSplashScreen::updateSplashImage(const int height)
 {
-    constexpr int SPLASH_HEIGHT_LOADING = 480;
-    constexpr int SPLASH_HEIGHT_ABOUT = 320;
-
-    int splashHeight;
-    if (m_displayLinks) {
-        splashHeight = SPLASH_HEIGHT_ABOUT;
-    } else {
-        splashHeight = SPLASH_HEIGHT_LOADING;
-    }
-    const int bannerHeight = splashHeight * 0.16875;
-    const int marginTop = splashHeight * 0.05;
-    const int marginRight = splashHeight * 0.1;
+    const int bannerHeight = height * 0.16875;
+    const int marginTop = height * 0.05;
+    const int marginRight = height * 0.1;
 
     Source source = getImageSource();
     QPixmap img(source.resourcePath);
@@ -112,20 +91,14 @@ void KisSplashScreen::updateSplashImage()
     if (img.isNull() || img.height() == 0) return;
 
     // Preserve aspect ratio of splash.
-    const int height = splashHeight;
     const int width = height * img.width() / img.height();
 
-    setFixedWidth(width);
-    setFixedHeight(height);
-    lblSplash->setFixedWidth(width);
-    lblSplash->setFixedHeight(height);
+    setFixedSize(width, height);
+    m_lblSplash->setFixedSize(width, height);
 
-    // Get a downscaled pixmap of the splash.
-    const int pixelWidth = width * devicePixelRatioF();
-    const int pixelHeight = height * devicePixelRatioF();
-    img = img.scaled(pixelWidth, pixelHeight, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-    img.setDevicePixelRatio(devicePixelRatioF());
-    lblSplash->setPixmap(img);
+    // Let scaledContents downscale to the fixedSize
+    m_lblSplash->setScaledContents(true);
+    m_lblSplash->setPixmap(img);
 
     // Align banner to top-left with margin.
     m_bannerSvg->setFixedHeight(bannerHeight);
@@ -145,118 +118,6 @@ void KisSplashScreen::updateSplashImage()
     m_artCreditsLabel->setFixedWidth(m_loadingTextLabel->width());
     m_artCreditsLabel->setFixedHeight(20);
     m_artCreditsLabel->move(m_loadingTextLabel->x(), height - marginTop - m_artCreditsLabel->height());
-
-    if (m_displayLinks) {
-        setFixedSize(sizeHint());
-    }
-}
-
-void KisSplashScreen::resizeEvent(QResizeEvent *event)
-{
-    QWidget::resizeEvent(event);
-    updateText();
-}
-
-void KisSplashScreen::updateText()
-{
-    QString color = colorString();
-
-    KConfigGroup cfg2( KSharedConfig::openConfig(), "RecentFiles");
-    int i = 1;
-
-    QString recent = i18n("<html>"
-                          "<head/>"
-                          "<body>"
-                          "<p><b><span style=\" color:%1;\">Recent Files</span></b></p>", color);
-
-    QString path;
-    QStringList recentfiles;
-
-    QFontMetrics metrics(lblRecent->font());
-
-    do {
-        path = cfg2.readPathEntry(QString("File%1").arg(i), QString());
-        if (!path.isEmpty()) {
-            QString name = cfg2.readPathEntry(QString("Name%1").arg(i), QString());
-            QUrl url(path);
-            if (name.isEmpty()) {
-                name = url.fileName();
-            }
-
-            name = metrics.elidedText(name, Qt::ElideMiddle, lblRecent->width());
-
-            if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
-                recentfiles.insert(0, QString("<p><a href=\"%1\"><span style=\"color:%3;\">%2</span></a></p>").arg(path).arg(name).arg(color));
-            }
-        }
-
-        i++;
-    } while (!path.isEmpty() || i <= 8);
-
-    recent += recentfiles.join("\n");
-    recent += "</body>"
-        "</html>";
-    lblRecent->setText(recent);
-}
-
-void KisSplashScreen::displayLinks(bool show) {
-
-    if (show) {
-        QString color = colorString();
-        QStringList lblLinksText;
-        lblLinksText    << "<html>"
-                        << "<head/>"
-                        << "<body><table style=\"width:100%\" cellpadding=\"30\"><tr><td>"
-                        << i18n("<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>",color);
-
-#ifdef Q_OS_MACOS
-        // macOS store version should not contain external links containing donation buttons or forms
-        if (!KisMacosEntitlements().sandbox()) {
-#endif
-
-            lblLinksText    << i18n("<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita's Development!</span></a></p>",color)
-                            << i18n("<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>",color);
-#ifdef Q_OS_MACOS
-        }
-#endif
-        lblLinksText    << i18n("<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>",color)
-                        << i18n("<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>",color)
-                        << "</td><td>"
-                        << i18n("<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>",color)
-                        << i18n("<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>",color)
-                        << i18n("<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>",color)
-                        << i18n("<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" text-decoration: underline; color:%1;\">Scripting API</span></a></p>",color)
-                        << i18n("<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>",color)
-                        << "</td></tr></table></body>"
-                        << "</html>";
-
-
-        lblLinks->setTextFormat(Qt::RichText);
-        lblLinks->setText(lblLinksText.join(""));
-
-        filesLayout->setContentsMargins(10,10,10,10);
-        actionControlsLayout->setContentsMargins(5,5,5,5);
-
-    } else {
-        // eliminating margins here allows for the splash screen image to take the entire area with nothing underneath
-        filesLayout->setContentsMargins(0,0,0,0);
-        actionControlsLayout->setContentsMargins(0,0,0,0);
-    }
-
-    lblLinks->setVisible(show);
-
-    updateText();
-
-    if (m_displayLinks != show) {
-        m_displayLinks = show;
-        updateSplashImage();
-    }
-}
-
-
-void KisSplashScreen::displayRecentFiles(bool show) {
-    lblRecent->setVisible(show);
-    line->setVisible(show);
 }
 
 void KisSplashScreen::setLoadingText(QString text)
@@ -296,18 +157,6 @@ KisSplashScreen::Source KisSplashScreen::getImageSource()
     return Source{resourcePath, artistCredit};
 }
 
-
-QString KisSplashScreen::colorString() const
-{
-    QString color = "#FFFFFF";
-    if (m_themed && qApp->palette().window().color().value() > 100) {
-        color = "#000000";
-    }
-
-    return color;
-}
-
-
 void KisSplashScreen::repaint()
 {
     QWidget::repaint();
@@ -332,9 +181,6 @@ void KisSplashScreen::show()
         if (!screen) {
             screen = QApplication::primaryScreen();
         }
-        // Reinitialize the splash image as the screen may have a different
-        // devicePixelRatio.
-        updateSplashImage();
         QRect r(QPoint(), size());
         move(screen->availableGeometry().center() - r.center());
     }
@@ -344,18 +190,4 @@ void KisSplashScreen::show()
     m_timer.setSingleShot(true);
     m_timer.start(1);
     QWidget::show();
-}
-
-void KisSplashScreen::toggleShowAtStartup(bool toggle)
-{
-    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
-    cfg.writeEntry("HideSplashAfterStartup", toggle);
-}
-
-void KisSplashScreen::linkClicked(const QString &link)
-{
-    KisPart::instance()->openExistingFile(link);
-    if (isWindow()) {
-        close();
-    }
 }

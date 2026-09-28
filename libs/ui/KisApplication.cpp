@@ -839,13 +839,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
         }
     }
 
-    // fixes BUG:369308  - Krita crashing on splash screen when loading.
-    // trying to open a file before Krita has loaded can cause it to hang and crash
-    if (d->splashScreen) {
-        d->splashScreen->displayLinks(true);
-        d->splashScreen->displayRecentFiles(true);
-    }
-
     Q_FOREACH(const QByteArray &message, d->earlyRemoteArguments) {
         executeRemoteArguments(message, d->mainWindow);
     }

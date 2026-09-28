@@ -671,7 +671,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     layerstyles/wdgTexture.ui
     layerstyles/wdgKisLayerStyleAngleSelector.ui
 
-    wdgsplash.ui
     input/wintab/drawpile_tablettester/tablettest.ui
 
     animation/wdg_animationrenderer.ui

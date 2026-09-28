@@ -805,7 +805,7 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
     app.setDesktopFileName(QStringLiteral("org.kde.krita"));
 
     if (!args.noSplash()) {
-        QWidget *splash = new KisSplashScreen();
+        QWidget *splash = new KisSplashScreen(480);
         app.setSplashScreen(splash);
     }
 

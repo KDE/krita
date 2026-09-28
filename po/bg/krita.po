@@ -70754,9 +70754,3 @@ msgstr ""
 "Превключване между пълен обхват и подмножество.\n"
 "Пълен обхват: [%1, %2]\n"
 "Подмножество: [%3, %4]"
-
-#~ msgid "Layer name:"
-#~ msgstr "Име на слой:"
-
-#~ msgid "No configuration options are available for this filter"
-#~ msgstr "Няма опции за настройване на този филтър"

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-26 00:43+0000\n"
-"PO-Revision-Date: 2026-09-18 19:14+0300\n"
+"PO-Revision-Date: 2026-09-26 20:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -31337,7 +31337,7 @@ msgstr "En düşük aydınlık:"
 #: libs/ui/forms/wdgimageproperties.ui:634
 #, kde-format
 msgid "Annotations"
-msgstr "Bilgi Notları"
+msgstr "Ek Açıklamalar"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDescription)
 #. i18n: ectx: property (text), widget (QLabel, m_lblOcioVersion)
@@ -57276,7 +57276,7 @@ msgstr "%1 katmanı için piksel verisi kaydedilemedi."
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:128
 #, kde-format
 msgid "Failed to save the annotations for layer %1."
-msgstr "%1 katmanı için bilgi notları kaydedilemedi."
+msgstr "%1 katmanı için ek açıklamalar kaydedilemedi."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:150
 #, kde-format
@@ -57403,7 +57403,7 @@ msgstr "Anahtar kareler kaydedilemedi."
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save annotations."
-msgstr "Bilgi notları kaydedilemedi."
+msgstr "Ek açıklamalar kaydedilemedi."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:553
 #, kde-format
@@ -57421,7 +57421,7 @@ msgstr "Ekran provası renk profili kaydedilemedi."
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save additional annotations."
-msgstr "Ek bilgi notları kaydedilemedi."
+msgstr "Ek açıklamalar kaydedilemedi."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:651
 #, kde-format

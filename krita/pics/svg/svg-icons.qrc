@@ -571,5 +571,9 @@
         <file>light_paint-order-marker-fill-stroke.svg</file>
         <file>dark_paint-order-marker-stroke-fill.svg</file>
         <file>light_paint-order-marker-stroke-fill.svg</file>
+        <file>light_document-information.svg</file>
+        <file>light_system-information.svg</file>
+        <file>dark_document-information.svg</file>
+        <file>dark_system-information.svg</file>
     </qresource>
 </RCC>

@@ -173,7 +173,7 @@
       <statusTip/>
     </Action>
     <Action name="sysinfo">
-      <icon/>
+      <icon>system-information</icon>
       <text>Show system information for bug reports.</text>
       <whatsThis/>
       <toolTip>Show system information for bug reports.</toolTip>

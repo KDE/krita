@@ -209,7 +209,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="file_documentinfo">
-      <icon>configure</icon>
+      <icon>document-information</icon>
       <text>&amp;Document Information</text>
       <whatsThis></whatsThis>
       <toolTip>Document Information</toolTip>

@@ -816,20 +816,8 @@ QString KisConfig::monitorProfile(int screen) const
     return profile;
 }
 
-QString KisConfig::monitorForScreen(int screen, const QString &defaultMonitor, bool defaultValue) const
+void KisConfig::setMonitorProfile(int screen, const QString & monitorProfile) const
 {
-    return (defaultValue ? defaultMonitor
-                         : m_cfg.readEntry(QString("monitor_for_screen_%1").arg(screen), defaultMonitor));
-}
-
-void KisConfig::setMonitorForScreen(int screen, const QString& monitor)
-{
-    m_cfg.writeEntry(QString("monitor_for_screen_%1").arg(screen), monitor);
-}
-
-void KisConfig::setMonitorProfile(int screen, const QString & monitorProfile, bool override) const
-{
-    m_cfg.writeEntry("monitorProfile/OverrideX11", override);
     m_cfg.writeEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), monitorProfile);
     if (!getScreenStringIdentfier(screen).isEmpty()) {
         m_cfg.writeEntry("monitorProfile" + getScreenStringIdentfier(screen), monitorProfile);

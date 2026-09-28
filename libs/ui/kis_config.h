@@ -210,10 +210,7 @@ public:
 
     /// get the profile the user has selected for the given screen
     QString monitorProfile(int screen) const;
-    void setMonitorProfile(int screen, const QString & monitorProfile, bool override) const;
-
-    QString monitorForScreen(int screen, const QString &defaultMonitor, bool defaultValue = true) const;
-    void setMonitorForScreen(int screen, const QString& monitor);
+    void setMonitorProfile(int screen, const QString & monitorProfile) const;
 
     /// Get the actual profile to be used for the given screen, which is
     /// either the screen profile set by the color management system or

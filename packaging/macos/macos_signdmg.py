@@ -222,7 +222,7 @@ def fix_bundle(bundle_root: pathlib.Path, bundle_version: str="", for_store: boo
 
 def fix_krita_plists(krita_app: pathlib.Path, bundle_id: str, version: str, build_version: str):
 
-    macosx_deployment_target = '12' if version.startswith('5') else '12'
+    macosx_deployment_target = '12' if version.startswith('5') else '13'
 
     kritaspotlight = pathlib.Path(krita_app, 'Contents', 'Library','Spotlight', 'kritaspotlight.mdimporter', 'Contents')
     krita_thumbnailer = pathlib.Path(krita_app, 'Contents', 'Plugins', 'krita-thumbnailer.appex', 'Contents')

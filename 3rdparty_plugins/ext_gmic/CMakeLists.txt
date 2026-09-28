@@ -23,9 +23,6 @@ if (APPLE)
 
         INSTALL_DIR ${PREFIX_ext_gmic}
 
-        # aligned_alloc not available in macOS<=10.15, remove after support for those versions dropped
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-force-turn-off-aligned_alloc.patch
-
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_gmic} -DOPENMP_STANDALONE_BUILD=ON
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 

@@ -1,6 +1,6 @@
 # Krita's macOS integration
 
-This Xcode project generates QuickLook (macOS < 10.15), QuickLook Thumbnailing
+This Xcode project generates QuickLook Thumbnailing
 (macOS 10.15+) and Spotlight plugins for .kra and .ora files.
 
 The QuickLook plugins take the `preview.png` image in the root of the ZIP

@@ -7,6 +7,8 @@
 #include <QKeyEvent>
 
 #include "kis_tool_pan.h"
+
+#include "kis_action_registry.h"
 #include "kis_cursor.h"
 #include "kis_canvas2.h"
 
@@ -23,6 +25,37 @@ KisToolPan::KisToolPan(KoCanvasBase *canvas)
 
 KisToolPan::~KisToolPan()
 {
+}
+
+void KisToolPan::activate(const QSet<KoShape*> &shapes)
+{
+    Q_UNUSED(shapes);
+
+    m_actionConnections.addConnection(action("movetool-move-up"),
+        &QAction::triggered, this, [this] () {
+            canvas()->canvasController()->panUp();
+        });
+
+    m_actionConnections.addConnection(action("movetool-move-down"),
+        &QAction::triggered, this, [this] () {
+            canvas()->canvasController()->panDown();
+        });
+
+    m_actionConnections.addConnection(action("movetool-move-left"),
+        &QAction::triggered, this, [this] () {
+            canvas()->canvasController()->panLeft();
+        });
+
+    m_actionConnections.addConnection(action("movetool-move-right"),
+        &QAction::triggered, this, [this] () {
+            canvas()->canvasController()->panRight();
+        });
+}
+
+void KisToolPan::deactivate()
+{
+    m_actionConnections.clear();
+    KisTool::deactivate();
 }
 
 void KisToolPan::beginPrimaryAction(KoPointerEvent *event)
@@ -43,25 +76,6 @@ void KisToolPan::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
     useCursor(KisCursor::openHandCursor());
-}
-
-void KisToolPan::keyPressEvent(QKeyEvent *event)
-{
-    switch (event->key()) {
-        case Qt::Key_Up:
-            canvas()->canvasController()->panUp();
-            break;
-        case Qt::Key_Down:
-            canvas()->canvasController()->panDown();
-            break;
-        case Qt::Key_Left:
-            canvas()->canvasController()->panLeft();
-            break;
-        case Qt::Key_Right:
-            canvas()->canvasController()->panRight();
-            break;
-    }
-    event->accept();
 }
 
 void KisToolPan::paint(QPainter &painter, const KoViewConverter &converter)
@@ -87,6 +101,19 @@ KisToolPanFactory::KisToolPanFactory()
 
 KisToolPanFactory::~KisToolPanFactory()
 {
+}
+
+QList<QAction *> KisToolPanFactory::createActionsImpl()
+{
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    QList<QAction *> actions = KoToolFactoryBase::createActionsImpl();
+
+    actions << actionRegistry->makeQAction("movetool-move-up", this);
+    actions << actionRegistry->makeQAction("movetool-move-down", this);
+    actions << actionRegistry->makeQAction("movetool-move-left", this);
+    actions << actionRegistry->makeQAction("movetool-move-right", this);
+
+    return actions;
 }
 
 KoToolBase* KisToolPanFactory::createTool(KoCanvasBase *canvas)

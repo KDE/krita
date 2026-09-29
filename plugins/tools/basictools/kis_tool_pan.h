@@ -10,6 +10,9 @@
 #include <kis_tool.h>
 #include <KoToolFactoryBase.h>
 
+#include <kis_signal_auto_connection.h>
+
+
 class KisToolPan : public KisTool
 {
     Q_OBJECT
@@ -17,11 +20,12 @@ public:
     KisToolPan(KoCanvasBase *canvas);
     ~KisToolPan() override;
 
+    void activate(const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
+
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
-
-    void keyPressEvent(QKeyEvent *event) override;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
@@ -29,6 +33,7 @@ public:
 
 private:
     QPoint m_lastPosition;
+    KisSignalAutoConnectionsStore m_actionConnections;
 };
 
 
@@ -38,6 +43,7 @@ public:
     KisToolPanFactory();
     ~KisToolPanFactory() override;
 
+    QList<QAction *> createActionsImpl() override;
     KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 

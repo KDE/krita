@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-26 00:43+0000\n"
+"POT-Creation-Date: 2026-09-29 00:43+0000\n"
 "PO-Revision-Date: 2026-05-09 16:03+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
@@ -21619,7 +21619,7 @@ msgid "Node Rename"
 msgstr "Przemianuj węzeł"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:867
+#: libs/image/kis_image.cc:866
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Zmień rozmiar obrazu"
@@ -21967,55 +21967,55 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr "Użyj palety barw dla ... barw lub mniejszych"
 
-#: libs/image/kis_image.cc:420
+#: libs/image/kis_image.cc:419
 #, kde-format
 msgid "Imported Image"
 msgstr "Importowane obrazy"
 
 #. i18n.
-#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:762 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Tło"
 
-#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:687
+#: libs/image/kis_image.cc:766 libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "Paint Layer"
 msgstr "Warstwa malowania"
 
-#: libs/image/kis_image.cc:866
+#: libs/image/kis_image.cc:865
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Kadruj obraz"
 
-#: libs/image/kis_image.cc:913
+#: libs/image/kis_image.cc:912
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:1017
+#: libs/image/kis_image.cc:1016
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Przytnij warstwę"
 
-#: libs/image/kis_image.cc:1018
+#: libs/image/kis_image.cc:1017
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Przytnij maskę"
 
-#: libs/image/kis_image.cc:1055
+#: libs/image/kis_image.cc:1054
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Przeskaluj obraz"
 
-#: libs/image/kis_image.cc:1056
+#: libs/image/kis_image.cc:1055
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Zmień rozdzielczość obrazu"
 
-#: libs/image/kis_image.cc:1106
+#: libs/image/kis_image.cc:1105
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -22024,17 +22024,17 @@ msgstr[0] "Przeskaluj warstwę"
 msgstr[1] "Przeskaluj %1 warstwy"
 msgstr[2] "Przeskaluj %1 warstw"
 
-#: libs/image/kis_image.cc:1245
+#: libs/image/kis_image.cc:1244
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Obróć obraz"
 
-#: libs/image/kis_image.cc:1255
+#: libs/image/kis_image.cc:1254
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Obróć maskę"
 
-#: libs/image/kis_image.cc:1258
+#: libs/image/kis_image.cc:1257
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -22043,12 +22043,12 @@ msgstr[0] "Obróć warstwę"
 msgstr[1] "Obróć %1 warstwy"
 msgstr[2] "Obróć %1 warstw"
 
-#: libs/image/kis_image.cc:1359
+#: libs/image/kis_image.cc:1358
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Pochyl maskę"
 
-#: libs/image/kis_image.cc:1363
+#: libs/image/kis_image.cc:1362
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -22057,42 +22057,42 @@ msgstr[0] "Pochyl warstwę"
 msgstr[1] "Pochyl %1 warstwy"
 msgstr[2] "Pochyl %1 warstw"
 
-#: libs/image/kis_image.cc:1370
+#: libs/image/kis_image.cc:1369
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Pochyl obraz"
 
-#: libs/image/kis_image.cc:1388
+#: libs/image/kis_image.cc:1387
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Przekształć przestrzeń barw warstwy"
 
-#: libs/image/kis_image.cc:1439
+#: libs/image/kis_image.cc:1438
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Przekształć przestrzeń barw obrazu"
 
-#: libs/image/kis_image.cc:1440
+#: libs/image/kis_image.cc:1439
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Przekształć przestrzeń barw projekcji"
 
-#: libs/image/kis_image.cc:1492
+#: libs/image/kis_image.cc:1491
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Ujednolić przestrzeń barw warstwy"
 
-#: libs/image/kis_image.cc:1522
+#: libs/image/kis_image.cc:1521
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Przypisz profil do warstwy"
 
-#: libs/image/kis_image.cc:1563
+#: libs/image/kis_image.cc:1562
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Przypisz profil"
 
-#: libs/image/kis_image.cc:2635
+#: libs/image/kis_image.cc:2634
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Obetnij zaznaczenie"
@@ -25053,7 +25053,7 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Usuń zasób"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:339
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:338
 #: libs/ui/KisMainWindow.cpp:2776
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347

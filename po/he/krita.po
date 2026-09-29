@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-26 00:43+0000\n"
+"POT-Creation-Date: 2026-09-29 00:43+0000\n"
 "PO-Revision-Date: 2026-09-18 23:14+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -21125,7 +21125,7 @@ msgid "Node Rename"
 msgstr "שינוי שם מפרק"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:867
+#: libs/image/kis_image.cc:866
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "שינוי גודל תמונה"
@@ -21457,55 +21457,55 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr "להשתמש בצבע מותאם אישית לרקע הבורר."
 
-#: libs/image/kis_image.cc:420
+#: libs/image/kis_image.cc:419
 #, kde-format
 msgid "Imported Image"
 msgstr "תמונה מיובאת"
 
 #. i18n.
-#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:762 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "רקע"
 
-#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:687
+#: libs/image/kis_image.cc:766 libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "Paint Layer"
 msgstr "שכבת צבע"
 
-#: libs/image/kis_image.cc:866
+#: libs/image/kis_image.cc:865
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "חיתוך תמונה"
 
-#: libs/image/kis_image.cc:913
+#: libs/image/kis_image.cc:912
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr "ניפוי נתונים שלא בשימוש"
 
-#: libs/image/kis_image.cc:1017
+#: libs/image/kis_image.cc:1016
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "חיתוך שכבה"
 
-#: libs/image/kis_image.cc:1018
+#: libs/image/kis_image.cc:1017
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "מסכת חיתוך"
 
-#: libs/image/kis_image.cc:1055
+#: libs/image/kis_image.cc:1054
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "שינוי קנה מידה לתמונה"
 
-#: libs/image/kis_image.cc:1056
+#: libs/image/kis_image.cc:1055
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "שינוי רזולוציית התמונה"
 
-#: libs/image/kis_image.cc:1106
+#: libs/image/kis_image.cc:1105
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21515,17 +21515,17 @@ msgstr[1] "שינוי קנה מידה של שכבות"
 msgstr[2] "שינוי קנה מידה של %1 שכבות"
 msgstr[3] "שינוי קנה מידה של %1 שכבות"
 
-#: libs/image/kis_image.cc:1245
+#: libs/image/kis_image.cc:1244
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "סיבוב התמונה"
 
-#: libs/image/kis_image.cc:1255
+#: libs/image/kis_image.cc:1254
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "מסכת סיבוב"
 
-#: libs/image/kis_image.cc:1258
+#: libs/image/kis_image.cc:1257
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21535,12 +21535,12 @@ msgstr[1] "סיבוב שתי שכבות"
 msgstr[2] "סיבוב %1 שכבות"
 msgstr[3] "סיבוב %1 שכבות"
 
-#: libs/image/kis_image.cc:1359
+#: libs/image/kis_image.cc:1358
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "מסכת גזירה"
 
-#: libs/image/kis_image.cc:1363
+#: libs/image/kis_image.cc:1362
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21550,43 +21550,43 @@ msgstr[1] "גזירת שתי שכבות"
 msgstr[2] "גזירת %1 שכבות"
 msgstr[3] "גזירת %1 שכבות"
 
-#: libs/image/kis_image.cc:1370
+#: libs/image/kis_image.cc:1369
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "גזירת תמונה"
 
-#: libs/image/kis_image.cc:1388
+#: libs/image/kis_image.cc:1387
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "הוס&פת תמונה בתור שכבה..."
 
-#: libs/image/kis_image.cc:1439
+#: libs/image/kis_image.cc:1438
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "המרת מרחב צבע של תמונה"
 
-#: libs/image/kis_image.cc:1440
+#: libs/image/kis_image.cc:1439
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "המרת מרחב צבע של היטל"
 
-#: libs/image/kis_image.cc:1492
+#: libs/image/kis_image.cc:1491
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "איחוד מרחבי צבע של שכבות"
 
-#: libs/image/kis_image.cc:1522
+#: libs/image/kis_image.cc:1521
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "הקצאת פרופיל לשכבה"
 
-#: libs/image/kis_image.cc:1563
+#: libs/image/kis_image.cc:1562
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "הקצאת פרופיל"
 
-#: libs/image/kis_image.cc:2635
+#: libs/image/kis_image.cc:2634
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "חיתוך בחירות"
@@ -24486,7 +24486,7 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "מחיקת משאב"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:339
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:338
 #: libs/ui/KisMainWindow.cpp:2776
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347

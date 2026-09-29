@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-26 00:43+0000\n"
+"POT-Creation-Date: 2026-09-29 00:43+0000\n"
 "PO-Revision-Date: 2026-07-17 12:04+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -21660,7 +21660,7 @@ msgid "Node Rename"
 msgstr "Renomina nodo"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:867
+#: libs/image/kis_image.cc:866
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Redimensiona image"
@@ -22005,56 +22005,56 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr ""
 
-#: libs/image/kis_image.cc:420
+#: libs/image/kis_image.cc:419
 #, fuzzy, kde-format
 #| msgid "Import Images"
 msgid "Imported Image"
 msgstr "Importa imagines"
 
 #. i18n.
-#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:762 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Fundo"
 
-#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:687
+#: libs/image/kis_image.cc:766 libs/ui/kis_layer_manager.cc:687
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "Mascara de &filtro..."
 
-#: libs/image/kis_image.cc:866
+#: libs/image/kis_image.cc:865
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Tonde imagine"
 
-#: libs/image/kis_image.cc:913
+#: libs/image/kis_image.cc:912
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:1017
+#: libs/image/kis_image.cc:1016
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Tonde strato (layer)"
 
-#: libs/image/kis_image.cc:1018
+#: libs/image/kis_image.cc:1017
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Tonde Mascara"
 
-#: libs/image/kis_image.cc:1055
+#: libs/image/kis_image.cc:1054
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Scala imagine"
 
-#: libs/image/kis_image.cc:1056
+#: libs/image/kis_image.cc:1055
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Cambia Resolution de Imagine"
 
-#: libs/image/kis_image.cc:1106
+#: libs/image/kis_image.cc:1105
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
@@ -22064,17 +22064,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Scala strato (Layer)"
 msgstr[1] "Scala strato (Layer)"
 
-#: libs/image/kis_image.cc:1245
+#: libs/image/kis_image.cc:1244
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rota imagine"
 
-#: libs/image/kis_image.cc:1255
+#: libs/image/kis_image.cc:1254
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Rota mascara"
 
-#: libs/image/kis_image.cc:1258
+#: libs/image/kis_image.cc:1257
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
@@ -22084,12 +22084,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Rota strato (Layer)"
 msgstr[1] "Rota strato (Layer)"
 
-#: libs/image/kis_image.cc:1359
+#: libs/image/kis_image.cc:1358
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr " Rumpe mascara"
 
-#: libs/image/kis_image.cc:1363
+#: libs/image/kis_image.cc:1362
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
@@ -22099,29 +22099,29 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Rumpe strato (Layer)"
 msgstr[1] "Rumpe strato (Layer)"
 
-#: libs/image/kis_image.cc:1370
+#: libs/image/kis_image.cc:1369
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Rumpe imagine"
 
-#: libs/image/kis_image.cc:1388
+#: libs/image/kis_image.cc:1387
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Converte  Spatio de Color de Strato"
 
-#: libs/image/kis_image.cc:1439
+#: libs/image/kis_image.cc:1438
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Converte typo de strato (layer)"
 
-#: libs/image/kis_image.cc:1440
+#: libs/image/kis_image.cc:1439
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Converte typo de strato (layer)"
 
-#: libs/image/kis_image.cc:1492
+#: libs/image/kis_image.cc:1491
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Layer Color Space"
@@ -22129,7 +22129,7 @@ msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Converte  Spatio de Color de Strato"
 
-#: libs/image/kis_image.cc:1522
+#: libs/image/kis_image.cc:1521
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Align to top edge"
@@ -22137,12 +22137,12 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Alinea a limite in alto"
 
-#: libs/image/kis_image.cc:1563
+#: libs/image/kis_image.cc:1562
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Assigna Profilo"
 
-#: libs/image/kis_image.cc:2635
+#: libs/image/kis_image.cc:2634
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Tonde Selectiones"
@@ -25137,7 +25137,7 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Dele ressource"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:339
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:338
 #: libs/ui/KisMainWindow.cpp:2776
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347

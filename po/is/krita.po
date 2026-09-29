@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-26 00:43+0000\n"
+"POT-Creation-Date: 2026-09-29 00:43+0000\n"
 "PO-Revision-Date: 2024-12-18 14:36+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -21419,7 +21419,7 @@ msgid "Node Rename"
 msgstr "Nafn:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:867
+#: libs/image/kis_image.cc:866
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Breyta stærð myndar"
@@ -21760,61 +21760,61 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr ""
 
-#: libs/image/kis_image.cc:420
+#: libs/image/kis_image.cc:419
 #, kde-format
 msgid "Imported Image"
 msgstr "Innflutt mynd"
 
 #. i18n.
-#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:762 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Bakgrunnur"
 
-#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:687
+#: libs/image/kis_image.cc:766 libs/ui/kis_layer_manager.cc:687
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Paste Layer"
 msgid "Paint Layer"
 msgstr "Líma lag"
 
-#: libs/image/kis_image.cc:866
+#: libs/image/kis_image.cc:865
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Kroppa mynd"
 
-#: libs/image/kis_image.cc:913
+#: libs/image/kis_image.cc:912
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:1017
+#: libs/image/kis_image.cc:1016
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Kroppa lag"
 
-#: libs/image/kis_image.cc:1018
+#: libs/image/kis_image.cc:1017
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Afskerping maska"
 
-#: libs/image/kis_image.cc:1055
+#: libs/image/kis_image.cc:1054
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Kvarða mynd"
 
-#: libs/image/kis_image.cc:1056
+#: libs/image/kis_image.cc:1055
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Breyta myndupplausn"
 
-#: libs/image/kis_image.cc:1106
+#: libs/image/kis_image.cc:1105
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21822,20 +21822,20 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Kvarða lag"
 msgstr[1] "Kvarða lag"
 
-#: libs/image/kis_image.cc:1245
+#: libs/image/kis_image.cc:1244
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Snúa mynd"
 
-#: libs/image/kis_image.cc:1255
+#: libs/image/kis_image.cc:1254
 #, fuzzy
 #| msgid "Pan Canvas"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Stærð striga"
 
-#: libs/image/kis_image.cc:1258
+#: libs/image/kis_image.cc:1257
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21843,13 +21843,13 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Snúa lagi"
 msgstr[1] "Snúa lagi"
 
-#: libs/image/kis_image.cc:1359
+#: libs/image/kis_image.cc:1358
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Afskerping maska"
 
-#: libs/image/kis_image.cc:1363
+#: libs/image/kis_image.cc:1362
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21857,47 +21857,47 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Kvarða lag"
 msgstr[1] "Kvarða lag"
 
-#: libs/image/kis_image.cc:1370
+#: libs/image/kis_image.cc:1369
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Kvarða mynd"
 
-#: libs/image/kis_image.cc:1388
+#: libs/image/kis_image.cc:1387
 #, fuzzy
 #| msgid "Image Color Space"
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Litrými myndar"
 
-#: libs/image/kis_image.cc:1439
+#: libs/image/kis_image.cc:1438
 #, fuzzy
 #| msgid "Image Color Space"
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Litrými myndar"
 
-#: libs/image/kis_image.cc:1440
+#: libs/image/kis_image.cc:1439
 #, fuzzy
 #| msgid "Image Color Space"
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Litrými myndar"
 
-#: libs/image/kis_image.cc:1492
+#: libs/image/kis_image.cc:1491
 #, fuzzy
 #| msgid "Image Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Litrými myndar"
 
-#: libs/image/kis_image.cc:1522
+#: libs/image/kis_image.cc:1521
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Frá hægri til vinstri"
 
-#: libs/image/kis_image.cc:1563
+#: libs/image/kis_image.cc:1562
 #, fuzzy
 #| msgctxt "@title:window"
 #| msgid "Missing Color Profile"
@@ -21905,7 +21905,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Litasnið sem vantar"
 
-#: libs/image/kis_image.cc:2635
+#: libs/image/kis_image.cc:2634
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -24881,7 +24881,7 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Eyða tilfangi"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:339
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:338
 #: libs/ui/KisMainWindow.cpp:2776
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347

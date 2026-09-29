@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-26 00:43+0000\n"
+"POT-Creation-Date: 2026-09-29 00:43+0000\n"
 "PO-Revision-Date: 2026-08-17 11:24+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -21535,7 +21535,7 @@ msgid "Node Rename"
 msgstr "Berrizendatu nodoa"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:867
+#: libs/image/kis_image.cc:866
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Aldatu irudia tamainaz"
@@ -21881,55 +21881,55 @@ msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
 msgstr "Erabili paleta ... koloretarako edo gutxiagorako"
 
-#: libs/image/kis_image.cc:420
+#: libs/image/kis_image.cc:419
 #, kde-format
 msgid "Imported Image"
 msgstr "Inportatutako irudia"
 
 #. i18n.
-#: libs/image/kis_image.cc:763 libs/ui/kis_import_catcher.cc:50
+#: libs/image/kis_image.cc:762 libs/ui/kis_import_catcher.cc:50
 #: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Atzeko planoa"
 
-#: libs/image/kis_image.cc:767 libs/ui/kis_layer_manager.cc:687
+#: libs/image/kis_image.cc:766 libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "Paint Layer"
 msgstr "Margo geruza"
 
-#: libs/image/kis_image.cc:866
+#: libs/image/kis_image.cc:865
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Moztu irudia"
 
-#: libs/image/kis_image.cc:913
+#: libs/image/kis_image.cc:912
 msgctxt "(qtundo-format)"
 msgid "Purge Unused Data"
 msgstr ""
 
-#: libs/image/kis_image.cc:1017
+#: libs/image/kis_image.cc:1016
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Moztu geruza"
 
-#: libs/image/kis_image.cc:1018
+#: libs/image/kis_image.cc:1017
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Moztu maskara"
 
-#: libs/image/kis_image.cc:1055
+#: libs/image/kis_image.cc:1054
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Eskalatu irudia"
 
-#: libs/image/kis_image.cc:1056
+#: libs/image/kis_image.cc:1055
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Aldatu irudi-bereizmena"
 
-#: libs/image/kis_image.cc:1106
+#: libs/image/kis_image.cc:1105
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -21937,17 +21937,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Eskalatu geruza"
 msgstr[1] "Eskalatu %1 geruza"
 
-#: libs/image/kis_image.cc:1245
+#: libs/image/kis_image.cc:1244
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Biratu irudia"
 
-#: libs/image/kis_image.cc:1255
+#: libs/image/kis_image.cc:1254
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Biratu maskara"
 
-#: libs/image/kis_image.cc:1258
+#: libs/image/kis_image.cc:1257
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -21955,12 +21955,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Biratu geruza"
 msgstr[1] "Biratu %1 geruza"
 
-#: libs/image/kis_image.cc:1359
+#: libs/image/kis_image.cc:1358
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Zizailatu maskara"
 
-#: libs/image/kis_image.cc:1363
+#: libs/image/kis_image.cc:1362
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -21968,27 +21968,27 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Zizailatu geruza"
 msgstr[1] "Zizailatu %1 geruza"
 
-#: libs/image/kis_image.cc:1370
+#: libs/image/kis_image.cc:1369
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Zizailatu irudia"
 
-#: libs/image/kis_image.cc:1388
+#: libs/image/kis_image.cc:1387
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Bihurtu geruzako kolore-eremua"
 
-#: libs/image/kis_image.cc:1439
+#: libs/image/kis_image.cc:1438
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Bihurtu irudiko kolore-eremua"
 
-#: libs/image/kis_image.cc:1440
+#: libs/image/kis_image.cc:1439
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Bihurtu proiekzioko kolore-eremua"
 
-#: libs/image/kis_image.cc:1492
+#: libs/image/kis_image.cc:1491
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Layer Color Space"
@@ -21996,17 +21996,17 @@ msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr "Bihurtu geruzako kolore-eremua"
 
-#: libs/image/kis_image.cc:1522
+#: libs/image/kis_image.cc:1521
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Esleitu profila geruzari"
 
-#: libs/image/kis_image.cc:1563
+#: libs/image/kis_image.cc:1562
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Esleitu profila"
 
-#: libs/image/kis_image.cc:2635
+#: libs/image/kis_image.cc:2634
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Moztu hautapenak"
@@ -24959,7 +24959,7 @@ msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Ezabatu baliabidea"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:339
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:338
 #: libs/ui/KisMainWindow.cpp:2776
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347

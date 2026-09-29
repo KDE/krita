@@ -141,7 +141,6 @@ else()
 
     macro(add_sip_python_module_v5 MODULE_NAME MODULE_SIP)        
         get_filename_component(module_name_toml ${MODULE_SIP} NAME_WE)
-        set(module_srcs "${SIP_EXTRA_FILES_DEPEND}")
 
         set(EXTRA_LINK_LIBRARIES ${ARGN})
 
@@ -189,6 +188,7 @@ else()
         set(CMAKE_CURRENT_SIP_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/_tmp")
 
         get_filename_component(_abs_module_sip ${MODULE_SIP} ABSOLUTE)
+        get_filename_component(module_srcs ${_abs_module_sip} PATH)
 
         # We give this target a long logical target name.
         # (This is to avoid having the library name clash with any already
@@ -238,7 +238,7 @@ else()
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
-                ${CMAKE_CURRENT_BINARY_DIR}/pyproject.toml ${SIP_EXTRA_STUBS}
+                ${CMAKE_CURRENT_BINARY_DIR}/pyproject.toml ${SIP_EXTRA_STUBS} ${SIP_EXTRA_FILES_DEPEND}
             OUTPUT
                 ${_sip_output_files} ${_complete_stubs}
         )

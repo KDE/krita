@@ -317,16 +317,21 @@ void View::setBrushRotation(qreal brushRotation)
 QPointF View::brushPosition() const
 {
     if (!d->view) return QPointF();
+
     KisCanvasResourceProvider *provider = d->view->resourceProvider();
     if (!provider || !provider->resourceManager()) return QPointF();
+
     const QPointF pixelPos = provider->resourceManager()
         ->resource(KoCanvasResource::CurrentBrushPosition)
         .value<QPointF>();
     if (pixelPos.isNull()) return QPointF();
+
     KisCanvas2 *canvas = d->view->canvasBase();
     if (!canvas) return QPointF();
+
     const KisCoordinatesConverter *converter = canvas->coordinatesConverter();
     if (!converter) return QPointF();
+
     // The stored position is in image pixel coordinates. Convert all the way
     // to canvas-widget coordinates (image -> document -> flake -> widget),
     // which is what scripts map to the screen with canvasWidget()->mapToGlobal.

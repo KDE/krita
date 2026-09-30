@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 02:39+0000\n"
-"PO-Revision-Date: 2026-09-18 23:14+0300\n"
+"PO-Revision-Date: 2026-09-29 09:10+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -51125,9 +51125,9 @@ msgstr "איפוס גווני ביניים"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetHighlights)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:335
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset Highlights"
-msgstr "&גובה:"
+msgstr "איפוס הדגשות"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPreserveLuminosity)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:362
@@ -56320,10 +56320,10 @@ msgid "Quality:"
 msgstr "איכות:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:322
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "Bilinear"
-msgstr "&שכבה"
+msgstr "ביליניארי"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:323
 #, kde-format

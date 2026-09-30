@@ -29,7 +29,6 @@ class KisColorSelectorBase : public QWidget
 {
 Q_OBJECT
 public:
-    enum Move {MoveToMousePosition, DontMove};
     explicit KisColorSelectorBase(QWidget *parent = 0);
     ~KisColorSelectorBase() override;
 
@@ -41,7 +40,7 @@ public:
 
     KisDisplayColorConverter* converter() const;
 
-    void tryHideAllPopups();
+    void requestHideMyself();
 
 public:
     void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset);
@@ -59,7 +58,7 @@ public Q_SLOTS:
     virtual void reset();
 
     virtual void updateSettings();
-    virtual void showPopup(Move move=MoveToMousePosition);
+    void showPopup(std::optional<QPoint> preferredCenter = std::nullopt);
 
 public:
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -78,7 +77,6 @@ protected:
     virtual KisColorSelectorBase* createPopup() const = 0;
     void dragEnterEvent(QDragEnterEvent *) override;
     void dropEvent(QDropEvent *) override;
-    void setHidingTime(int time);
     bool isPopup() const { return m_isPopup; }
     void mouseMoveEvent(QMouseEvent *event) override;
     void changeEvent(QEvent *event) override;
@@ -90,7 +88,7 @@ private:
 
 
 protected Q_SLOTS:
-    void hidePopup();
+    void tryHideMyself();
 
     /// if you overwrite this, keep in mind, that you should set the color only, if m_colorUpdateAllowed is true
     virtual void canvasResourceChanged(int key, const QVariant& v);

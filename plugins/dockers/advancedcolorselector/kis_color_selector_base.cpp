@@ -33,40 +33,96 @@
 
 #include <resources/KoGamutMask.h>
 
+// for HAVE_WAYLAND
+#include <KoConfig.h>
+
+#if defined HAVE_WAYLAND && QT_VERSION >= QT_VERSION_CHECK(6, 11, 0)
+#define HAVE_QT_PRIVATE_TOOLTIP_POSITION_API
+#endif
+
+#ifdef HAVE_QT_PRIVATE_TOOLTIP_POSITION_API
+#include <QtWaylandClient/private/qwaylandwindow_p.h>
+#endif
+
+
+namespace {
+    QWidget* findNearestDockerOrNativeParent(QWidget *w) {
+        if (!w || w->inherits("QDockWidget") || w->windowHandle()) {
+            return w;
+        }
+
+        return findNearestDockerOrNativeParent(w->parentWidget());
+    }
+}
+
 class KisColorPreviewPopup : public QWidget {
 public:
     KisColorPreviewPopup(KisColorSelectorBase* parent)
         : QWidget(parent), m_parent(parent)
     {
-        setWindowFlags(Qt::ToolTip | Qt::NoDropShadowWindowHint);
+        setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::NoDropShadowWindowHint);
+        setAttribute(Qt::WA_TranslucentBackground);
         setQColor(QColor(0,0,0));
         m_baseColor = QColor(0,0,0,0);
         m_previousColor = QColor(0,0,0,0);
         m_lastUsedColor = QColor(0,0,0,0);
     }
 
-    void show()
+    void showAndAdjustPosition()
     {
         updatePosition();
-        QWidget::show();
+        show();
     }
 
     void updatePosition()
     {
-        QPoint parentPos = m_parent->mapToGlobal(QPoint(0,0));
-        const QRect availRect = this->screen()->availableGeometry();
-        QPoint targetPos;
-        if ( parentPos.x() - 100 > availRect.x() ) {
-            targetPos =  QPoint(parentPos.x() - 100, parentPos.y());
-        } else if ( parentPos.x() + m_parent->width() + 100 < availRect.right()) {
-            targetPos = m_parent->mapToGlobal(QPoint(m_parent->width(), 0));
-        } else if ( parentPos.y() - 100 > availRect.y() ) {
-            targetPos =  QPoint(parentPos.x(), parentPos.y() - 100);
-        } else {
-            targetPos =  QPoint(parentPos.x(), parentPos.y() + m_parent->height());
+        resize(100, 150);
+
+        // make sure that all the platform-specific structures for the window
+        // are created (i.e. QWaylandWindow) before trying to request them
+        // via `windowHandle()->handle()`
+        create();
+
+#ifdef HAVE_QT_PRIVATE_TOOLTIP_POSITION_API
+        if (auto waylandWindow = dynamic_cast<QNativeInterface::Private::QWaylandWindow *>(windowHandle()->handle())) {
+            QWidget *referenceWidget = findNearestDockerOrNativeParent(parentWidget());
+            if (!referenceWidget) {
+                referenceWidget = parentWidget();
+            }
+
+            const QPoint parentPos = parentWidget()->window()->mapFromGlobal(referenceWidget->mapToGlobal(QPoint()));
+            const QRect gravityRect(QRect(parentPos, QSize(referenceWidget->width(), 10)));
+
+            waylandWindow->setParentControlGeometry(gravityRect);
+
+            // well, it is technically not a "submenu", but this is the way
+            // to make qt position it "around" the docker widget
+            waylandWindow->setExtendedWindowType(QNativeInterface::Private::QWaylandWindow::SubMenu);
+        } else
+#endif /* HAVE_QT_PRIVATE_TOOLTIP_POSITION_API */
+        {
+            QPoint parentPos = m_parent->mapToGlobal(QPoint(0,0));
+            const QRect availRect = this->screen()->availableGeometry();
+            QPoint targetPos;
+            if ( parentPos.x() - 100 > availRect.x() ) {
+                targetPos =  QPoint(parentPos.x() - 100, parentPos.y());
+            } else if ( parentPos.x() + m_parent->width() + 100 < availRect.right()) {
+                targetPos = m_parent->mapToGlobal(QPoint(m_parent->width(), 0));
+            } else if ( parentPos.y() - 100 > availRect.y() ) {
+                targetPos =  QPoint(parentPos.x(), parentPos.y() - 100);
+            } else {
+                targetPos =  QPoint(parentPos.x(), parentPos.y() + m_parent->height());
+            }
+            move(targetPos.x(), targetPos.y());
         }
-        setGeometry(targetPos.x(), targetPos.y(), 100, 150);
-        setAttribute(Qt::WA_TranslucentBackground);
+    }
+
+    void initializeColors(const QColor& color, const QColor& lastUsedColor) {
+        m_color = color;
+        m_baseColor = color;
+        m_previousColor = color;
+        m_lastUsedColor = lastUsedColor;
+        update();
     }
 
     void setQColor(const QColor& color)
@@ -107,13 +163,13 @@ protected:
     void enterEvent(QEnterEvent *e) override
 #endif
     {
+        m_parent->requestHideMyself();
         QWidget::enterEvent(e);
-        m_parent->tryHideAllPopups();
     }
 
     void leaveEvent(QEvent *e) override {
+        m_parent->requestHideMyself();
         QWidget::leaveEvent(e);
-        m_parent->tryHideAllPopups();
     }
 
 private:
@@ -139,9 +195,9 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_hideOnMouseClick(false),
     m_colorPreviewPopup(new KisColorPreviewPopup(this))
 {
-    m_hideTimer->setInterval(0);
+    m_hideTimer->setInterval(200);
     m_hideTimer->setSingleShot(true);
-    connect(m_hideTimer, SIGNAL(timeout()), this, SLOT(hidePopup()));
+    connect(m_hideTimer, SIGNAL(timeout()), this, SLOT(tryHideMyself()));
 
     using namespace std::placeholders; // For _1 placeholder
     auto function = std::bind(&KisColorSelectorBase::slotUpdateColorAndPreview, this, _1);
@@ -193,7 +249,16 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
                 this,                               SLOT(updateLastUsedColorPreview(KoColor)), Qt::UniqueConnection);
 
         if (m_canvas->viewManager() && m_canvas->viewManager()->canvasResourceProvider()) {
-            setColor(Acs::currentColor(m_canvas->viewManager()->canvasResourceProvider(), Acs::Foreground));
+            const KoColor currentColor = Acs::currentColor(m_canvas->viewManager()->canvasResourceProvider(), Acs::Foreground);
+            setColor(currentColor);
+
+            auto colorHistory = m_canvas->viewManager()->canvasResourceProvider()->colorHistoryColors();
+            const KoColor lastUsedColor = !colorHistory.isEmpty() ? colorHistory.first() : currentColor;
+
+            const QColor currentQColor = converter()->toQColor(currentColor);
+            const QColor lastUsedQColor = converter()->toQColor(lastUsedColor);
+
+            m_colorPreviewPopup->initializeColors(currentQColor, lastUsedQColor);
         }
     }
     if (m_popup) {
@@ -222,27 +287,8 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 
         lazyCreatePopup();
 
-        int x = event->globalX();
-        int y = event->globalY();
-        int popupsize = m_popup->width();
-        x-=popupsize/2;
-        y-=popupsize/2;
-
-        const QRect availRect = this->screen()->availableGeometry();
-
-        if(x<availRect.x())
-            x = availRect.x();
-        if(y<availRect.y())
-            y = availRect.y();
-        if(x+m_popup->width()>availRect.x()+availRect.width())
-            x = availRect.x()+availRect.width()-m_popup->width();
-        if(y+m_popup->height()>availRect.y()+availRect.height())
-            y = availRect.y()+availRect.height()-m_popup->height();
-
         m_colorUpdateSelf=false;
-        m_popup->move(x, y);
-        m_popup->setHidingTime(200);
-        showPopup(DontMove);
+        showPopup(event->globalPos());
 
     } else if (m_isPopup && event->button() == Qt::MiddleButton) {
         if (m_colorPreviewPopup) {
@@ -277,11 +323,8 @@ void KisColorSelectorBase::enterEvent(QEvent *e)
 void KisColorSelectorBase::enterEvent(QEnterEvent *e)
 #endif
 {
-    if (m_popup && m_popup->isVisible()) {
-        m_popup->m_hideTimer->stop();
-    }
 
-    if (m_isPopup && m_hideTimer->isActive()) {
+    if (m_hideTimer->isActive()) {
         m_hideTimer->stop();
     }
 
@@ -294,17 +337,8 @@ void KisColorSelectorBase::enterEvent(QEnterEvent *e)
 
         lazyCreatePopup();
 
-        const QRect availRect = this->screen()->availableGeometry();
-
-        QPoint proposedTopLeft = rect().center() - m_popup->rect().center();
-        proposedTopLeft = mapToGlobal(proposedTopLeft);
-
-        QRect popupRect = QRect(proposedTopLeft, m_popup->size());
-        popupRect = kisEnsureInRect(popupRect, availRect);
-
-        m_popup->setGeometry(popupRect);
-        m_popup->setHidingTime(200);
-        showPopup(DontMove);
+        const QPoint preferredCenter = mapToGlobal(rect().center());
+        showPopup(preferredCenter);
     }
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -318,15 +352,13 @@ void KisColorSelectorBase::enterEvent(QEnterEvent *e)
 
 void KisColorSelectorBase::leaveEvent(QEvent *e)
 {
-    tryHideAllPopups();
+    m_hideTimer->start();
     QWidget::leaveEvent(e);
 }
 
 void KisColorSelectorBase::keyPressEvent(QKeyEvent *)
 {
-    if (m_isPopup) {
-        hidePopup();
-    }
+    tryHideMyself();
 }
 
 void KisColorSelectorBase::dragEnterEvent(QDragEnterEvent *e)
@@ -382,13 +414,6 @@ void KisColorSelectorBase::setColor(const KoColor& color)
     Q_UNUSED(color);
 }
 
-void KisColorSelectorBase::setHidingTime(int time)
-{
-    KIS_ASSERT_RECOVER_NOOP(m_isPopup);
-
-    m_hideTimer->setInterval(time);
-}
-
 void KisColorSelectorBase::lazyCreatePopup()
 {
     if (!m_popup) {
@@ -410,21 +435,29 @@ void KisColorSelectorBase::lazyCreatePopup()
     m_popup->updateSettings();
 }
 
-void KisColorSelectorBase::showPopup(Move move)
+void KisColorSelectorBase::showPopup(std::optional<QPoint> preferredCenter)
 {
     // This slot may be called by some action,
     // so we need to be able to handle it
     lazyCreatePopup();
 
-    QPoint cursorPos = QCursor::pos();
-    const QRect availRect = this->screen()->availableGeometry();
+    const QPoint preferredGlobalCenterPos = preferredCenter ? *preferredCenter : QCursor::pos();
 
-    if (move == MoveToMousePosition) {
-        m_popup->move(QPoint(cursorPos.x()-m_popup->width()/2, cursorPos.y()-m_popup->height()/2));
-        QRect rc = m_popup->geometry();
-        if (rc.x() < availRect.x()) rc.setX(availRect.x());
-        if (rc.y() < availRect.y()) rc.setY(availRect.y());
-        m_popup->setGeometry(rc);
+    m_popup->create();
+
+    const QPoint preferredGlobalTopLeft =
+        QPoint(preferredGlobalCenterPos.x() - m_popup->width() / 2, preferredGlobalCenterPos.y() - m_popup->height() / 2);
+
+#ifdef HAVE_WAYLAND
+    if (qApp->platformName() == "wayland") {
+        m_popup->move(preferredGlobalTopLeft);
+    } else
+#endif
+    {
+        const QRect availRect = this->screen()->availableGeometry();
+        QRect rc(preferredGlobalTopLeft, m_popup->size());
+        rc = kisEnsureInRect(rc, availRect);
+        m_popup->move(rc.topLeft());
     }
 
     if (m_colorPreviewPopup) {
@@ -432,15 +465,21 @@ void KisColorSelectorBase::showPopup(Move move)
     }
 
     m_popup->show();
-    m_popup->m_colorPreviewPopup->show();
+    m_popup->m_colorPreviewPopup->showAndAdjustPosition();
 }
 
-void KisColorSelectorBase::hidePopup()
+void KisColorSelectorBase::requestHideMyself()
 {
-    KIS_ASSERT_RECOVER_RETURN(m_isPopup);
+    m_hideTimer->start();
+}
 
+void KisColorSelectorBase::tryHideMyself()
+{
     m_colorPreviewPopup->hide();
-    hide();
+
+    if (m_isPopup) {
+        hide();
+    }
 }
 
 void KisColorSelectorBase::commitColor(const KoColor& color, Acs::ColorRole role)
@@ -461,7 +500,7 @@ void KisColorSelectorBase::commitColor(const KoColor& color, Acs::ColorRole role
 void KisColorSelectorBase::showColorPreview()
 {
     if(m_colorPreviewPopup->isHidden()) {
-        m_colorPreviewPopup->show();
+        m_colorPreviewPopup->showAndAdjustPosition();
     }
 }
 
@@ -506,8 +545,7 @@ void KisColorSelectorBase::updateSettings()
         setPopupBehaviour(false, false); // do not show zoom selector
    }
 
-
-    if(m_isPopup) {
+   if(m_isPopup) {
         m_hideOnMouseClick = cfg.readEntry("hidePopupOnClickCheck", false);
         const int zoomSize = cfg.readEntry("zoomSize", 280);
         resize(zoomSize, zoomSize);
@@ -543,34 +581,16 @@ KisDisplayColorConverter* KisColorSelectorBase::converter() const
                 KisDisplayColorConverter::dumbConverterInstance();
 }
 
-void KisColorSelectorBase::tryHideAllPopups()
-{
-    if (m_colorPreviewPopup->isVisible()) {
-        m_colorUpdateSelf=false; //this is for allowing advanced selector to listen to outside color-change events.
-        m_colorPreviewPopup->hide();
-    }
-
-    if (m_popup && m_popup->isVisible()) {
-        m_popup->m_hideTimer->start();
-    }
-
-    if (m_isPopup && !m_hideTimer->isActive()) {
-        m_hideTimer->start();
-    }
-}
-
-
 void KisColorSelectorBase::mouseMoveEvent(QMouseEvent *event)
 {
     event->accept();
 }
 
-
 void KisColorSelectorBase::changeEvent(QEvent *event)
 {
     // hide the popup when another window becomes active, e.g. due to alt+tab
     if(m_isPopup && event->type() == QEvent::ActivationChange && !isActiveWindow()) {
-        hidePopup();
+        tryHideMyself();
     }
 
     QWidget::changeEvent(event);

@@ -35,6 +35,17 @@ kis_add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_SOURCES})
 
 target_link_libraries(kritacolorselectorng kritaui)
 
+if (QT_MAJOR_VERSION STREQUAL "6")
+    if (HAVE_WAYLAND)
+        set_source_files_properties(
+            kis_color_selector_base.cpp
+            PROPERTIES
+            INCLUDE_DIRECTORIES
+            "${Qt6WaylandGlobalPrivate_INCLUDE_DIRS};${Qt6WaylandClient_PRIVATE_INCLUDE_DIRS};${Qt6Gui_PRIVATE_INCLUDE_DIRS}"
+        )
+    endif()
+endif()
+
 install(TARGETS kritacolorselectorng  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( FILES  kis_colselng_color_patches.png

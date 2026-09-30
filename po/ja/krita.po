@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-29 00:43+0000\n"
+"POT-Creation-Date: 2026-09-30 00:43+0000\n"
 "PO-Revision-Date: 2026-06-07 12:10+0900\n"
 "Last-Translator: Mint <5602mint@gmail.com>\n"
 "Language-Team: Japanese <kde-i18n-doc@kde.org>\n"
@@ -7280,24 +7280,26 @@ msgid "Align Right"
 msgstr "右揃え"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
+#: krita/data/actions/InteractionTool.action:33
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Ungroup shapes"
 msgctxt "action"
-msgid "Ungroup shape(s)"
+msgid "Ungroup shapes"
 msgstr "シェイプのグループ化を解除"
 
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:28
-#: krita/data/actions/InteractionTool.action:33
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Group as Swatch Group in a Palette"
+#| msgid "Remove selected group"
 msgctxt "action"
-msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
-msgstr ""
+msgid "Remove the selected shape group"
+msgstr "選択されたグループを削除"
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7350,31 +7352,26 @@ msgid "Vertically Center"
 msgstr "縦中央に"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
+#: krita/data/actions/InteractionTool.action:73
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Group shapes"
 msgctxt "action"
-msgid "Group shape(s)"
+msgid "Group shapes"
 msgstr "シェイプをグループ化"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
 #, fuzzy, kde-format
 #| msgctxt "action"
-#| msgid "Group"
-msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
-msgid "Group"
-msgstr "グループ化"
-
-#. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
-#: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group"
-msgctxt "Group shape(s) in the context of Vector Interaction Tool"
-msgid "Group"
-msgstr "グループ化"
+#| msgid "Create a group layer containing selected layers"
+msgctxt "action"
+msgid "Create a shape group containing selected shapes"
+msgstr "選択したレイヤーを持つグループレイヤーを作成"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
@@ -12132,7 +12129,10 @@ msgid "Paste layer from clipboard"
 msgstr "クリップボードよりレイヤーを貼り付け"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2914
+#. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2914 krita/krita.action:2917
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Group Layer"
@@ -12147,15 +12147,11 @@ msgctxt "action"
 msgid "Create a group layer containing selected layers"
 msgstr "選択したレイヤーを持つグループレイヤーを作成"
 
-#. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2917
-#, kde-format
-msgctxt "action"
-msgid "Quick Group"
-msgstr "クイックグループ化"
-
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2926
+#. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2926 krita/krita.action:2929
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Ungroup shapes"
@@ -12170,13 +12166,6 @@ msgctxt "action"
 msgid "Remove grouping of the layers or remove one layer out of the group"
 msgstr ""
 "レイヤーのグルーピングを解除するか、グループの中からレイヤーを一つ消去する"
-
-#. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2929
-#, kde-format
-msgctxt "action"
-msgid "Quick Ungroup"
-msgstr "クイックグループ解除"
 
 #. i18n: context: text @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
@@ -16465,10 +16454,9 @@ msgctxt "action"
 msgid "Change Interface Scale"
 msgstr "矩形を変更"
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
 #: krita/main.cc:719 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
-#: libs/ui/wdgsplash.ui:309
+#: libs/ui/kis_splash_screen.cpp:46
 #, kde-format
 msgid "Krita"
 msgstr "Krita"
@@ -24407,10 +24395,10 @@ msgstr "ローカルリソース"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
 #: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
-#: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1237
-#: libs/ui/KisApplication.cpp:1240 libs/ui/KisApplication.cpp:1256
-#: libs/ui/KisApplication.cpp:1288 libs/ui/KisApplication.cpp:1302
-#: libs/ui/KisApplication.cpp:1330 libs/ui/KisDocument.cpp:1057
+#: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1230
+#: libs/ui/KisApplication.cpp:1233 libs/ui/KisApplication.cpp:1249
+#: libs/ui/KisApplication.cpp:1281 libs/ui/KisApplication.cpp:1295
+#: libs/ui/KisApplication.cpp:1323 libs/ui/KisDocument.cpp:1057
 #: libs/ui/KisDocument.cpp:1072 libs/ui/KisDocument.cpp:2039
 #: libs/ui/KisDocument.cpp:2082 libs/ui/KisDocument.cpp:2093
 #: libs/ui/KisMainWindow.cpp:1049 libs/ui/KisMainWindow.cpp:1119
@@ -26970,6 +26958,7 @@ msgstr "FFmpeg のバージョン:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:845
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:120
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
 #: plugins/impex/webp/kis_wdg_options_webp.ui:451
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:447
@@ -27151,23 +27140,137 @@ msgstr "画像の境界"
 msgid "Image Center"
 msgstr "画像の中心"
 
-#: libs/ui/dialogs/kis_about_application.cpp:35
+#: libs/ui/dialogs/kis_about_application.cpp:40
 #, kde-format
 msgid "About Krita"
 msgstr "Krita について"
 
-#: libs/ui/dialogs/kis_about_application.cpp:46
+#: libs/ui/dialogs/kis_about_application.cpp:51
+#, fuzzy, kde-format
+#| msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
+msgid "<p><b>Using Krita</b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Krita を使う</b></span></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:58
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
+#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
+#| "a></p>"
+msgid ""
+"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
+"underline;\">Support Krita's Development!</span></a></p>"
+msgstr ""
+"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Krita の開発を支援する！</span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:59
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: "
+#| "underline; color:%1;\">Krita Website</span></a></p>"
+msgid ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
+"\">Krita Website</span></a></p>"
+msgstr ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Krita ウェブサイト</span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:63
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
+#| "\"><span style=\" text-decoration: underline; color:%1;\">Getting "
+#| "Started</span></a></p>"
+msgid ""
+"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
+"\"><span style=\" text-decoration: underline;\">Getting Started</span></a></"
+"p>"
+msgstr ""
+"<p><a href=\"https://docs.krita.org/ja/user_manual/getting_started.html"
+"\"><span style=\" text-decoration: underline; color:%1;\">はじめに</span></"
+"a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:64
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+#| "underline; color:%1;\">Manual</span></a></p>"
+msgid ""
+"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+"underline;\">Manual</span></a></p>"
+msgstr ""
+"<p><a href=\"https://docs.krita.org/ja\"><span style=\" text-decoration: "
+"underline; color:%1;\">マニュアル</span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:66
+#, fuzzy, kde-format
+#| msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
+msgid "<p><b>Coding Krita</b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Krita の開発</b></span></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:67
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
+#| "underline; color:%1;\">User Community</span></a></p>"
+msgid ""
+"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
+"underline;\">User Community</span></a></p>"
+msgstr ""
+"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
+"underline; color:%1;\">ユーザーコミュニティ</span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:68
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+#| "decoration: underline; color:%1;\">Source Code</span></a></p>"
+msgid ""
+"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline;;\">Source Code</span></a></p>"
+msgstr ""
+"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline; color:%1;\">ソースコード</span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:69
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style="
+#| "\" text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+msgid ""
+"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
+"text-decoration: underline;\">Scripting API</span></a></p>"
+msgstr ""
+"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
+"text-decoration: underline; color:%1;\">スクリプト API</span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:70
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
+#| "style=\" text-decoration: underline; color:%1;\">Scripting School</span></"
+#| "a></p>"
+msgid ""
+"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline;;\">Scripting School</span></a></p>"
+msgstr ""
+"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline; color:%1;\">スクリプティング・スクール</"
+"span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:83
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><p align=\"center\"><b>作成者</b></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:66
+#: libs/ui/dialogs/kis_about_application.cpp:103
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Noboru Sinohara, Yukiko Bando, Tokiedian, Hiroki Tokunaga"
 
-#: libs/ui/dialogs/kis_about_application.cpp:67
+#: libs/ui/dialogs/kis_about_application.cpp:104
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -27175,12 +27278,12 @@ msgstr ""
 "shinobo@leo.bekkoame.ne.jp, ybando@k6.dion.ne.jp, lamentisimo@gmail.com, "
 "tokusan441@gmail.com"
 
-#: libs/ui/dialogs/kis_about_application.cpp:72
+#: libs/ui/dialogs/kis_about_application.cpp:109
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>翻訳者</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:84
+#: libs/ui/dialogs/kis_about_application.cpp:121
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -27192,7 +27295,7 @@ msgstr ""
 "国際化についての情報はこちら <a href=\"http://l10n.kde.org\">http://l10n.kde."
 "org</a></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:93
+#: libs/ui/dialogs/kis_about_application.cpp:130
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
@@ -27217,12 +27320,12 @@ msgstr ""
 "href=\"http://www.asifa-hollywood.org/\"><img src=\":/asifa.png\"></a> </"
 "body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:105
+#: libs/ui/dialogs/kis_about_application.cpp:142
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><p align=\"center\"><b>謝辞</b></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:128
+#: libs/ui/dialogs/kis_about_application.cpp:165
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -27231,7 +27334,7 @@ msgstr ""
 "</p><p><i>Krita の開発への助言、アイコン、ブラシセットその他による支援</i></"
 "p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:132
+#: libs/ui/dialogs/kis_about_application.cpp:169
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -27265,7 +27368,7 @@ msgstr ""
 "きません。これは商用ソフトウェアの試用版・学生版が皆さんの作品の商用利用を禁"
 "止しているのとは対照的なものです。</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:167
+#: libs/ui/dialogs/kis_about_application.cpp:204
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -34063,23 +34166,23 @@ msgstr "統合された画像から描画色を抽出"
 msgid "Sample Background Color from Merged Image"
 msgstr "統合された画像から背景色を抽出"
 
-#: libs/ui/input/kis_change_frame_action.cpp:26
+#: libs/ui/input/kis_change_frame_action.cpp:27
 #, kde-format
 msgid "Switch Time"
 msgstr "時間切り替え"
 
-#: libs/ui/input/kis_change_frame_action.cpp:27
+#: libs/ui/input/kis_change_frame_action.cpp:28
 #, kde-format
 msgid ""
 "The <i>Switch Time</i> action changes the current time of the animation."
 msgstr "<i>時間切り替え</i>はアニメーションの現在時間を変更します。"
 
-#: libs/ui/input/kis_change_frame_action.cpp:30
+#: libs/ui/input/kis_change_frame_action.cpp:31
 #, kde-format
 msgid "Next Frame"
 msgstr "次のフレーム"
 
-#: libs/ui/input/kis_change_frame_action.cpp:31
+#: libs/ui/input/kis_change_frame_action.cpp:32
 #, kde-format
 msgid "Previous Frame"
 msgstr "前のフレーム"
@@ -34885,6 +34988,11 @@ msgstr "フリーハンド選択ツール"
 msgid "Activate Transform Tool"
 msgstr "変形ツールをアクティブ化"
 
+#: libs/ui/input/KisTouchGestureAction.cpp:36 libs/ui/kis_mirror_manager.cpp:37
+#, kde-format
+msgid "Mirror View"
+msgstr "左右反転表示"
+
 #. i18n: ectx: property (windowTitle), widget (QWidget, TabletTest)
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:18
 #: libs/ui/input/wintab/drawpile_tablettester/tablettester.cpp:18
@@ -35292,11 +35400,6 @@ msgstr "色オーバーレイ"
 #, kde-format
 msgid "Filter Mask Properties"
 msgstr "フィルタマスクのプロパティ"
-
-#: libs/ui/kis_mirror_manager.cpp:37
-#, kde-format
-msgid "Mirror View"
-msgstr "左右反転表示"
 
 #: libs/ui/kis_mirror_manager.cpp:43
 #, kde-format
@@ -35797,107 +35900,13 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "不透明領域を選択"
 
-#: libs/ui/kis_splash_screen.cpp:167
-#, kde-format
-msgid ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></b></"
-"p>"
-msgstr ""
-"<html><head/><body><p align=\"center\"><b><span style=\" color:%1;\">最近使用"
-"したファイル</span></b></p>"
-
-#: libs/ui/kis_splash_screen.cpp:210
-#, kde-format
-msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
-msgstr "<p><span style=\" color:%1;\"><b>Krita を使う</b></span></p>"
-
-#: libs/ui/kis_splash_screen.cpp:217
-#, kde-format
-msgid ""
-"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Support Krita's Development!</span></a></p>"
-msgstr ""
-"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Krita の開発を支援する！</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:218
-#, kde-format
-msgid ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Krita Website</span></a></p>"
-msgstr ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Krita ウェブサイト</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:222
-#, kde-format
-msgid ""
-"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-"\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</"
-"span></a></p>"
-msgstr ""
-"<p><a href=\"https://docs.krita.org/ja/user_manual/getting_started.html"
-"\"><span style=\" text-decoration: underline; color:%1;\">はじめに</span></"
-"a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:223
-#, kde-format
-msgid ""
-"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Manual</span></a></p>"
-msgstr ""
-"<p><a href=\"https://docs.krita.org/ja\"><span style=\" text-decoration: "
-"underline; color:%1;\">マニュアル</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:225
-#, kde-format
-msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
-msgstr "<p><span style=\" color:%1;\"><b>Krita の開発</b></span></p>"
-
-#: libs/ui/kis_splash_screen.cpp:226
-#, kde-format
-msgid ""
-"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">User Community</span></a></p>"
-msgstr ""
-"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">ユーザーコミュニティ</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:227
-#, kde-format
-msgid ""
-"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-"decoration: underline; color:%1;\">Source Code</span></a></p>"
-msgstr ""
-"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-"decoration: underline; color:%1;\">ソースコード</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:228
-#, kde-format
-msgid ""
-"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
-"text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
-msgstr ""
-"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
-"text-decoration: underline; color:%1;\">スクリプト API</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:229
-#, kde-format
-msgid ""
-"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
-"\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
-msgstr ""
-"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
-"\" text-decoration: underline; color:%1;\">スクリプティング・スクール</"
-"span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:273
+#: libs/ui/kis_splash_screen.cpp:134
 #, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:294
+#: libs/ui/kis_splash_screen.cpp:155
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
@@ -36165,20 +36174,20 @@ msgstr "MIME タイプが見つかりません、-mimetype オプションを試
 msgid "Failed to render animation frames!"
 msgstr "アニメーションフレームのレンダリングに失敗しました!"
 
-#: libs/ui/KisApplication.cpp:817 libs/ui/KisApplication.cpp:1096
+#: libs/ui/KisApplication.cpp:817 libs/ui/KisApplication.cpp:1089
 #, kde-format
 msgid "File layer"
 msgstr "ファイル参照レイヤー"
 
 #: libs/ui/KisApplication.cpp:825 libs/ui/KisApplication.cpp:830
-#: libs/ui/KisApplication.cpp:1090 libs/ui/KisApplication.cpp:1104
-#: libs/ui/KisApplication.cpp:1109
+#: libs/ui/KisApplication.cpp:1083 libs/ui/KisApplication.cpp:1097
+#: libs/ui/KisApplication.cpp:1102
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: 警告"
 
-#: libs/ui/KisApplication.cpp:826 libs/ui/KisApplication.cpp:1105
+#: libs/ui/KisApplication.cpp:826 libs/ui/KisApplication.cpp:1098
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
@@ -36216,33 +36225,33 @@ msgstr ""
 "--new-image オプションを使用して新しいファイルを作成するか、既存のファイルを"
 "開いてください。"
 
-#: libs/ui/KisApplication.cpp:1091
+#: libs/ui/KisApplication.cpp:1084
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "ファイルを開けませんでした。%1"
 
-#: libs/ui/KisApplication.cpp:1110
+#: libs/ui/KisApplication.cpp:1103
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 "ファイル参照レイヤーを追加できません。開いているドキュメントがありません。"
 
-#: libs/ui/KisApplication.cpp:1238
+#: libs/ui/KisApplication.cpp:1231
 #, kde-format
 msgid "No template found for: %1"
 msgstr "以下の場所にテンプレートは存在しません: %1"
 
-#: libs/ui/KisApplication.cpp:1241
+#: libs/ui/KisApplication.cpp:1234
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "以下の場所にはテンプレートが多過ぎます: %1"
 
-#: libs/ui/KisApplication.cpp:1257
+#: libs/ui/KisApplication.cpp:1250
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "テンプレート %1 は読み込みに失敗しました。"
 
-#: libs/ui/KisApplication.cpp:1289
+#: libs/ui/KisApplication.cpp:1282
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -36257,7 +36266,7 @@ msgstr ""
 "\n"
 "変更を有効にするには、Krita を再起動します。"
 
-#: libs/ui/KisApplication.cpp:1303
+#: libs/ui/KisApplication.cpp:1296
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -36269,7 +36278,7 @@ msgstr ""
 "他のプログラムがこのファイルを使用中でないか確認した後もう一度お試しくださ"
 "い。"
 
-#: libs/ui/KisApplication.cpp:1331
+#: libs/ui/KisApplication.cpp:1324
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "設定ファイルをクリアしますか？"
@@ -38956,42 +38965,6 @@ msgstr ""
 "新しい AppImage が %1 にダウンロードされました。更新を完了するには、Krita を"
 "閉じて新しい AppImage を実行してください。"
 
-#. i18n: ectx: property (text), widget (QLabel, lblLinks)
-#: libs/ui/wdgsplash.ui:439
-#, kde-format
-msgid ""
-"<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-"\">Links</span></p></body></html>"
-msgstr ""
-"<html><head/><body><p align=\"left\"><span style=\" font-weight:600;\">リンク"
-"</span></p></body></html>"
-
-#. i18n: ectx: property (text), widget (QLabel, lblRecent)
-#: libs/ui/wdgsplash.ui:493
-#, kde-format
-msgid ""
-"<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-"\">Recent files</span></p></body></html>"
-msgstr ""
-"<html><head/><body><p align=\"left\"><span style=\" font-weight:600;\">最近開"
-"いたファイル</span></p></body></html>"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkShowAtStartup)
-#: libs/ui/wdgsplash.ui:594
-#, kde-format
-msgid "Hide after startup."
-msgstr "スタートアップの後は表示しない"
-
-#. i18n: ectx: property (text), widget (QPushButton, bnClose)
-#. i18n: ectx: property (text), widget (QStatusBar, statusbar)
-#. i18n: ectx: property (text), widget (QPushButton, closeButton)
-#: libs/ui/wdgsplash.ui:1016
-#: plugins/extensions/pykrita/plugin/krita/excepthook.ui:61
-#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:63
-#, kde-format
-msgid "&Close"
-msgstr "閉じる(&C)"
-
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:125
 #, kde-format
 msgctxt ""
@@ -41136,37 +41109,37 @@ msgstr "%1:"
 msgid "Color name:"
 msgstr "色名:"
 
-#: libs/widgets/kis_color_input.cpp:421
+#: libs/widgets/kis_color_input.cpp:429
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
 msgstr "H:"
 
-#: libs/widgets/kis_color_input.cpp:422
+#: libs/widgets/kis_color_input.cpp:430
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
 msgstr "S:"
 
-#: libs/widgets/kis_color_input.cpp:501
+#: libs/widgets/kis_color_input.cpp:509
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
 msgid "L:"
 msgstr "L:"
 
-#: libs/widgets/kis_color_input.cpp:504
+#: libs/widgets/kis_color_input.cpp:512
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
 msgid "Y:"
 msgstr "Y:"
 
-#: libs/widgets/kis_color_input.cpp:507
+#: libs/widgets/kis_color_input.cpp:515
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
 msgid "I:"
 msgstr "I:"
 
-#: libs/widgets/kis_color_input.cpp:511
+#: libs/widgets/kis_color_input.cpp:519
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
@@ -51156,6 +51129,14 @@ msgstr "スクリプト実行中に例外が発生"
 msgid "Exception"
 msgstr "例外"
 
+#. i18n: ectx: property (text), widget (QStatusBar, statusbar)
+#. i18n: ectx: property (text), widget (QPushButton, closeButton)
+#: plugins/extensions/pykrita/plugin/krita/excepthook.ui:61
+#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:63
+#, kde-format
+msgid "&Close"
+msgstr "閉じる(&C)"
+
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, ScriptEditor)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:18
 #, kde-format
@@ -51300,7 +51281,7 @@ msgid "Error: The Python engine could not be initialized"
 msgstr "エラー: Python エンジンが初期化できませんでした"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/pykrita/plugin/manager.ui:75
+#: plugins/extensions/pykrita/plugin/manager.ui:72
 #, kde-format
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
@@ -51313,18 +51294,96 @@ msgstr ""
 "decoration: underline; color:#2980b9;\">Krita Scripting School</span></a> を"
 "チェックしてください!</p></body></html>"
 
-#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:59
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
+#, fuzzy, kde-format
+#| msgctxt "EXIF: exposure - exposure mode"
+#| msgid "Manual"
+msgctxt "@title:tab plugin manual"
+msgid "Manual"
+msgstr "手動"
+
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:53
+#, fuzzy, kde-format
+#| msgid "Status"
+msgctxt "@title:tab plugin status"
+msgid "Status"
+msgstr "ステータス"
+
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:75
 #, kde-format
 msgid "Python Plugin Manager"
 msgstr "Python プラグインマネージャ"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:124
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:114
+#, fuzzy, kde-format
+#| msgid "Location:"
+msgctxt "%1 plugin file path"
+msgid "Location: %1"
+msgstr "場所:"
+
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
+#, fuzzy, kde-format
+#| msgid "Enabled"
+msgid "Enabled: false"
+msgstr "有効"
+
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
+#, fuzzy, kde-format
+#| msgid "Enabled"
+msgid "Enabled: true"
+msgstr "有効"
+
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:117
+#, fuzzy, kde-format
+#| msgid "Status"
+msgctxt "%1 plugin status text"
+msgid "Status: %1"
+msgstr "ステータス"
+
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:119
+#, fuzzy, kde-format
+#| msgid "Error: "
+msgctxt "%1 plugin error message"
+msgid "Error: %1"
+msgstr "エラー: "
+
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:81
+#, fuzzy, kde-format
+#| msgctxt "Draws a line around an area"
+#| msgid "Stroke"
+msgctxt "@item:intable plugin status"
+msgid "Broken"
+msgstr "縁取り"
+
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:83
+#, fuzzy, kde-format
+#| msgid "Enabled"
+msgctxt "@item:intable plugin status"
+msgid "Unstable"
+msgstr "有効"
+
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:85
+#, fuzzy, kde-format
+#| msgctxt "Load Image as Thumbnail button"
+#| msgid "Load Image"
+msgctxt "@item:intable plugin status"
+msgid "Loaded"
+msgstr "画像の読み込み"
+
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:87
+#, fuzzy, kde-format
+#| msgid "Not Saved"
+msgctxt "@item:intable plugin status"
+msgid "Not loaded"
+msgstr "未保存"
+
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Unable to find the module specified <application>%1</application>"
 msgstr "<application>%1</application> で指定されたモジュールを見つけられません"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:147
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:173
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -51334,13 +51393,13 @@ msgstr ""
 "<p>指定されたバージョンは <application>%1</application>: <icode>%2</icode> の"
 "依存性に不正なフォーマットを含んでいます。スキップします</p>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:174
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:200
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<title>Dependency check</title>"
 msgstr "<title>依存性確認</title>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:205
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:231
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -51352,7 +51411,7 @@ msgstr ""
 "ジュールは PEP396 <code>__version__</code> 属性を持っていません。これは無効に"
 "されますが、その場合の挙動は予想できません...</p>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:219
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:245
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p><application>%1</application>: Unexpected module's version format"
@@ -51360,7 +51419,7 @@ msgstr ""
 "<p><application>%1</application>: 予期されないモジュールのバージョンフォー"
 "マット"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:232
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:258
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -51370,7 +51429,7 @@ msgstr ""
 "<p><application>%1</application>: 適するバージョンを発見できませんでした。必"
 "要なバージョンは%2 %3ですが、発見したバージョンは%4でした</p>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:247
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:273
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -51378,29 +51437,38 @@ msgid ""
 msgstr ""
 "<p>モジュールで読み込みに失敗 <application>%1</application>:</p><pre>%2</pre>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:356
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:382
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Internal engine failure"
 msgstr "内部エンジンの障害"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:360
-#, kde-format
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:386
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Module not loaded:<br/>%1"
 msgctxt "@info:tooltip"
-msgid "Module not loaded:<br/>%1"
+msgid "Module not loaded:<br/><code>%1</code>"
 msgstr "モジュールが読み込めませんでした:<br/>%1"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:51
+#: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:53
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "名前"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:53
+#: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:55
 #, kde-format
 msgctxt "@title:column"
 msgid "Comment"
 msgstr "コメント"
+
+#: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:57
+#, fuzzy, kde-format
+#| msgid "Status"
+msgctxt "@title:column"
+msgid "Status"
+msgstr "ステータス"
 
 #: plugins/extensions/qmic/kis_qmic_interface.cpp:230
 msgctxt "(qtundo-format)"
@@ -66201,7 +66269,7 @@ msgid "Zoom Tool"
 msgstr "表示拡大縮小ツール"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
-#: plugins/tools/basictools/kis_tool_pan.cpp:81
+#: plugins/tools/basictools/kis_tool_pan.cpp:95
 #, kde-format
 msgid "Pan Tool"
 msgstr "パン (平行移動) ツール"
@@ -71343,6 +71411,66 @@ msgstr ""
 "全範囲と部分範囲を切り替えます。\n"
 "全範囲: [%1, %2]\n"
 "部分範囲: [%3, %4]"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Ungroup shapes"
+#~ msgctxt "action"
+#~ msgid "Ungroup shape(s)"
+#~ msgstr "シェイプのグループ化を解除"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Group shapes"
+#~ msgctxt "action"
+#~ msgid "Group shape(s)"
+#~ msgstr "シェイプをグループ化"
+
+#, fuzzy
+#~| msgctxt "action"
+#~| msgid "Group"
+#~ msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
+#~ msgid "Group"
+#~ msgstr "グループ化"
+
+#, fuzzy
+#~| msgctxt "action"
+#~| msgid "Group"
+#~ msgctxt "Group shape(s) in the context of Vector Interaction Tool"
+#~ msgid "Group"
+#~ msgstr "グループ化"
+
+#~ msgctxt "action"
+#~ msgid "Quick Group"
+#~ msgstr "クイックグループ化"
+
+#~ msgctxt "action"
+#~ msgid "Quick Ungroup"
+#~ msgstr "クイックグループ解除"
+
+#~ msgid ""
+#~ "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
+#~ "b></p>"
+#~ msgstr ""
+#~ "<html><head/><body><p align=\"center\"><b><span style=\" color:%1;\">最近"
+#~ "使用したファイル</span></b></p>"
+
+#~ msgid ""
+#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
+#~ "\">Links</span></p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;\">リ"
+#~ "ンク</span></p></body></html>"
+
+#~ msgid ""
+#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
+#~ "\">Recent files</span></p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;\">最"
+#~ "近開いたファイル</span></p></body></html>"
+
+#~ msgid "Hide after startup."
+#~ msgstr "スタートアップの後は表示しない"
 
 #~ msgid "Layer name:"
 #~ msgstr "レイヤー名:"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-29 00:43+0000\n"
+"POT-Creation-Date: 2026-09-30 00:43+0000\n"
 "PO-Revision-Date: 2026-09-22 23:23+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -7244,24 +7244,26 @@ msgid "Align Right"
 msgstr "Дясно подравняване"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
-#, kde-format
+#: krita/data/actions/InteractionTool.action:33
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Ungroup shapes"
 msgctxt "action"
-msgid "Ungroup shape(s)"
-msgstr "Разгрупиране на форма(и)"
+msgid "Ungroup shapes"
+msgstr "Разгрупиране на форми"
 
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:28
-#: krita/data/actions/InteractionTool.action:33
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Group as Swatch Group in a Palette"
+#| msgid "Remove selected group"
 msgctxt "action"
-msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
-msgstr ""
-"Разделяне на група(и) от форми във векторизиращия инструмент за "
-"взаимодействие"
+msgid "Remove the selected shape group"
+msgstr "Премахване на избраната група"
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7314,25 +7316,26 @@ msgid "Vertically Center"
 msgstr "Вертикално центриране"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
-#, kde-format
+#: krita/data/actions/InteractionTool.action:73
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Group shapes"
 msgctxt "action"
-msgid "Group shape(s)"
-msgstr "Групиране на форма(и)"
+msgid "Group shapes"
+msgstr "Групиране на форми"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, kde-format
-msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
-msgid "Group"
-msgstr "Групиране"
-
-#. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
-#: krita/data/actions/InteractionTool.action:73
-#, kde-format
-msgctxt "Group shape(s) in the context of Vector Interaction Tool"
-msgid "Group"
-msgstr "Групиране"
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Create a group layer containing selected layers"
+msgctxt "action"
+msgid "Create a shape group containing selected shapes"
+msgstr "Създаване на групов слой с избраните слоеве"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
@@ -12080,7 +12083,10 @@ msgid "Paste layer from clipboard"
 msgstr "Поставяне на слой от клипборда"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2914
+#. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2914 krita/krita.action:2917
 #, kde-format
 msgctxt "action"
 msgid "Group layer(s)"
@@ -12093,15 +12099,11 @@ msgctxt "action"
 msgid "Create a group layer containing selected layers"
 msgstr "Създаване на групов слой с избраните слоеве"
 
-#. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2917
-#, kde-format
-msgctxt "action"
-msgid "Quick Group"
-msgstr "Бързо групиране"
-
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2926
+#. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2926 krita/krita.action:2929
 #, kde-format
 msgctxt "action"
 msgid "Ungroup layer(s)"
@@ -12114,13 +12116,6 @@ msgctxt "action"
 msgid "Remove grouping of the layers or remove one layer out of the group"
 msgstr ""
 "Премахване на групирането на слоевете или изваждане на един слой от групата"
-
-#. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2929
-#, kde-format
-msgctxt "action"
-msgid "Quick Ungroup"
-msgstr "Бързо разгрупиране"
 
 #. i18n: context: text @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
@@ -16387,10 +16382,9 @@ msgctxt "action"
 msgid "Change Interface Scale"
 msgstr "Промяна на мащаба на интерфейса"
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
 #: krita/main.cc:719 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
-#: libs/ui/wdgsplash.ui:309
+#: libs/ui/kis_splash_screen.cpp:46
 #, kde-format
 msgid "Krita"
 msgstr "Krita"
@@ -24068,10 +24062,10 @@ msgstr "Локални ресурси"
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
 #: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
-#: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1237
-#: libs/ui/KisApplication.cpp:1240 libs/ui/KisApplication.cpp:1256
-#: libs/ui/KisApplication.cpp:1288 libs/ui/KisApplication.cpp:1302
-#: libs/ui/KisApplication.cpp:1330 libs/ui/KisDocument.cpp:1057
+#: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1230
+#: libs/ui/KisApplication.cpp:1233 libs/ui/KisApplication.cpp:1249
+#: libs/ui/KisApplication.cpp:1281 libs/ui/KisApplication.cpp:1295
+#: libs/ui/KisApplication.cpp:1323 libs/ui/KisDocument.cpp:1057
 #: libs/ui/KisDocument.cpp:1072 libs/ui/KisDocument.cpp:2039
 #: libs/ui/KisDocument.cpp:2082 libs/ui/KisDocument.cpp:2093
 #: libs/ui/KisMainWindow.cpp:1049 libs/ui/KisMainWindow.cpp:1119
@@ -26606,6 +26600,7 @@ msgstr "Версия на FFmpeg:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:845
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:120
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
 #: plugins/impex/webp/kis_wdg_options_webp.ui:451
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:447
@@ -26790,35 +26785,149 @@ msgstr "Краища на изображение"
 msgid "Image Center"
 msgstr "Център на изображението"
 
-#: libs/ui/dialogs/kis_about_application.cpp:35
+#: libs/ui/dialogs/kis_about_application.cpp:40
 #, kde-format
 msgid "About Krita"
 msgstr "Относно Krita"
 
-#: libs/ui/dialogs/kis_about_application.cpp:46
+#: libs/ui/dialogs/kis_about_application.cpp:51
+#, fuzzy, kde-format
+#| msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
+msgid "<p><b>Using Krita</b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Използване на Krita</b></span></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:58
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
+#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
+#| "a></p>"
+msgid ""
+"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
+"underline;\">Support Krita's Development!</span></a></p>"
+msgstr ""
+"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Подкрепа за разработването на Krita!</span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:59
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: "
+#| "underline; color:%1;\">Krita Website</span></a></p>"
+msgid ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
+"\">Krita Website</span></a></p>"
+msgstr ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Уебсайт на Krita</span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:63
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
+#| "\"><span style=\" text-decoration: underline; color:%1;\">Getting "
+#| "Started</span></a></p>"
+msgid ""
+"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
+"\"><span style=\" text-decoration: underline;\">Getting Started</span></a></"
+"p>"
+msgstr ""
+"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
+"\"><span style=\" text-decoration: underline; color:%1;\">Първи стъпки</"
+"span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:64
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+#| "underline; color:%1;\">Manual</span></a></p>"
+msgid ""
+"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+"underline;\">Manual</span></a></p>"
+msgstr ""
+"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Ръководство</span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:66
+#, fuzzy, kde-format
+#| msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
+msgid "<p><b>Coding Krita</b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Програмиране на Krita</b></span></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:67
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
+#| "underline; color:%1;\">User Community</span></a></p>"
+msgid ""
+"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
+"underline;\">User Community</span></a></p>"
+msgstr ""
+"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
+"underline; color:%1;\">Потребителска общност</span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:68
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+#| "decoration: underline; color:%1;\">Source Code</span></a></p>"
+msgid ""
+"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline;;\">Source Code</span></a></p>"
+msgstr ""
+"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline; color:%1;\">Изходен код</span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:69
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style="
+#| "\" text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+msgid ""
+"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
+"text-decoration: underline;\">Scripting API</span></a></p>"
+msgstr ""
+"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
+"text-decoration: underline; color:%1;\">API за скриптове</span></a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:70
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
+#| "style=\" text-decoration: underline; color:%1;\">Scripting School</span></"
+#| "a></p>"
+msgid ""
+"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline;;\">Scripting School</span></a></p>"
+msgstr ""
+"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline; color:%1;\">Училище по скриптинг</span></a></"
+"p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:83
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr ""
 "<html><head/><body><h1 align=\"center\">Krita е създадена от </h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:66
+#: libs/ui/dialogs/kis_about_application.cpp:103
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Минчо Кондарев"
 
-#: libs/ui/dialogs/kis_about_application.cpp:67
+#: libs/ui/dialogs/kis_about_application.cpp:104
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "radnev@yahoo.com"
 
-#: libs/ui/dialogs/kis_about_application.cpp:72
+#: libs/ui/dialogs/kis_about_application.cpp:109
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>Преводачи</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:84
+#: libs/ui/dialogs/kis_about_application.cpp:121
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -26831,7 +26940,7 @@ msgstr ""
 "интернационализирането на KDE посетете <a href=\"http://l10n.kde.org\"> "
 "http: //l10n.kde.org </a> </p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:93
+#: libs/ui/dialogs/kis_about_application.cpp:130
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
@@ -26856,12 +26965,12 @@ msgstr ""
 "align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
 "asifa.png\"></a> </body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:105
+#: libs/ui/dialogs/kis_about_application.cpp:142
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Благодарим на</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:128
+#: libs/ui/dialogs/kis_about_application.cpp:165
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -26870,7 +26979,7 @@ msgstr ""
 ".</p><p><i>За подкрепа на разработката на Krita със съвети, икони, набор от "
 "четки и др.</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:132
+#: libs/ui/dialogs/kis_about_application.cpp:169
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -26904,7 +27013,7 @@ msgstr ""
 "продукти, които ще ви забранят да ги използвате в комерсиални ситуации.</"
 "p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:167
+#: libs/ui/dialogs/kis_about_application.cpp:204
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -33743,12 +33852,12 @@ msgstr "Проба на цвят на преден план от обедине�
 msgid "Sample Background Color from Merged Image"
 msgstr "Проба на цвят на фон от обединено изображение"
 
-#: libs/ui/input/kis_change_frame_action.cpp:26
+#: libs/ui/input/kis_change_frame_action.cpp:27
 #, kde-format
 msgid "Switch Time"
 msgstr "Превключване на времето"
 
-#: libs/ui/input/kis_change_frame_action.cpp:27
+#: libs/ui/input/kis_change_frame_action.cpp:28
 #, kde-format
 msgid ""
 "The <i>Switch Time</i> action changes the current time of the animation."
@@ -33756,12 +33865,12 @@ msgstr ""
 "Действието <i>Превключване на времето</i> променя текущото време на "
 "анимацията."
 
-#: libs/ui/input/kis_change_frame_action.cpp:30
+#: libs/ui/input/kis_change_frame_action.cpp:31
 #, kde-format
 msgid "Next Frame"
 msgstr "Следващ кадър"
 
-#: libs/ui/input/kis_change_frame_action.cpp:31
+#: libs/ui/input/kis_change_frame_action.cpp:32
 #, kde-format
 msgid "Previous Frame"
 msgstr "Предишен кадър"
@@ -34550,6 +34659,11 @@ msgstr "Селекция на ръка"
 msgid "Activate Transform Tool"
 msgstr "Активиране на инструмента за трансформиране"
 
+#: libs/ui/input/KisTouchGestureAction.cpp:36 libs/ui/kis_mirror_manager.cpp:37
+#, kde-format
+msgid "Mirror View"
+msgstr "Огледален изглед"
+
 #. i18n: ectx: property (windowTitle), widget (QWidget, TabletTest)
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:18
 #: libs/ui/input/wintab/drawpile_tablettester/tablettester.cpp:18
@@ -34947,11 +35061,6 @@ msgstr "Маска за цветен слой"
 #, kde-format
 msgid "Filter Mask Properties"
 msgstr "Свойства на маска на филтъра"
-
-#: libs/ui/kis_mirror_manager.cpp:37
-#, kde-format
-msgid "Mirror View"
-msgstr "Огледален изглед"
 
 #: libs/ui/kis_mirror_manager.cpp:43
 #, kde-format
@@ -35446,107 +35555,13 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Селектиране на непрозрачна област"
 
-#: libs/ui/kis_splash_screen.cpp:167
-#, kde-format
-msgid ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></b></"
-"p>"
-msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Ненавсно отваряни "
-"файлове</span></b></p>"
-
-#: libs/ui/kis_splash_screen.cpp:210
-#, kde-format
-msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
-msgstr "<p><span style=\" color:%1;\"><b>Използване на Krita</b></span></p>"
-
-#: libs/ui/kis_splash_screen.cpp:217
-#, kde-format
-msgid ""
-"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Support Krita's Development!</span></a></p>"
-msgstr ""
-"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Подкрепа за разработването на Krita!</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:218
-#, kde-format
-msgid ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Krita Website</span></a></p>"
-msgstr ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Уебсайт на Krita</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:222
-#, kde-format
-msgid ""
-"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-"\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</"
-"span></a></p>"
-msgstr ""
-"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-"\"><span style=\" text-decoration: underline; color:%1;\">Първи стъпки</"
-"span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:223
-#, kde-format
-msgid ""
-"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Manual</span></a></p>"
-msgstr ""
-"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Ръководство</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:225
-#, kde-format
-msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
-msgstr "<p><span style=\" color:%1;\"><b>Програмиране на Krita</b></span></p>"
-
-#: libs/ui/kis_splash_screen.cpp:226
-#, kde-format
-msgid ""
-"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">User Community</span></a></p>"
-msgstr ""
-"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">Потребителска общност</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:227
-#, kde-format
-msgid ""
-"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-"decoration: underline; color:%1;\">Source Code</span></a></p>"
-msgstr ""
-"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-"decoration: underline; color:%1;\">Изходен код</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:228
-#, kde-format
-msgid ""
-"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
-"text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
-msgstr ""
-"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
-"text-decoration: underline; color:%1;\">API за скриптове</span></a></p>"
-
-#: libs/ui/kis_splash_screen.cpp:229
-#, kde-format
-msgid ""
-"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
-"\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
-msgstr ""
-"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
-"\" text-decoration: underline; color:%1;\">Училище по скриптинг</span></a></"
-"p>"
-
-#: libs/ui/kis_splash_screen.cpp:273
+#: libs/ui/kis_splash_screen.cpp:134
 #, kde-format
 msgctxt "Normal splash artist name"
 msgid "Tyson Tan"
 msgstr "Tyson Tan"
 
-#: libs/ui/kis_splash_screen.cpp:294
+#: libs/ui/kis_splash_screen.cpp:155
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
@@ -35816,20 +35831,20 @@ msgstr "Не е намерен видът по MIME. Опитайте с пар�
 msgid "Failed to render animation frames!"
 msgstr "Неуспешно изграждане кадрите на анимацията!"
 
-#: libs/ui/KisApplication.cpp:817 libs/ui/KisApplication.cpp:1096
+#: libs/ui/KisApplication.cpp:817 libs/ui/KisApplication.cpp:1089
 #, kde-format
 msgid "File layer"
 msgstr "Слой на файла"
 
 #: libs/ui/KisApplication.cpp:825 libs/ui/KisApplication.cpp:830
-#: libs/ui/KisApplication.cpp:1090 libs/ui/KisApplication.cpp:1104
-#: libs/ui/KisApplication.cpp:1109
+#: libs/ui/KisApplication.cpp:1083 libs/ui/KisApplication.cpp:1097
+#: libs/ui/KisApplication.cpp:1102
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Предупреждение"
 
-#: libs/ui/KisApplication.cpp:826 libs/ui/KisApplication.cpp:1105
+#: libs/ui/KisApplication.cpp:826 libs/ui/KisApplication.cpp:1098
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Не може да се добави %1 като слой-файл: файлът не съществува."
@@ -35866,32 +35881,32 @@ msgstr ""
 "Можете да създадете нов файл чрез опцията --new-image или да отворите "
 "съществуващ файл."
 
-#: libs/ui/KisApplication.cpp:1091
+#: libs/ui/KisApplication.cpp:1084
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Не може да се отвори файл %1"
 
-#: libs/ui/KisApplication.cpp:1110
+#: libs/ui/KisApplication.cpp:1103
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Няма възможност за добавяне на слой от файл: няма отворен документ."
 
-#: libs/ui/KisApplication.cpp:1238
+#: libs/ui/KisApplication.cpp:1231
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Не е открит шаблон за: %1"
 
-#: libs/ui/KisApplication.cpp:1241
+#: libs/ui/KisApplication.cpp:1234
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Открити са много шаблони за: %1"
 
-#: libs/ui/KisApplication.cpp:1257
+#: libs/ui/KisApplication.cpp:1250
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Неуспешно зареждане на шаблон %1."
 
-#: libs/ui/KisApplication.cpp:1289
+#: libs/ui/KisApplication.cpp:1282
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -35906,7 +35921,7 @@ msgstr ""
 "\n"
 "Рестартирайте Крита, за да влязат в сила промените."
 
-#: libs/ui/KisApplication.cpp:1303
+#: libs/ui/KisApplication.cpp:1296
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -35918,7 +35933,7 @@ msgstr ""
 "Моля, уверете се, че файлът не се използва от друга програма, и опитайте "
 "отново."
 
-#: libs/ui/KisApplication.cpp:1331
+#: libs/ui/KisApplication.cpp:1324
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Желаете ли изчистване на файла с настройки?"
@@ -38610,42 +38625,6 @@ msgstr ""
 "Новият AppImage беше изтеглен в %1. За завършване на актуализацията "
 "затворете Krita и стартирайте новия AppImage."
 
-#. i18n: ectx: property (text), widget (QLabel, lblLinks)
-#: libs/ui/wdgsplash.ui:439
-#, kde-format
-msgid ""
-"<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-"\">Links</span></p></body></html>"
-msgstr ""
-"<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-"\">Връзки</span></p></body></html>"
-
-#. i18n: ectx: property (text), widget (QLabel, lblRecent)
-#: libs/ui/wdgsplash.ui:493
-#, kde-format
-msgid ""
-"<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-"\">Recent files</span></p></body></html>"
-msgstr ""
-"<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-"\">Последни файлове</span></p></body></html>"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkShowAtStartup)
-#: libs/ui/wdgsplash.ui:594
-#, kde-format
-msgid "Hide after startup."
-msgstr "Скриване след стартиране."
-
-#. i18n: ectx: property (text), widget (QPushButton, bnClose)
-#. i18n: ectx: property (text), widget (QStatusBar, statusbar)
-#. i18n: ectx: property (text), widget (QPushButton, closeButton)
-#: libs/ui/wdgsplash.ui:1016
-#: plugins/extensions/pykrita/plugin/krita/excepthook.ui:61
-#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:63
-#, kde-format
-msgid "&Close"
-msgstr "&Затваряне"
-
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:125
 #, kde-format
 msgctxt ""
@@ -40827,37 +40806,37 @@ msgstr "%1:"
 msgid "Color name:"
 msgstr "Име на цвят:"
 
-#: libs/widgets/kis_color_input.cpp:421
+#: libs/widgets/kis_color_input.cpp:429
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
 msgstr "Ц:"
 
-#: libs/widgets/kis_color_input.cpp:422
+#: libs/widgets/kis_color_input.cpp:430
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
 msgstr "Н:"
 
-#: libs/widgets/kis_color_input.cpp:501
+#: libs/widgets/kis_color_input.cpp:509
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
 msgid "L:"
 msgstr "С:"
 
-#: libs/widgets/kis_color_input.cpp:504
+#: libs/widgets/kis_color_input.cpp:512
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
 msgid "Y:"
 msgstr "Y:"
 
-#: libs/widgets/kis_color_input.cpp:507
+#: libs/widgets/kis_color_input.cpp:515
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
 msgid "I:"
 msgstr "И:"
 
-#: libs/widgets/kis_color_input.cpp:511
+#: libs/widgets/kis_color_input.cpp:519
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
@@ -50731,6 +50710,14 @@ msgstr "При изпълнението на скрипта възникна и�
 msgid "Exception"
 msgstr "Изключение"
 
+#. i18n: ectx: property (text), widget (QStatusBar, statusbar)
+#. i18n: ectx: property (text), widget (QPushButton, closeButton)
+#: plugins/extensions/pykrita/plugin/krita/excepthook.ui:61
+#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:63
+#, kde-format
+msgid "&Close"
+msgstr "&Затваряне"
+
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, ScriptEditor)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:18
 #, kde-format
@@ -50875,7 +50862,7 @@ msgid "Error: The Python engine could not be initialized"
 msgstr "Грешка: Python енджинът не можа да бъде инициализиран"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/pykrita/plugin/manager.ui:75
+#: plugins/extensions/pykrita/plugin/manager.ui:72
 #, kde-format
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
@@ -50888,18 +50875,96 @@ msgstr ""
 "\"><span style=\" text-decoration: underline; color:#2980b9;\">Училището за "
 "скриптове на Krita</span></a>!</p></body></html>"
 
-#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:59
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
+#, fuzzy, kde-format
+#| msgctxt "EXIF: exposure - exposure mode"
+#| msgid "Manual"
+msgctxt "@title:tab plugin manual"
+msgid "Manual"
+msgstr "Ръчно"
+
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:53
+#, fuzzy, kde-format
+#| msgid "Status"
+msgctxt "@title:tab plugin status"
+msgid "Status"
+msgstr "Състояние"
+
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:75
 #, kde-format
 msgid "Python Plugin Manager"
 msgstr "Мениджър на Python добавки"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:124
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:114
+#, fuzzy, kde-format
+#| msgid "Location:"
+msgctxt "%1 plugin file path"
+msgid "Location: %1"
+msgstr "Местоположение:"
+
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
+#, fuzzy, kde-format
+#| msgid "Enabled"
+msgid "Enabled: false"
+msgstr "Включено"
+
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
+#, fuzzy, kde-format
+#| msgid "Enabled"
+msgid "Enabled: true"
+msgstr "Включено"
+
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:117
+#, fuzzy, kde-format
+#| msgid "Status"
+msgctxt "%1 plugin status text"
+msgid "Status: %1"
+msgstr "Състояние"
+
+#: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:119
+#, fuzzy, kde-format
+#| msgid "Error: "
+msgctxt "%1 plugin error message"
+msgid "Error: %1"
+msgstr "Грешка: "
+
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:81
+#, fuzzy, kde-format
+#| msgctxt "Draws a line around an area"
+#| msgid "Stroke"
+msgctxt "@item:intable plugin status"
+msgid "Broken"
+msgstr "Очертаване"
+
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:83
+#, fuzzy, kde-format
+#| msgid "Enabled"
+msgctxt "@item:intable plugin status"
+msgid "Unstable"
+msgstr "Включено"
+
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:85
+#, fuzzy, kde-format
+#| msgctxt "Load Image as Thumbnail button"
+#| msgid "Load Image"
+msgctxt "@item:intable plugin status"
+msgid "Loaded"
+msgstr "Зареждане на изображение"
+
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:87
+#, fuzzy, kde-format
+#| msgid "Not Saved"
+msgctxt "@item:intable plugin status"
+msgid "Not loaded"
+msgstr "Незапазено"
+
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:150
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Unable to find the module specified <application>%1</application>"
 msgstr "Не може да бъде намерен посоченият модул <application>%1</application>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:147
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:173
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -50909,13 +50974,13 @@ msgstr ""
 "<p>Зададената версия има невалиден формат за зависимост <application>%1</"
 "application>: <icode>%2</icode>. Пропуснато</p>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:174
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:200
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<title>Dependency check</title>"
 msgstr "<title>Проверка на зависимостите</title>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:205
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:231
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -50927,14 +50992,14 @@ msgstr ""
 "application>: Модулът няма PEP396 атрибут <code>__version__</code>. Той не е "
 "деактивиран, но поведението е непредсказуемо...</p>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:219
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:245
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p><application>%1</application>: Unexpected module's version format"
 msgstr ""
 "<p><application>%1</application>: Неочакван формат на версията на модула</p>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:232
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:258
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -50944,7 +51009,7 @@ msgstr ""
 "<p><application>%1</application>: Не е намерена подходяща версия. Изисквана "
 "версия %2 %3, но е намерена %4</p>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:247
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:273
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -50953,29 +51018,38 @@ msgstr ""
 "<p>Грешка при зареждане на модула <application>%1</application>:</p><pre>%2</"
 "pre>"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:356
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:382
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Internal engine failure"
 msgstr "Вътрешен системен срив"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:360
-#, kde-format
+#: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:386
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Module not loaded:<br/>%1"
 msgctxt "@info:tooltip"
-msgid "Module not loaded:<br/>%1"
+msgid "Module not loaded:<br/><code>%1</code>"
 msgstr "Модулът не е зареден:<br/>%1"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:51
+#: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:53
 #, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Име"
 
-#: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:53
+#: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:55
 #, kde-format
 msgctxt "@title:column"
 msgid "Comment"
 msgstr "Коментар"
+
+#: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:57
+#, fuzzy, kde-format
+#| msgid "Status"
+msgctxt "@title:column"
+msgid "Status"
+msgstr "Състояние"
 
 #: plugins/extensions/qmic/kis_qmic_interface.cpp:230
 msgctxt "(qtundo-format)"
@@ -65833,7 +65907,7 @@ msgid "Zoom Tool"
 msgstr "Инструмент за мащабиране"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
-#: plugins/tools/basictools/kis_tool_pan.cpp:81
+#: plugins/tools/basictools/kis_tool_pan.cpp:95
 #, kde-format
 msgid "Pan Tool"
 msgstr "Изместване на платното"
@@ -70754,3 +70828,57 @@ msgstr ""
 "Превключване между пълен обхват и подмножество.\n"
 "Пълен обхват: [%1, %2]\n"
 "Подмножество: [%3, %4]"
+
+#~ msgctxt "action"
+#~ msgid "Ungroup shape(s)"
+#~ msgstr "Разгрупиране на форма(и)"
+
+#~ msgctxt "action"
+#~ msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
+#~ msgstr ""
+#~ "Разделяне на група(и) от форми във векторизиращия инструмент за "
+#~ "взаимодействие"
+
+#~ msgctxt "action"
+#~ msgid "Group shape(s)"
+#~ msgstr "Групиране на форма(и)"
+
+#~ msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
+#~ msgid "Group"
+#~ msgstr "Групиране"
+
+#~ msgctxt "Group shape(s) in the context of Vector Interaction Tool"
+#~ msgid "Group"
+#~ msgstr "Групиране"
+
+#~ msgctxt "action"
+#~ msgid "Quick Group"
+#~ msgstr "Бързо групиране"
+
+#~ msgctxt "action"
+#~ msgid "Quick Ungroup"
+#~ msgstr "Бързо разгрупиране"
+
+#~ msgid ""
+#~ "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
+#~ "b></p>"
+#~ msgstr ""
+#~ "<html><head/><body><p><b><span style=\" color:%1;\">Ненавсно отваряни "
+#~ "файлове</span></b></p>"
+
+#~ msgid ""
+#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
+#~ "\">Links</span></p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
+#~ "\">Връзки</span></p></body></html>"
+
+#~ msgid ""
+#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
+#~ "\">Recent files</span></p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
+#~ "\">Последни файлове</span></p></body></html>"
+
+#~ msgid "Hide after startup."
+#~ msgstr "Скриване след стартиране."

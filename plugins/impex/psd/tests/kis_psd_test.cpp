@@ -433,6 +433,75 @@ void KisPSDTest::testLoadVectorShapes()
     QVERIFY(!shapeStroke->isVisible());
 }
 
+void KisPSDTest::testRoundTripUserLocked()
+{
+    const KoColorProfile *profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+
+    QRect imageRect(0,0,512,512);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    doc->setFileBatchMode(true);
+    KisImageSP image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
+
+    doc->setCurrentImage(image);
+
+    KisPaintLayerSP paintLayer0 = new KisPaintLayer(image, "paint0", OPACITY_OPAQUE_U8);
+    paintLayer0->setUserLocked(true);
+
+    image->addNode(paintLayer0, image->root());
+
+    QCOMPARE(image->root()->childCount(), 1);
+    QCOMPARE(paintLayer0->userLocked(), true);
+
+    const QByteArray mimeType("image/vnd.adobe.photoshop");
+    QFileInfo dstFileInfo(QDir::currentPath() + '/' + "test_save_user_locked.psd");
+    bool retval = doc->exportDocumentSync(dstFileInfo.absoluteFilePath(), mimeType);
+    QVERIFY(retval);
+
+    QSharedPointer<KisDocument> openedDoc = openPsdDocument(dstFileInfo);
+    QVERIFY(openedDoc->image());
+
+    QCOMPARE(openedDoc->image()->root()->childCount(), 1);
+    QCOMPARE(openedDoc->image()->root()->firstChild()->userLocked(), true);
+}
+
+void KisPSDTest::testRoundTripGroupCollapsed()
+{
+    const KoColorProfile *profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+
+    QRect imageRect(0,0,512,512);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    doc->setFileBatchMode(true);
+    KisImageSP image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
+
+    doc->setCurrentImage(image);
+
+    KisGroupLayerSP groupLayer0 = new KisGroupLayer(image, "group0", OPACITY_OPAQUE_U8);
+    image->addNode(groupLayer0, image->root());
+
+    KisPaintLayerSP paintLayer0 = new KisPaintLayer(image, "paint0", OPACITY_OPAQUE_U8);
+    image->addNode(paintLayer0, groupLayer0);
+
+    groupLayer0->setCollapsed(true);
+
+    QCOMPARE(image->root()->childCount(), 1);
+    QCOMPARE(groupLayer0->collapsed(), true);
+
+    const QByteArray mimeType("image/vnd.adobe.photoshop");
+    QFileInfo dstFileInfo(QDir::currentPath() + '/' + "test_save_user_locked.psd");
+    bool retval = doc->exportDocumentSync(dstFileInfo.absoluteFilePath(), mimeType);
+    QVERIFY(retval);
+
+    QSharedPointer<KisDocument> openedDoc = openPsdDocument(dstFileInfo);
+    QVERIFY(openedDoc->image());
+
+    QCOMPARE(openedDoc->image()->root()->childCount(), 1);
+    QCOMPARE(openedDoc->image()->root()->firstChild()->collapsed(), true);
+}
+
 void KisPSDTest::testOpenLayerStylesWithPattern()
 {
     QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "test_ls_pattern.psd");

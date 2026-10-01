@@ -9,6 +9,7 @@
 #include "recorder_format.h"
 #include <QRegularExpression>
 #include <algorithm>
+#include <QRegion>
 
 struct RecorderExportPreprocessor::Private {
     QDir directory;

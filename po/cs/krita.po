@@ -59866,15 +59866,13 @@ msgid "Empty"
 msgstr "<prázdné>"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
-#, fuzzy, kde-format
-#| msgid "Overwrite"
+#, kde-format
 msgctxt "@action:button"
 msgid "Overwrite"
 msgstr "Přepsat"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
-#, fuzzy, kde-format
-#| msgid "Save"
+#, kde-format
 msgctxt "@action:button"
 msgid "Save"
 msgstr "Uložit"

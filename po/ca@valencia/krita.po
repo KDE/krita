@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-01 00:43+0000\n"
-"PO-Revision-Date: 2026-09-18 11:32+0200\n"
+"PO-Revision-Date: 2026-09-30 09:10+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 26.08.1\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7260,9 +7260,7 @@ msgstr "Alinea a la dreta"
 #. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
 #: krita/data/actions/InteractionTool.action:33
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shapes"
 msgstr "Desagrupa les formes"
@@ -7270,12 +7268,10 @@ msgstr "Desagrupa les formes"
 # skip-rule: kct-snapshot
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:28
-#, fuzzy, kde-format
-#| msgctxt "Group as Swatch Group in a Palette"
-#| msgid "Remove selected group"
+#, kde-format
 msgctxt "action"
 msgid "Remove the selected shape group"
-msgstr "Elimina el grup seleccionat"
+msgstr "Elimina el grup de formes seleccionat"
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7333,21 +7329,17 @@ msgstr "Centra verticalment"
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shapes"
 msgstr "Agrupa les formes"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Create a group layer containing selected layers"
+#, kde-format
 msgctxt "action"
 msgid "Create a shape group containing selected shapes"
-msgstr "Crea una capa de grup que continga les capes triades"
+msgstr "Crea un grup de formes que continga les formes seleccionades"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
@@ -24352,7 +24344,7 @@ msgstr "Nom del fitxer"
 #: libs/resources/KisTagResourceModel.cpp:631
 #, kde-format
 msgid "Tooltip"
-msgstr "Consell d'eina"
+msgstr "Consell"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
@@ -26913,121 +26905,88 @@ msgid "About Krita"
 msgstr "Quant a Krita"
 
 #: libs/ui/dialogs/kis_about_application.cpp:51
-#, fuzzy, kde-format
-#| msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
+#, kde-format
 msgid "<p><b>Using Krita</b></p>"
-msgstr "<p><span style=\" color:%1;\"><b>Ús de Krita</b></span></p>"
+msgstr "<p><b>Ús de Krita</b></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:58
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline;\">Support Krita's Development!</span></a></p>"
 msgstr ""
 "<p><a href=\"https://krita.org/support-vos/\"><span style=\" text-"
-"decoration: underline; color:%1;\">Ajudeu el desenvolupament de Krita!</"
-"span></a></p>"
+"decoration: underline;\">Ajudeu el desenvolupament de Krita!</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:59
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">Krita Website</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
 "\">Krita Website</span></a></p>"
 msgstr ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Lloc web de Krita</span></a></p>"
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
+"\">Lloc web de Krita</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:63
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
 "\"><span style=\" text-decoration: underline;\">Getting Started</span></a></"
 "p>"
 msgstr ""
 "<p><a href=\"https://docs.krita.org/ca/user_manual/getting_started.html"
-"\"><span style=\" text-decoration: underline; color:%1;\">Com començar</"
-"span></a></p>"
+"\"><span style=\" text-decoration: underline;\">Com començar</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:64
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">Manual</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline;\">Manual</span></a></p>"
 msgstr ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Manual</span></a></p>"
+"underline;\">Manual</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:66
-#, fuzzy, kde-format
-#| msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
+#, kde-format
 msgid "<p><b>Coding Krita</b></p>"
-msgstr "<p><span style=\" color:%1;\"><b>Programar Krita</b></span></p>"
+msgstr "<p><b>Programar Krita</b></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:67
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">User Community</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline;\">User Community</span></a></p>"
 msgstr ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">Comunitat d'usuaris</span></a></p>"
+"underline;\">Comunitat d'usuaris</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Source Code</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline;;\">Source Code</span></a></p>"
 msgstr ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-"decoration: underline; color:%1;\">Codi font</span></a></p>"
+"decoration: underline;;\">Codi font</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:69
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline;\">Scripting API</span></a></p>"
 msgstr ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
-"text-decoration: underline; color:%1;\">API de creació de scripts</span></"
-"a></p>"
+"text-decoration: underline;\">API de creació de scripts</span></a></p>"
 
 # skip-rule: kct-scripting
 #: libs/ui/dialogs/kis_about_application.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Scripting School</span></"
-#| "a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline;;\">Scripting School</span></a></p>"
 msgstr ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
-"\" text-decoration: underline; color:%1;\">Escola de creació de scripts</"
-"span></a></p>"
+"\" text-decoration: underline;;\">Escola de creació de scripts</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:83
 #, kde-format
@@ -51002,16 +50961,13 @@ msgstr ""
 "Scripting School</span></a>!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "EXIF: exposure - exposure mode"
-#| msgid "Manual"
+#, kde-format
 msgctxt "@title:tab plugin manual"
 msgid "Manual"
 msgstr "Manual"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:53
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:tab plugin status"
 msgid "Status"
 msgstr "Estat"
@@ -51022,67 +50978,56 @@ msgid "Python Plugin Manager"
 msgstr "Gestor de connectors en Python"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:114
-#, fuzzy, kde-format
-#| msgid "Location:"
+#, kde-format
 msgctxt "%1 plugin file path"
 msgid "Location: %1"
-msgstr "Ubicació:"
+msgstr "Ubicació: %1"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgid "Enabled: false"
-msgstr "Activada"
+msgstr "Activat: fals"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgid "Enabled: true"
-msgstr "Activada"
+msgstr "Activat: cert"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:117
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "%1 plugin status text"
 msgid "Status: %1"
-msgstr "Estat"
+msgstr "Estat: %1"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:119
-#, fuzzy, kde-format
-#| msgid "Error: "
+#, kde-format
 msgctxt "%1 plugin error message"
 msgid "Error: %1"
-msgstr "S'ha produït un error: "
+msgstr "S'ha produït un error: %1"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Broken"
-msgstr "Traç"
+msgstr "Trencat"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:83
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Unstable"
-msgstr "Activada"
+msgstr "Inestable"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "Load Image as Thumbnail button"
-#| msgid "Load Image"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Loaded"
-msgstr "Carrega la imatge"
+msgstr "Carregat"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:87
-#, fuzzy, kde-format
-#| msgid "Not Saved"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Not loaded"
-msgstr "Sense guardar"
+msgstr "No carregat"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:150
 #, kde-format
@@ -51152,12 +51097,10 @@ msgid "Internal engine failure"
 msgstr "S'ha produït un error intern en el motor"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:386
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Module not loaded:<br/>%1"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/><code>%1</code>"
-msgstr "No s'ha carregat el mòdul:<br/>%1"
+msgstr "No s'ha carregat el mòdul:<br/><code>%1</code>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:53
 #, kde-format
@@ -51172,8 +51115,7 @@ msgid "Comment"
 msgstr "Comentari"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:57
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:column"
 msgid "Status"
 msgstr "Estat"
@@ -71019,88 +70961,3 @@ msgstr ""
 "Canvia entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
-
-#~ msgid "Warning(s):"
-#~ msgstr "Avís/os:"
-
-#~ msgctxt "The suffix after number of frames"
-#~ msgid "frame(s)"
-#~ msgstr "fotogrames"
-
-#~ msgid "Preserve alpha"
-#~ msgstr "Conserva l'alfa"
-
-#~ msgid "Stamp"
-#~ msgstr "Segell"
-
-#~ msgid ""
-#~ "Nothing copied\n"
-#~ " to Clipboard"
-#~ msgstr ""
-#~ "No s'ha copiat res\n"
-#~ " a dins del porta-retalls"
-
-#~ msgid ""
-#~ "Creates a brush tip from the current image selection.\n"
-#~ " If no selection is present the whole image will be used."
-#~ msgstr ""
-#~ "Crea una punta del pinzell des de la selecció de la imatge actual.\n"
-#~ " Si no hi ha present cap selecció, s'utilitzarà tota la imatge."
-
-#~ msgctxt "action"
-#~ msgid "Ungroup shape(s)"
-#~ msgstr "Desagrupa formes"
-
-#~ msgctxt "action"
-#~ msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
-#~ msgstr "«Desagrupa formes en el context de l'eina d'interacció vectorial»"
-
-#~ msgctxt "action"
-#~ msgid "Group shape(s)"
-#~ msgstr "Agrupa formes"
-
-#~ msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
-#~ msgid "Group"
-#~ msgstr "Agrupa"
-
-#~ msgctxt "Group shape(s) in the context of Vector Interaction Tool"
-#~ msgid "Group"
-#~ msgstr "Agrupa"
-
-#~ msgctxt "action"
-#~ msgid "Quick Group"
-#~ msgstr "Agrupa ràpid"
-
-#~ msgctxt "action"
-#~ msgid "Quick Ungroup"
-#~ msgstr "Desagrupa ràpid"
-
-#~ msgid ""
-#~ "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#~ "b></p>"
-#~ msgstr ""
-#~ "<html><head/><body><p><b><span style=\" color:%1;\">Fitxers recents</"
-#~ "span></b></p>"
-
-#~ msgid ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Links</span></p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Enllaços</span></p></body></html>"
-
-#~ msgid ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Recent files</span></p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Fitxers recents</span></p></body></html>"
-
-#~ msgid "Hide after startup."
-#~ msgstr "Oculta després d'iniciar."
-
-#~ msgid "Layer name:"
-#~ msgstr "Nom de la capa:"
-
-#~ msgid "No configuration options are available for this filter"
-#~ msgstr "No hi ha cap opció de configuració disponible per a este filtre"

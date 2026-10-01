@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-01 00:43+0000\n"
-"PO-Revision-Date: 2026-09-30 10:07+0300\n"
+"PO-Revision-Date: 2026-10-01 20:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -12066,9 +12066,7 @@ msgstr "Panodan katman yapıştır"
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914 krita/krita.action:2917
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Group layers"
 msgstr "Katmanları Grupla"
@@ -12085,9 +12083,7 @@ msgstr "Seçili katmanları içeren bir grup katman oluştur"
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926 krita/krita.action:2929
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Ungroup layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layers"
 msgstr "Katmanların Gruplamasını Kaldır"
@@ -13081,12 +13077,10 @@ msgstr "Bu&radan Kopyala…"
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3632
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set the source for the selected clone layer(s)."
+#, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layers"
-msgstr "Seçili klon katman(lar) için kaynağı ayarla"
+msgstr "Seçili klon katman için kaynağı ayarla"
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3633
@@ -25190,13 +25184,11 @@ msgstr "1920 pikselden daha büyük boyutlar ölçüler yaygın olarak desteklen
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Warning"
+#, kde-format
 msgid "Warning:"
 msgid_plural "Warnings:"
-msgstr[0] "Uyarı"
-msgstr[1] "Uyarı"
+msgstr[0] "Uyarı:"
+msgstr[1] "Uyarılar:"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
 #, kde-format
@@ -40102,7 +40094,7 @@ msgstr ""
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
 #, kde-format
 msgid "Overwrite"
-msgstr "Geçersiz Kıl"
+msgstr "Üzerine Yaz"
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:208
 #, kde-format
@@ -45029,13 +45021,12 @@ msgid "px"
 msgstr " pks"
 
 #: plugins/dockers/recorder/recorder_export.cpp:560
-#, fuzzy, kde-format
-#| msgid "frame"
+#, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame"
 msgid_plural "frames"
-msgstr[0] "kare"
-msgstr[1] "kare"
+msgstr[0] " kare"
+msgstr[1] " kare"
 
 #: plugins/dockers/recorder/recorder_export.cpp:620
 #, kde-format
@@ -45051,7 +45042,7 @@ msgstr "FFmpeg Yürütülebilir Dosyasını Seç"
 #: plugins/dockers/recorder/recorder_export.cpp:812
 #, kde-format
 msgid "No frames to export."
-msgstr "Kareleri panoya kopyala."
+msgstr "Kareleri panoya kopyalayın."
 
 #: plugins/dockers/recorder/recorder_export.cpp:826
 #, kde-format
@@ -54959,9 +54950,7 @@ msgid "Brush selection information for animated brushes"
 msgstr "Canlandırılmış fırçalar için fırça seçim bilgisi"
 
 #: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "video importer: video file statistics"
-#| msgid "Frames: %1"
+#, kde-format
 msgctxt "@label %1 number of animation frames"
 msgid "Frames: %1"
 msgstr "Kareler: %1"
@@ -60965,25 +60954,22 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape"
-#| msgid_plural "Create %1 shapes"
+#, kde-format
 msgctxt "@action:button create new brushtip"
 msgid "Create New"
-msgstr "Şekil Oluştur"
+msgstr "Yeni Oluştur"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:119
 #, kde-format
 msgid "Current Brush Tip"
-msgstr "Geçerli Fırça Ucu"
+msgstr "Geçerli fırça ucu"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:134
 #, kde-format
 msgid "Brush Details"
-msgstr "Fırça Ayrıntıları"
+msgstr "Fırça ayrıntıları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:179
@@ -61234,60 +61220,51 @@ msgid "Text"
 msgstr "Metin"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:79
-#, fuzzy, kde-format
-#| msgid "Source:"
+#, kde-format
 msgctxt "@label:listbox image source"
 msgid "Source:"
 msgstr "Kaynak:"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Image"
 msgstr "Görsel"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Clipboard"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Clipboard"
 msgstr "Pano"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:87
-#, fuzzy, kde-format
-#| msgid "Reload File"
+#, kde-format
 msgctxt "@action:button reload image"
 msgid "Reload"
-msgstr "Dosyayı Yeniden Yükle"
+msgstr "Yeniden Yükle"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:250
-#, fuzzy, kde-format
-#| msgctxt "Empty locale"
-#| msgid "Empty"
+#, kde-format
 msgctxt "@info empty image"
 msgid "Empty"
 msgstr "Boş"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
-#, fuzzy, kde-format
-#| msgid "Overwrite"
+#, kde-format
 msgctxt "@action:button"
 msgid "Overwrite"
-msgstr "Geçersiz Kıl"
+msgstr "Üzerine Yaz"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
-#, fuzzy, kde-format
-#| msgid "Save"
+#, kde-format
 msgctxt "@action:button"
 msgid "Save"
 msgstr "Kaydet"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
-#, fuzzy, kde-format
-#| msgid "Creates a brush tip from the image in the clipboard."
+#, kde-format
 msgid "Creates a brush tip from the current image, selection, or clipboard."
-msgstr "Panodaki görselden bir fırça ucu oluşturun."
+msgstr "Geçerli görsel, seçim veya panodan yeni bir fırça ucu oluşturun."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
@@ -61333,10 +61310,9 @@ msgstr ""
 "  Karşıtlık: %​0"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
-#, fuzzy, kde-format
-#| msgid "Current Brush Tip"
+#, kde-format
 msgid "Create New Brushtip"
-msgstr "Geçerli Fırça Ucu"
+msgstr "Yeni Fırça Ucu Oluştur"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
@@ -65023,7 +64999,7 @@ msgstr "Web’den Python Eklenti İçe Aktar…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:47
 msgid "Overwrite Plugin"
-msgstr "Eklenti Üzerine Yaz"
+msgstr "Eklentinin Üzerine Yaz"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:48
 #, python-format

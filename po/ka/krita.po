@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-01 00:43+0000\n"
-"PO-Revision-Date: 2026-09-30 09:45+0200\n"
+"PO-Revision-Date: 2026-10-01 06:02+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -12069,12 +12069,10 @@ msgstr "ფენის ჩასმა ბუფერიდან"
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914 krita/krita.action:2917
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Group layers"
-msgstr "ფენ(ებ)-ის დაჯგუფება"
+msgstr "ფენების დაჯგუფება"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2916
@@ -12088,12 +12086,10 @@ msgstr "მონიშნული ფენების შემცველ�
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926 krita/krita.action:2929
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Ungroup layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layers"
-msgstr "ფენ(ებ)-ის განჯგუფება"
+msgstr "ფენების განჯგუფება"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2928
@@ -13085,12 +13081,10 @@ msgstr "კოპი&რების წყაროს დაყენება
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3632
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set the source for the selected clone layer(s)."
+#, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layers"
-msgstr "წყაროს დაყენება მონიშნული კლონი ფენებისთვის."
+msgstr "წყაროს დაყენება მონიშნული კლონი ფენებისთვის"
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3633
@@ -25135,13 +25129,11 @@ msgstr "1920 პიქსელზე მეტი ზომები, ყვე
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Warning"
+#, kde-format
 msgid "Warning:"
 msgid_plural "Warnings:"
-msgstr[0] "გაფრთხილება"
-msgstr[1] "გაფრთხილება"
+msgstr[0] "გაფრთხილება:"
+msgstr[1] "გაფრთხილებები:"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
 #, kde-format
@@ -26438,7 +26430,7 @@ msgstr "საბაზისო სახელი:"
 #: libs/ui/animation/wdg_animationrenderer.ui:185
 #, kde-format
 msgid "frame"
-msgstr "ჩარჩო"
+msgstr "კადრი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/animation/wdg_animationrenderer.ui:192
@@ -31564,7 +31556,7 @@ msgstr "პორტრეტი"
 #: libs/ui/forms/wdgnewimage.ui:320
 #, kde-format
 msgid "Clipboard"
-msgstr "გაცვლის ბაფერი"
+msgstr "გაცვლის ბუფერი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgnewimage.ui:344
@@ -44452,13 +44444,12 @@ msgid "px"
 msgstr "px"
 
 #: plugins/dockers/recorder/recorder_export.cpp:560
-#, fuzzy, kde-format
-#| msgid "frame"
+#, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame"
 msgid_plural "frames"
-msgstr[0] "ჩარჩო"
-msgstr[1] "ჩარჩო"
+msgstr[0] "კადრი"
+msgstr[1] "კადრი"
 
 #: plugins/dockers/recorder/recorder_export.cpp:620
 #, kde-format
@@ -54350,9 +54341,7 @@ msgid "Brush selection information for animated brushes"
 msgstr "ფუნჯის არჩევნის ინფორმაცია ანიმირებული ფუნჯებისთვის"
 
 #: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "video importer: video file statistics"
-#| msgid "Frames: %1"
+#, kde-format
 msgctxt "@label %1 number of animation frames"
 msgid "Frames: %1"
 msgstr "კადრები: %1"
@@ -60028,19 +60017,16 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape"
-#| msgid_plural "Create %1 shapes"
+#, kde-format
 msgctxt "@action:button create new brushtip"
 msgid "Create New"
-msgstr "მოხაზულობის შექმნა"
+msgstr "ახლის შექმნა"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:119
 #, kde-format
 msgid "Current Brush Tip"
-msgstr "მიმდინარე ფუნჯის წვერო"
+msgstr "მიმდინარე ფუნჯის წვერი"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:134
@@ -60298,60 +60284,52 @@ msgid "Text"
 msgstr "ტექსტი"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:79
-#, fuzzy, kde-format
-#| msgid "Source:"
+#, kde-format
 msgctxt "@label:listbox image source"
 msgid "Source:"
 msgstr "წყარო:"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Image"
 msgstr "გამოსახულება"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Clipboard"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Clipboard"
-msgstr "გაცვლის ბაფერი"
+msgstr "გაცვლის ბუფერი"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:87
-#, fuzzy, kde-format
-#| msgid "Reload File"
+#, kde-format
 msgctxt "@action:button reload image"
 msgid "Reload"
-msgstr "ფაილის თავიდან ჩატვირთვა"
+msgstr "თავიდან ჩატვირთვა"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:250
-#, fuzzy, kde-format
-#| msgctxt "Empty locale"
-#| msgid "Empty"
+#, kde-format
 msgctxt "@info empty image"
 msgid "Empty"
 msgstr "ცარიელი"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
-#, fuzzy, kde-format
-#| msgid "Overwrite"
+#, kde-format
 msgctxt "@action:button"
 msgid "Overwrite"
 msgstr "თავზე გადაწერა"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
-#, fuzzy, kde-format
-#| msgid "Save"
+#, kde-format
 msgctxt "@action:button"
 msgid "Save"
 msgstr "შენახვა"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
-#, fuzzy, kde-format
-#| msgid "Creates a brush tip from the image in the clipboard."
+#, kde-format
 msgid "Creates a brush tip from the current image, selection, or clipboard."
-msgstr "შექმნის ფუნჯის წვეროს ბუფერში მყოფი გამოსახულებიდან."
+msgstr ""
+"შექმნის ფუნჯის წვეროს მიმდინარე გამოსახულებიდან, მონიშნულიდან, ან ბუფერიდან."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
@@ -60397,10 +60375,9 @@ msgstr ""
 " კონტრასტი: 0%"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
-#, fuzzy, kde-format
-#| msgid "Current Brush Tip"
+#, kde-format
 msgid "Create New Brushtip"
-msgstr "მიმდინარე ფუნჯის წვერო"
+msgstr "ახალი ფუნჯის წვერის შექმნა"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format

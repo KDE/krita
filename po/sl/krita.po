@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-01 00:43+0000\n"
-"PO-Revision-Date: 2026-09-18 17:39+0200\n"
+"PO-Revision-Date: 2026-10-01 12:36+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -7264,21 +7264,17 @@ msgstr "Poravnaj desno"
 #. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
 #: krita/data/actions/InteractionTool.action:33
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shapes"
 msgstr "Razdruži like"
 
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:28
-#, fuzzy, kde-format
-#| msgctxt "Group as Swatch Group in a Palette"
-#| msgid "Remove selected group"
+#, kde-format
 msgctxt "action"
 msgid "Remove the selected shape group"
-msgstr "Odstrani izbrano skupino"
+msgstr "Odstrani izbrano skupino likov"
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7336,21 +7332,17 @@ msgstr "Usredini navpično"
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shapes"
 msgstr "Združi like"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Create a group layer containing selected layers"
+#, kde-format
 msgctxt "action"
 msgid "Create a shape group containing selected shapes"
-msgstr "Ustvari skupino plasti, ki vsebuje izbrane plasti"
+msgstr "Ustvari skupino likov, ki vsebuje izbrane like"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
@@ -12083,9 +12075,7 @@ msgstr "Prilepi plast iz odložišča"
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914 krita/krita.action:2917
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Group layers"
 msgstr "Združi plasti"
@@ -12102,9 +12092,7 @@ msgstr "Ustvari skupino plasti, ki vsebuje izbrane plasti"
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926 krita/krita.action:2929
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Ungroup layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layers"
 msgstr "Razdruži plasti"
@@ -13097,12 +13085,10 @@ msgstr "Določi kopiranje i&z …"
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3632
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set the source for the selected clone layer(s)."
+#, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layers"
-msgstr "Nastavite vir izbranih kloniranih plasti."
+msgstr "Nastavite vir izbranih kloniranih plasti"
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3633
@@ -25175,15 +25161,13 @@ msgstr "Video z merami, večjimi od 1920 slikovnih točk, ni širše podprt."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Warning"
+#, kde-format
 msgid "Warning:"
 msgid_plural "Warnings:"
-msgstr[0] "Opozorilo"
-msgstr[1] "Opozorilo"
-msgstr[2] "Opozorilo"
-msgstr[3] "Opozorilo"
+msgstr[0] "Opozorila:"
+msgstr[1] "Opozorilo:"
+msgstr[2] "Opozorili:"
+msgstr[3] "Opozorila:"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
 #, kde-format
@@ -26760,119 +26744,87 @@ msgid "About Krita"
 msgstr "O programu Krita"
 
 #: libs/ui/dialogs/kis_about_application.cpp:51
-#, fuzzy, kde-format
-#| msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
+#, kde-format
 msgid "<p><b>Using Krita</b></p>"
-msgstr "<p><span style=\" color:%1;\"><b>Uporaba Krite</b></span></p>"
+msgstr "<p><b>Uporaba Krite</b></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:58
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline;\">Support Krita's Development!</span></a></p>"
 msgstr ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Podprite razvoj Krite!</span></a></p>"
+"underline;\">Podprite razvoj Krite!</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:59
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">Krita Website</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
 "\">Krita Website</span></a></p>"
 msgstr ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Spletišče Krita</span></a></p>"
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
+"\">Spletišče Krita</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:63
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
 "\"><span style=\" text-decoration: underline;\">Getting Started</span></a></"
 "p>"
 msgstr ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-"\"><span style=\" text-decoration: underline; color:%1;\">Prvi koraki</"
-"span></a></p>"
+"\"><span style=\" text-decoration: underline;\">Prvi koraki</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:64
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">Manual</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline;\">Manual</span></a></p>"
 msgstr ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Priročnik</span></a></p>"
+"underline;\">Priročnik</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:66
-#, fuzzy, kde-format
-#| msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
+#, kde-format
 msgid "<p><b>Coding Krita</b></p>"
-msgstr "<p><span style=\" color:%1;\"><b>Pisanje kode za Krito</b></span></p>"
+msgstr "<p><b>Pisanje kode za Krito</b></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:67
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">User Community</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline;\">User Community</span></a></p>"
 msgstr ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">Skupnost uporabnikov</span></a></p>"
+"underline;\">Skupnost uporabnikov</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Source Code</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline;;\">Source Code</span></a></p>"
 msgstr ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-"decoration: underline; color:%1;\">Izvorna koda</span></a></p>"
+"decoration: underline;\">Izvorna koda</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:69
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline;\">Scripting API</span></a></p>"
 msgstr ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
-"text-decoration: underline; color:%1;\">API za skriptno izvajanje</span></"
-"a></p>"
+"text-decoration: underline;\">API za skriptno izvajanje</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Scripting School</span></"
-#| "a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline;;\">Scripting School</span></a></p>"
 msgstr ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
-"\" text-decoration: underline; color:%1;\">Šolo pisanja skriptov Krita</"
-"span></a></p>"
+"\" text-decoration: underline;\">Šolo pisanja skriptov Krita</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:83
 #, kde-format
@@ -45116,15 +45068,14 @@ msgid "px"
 msgstr "sl. točk"
 
 #: plugins/dockers/recorder/recorder_export.cpp:560
-#, fuzzy, kde-format
-#| msgid "frame"
+#, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame"
 msgid_plural "frames"
-msgstr[0] "sličica"
+msgstr[0] "sličic"
 msgstr[1] "sličica"
-msgstr[2] "sličica"
-msgstr[3] "sličica"
+msgstr[2] "sličici"
+msgstr[3] "sličice"
 
 #: plugins/dockers/recorder/recorder_export.cpp:620
 #, kde-format
@@ -50772,16 +50723,13 @@ msgstr ""
 "span></a> (v angleškem jeziku)!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "EXIF: exposure - exposure mode"
-#| msgid "Manual"
+#, kde-format
 msgctxt "@title:tab plugin manual"
 msgid "Manual"
 msgstr "Ročno"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:53
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:tab plugin status"
 msgid "Status"
 msgstr "Stanje"
@@ -50792,67 +50740,56 @@ msgid "Python Plugin Manager"
 msgstr "Upravitelj vstavkov Python"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:114
-#, fuzzy, kde-format
-#| msgid "Location:"
+#, kde-format
 msgctxt "%1 plugin file path"
 msgid "Location: %1"
-msgstr "Mesto:"
+msgstr "Mesto: %1"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgid "Enabled: false"
-msgstr "Omogočeno"
+msgstr "Omogočeno: false (ni res)"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgid "Enabled: true"
-msgstr "Omogočeno"
+msgstr "Omogočeno: true (res)"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:117
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "%1 plugin status text"
 msgid "Status: %1"
-msgstr "Stanje"
+msgstr "Stanje: %1"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:119
-#, fuzzy, kde-format
-#| msgid "Error: "
+#, kde-format
 msgctxt "%1 plugin error message"
 msgid "Error: %1"
-msgstr "Napaka: "
+msgstr "Napaka: %1"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Broken"
-msgstr "Poteza"
+msgstr "Okvarjeno"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:83
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Unstable"
-msgstr "Omogočeno"
+msgstr "Nestabilno"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "Load Image as Thumbnail button"
-#| msgid "Load Image"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Loaded"
-msgstr "Naloži sliko"
+msgstr "Naloženo"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:87
-#, fuzzy, kde-format
-#| msgid "Not Saved"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Not loaded"
-msgstr "Ni shranjeno"
+msgstr "Ni naloženo"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:150
 #, kde-format
@@ -50921,12 +50858,10 @@ msgid "Internal engine failure"
 msgstr "Odpoved notranjega pogona"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:386
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Module not loaded:<br/>%1"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/><code>%1</code>"
-msgstr "Modul ni naložen:<br/>%1"
+msgstr "Modul ni naložen:<br/><code>%1</code>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:53
 #, kde-format
@@ -50941,8 +50876,7 @@ msgid "Comment"
 msgstr "Komentar"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:57
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:column"
 msgid "Status"
 msgstr "Stanje"
@@ -55103,12 +55037,10 @@ msgid "Brush selection information for animated brushes"
 msgstr "Informacije o izboru čopičev za animirane čopiče"
 
 #: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "video importer: video file statistics"
-#| msgid "Frames: %1"
+#, kde-format
 msgctxt "@label %1 number of animation frames"
 msgid "Frames: %1"
-msgstr "Sličic: %1"
+msgstr "Sličic:e %1"
 
 #: plugins/impex/brush/KisWdgOptionsBrush.h:43
 #, kde-format
@@ -61110,13 +61042,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape"
-#| msgid_plural "Create %1 shapes"
+#, kde-format
 msgctxt "@action:button create new brushtip"
 msgid "Create New"
-msgstr "Ustvari %1 likov"
+msgstr "Ustvari novo"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:119
@@ -61379,60 +61308,51 @@ msgid "Text"
 msgstr "Besedilo"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:79
-#, fuzzy, kde-format
-#| msgid "Source:"
+#, kde-format
 msgctxt "@label:listbox image source"
 msgid "Source:"
 msgstr "Vir:"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Image"
 msgstr "Slika"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Clipboard"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Clipboard"
 msgstr "Odložišče"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:87
-#, fuzzy, kde-format
-#| msgid "Reload File"
+#, kde-format
 msgctxt "@action:button reload image"
 msgid "Reload"
-msgstr "Ponovno naloži datoteko"
+msgstr "Ponovno naloži"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:250
-#, fuzzy, kde-format
-#| msgctxt "Empty locale"
-#| msgid "Empty"
+#, kde-format
 msgctxt "@info empty image"
 msgid "Empty"
 msgstr "Prazno"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
-#, fuzzy, kde-format
-#| msgid "Overwrite"
+#, kde-format
 msgctxt "@action:button"
 msgid "Overwrite"
 msgstr "Prepiši"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
-#, fuzzy, kde-format
-#| msgid "Save"
+#, kde-format
 msgctxt "@action:button"
 msgid "Save"
 msgstr "Shrani"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
-#, fuzzy, kde-format
-#| msgid "Creates a brush tip from the image in the clipboard."
+#, kde-format
 msgid "Creates a brush tip from the current image, selection, or clipboard."
-msgstr "Ustvari konico čopiča iz slike na odložišču."
+msgstr "Ustvari konico čopiča iz trenutne slike, izbora ali odložišča."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
@@ -61478,10 +61398,9 @@ msgstr ""
 " Kontrast: 0%"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
-#, fuzzy, kde-format
-#| msgid "Current Brush Tip"
+#, kde-format
 msgid "Create New Brushtip"
-msgstr "Trenutna konica čopiča"
+msgstr "Ustvari novo konico čopiča"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
@@ -70664,86 +70583,3 @@ msgstr ""
 "Preklopite med polnim obsegom in podobsegom.\n"
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
-
-#~ msgid "Warning(s):"
-#~ msgstr "Opozorila:"
-
-#~ msgctxt "The suffix after number of frames"
-#~ msgid "frame(s)"
-#~ msgstr "sličic"
-
-#~ msgid "Preserve alpha"
-#~ msgstr "Ohrani alfo"
-
-#~ msgid "Stamp"
-#~ msgstr "Ožigosaj"
-
-#~ msgid ""
-#~ "Nothing copied\n"
-#~ " to Clipboard"
-#~ msgstr "Ničesar ni na odložišču."
-
-#~ msgid ""
-#~ "Creates a brush tip from the current image selection.\n"
-#~ " If no selection is present the whole image will be used."
-#~ msgstr ""
-#~ "Ustvari konico čopiča iz trenutne izbire slike.\n"
-#~ " Če ni nobenega izbora, bo uporabljena celotna slika."
-
-#~ msgctxt "action"
-#~ msgid "Ungroup shape(s)"
-#~ msgstr "Razdruži like"
-
-#~ msgctxt "action"
-#~ msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
-#~ msgstr "»Razdruži like v okviru orodja za vektorsko interakcijo«"
-
-#~ msgctxt "action"
-#~ msgid "Group shape(s)"
-#~ msgstr "Združi like"
-
-#~ msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
-#~ msgid "Group"
-#~ msgstr "Združi"
-
-#~ msgctxt "Group shape(s) in the context of Vector Interaction Tool"
-#~ msgid "Group"
-#~ msgstr "Združi"
-
-#~ msgctxt "action"
-#~ msgid "Quick Group"
-#~ msgstr "Hitro združi"
-
-#~ msgctxt "action"
-#~ msgid "Quick Ungroup"
-#~ msgstr "Hitro razdruži"
-
-#~ msgid ""
-#~ "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#~ "b></p>"
-#~ msgstr ""
-#~ "<html><head/><body><p><b><span style=\" color:%1;\">Nedavne datoteke</"
-#~ "span></b></p>"
-
-#~ msgid ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Links</span></p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Povezave</span></p></body></html>"
-
-#~ msgid ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Recent files</span></p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Nedavne datoteke</span></p></body></html>"
-
-#~ msgid "Hide after startup."
-#~ msgstr "Skrij po zagonu."
-
-#~ msgid "Layer name:"
-#~ msgstr "Ime plasti:"
-
-#~ msgid "No configuration options are available for this filter"
-#~ msgstr "Za ta filter ni na voljo nobenih možnosti prilagajanja"

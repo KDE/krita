@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-01 00:43+0000\n"
-"PO-Revision-Date: 2026-09-29 09:10+0300\n"
+"PO-Revision-Date: 2026-09-30 08:47+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -19913,11 +19913,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:347
-#, fuzzy, kde-format
-#| msgid "Horizontal Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Horizontal Kana Alternates"
-msgstr "קווים אופקיים"
+msgstr "חלופות קאנה אופקיות"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:348
 #, kde-format
@@ -20030,10 +20029,10 @@ msgid "Replaces standard form kanji in Japanese fonts with the JIS2004 forms."
 msgstr "החלפת קאנג׳י בגופנים יפניים בצורות JIS2004."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:383
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Leading Jamo Forms"
-msgstr "צורות ג׳אמו "
+msgstr "צורות ג׳אמו פותחות"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:384
 #, kde-format
@@ -20103,10 +20102,10 @@ msgid "Replaces glyphs with quarter-width glyphs."
 msgstr "החלפת גליפים בגליפים ברוחב רבע."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:407
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Ruby Notation Forms"
-msgstr "כלי ציור"
+msgstr "צורות סימון רובי"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:408
 #, kde-format
@@ -20143,10 +20142,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:419
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Traditional Name Forms"
-msgstr "עירובים"
+msgstr "צורות שמות מסורתיות"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:420
 #, kde-format
@@ -20170,10 +20169,10 @@ msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
 msgstr "החלפת גליפים בגופני סינית/יפנית/קוריאנית בצורות ‚מסורתיות’."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Third Widths"
-msgstr "רוחב:"
+msgstr "שלישי רוחב"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:428
 #, kde-format
@@ -20194,11 +20193,10 @@ msgid "Repositions glyphs so they look more appropriate in vertical layout."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:435
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Half Widths"
-msgstr "חלופה"
+msgstr "חלופות חצויות רוחב"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:436
 #, kde-format
@@ -20213,11 +20211,10 @@ msgid "Vertical Contextual Half-width Spacing"
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates"
-msgstr "קווים אנכיים"
+msgstr "חלופות אנכיות"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:444
 #, kde-format
@@ -20227,10 +20224,10 @@ msgstr ""
 "החלפת גליפים בגופנים סיניים/יפניים/קוריאניים בכלו שמתאימים לכתיבה אנכית."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:447
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Half Metrics"
-msgstr "גל משולש"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:448
 #, kde-format
@@ -20240,10 +20237,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:451
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Vowel Jamo Forms"
-msgstr "גל משולש"
+msgstr "צורות ג׳אמו של תנועות"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:452
 #, kde-format
@@ -20253,10 +20250,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:455
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Kana Alternates"
-msgstr "גל משולש"
+msgstr "חלופות קאנה אנכיות"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:456
 #, kde-format
@@ -20280,10 +20277,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:463
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates for Rotation"
-msgstr "גל משולש"
+msgstr "חלופות אנכיות לסיבוב"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:464
 #, kde-format
@@ -20292,10 +20289,10 @@ msgid "Replaces a subset of glyphs with rotated variants for vertical layout."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:467
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates and Rotation"
-msgstr "כלי ציור"
+msgstr "חלופות אנכיות וסיבוב"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:468
 #, kde-format
@@ -20487,11 +20484,10 @@ msgid "Replaces glyphs that need to stretch with stretchable glyphs."
 msgstr "החלפת גליפים שצריכים להימתח בגליפים נמתחים."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:536
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Stylistic Set %1"
-msgstr "חלופה"
+msgstr "סדרה מסוגננת %1"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:537
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:551
@@ -21366,11 +21362,10 @@ msgid "%1 cd/m²"
 msgstr ""
 
 #: libs/image/kis_hdr_metadata_models.cpp:63
-#, fuzzy, kde-format
-#| msgid "Luminance"
+#, kde-format
 msgctxt "CLLI calculation type"
 msgid "XYZ Luminance"
-msgstr "הארה"
+msgstr "הארה ב־XYZ"
 
 #: libs/image/kis_hdr_metadata_models.cpp:64
 #, fuzzy, kde-format
@@ -21380,11 +21375,10 @@ msgid "Rec 2020 Per Component"
 msgstr "Rec 2020 PQ"
 
 #: libs/image/kis_hdr_metadata_models.cpp:65
-#, fuzzy, kde-format
-#| msgid "Components:"
+#, kde-format
 msgctxt "CLLI calculation type"
 msgid "RGB Per Component"
-msgstr "רכיבים:"
+msgstr "RGB לרכיב"
 
 #: libs/image/kis_hdr_metadata_models.cpp:67
 #, kde-format
@@ -21439,11 +21433,10 @@ msgid "Reset color volume to the values defined by DCI-P3 D65"
 msgstr "איפוס נפח הצבע לערכים שמוגדרים על ידי DCI-P3 D65"
 
 #: libs/image/kis_hdr_metadata_models.cpp:123
-#, fuzzy, kde-format
-#| msgid "Use custom color for selector background."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Use custom values for color volume"
-msgstr "להשתמש בצבע מותאם אישית לרקע הבורר."
+msgstr "להשתמש בערכים מותאמים אישית לנפח צבע"
 
 #: libs/image/kis_image.cc:419
 #, kde-format
@@ -21544,10 +21537,9 @@ msgid "Shear Image"
 msgstr "גזירת תמונה"
 
 #: libs/image/kis_image.cc:1387
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
-msgstr "הוס&פת תמונה בתור שכבה..."
+msgstr "המרת מרחב צבע של שכבה"
 
 #: libs/image/kis_image.cc:1438
 msgctxt "(qtundo-format)"
@@ -25139,10 +25131,10 @@ msgstr ""
 " %1 תמוניות לשנייה</small>"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:127
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "An interpolation method"
 msgid "Spline"
-msgstr "מקושר"
+msgstr "ספליין/Spline"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #, kde-format
@@ -25345,11 +25337,9 @@ msgid "This format has no preferences."
 msgstr "לתסדיר הזה אין העדפות."
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
-#, fuzzy, kde-format
-#| msgctxt "Shows up instead of the name when there's no profile"
-#| msgid "No Profile Found"
+#, kde-format
 msgid "No frame files found"
-msgstr "לא נמצא פרופיל"
+msgstr "לא נמצאו קובצי תמוניות"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
 #, kde-format
@@ -25800,10 +25790,10 @@ msgid "up"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:80
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "apng prediction option name"
 msgid "avg"
-msgstr "Tab"
+msgstr "ממוצע"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:81
 #, kde-format
@@ -26231,9 +26221,9 @@ msgstr "גובה:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsImportVideoScaleGroup)
 #: libs/ui/animation/VideoImportDialog.ui:553
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import Video Scale"
-msgstr "ייבוא מסמך"
+msgstr "קנה מידה לייבוא וידאו"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #. i18n: ectx: property (text), widget (QLabel, videoScaleFilterLabel)
@@ -26597,118 +26587,87 @@ msgid "About Krita"
 msgstr "על Krita"
 
 #: libs/ui/dialogs/kis_about_application.cpp:51
-#, fuzzy, kde-format
-#| msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
+#, kde-format
 msgid "<p><b>Using Krita</b></p>"
-msgstr "<p><span style=\" color:%1;\"><b>שימוש ב־Krita</b></span></p>"
+msgstr "<p><b>שימוש ב־Krita</b></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:58
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline;\">Support Krita's Development!</span></a></p>"
 msgstr ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
-"underline; color:%1;\">תמיכה בפיתוח של Krita!</span></a></p>"
+"underline;\">תמיכה בפיתוח של Krita!</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:59
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">Krita Website</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
 "\">Krita Website</span></a></p>"
 msgstr ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">האתר של Krita</span></a></p>"
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
+"\">האתר של Krita</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:63
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
 "\"><span style=\" text-decoration: underline;\">Getting Started</span></a></"
 "p>"
 msgstr ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-"\"><span style=\" text-decoration: underline; color:%1;\">מאיפה מתחילים</"
-"span></a></p>"
+"\"><span style=\" text-decoration: underline;\">מאיפה מתחילים</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:64
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">Manual</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline;\">Manual</span></a></p>"
 msgstr ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-"underline; color:%1;\">המדריך למשתמשים</span></a></p>"
+"underline;\">המדריך למשתמשים</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:66
-#, fuzzy, kde-format
-#| msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
+#, kde-format
 msgid "<p><b>Coding Krita</b></p>"
-msgstr "<p><span style=\" color:%1;\"><b>תכנות עם Krita</b></span></p>"
+msgstr "<p><b>תכנות עם Krita</b></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:67
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">User Community</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline;\">User Community</span></a></p>"
 msgstr ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">קהילת המשתמשים</span></a></p>"
+"underline;\">קהילת המשתמשים</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Source Code</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline;;\">Source Code</span></a></p>"
 msgstr ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-"decoration: underline; color:%1;\">קוד המקור</span></a></p>"
+"decoration: underline;\">קוד המקור</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:69
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline;\">Scripting API</span></a></p>"
 msgstr ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
-"text-decoration: underline; color:%1;\">API לכתיבת סקריפטים</span></a></p>"
+"text-decoration: underline;\">API לכתיבת סקריפטים</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Scripting School</span></"
-#| "a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline;;\">Scripting School</span></a></p>"
 msgstr ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
-"\" text-decoration: underline; color:%1;\">בית הספר לכתיבת סקריפטים</span></"
-"a></p>"
+"\" text-decoration: underline;\">בית הספר לכתיבת סקריפטים</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:83
 #, kde-format
@@ -36353,9 +36312,9 @@ msgstr "צבע:"
 
 #: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
 #: libs/widgets/kis_palette_view.cpp:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spot color:"
-msgstr "&צבע"
+msgstr "צבע נקודה:"
 
 #: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:141
 #, kde-format
@@ -36407,16 +36366,16 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisRemoteFileFetcher.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
-msgstr "לא ניתן להוסיף שכבה לתמונה"
+msgstr "יורדת תמונה מ־%1…"
 
 #: libs/ui/KisRemoteFileFetcher.cpp:76
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
-msgstr "לא ניתן להוסיף שכבה לתמונה"
+msgstr "יורדת תמונה מ־%1… (%2 / %3)"
 
 #: libs/ui/KisRemoteFileFetcher.cpp:93
 #, kde-format
@@ -36589,39 +36548,39 @@ msgid "Recovered"
 msgstr "מלבן"
 
 #: libs/ui/KisView.cpp:1351
-#, fuzzy, kde-format
+#, kde-format
 msgid "Soft Proofing doesn't work in floating point."
-msgstr "אלפא"
+msgstr "הגהת צבע לא עובדת בנקודה צפה."
 
 #: libs/ui/KisView.cpp:1356
-#, fuzzy, kde-format
+#, kde-format
 msgid "Soft Proofing turned on."
-msgstr "אלפא"
+msgstr "הגהת צבעים הופעלה."
 
 #: libs/ui/KisView.cpp:1358
-#, fuzzy, kde-format
+#, kde-format
 msgid "Soft Proofing turned off."
-msgstr "אלפא"
+msgstr "הגהת צבעים נכבתה."
 
 #: libs/ui/KisView.cpp:1370
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gamut Warnings don't work in floating point."
-msgstr "הדפסה אחרונה"
+msgstr "אזהרות מנעד לא עובדות בנקודה צפה."
 
 #: libs/ui/KisView.cpp:1376
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gamut Warnings turned on."
-msgstr "הדפסה אחרונה"
+msgstr "אזהרות מנעד הופעלו."
 
 #: libs/ui/KisView.cpp:1378
-#, fuzzy, kde-format
+#, kde-format
 msgid "But Soft Proofing is still off."
-msgstr "אלפא"
+msgstr "אבל הגהת צבעים עדיין כבויה."
 
 #: libs/ui/KisView.cpp:1381
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gamut Warnings turned off."
-msgstr "הדפסה אחרונה"
+msgstr "אזהרות מנעד נכבו."
 
 #: libs/ui/KisViewManager.cpp:810
 #, kde-format
@@ -49750,16 +49709,13 @@ msgstr ""
 "span></a>!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "EXIF: exposure - exposure mode"
-#| msgid "Manual"
+#, kde-format
 msgctxt "@title:tab plugin manual"
 msgid "Manual"
 msgstr "ידני"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:53
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:tab plugin status"
 msgid "Status"
 msgstr "מצב"
@@ -49770,66 +49726,56 @@ msgid "Python Plugin Manager"
 msgstr "מנהל תוספי Python"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:114
-#, fuzzy, kde-format
-#| msgid "Location:"
+#, kde-format
 msgctxt "%1 plugin file path"
 msgid "Location: %1"
-msgstr "מקום:"
+msgstr "מקום: %1"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgid "Enabled: false"
-msgstr "פעיל"
+msgstr "פעיל: שלילי"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgid "Enabled: true"
-msgstr "פעיל"
+msgstr "פעיל: חיובי"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:117
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "%1 plugin status text"
 msgid "Status: %1"
-msgstr "מצב"
+msgstr "מצב: %1"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:119
-#, fuzzy, kde-format
-#| msgid "Error: "
+#, kde-format
 msgctxt "%1 plugin error message"
 msgid "Error: %1"
-msgstr "שגיאה: "
+msgstr "שגיאה: %1"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Broken"
-msgstr "קו מתאר"
+msgstr "פגום"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Unstable"
-msgstr "כחול"
+msgstr "מעורער"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "Load Image as Thumbnail button"
-#| msgid "Load Image"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Loaded"
-msgstr "טעינת תמונה"
+msgstr "נטען"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:87
-#, fuzzy, kde-format
-#| msgid "Not Saved"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Not loaded"
-msgstr "לא נשמר"
+msgstr "לא נטען"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:150
 #, kde-format
@@ -49890,12 +49836,10 @@ msgid "Internal engine failure"
 msgstr "כשל מנוע פנימי"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:386
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Module not loaded:<br/>%1"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/><code>%1</code>"
-msgstr "המודול לא נטען:<br/>%1"
+msgstr "המודול לא נטען:<br/><code>%1</code>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:53
 #, kde-format
@@ -49910,8 +49854,7 @@ msgid "Comment"
 msgstr "הערה"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:57
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:column"
 msgid "Status"
 msgstr "מצב"

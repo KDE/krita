@@ -83,7 +83,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-01 00:43+0000\n"
-"PO-Revision-Date: 2026-09-30 08:28+0200\n"
+"PO-Revision-Date: 2026-10-01 08:17+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -12150,9 +12150,7 @@ msgstr "Вставить из буфера обмена"
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914 krita/krita.action:2917
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Group layers"
 msgstr "Сгруппировать слои"
@@ -12169,9 +12167,7 @@ msgstr "Создать групповой слой, включающий выд�
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926 krita/krita.action:2929
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Ungroup layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layers"
 msgstr "Разгруппировать слои"
@@ -13172,12 +13168,10 @@ msgstr "Установить источник для &копирования..."
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3632
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set the source for the selected clone layer(s)."
+#, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layers"
-msgstr "Указать источник выделенного клонирующего слоя (слоёв)."
+msgstr "Указать источник для выделенных клонирующих слоёв"
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3633
@@ -25602,15 +25596,13 @@ msgstr "Размер, превышающий «1920» (в пикселах), р�
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Warning"
+#, kde-format
 msgid "Warning:"
 msgid_plural "Warnings:"
-msgstr[0] "Предупреждение"
-msgstr[1] "Предупреждение"
-msgstr[2] "Предупреждение"
-msgstr[3] "Предупреждение"
+msgstr[0] "Предупреждения:"
+msgstr[1] "Предупреждения:"
+msgstr[2] "Предупреждения:"
+msgstr[3] "Предупреждение:"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
 #, kde-format
@@ -45821,14 +45813,13 @@ msgid "px"
 msgstr "пикс."
 
 #: plugins/dockers/recorder/recorder_export.cpp:560
-#, fuzzy, kde-format
-#| msgid "frame"
+#, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame"
 msgid_plural "frames"
 msgstr[0] "кадр"
-msgstr[1] "кадр"
-msgstr[2] "кадр"
+msgstr[1] "кадра"
+msgstr[2] "кадров"
 msgstr[3] "кадр"
 
 #: plugins/dockers/recorder/recorder_export.cpp:620
@@ -55880,12 +55871,10 @@ msgid "Brush selection information for animated brushes"
 msgstr "Информация о выделении кистью для анимированных кистей"
 
 #: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "video importer: video file statistics"
-#| msgid "Frames: %1"
+#, kde-format
 msgctxt "@label %1 number of animation frames"
 msgid "Frames: %1"
-msgstr "Количество кадров: %1"
+msgstr "Кадров: %1"
 
 #: plugins/impex/brush/KisWdgOptionsBrush.h:43
 #, kde-format
@@ -61923,10 +61912,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button create new brushtip"
 msgid "Create New"
-msgstr "&Создать"
+msgstr "Создать"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:119
@@ -62192,61 +62181,52 @@ msgid "Text"
 msgstr "Текст"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:79
-#, fuzzy, kde-format
-#| msgid "Source:"
+#, kde-format
 msgctxt "@label:listbox image source"
 msgid "Source:"
 msgstr "Источник:"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Image"
-msgstr "Изображению"
+msgstr "Изображение"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Clipboard"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Clipboard"
 msgstr "Буфер обмена"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:87
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:button reload image"
 msgid "Reload"
-msgstr "Перезагрузить"
+msgstr "Обновить"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:250
-#, fuzzy, kde-format
-#| msgctxt "Empty locale"
-#| msgid "Empty"
+#, kde-format
 msgctxt "@info empty image"
 msgid "Empty"
 msgstr "Пусто"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
-#, fuzzy, kde-format
-#| msgid "Overwrite"
+#, kde-format
 msgctxt "@action:button"
 msgid "Overwrite"
 msgstr "Заменить"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
-#, fuzzy, kde-format
-#| msgid "Save"
+#, kde-format
 msgctxt "@action:button"
 msgid "Save"
 msgstr "Сохранить"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
-#, fuzzy, kde-format
-#| msgid "Creates a brush tip from the image in the clipboard."
+#, kde-format
 msgid "Creates a brush tip from the current image, selection, or clipboard."
-msgstr "Создаёт миниатюру кисти из изображения в буфере обмена."
+msgstr ""
+"Создаёт кончик кисти из текущего изображения, выделения или буфера обмена."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
@@ -62292,10 +62272,9 @@ msgstr ""
 " Контрастность: 0%"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
-#, fuzzy, kde-format
-#| msgid "Create New Bundle"
+#, kde-format
 msgid "Create New Brushtip"
-msgstr "Создать новый пакет"
+msgstr "Создать кончик кисти"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format

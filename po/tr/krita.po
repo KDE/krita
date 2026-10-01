@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 02:39+0000\n"
-"PO-Revision-Date: 2026-09-26 20:23+0300\n"
+"PO-Revision-Date: 2026-10-01 20:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -39855,7 +39855,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:135
 #, kde-format
 msgid "Overwrite"
-msgstr "Geçersiz Kıl"
+msgstr "Üzerine Yaz"
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:208
 #, kde-format
@@ -44791,7 +44791,7 @@ msgstr "FFmpeg Yürütülebilir Dosyasını Seç"
 #: plugins/dockers/recorder/recorder_export.cpp:812
 #, kde-format
 msgid "No frames to export."
-msgstr "Kareleri panoya kopyala."
+msgstr "Kareleri panoya kopyalayın."
 
 #: plugins/dockers/recorder/recorder_export.cpp:826
 #, kde-format
@@ -60613,13 +60613,13 @@ msgstr "Damga"
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:132
 #, kde-format
 msgid "Current Brush Tip"
-msgstr "Geçerli Fırça Ucu"
+msgstr "Geçerli fırça ucu"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:147
 #, kde-format
 msgid "Brush Details"
-msgstr "Fırça Ayrıntıları"
+msgstr "Fırça ayrıntıları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
@@ -64629,7 +64629,7 @@ msgstr "Web’den Python Eklenti İçe Aktar…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:47
 msgid "Overwrite Plugin"
-msgstr "Eklenti Üzerine Yaz"
+msgstr "Eklentinin Üzerine Yaz"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:48
 #, python-format

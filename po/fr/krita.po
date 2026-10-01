@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-30 00:43+0000\n"
+"POT-Creation-Date: 2026-10-01 00:43+0000\n"
 "PO-Revision-Date: 2026-09-11 15:32+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
@@ -12210,7 +12210,7 @@ msgstr "Coller le calque depuis le presse-papiers"
 #| msgctxt "action"
 #| msgid "Group Layer"
 msgctxt "action"
-msgid "Group layer(s)"
+msgid "Group layers"
 msgstr "Calque de groupe"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
@@ -12229,7 +12229,7 @@ msgstr "Créer un calque de groupe contenant les calques sélectionnés"
 #| msgctxt "(qtundo-format)"
 #| msgid "Ungroup shapes"
 msgctxt "action"
-msgid "Ungroup layer(s)"
+msgid "Ungroup layers"
 msgstr "Dégrouper les formes"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
@@ -13225,9 +13225,11 @@ msgstr "Défini&r la copie à partir de..."
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3632
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Set the source for the selected clone layer(s)."
 msgctxt "action"
-msgid "Set the source for the selected clone layer(s)."
+msgid "Set the source for the selected clone layers"
 msgstr "Définir la source pour le ou les calques sélectionnés clonés."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
@@ -21274,7 +21276,7 @@ msgstr "Taille"
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:164
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:27
 #: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:61
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:179
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:176
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:42
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:44
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:56
@@ -22607,7 +22609,7 @@ msgstr "Masque de transformation"
 #: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
-#: plugins/impex/psd/psd_loader.cpp:593
+#: plugins/impex/psd/psd_loader.cpp:599
 #: plugins/impex/tiff/kis_tiff_import.cc:565
 #, kde-format
 msgid "Transparency Mask"
@@ -24229,7 +24231,7 @@ msgctxt "Automatically created layer name when saving into PSD"
 msgid "Background"
 msgstr "Arrière-plan"
 
-#: libs/psd/psd_layer_section.cpp:967 libs/psd/psd_layer_section.cpp:1145
+#: libs/psd/psd_layer_section.cpp:973 libs/psd/psd_layer_section.cpp:1151
 #, kde-format
 msgid "Unnamed Layer"
 msgstr "Calque sans nom"
@@ -24262,7 +24264,7 @@ msgstr "Ressources locales"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
-#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:779
+#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:777
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
 #: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
@@ -24830,7 +24832,7 @@ msgstr "Supprimer la ressource"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:338
 #: libs/ui/KisMainWindow.cpp:2776
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:369
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
 msgctxt "@title:window"
@@ -25430,9 +25432,13 @@ msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
-#, kde-format
-msgid "Warning(s):"
-msgstr "Avertissement(s) :"
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Warning"
+msgid "Warning:"
+msgid_plural "Warnings:"
+msgstr[0] "Avertissement"
+msgstr[1] "Avertissement"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
 #, kde-format
@@ -28006,7 +28012,7 @@ msgstr "Profondeur en bits de la surface du canevas (Redémarrage nécessaire)"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1425
 #: libs/ui/widgets/KisDitherWidget.ui:119
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:244
 #, kde-format
 msgid "Auto"
 msgstr "Auto"
@@ -30156,7 +30162,7 @@ msgstr "Couleur 2 :"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:50
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:172
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2010
 #, kde-format
 msgid "Size:"
@@ -31602,7 +31608,7 @@ msgstr "Échelle :"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #. i18n: ectx: property (text), widget (QLabel, dimensionLbl)
 #: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:46
-#: plugins/impex/brush/wdg_export_gih.ui:161
+#: plugins/impex/brush/wdg_export_gih.ui:175
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:64
 #, kde-format
 msgid "Dimensions"
@@ -32148,10 +32154,7 @@ msgid "Portrait"
 msgstr "Portrait"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpClipboard)
-#. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
 #: libs/ui/forms/wdgnewimage.ui:320
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:94
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:324
 #, kde-format
 msgid "Clipboard"
 msgstr "Presse-papier"
@@ -32292,8 +32295,6 @@ msgstr "Enregistrer la nouvelle mise en page de la fenêtre"
 #: plugins/extensions/pykrita/plugin/info.ui:217
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:240
 #: plugins/impex/brush/wdg_export_gih.ui:41
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
 #, kde-format
 msgid "Name:"
@@ -32343,8 +32344,6 @@ msgstr "Préréglage de brosse actif"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:75
 #: plugins/generators/seexpr/wdgseexpr.ui:172
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
 #, kde-format
 msgid "Save"
@@ -35026,7 +35025,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Modifier le calque de fichier"
 
-#: libs/ui/kis_clipboard.cc:780 libs/ui/KisView.cpp:684
+#: libs/ui/kis_clipboard.cc:778 libs/ui/KisView.cpp:684
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -35656,7 +35655,7 @@ msgstr "Débit : {n} %"
 #: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:165
 #: plugins/tools/basictools/wdgmultihandtool.ui:129
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2099
 #, kde-format
@@ -40644,8 +40643,6 @@ msgstr ""
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:204
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:160
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:135
 #, kde-format
 msgid "Overwrite"
 msgstr "Écraser"
@@ -45629,10 +45626,13 @@ msgid "px"
 msgstr "px"
 
 #: plugins/dockers/recorder/recorder_export.cpp:560
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "frame"
 msgctxt "The suffix after number of frames"
-msgid "frame(s)"
-msgstr "Image(s)"
+msgid "frame"
+msgid_plural "frames"
+msgstr[0] "image"
+msgstr[1] "image"
 
 #: plugins/dockers/recorder/recorder_export.cpp:620
 #, kde-format
@@ -55661,33 +55661,33 @@ msgstr "&Couleur :"
 msgid "Brush selection information for animated brushes"
 msgstr "Information de sélection de brosse pour les brosses animées"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:33
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:209
+#: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
+#, fuzzy, kde-format
+#| msgctxt "video importer: video file statistics"
+#| msgid "Frames: %1"
+msgctxt "@label %1 number of animation frames"
+msgid "Frames: %1"
+msgstr "Images : %1"
+
+#: plugins/impex/brush/KisWdgOptionsBrush.h:43
 #, kde-format
 msgid "Constant"
 msgstr "Constant"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:34
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:214
+#: plugins/impex/brush/KisWdgOptionsBrush.h:44
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:20
 #, kde-format
 msgid "Random"
 msgstr "Aléatoire"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:35
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:219
+#: plugins/impex/brush/KisWdgOptionsBrush.h:45
 #, kde-format
 msgid "Incremental"
 msgstr "Incrémental"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyAmountPressureBox)
 #. i18n: ectx: property (text), widget (QToolButton, liquifySizePressureBox)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:36
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:224
+#: plugins/impex/brush/KisWdgOptionsBrush.h:46
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:17
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2017
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2339
@@ -55695,19 +55695,17 @@ msgstr "Incrémental"
 msgid "Pressure"
 msgstr "Pression"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:37
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:229
+#: plugins/impex/brush/KisWdgOptionsBrush.h:47
 #, kde-format
 msgid "Angular"
 msgstr "Angulaire"
 
-#: plugins/impex/brush/KisWdgOptionsBrush.h:38
+#: plugins/impex/brush/KisWdgOptionsBrush.h:48
 #, kde-format
 msgid "Velocity"
 msgstr "Vitesse"
 
-#: plugins/impex/brush/KisWdgOptionsBrush.h:55
+#: plugins/impex/brush/KisWdgOptionsBrush.h:65
 #, kde-format
 msgid "Rank"
 msgstr "Classement"
@@ -55720,9 +55718,7 @@ msgstr "Classement"
 #: plugins/impex/brush/wdg_export_gih.ui:31
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:379
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:153
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:107
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:82
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:219
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:206
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:152
 #: plugins/paintops/roundmarker/kis_roundmarker_option.ui:36
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2367
@@ -55730,54 +55726,50 @@ msgstr "Classement"
 msgid "Spacing:"
 msgstr "Espacement : "
 
-#. i18n: ectx: property (text), widget (QCheckBox, colorAsmask)
 #. i18n: ectx: property (text), widget (QCheckBox, colorAsMask)
 #: plugins/impex/brush/wdg_export_gih.ui:51
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:88
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:92
 #, kde-format
 msgid "Create mask from color"
 msgstr "Créer un masque depuis une couleur"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: plugins/impex/brush/wdg_export_gih.ui:66
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:130
+#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
+#: plugins/impex/brush/wdg_export_gih.ui:61
+#, kde-format
+msgid "Preserve alpha channel"
+msgstr "Préserver le canal « Alpha »"
+
+#. i18n: ectx: property (title), widget (QGroupBox, styleGroupBox)
+#: plugins/impex/brush/wdg_export_gih.ui:76
 #, kde-format
 msgid "Brush Style"
 msgstr "Style de brosse"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, styleLbl)
-#: plugins/impex/brush/wdg_export_gih.ui:89
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:150
+#: plugins/impex/brush/wdg_export_gih.ui:99
 #, kde-format
 msgid "Style:"
 msgstr "Style :"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, brushStyle)
-#: plugins/impex/brush/wdg_export_gih.ui:106
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:167
+#: plugins/impex/brush/wdg_export_gih.ui:116
 #, kde-format
 msgid "Regular"
 msgstr "Régulier"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, brushStyle)
-#: plugins/impex/brush/wdg_export_gih.ui:111
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:172
+#: plugins/impex/brush/wdg_export_gih.ui:121
 #, kde-format
 msgid "Animated"
 msgstr "Animé"
 
 #. i18n: ectx: property (title), widget (QGroupBox, animStyleGroup)
-#: plugins/impex/brush/wdg_export_gih.ui:124
+#: plugins/impex/brush/wdg_export_gih.ui:134
 #, kde-format
 msgid "Animated style options"
 msgstr "Options pour styles animés"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #. i18n: ectx: property (text), widget (QLabel, selectionModeLbl)
-#: plugins/impex/brush/wdg_export_gih.ui:213
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:186
+#: plugins/impex/brush/wdg_export_gih.ui:227
 #, kde-format
 msgid "Selection mode:"
 msgstr "Mode de sélection :"
@@ -61539,12 +61531,6 @@ msgstr "Mouvement agité"
 msgid "Aspect ratio:"
 msgstr "Proportions :"
 
-#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:133
-#, kde-format
-msgid "Preserve alpha"
-msgstr "Préserver le canal alpha"
-
 #. i18n: ectx: property (text), widget (QCheckBox, randomHSVCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:33
 #, kde-format
@@ -61744,12 +61730,6 @@ msgstr "Partager la courbe avec tous les paramètres"
 msgid "X Range:"
 msgstr "Intervalle en X :"
 
-#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:115
-#, kde-format
-msgid "Preserve alpha channel"
-msgstr "Préserver le canal « Alpha »"
-
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:28
 #, kde-format
@@ -61813,46 +61793,48 @@ msgstr ""
 "couleurs au cours du dessin réalisé en une fois, alors que le second rend "
 "une couleur moyenne si vous passez plusieurs fois au même endroit.</p></html>"
 
-#. i18n: ectx: property (text), widget (QPushButton, stampButton)
+#. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:307
-#, kde-format
-msgid "Stamp"
-msgstr "Tampon"
+#, fuzzy, kde-format
+#| msgctxt "In bundle manager; press button to create a new bundle"
+#| msgid "Create"
+msgctxt "@action:button create new brushtip"
+msgid "Create New"
+msgstr "Créer"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:132
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:119
 #, kde-format
 msgid "Current Brush Tip"
 msgstr "Pointe de brosse actuelle"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:147
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:134
 #, kde-format
 msgid "Brush Details"
 msgstr "Détails des brosses"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:179
 #, kde-format
 msgid "Preserve brush preset settings"
 msgstr "Conserver les paramètres de préréglage de la brosse"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:212
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:199
 #, kde-format
 msgid "Reset Predefined Tip"
 msgstr "Réinitialiser la pointe prédéfinie"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBrushMode)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:226
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:213
 #, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Brush mode"
 msgstr "Mode de brosse"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetAdjustments)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:275
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:262
 #, kde-format
 msgid "Reset Adjustments"
 msgstr "Ré-initialiser les ajustements"
@@ -61991,7 +61973,7 @@ msgstr "Espacement automatique"
 msgid "Brush Tip"
 msgstr "Pointe de brosse"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:47
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:45
 #, kde-format
 msgid ""
 "Precision Level 1 (fastest)\n"
@@ -62006,7 +61988,7 @@ msgstr ""
 "\n"
 "Optimal pour de très grandes brosses"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:55
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:53
 #, kde-format
 msgid ""
 "Precision Level 2\n"
@@ -62021,7 +62003,7 @@ msgstr ""
 "\n"
 "Optimal pour de grandes brosses"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:63
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:61
 #, kde-format
 msgid ""
 "Precision Level 3\n"
@@ -62032,7 +62014,7 @@ msgstr ""
 "Précision des sous-pixels : désactivé \n"
 "Précision des tailles des brosses : exact"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:69
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:67
 #, kde-format
 msgid ""
 "Precision Level 4 (optimal)\n"
@@ -62047,7 +62029,7 @@ msgstr ""
 "\n"
 "Fournit jusqu'à des performances 50 % meilleure en comparaison du niveau 5"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:77
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:75
 #, kde-format
 msgid ""
 "Precision Level 5 (best quality)\n"
@@ -62062,49 +62044,83 @@ msgstr ""
 "\n"
 "La performance la plus lente. Meilleure qualité."
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:139
 #, kde-format
 msgctxt "Autobrush Brush tip mode"
 msgid "Auto"
 msgstr "Auto"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:143
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
 #, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Predefined"
 msgstr "Prédéfini"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:146
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:144
 #: plugins/paintops/libpaintop/kis_text_brush_chooser.cpp:40
 #, kde-format
 msgctxt "Text Brush tip mode"
 msgid "Text"
 msgstr "Texte"
 
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:100
-#, kde-format
-msgid ""
-"Nothing copied\n"
-" to Clipboard"
-msgstr ""
-"Rien n'a été copié\n"
-" dans le presse-papiers"
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:79
+#, fuzzy, kde-format
+#| msgid "Source:"
+msgctxt "@label:listbox image source"
+msgid "Source:"
+msgstr "Source :"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:229
-#, kde-format
-msgid ""
-"Creates a brush tip from the current image selection.\n"
-" If no selection is present the whole image will be used."
-msgstr ""
-"Crée une astuce de brosse à partir de la sélection de l'image courante.\n"
-"Si aucune sélection n'est disponible, toute l'image sera utilisée."
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:83
+#, fuzzy, kde-format
+#| msgid "Image"
+msgctxt "@item:inlistbox"
+msgid "Image"
+msgstr "Image"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:233
-#, kde-format
-msgid "Creates a brush tip from the image in the clipboard."
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
+#, fuzzy, kde-format
+#| msgid "Clipboard"
+msgctxt "@item:inlistbox"
+msgid "Clipboard"
+msgstr "Presse-papier"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:87
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Reload"
+msgctxt "@action:button reload image"
+msgid "Reload"
+msgstr "Recharger"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:250
+#, fuzzy, kde-format
+#| msgctxt "Empty locale"
+#| msgid "Empty"
+msgctxt "@info empty image"
+msgid "Empty"
+msgstr "Vide"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
+#, fuzzy, kde-format
+#| msgid "Overwrite"
+msgctxt "@action:button"
+msgid "Overwrite"
+msgstr "Écraser"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
+#, fuzzy, kde-format
+#| msgid "Save"
+msgctxt "@action:button"
+msgid "Save"
+msgstr "Enregistrer"
+
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
+#, fuzzy, kde-format
+#| msgid "Creates a brush tip from the image in the clipboard."
+msgid "Creates a brush tip from the current image, selection, or clipboard."
 msgstr "Créer une pointe de brosse à partir de l'image dans le presse-papiers."
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:238
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
 msgid ""
 "Reloads Spacing from file\n"
@@ -62115,25 +62131,25 @@ msgstr ""
 "Échelle à 1,0 \n"
 "Angle à 0,0"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:236
 #, kde-format
 msgctxt "@label:slider"
 msgid "Neutral point: "
 msgstr "Point neutre :"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:252
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
 #, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
 msgstr "Luminosité : "
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:259
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:251
 #, kde-format
 msgctxt "@label:slider"
 msgid "Contrast: "
 msgstr "Contraste :"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:262
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:254
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -62146,6 +62162,12 @@ msgstr ""
 " Point neutre : 127\n"
 " Luminosité : 0 %\n"
 " Contraste : 0 %"
+
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
+#, fuzzy, kde-format
+#| msgid "Create New Bundle"
+msgid "Create New Brushtip"
+msgstr "Créer un nouveau pack"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
@@ -71442,6 +71464,33 @@ msgstr ""
 "Gamme complète : [%1, %2]\n"
 "Sous-gamme : [%3, %4]"
 
+#~ msgid "Warning(s):"
+#~ msgstr "Avertissement(s) :"
+
+#~ msgctxt "The suffix after number of frames"
+#~ msgid "frame(s)"
+#~ msgstr "Image(s)"
+
+#~ msgid "Preserve alpha"
+#~ msgstr "Préserver le canal alpha"
+
+#~ msgid "Stamp"
+#~ msgstr "Tampon"
+
+#~ msgid ""
+#~ "Nothing copied\n"
+#~ " to Clipboard"
+#~ msgstr ""
+#~ "Rien n'a été copié\n"
+#~ " dans le presse-papiers"
+
+#~ msgid ""
+#~ "Creates a brush tip from the current image selection.\n"
+#~ " If no selection is present the whole image will be used."
+#~ msgstr ""
+#~ "Crée une astuce de brosse à partir de la sélection de l'image courante.\n"
+#~ "Si aucune sélection n'est disponible, toute l'image sera utilisée."
+
 #, fuzzy
 #~| msgctxt "(qtundo-format)"
 #~| msgid "Ungroup shapes"
@@ -74612,10 +74661,6 @@ msgstr ""
 #~ msgid "Import"
 #~ msgstr "Importer"
 
-#~ msgctxt "In bundle manager; press button to create a new bundle"
-#~ msgid "Create"
-#~ msgstr "Créer"
-
 #~ msgid "Bundle Name"
 #~ msgstr "Nom du pack"
 
@@ -75195,10 +75240,6 @@ msgstr ""
 #~ msgctxt "action"
 #~ msgid "&New"
 #~ msgstr "&Nouveau"
-
-#~ msgctxt "action"
-#~ msgid "Reload"
-#~ msgstr "Recharger"
 
 #~ msgctxt "action"
 #~ msgid "&Print..."
@@ -76532,9 +76573,6 @@ msgstr ""
 
 #~ msgid "Bundle \"%1\" doesn't exist!"
 #~ msgstr "Le pack « %1 » n'existe pas !"
-
-#~ msgid "Create New Bundle"
-#~ msgstr "Créer un nouveau pack"
 
 #~ msgid "Inactive Bundles"
 #~ msgstr "Packs inactifs"

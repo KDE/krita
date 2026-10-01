@@ -82,8 +82,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-30 00:43+0000\n"
-"PO-Revision-Date: 2026-09-23 11:04+0200\n"
+"POT-Creation-Date: 2026-10-01 00:43+0000\n"
+"PO-Revision-Date: 2026-09-30 08:28+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -7328,23 +7328,17 @@ msgstr "Выравнивание по правому краю"
 #. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
 #: krita/data/actions/InteractionTool.action:33
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shapes"
-msgstr ""
-"Разгруппировка объектов\n"
-"разгруппировку объектов"
+msgstr "Разгруппировать объекты"
 
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:28
-#, fuzzy, kde-format
-#| msgctxt "Group as Swatch Group in a Palette"
-#| msgid "Remove selected group"
+#, kde-format
 msgctxt "action"
 msgid "Remove the selected shape group"
-msgstr "Удалить выбранную группу"
+msgstr "Расформировать выбранную группу объектов"
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7402,23 +7396,17 @@ msgstr "Центрировать по вертикали"
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shapes"
-msgstr ""
-"Группировка объектов\n"
-"группировку объектов"
+msgstr "Сгруппировать объекты"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Create a group layer containing selected layers"
+#, kde-format
 msgctxt "action"
 msgid "Create a shape group containing selected shapes"
-msgstr "Создать групповой слой, включающий выделенные слои"
+msgstr "Создать группу из выделенных объектов"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
@@ -12162,9 +12150,11 @@ msgstr "Вставить из буфера обмена"
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914 krita/krita.action:2917
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Group layer(s)"
 msgctxt "action"
-msgid "Group layer(s)"
+msgid "Group layers"
 msgstr "Сгруппировать слои"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
@@ -12179,9 +12169,11 @@ msgstr "Создать групповой слой, включающий выд�
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926 krita/krita.action:2929
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Ungroup layer(s)"
 msgctxt "action"
-msgid "Ungroup layer(s)"
+msgid "Ungroup layers"
 msgstr "Разгруппировать слои"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
@@ -13180,9 +13172,11 @@ msgstr "Установить источник для &копирования..."
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3632
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Set the source for the selected clone layer(s)."
 msgctxt "action"
-msgid "Set the source for the selected clone layer(s)."
+msgid "Set the source for the selected clone layers"
 msgstr "Указать источник выделенного клонирующего слоя (слоёв)."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
@@ -21298,7 +21292,7 @@ msgstr "Размер"
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:164
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:27
 #: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:61
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:179
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:176
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:42
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:44
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:56
@@ -22787,7 +22781,7 @@ msgstr "Трансформирующая маска"
 #: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
-#: plugins/impex/psd/psd_loader.cpp:593
+#: plugins/impex/psd/psd_loader.cpp:599
 #: plugins/impex/tiff/kis_tiff_import.cc:565
 #, kde-format
 msgid "Transparency Mask"
@@ -24407,7 +24401,7 @@ msgctxt "Automatically created layer name when saving into PSD"
 msgid "Background"
 msgstr "Фон"
 
-#: libs/psd/psd_layer_section.cpp:967 libs/psd/psd_layer_section.cpp:1145
+#: libs/psd/psd_layer_section.cpp:973 libs/psd/psd_layer_section.cpp:1151
 #, kde-format
 msgid "Unnamed Layer"
 msgstr "Безымянный слой"
@@ -24440,7 +24434,7 @@ msgstr "Локальные источники"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
-#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:779
+#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:777
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
 #: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
@@ -25001,7 +24995,7 @@ msgstr "Удалить ресурс"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:338
 #: libs/ui/KisMainWindow.cpp:2776
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:369
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
 msgctxt "@title:window"
@@ -25608,9 +25602,15 @@ msgstr "Размер, превышающий «1920» (в пикселах), р�
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
-#, kde-format
-msgid "Warning(s):"
-msgstr "Предупреждения:"
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Warning"
+msgid "Warning:"
+msgid_plural "Warnings:"
+msgstr[0] "Предупреждение"
+msgstr[1] "Предупреждение"
+msgstr[2] "Предупреждение"
+msgstr[3] "Предупреждение"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
 #, kde-format
@@ -27195,119 +27195,87 @@ msgid "About Krita"
 msgstr "О Krita"
 
 #: libs/ui/dialogs/kis_about_application.cpp:51
-#, fuzzy, kde-format
-#| msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
+#, kde-format
 msgid "<p><b>Using Krita</b></p>"
-msgstr "<p><span style=\" color:%1;\"><b>Работа с Krita</b></span></p>"
+msgstr "<p><b>Работа с Krita</b></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:58
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline;\">Support Krita's Development!</span></a></p>"
 msgstr ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Поддержите разработку Krita</span></a></p>"
+"underline;\">Поддержите разработку Krita</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:59
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">Krita Website</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
 "\">Krita Website</span></a></p>"
 msgstr ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Веб-сайт Krita</span></a></p>"
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
+"\">Веб-сайт Krita</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:63
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
 "\"><span style=\" text-decoration: underline;\">Getting Started</span></a></"
 "p>"
 msgstr ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-"\"><span style=\" text-decoration: underline; color:%1;\">Начало работы</"
-"span></a></p>"
+"\"><span style=\" text-decoration: underline;\">Начало работы</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:64
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">Manual</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline;\">Manual</span></a></p>"
 msgstr ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Руководство</span></a></p>"
+"underline;\">Руководство</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:66
-#, fuzzy, kde-format
-#| msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
+#, kde-format
 msgid "<p><b>Coding Krita</b></p>"
-msgstr ""
-"<p><span style=\" color:%1;\"><b>Участие в разработке Krita</b></span></p>"
+msgstr "<p><b>Участие в разработке Krita</b></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:67
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">User Community</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline;\">User Community</span></a></p>"
 msgstr ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">Сообщество пользователей</span></a></p>"
+"underline;\">Сообщество пользователей</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Source Code</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline;;\">Source Code</span></a></p>"
 msgstr ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-"decoration: underline; color:%1;\">Исходный код</span></a></p>"
+"decoration: underline;;\">Исходный код</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:69
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline;\">Scripting API</span></a></p>"
 msgstr ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
-"text-decoration: underline; color:%1;\">API сценариев</span></a></p>"
+"text-decoration: underline;\">API сценариев</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Scripting School</span></"
-#| "a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline;;\">Scripting School</span></a></p>"
 msgstr ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
-"\" text-decoration: underline; color:%1;\">Школа создания сценариев</span></"
-"a></p>"
+"\" text-decoration: underline;;\">Школа создания сценариев</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:83
 #, kde-format
@@ -28173,7 +28141,7 @@ msgstr "Глубина цвета поверхности холста (треб�
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1425
 #: libs/ui/widgets/KisDitherWidget.ui:119
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:244
 #, kde-format
 msgid "Auto"
 msgstr "Автоматическая"
@@ -30325,7 +30293,7 @@ msgstr "Цвет 2:"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:50
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:172
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2010
 #, kde-format
 msgid "Size:"
@@ -31752,7 +31720,7 @@ msgstr "Масштаб:"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #. i18n: ectx: property (text), widget (QLabel, dimensionLbl)
 #: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:46
-#: plugins/impex/brush/wdg_export_gih.ui:161
+#: plugins/impex/brush/wdg_export_gih.ui:175
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:64
 #, kde-format
 msgid "Dimensions"
@@ -32288,10 +32256,7 @@ msgid "Portrait"
 msgstr "Портретный"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpClipboard)
-#. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
 #: libs/ui/forms/wdgnewimage.ui:320
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:94
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:324
 #, kde-format
 msgid "Clipboard"
 msgstr "Буфер обмена"
@@ -32431,8 +32396,6 @@ msgstr "Сохранить новое расположение окон"
 #: plugins/extensions/pykrita/plugin/info.ui:217
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:240
 #: plugins/impex/brush/wdg_export_gih.ui:41
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
 #, kde-format
 msgid "Name:"
@@ -32482,8 +32445,6 @@ msgstr "Текущий профиль кисти"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:75
 #: plugins/generators/seexpr/wdgseexpr.ui:172
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
 #, kde-format
 msgid "Save"
@@ -35149,7 +35110,7 @@ msgstr ""
 "Изменение слоя из файла\n"
 "изменение слоя из файла"
 
-#: libs/ui/kis_clipboard.cc:780 libs/ui/KisView.cpp:684
+#: libs/ui/kis_clipboard.cc:778 libs/ui/KisView.cpp:684
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -35848,7 +35809,7 @@ msgstr "Нажим: {n}%"
 #: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:165
 #: plugins/tools/basictools/wdgmultihandtool.ui:129
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2099
 #, kde-format
@@ -40776,8 +40737,6 @@ msgstr ""
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:204
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:160
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:135
 #, kde-format
 msgid "Overwrite"
 msgstr "Заменить"
@@ -45862,10 +45821,15 @@ msgid "px"
 msgstr "пикс."
 
 #: plugins/dockers/recorder/recorder_export.cpp:560
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "frame"
 msgctxt "The suffix after number of frames"
-msgid "frame(s)"
-msgstr "кадр(ы)"
+msgid "frame"
+msgid_plural "frames"
+msgstr[0] "кадр"
+msgstr[1] "кадр"
+msgstr[2] "кадр"
+msgstr[3] "кадр"
 
 #: plugins/dockers/recorder/recorder_export.cpp:620
 #, kde-format
@@ -51568,16 +51532,13 @@ msgstr ""
 "создания сценариев Krita</span></a>!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "EXIF: exposure - exposure mode"
-#| msgid "Manual"
+#, kde-format
 msgctxt "@title:tab plugin manual"
 msgid "Manual"
-msgstr "Вручную"
+msgstr "Руководство"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:53
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:tab plugin status"
 msgid "Status"
 msgstr "Состояние"
@@ -51588,65 +51549,56 @@ msgid "Python Plugin Manager"
 msgstr "Управление модулями Python"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:114
-#, fuzzy, kde-format
-#| msgid "Location:"
+#, kde-format
 msgctxt "%1 plugin file path"
 msgid "Location: %1"
-msgstr "Путь:"
+msgstr "Расположение: %1"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enabled: false"
-msgstr "Включить"
+msgstr "Включён: нет"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgid "Enabled: true"
-msgstr "Включено"
+msgstr "Включён: да"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:117
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "%1 plugin status text"
 msgid "Status: %1"
-msgstr "Состояние"
+msgstr "Состояние: %1"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:119
-#, fuzzy, kde-format
-#| msgid "Error: "
+#, kde-format
 msgctxt "%1 plugin error message"
 msgid "Error: %1"
-msgstr "Ошибка: "
+msgstr "Ошибка: %1"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Broken"
-msgstr "Обводка"
+msgstr "Повреждён"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:83
-#, fuzzy, kde-format
-#| msgctxt "Enable Shrink To Fit"
-#| msgid "Enable"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Unstable"
-msgstr "Включить"
+msgstr "Нестабилен"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:85
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Loaded"
-msgstr "Шкура леопарда"
+msgstr "Загружен"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:87
-#, fuzzy, kde-format
-#| msgid "Not Saved"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Not loaded"
-msgstr "Несохранённый"
+msgstr "Не загружен"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:150
 #, kde-format
@@ -51713,12 +51665,10 @@ msgid "Internal engine failure"
 msgstr "Внутренняя ошибка движка"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:386
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Module not loaded:<br/>%1"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/><code>%1</code>"
-msgstr "Модуль не загружен:<br/>%1"
+msgstr "Модуль не загружен:<br/><code>%1</code>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:53
 #, kde-format
@@ -51733,8 +51683,7 @@ msgid "Comment"
 msgstr "Комментарий"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:57
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:column"
 msgid "Status"
 msgstr "Состояние"
@@ -55930,33 +55879,33 @@ msgstr "&Цвет:"
 msgid "Brush selection information for animated brushes"
 msgstr "Информация о выделении кистью для анимированных кистей"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:33
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:209
+#: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
+#, fuzzy, kde-format
+#| msgctxt "video importer: video file statistics"
+#| msgid "Frames: %1"
+msgctxt "@label %1 number of animation frames"
+msgid "Frames: %1"
+msgstr "Количество кадров: %1"
+
+#: plugins/impex/brush/KisWdgOptionsBrush.h:43
 #, kde-format
 msgid "Constant"
 msgstr "Постоянный"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:34
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:214
+#: plugins/impex/brush/KisWdgOptionsBrush.h:44
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:20
 #, kde-format
 msgid "Random"
 msgstr "Случайный"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:35
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:219
+#: plugins/impex/brush/KisWdgOptionsBrush.h:45
 #, kde-format
 msgid "Incremental"
 msgstr "Инкрементальный"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyAmountPressureBox)
 #. i18n: ectx: property (text), widget (QToolButton, liquifySizePressureBox)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:36
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:224
+#: plugins/impex/brush/KisWdgOptionsBrush.h:46
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:17
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2017
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2339
@@ -55964,19 +55913,17 @@ msgstr "Инкрементальный"
 msgid "Pressure"
 msgstr "Давление"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:37
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:229
+#: plugins/impex/brush/KisWdgOptionsBrush.h:47
 #, kde-format
 msgid "Angular"
 msgstr "Угловой"
 
-#: plugins/impex/brush/KisWdgOptionsBrush.h:38
+#: plugins/impex/brush/KisWdgOptionsBrush.h:48
 #, kde-format
 msgid "Velocity"
 msgstr "Скорость"
 
-#: plugins/impex/brush/KisWdgOptionsBrush.h:55
+#: plugins/impex/brush/KisWdgOptionsBrush.h:65
 #, kde-format
 msgid "Rank"
 msgstr "Место"
@@ -55989,9 +55936,7 @@ msgstr "Место"
 #: plugins/impex/brush/wdg_export_gih.ui:31
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:379
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:153
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:107
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:82
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:219
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:206
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:152
 #: plugins/paintops/roundmarker/kis_roundmarker_option.ui:36
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2367
@@ -55999,54 +55944,50 @@ msgstr "Место"
 msgid "Spacing:"
 msgstr "Интервал:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, colorAsmask)
 #. i18n: ectx: property (text), widget (QCheckBox, colorAsMask)
 #: plugins/impex/brush/wdg_export_gih.ui:51
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:88
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:92
 #, kde-format
 msgid "Create mask from color"
 msgstr "Создать маску из цвета"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: plugins/impex/brush/wdg_export_gih.ui:66
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:130
+#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
+#: plugins/impex/brush/wdg_export_gih.ui:61
+#, kde-format
+msgid "Preserve alpha channel"
+msgstr "Сохранить альфа-канал"
+
+#. i18n: ectx: property (title), widget (QGroupBox, styleGroupBox)
+#: plugins/impex/brush/wdg_export_gih.ui:76
 #, kde-format
 msgid "Brush Style"
 msgstr "Стиль кисти"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, styleLbl)
-#: plugins/impex/brush/wdg_export_gih.ui:89
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:150
+#: plugins/impex/brush/wdg_export_gih.ui:99
 #, kde-format
 msgid "Style:"
 msgstr "Стиль:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, brushStyle)
-#: plugins/impex/brush/wdg_export_gih.ui:106
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:167
+#: plugins/impex/brush/wdg_export_gih.ui:116
 #, kde-format
 msgid "Regular"
 msgstr "Обычный"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, brushStyle)
-#: plugins/impex/brush/wdg_export_gih.ui:111
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:172
+#: plugins/impex/brush/wdg_export_gih.ui:121
 #, kde-format
 msgid "Animated"
 msgstr "Анимированный"
 
 #. i18n: ectx: property (title), widget (QGroupBox, animStyleGroup)
-#: plugins/impex/brush/wdg_export_gih.ui:124
+#: plugins/impex/brush/wdg_export_gih.ui:134
 #, kde-format
 msgid "Animated style options"
 msgstr "Опции анимированного стиля"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #. i18n: ectx: property (text), widget (QLabel, selectionModeLbl)
-#: plugins/impex/brush/wdg_export_gih.ui:213
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:186
+#: plugins/impex/brush/wdg_export_gih.ui:227
 #, kde-format
 msgid "Selection mode:"
 msgstr "Режим выделения:"
@@ -61721,12 +61662,6 @@ msgstr "Дрожание при движении"
 msgid "Aspect ratio:"
 msgstr "Соотношение сторон:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:133
-#, kde-format
-msgid "Preserve alpha"
-msgstr "Сохранить альфа-канал"
-
 #. i18n: ectx: property (text), widget (QCheckBox, randomHSVCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:33
 #, kde-format
@@ -61925,12 +61860,6 @@ msgstr "Общая кривая для всех параметров"
 msgid "X Range:"
 msgstr "Диапазон по оси X:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:115
-#, kde-format
-msgid "Preserve alpha channel"
-msgstr "Сохранить альфа-канал"
-
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:28
 #, kde-format
@@ -61992,46 +61921,46 @@ msgstr ""
 "цвет ложится равномерно, даже если наносить его на одно и то же место "
 "несколько раз.</p></html>"
 
-#. i18n: ectx: property (text), widget (QPushButton, stampButton)
+#. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:307
-#, kde-format
-msgid "Stamp"
-msgstr "Штамп"
+#, fuzzy, kde-format
+msgctxt "@action:button create new brushtip"
+msgid "Create New"
+msgstr "&Создать"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:132
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:119
 #, kde-format
 msgid "Current Brush Tip"
 msgstr "Текущий кончик кисти"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:147
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:134
 #, kde-format
 msgid "Brush Details"
 msgstr "Параметры кисти"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:179
 #, kde-format
 msgid "Preserve brush preset settings"
 msgstr "Сохранить параметры профиля кистей"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:212
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:199
 #, kde-format
 msgid "Reset Predefined Tip"
 msgstr "Сделать наконечник текущим"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBrushMode)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:226
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:213
 #, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Brush mode"
 msgstr "Режим кисти"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetAdjustments)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:275
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:262
 #, kde-format
 msgid "Reset Adjustments"
 msgstr "Сбросить параметры"
@@ -62172,7 +62101,7 @@ msgstr "Автоматические интервалы"
 msgid "Brush Tip"
 msgstr "Кончик кисти"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:47
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:45
 #, kde-format
 msgid ""
 "Precision Level 1 (fastest)\n"
@@ -62187,7 +62116,7 @@ msgstr ""
 "\n"
 "Оптимально для очень больших кистей"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:55
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:53
 #, kde-format
 msgid ""
 "Precision Level 2\n"
@@ -62202,7 +62131,7 @@ msgstr ""
 "\n"
 "Оптимально для больших кистей"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:63
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:61
 #, kde-format
 msgid ""
 "Precision Level 3\n"
@@ -62213,7 +62142,7 @@ msgstr ""
 "Субпиксельная точность: отключено\n"
 "Точность размера кисти: строгая"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:69
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:67
 #, kde-format
 msgid ""
 "Precision Level 4 (optimal)\n"
@@ -62228,7 +62157,7 @@ msgstr ""
 "\n"
 "По сравнению с 5 уровнем работает на 50% быстрее"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:77
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:75
 #, kde-format
 msgid ""
 "Precision Level 5 (best quality)\n"
@@ -62243,49 +62172,83 @@ msgstr ""
 "\n"
 "Минимальная скорость, высочайшее качество."
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:139
 #, kde-format
 msgctxt "Autobrush Brush tip mode"
 msgid "Auto"
 msgstr "Автоматическая"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:143
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
 #, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Predefined"
 msgstr "Предопределённое"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:146
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:144
 #: plugins/paintops/libpaintop/kis_text_brush_chooser.cpp:40
 #, kde-format
 msgctxt "Text Brush tip mode"
 msgid "Text"
 msgstr "Текст"
 
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:100
-#, kde-format
-msgid ""
-"Nothing copied\n"
-" to Clipboard"
-msgstr ""
-"Буфер обмена\n"
-"      пуст"
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:79
+#, fuzzy, kde-format
+#| msgid "Source:"
+msgctxt "@label:listbox image source"
+msgid "Source:"
+msgstr "Источник:"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:229
-#, kde-format
-msgid ""
-"Creates a brush tip from the current image selection.\n"
-" If no selection is present the whole image will be used."
-msgstr ""
-"Создаёт миниатюру кисти из текущего изображения.\n"
-" Если нет выделения, будет использовано всё изображение."
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:83
+#, fuzzy, kde-format
+#| msgid "Image"
+msgctxt "@item:inlistbox"
+msgid "Image"
+msgstr "Изображению"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:233
-#, kde-format
-msgid "Creates a brush tip from the image in the clipboard."
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
+#, fuzzy, kde-format
+#| msgid "Clipboard"
+msgctxt "@item:inlistbox"
+msgid "Clipboard"
+msgstr "Буфер обмена"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:87
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Reload"
+msgctxt "@action:button reload image"
+msgid "Reload"
+msgstr "Перезагрузить"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:250
+#, fuzzy, kde-format
+#| msgctxt "Empty locale"
+#| msgid "Empty"
+msgctxt "@info empty image"
+msgid "Empty"
+msgstr "Пусто"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
+#, fuzzy, kde-format
+#| msgid "Overwrite"
+msgctxt "@action:button"
+msgid "Overwrite"
+msgstr "Заменить"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
+#, fuzzy, kde-format
+#| msgid "Save"
+msgctxt "@action:button"
+msgid "Save"
+msgstr "Сохранить"
+
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
+#, fuzzy, kde-format
+#| msgid "Creates a brush tip from the image in the clipboard."
+msgid "Creates a brush tip from the current image, selection, or clipboard."
 msgstr "Создаёт миниатюру кисти из изображения в буфере обмена."
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:238
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
 msgid ""
 "Reloads Spacing from file\n"
@@ -62296,25 +62259,25 @@ msgstr ""
 "Сбрасывает масштаб на 1,0\n"
 "Сбрасывает поворот на 0,0"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:236
 #, kde-format
 msgctxt "@label:slider"
 msgid "Neutral point: "
 msgstr "Нейтральная точка: "
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:252
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
 #, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
 msgstr "Яркость: "
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:259
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:251
 #, kde-format
 msgctxt "@label:slider"
 msgid "Contrast: "
 msgstr "Контрастность: "
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:262
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:254
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -62327,6 +62290,12 @@ msgstr ""
 "Нейтральная точка: 127\n"
 " Яркость: 0%\n"
 " Контрастность: 0%"
+
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
+#, fuzzy, kde-format
+#| msgid "Create New Bundle"
+msgid "Create New Brushtip"
+msgstr "Создать новый пакет"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
@@ -71669,6 +71638,33 @@ msgstr ""
 "Полный диапазон: [%1, %2]\n"
 "Поддиапазон: [%3, %4]"
 
+#~ msgid "Warning(s):"
+#~ msgstr "Предупреждения:"
+
+#~ msgctxt "The suffix after number of frames"
+#~ msgid "frame(s)"
+#~ msgstr "кадр(ы)"
+
+#~ msgid "Preserve alpha"
+#~ msgstr "Сохранить альфа-канал"
+
+#~ msgid "Stamp"
+#~ msgstr "Штамп"
+
+#~ msgid ""
+#~ "Nothing copied\n"
+#~ " to Clipboard"
+#~ msgstr ""
+#~ "Буфер обмена\n"
+#~ "      пуст"
+
+#~ msgid ""
+#~ "Creates a brush tip from the current image selection.\n"
+#~ " If no selection is present the whole image will be used."
+#~ msgstr ""
+#~ "Создаёт миниатюру кисти из текущего изображения.\n"
+#~ " Если нет выделения, будет использовано всё изображение."
+
 #~ msgctxt "action"
 #~ msgid "Ungroup shape(s)"
 #~ msgstr "Разгруппировать объекты"
@@ -74659,11 +74655,6 @@ msgstr ""
 #~ msgid "Import"
 #~ msgstr "Импорт"
 
-#, fuzzy
-#~ msgctxt "In bundle manager; press button to create a new bundle"
-#~ msgid "Create"
-#~ msgstr "&Создать"
-
 #~ msgid "Bundle Name"
 #~ msgstr "Название пакета"
 
@@ -75164,10 +75155,6 @@ msgstr ""
 #~ msgctxt "action"
 #~ msgid "&New"
 #~ msgstr "&Создать"
-
-#~ msgctxt "action"
-#~ msgid "Reload"
-#~ msgstr "Перезагрузить"
 
 #~ msgctxt "action"
 #~ msgid "&Print..."
@@ -76590,9 +76577,6 @@ msgstr ""
 # BUGME: remove exclamation mark. --aspotashev
 #~ msgid "Bundle \"%1\" doesn't exist!"
 #~ msgstr "Пакет «%1» не существует."
-
-#~ msgid "Create New Bundle"
-#~ msgstr "Создать новый пакет"
 
 #~ msgid "Inactive Bundles"
 #~ msgstr "Неактивные пакеты"

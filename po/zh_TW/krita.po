@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-30 00:43+0000\n"
+"POT-Creation-Date: 2026-10-01 00:43+0000\n"
 "PO-Revision-Date: 2026-06-11 17:03+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -12080,7 +12080,7 @@ msgstr "從剪貼簿貼上圖層"
 #| msgctxt "action"
 #| msgid "Group Layer"
 msgctxt "action"
-msgid "Group layer(s)"
+msgid "Group layers"
 msgstr "群組圖層"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
@@ -12099,7 +12099,7 @@ msgstr "建立一個包含所選圖層的群組圖層"
 #| msgctxt "(qtundo-format)"
 #| msgid "Ungroup shapes"
 msgctxt "action"
-msgid "Ungroup layer(s)"
+msgid "Ungroup layers"
 msgstr "拆散形狀"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
@@ -13093,9 +13093,11 @@ msgstr "設定再製來源(&R)…"
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3632
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Set the source for the selected clone layer(s)."
 msgctxt "action"
-msgid "Set the source for the selected clone layer(s)."
+msgid "Set the source for the selected clone layers"
 msgstr "設定選取再製圖層的來源。"
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
@@ -21316,7 +21318,7 @@ msgstr "大小"
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:164
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:27
 #: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:61
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:179
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:176
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:42
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:44
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:56
@@ -22638,7 +22640,7 @@ msgstr "變形遮罩"
 #: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
-#: plugins/impex/psd/psd_loader.cpp:593
+#: plugins/impex/psd/psd_loader.cpp:599
 #: plugins/impex/tiff/kis_tiff_import.cc:565
 #, kde-format
 msgid "Transparency Mask"
@@ -24266,7 +24268,7 @@ msgctxt "Automatically created layer name when saving into PSD"
 msgid "Background"
 msgstr "背景"
 
-#: libs/psd/psd_layer_section.cpp:967 libs/psd/psd_layer_section.cpp:1145
+#: libs/psd/psd_layer_section.cpp:973 libs/psd/psd_layer_section.cpp:1151
 #, kde-format
 msgid "Unnamed Layer"
 msgstr "未命名圖層"
@@ -24299,7 +24301,7 @@ msgstr "本機資源"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
-#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:779
+#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:777
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
 #: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
@@ -24868,7 +24870,7 @@ msgstr "刪除資源"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:338
 #: libs/ui/KisMainWindow.cpp:2776
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:369
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
 msgctxt "@title:window"
@@ -25449,9 +25451,12 @@ msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
-#, kde-format
-msgid "Warning(s):"
-msgstr "警告："
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Warning"
+msgid "Warning:"
+msgid_plural "Warnings:"
+msgstr[0] "警告"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
 #, kde-format
@@ -28010,7 +28015,7 @@ msgstr "CMYK 混色模式 (需要重啟程式)："
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1425
 #: libs/ui/widgets/KisDitherWidget.ui:119
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:244
 #, kde-format
 msgid "Auto"
 msgstr "自動"
@@ -30107,7 +30112,7 @@ msgstr "色彩 2："
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:50
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:172
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2010
 #, kde-format
 msgid "Size:"
@@ -31501,7 +31506,7 @@ msgstr "縮放："
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #. i18n: ectx: property (text), widget (QLabel, dimensionLbl)
 #: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:46
-#: plugins/impex/brush/wdg_export_gih.ui:161
+#: plugins/impex/brush/wdg_export_gih.ui:175
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:64
 #, kde-format
 msgid "Dimensions"
@@ -32036,10 +32041,7 @@ msgid "Portrait"
 msgstr "縱向"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpClipboard)
-#. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
 #: libs/ui/forms/wdgnewimage.ui:320
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:94
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:324
 #, kde-format
 msgid "Clipboard"
 msgstr "剪貼簿"
@@ -32174,8 +32176,6 @@ msgstr "儲存新視窗版面配置"
 #: plugins/extensions/pykrita/plugin/info.ui:217
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:240
 #: plugins/impex/brush/wdg_export_gih.ui:41
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
 #, kde-format
 msgid "Name:"
@@ -32225,8 +32225,6 @@ msgstr "目前筆刷預設"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:75
 #: plugins/generators/seexpr/wdgseexpr.ui:172
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
 #, kde-format
 msgid "Save"
@@ -34851,7 +34849,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "變更檔案圖層"
 
-#: libs/ui/kis_clipboard.cc:780 libs/ui/KisView.cpp:684
+#: libs/ui/kis_clipboard.cc:778 libs/ui/KisView.cpp:684
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -35486,7 +35484,7 @@ msgstr "流量：{n}%"
 #: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:165
 #: plugins/tools/basictools/wdgmultihandtool.ui:129
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2099
 #, kde-format
@@ -40259,8 +40257,6 @@ msgstr "檔名已在使用。儲存將會覆蓋原本的工作空間。"
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:204
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:160
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:135
 #, fuzzy, kde-format
 #| msgid "Overwrite"
 msgid "Overwrite"
@@ -45164,10 +45160,12 @@ msgid "px"
 msgstr "px"
 
 #: plugins/dockers/recorder/recorder_export.cpp:560
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "frame"
 msgctxt "The suffix after number of frames"
-msgid "frame(s)"
-msgstr "影格"
+msgid "frame"
+msgid_plural "frames"
+msgstr[0] "frame"
 
 #: plugins/dockers/recorder/recorder_export.cpp:620
 #, kde-format
@@ -55249,33 +55247,33 @@ msgstr "色彩(&C)："
 msgid "Brush selection information for animated brushes"
 msgstr "動畫筆刷的筆刷選取區域資訊"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:33
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:209
+#: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
+#, fuzzy, kde-format
+#| msgctxt "video importer: video file statistics"
+#| msgid "Frames: %1"
+msgctxt "@label %1 number of animation frames"
+msgid "Frames: %1"
+msgstr "影格數：%1"
+
+#: plugins/impex/brush/KisWdgOptionsBrush.h:43
 #, kde-format
 msgid "Constant"
 msgstr "常量"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:34
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:214
+#: plugins/impex/brush/KisWdgOptionsBrush.h:44
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:20
 #, kde-format
 msgid "Random"
 msgstr "隨機"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:35
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:219
+#: plugins/impex/brush/KisWdgOptionsBrush.h:45
 #, kde-format
 msgid "Incremental"
 msgstr "遞增"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyAmountPressureBox)
 #. i18n: ectx: property (text), widget (QToolButton, liquifySizePressureBox)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:36
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:224
+#: plugins/impex/brush/KisWdgOptionsBrush.h:46
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:17
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2017
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2339
@@ -55283,19 +55281,17 @@ msgstr "遞增"
 msgid "Pressure"
 msgstr "壓力"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:37
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:229
+#: plugins/impex/brush/KisWdgOptionsBrush.h:47
 #, kde-format
 msgid "Angular"
 msgstr "壓感筆角度"
 
-#: plugins/impex/brush/KisWdgOptionsBrush.h:38
+#: plugins/impex/brush/KisWdgOptionsBrush.h:48
 #, kde-format
 msgid "Velocity"
 msgstr "速度"
 
-#: plugins/impex/brush/KisWdgOptionsBrush.h:55
+#: plugins/impex/brush/KisWdgOptionsBrush.h:65
 #, kde-format
 msgid "Rank"
 msgstr "等級"
@@ -55308,9 +55304,7 @@ msgstr "等級"
 #: plugins/impex/brush/wdg_export_gih.ui:31
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:379
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:153
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:107
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:82
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:219
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:206
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:152
 #: plugins/paintops/roundmarker/kis_roundmarker_option.ui:36
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2367
@@ -55318,54 +55312,50 @@ msgstr "等級"
 msgid "Spacing:"
 msgstr "間距："
 
-#. i18n: ectx: property (text), widget (QCheckBox, colorAsmask)
 #. i18n: ectx: property (text), widget (QCheckBox, colorAsMask)
 #: plugins/impex/brush/wdg_export_gih.ui:51
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:88
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:92
 #, kde-format
 msgid "Create mask from color"
 msgstr "從色彩建立遮罩"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: plugins/impex/brush/wdg_export_gih.ui:66
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:130
+#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
+#: plugins/impex/brush/wdg_export_gih.ui:61
+#, kde-format
+msgid "Preserve alpha channel"
+msgstr "保留 Alpha (透明度) 通道"
+
+#. i18n: ectx: property (title), widget (QGroupBox, styleGroupBox)
+#: plugins/impex/brush/wdg_export_gih.ui:76
 #, kde-format
 msgid "Brush Style"
 msgstr "筆刷樣式"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, styleLbl)
-#: plugins/impex/brush/wdg_export_gih.ui:89
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:150
+#: plugins/impex/brush/wdg_export_gih.ui:99
 #, kde-format
 msgid "Style:"
 msgstr "樣式："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, brushStyle)
-#: plugins/impex/brush/wdg_export_gih.ui:106
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:167
+#: plugins/impex/brush/wdg_export_gih.ui:116
 #, kde-format
 msgid "Regular"
 msgstr "一般"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, brushStyle)
-#: plugins/impex/brush/wdg_export_gih.ui:111
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:172
+#: plugins/impex/brush/wdg_export_gih.ui:121
 #, kde-format
 msgid "Animated"
 msgstr "動畫"
 
 #. i18n: ectx: property (title), widget (QGroupBox, animStyleGroup)
-#: plugins/impex/brush/wdg_export_gih.ui:124
+#: plugins/impex/brush/wdg_export_gih.ui:134
 #, kde-format
 msgid "Animated style options"
 msgstr "動畫格式選項"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #. i18n: ectx: property (text), widget (QLabel, selectionModeLbl)
-#: plugins/impex/brush/wdg_export_gih.ui:213
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:186
+#: plugins/impex/brush/wdg_export_gih.ui:227
 #, kde-format
 msgid "Selection mode:"
 msgstr "選擇模式："
@@ -60795,12 +60785,6 @@ msgstr "抖動位移"
 msgid "Aspect ratio:"
 msgstr "寬高比："
 
-#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:133
-#, kde-format
-msgid "Preserve alpha"
-msgstr "保持 Alpha (透明度) 不變"
-
 #. i18n: ectx: property (text), widget (QCheckBox, randomHSVCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:33
 #, kde-format
@@ -60997,12 +60981,6 @@ msgstr "所有感測器統一曲線"
 msgid "X Range:"
 msgstr "X 範圍："
 
-#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:115
-#, kde-format
-msgid "Preserve alpha channel"
-msgstr "保留 Alpha (透明度) 通道"
-
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:28
 #, kde-format
@@ -61065,47 +61043,50 @@ msgstr ""
 "透明度較低時明顯)；沖刷模式下，同一條筆畫中的筆尖印跡不會在互相重疊處加深，一"
 "條筆畫內部的色彩總是均勻的。</p></html>"
 
-#. i18n: ectx: property (text), widget (QPushButton, stampButton)
+#. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:307
-#, kde-format
-msgid "Stamp"
-msgstr "印章"
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Create shape"
+#| msgid_plural "Create %1 shapes"
+msgctxt "@action:button create new brushtip"
+msgid "Create New"
+msgstr "建立 %1 個形狀"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:132
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:119
 #, kde-format
 msgid "Current Brush Tip"
 msgstr "目前筆尖"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:147
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:134
 #, kde-format
 msgid "Brush Details"
 msgstr "筆刷詳情"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:179
 #, fuzzy, kde-format
 #| msgid "Preserve Brush Preset Settings"
 msgid "Preserve brush preset settings"
 msgstr "保留筆刷預設選項"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:212
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:199
 #, kde-format
 msgid "Reset Predefined Tip"
 msgstr "重設預製形狀筆尖"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBrushMode)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:226
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:213
 #, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Brush mode"
 msgstr "筆刷模式"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetAdjustments)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:275
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:262
 #, kde-format
 msgid "Reset Adjustments"
 msgstr "重設調整"
@@ -61252,7 +61233,7 @@ msgstr "自動間距"
 msgid "Brush Tip"
 msgstr "筆尖"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:47
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:45
 #, kde-format
 msgid ""
 "Precision Level 1 (fastest)\n"
@@ -61267,7 +61248,7 @@ msgstr ""
 "\n"
 "為超大筆刷最佳化"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:55
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:53
 #, kde-format
 msgid ""
 "Precision Level 2\n"
@@ -61282,7 +61263,7 @@ msgstr ""
 "\n"
 "為大筆刷最佳化"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:63
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:61
 #, kde-format
 msgid ""
 "Precision Level 3\n"
@@ -61293,7 +61274,7 @@ msgstr ""
 "次像素精度：停用\n"
 "筆刷大小精度：完全一致"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:69
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:67
 #, kde-format
 msgid ""
 "Precision Level 4 (optimal)\n"
@@ -61308,7 +61289,7 @@ msgstr ""
 "\n"
 "與精度級別 5 相比，效能最多快 50%"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:77
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:75
 #, kde-format
 msgid ""
 "Precision Level 5 (best quality)\n"
@@ -61323,49 +61304,81 @@ msgstr ""
 "\n"
 "效能最慢。品質最好。"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:139
 #, kde-format
 msgctxt "Autobrush Brush tip mode"
 msgid "Auto"
 msgstr "自動"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:143
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
 #, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Predefined"
 msgstr "預製形狀"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:146
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:144
 #: plugins/paintops/libpaintop/kis_text_brush_chooser.cpp:40
 #, kde-format
 msgctxt "Text Brush tip mode"
 msgid "Text"
 msgstr "文字"
 
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:100
-#, kde-format
-msgid ""
-"Nothing copied\n"
-" to Clipboard"
-msgstr ""
-"無任何內容\n"
-"被複製到剪貼簿"
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:79
+#, fuzzy, kde-format
+#| msgid "Source:"
+msgctxt "@label:listbox image source"
+msgid "Source:"
+msgstr "來源："
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:229
-#, kde-format
-msgid ""
-"Creates a brush tip from the current image selection.\n"
-" If no selection is present the whole image will be used."
-msgstr ""
-"從目前影像選取區域中建立筆尖。\n"
-"如果沒有選取區域，將使用整個影像建立筆尖。"
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:83
+#, fuzzy, kde-format
+#| msgid "Image"
+msgctxt "@item:inlistbox"
+msgid "Image"
+msgstr "影像"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:233
-#, kde-format
-msgid "Creates a brush tip from the image in the clipboard."
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
+#, fuzzy, kde-format
+#| msgid "Clipboard"
+msgctxt "@item:inlistbox"
+msgid "Clipboard"
+msgstr "剪貼簿"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:87
+#, fuzzy, kde-format
+#| msgid "Reload File"
+msgctxt "@action:button reload image"
+msgid "Reload"
+msgstr "重新載入檔案"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:250
+#, fuzzy, kde-format
+#| msgid "Empty slot"
+msgctxt "@info empty image"
+msgid "Empty"
+msgstr "空格"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
+#, fuzzy, kde-format
+#| msgid "Overwrite"
+msgctxt "@action:button"
+msgid "Overwrite"
+msgstr "覆蓋"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
+#, fuzzy, kde-format
+#| msgid "Save"
+msgctxt "@action:button"
+msgid "Save"
+msgstr "儲存"
+
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
+#, fuzzy, kde-format
+#| msgid "Creates a brush tip from the image in the clipboard."
+msgid "Creates a brush tip from the current image, selection, or clipboard."
 msgstr "從剪貼簿中的影像建立筆尖。"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:238
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
 msgid ""
 "Reloads Spacing from file\n"
@@ -61376,25 +61389,25 @@ msgstr ""
 "設定縮放為 1.0\n"
 "設定旋轉為 0.0"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:236
 #, kde-format
 msgctxt "@label:slider"
 msgid "Neutral point: "
 msgstr "中性點："
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:252
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
 #, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
 msgstr "亮度："
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:259
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:251
 #, kde-format
 msgctxt "@label:slider"
 msgid "Contrast: "
 msgstr "對比度："
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:262
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:254
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -61407,6 +61420,12 @@ msgstr ""
 " 中性點：127\n"
 " 亮度：0%\n"
 " 對比度：0%"
+
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
+#, fuzzy, kde-format
+#| msgid "Current Brush Tip"
+msgid "Create New Brushtip"
+msgstr "目前筆尖"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
@@ -70745,6 +70764,33 @@ msgstr ""
 "在全範圍與子範圍之間切換。\n"
 "全範圍：[%1, %2]\n"
 "子範圍：[%3, %4]"
+
+#~ msgid "Warning(s):"
+#~ msgstr "警告："
+
+#~ msgctxt "The suffix after number of frames"
+#~ msgid "frame(s)"
+#~ msgstr "影格"
+
+#~ msgid "Preserve alpha"
+#~ msgstr "保持 Alpha (透明度) 不變"
+
+#~ msgid "Stamp"
+#~ msgstr "印章"
+
+#~ msgid ""
+#~ "Nothing copied\n"
+#~ " to Clipboard"
+#~ msgstr ""
+#~ "無任何內容\n"
+#~ "被複製到剪貼簿"
+
+#~ msgid ""
+#~ "Creates a brush tip from the current image selection.\n"
+#~ " If no selection is present the whole image will be used."
+#~ msgstr ""
+#~ "從目前影像選取區域中建立筆尖。\n"
+#~ "如果沒有選取區域，將使用整個影像建立筆尖。"
 
 #, fuzzy
 #~| msgctxt "(qtundo-format)"

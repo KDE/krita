@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-30 00:43+0000\n"
+"POT-Creation-Date: 2026-10-01 00:43+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -12352,7 +12352,7 @@ msgstr "&Pirmas sluoksnis Iš iškarpinės"
 #: krita/krita.action:2914 krita/krita.action:2917
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Group layer(s)"
+msgid "Group layers"
 msgstr "&Grupuoti sluoksnį"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
@@ -12371,7 +12371,7 @@ msgstr ""
 #| msgctxt "(qtundo-format)"
 #| msgid "Ungroup shapes"
 msgctxt "action"
-msgid "Ungroup layer(s)"
+msgid "Ungroup layers"
 msgstr "Išgrupuoti formas"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
@@ -13362,7 +13362,7 @@ msgstr "Paveikslėlis"
 #: krita/krita.action:3632
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Set the source for the selected clone layer(s)."
+msgid "Set the source for the selected clone layers"
 msgstr "Pasirinkti maišymo veikseną sluoksniui."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
@@ -21470,7 +21470,7 @@ msgstr "Dydis"
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:164
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:27
 #: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:61
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:179
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:176
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:42
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:44
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:56
@@ -22875,7 +22875,7 @@ msgstr "Transformuoti mazgą"
 #: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
-#: plugins/impex/psd/psd_loader.cpp:593
+#: plugins/impex/psd/psd_loader.cpp:599
 #: plugins/impex/tiff/kis_tiff_import.cc:565
 #, kde-format
 msgid "Transparency Mask"
@@ -24584,7 +24584,7 @@ msgctxt "Automatically created layer name when saving into PSD"
 msgid "Background"
 msgstr "Fonas"
 
-#: libs/psd/psd_layer_section.cpp:967 libs/psd/psd_layer_section.cpp:1145
+#: libs/psd/psd_layer_section.cpp:973 libs/psd/psd_layer_section.cpp:1151
 #, fuzzy, kde-format
 msgid "Unnamed Layer"
 msgstr "&Klonuoti sluoksnį"
@@ -24617,7 +24617,7 @@ msgstr "Valyti resursų failus"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
-#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:779
+#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:777
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
 #: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
@@ -25207,7 +25207,7 @@ msgstr "Trinti resursą"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:338
 #: libs/ui/KisMainWindow.cpp:2776
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:369
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -25817,8 +25817,12 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
 #, fuzzy, kde-format
 #| msgid "Warning"
-msgid "Warning(s):"
-msgstr "Dėmesio"
+msgid "Warning:"
+msgid_plural "Warnings:"
+msgstr[0] "Dėmesio"
+msgstr[1] "Dėmesio"
+msgstr[2] "Dėmesio"
+msgstr[3] "Dėmesio"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
 #, kde-format
@@ -28280,7 +28284,7 @@ msgstr "Krita"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1425
 #: libs/ui/widgets/KisDitherWidget.ui:119
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:244
 #, kde-format
 msgid "Auto"
 msgstr "Auto"
@@ -30338,7 +30342,7 @@ msgstr "Spalva:"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:50
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:172
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2010
 #, kde-format
 msgid "Size:"
@@ -31723,7 +31727,7 @@ msgstr "Mastelis:"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #. i18n: ectx: property (text), widget (QLabel, dimensionLbl)
 #: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:46
-#: plugins/impex/brush/wdg_export_gih.ui:161
+#: plugins/impex/brush/wdg_export_gih.ui:175
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:64
 #, kde-format
 msgid "Dimensions"
@@ -32263,10 +32267,7 @@ msgid "Portrait"
 msgstr "Stačias"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpClipboard)
-#. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
 #: libs/ui/forms/wdgnewimage.ui:320
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:94
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:324
 #, fuzzy, kde-format
 msgid "Clipboard"
 msgstr "Iškirpti pažymėjimą į naują sluoksnį"
@@ -32401,8 +32402,6 @@ msgstr "Lango dydis"
 #: plugins/extensions/pykrita/plugin/info.ui:217
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:240
 #: plugins/impex/brush/wdg_export_gih.ui:41
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
 #, kde-format
 msgid "Name:"
@@ -32453,8 +32452,6 @@ msgstr "Dabartinis teptuko ruošinys"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:75
 #: plugins/generators/seexpr/wdgseexpr.ui:172
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
 #, kde-format
 msgid "Save"
@@ -35059,7 +35056,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "&Filtro sluoksnis..."
 
-#: libs/ui/kis_clipboard.cc:780 libs/ui/KisView.cpp:684
+#: libs/ui/kis_clipboard.cc:778 libs/ui/KisView.cpp:684
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -35723,7 +35720,7 @@ msgstr "Srautas:"
 #: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:165
 #: plugins/tools/basictools/wdgmultihandtool.ui:129
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2099
 #, kde-format
@@ -40384,8 +40381,6 @@ msgstr ""
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:204
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:160
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:135
 #, fuzzy, kde-format
 #| msgid "Overwrite Preset"
 msgid "Overwrite"
@@ -45438,8 +45433,12 @@ msgstr "piks"
 #: plugins/dockers/recorder/recorder_export.cpp:560
 #, fuzzy, kde-format
 msgctxt "The suffix after number of frames"
-msgid "frame(s)"
-msgstr "Pašalinti sluoksnį"
+msgid "frame"
+msgid_plural "frames"
+msgstr[0] "Pašalinti sluoksnį"
+msgstr[1] "Pašalinti sluoksnį"
+msgstr[2] "Pašalinti sluoksnį"
+msgstr[3] "Pašalinti sluoksnį"
 
 #: plugins/dockers/recorder/recorder_export.cpp:620
 #, fuzzy, kde-format
@@ -55712,33 +55711,31 @@ msgstr "&Spalva:"
 msgid "Brush selection information for animated brushes"
 msgstr ""
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:33
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:209
+#: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
+#, fuzzy, kde-format
+msgctxt "@label %1 number of animation frames"
+msgid "Frames: %1"
+msgstr "Pašalinti sluoksnį"
+
+#: plugins/impex/brush/KisWdgOptionsBrush.h:43
 #, kde-format
 msgid "Constant"
 msgstr "Konstanta"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:34
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:214
+#: plugins/impex/brush/KisWdgOptionsBrush.h:44
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:20
 #, kde-format
 msgid "Random"
 msgstr "Atsitiktinis"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:35
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:219
+#: plugins/impex/brush/KisWdgOptionsBrush.h:45
 #, kde-format
 msgid "Incremental"
 msgstr "Papildymo"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyAmountPressureBox)
 #. i18n: ectx: property (text), widget (QToolButton, liquifySizePressureBox)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:36
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:224
+#: plugins/impex/brush/KisWdgOptionsBrush.h:46
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:17
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2017
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2339
@@ -55746,21 +55743,19 @@ msgstr "Papildymo"
 msgid "Pressure"
 msgstr "Spaudimas"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:37
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:229
+#: plugins/impex/brush/KisWdgOptionsBrush.h:47
 #, kde-format
 msgid "Angular"
 msgstr "Kampinis"
 
-#: plugins/impex/brush/KisWdgOptionsBrush.h:38
+#: plugins/impex/brush/KisWdgOptionsBrush.h:48
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Set opacity"
 msgid "Velocity"
 msgstr "Nepermatomumas"
 
-#: plugins/impex/brush/KisWdgOptionsBrush.h:55
+#: plugins/impex/brush/KisWdgOptionsBrush.h:65
 #, kde-format
 msgid "Rank"
 msgstr ""
@@ -55773,9 +55768,7 @@ msgstr ""
 #: plugins/impex/brush/wdg_export_gih.ui:31
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:379
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:153
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:107
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:82
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:219
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:206
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:152
 #: plugins/paintops/roundmarker/kis_roundmarker_option.ui:36
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2367
@@ -55783,54 +55776,50 @@ msgstr ""
 msgid "Spacing:"
 msgstr "Tarpai:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, colorAsmask)
 #. i18n: ectx: property (text), widget (QCheckBox, colorAsMask)
 #: plugins/impex/brush/wdg_export_gih.ui:51
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:88
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:92
 #, fuzzy, kde-format
 msgid "Create mask from color"
 msgstr "&Pirmas sluoksnis Iš iškarpinės"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: plugins/impex/brush/wdg_export_gih.ui:66
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:130
+#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
+#: plugins/impex/brush/wdg_export_gih.ui:61
+#, fuzzy, kde-format
+msgid "Preserve alpha channel"
+msgstr "Ignoruoti alfa"
+
+#. i18n: ectx: property (title), widget (QGroupBox, styleGroupBox)
+#: plugins/impex/brush/wdg_export_gih.ui:76
 #, fuzzy, kde-format
 msgid "Brush Style"
 msgstr "Nuostatos"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, styleLbl)
-#: plugins/impex/brush/wdg_export_gih.ui:89
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:150
+#: plugins/impex/brush/wdg_export_gih.ui:99
 #, kde-format
 msgid "Style:"
 msgstr "Stilius:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, brushStyle)
-#: plugins/impex/brush/wdg_export_gih.ui:106
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:167
+#: plugins/impex/brush/wdg_export_gih.ui:116
 #, kde-format
 msgid "Regular"
 msgstr "Paprastas"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, brushStyle)
-#: plugins/impex/brush/wdg_export_gih.ui:111
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:172
+#: plugins/impex/brush/wdg_export_gih.ui:121
 #, kde-format
 msgid "Animated"
 msgstr "Animacija"
 
 #. i18n: ectx: property (title), widget (QGroupBox, animStyleGroup)
-#: plugins/impex/brush/wdg_export_gih.ui:124
+#: plugins/impex/brush/wdg_export_gih.ui:134
 #, fuzzy, kde-format
 msgid "Animated style options"
 msgstr "Ryškumas"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #. i18n: ectx: property (text), widget (QLabel, selectionModeLbl)
-#: plugins/impex/brush/wdg_export_gih.ui:213
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:186
+#: plugins/impex/brush/wdg_export_gih.ui:227
 #, kde-format
 msgid "Selection mode:"
 msgstr "Pasirinkimo veiksena:"
@@ -61104,12 +61093,6 @@ msgstr "&Keisti dydį"
 msgid "Aspect ratio:"
 msgstr "Proporcija:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:133
-#, fuzzy, kde-format
-msgid "Preserve alpha"
-msgstr "Ignoruoti alfa"
-
 #. i18n: ectx: property (text), widget (QCheckBox, randomHSVCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:33
 #, fuzzy, kde-format
@@ -61300,12 +61283,6 @@ msgstr ""
 msgid "X Range:"
 msgstr "Spalvos ruožas"
 
-#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:115
-#, fuzzy, kde-format
-msgid "Preserve alpha channel"
-msgstr "Ignoruoti alfa"
-
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:28
 #, fuzzy, kde-format
@@ -61362,41 +61339,42 @@ msgid ""
 "stroke even if you go over the same place again and again.</p></html>"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QPushButton, stampButton)
+#. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:307
-#, kde-format
-msgid "Stamp"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "&Create"
+msgctxt "@action:button create new brushtip"
+msgid "Create New"
+msgstr "&Sukurti"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:132
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:119
 #, fuzzy, kde-format
 msgid "Current Brush Tip"
 msgstr "Filtrai"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:147
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:134
 #, fuzzy, kde-format
 #| msgid "Brush Settings"
 msgid "Brush Details"
 msgstr "Teptuko nuostatos"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:179
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
 msgid "Preserve brush preset settings"
 msgstr "Teptuko ruošiniai"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:212
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:199
 #, fuzzy, kde-format
 msgid "Reset Predefined Tip"
 msgstr "Paruošti teptukai"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBrushMode)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:226
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:213
 #, fuzzy, kde-format
 #| msgid "Brushes"
 msgctxt "Predefined Brush tip mode"
@@ -61404,7 +61382,7 @@ msgid "Brush mode"
 msgstr "Teptukai"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetAdjustments)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:275
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:262
 #, fuzzy, kde-format
 msgid "Reset Adjustments"
 msgstr "Mažiau sodrumo"
@@ -61544,7 +61522,7 @@ msgstr "Tarpai"
 msgid "Brush Tip"
 msgstr "Teptuko patarimas"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:47
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:45
 #, kde-format
 msgid ""
 "Precision Level 1 (fastest)\n"
@@ -61554,7 +61532,7 @@ msgid ""
 "Optimal for very big brushes"
 msgstr ""
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:55
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:53
 #, kde-format
 msgid ""
 "Precision Level 2\n"
@@ -61564,7 +61542,7 @@ msgid ""
 "Optimal for big brushes"
 msgstr ""
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:63
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:61
 #, kde-format
 msgid ""
 "Precision Level 3\n"
@@ -61572,7 +61550,7 @@ msgid ""
 "Brush size precision: exact"
 msgstr ""
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:69
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:67
 #, kde-format
 msgid ""
 "Precision Level 4 (optimal)\n"
@@ -61582,7 +61560,7 @@ msgid ""
 "Gives up to 50% better performance in comparison to Level 5"
 msgstr ""
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:77
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:75
 #, kde-format
 msgid ""
 "Precision Level 5 (best quality)\n"
@@ -61592,20 +61570,20 @@ msgid ""
 "The slowest performance. Best quality."
 msgstr ""
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:139
 #, fuzzy, kde-format
 #| msgid "Auto"
 msgctxt "Autobrush Brush tip mode"
 msgid "Auto"
 msgstr "Auto"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:143
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
 #, fuzzy, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Predefined"
 msgstr "&Paruoštas:"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:146
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:144
 #: plugins/paintops/libpaintop/kis_text_brush_chooser.cpp:40
 #, fuzzy, kde-format
 #| msgid "Text"
@@ -61613,26 +61591,59 @@ msgctxt "Text Brush tip mode"
 msgid "Text"
 msgstr "Tekstas"
 
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:100
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:79
 #, fuzzy, kde-format
-msgid ""
-"Nothing copied\n"
-" to Clipboard"
-msgstr "Kopijuoti pažymėjimą į naują sluoksnį"
+#| msgid "Source:"
+msgctxt "@label:listbox image source"
+msgid "Source:"
+msgstr "Šaltinis:"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:229
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:83
+#, fuzzy, kde-format
+#| msgid "Image"
+msgctxt "@item:inlistbox"
+msgid "Image"
+msgstr "Paveikslėlis"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
+#, fuzzy, kde-format
+msgctxt "@item:inlistbox"
+msgid "Clipboard"
+msgstr "Iškirpti pažymėjimą į naują sluoksnį"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:87
+#, fuzzy, kde-format
+#| msgid "Reload"
+msgctxt "@action:button reload image"
+msgid "Reload"
+msgstr "Įkelti iš naujo"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:250
+#, fuzzy, kde-format
+msgctxt "@info empty image"
+msgid "Empty"
+msgstr "Tuščia"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
+#, fuzzy, kde-format
+#| msgid "Overwrite Preset"
+msgctxt "@action:button"
+msgid "Overwrite"
+msgstr "Perrašyti ruošinį"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
+#, fuzzy, kde-format
+#| msgid "Save"
+msgctxt "@action:button"
+msgid "Save"
+msgstr "Išsaugoti"
+
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
 #, kde-format
-msgid ""
-"Creates a brush tip from the current image selection.\n"
-" If no selection is present the whole image will be used."
+msgid "Creates a brush tip from the current image, selection, or clipboard."
 msgstr ""
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:233
-#, kde-format
-msgid "Creates a brush tip from the image in the clipboard."
-msgstr ""
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:238
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
 msgid ""
 "Reloads Spacing from file\n"
@@ -61640,26 +61651,26 @@ msgid ""
 "Sets Rotation to 0.0"
 msgstr ""
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:236
 #, fuzzy, kde-format
 msgctxt "@label:slider"
 msgid "Neutral point: "
 msgstr "Tikslas:"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:252
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
 #, fuzzy, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
 msgstr "Ryškumas"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:259
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:251
 #, fuzzy, kde-format
 #| msgid "Contrast:"
 msgctxt "@label:slider"
 msgid "Contrast: "
 msgstr "Kontrastas:"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:262
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:254
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -61668,6 +61679,11 @@ msgid ""
 " Brightness: 0%\n"
 " Contrast: 0%"
 msgstr ""
+
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
+#, fuzzy, kde-format
+msgid "Create New Brushtip"
+msgstr "Filtrai"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, fuzzy, kde-format
@@ -71387,6 +71403,26 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+#~| msgid "Warning"
+#~ msgid "Warning(s):"
+#~ msgstr "Dėmesio"
+
+#, fuzzy
+#~ msgctxt "The suffix after number of frames"
+#~ msgid "frame(s)"
+#~ msgstr "Pašalinti sluoksnį"
+
+#, fuzzy
+#~ msgid "Preserve alpha"
+#~ msgstr "Ignoruoti alfa"
+
+#, fuzzy
+#~ msgid ""
+#~ "Nothing copied\n"
+#~ " to Clipboard"
+#~ msgstr "Kopijuoti pažymėjimą į naują sluoksnį"
+
+#, fuzzy
 #~| msgctxt "(qtundo-format)"
 #~| msgid "Ungroup shapes"
 #~ msgctxt "action"
@@ -73996,12 +74032,6 @@ msgstr ""
 #~ msgstr "Importuoti"
 
 #, fuzzy
-#~| msgid "&Create"
-#~ msgctxt "In bundle manager; press button to create a new bundle"
-#~ msgid "Create"
-#~ msgstr "&Sukurti"
-
-#, fuzzy
 #~ msgid "Bundle Name"
 #~ msgstr "Įterpti pavadinimą"
 
@@ -74571,12 +74601,6 @@ msgstr ""
 #~ msgctxt "action"
 #~ msgid "&New"
 #~ msgstr "&Nauja:"
-
-#, fuzzy
-#~| msgid "Reload"
-#~ msgctxt "action"
-#~ msgid "Reload"
-#~ msgstr "Įkelti iš naujo"
 
 #, fuzzy
 #~ msgctxt "action"

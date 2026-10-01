@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-30 00:43+0000\n"
+"POT-Creation-Date: 2026-10-01 00:43+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -12412,7 +12412,7 @@ msgstr "चिकटपट्टीवरील पहिला स्तर (&F
 #: krita/krita.action:2914 krita/krita.action:2917
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Group layer(s)"
+msgid "Group layers"
 msgstr "समूह स्तर (&G)"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
@@ -12431,7 +12431,7 @@ msgstr ""
 #| msgctxt "(qtundo-format)"
 #| msgid "Ungroup shapes"
 msgctxt "action"
-msgid "Ungroup layer(s)"
+msgid "Ungroup layers"
 msgstr "आकारांचा समूह काढून टाका"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
@@ -13424,7 +13424,7 @@ msgstr "पासून प्रत करा"
 #: krita/krita.action:3632
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "Set the source for the selected clone layer(s)."
+msgid "Set the source for the selected clone layers"
 msgstr "स्तरासाठी ब्लेंडिंग पद्धत निवडा."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
@@ -21550,7 +21550,7 @@ msgstr "आकार"
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:164
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:27
 #: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:61
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:179
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:176
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:42
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:44
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:56
@@ -22943,7 +22943,7 @@ msgstr "रूपांतरित करा"
 #: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
-#: plugins/impex/psd/psd_loader.cpp:593
+#: plugins/impex/psd/psd_loader.cpp:599
 #: plugins/impex/tiff/kis_tiff_import.cc:565
 #, kde-format
 msgid "Transparency Mask"
@@ -24643,7 +24643,7 @@ msgctxt "Automatically created layer name when saving into PSD"
 msgid "Background"
 msgstr "पार्श्वभूमी"
 
-#: libs/psd/psd_layer_section.cpp:967 libs/psd/psd_layer_section.cpp:1145
+#: libs/psd/psd_layer_section.cpp:973 libs/psd/psd_layer_section.cpp:1151
 #, fuzzy, kde-format
 msgid "Unnamed Layer"
 msgstr "प्रतिकृती स्तर (&C)"
@@ -24676,7 +24676,7 @@ msgstr "संसाधन फाईल्स साफ करा"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
-#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:779
+#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:777
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
 #: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
@@ -25266,7 +25266,7 @@ msgstr "संसाधन काढून टाका"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:338
 #: libs/ui/KisMainWindow.cpp:2776
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:369
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -25889,8 +25889,10 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
 #, fuzzy, kde-format
 #| msgid "Warning"
-msgid "Warning(s):"
-msgstr "इशारा"
+msgid "Warning:"
+msgid_plural "Warnings:"
+msgstr[0] "इशारा"
+msgstr[1] "इशारा"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
 #, kde-format
@@ -28366,7 +28368,7 @@ msgstr "क्रिटा"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1425
 #: libs/ui/widgets/KisDitherWidget.ui:119
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:244
 #, kde-format
 msgid "Auto"
 msgstr "स्वयंचलित"
@@ -30505,7 +30507,7 @@ msgstr "रंगः"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:50
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:172
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2010
 #, kde-format
 msgid "Size:"
@@ -31901,7 +31903,7 @@ msgstr "प्रमाण :"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #. i18n: ectx: property (text), widget (QLabel, dimensionLbl)
 #: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:46
-#: plugins/impex/brush/wdg_export_gih.ui:161
+#: plugins/impex/brush/wdg_export_gih.ui:175
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:64
 #, kde-format
 msgid "Dimensions"
@@ -32445,10 +32447,7 @@ msgid "Portrait"
 msgstr "पोर्ट्रेट"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpClipboard)
-#. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
 #: libs/ui/forms/wdgnewimage.ui:320
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:94
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:324
 #, fuzzy, kde-format
 #| msgid "Color Smudge Brush"
 msgid "Clipboard"
@@ -32584,8 +32583,6 @@ msgstr "खिडकीचा आकार"
 #: plugins/extensions/pykrita/plugin/info.ui:217
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:240
 #: plugins/impex/brush/wdg_export_gih.ui:41
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
 #, kde-format
 msgid "Name:"
@@ -32636,8 +32633,6 @@ msgstr "वर्तमान प्रीसेट"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:75
 #: plugins/generators/seexpr/wdgseexpr.ui:172
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
 #, kde-format
 msgid "Save"
@@ -35260,7 +35255,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "गाळणी बदला"
 
-#: libs/ui/kis_clipboard.cc:780 libs/ui/KisView.cpp:684
+#: libs/ui/kis_clipboard.cc:778 libs/ui/KisView.cpp:684
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -35923,7 +35918,7 @@ msgstr "प्रवाह :"
 #: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:165
 #: plugins/tools/basictools/wdgmultihandtool.ui:129
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2099
 #, kde-format
@@ -40575,8 +40570,6 @@ msgstr ""
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:204
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:160
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:135
 #, fuzzy, kde-format
 #| msgid "Overwrite Preset"
 msgid "Overwrite"
@@ -45629,8 +45622,10 @@ msgstr "px"
 #: plugins/dockers/recorder/recorder_export.cpp:560
 #, fuzzy, kde-format
 msgctxt "The suffix after number of frames"
-msgid "frame(s)"
-msgstr "स्तर काढून टाका"
+msgid "frame"
+msgid_plural "frames"
+msgstr[0] "स्तर काढून टाका"
+msgstr[1] "स्तर काढून टाका"
 
 #: plugins/dockers/recorder/recorder_export.cpp:620
 #, fuzzy, kde-format
@@ -55965,33 +55960,31 @@ msgstr "रंग (&C):"
 msgid "Brush selection information for animated brushes"
 msgstr ""
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:33
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:209
+#: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
+#, fuzzy, kde-format
+msgctxt "@label %1 number of animation frames"
+msgid "Frames: %1"
+msgstr "स्तर काढून टाका"
+
+#: plugins/impex/brush/KisWdgOptionsBrush.h:43
 #, kde-format
 msgid "Constant"
 msgstr "स्थिर"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:34
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:214
+#: plugins/impex/brush/KisWdgOptionsBrush.h:44
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:20
 #, kde-format
 msgid "Random"
 msgstr "विनाक्रम"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:35
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:219
+#: plugins/impex/brush/KisWdgOptionsBrush.h:45
 #, kde-format
 msgid "Incremental"
 msgstr "वाढता"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyAmountPressureBox)
 #. i18n: ectx: property (text), widget (QToolButton, liquifySizePressureBox)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:36
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:224
+#: plugins/impex/brush/KisWdgOptionsBrush.h:46
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:17
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2017
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2339
@@ -55999,20 +55992,18 @@ msgstr "वाढता"
 msgid "Pressure"
 msgstr "दाब"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:37
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:229
+#: plugins/impex/brush/KisWdgOptionsBrush.h:47
 #, kde-format
 msgid "Angular"
 msgstr "कोनीय"
 
-#: plugins/impex/brush/KisWdgOptionsBrush.h:38
+#: plugins/impex/brush/KisWdgOptionsBrush.h:48
 #, fuzzy, kde-format
 #| msgid "Curves opacity"
 msgid "Velocity"
 msgstr "वलयांची अपारदर्शकता"
 
-#: plugins/impex/brush/KisWdgOptionsBrush.h:55
+#: plugins/impex/brush/KisWdgOptionsBrush.h:65
 #, kde-format
 msgid "Rank"
 msgstr ""
@@ -56025,9 +56016,7 @@ msgstr ""
 #: plugins/impex/brush/wdg_export_gih.ui:31
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:379
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:153
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:107
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:82
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:219
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:206
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:152
 #: plugins/paintops/roundmarker/kis_roundmarker_option.ui:36
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2367
@@ -56035,55 +56024,52 @@ msgstr ""
 msgid "Spacing:"
 msgstr "अंतर :"
 
-#. i18n: ectx: property (text), widget (QCheckBox, colorAsmask)
 #. i18n: ectx: property (text), widget (QCheckBox, colorAsMask)
 #: plugins/impex/brush/wdg_export_gih.ui:51
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:88
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:92
 #, fuzzy, kde-format
 msgid "Create mask from color"
 msgstr "चिकटपट्टीवरील पहिला स्तर (&F)"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: plugins/impex/brush/wdg_export_gih.ui:66
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:130
+#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
+#: plugins/impex/brush/wdg_export_gih.ui:61
+#, fuzzy, kde-format
+#| msgid "Preserve alpha"
+msgid "Preserve alpha channel"
+msgstr "अल्फाचे जतन"
+
+#. i18n: ectx: property (title), widget (QGroupBox, styleGroupBox)
+#: plugins/impex/brush/wdg_export_gih.ui:76
 #, fuzzy, kde-format
 msgid "Brush Style"
 msgstr "कुंचल्याची रूपरेषा"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, styleLbl)
-#: plugins/impex/brush/wdg_export_gih.ui:89
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:150
+#: plugins/impex/brush/wdg_export_gih.ui:99
 #, kde-format
 msgid "Style:"
 msgstr "शैली :"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, brushStyle)
-#: plugins/impex/brush/wdg_export_gih.ui:106
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:167
+#: plugins/impex/brush/wdg_export_gih.ui:116
 #, kde-format
 msgid "Regular"
 msgstr "नियमित"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, brushStyle)
-#: plugins/impex/brush/wdg_export_gih.ui:111
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:172
+#: plugins/impex/brush/wdg_export_gih.ui:121
 #, kde-format
 msgid "Animated"
 msgstr "चलित"
 
 #. i18n: ectx: property (title), widget (QGroupBox, animStyleGroup)
-#: plugins/impex/brush/wdg_export_gih.ui:124
+#: plugins/impex/brush/wdg_export_gih.ui:134
 #, fuzzy, kde-format
 #| msgid "Bristle options"
 msgid "Animated style options"
 msgstr "केसांचे पर्याय"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #. i18n: ectx: property (text), widget (QLabel, selectionModeLbl)
-#: plugins/impex/brush/wdg_export_gih.ui:213
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:186
+#: plugins/impex/brush/wdg_export_gih.ui:227
 #, kde-format
 msgid "Selection mode:"
 msgstr "निवड पद्धत :"
@@ -61410,12 +61396,6 @@ msgstr "जिटर हालचाल"
 msgid "Aspect ratio:"
 msgstr "आस्पेक्टचे प्रमाण :"
 
-#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:133
-#, kde-format
-msgid "Preserve alpha"
-msgstr "अल्फाचे जतन"
-
 #. i18n: ectx: property (text), widget (QCheckBox, randomHSVCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:33
 #, kde-format
@@ -61608,13 +61588,6 @@ msgstr ""
 msgid "X Range:"
 msgstr "रंगांची श्रेणी"
 
-#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:115
-#, fuzzy, kde-format
-#| msgid "Preserve alpha"
-msgid "Preserve alpha channel"
-msgstr "अल्फाचे जतन"
-
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:28
 #, fuzzy, kde-format
@@ -61679,42 +61652,43 @@ msgstr ""
 "पर्यायात तुम्ही पुन्हा पुन्हा त्याच जागी गेल्यास एकाच फटकाऱ्यात रंगाचा पर्याय मिळतो.</p></"
 "html>"
 
-#. i18n: ectx: property (text), widget (QPushButton, stampButton)
+#. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:307
-#, kde-format
-msgid "Stamp"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "&Create"
+msgctxt "@action:button create new brushtip"
+msgid "Create New"
+msgstr "निर्माण करा (&C)"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:132
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:119
 #, fuzzy, kde-format
 #| msgid "Curve brush"
 msgid "Current Brush Tip"
 msgstr "वलय कुंचला"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:147
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:134
 #, fuzzy, kde-format
 #| msgid "Brush Settings"
 msgid "Brush Details"
 msgstr "कुंचल्याची संयोजना"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:179
 #, fuzzy, kde-format
 #| msgid "Brush Presets"
 msgid "Preserve brush preset settings"
 msgstr "कुंचला पूर्व संयोजना"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:212
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:199
 #, fuzzy, kde-format
 msgid "Reset Predefined Tip"
 msgstr "पूर्वलक्षित कुंचले"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBrushMode)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:226
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:213
 #, fuzzy, kde-format
 #| msgid "Brushes"
 msgctxt "Predefined Brush tip mode"
@@ -61722,7 +61696,7 @@ msgid "Brush mode"
 msgstr "कुंचले"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetAdjustments)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:275
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:262
 #, fuzzy, kde-format
 #| msgid "Color Adjustment"
 msgid "Reset Adjustments"
@@ -61865,7 +61839,7 @@ msgstr "अंतर"
 msgid "Brush Tip"
 msgstr "कुंचल्याचे टोक"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:47
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:45
 #, kde-format
 msgid ""
 "Precision Level 1 (fastest)\n"
@@ -61880,7 +61854,7 @@ msgstr ""
 "\n"
 "\" मोठ्या कुंचल्यांसाठी जुळविलेले"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:55
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:53
 #, kde-format
 msgid ""
 "Precision Level 2\n"
@@ -61895,7 +61869,7 @@ msgstr ""
 "\n"
 "\"मोठ्या कुंचल्यांसाठी जुळविलेले"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:63
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:61
 #, kde-format
 msgid ""
 "Precision Level 3\n"
@@ -61906,7 +61880,7 @@ msgstr ""
 "Subpixel precision: disabled\n"
 "कुंचल्याचा काटेकोरः तोच आकार"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:69
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:67
 #, kde-format
 msgid ""
 "Precision Level 4 (optimal)\n"
@@ -61921,7 +61895,7 @@ msgstr ""
 "\n"
 "पाचव्या पाळीपेक्षा ५० टक्के जास्त चांगले काम होते"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:77
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:75
 #, kde-format
 msgid ""
 "Precision Level 5 (best quality)\n"
@@ -61936,20 +61910,20 @@ msgstr ""
 "\n"
 "सर्वात मंद गतीचे काम पण उत्तम गुणवत्ता"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:139
 #, fuzzy, kde-format
 #| msgid "Auto"
 msgctxt "Autobrush Brush tip mode"
 msgid "Auto"
 msgstr "स्वयंचलित"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:143
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
 #, fuzzy, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Predefined"
 msgstr "पूर्वनियोजित (&P):"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:146
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:144
 #: plugins/paintops/libpaintop/kis_text_brush_chooser.cpp:40
 #, fuzzy, kde-format
 #| msgid "Text"
@@ -61957,26 +61931,60 @@ msgctxt "Text Brush tip mode"
 msgid "Text"
 msgstr "मजकूर"
 
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:100
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:79
 #, fuzzy, kde-format
-msgid ""
-"Nothing copied\n"
-" to Clipboard"
-msgstr "निवडलेले नव्या स्तरात प्रत करा"
+#| msgid "Source:"
+msgctxt "@label:listbox image source"
+msgid "Source:"
+msgstr "स्रोत :"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:229
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:83
+#, fuzzy, kde-format
+#| msgid "Image"
+msgctxt "@item:inlistbox"
+msgid "Image"
+msgstr "प्रतिमा"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
+#, fuzzy, kde-format
+#| msgid "Color Smudge Brush"
+msgctxt "@item:inlistbox"
+msgid "Clipboard"
+msgstr "कलर स्मज कुंचला"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:87
+#, fuzzy, kde-format
+#| msgid "Reload"
+msgctxt "@action:button reload image"
+msgid "Reload"
+msgstr "पुन्हा दाखल करा"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:250
+#, fuzzy, kde-format
+msgctxt "@info empty image"
+msgid "Empty"
+msgstr "रिकामी"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
+#, fuzzy, kde-format
+#| msgid "Overwrite Preset"
+msgctxt "@action:button"
+msgid "Overwrite"
+msgstr "प्रीसेट खोडून पुन्हा लिहा"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
+#, fuzzy, kde-format
+#| msgid "Save"
+msgctxt "@action:button"
+msgid "Save"
+msgstr "साठवा"
+
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
 #, kde-format
-msgid ""
-"Creates a brush tip from the current image selection.\n"
-" If no selection is present the whole image will be used."
+msgid "Creates a brush tip from the current image, selection, or clipboard."
 msgstr ""
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:233
-#, kde-format
-msgid "Creates a brush tip from the image in the clipboard."
-msgstr ""
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:238
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
 msgid ""
 "Reloads Spacing from file\n"
@@ -61984,27 +61992,27 @@ msgid ""
 "Sets Rotation to 0.0"
 msgstr ""
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:236
 #, fuzzy, kde-format
 #| msgid "Target point:"
 msgctxt "@label:slider"
 msgid "Neutral point: "
 msgstr "लक्ष्य बिंदू :"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:252
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
 #, fuzzy, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
 msgstr "प्रखरता"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:259
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:251
 #, fuzzy, kde-format
 #| msgid "Contrast:"
 msgctxt "@label:slider"
 msgid "Contrast: "
 msgstr "विरोधाभास :"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:262
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:254
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -62013,6 +62021,11 @@ msgid ""
 " Brightness: 0%\n"
 " Contrast: 0%"
 msgstr ""
+
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
+#, fuzzy, kde-format
+msgid "Create New Brushtip"
+msgstr "संसाधन फाईल्स साफ करा"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, fuzzy, kde-format
@@ -71838,6 +71851,25 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+#~| msgid "Warning"
+#~ msgid "Warning(s):"
+#~ msgstr "इशारा"
+
+#, fuzzy
+#~ msgctxt "The suffix after number of frames"
+#~ msgid "frame(s)"
+#~ msgstr "स्तर काढून टाका"
+
+#~ msgid "Preserve alpha"
+#~ msgstr "अल्फाचे जतन"
+
+#, fuzzy
+#~ msgid ""
+#~ "Nothing copied\n"
+#~ " to Clipboard"
+#~ msgstr "निवडलेले नव्या स्तरात प्रत करा"
+
+#, fuzzy
 #~| msgctxt "(qtundo-format)"
 #~| msgid "Ungroup shapes"
 #~ msgctxt "action"
@@ -74642,12 +74674,6 @@ msgstr ""
 #~ msgstr "प्रतिमा आयात करा"
 
 #, fuzzy
-#~| msgid "&Create"
-#~ msgctxt "In bundle manager; press button to create a new bundle"
-#~ msgid "Create"
-#~ msgstr "निर्माण करा (&C)"
-
-#, fuzzy
 #~ msgid "Bundle Name"
 #~ msgstr "नाव घाला"
 
@@ -75226,12 +75252,6 @@ msgstr ""
 #~ msgctxt "action"
 #~ msgid "&New"
 #~ msgstr "नवीन (&N):"
-
-#, fuzzy
-#~| msgid "Reload"
-#~ msgctxt "action"
-#~ msgid "Reload"
-#~ msgstr "पुन्हा दाखल करा"
 
 #, fuzzy
 #~ msgctxt "action"
@@ -76543,10 +76563,6 @@ msgstr ""
 #~| msgid "Bookmark current"
 #~ msgid "Bundle \"%1\" doesn't exist!"
 #~ msgstr "वर्तमानास ओळखचिन्ह करा"
-
-#, fuzzy
-#~ msgid "Create New Bundle"
-#~ msgstr "संसाधन फाईल्स साफ करा"
 
 #, fuzzy
 #~ msgid "Inactive Bundles"

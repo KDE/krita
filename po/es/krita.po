@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-30 00:43+0000\n"
-"PO-Revision-Date: 2026-09-19 18:15+0100\n"
+"POT-Creation-Date: 2026-10-01 00:43+0000\n"
+"PO-Revision-Date: 2026-10-01 00:32+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -7254,21 +7254,17 @@ msgstr "Alinear a la derecha"
 #. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
 #: krita/data/actions/InteractionTool.action:33
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shapes"
 msgstr "Desagrupar formas"
 
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:28
-#, fuzzy, kde-format
-#| msgctxt "Group as Swatch Group in a Palette"
-#| msgid "Remove selected group"
+#, kde-format
 msgctxt "action"
 msgid "Remove the selected shape group"
-msgstr "Eliminar el grupo seleccionado"
+msgstr "Eliminar el grupo de formas seleccionado"
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7326,21 +7322,17 @@ msgstr "Centrar verticalmente"
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shapes"
 msgstr "Agrupar formas"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Create a group layer containing selected layers"
+#, kde-format
 msgctxt "action"
 msgid "Create a shape group containing selected shapes"
-msgstr "Crear una capa de agrupación que contiene las capas seleccionadas"
+msgstr "Crear una grupo de formas que contiene las formas seleccionadas"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
@@ -12097,9 +12089,11 @@ msgstr "Pegar capa desde el portapapeles"
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914 krita/krita.action:2917
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Group layer(s)"
 msgctxt "action"
-msgid "Group layer(s)"
+msgid "Group layers"
 msgstr "Agrupar capas"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
@@ -12114,9 +12108,11 @@ msgstr "Crear una capa de agrupación que contiene las capas seleccionadas"
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926 krita/krita.action:2929
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Ungroup layer(s)"
 msgctxt "action"
-msgid "Ungroup layer(s)"
+msgid "Ungroup layers"
 msgstr "Desagrupar capas"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
@@ -13110,9 +13106,11 @@ msgstr "Defini&r copia desde…"
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3632
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Set the source for the selected clone layer(s)."
 msgctxt "action"
-msgid "Set the source for the selected clone layer(s)."
+msgid "Set the source for the selected clone layers"
 msgstr "Definir el origen para las capas de clonación seleccionadas."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
@@ -21117,7 +21115,7 @@ msgstr "Tamaño"
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:164
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:27
 #: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:61
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:179
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:176
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:42
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:44
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:56
@@ -22443,7 +22441,7 @@ msgstr "Máscara de transformación"
 #: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
 #: libs/ui/kis_node_manager.cpp:1391
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
-#: plugins/impex/psd/psd_loader.cpp:593
+#: plugins/impex/psd/psd_loader.cpp:599
 #: plugins/impex/tiff/kis_tiff_import.cc:565
 #, kde-format
 msgid "Transparency Mask"
@@ -24063,7 +24061,7 @@ msgctxt "Automatically created layer name when saving into PSD"
 msgid "Background"
 msgstr "Fondo"
 
-#: libs/psd/psd_layer_section.cpp:967 libs/psd/psd_layer_section.cpp:1145
+#: libs/psd/psd_layer_section.cpp:973 libs/psd/psd_layer_section.cpp:1151
 #, kde-format
 msgid "Unnamed Layer"
 msgstr "Capa sin nombre"
@@ -24096,7 +24094,7 @@ msgstr "Recursos locales"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
-#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:779
+#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:777
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
 #: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
@@ -24661,7 +24659,7 @@ msgstr "Borrar recurso"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:338
 #: libs/ui/KisMainWindow.cpp:2776
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:407
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:369
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
 msgctxt "@title:window"
@@ -25253,9 +25251,13 @@ msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
-#, kde-format
-msgid "Warning(s):"
-msgstr "Advertencias:"
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Warning"
+msgid "Warning:"
+msgid_plural "Warnings:"
+msgstr[0] "Advertencia"
+msgstr[1] "Advertencia"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
 #, kde-format
@@ -26835,117 +26837,87 @@ msgid "About Krita"
 msgstr "Acerca de Krita"
 
 #: libs/ui/dialogs/kis_about_application.cpp:51
-#, fuzzy, kde-format
-#| msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
+#, kde-format
 msgid "<p><b>Using Krita</b></p>"
-msgstr "<p><span style=\" color:%1;\"><b>Uso de Krita</b></span></p>"
+msgstr "<p><b>Uso de Krita</b></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:58
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline;\">Support Krita's Development!</span></a></p>"
 msgstr ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
-"underline; color:%1;\">¡Apoye el desarrollo de Krita!</span></a></p>"
+"underline;\">¡Apoye el desarrollo de Krita!</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:59
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">Krita Website</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
 "\">Krita Website</span></a></p>"
 msgstr ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Sitio web de Krita</span></a></p>"
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
+"\">Sitio web de Krita</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:63
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
 "\"><span style=\" text-decoration: underline;\">Getting Started</span></a></"
 "p>"
 msgstr ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-"\"><span style=\" text-decoration: underline; color:%1;\">Primeros pasos</"
-"span></a></p>"
+"\"><span style=\" text-decoration: underline;\">Primeros pasos</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:64
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">Manual</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline;\">Manual</span></a></p>"
 msgstr ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Manual</span></a></p>"
+"underline;\">Manual</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:66
-#, fuzzy, kde-format
-#| msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
+#, kde-format
 msgid "<p><b>Coding Krita</b></p>"
-msgstr "<p><span style=\" color:%1;\"><b>Programación de Krita</b></span></p>"
+msgstr "<p><b>Programación de Krita</b></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:67
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">User Community</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline;\">User Community</span></a></p>"
 msgstr ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">Comunidad de usuarios</span></a></p>"
+"underline;\">Comunidad de usuarios</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Source Code</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline;;\">Source Code</span></a></p>"
 msgstr ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-"decoration: underline; color:%1;\">Código fuente</span></a></p>"
+"decoration: underline;\">Código fuente</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:69
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline;\">Scripting API</span></a></p>"
 msgstr ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
-"text-decoration: underline; color:%1;\">API de guiones</span></a></p>"
+"text-decoration: underline;\">API de guiones</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Scripting School</span></"
-#| "a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline;;\">Scripting School</span></a></p>"
 msgstr ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
-"\" text-decoration: underline; color:%1;\">Escuela de guiones</span></a></p>"
+"\" text-decoration: underline;\">Escuela de guiones</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:83
 #, kde-format
@@ -27805,7 +27777,7 @@ msgstr "Profundidad de bits de la superficie del lienzo (necesita reiniciar):"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1425
 #: libs/ui/widgets/KisDitherWidget.ui:119
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:244
 #, kde-format
 msgid "Auto"
 msgstr "Automático"
@@ -29942,7 +29914,7 @@ msgstr "Color 2:"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:50
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:172
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2010
 #, kde-format
 msgid "Size:"
@@ -31382,7 +31354,7 @@ msgstr "Escala:"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #. i18n: ectx: property (text), widget (QLabel, dimensionLbl)
 #: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:46
-#: plugins/impex/brush/wdg_export_gih.ui:161
+#: plugins/impex/brush/wdg_export_gih.ui:175
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:64
 #, kde-format
 msgid "Dimensions"
@@ -31917,10 +31889,7 @@ msgid "Portrait"
 msgstr "Retrato"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpClipboard)
-#. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
 #: libs/ui/forms/wdgnewimage.ui:320
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:94
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:324
 #, kde-format
 msgid "Clipboard"
 msgstr "Portapapeles"
@@ -32061,8 +32030,6 @@ msgstr "Guardar nueva disposición de ventanas"
 #: plugins/extensions/pykrita/plugin/info.ui:217
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:240
 #: plugins/impex/brush/wdg_export_gih.ui:41
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
 #, kde-format
 msgid "Name:"
@@ -32112,8 +32079,6 @@ msgstr "Valor predefinido del pincel actual"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:75
 #: plugins/generators/seexpr/wdgseexpr.ui:172
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
 #, kde-format
 msgid "Save"
@@ -34766,7 +34731,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Cambiar capa de archivo"
 
-#: libs/ui/kis_clipboard.cc:780 libs/ui/KisView.cpp:684
+#: libs/ui/kis_clipboard.cc:778 libs/ui/KisView.cpp:684
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -35386,7 +35351,7 @@ msgstr "Flujo: {n} %"
 #: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:165
 #: plugins/tools/basictools/wdgmultihandtool.ui:129
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2099
 #, kde-format
@@ -40310,8 +40275,6 @@ msgstr ""
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:204
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:160
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:135
 #, kde-format
 msgid "Overwrite"
 msgstr "Sobrescribir"
@@ -45269,10 +45232,13 @@ msgid "px"
 msgstr "px"
 
 #: plugins/dockers/recorder/recorder_export.cpp:560
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "frame"
 msgctxt "The suffix after number of frames"
-msgid "frame(s)"
-msgstr "fotogramas"
+msgid "frame"
+msgid_plural "frames"
+msgstr[0] "fotograma"
+msgstr[1] "fotograma"
 
 #: plugins/dockers/recorder/recorder_export.cpp:620
 #, kde-format
@@ -50940,16 +50906,13 @@ msgstr ""
 "guiones de Krita</span></a>.</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "EXIF: exposure - exposure mode"
-#| msgid "Manual"
+#, kde-format
 msgctxt "@title:tab plugin manual"
 msgid "Manual"
 msgstr "Manual"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:53
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:tab plugin status"
 msgid "Status"
 msgstr "Estado"
@@ -50960,67 +50923,56 @@ msgid "Python Plugin Manager"
 msgstr "Gestor de complementos de Python"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:114
-#, fuzzy, kde-format
-#| msgid "Location:"
+#, kde-format
 msgctxt "%1 plugin file path"
 msgid "Location: %1"
-msgstr "Ubicación:"
+msgstr "Ubicación: %1"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgid "Enabled: false"
-msgstr "Activado"
+msgstr "Activado: falso"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgid "Enabled: true"
-msgstr "Activado"
+msgstr "Activado: cierto"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:117
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "%1 plugin status text"
 msgid "Status: %1"
-msgstr "Estado"
+msgstr "Estado: %1"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:119
-#, fuzzy, kde-format
-#| msgid "Error: "
+#, kde-format
 msgctxt "%1 plugin error message"
 msgid "Error: %1"
-msgstr "Error: "
+msgstr "Error: %1"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Broken"
-msgstr "Trazo"
+msgstr "Dañado"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:83
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Unstable"
-msgstr "Activado"
+msgstr "Inestable"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "Load Image as Thumbnail button"
-#| msgid "Load Image"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Loaded"
-msgstr "Cargar imagen"
+msgstr "Cargado"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:87
-#, fuzzy, kde-format
-#| msgid "Not Saved"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Not loaded"
-msgstr "No guardado"
+msgstr "No cargado"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:150
 #, kde-format
@@ -51090,12 +51042,10 @@ msgid "Internal engine failure"
 msgstr "Fallo del motor interno"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:386
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Module not loaded:<br/>%1"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/><code>%1</code>"
-msgstr "Módulo no cargado:<br/>%1"
+msgstr "Módulo no cargado:<br/><code>%1</code>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:53
 #, kde-format
@@ -51110,8 +51060,7 @@ msgid "Comment"
 msgstr "Comentario"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:57
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:column"
 msgid "Status"
 msgstr "Estado"
@@ -55266,33 +55215,33 @@ msgstr "&Color:"
 msgid "Brush selection information for animated brushes"
 msgstr "Información de selección de pincel para pinceles animados"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:33
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:209
+#: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
+#, fuzzy, kde-format
+#| msgctxt "video importer: video file statistics"
+#| msgid "Frames: %1"
+msgctxt "@label %1 number of animation frames"
+msgid "Frames: %1"
+msgstr "Fotogramas: %1"
+
+#: plugins/impex/brush/KisWdgOptionsBrush.h:43
 #, kde-format
 msgid "Constant"
 msgstr "Constante"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:34
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:214
+#: plugins/impex/brush/KisWdgOptionsBrush.h:44
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:20
 #, kde-format
 msgid "Random"
 msgstr "Aleatorio"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:35
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:219
+#: plugins/impex/brush/KisWdgOptionsBrush.h:45
 #, kde-format
 msgid "Incremental"
 msgstr "Incremental"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyAmountPressureBox)
 #. i18n: ectx: property (text), widget (QToolButton, liquifySizePressureBox)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:36
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:224
+#: plugins/impex/brush/KisWdgOptionsBrush.h:46
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:17
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2017
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2339
@@ -55300,19 +55249,17 @@ msgstr "Incremental"
 msgid "Pressure"
 msgstr "Presión"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#: plugins/impex/brush/KisWdgOptionsBrush.h:37
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:229
+#: plugins/impex/brush/KisWdgOptionsBrush.h:47
 #, kde-format
 msgid "Angular"
 msgstr "Angular"
 
-#: plugins/impex/brush/KisWdgOptionsBrush.h:38
+#: plugins/impex/brush/KisWdgOptionsBrush.h:48
 #, kde-format
 msgid "Velocity"
 msgstr "Velocidad"
 
-#: plugins/impex/brush/KisWdgOptionsBrush.h:55
+#: plugins/impex/brush/KisWdgOptionsBrush.h:65
 #, kde-format
 msgid "Rank"
 msgstr "Rango"
@@ -55325,9 +55272,7 @@ msgstr "Rango"
 #: plugins/impex/brush/wdg_export_gih.ui:31
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:379
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:153
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:107
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:82
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:219
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:206
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:152
 #: plugins/paintops/roundmarker/kis_roundmarker_option.ui:36
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2367
@@ -55335,54 +55280,50 @@ msgstr "Rango"
 msgid "Spacing:"
 msgstr "Espaciado:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, colorAsmask)
 #. i18n: ectx: property (text), widget (QCheckBox, colorAsMask)
 #: plugins/impex/brush/wdg_export_gih.ui:51
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:88
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:92
 #, kde-format
 msgid "Create mask from color"
 msgstr "Crear máscara a partir del color"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: plugins/impex/brush/wdg_export_gih.ui:66
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:130
+#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
+#: plugins/impex/brush/wdg_export_gih.ui:61
+#, kde-format
+msgid "Preserve alpha channel"
+msgstr "Preservar el canal de alfa"
+
+#. i18n: ectx: property (title), widget (QGroupBox, styleGroupBox)
+#: plugins/impex/brush/wdg_export_gih.ui:76
 #, kde-format
 msgid "Brush Style"
 msgstr "Estilo del pincel"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, styleLbl)
-#: plugins/impex/brush/wdg_export_gih.ui:89
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:150
+#: plugins/impex/brush/wdg_export_gih.ui:99
 #, kde-format
 msgid "Style:"
 msgstr "Estilo:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, brushStyle)
-#: plugins/impex/brush/wdg_export_gih.ui:106
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:167
+#: plugins/impex/brush/wdg_export_gih.ui:116
 #, kde-format
 msgid "Regular"
 msgstr "Regular"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, brushStyle)
-#: plugins/impex/brush/wdg_export_gih.ui:111
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:172
+#: plugins/impex/brush/wdg_export_gih.ui:121
 #, kde-format
 msgid "Animated"
 msgstr "Animado"
 
 #. i18n: ectx: property (title), widget (QGroupBox, animStyleGroup)
-#: plugins/impex/brush/wdg_export_gih.ui:124
+#: plugins/impex/brush/wdg_export_gih.ui:134
 #, kde-format
 msgid "Animated style options"
 msgstr "Opciones del estilo animado"
 
-#. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #. i18n: ectx: property (text), widget (QLabel, selectionModeLbl)
-#: plugins/impex/brush/wdg_export_gih.ui:213
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:186
+#: plugins/impex/brush/wdg_export_gih.ui:227
 #, kde-format
 msgid "Selection mode:"
 msgstr "Modo de selección:"
@@ -61083,12 +61024,6 @@ msgstr "Movimiento fluctuante"
 msgid "Aspect ratio:"
 msgstr "Relación de aspecto:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
-#: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:133
-#, kde-format
-msgid "Preserve alpha"
-msgstr "Preservar el alfa"
-
 #. i18n: ectx: property (text), widget (QCheckBox, randomHSVCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:33
 #, kde-format
@@ -61288,12 +61223,6 @@ msgstr "Compartir curva en todas las preferencias"
 msgid "X Range:"
 msgstr "Intervalo X:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
-#: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:115
-#, kde-format
-msgid "Preserve alpha channel"
-msgstr "Preservar el canal de alfa"
-
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:28
 #, kde-format
@@ -61356,46 +61285,49 @@ msgstr ""
 "mientras se pinta un trazo, la segunda opción le da un color uniforme en un "
 "trazo, aunque pase por encima del mismo sitio una y otra vez.</p></html>"
 
-#. i18n: ectx: property (text), widget (QPushButton, stampButton)
+#. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:307
-#, kde-format
-msgid "Stamp"
-msgstr "Sello"
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Create shape"
+#| msgid_plural "Create %1 shapes"
+msgctxt "@action:button create new brushtip"
+msgid "Create New"
+msgstr "Crear forma"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:132
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:119
 #, kde-format
 msgid "Current Brush Tip"
 msgstr "Punta de pincel actual"
 
 #. i18n: ectx: property (text), widget (QLabel, brushDetailsLabel)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:147
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:134
 #, kde-format
 msgid "Brush Details"
 msgstr "Detalles del pincel"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveBrushPresetSettings)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:192
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:179
 #, kde-format
 msgid "Preserve brush preset settings"
 msgstr "Preservar los ajustes predefinidos del pincel"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetBrushButton)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:212
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:199
 #, kde-format
 msgid "Reset Predefined Tip"
 msgstr "Restablecer punta predefinida"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpBrushMode)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:226
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:213
 #, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Brush mode"
 msgstr "Modo del pincel"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetAdjustments)
-#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:275
+#: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:262
 #, kde-format
 msgid "Reset Adjustments"
 msgstr "Reiniciar ajustes"
@@ -61534,7 +61466,7 @@ msgstr "Espaciado automático"
 msgid "Brush Tip"
 msgstr "Punta del pincel"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:47
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:45
 #, kde-format
 msgid ""
 "Precision Level 1 (fastest)\n"
@@ -61549,7 +61481,7 @@ msgstr ""
 "\n"
 "Óptimo para pinceles muy grandes"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:55
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:53
 #, kde-format
 msgid ""
 "Precision Level 2\n"
@@ -61564,7 +61496,7 @@ msgstr ""
 "\n"
 "Óptimo para pinceles grandes"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:63
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:61
 #, kde-format
 msgid ""
 "Precision Level 3\n"
@@ -61575,7 +61507,7 @@ msgstr ""
 "Precisión de subpíxeles: desactivada\n"
 "Precisión de tamaño de pincel: exacto"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:69
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:67
 #, kde-format
 msgid ""
 "Precision Level 4 (optimal)\n"
@@ -61590,7 +61522,7 @@ msgstr ""
 "\n"
 "Proporciona hasta un 50 % de mejor rendimiento que el nivel 5"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:77
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:75
 #, kde-format
 msgid ""
 "Precision Level 5 (best quality)\n"
@@ -61605,49 +61537,82 @@ msgstr ""
 "\n"
 "El menor rendimiento. Mejor calidad."
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:139
 #, kde-format
 msgctxt "Autobrush Brush tip mode"
 msgid "Auto"
 msgstr "Automático"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:143
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:141
 #, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Predefined"
 msgstr "Predefinido"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:146
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:144
 #: plugins/paintops/libpaintop/kis_text_brush_chooser.cpp:40
 #, kde-format
 msgctxt "Text Brush tip mode"
 msgid "Text"
 msgstr "Texto"
 
-#: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:100
-#, kde-format
-msgid ""
-"Nothing copied\n"
-" to Clipboard"
-msgstr ""
-"Nada copiado\n"
-"al portapapeles"
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:79
+#, fuzzy, kde-format
+#| msgid "Source:"
+msgctxt "@label:listbox image source"
+msgid "Source:"
+msgstr "Origen:"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:229
-#, kde-format
-msgid ""
-"Creates a brush tip from the current image selection.\n"
-" If no selection is present the whole image will be used."
-msgstr ""
-"Crea una punta de pincel a partir de la selección actual de la imagen.\n"
-"Si no existe ninguna selección, se usará la totalidad de la imagen."
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:83
+#, fuzzy, kde-format
+#| msgid "Image"
+msgctxt "@item:inlistbox"
+msgid "Image"
+msgstr "Imagen"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:233
-#, kde-format
-msgid "Creates a brush tip from the image in the clipboard."
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
+#, fuzzy, kde-format
+#| msgid "Clipboard"
+msgctxt "@item:inlistbox"
+msgid "Clipboard"
+msgstr "Portapapeles"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:87
+#, fuzzy, kde-format
+#| msgid "Reload File"
+msgctxt "@action:button reload image"
+msgid "Reload"
+msgstr "Volver a cargar el archivo"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:250
+#, fuzzy, kde-format
+#| msgctxt "Empty locale"
+#| msgid "Empty"
+msgctxt "@info empty image"
+msgid "Empty"
+msgstr "En blanco"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
+#, fuzzy, kde-format
+#| msgid "Overwrite"
+msgctxt "@action:button"
+msgid "Overwrite"
+msgstr "Sobrescribir"
+
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
+#, fuzzy, kde-format
+#| msgid "Save"
+msgctxt "@action:button"
+msgid "Save"
+msgstr "Guardar"
+
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
+#, fuzzy, kde-format
+#| msgid "Creates a brush tip from the image in the clipboard."
+msgid "Creates a brush tip from the current image, selection, or clipboard."
 msgstr "Crea una punta de pincel a partir de la imagen del portapapeles."
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:238
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
 msgid ""
 "Reloads Spacing from file\n"
@@ -61658,25 +61623,25 @@ msgstr ""
 "Define el escalado a 1,0\n"
 "Define la rotación a 0,0"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:236
 #, kde-format
 msgctxt "@label:slider"
 msgid "Neutral point: "
 msgstr "Punto neutral: "
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:252
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:244
 #, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
 msgstr "Brillo: "
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:259
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:251
 #, kde-format
 msgctxt "@label:slider"
 msgid "Contrast: "
 msgstr "Contraste: "
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:262
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:254
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -61689,6 +61654,12 @@ msgstr ""
 " Punto neutro: 127\n"
 " Brillo: 0 %\n"
 " Contraste: 0 %"
+
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
+#, fuzzy, kde-format
+#| msgid "Current Brush Tip"
+msgid "Create New Brushtip"
+msgstr "Punta de pincel actual"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
@@ -70947,62 +70918,29 @@ msgstr ""
 "Intervalo completo: [%1, %2]\n"
 "Subintervalo: [%3, %4]"
 
-#~ msgctxt "action"
-#~ msgid "Ungroup shape(s)"
-#~ msgstr "Desagrupar formas"
+#~ msgid "Warning(s):"
+#~ msgstr "Advertencias:"
 
-#~ msgctxt "action"
-#~ msgid "\"Ungroups shape(s) in the context of Vector Interaction Tool\""
-#~ msgstr ""
-#~ "«Desagrupa formas en el contexto de la herramienta de interacción "
-#~ "vectorial»"
+#~ msgctxt "The suffix after number of frames"
+#~ msgid "frame(s)"
+#~ msgstr "fotogramas"
 
-#~ msgctxt "action"
-#~ msgid "Group shape(s)"
-#~ msgstr "Agrupar formas"
+#~ msgid "Preserve alpha"
+#~ msgstr "Preservar el alfa"
 
-#~ msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
-#~ msgid "Group"
-#~ msgstr "Agrupar"
-
-#~ msgctxt "Group shape(s) in the context of Vector Interaction Tool"
-#~ msgid "Group"
-#~ msgstr "Agrupar"
-
-#~ msgctxt "action"
-#~ msgid "Quick Group"
-#~ msgstr "Agrupar rápidamente"
-
-#~ msgctxt "action"
-#~ msgid "Quick Ungroup"
-#~ msgstr "Desagrupar rápidamente"
+#~ msgid "Stamp"
+#~ msgstr "Sello"
 
 #~ msgid ""
-#~ "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#~ "b></p>"
+#~ "Nothing copied\n"
+#~ " to Clipboard"
 #~ msgstr ""
-#~ "<html><head/><body><p><b><span style=\" color:%1;\">Archivos recientes</"
-#~ "span></b></p>"
+#~ "Nada copiado\n"
+#~ "al portapapeles"
 
 #~ msgid ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Links</span></p></body></html>"
+#~ "Creates a brush tip from the current image selection.\n"
+#~ " If no selection is present the whole image will be used."
 #~ msgstr ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Enlaces</span></p></body></html>"
-
-#~ msgid ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Recent files</span></p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Archivos recientes</span></p></body></html>"
-
-#~ msgid "Hide after startup."
-#~ msgstr "Ocultar tras el inicio."
-
-#~ msgid "Layer name:"
-#~ msgstr "Nombre de la capa:"
-
-#~ msgid "No configuration options are available for this filter"
-#~ msgstr "No hay disponible ninguna opción de configuración para este filtro"
+#~ "Crea una punta de pincel a partir de la selección actual de la imagen.\n"
+#~ "Si no existe ninguna selección, se usará la totalidad de la imagen."

@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-01 00:43+0000\n"
-"PO-Revision-Date: 2026-09-30 16:00+0200\n"
+"PO-Revision-Date: 2026-10-02 12:02+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -12167,12 +12167,10 @@ msgstr "Laag plakken vanaf het klembord"
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914 krita/krita.action:2917
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Group layers"
-msgstr "La(a)g(en) groeperen"
+msgstr "Lagen groeperen"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2916
@@ -12186,12 +12184,10 @@ msgstr "Een groepslaag maken met geselecteerde lagen"
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926 krita/krita.action:2929
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Ungroup layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layers"
-msgstr "Groepering van la(a)g(en) opheffen"
+msgstr "Groepering van lagen opheffen"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2928
@@ -13184,12 +13180,10 @@ msgstr "Kopië&ren van instellen..."
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3632
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set the source for the selected clone layer(s)."
+#, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layers"
-msgstr "De bron van de geselecteerde kloonla(a)g(en) instellen."
+msgstr "De bron van de geselecteerde kloonlagen instellen."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3633
@@ -25301,13 +25295,11 @@ msgstr "Afmetingen groter dan 1920 pixels worden niet breed ondersteund."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Warning"
+#, kde-format
 msgid "Warning:"
 msgid_plural "Warnings:"
 msgstr[0] "Waarschuwing"
-msgstr[1] "Waarschuwing"
+msgstr[1] "Waarschuwingen:"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
 #, kde-format
@@ -45272,13 +45264,12 @@ msgid "px"
 msgstr "px"
 
 #: plugins/dockers/recorder/recorder_export.cpp:560
-#, fuzzy, kde-format
-#| msgid "frame"
+#, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame"
 msgid_plural "frames"
-msgstr[0] "frame"
-msgstr[1] "frame"
+msgstr[0] "Frame"
+msgstr[1] "frames"
 
 #: plugins/dockers/recorder/recorder_export.cpp:620
 #, kde-format
@@ -55242,9 +55233,7 @@ msgid "Brush selection information for animated brushes"
 msgstr "Selectie-informatie van penseel voor geanimeerde penselen"
 
 #: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "video importer: video file statistics"
-#| msgid "Frames: %1"
+#, kde-format
 msgctxt "@label %1 number of animation frames"
 msgid "Frames: %1"
 msgstr "Frames: %1"
@@ -61298,12 +61287,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#, fuzzy, kde-format
-#| msgctxt "In bundle manager; press button to create a new bundle"
-#| msgid "Create"
+#, kde-format
 msgctxt "@action:button create new brushtip"
 msgid "Create New"
-msgstr "Aanmaken"
+msgstr "Nieuwe aanmaken"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:119
@@ -61568,61 +61555,52 @@ msgid "Text"
 msgstr "Tekst"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:79
-#, fuzzy, kde-format
-#| msgid "Source:"
+#, kde-format
 msgctxt "@label:listbox image source"
 msgid "Source:"
 msgstr "Bron:"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Image"
 msgstr "Afbeelding"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Clipboard"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Clipboard"
 msgstr "Klembord"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:87
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:button reload image"
 msgid "Reload"
-msgstr "Opnieuw laden"
+msgstr "Herladen"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:250
-#, fuzzy, kde-format
-#| msgctxt "Empty locale"
-#| msgid "Empty"
+#, kde-format
 msgctxt "@info empty image"
 msgid "Empty"
 msgstr "Leeg"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
-#, fuzzy, kde-format
-#| msgid "Overwrite"
+#, kde-format
 msgctxt "@action:button"
 msgid "Overwrite"
 msgstr "Overschrijven"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
-#, fuzzy, kde-format
-#| msgid "Save"
+#, kde-format
 msgctxt "@action:button"
 msgid "Save"
 msgstr "Opslaan"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
-#, fuzzy, kde-format
-#| msgid "Creates a brush tip from the image in the clipboard."
+#, kde-format
 msgid "Creates a brush tip from the current image, selection, or clipboard."
-msgstr "Maakt een penseeltip aan uit de afbeelding in het klembord."
+msgstr ""
+"Maakt een penseeltip aan uit de huidige afbeelding, selectie of klembord."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
@@ -61669,10 +61647,9 @@ msgstr ""
 " Contrast: 0%"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
-#, fuzzy, kde-format
-#| msgid "Create New Bundle"
+#, kde-format
 msgid "Create New Brushtip"
-msgstr "Nieuwe bundel aanmaken"
+msgstr "Nieuw penseeleind aanmaken"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format

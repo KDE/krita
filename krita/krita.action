@@ -2730,7 +2730,7 @@
       <statusTip/>
     </Action>
     <Action name="isolate_active_layer">
-      <icon>view-filter</icon>
+      <icon>isolate-layer</icon>
       <text>&amp;Isolate Active Layer</text>
       <whatsThis/>
       <toolTip>Isolate Active Layer</toolTip>
@@ -2742,7 +2742,7 @@
       <statusTip/>
     </Action>
     <Action name="isolate_active_group">
-      <icon>view-filter</icon>
+      <icon>isolate-group</icon>
       <text>&amp;Isolate Active Group</text>
       <whatsThis/>
       <toolTip>Isolate Active Group</toolTip>

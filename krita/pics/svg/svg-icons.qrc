@@ -539,5 +539,9 @@
         <file>light_remove-frame-and-pull.svg</file>
         <file>light_remove-hold-frame.svg</file>
         <file>light_remove-multiple-hold-frames.svg</file>
+        <file>dark_isolate-group.svg</file>
+        <file>light_isolate-group.svg</file>
+        <file>light_isolate-layer.svg</file>
+        <file>dark_isolate-layer.svg</file>
     </qresource>
 </RCC>

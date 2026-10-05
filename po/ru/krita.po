@@ -83,7 +83,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 02:39+0000\n"
-"PO-Revision-Date: 2026-09-23 11:07+0200\n"
+"PO-Revision-Date: 2026-10-04 10:09+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -28913,7 +28913,7 @@ msgstr "Отменить открытие файла автосохранени�
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:53
 #, kde-format
 msgid "OK"
-msgstr "OK"
+msgstr "ОК"
 
 #: libs/ui/dialogs/KisSessionManagerDialog.cpp:73
 #, kde-format

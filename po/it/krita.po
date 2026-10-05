@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-18 02:39+0000\n"
-"PO-Revision-Date: 2026-09-22 20:25+0200\n"
+"PO-Revision-Date: 2026-10-02 19:43+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -13160,7 +13160,7 @@ msgstr "Imposta copia &da..."
 #, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layer(s)."
-msgstr "Imposta la sorgente per i livelli dei cloni selezionati."
+msgstr "Imposta la sorgente per i livelli clone selezionati."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3645

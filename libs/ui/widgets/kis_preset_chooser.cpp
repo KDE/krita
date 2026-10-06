@@ -522,27 +522,13 @@ void KisPresetChooser::showHideBrushNames(ListViewMode newViewMode)
 
 void KisPresetChooser::slotStrokePreviewReady(int presetId)
 {
+    Q_UNUSED(presetId);
+
     if (m_mode != ViewMode::STROKE) {
         return;
     }
 
-    KisTagFilterResourceProxyModel *model = m_chooser->tagFilterModel();
-    if (!model) {
-        m_chooser->itemView()->viewport()->update();
-        return;
-    }
-
-    QModelIndex index = model->indexForResourceId(presetId);
-    if (!index.isValid()) {
-        return;
-    }
-
-    const QRect rect = m_chooser->itemView()->visualRect(index);
-    if (!rect.isValid()) {
-        return;
-    }
-
-    m_chooser->itemView()->viewport()->update(rect);
+    m_chooser->itemView()->viewport()->update();
 }
 
 void KisPresetChooser::slotGenerateStrokePreviews()

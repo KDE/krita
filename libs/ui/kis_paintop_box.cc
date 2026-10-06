@@ -1092,10 +1092,6 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
             m_vMirrorAction->setChecked(value.toBool());
         }
 
-        // Notify the stroke preview cache of canvas resource changes
-        // (size, flow, opacity, rotation changes via shortcuts)
-        KisBrushStrokePreviewCache::instance()->slotCanvasResourceChanged(key, value);
-
         sender()->blockSignals(false);
     }
 }

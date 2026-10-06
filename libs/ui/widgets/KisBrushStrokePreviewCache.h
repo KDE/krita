@@ -62,9 +62,6 @@ public Q_SLOTS:
     /// Track current preset for settings change detection.
     void slotSetCurrentPreset(KisPaintOpPresetSP preset);
 
-    /// Handle canvas resource changes (size, flow, opacity, rotation).
-    void slotCanvasResourceChanged(int key, const QVariant &value);
-
 private Q_SLOTS:
     void slotCurrentPresetSettingsChanged();
     void slotScheduleGenerateAllPreviews();

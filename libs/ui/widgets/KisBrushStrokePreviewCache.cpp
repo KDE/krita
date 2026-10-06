@@ -437,35 +437,6 @@ void KisBrushStrokePreviewCache::slotCurrentPresetSettingsChanged()
     slotPresetSettingsChanged(m_d->currentPreset);
 }
 
-void KisBrushStrokePreviewCache::slotCanvasResourceChanged(int key, const QVariant &value)
-{
-    Q_UNUSED(value);
-
-    if (!m_d->currentPreset) {
-        return;
-    }
-
-    const bool affectsBrush = key == KoCanvasResource::Size
-        || key == KoCanvasResource::Opacity
-        || key == KoCanvasResource::Flow
-        || key == KoCanvasResource::BrushRotation;
-
-    if (!affectsBrush) {
-        return;
-    }
-
-    const int presetId = m_d->currentPreset->resourceId();
-    invalidatePreset(presetId);
-
-    if (m_d->generator) {
-        m_d->generator->requestPreview(m_d->currentPreset);
-    }
-
-    if (presetId >= 0) {
-        Q_EMIT sigPreviewReady(presetId);
-    }
-}
-
 QString KisBrushStrokePreviewCache::generateSettingsFingerprint(KisPaintOpPresetSP preset) const
 {
     if (!preset || !preset->settings()) {

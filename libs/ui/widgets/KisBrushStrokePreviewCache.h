@@ -37,13 +37,10 @@ public:
     static bool isNoPreviewEngine(const QString &paintOpId);
 
     /// Get cached preview scaled to size, or placeholder if not cached.
-    QImage getPreview(KisPaintOpPresetSP preset, const QSize &size);
+    QImage getPreview(int presetId, const QSize &size, int pixelRatio);
 
     /// Invalidate cache for a preset when its settings change.
     void invalidatePreset(int presetId);
-
-    /// Generate previews for all presets not already cached.
-    void generateAllPreviews();
 
     /// Register live preview view for generating stroke previews.
     void registerLivePreviewView(KisPresetLivePreviewView *view);
@@ -54,7 +51,9 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     /// Receive preview image from live preview view.
-    void slotLivePreviewImageReady(int presetId, const QImage &previewImage);
+    void slotLivePreviewImageReady(int presetId, QImage &previewImage);
+
+    void slotPreviewImageReady(int presetId, QImage &previewImage);
 
     /// Handle preset settings change.
     void slotPresetSettingsChanged(KisPaintOpPresetSP preset);
@@ -64,8 +63,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotCurrentPresetSettingsChanged();
-    void slotScheduleGenerateAllPreviews();
-    void slotRunGenerateAllPreviews();
 
 private:
     KisBrushStrokePreviewCache();
@@ -74,10 +71,11 @@ private:
 
     QString generateCacheKey(int presetId) const;
     QString generateSizedCacheKey(int presetId, const QSize &size) const;
+    /// Make sure that we have under >= 500 items cached, if there are more remove the oldest ones
     void evictIfNeeded();
     void updateAccessOrder(const QString &key);
-    QImage generatePlaceholder(const QSize &size) const;
-    QImage generateNoPreviewPlaceholder(const QSize &size) const;
+    QImage generatePlaceholder(const QSize &size, int pixelRatio) const;
+    QImage generateNoPreviewPlaceholder(const QSize &size, int pixelRatio) const;
     QString generateSettingsFingerprint(KisPaintOpPresetSP preset) const;
     QImage scalePreviewToSize(const QImage &source, const QSize &targetSize) const;
 
@@ -85,9 +83,11 @@ private:
     void initDiskCache();
     QString getDiskCacheFilename(int presetId) const;
     bool loadFromDiskCache(int presetId, QImage &image);
-    void saveToDiskCache(int presetId, const QImage &image);
+    void saveToDiskCache(int presetId, QImage &image);
     bool hasDiskCache(int presetId) const;
     void removeDiskCache(int presetId);
+
+    void requestPreviewGeneration(int presetId);
 
     struct Private;
     QScopedPointer<Private> m_d;

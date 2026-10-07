@@ -33,11 +33,13 @@
 
 #include <brushengine/kis_paintop_settings.h>
 #include <brushengine/kis_paintop_preset.h>
+#include "KisResourceMetaDataModel.h"
 #include "kis_config_notifier.h"
 #include <kis_icon.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceThumbnailCache.h>
 #include "KisBrushStrokePreviewCache.h"
+#include "KisResourceModelProvider.h"
 
 /// Resource item delegate for rendering brush stroke previews
 class KisPresetDelegate : public QAbstractItemDelegate
@@ -52,8 +54,8 @@ public:
     KisPresetDelegate(QObject * parent = nullptr)
         : QAbstractItemDelegate(parent)
         , m_showText(false)
-        , m_useDirtyPresets(false)
         , m_viewMode(KisPresetChooser::THUMBNAIL)
+        , m_useDirtyPresets(false)
         , m_iconSize(50) {}
 
     ~KisPresetDelegate() override {}
@@ -215,13 +217,7 @@ void KisPresetDelegate::paintThumbnail(QPainter *painter, const QStyleOptionView
 void KisPresetDelegate::paintStrokePreview(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     bool dirty = index.data(Qt::UserRole + KisAbstractResourceModel::Dirty).toBool();
-
-    KoResourceSP resource;
-    const KisAbstractResourceModel *resourceModel = dynamic_cast<const KisAbstractResourceModel*>(index.model());
-    if (resourceModel) {
-        resource = resourceModel->resourceForIndex(index);
-    }
-    KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
+    int presetId = index.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt();
 
     qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
     const bool isSelected = option.state & QStyle::State_Selected;
@@ -261,14 +257,11 @@ void KisPresetDelegate::paintStrokePreview(QPainter *painter, const QStyleOption
     strokeRect.setHeight(qMax(10, innerRect.height() - (textAreaHeight - textAreaTopTrim)));
 
     QSize previewSize = strokeRect.size() * devicePixelRatioF;
-
-    const QString paintOpId = preset ? preset->paintOp().id() : QString();
+    const QString paintOpId =
+        KisResourceModelProvider::resourceMetadataModel()->metaDataValue(presetId, "paintopid").toString();
     const bool useStripedBackground = KisBrushStrokePreviewCache::needsStripedBackground(paintOpId);
 
-    QImage strokePreview;
-    if (preset) {
-        strokePreview = KisBrushStrokePreviewCache::instance()->getPreview(preset, previewSize);
-    }
+    QImage strokePreview = KisBrushStrokePreviewCache::instance()->getPreview(presetId, previewSize, painter->device()->devicePixelRatio());
     if (strokePreview.isNull()) {
         strokePreview = QImage(previewSize, QImage::Format_ARGB32_Premultiplied);
         strokePreview.fill(Qt::transparent);
@@ -355,9 +348,6 @@ KisPresetChooser::KisPresetChooser(QWidget *parent)
             SLOT(notifyConfigChanged()));
 
     notifyConfigChanged();
-
-    // Pre-generate stroke previews.
-    QTimer::singleShot(0, this, SLOT(slotGenerateStrokePreviews()));
 }
 
 KisPresetChooser::~KisPresetChooser()
@@ -368,7 +358,6 @@ void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)
 {
     m_mode = mode;
     updateViewSettings();
-    KisBrushStrokePreviewCache::instance()->generateAllPreviews();
 }
 
 void KisPresetChooser::setViewModeToThumbnail()
@@ -470,8 +459,6 @@ void KisPresetChooser::setIconSize(int newSize)
         m_chooser->itemView()->setIconSize(thumbnailSize);
         m_chooser->itemView()->doItemsLayout();
     }
-
-    KisBrushStrokePreviewCache::instance()->generateAllPreviews();
 }
 
 int KisPresetChooser::iconSize()
@@ -529,11 +516,6 @@ void KisPresetChooser::slotStrokePreviewReady(int presetId)
     }
 
     m_chooser->itemView()->viewport()->update();
-}
-
-void KisPresetChooser::slotGenerateStrokePreviews()
-{
-    KisBrushStrokePreviewCache::instance()->generateAllPreviews();
 }
 
 void KisPresetChooser::slotBaseLengthChanged(int length)

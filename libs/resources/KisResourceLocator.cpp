@@ -425,6 +425,34 @@ KoResourceSP KisResourceLocator::resourceForId(int resourceId)
     return r;
 }
 
+QString KisResourceLocator::md5ForId(int resourceId)
+{
+    if (resourceId < 0) {
+        return "";
+    }
+    QSqlQuery q;
+    if (!q.prepare("SELECT resources.id\n"
+                   ",      resources.md5sum\n"
+                   "FROM   resources\n"
+                   "WHERE  resources.id = :resourceId\n")) {
+        qWarning() << "Could not prepare id/version query" << q.lastError();
+    }
+
+    q.bindValue(":resourceId", resourceId);
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute md5sum query" << q.lastError() << q.boundValues();
+    }
+
+    if (!q.first()) {
+        qWarning() << "Could not find the resource in the database";
+    }
+
+    QString out = q.value(1).toString();
+
+    return out;
+}
+
 bool KisResourceLocator::setResourceActive(int resourceId, bool active)
 {
     // First remove the resource from the cache

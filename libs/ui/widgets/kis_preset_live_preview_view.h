@@ -56,7 +56,6 @@ public:
     void setCurrentPreset(KisPaintOpPresetSP preset);
     void requestUpdateStroke();
     void requestUpdateStrokeImmediate();
-    void setBatchPreviewMode(bool enabled);
     void setCachePreviewMode(bool enabled);
     KoCanvasResourceProvider* resourceManager() const;
 
@@ -67,7 +66,7 @@ Q_SIGNALS:
      * @param presetId The presetId (resource id).
      * @param previewImage Preview image.
      */
-    void sigPreviewImageReady(int presetId, const QImage &previewImage);
+    void sigPreviewImageReady(int presetId, QImage &previewImage);
 
 private Q_SLOTS:
     void updateStroke();
@@ -128,7 +127,6 @@ private:
 
     bool m_previewGenerationInProgress {false};
     KisSignalCompressor m_updateCompressor;
-    bool m_batchPreviewMode {false};
     bool m_cachePreviewMode {false};
 
     /// the range of brush sizes that will control zooming in/out

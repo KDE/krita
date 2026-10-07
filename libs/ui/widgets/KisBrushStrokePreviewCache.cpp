@@ -6,19 +6,20 @@
 
 #include "KisBrushStrokePreviewCache.h"
 #include "KisBrushStrokePreviewGenerator.h"
+#include "KisResourceMetaDataModel.h"
+#include "KisResourceLocator.h"
 
 #include <QDir>
 #include <QFile>
 #include <QHash>
 #include <QList>
-#include <QMutex>
-#include <QMutexLocker>
 #include <QPainter>
 #include <QPointer>
 #include <QRegularExpression>
 #include <QSaveFile>
 #include <QStandardPaths>
 #include <QTimer>
+#include <QThreadPool>
 
 #include <klocalizedstring.h>
 #include <kis_paintop_settings.h>
@@ -40,12 +41,9 @@ inline int validPresetId(KisPaintOpPresetSP preset)
 } // namespace
 
 struct KisBrushStrokePreviewCache::Private {
-    struct CacheEntry {
-        QImage image;
-    };
-
-    mutable QMutex mutex;
-    QHash<QString, CacheEntry> cache;
+    /// Cached stroke previews
+    QHash<QString, QImage> cache;
+    /// Scaled images
     QHash<QString, QImage> scaledCache;
     QList<QString> accessOrder;
     int maxCacheSize = 500;
@@ -54,7 +52,14 @@ struct KisBrushStrokePreviewCache::Private {
     QString currentSettingsFingerprint;
     QString diskCachePath;
     QScopedPointer<KisBrushStrokePreviewGenerator> generator;
-    bool pendingGenerateAll {false};
+
+    struct PlaceholderStroke {
+        QImage image;
+        int pixelRatio;
+    };
+
+    std::optional<PlaceholderStroke> placeholder;
+    std::optional<PlaceholderStroke> noPreviewPlaceholder;
 
     /// Remove all scaled cache entries for a base key.
     void removeScaledVariants(const QString &baseKey)
@@ -76,14 +81,6 @@ KisBrushStrokePreviewCache::KisBrushStrokePreviewCache()
 {
     initDiskCache();
     m_d->generator.reset(new KisBrushStrokePreviewGenerator(this));
-
-    KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
-    if (model) {
-        connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)),
-                this, SLOT(slotScheduleGenerateAllPreviews()));
-        connect(model, SIGNAL(modelReset()),
-                this, SLOT(slotScheduleGenerateAllPreviews()));
-    }
 }
 
 KisBrushStrokePreviewCache::~KisBrushStrokePreviewCache()
@@ -131,11 +128,24 @@ bool KisBrushStrokePreviewCache::loadFromDiskCache(int presetId, QImage &image)
     return QFile::exists(filename) && image.load(filename);
 }
 
-void KisBrushStrokePreviewCache::saveToDiskCache(int presetId, const QImage &image)
+void KisBrushStrokePreviewCache::saveToDiskCache(int presetId, QImage &image)
 {
     if (image.isNull()) {
         return;
     }
+
+    // The preset must've been loaded before to generate the preview, so loading it again is basically free and
+    // shouldn't impact performace
+    KoResourceSP preset = KisResourceLocator::instance()->resourceForId(presetId);
+
+    //Just don't save dirty previews
+    if (preset->isDirty()) {
+        return;
+    }
+
+    //Save the md5 sum into the preview so that we can know it's the same brush
+    QString md5 = preset->md5Sum();
+    image.setText("md5", md5);
 
     QSaveFile file(getDiskCacheFilename(presetId));
     if (file.open(QIODevice::WriteOnly) && image.save(&file, "PNG", 50)) {
@@ -178,19 +188,19 @@ void KisBrushStrokePreviewCache::updateAccessOrder(const QString &key)
     m_d->accessOrder.append(key);
 }
 
-QImage KisBrushStrokePreviewCache::getPreview(KisPaintOpPresetSP preset, const QSize &size)
+QImage KisBrushStrokePreviewCache::getPreview(int presetId, const QSize &size, int pixelRatio )
 {
-    const int presetId = validPresetId(preset);
     if (presetId < 0 || size.isEmpty()) {
-        return size.isEmpty() ? QImage() : generatePlaceholder(size);
+        return size.isEmpty() ? QImage() : generatePlaceholder(size, pixelRatio);
     }
+
+    QString paintopId =
+        KisResourceModelProvider::resourceMetadataModel()->metaDataValue(presetId, "paintopid").toString();
 
     // Return "No Preview" placeholder for unsupported brush engines
-    if (preset && isNoPreviewEngine(preset->paintOp().id())) {
-        return generateNoPreviewPlaceholder(size);
+    if (isNoPreviewEngine(paintopId)) {
+        return generateNoPreviewPlaceholder(size, pixelRatio);
     }
-
-    QMutexLocker locker(&m_d->mutex);
 
     const QString baseKey = generateCacheKey(presetId);
     const QString sizedKey = generateSizedCacheKey(presetId, size);
@@ -204,25 +214,53 @@ QImage KisBrushStrokePreviewCache::getPreview(KisPaintOpPresetSP preset, const Q
 
     // Check base cache.
     auto it = m_d->cache.find(baseKey);
-    if (it != m_d->cache.end() && !it->image.isNull()) {
+    if (it != m_d->cache.end() && !it->isNull()) {
         updateAccessOrder(baseKey);
-        QImage scaled = scalePreviewToSize(it->image, size);
+        QImage scaled = scalePreviewToSize(*it, size);
         m_d->scaledCache.insert(sizedKey, scaled);
         return scaled;
     }
 
     // Try disk cache.
-    QImage diskImage;
-    if (loadFromDiskCache(presetId, diskImage) && !diskImage.isNull()) {
+    if (hasDiskCache(presetId)) {
+
+        // Get md5 first
+        QString md5 = KisResourceLocator::instance()->md5ForId(presetId);
+
+        QImage diskImage;
+        loadFromDiskCache(presetId, diskImage);
+
+        // If there's an md5 mismatch request preview regeneration
+        if (diskImage.text("md5") != md5) {
+            removeDiskCache(presetId);
+            requestPreviewGeneration(presetId);
+            return generatePlaceholder(size, pixelRatio);
+        }
         evictIfNeeded();
         m_d->cache.insert(baseKey, {diskImage});
         m_d->accessOrder.append(baseKey);
         QImage scaled = scalePreviewToSize(diskImage, size);
         m_d->scaledCache.insert(sizedKey, scaled);
+
         return scaled;
     }
 
-    return generatePlaceholder(size);
+    // We schedule a preview to be generated here and in the meantime show a placeholder
+    requestPreviewGeneration(presetId);
+
+    return generatePlaceholder(size, pixelRatio);
+}
+
+void KisBrushStrokePreviewCache::requestPreviewGeneration(int presetId)
+{
+    if (m_d->generator) {
+        // ask for it to be executed later, so that we don't clog up a single frame with a dozen brush preset requests
+        QTimer::singleShot(0, [this, presetId] {
+            KoResourceSP resource = KisResourceLocator::instance()->resourceForId(presetId);
+            KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
+            m_d->generator->requestPreview(preset);
+        });
+    }
 }
 
 QImage KisBrushStrokePreviewCache::scalePreviewToSize(const QImage &source, const QSize &targetSize) const
@@ -253,37 +291,55 @@ QImage KisBrushStrokePreviewCache::scalePreviewToSize(const QImage &source, cons
     return scaled;
 }
 
-QImage KisBrushStrokePreviewCache::generatePlaceholder(const QSize &size) const
+QImage KisBrushStrokePreviewCache::generatePlaceholder(const QSize &size, int pixelRatio) const
 {
+    // Cache previews with the same size, just because on first startup there will be A LOT of requests to generate them
+    // and we don't need to waste the work
+    if (m_d->placeholder.has_value()) {
+        if (m_d->placeholder.value().image.size() == size && m_d->placeholder.value().pixelRatio == pixelRatio) {
+            return m_d->placeholder.value().image;
+        }
+    }
+
     QImage placeholder(size, QImage::Format_ARGB32_Premultiplied);
     placeholder.fill(Qt::transparent);
 
     QPainter painter(&placeholder);
     painter.setPen(Qt::white);
     QFont font;
-    font.setPixelSize(qMin(size.height() / 2, 10));
+    font.setPixelSize(qMin(size.height() / 2, 10 * pixelRatio));
     painter.setFont(font);
     painter.drawText(placeholder.rect(), Qt::AlignCenter, i18n("Loading..."));
 
+    m_d->placeholder = Private::PlaceholderStroke{placeholder, pixelRatio};
+
     return placeholder;
 }
 
-QImage KisBrushStrokePreviewCache::generateNoPreviewPlaceholder(const QSize &size) const
+QImage KisBrushStrokePreviewCache::generateNoPreviewPlaceholder(const QSize &size, int pixelRatio) const
 {
+    if (m_d->noPreviewPlaceholder.has_value()) {
+        if (m_d->noPreviewPlaceholder.value().image.size() == size && m_d->noPreviewPlaceholder.value().pixelRatio == pixelRatio) {
+            return m_d->noPreviewPlaceholder.value().image;
+        }
+    }
+
     QImage placeholder(size, QImage::Format_ARGB32_Premultiplied);
     placeholder.fill(Qt::transparent);
 
     QPainter painter(&placeholder);
     painter.setPen(Qt::white);
     QFont font;
-    font.setPixelSize(qMin(size.height() / 2, 10));
+    font.setPixelSize(qMin(size.height() / 2, 10 * pixelRatio));
     painter.setFont(font);
     painter.drawText(placeholder.rect(), Qt::AlignCenter, i18n("No Preview"));
+
+    m_d->noPreviewPlaceholder = Private::PlaceholderStroke{placeholder, pixelRatio};
 
     return placeholder;
 }
 
-void KisBrushStrokePreviewCache::slotLivePreviewImageReady(int presetId, const QImage &previewImage)
+void KisBrushStrokePreviewCache::slotLivePreviewImageReady(int presetId, QImage &previewImage)
 {
     if (presetId < 0 || previewImage.isNull()) {
         return;
@@ -291,14 +347,17 @@ void KisBrushStrokePreviewCache::slotLivePreviewImageReady(int presetId, const Q
 
     saveToDiskCache(presetId, previewImage);
 
-    {
-        QMutexLocker locker(&m_d->mutex);
+    slotPreviewImageReady(presetId, previewImage);
+}
 
+void KisBrushStrokePreviewCache::slotPreviewImageReady(int presetId, QImage &previewImage)
+{
+    {
         const QString baseKey = generateCacheKey(presetId);
 
         auto it = m_d->cache.find(baseKey);
         if (it != m_d->cache.end()) {
-            it->image = previewImage;
+            *it = previewImage;
             updateAccessOrder(baseKey);
         } else {
             evictIfNeeded();
@@ -320,63 +379,9 @@ void KisBrushStrokePreviewCache::invalidatePreset(int presetId)
 
     removeDiskCache(presetId);
 
-    QMutexLocker locker(&m_d->mutex);
-
     const QString baseKey = generateCacheKey(presetId);
 
     m_d->removeScaledVariants(baseKey);
-}
-
-void KisBrushStrokePreviewCache::generateAllPreviews()
-{
-    KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
-    if (!model) {
-        return;
-    }
-
-    QList<KisPaintOpPresetSP> missing;
-    const int rowCount = model->rowCount();
-
-    for (int i = 0; i < rowCount; ++i) {
-        QModelIndex idx = model->index(i, 0);
-        KisPaintOpPresetSP preset = model->resourceForIndex(idx).dynamicCast<KisPaintOpPreset>();
-
-        const int presetId = validPresetId(preset);
-        if (presetId < 0) {
-            continue;
-        }
-
-        const QString baseKey = generateCacheKey(presetId);
-        bool cached;
-        {
-            QMutexLocker locker(&m_d->mutex);
-            cached = m_d->cache.contains(baseKey);
-        }
-
-        if (!cached && !hasDiskCache(presetId)) {
-            missing.append(preset);
-        }
-    }
-
-    if (!missing.isEmpty() && m_d->generator) {
-        m_d->generator->startBatch(missing);
-    }
-}
-
-void KisBrushStrokePreviewCache::slotScheduleGenerateAllPreviews()
-{
-    if (m_d->pendingGenerateAll) {
-        return;
-    }
-
-    m_d->pendingGenerateAll = true;
-    QTimer::singleShot(0, this, SLOT(slotRunGenerateAllPreviews()));
-}
-
-void KisBrushStrokePreviewCache::slotRunGenerateAllPreviews()
-{
-    m_d->pendingGenerateAll = false;
-    generateAllPreviews();
 }
 
 void KisBrushStrokePreviewCache::registerLivePreviewView(KisPresetLivePreviewView *view)

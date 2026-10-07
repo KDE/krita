@@ -87,7 +87,6 @@ protected:
 private Q_SLOTS:
     void notifyConfigChanged();
     void slotStrokePreviewReady(int presetId);
-    void slotGenerateStrokePreviews();
     void slotBaseLengthChanged(int length);
 
 private:

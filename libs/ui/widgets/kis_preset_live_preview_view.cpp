@@ -99,15 +99,6 @@ void KisPresetLivePreviewView::requestUpdateStrokeImmediate()
     updateStroke();
 }
 
-void KisPresetLivePreviewView::setBatchPreviewMode(bool enabled)
-{
-    if (m_batchPreviewMode == enabled) {
-        return;
-    }
-    m_batchPreviewMode = enabled;
-    m_updateCompressor.setDelay(enabled ? 0 : DefaultUpdateDelayMs);
-}
-
 void KisPresetLivePreviewView::setCachePreviewMode(bool enabled)
 {
     m_cachePreviewMode = enabled;
@@ -148,7 +139,7 @@ void KisPresetLivePreviewView::slotPreviewGenerationCompleted()
 
     m_lastPreviewImage = m_layer->paintDevice()->convertToQImage(0, m_image->bounds());
 
-    if (!m_batchPreviewMode && !m_cachePreviewMode) {
+    if (!m_cachePreviewMode) {
         // only add the object once...then just update the pixmap so we can move the preview around
         if (!m_sceneImageItem) {
             m_sceneImageItem = m_brushPreviewScene->addPixmap(QPixmap::fromImage(m_lastPreviewImage));

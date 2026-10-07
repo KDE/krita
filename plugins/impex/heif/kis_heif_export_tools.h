@@ -258,7 +258,6 @@ inline void writeFloatLayerImpl(const int width,
                                 const int stride,
                                 KisHLineConstIteratorSP it,
                                 float hlgGamma,
-                                float hlgNominalPeak,
                                 const KoColorSpace *cs)
 {
     const int endValue0 = endianness == QSysInfo::LittleEndian ? 1 : 0;
@@ -284,7 +283,7 @@ inline void writeFloatLayerImpl(const int width,
             }
 
             if (conversionPolicy == ConversionPolicy::ApplyHLG && removeOOTF) {
-                removeHLGOOTF(dst, lCoef.constData(), hlgGamma, hlgNominalPeak);
+                removeHLGOOTF(dst, lCoef.constData(), hlgGamma);
             }
 
             for (int ch = 0; ch < channels; ch++) {

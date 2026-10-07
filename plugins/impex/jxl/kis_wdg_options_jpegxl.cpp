@@ -143,18 +143,7 @@ KisWdgOptionsJPEGXL::KisWdgOptionsJPEGXL(QWidget *parent)
 
     metaDataFilters->setModel(&m_filterRegistryModel);
 
-    connect(cmbConversionPolicy,
-            qOverload<int>(&QComboBox::currentIndexChanged),
-            this,
-            &KisWdgOptionsJPEGXL::toggleExtraHDROptions);
-
     connect(modular, qOverload<int>(&QComboBox::currentIndexChanged), this, &KisWdgOptionsJPEGXL::toggleModularTabs);
-}
-
-void KisWdgOptionsJPEGXL::toggleExtraHDROptions(int index)
-{
-    const QString option = cmbConversionPolicy->itemData(index).value<QString>();
-    chkHLGOOTF->setEnabled(option.contains("HLG"));
 }
 
 void KisWdgOptionsJPEGXL::toggleModularTabs(int index)
@@ -240,9 +229,6 @@ void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cf
     }
     const QString optionName = cfg->getString("floatingPointConversionOption", "Rec2100PQ");
     cmbConversionPolicy->setCurrentIndex(cmbConversionPolicy->findData(optionName, Qt::UserRole));
-    spnNits->setValue(cfg->getDouble("HLGnominalPeak", 1000.0));
-    spnGamma->setValue(cfg->getDouble("HLGgamma", 1.2));
-    chkHLGOOTF->setChecked(cfg->getBool("removeHGLOOTF", true));
 
     resampling->setCurrentIndex(resampling->findData(cfg->getInt("resampling", -1)));
     extraChannelResampling->setCurrentIndex(
@@ -301,9 +287,6 @@ KisPropertiesConfigurationSP KisWdgOptionsJPEGXL::configuration() const
 
     cfg->setProperty("forceCicpLossless", forceCicpLossless->isChecked());
     cfg->setProperty("floatingPointConversionOption", cmbConversionPolicy->currentData(Qt::UserRole).toString());
-    cfg->setProperty("HLGnominalPeak", spnNits->value());
-    cfg->setProperty("HLGgamma", spnGamma->value());
-    cfg->setProperty("removeHGLOOTF", chkHLGOOTF->isChecked());
 
     cfg->setProperty("resampling", resampling->currentData());
     cfg->setProperty("extraChannelResampling", extraChannelResampling->currentData());

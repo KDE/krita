@@ -23,7 +23,6 @@
 #include <KoColorSpaceEngine.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfileQuery.h>
-#include <dialogs/kis_dlg_hlg_import.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_iterator_ng.h>
@@ -124,7 +123,6 @@ inline auto readPlanarLayer(const int luma,
                             const int strideA,
                             KisHLineIteratorSP it,
                             float displayGamma,
-                            float displayNits,
                             const KoColorSpace *colorSpace)
 {
     return createOptimizedClass<readLayerImpl>(luma,
@@ -143,7 +141,6 @@ inline auto readPlanarLayer(const int luma,
                                                strideA,
                                                it,
                                                displayGamma,
-                                               displayNits,
                                                colorSpace);
 }
 } // namespace Planar
@@ -161,7 +158,6 @@ inline auto readInterleavedLayer(const int luma,
                                  const int stride,
                                  KisHLineIteratorSP it,
                                  float displayGamma,
-                                 float displayNits,
                                  const KoColorSpace *colorSpace)
 {
     return createOptimizedClass<HDR::readLayerImpl>(luma,
@@ -174,7 +170,6 @@ inline auto readInterleavedLayer(const int luma,
                                                     stride,
                                                     it,
                                                     displayGamma,
-                                                    displayNits,
                                                     colorSpace);
 }
 } // namespace HDR
@@ -191,7 +186,6 @@ inline auto readInterleavedLayer(LinearizePolicy linearizePolicy,
                                  const int stride,
                                  KisHLineIteratorSP it,
                                  float displayGamma,
-                                 float displayNits,
                                  const KoColorSpace *colorSpace)
 {
     return createOptimizedClass<SDR::readLayerImpl>(linearizePolicy,
@@ -203,7 +197,6 @@ inline auto readInterleavedLayer(LinearizePolicy linearizePolicy,
                                                     stride,
                                                     it,
                                                     displayGamma,
-                                                    displayNits,
                                                     colorSpace);
 }
 } // namespace SDR
@@ -248,9 +241,8 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         dbgFile << "loading heif" << heifModel << heifChroma << luma;
 
         LinearizePolicy linearizePolicy = LinearizePolicy::KeepTheSame;
-        bool applyOOTF = true;
+        bool applyOOTF = false;
         float displayGamma = 1.2f;
-        float displayNits = 1000.0;
 
         struct heif_error err {
         };
@@ -302,13 +294,6 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 }
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_HLG) {
                     dbgFile << "linearizing from HLG";
-                    if (!document->fileBatchMode()) {
-                        KisDlgHLGImport dlg(applyOOTF, displayGamma, displayNits);
-                        dlg.exec();
-                        applyOOTF = dlg.applyOOTF();
-                        displayGamma = dlg.gamma();
-                        displayNits = dlg.nominalPeakBrightness();
-                    }
                     linearizePolicy = LinearizePolicy::LinearFromHLG;
                     transferCharacteristic = TRC_LINEAR;
                 }
@@ -448,7 +433,6 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                                     strideA,
                                     it,
                                     displayGamma,
-                                    displayNits,
                                     colorSpace);
         } else if (heifChroma == heif_chroma_interleaved_RGB || heifChroma == heif_chroma_interleaved_RGBA) {
             HeifStrideType stride = 0;
@@ -469,7 +453,6 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                                       stride,
                                       it,
                                       displayGamma,
-                                      displayNits,
                                       colorSpace);
 
         } else if (heifChroma == heif_chroma_interleaved_RRGGBB_LE || heifChroma == heif_chroma_interleaved_RRGGBBAA_LE || heifChroma == heif_chroma_interleaved_RRGGBB_BE || heifChroma == heif_chroma_interleaved_RRGGBB_BE) {
@@ -491,7 +474,6 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                                       stride,
                                       it,
                                       displayGamma,
-                                      displayNits,
                                       colorSpace);
         }
 

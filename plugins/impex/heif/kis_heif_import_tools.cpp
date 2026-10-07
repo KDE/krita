@@ -19,8 +19,7 @@ template<typename Arch,
                                    int> = 0>
 inline void linearize(float *pixelValues,
                       const double *lCoef,
-                      float displayGamma,
-                      float displayNits)
+                      float displayGamma)
 {
     using float_v = typename KoColorTransferFunctions<Arch>::float_v;
     if (linearizePolicy == LinearizePolicy::LinearFromPQ) {
@@ -40,7 +39,7 @@ inline void linearize(float *pixelValues,
     if (linearizePolicy == LinearizePolicy::KeepTheSame) {
         qSwap(pixelValues[0], pixelValues[2]);
     } else if (linearizePolicy == LinearizePolicy::LinearFromHLG && applyOOTF) {
-        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
+        applyHLGOOTF(pixelValues, lCoef, displayGamma);
     }
 }
 #endif
@@ -52,13 +51,12 @@ template<typename Arch,
                                    int> = 0>
 inline void linearize(float *pixelValues,
                       const double *lCoef,
-                      float displayGamma,
-                      float displayNits)
+                      float displayGamma)
 {
     if (linearizePolicy == LinearizePolicy::KeepTheSame) {
         qSwap(pixelValues[0], pixelValues[2]);
     } else if (linearizePolicy == LinearizePolicy::LinearFromHLG && applyOOTF) {
-        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
+        applyHLGOOTF(pixelValues, lCoef, displayGamma);
     }
 }
 
@@ -158,7 +156,6 @@ inline void readLayer(const int width,
                       const int strideA,
                       KisHLineIteratorSP it,
                       float displayGamma,
-                      float displayNits,
                       const KoColorSpace *colorSpace)
 {
     const QVector<qreal> lCoef{colorSpace->lumaCoefficients()};
@@ -177,8 +174,7 @@ inline void readLayer(const int width,
 
             linearize<Arch, linearizePolicy, applyOOTF>(data,
                                                         lCoef.constData(),
-                                                        displayGamma,
-                                                        displayNits);
+                                                        displayGamma);
 
             if (hasAlpha) {
                 data[3] =
@@ -269,7 +265,6 @@ void readLayerImpl::create(const int luma,
                            const int strideA,
                            KisHLineIteratorSP it,
                            float displayGamma,
-                           float displayNits,
                            const KoColorSpace *colorSpace)
 {
     if (luma == 8) {
@@ -288,7 +283,6 @@ void readLayerImpl::create(const int luma,
                                                                strideA,
                                                                it,
                                                                displayGamma,
-                                                               displayNits,
                                                                colorSpace);
     } else if (luma == 10) {
         return readPlanarLayerWithLuma<xsimd::current_arch, 10>(policy,
@@ -306,7 +300,6 @@ void readLayerImpl::create(const int luma,
                                                                 strideA,
                                                                 it,
                                                                 displayGamma,
-                                                                displayNits,
                                                                 colorSpace);
     } else if (luma == 12) {
         return readPlanarLayerWithLuma<xsimd::current_arch, 12>(policy,
@@ -324,7 +317,6 @@ void readLayerImpl::create(const int luma,
                                                                 strideA,
                                                                 it,
                                                                 displayGamma,
-                                                                displayNits,
                                                                 colorSpace);
     } else {
         return readPlanarLayerWithLuma<xsimd::current_arch, 16>(policy,
@@ -342,7 +334,6 @@ void readLayerImpl::create(const int luma,
                                                                 strideA,
                                                                 it,
                                                                 displayGamma,
-                                                                displayNits,
                                                                 colorSpace);
     }
 }
@@ -364,7 +355,6 @@ readLayerImpl::create<xsimd::current_arch>(const int luma,
                                            const int strideA,
                                            KisHLineIteratorSP it,
                                            float displayGamma,
-                                           float displayNits,
                                            const KoColorSpace *colorSpace);
 
 } // namespace Planar
@@ -379,8 +369,7 @@ template<typename Arch,
                                    int> = 0>
 inline void linearize(float *pixelValues,
                       const double *lCoef,
-                      float displayGamma,
-                      float displayNits)
+                      float displayGamma)
 {
     using float_v = typename KoColorTransferFunctions<Arch>::float_v;
     if (linearizePolicy == LinearizePolicy::LinearFromPQ) {
@@ -400,7 +389,7 @@ inline void linearize(float *pixelValues,
     if (linearizePolicy == LinearizePolicy::KeepTheSame) {
         qSwap(pixelValues[0], pixelValues[2]);
     } else if (linearizePolicy == LinearizePolicy::LinearFromHLG && applyOOTF) {
-        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
+        applyHLGOOTF(pixelValues, lCoef, displayGamma);
     }
 }
 #endif
@@ -412,13 +401,12 @@ template<typename Arch,
                                    int> = 0>
 inline void linearize(float *pixelValues,
                       const double *lCoef,
-                      float displayGamma,
-                      float displayNits)
+                      float displayGamma)
 {
     if (linearizePolicy == LinearizePolicy::KeepTheSame) {
         qSwap(pixelValues[0], pixelValues[2]);
     } else if (linearizePolicy == LinearizePolicy::LinearFromHLG && applyOOTF) {
-        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
+        applyHLGOOTF(pixelValues, lCoef, displayGamma);
     }
 }
 
@@ -515,7 +503,6 @@ inline void readLayer(const int width,
                       const int stride,
                       KisHLineIteratorSP it,
                       float displayGamma,
-                      float displayNits,
                       const KoColorSpace *colorSpace)
 {
     const QVector<qreal> lCoef{colorSpace->lumaCoefficients()};
@@ -563,8 +550,7 @@ inline void readLayer(const int width,
 
             linearize<Arch, linearizePolicy, applyOOTF>(data,
                                                         lCoef.constData(),
-                                                        displayGamma,
-                                                        displayNits);
+                                                        displayGamma);
 
             if (luma == 8) {
                 KoBgrU8Traits::fromNormalisedChannelsValue(it->rawData(),
@@ -641,7 +627,6 @@ void readLayerImpl::create(const int luma,
                            const int stride,
                            KisHLineIteratorSP it,
                            float displayGamma,
-                           float displayNits,
                            const KoColorSpace *colorSpace)
 {
     if (luma == 10) {
@@ -654,7 +639,6 @@ void readLayerImpl::create(const int luma,
                                                  stride,
                                                  it,
                                                  displayGamma,
-                                                 displayNits,
                                                  colorSpace);
     } else if (luma == 12) {
         return readInterleavedWithLuma<Arch, 12>(linearizePolicy,
@@ -666,7 +650,6 @@ void readLayerImpl::create(const int luma,
                                                  stride,
                                                  it,
                                                  displayGamma,
-                                                 displayNits,
                                                  colorSpace);
     } else {
         return readInterleavedWithLuma<Arch, 16>(linearizePolicy,
@@ -678,7 +661,6 @@ void readLayerImpl::create(const int luma,
                                                  stride,
                                                  it,
                                                  displayGamma,
-                                                 displayNits,
                                                  colorSpace);
     }
 }
@@ -694,7 +676,6 @@ readLayerImpl::create<xsimd::current_arch>(const int luma,
                                            const int stride,
                                            KisHLineIteratorSP it,
                                            float displayGamma,
-                                           float displayNits,
                                            const KoColorSpace *colorSpace);
 } // namespace HDR
 
@@ -708,8 +689,7 @@ template<typename Arch,
                                    int> = 0>
 inline void linearize(float *pixelValues,
                       const double *lCoef,
-                      float displayGamma,
-                      float displayNits)
+                      float displayGamma)
 {
     using float_v = typename KoColorTransferFunctions<Arch>::float_v;
     if (linearizePolicy == LinearizePolicy::LinearFromPQ) {
@@ -729,7 +709,7 @@ inline void linearize(float *pixelValues,
     if (linearizePolicy == LinearizePolicy::KeepTheSame) {
         qSwap(pixelValues[0], pixelValues[2]);
     } else if (linearizePolicy == LinearizePolicy::LinearFromHLG && applyOOTF) {
-        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
+        applyHLGOOTF(pixelValues, lCoef, displayGamma);
     }
 }
 #endif
@@ -741,13 +721,12 @@ template<typename Arch,
                                    int> = 0>
 inline void linearize(float *pixelValues,
                       const double *lCoef,
-                      float displayGamma,
-                      float displayNits)
+                      float displayGamma)
 {
     if (linearizePolicy == LinearizePolicy::KeepTheSame) {
         qSwap(pixelValues[0], pixelValues[2]);
     } else if (linearizePolicy == LinearizePolicy::LinearFromHLG && applyOOTF) {
-        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
+        applyHLGOOTF(pixelValues, lCoef, displayGamma);
     }
 }
 
@@ -816,7 +795,6 @@ inline void readLayer(const int width,
                       const int stride,
                       KisHLineIteratorSP it,
                       float displayGamma,
-                      float displayNits,
                       const KoColorSpace *colorSpace)
 {
     const QVector<qreal> lCoef{colorSpace->lumaCoefficients()};
@@ -849,8 +827,7 @@ inline void readLayer(const int width,
 
             linearize<Arch, linearizePolicy, applyOOTF>(data,
                                                         lCoef.constData(),
-                                                        displayGamma,
-                                                        displayNits);
+                                                        displayGamma);
 
             KoBgrU8Traits::fromNormalisedChannelsValue(it->rawData(),
                                                        pixelValues);
@@ -899,7 +876,6 @@ void readLayerImpl::create(LinearizePolicy linearizePolicy,
                            const int stride,
                            KisHLineIteratorSP it,
                            float displayGamma,
-                           float displayNits,
                            const KoColorSpace *colorSpace)
 {
     if (linearizePolicy == LinearizePolicy::LinearFromHLG) {
@@ -911,7 +887,6 @@ void readLayerImpl::create(LinearizePolicy linearizePolicy,
                                                                                stride,
                                                                                it,
                                                                                displayGamma,
-                                                                               displayNits,
                                                                                colorSpace);
     } else if (linearizePolicy == LinearizePolicy::LinearFromPQ) {
         return readInterleavedWithPolicy<Arch, LinearizePolicy::LinearFromPQ>(applyOOTF,
@@ -922,7 +897,6 @@ void readLayerImpl::create(LinearizePolicy linearizePolicy,
                                                                               stride,
                                                                               it,
                                                                               displayGamma,
-                                                                              displayNits,
                                                                               colorSpace);
     } else if (linearizePolicy == LinearizePolicy::LinearFromSMPTE428) {
         return readInterleavedWithPolicy<Arch, LinearizePolicy::LinearFromSMPTE428>(applyOOTF,
@@ -933,7 +907,6 @@ void readLayerImpl::create(LinearizePolicy linearizePolicy,
                                                                                     stride,
                                                                                     it,
                                                                                     displayGamma,
-                                                                                    displayNits,
                                                                                     colorSpace);
     } else {
         return readInterleavedWithPolicy<Arch, LinearizePolicy::KeepTheSame>(applyOOTF,
@@ -944,7 +917,6 @@ void readLayerImpl::create(LinearizePolicy linearizePolicy,
                                                                              stride,
                                                                              it,
                                                                              displayGamma,
-                                                                             displayNits,
                                                                              colorSpace);
     }
 }
@@ -959,7 +931,6 @@ readLayerImpl::create<xsimd::current_arch>(LinearizePolicy linearizePolicy,
                                            const int stride,
                                            KisHLineIteratorSP it,
                                            float displayGamma,
-                                           float displayNits,
                                            const KoColorSpace *colorSpace);
 } // namespace SDR
 

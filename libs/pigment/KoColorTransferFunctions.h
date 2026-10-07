@@ -74,8 +74,7 @@ ALWAYS_INLINE float HLGOOTFGamma(float nominalPeak) noexcept
 // we're always converting from PQ to HLG.
 ALWAYS_INLINE void applyHLGOOTF(float *rgb,
                                 const double *lumaCoefficients,
-                                float gamma = 1.2f,
-                                float nominalPeak = 1000.0f) noexcept
+                                float gamma = 1.2f) noexcept
 {
     const float luma = (rgb[0] * static_cast<float>(lumaCoefficients[0]))
         + (rgb[1] * static_cast<float>(lumaCoefficients[1]))
@@ -91,8 +90,7 @@ ALWAYS_INLINE void applyHLGOOTF(float *rgb,
 // we're always converting from HLG to PQ.
 ALWAYS_INLINE void removeHLGOOTF(float *rgb,
                                  const double *lumaCoefficients,
-                                 float gamma = 1.2f,
-                                 float nominalPeak = 1000.0f) noexcept
+                                 float gamma = 1.2f) noexcept
 {
     const float luma = (rgb[0] * static_cast<float>(lumaCoefficients[0]))
         + (rgb[1] * static_cast<float>(lumaCoefficients[1]))

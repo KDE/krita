@@ -73,7 +73,7 @@ set(kritaui_LIB_SRCS
     dialogs/KisRecoverNamedAutosaveDialog.cpp
     dialogs/KisDlgSavePreset.cpp
     dialogs/kis_dlg_missing_color_profile.cpp
-    dialogs/kis_dlg_hlg_import.cpp
+
     dialogs/KisDlgConfigureCumulativeUndo.cpp
     dialogs/KisCumulativeUndoModel.cpp
     dialogs/KisColorSpaceConversionDialog.cpp
@@ -649,7 +649,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
     widgets/KisDlgListPicker.ui
     dialogs/kis_delayed_save_dialog.ui
-    dialogs/kis_dlg_hlg_import.ui
     dialogs/KisRecoverNamedAutosaveDialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui

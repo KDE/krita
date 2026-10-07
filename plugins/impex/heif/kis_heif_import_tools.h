@@ -150,7 +150,6 @@ struct readLayerImpl {
                        const int stride,
                        KisHLineIteratorSP it,
                        float displayGamma,
-                       float displayNits,
                        const KoColorSpace *colorSpace);
 };
 } // namespace SDR
@@ -175,7 +174,6 @@ struct readLayerImpl {
                        const int strideA,
                        KisHLineIteratorSP it,
                        float displayGamma,
-                       float displayNits,
                        const KoColorSpace *colorSpace);
 };
 } // namespace Planar
@@ -194,7 +192,6 @@ struct readLayerImpl {
                        const int stride,
                        KisHLineIteratorSP it,
                        float displayGamma,
-                       float displayNits,
                        const KoColorSpace *colorSpace);
 };
 } // namespace HDR

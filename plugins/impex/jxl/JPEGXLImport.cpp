@@ -29,7 +29,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorTransferFunctions.h>
 #include <KoConfig.h>
-#include <dialogs/kis_dlg_hlg_import.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <filter/kis_filter_registry.h>
@@ -66,9 +65,8 @@ public:
     KoID m_depthID_target;
     KoColorConversionTransformation::Intent m_intent;
     bool isCMYK = false;
-    bool applyOOTF = true;
+    bool applyOOTF = false;
     float displayGamma = 1.2f;
-    float displayNits = 1000.0;
     LinearizePolicy linearizePolicy = LinearizePolicy::KeepTheSame;
     const KoColorSpace *cs = nullptr;
     const KoColorSpace *cs_target = nullptr;
@@ -144,7 +142,7 @@ inline void imageOutCallback(JPEGXLImportData &d)
                 }
 
                 if (policy == LinearizePolicy::LinearFromHLG && applyOOTF) {
-                    applyHLGOOTF(tmp, lCoef, d.displayGamma, d.displayNits);
+                    applyHLGOOTF(tmp, lCoef, d.displayGamma);
                 }
 
                 cs->fromNormalisedChannelsValue(it->rawData(), pixelValues);
@@ -559,13 +557,6 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     }
                     case JXL_TRANSFER_FUNCTION_HLG: {
                         dbgFile << "linearizing from HLG";
-                        if (!document->fileBatchMode()) {
-                            KisDlgHLGImport dlg(d.applyOOTF, d.displayGamma, d.displayNits);
-                            dlg.exec();
-                            d.applyOOTF = dlg.applyOOTF();
-                            d.displayGamma = dlg.gamma();
-                            d.displayNits = dlg.nominalPeakBrightness();
-                        }
                         d.linearizePolicy = LinearizePolicy::LinearFromHLG;
                         return TRC_LINEAR;
                     }

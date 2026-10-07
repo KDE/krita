@@ -1,3 +1,4 @@
+
 /*
  *  SPDX-FileCopyrightText: 2021 the JPEG XL Project Authors
  *  SPDX-License-Identifier: BSD-3-Clause
@@ -132,8 +133,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
     }
 
     const float hlgGamma = cfg->getFloat("HLGgamma", 1.2f);
-    const float hlgNominalPeak = cfg->getFloat("HLGnominalPeak", 1000.0f);
-    const bool removeHGLOOTF = cfg->getBool("removeHGLOOTF", true);
+    const bool removeHGLOOTF = false;
 
     const bool hasPrimaries = cs->profile()->hasColorants();
     const TransferCharacteristics gamma = cs->profile()->getTransferCharacteristics();
@@ -742,7 +742,6 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                                                bounds.height(),
                                                it,
                                                hlgGamma,
-                                               hlgNominalPeak,
                                                cs);
                     }
                 }();
@@ -886,7 +885,6 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                                                layerBounds.height(),
                                                it,
                                                hlgGamma,
-                                               hlgNominalPeak,
                                                cs);
                     }
                 }();
@@ -1120,9 +1118,8 @@ KisPropertiesConfigurationSP JPEGXLExport::defaultConfiguration(const QByteArray
 
     cfg->setProperty("forceCicpLossless", false);
     cfg->setProperty("floatingPointConversionOption", "KeepSame");
-    cfg->setProperty("HLGnominalPeak", 1000.0);
     cfg->setProperty("HLGgamma", 1.2);
-    cfg->setProperty("removeHGLOOTF", true);
+    cfg->setProperty("removeHGLOOTF", false);
 
     cfg->setProperty("resampling", -1);
     cfg->setProperty("extraChannelResampling", -1);

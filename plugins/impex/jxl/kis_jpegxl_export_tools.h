@@ -166,7 +166,6 @@ inline QByteArray writeLayer(const int width,
                              const int height,
                              KisHLineConstIteratorSP it,
                              float hlgGamma,
-                             float hlgNominalPeak,
                              const KoColorSpace *cs)
 {
     const int channels = static_cast<int>(CSTrait::channels_nb);
@@ -196,7 +195,7 @@ inline QByteArray writeLayer(const int width,
             }
 
             if (conversionPolicy == ConversionPolicy::ApplyHLG && removeOOTF) {
-                removeHLGOOTF(dst, lCoef.constData(), hlgGamma, hlgNominalPeak);
+                removeHLGOOTF(dst, lCoef.constData(), hlgGamma);
             }
 
             for (int ch = 0; ch < channels; ch++) {
@@ -230,11 +229,9 @@ inline QByteArray writeLayerNoConversion(const int width,
                                          const int height,
                                          KisHLineConstIteratorSP it,
                                          float hlgGamma,
-                                         float hlgNominalPeak,
                                          const KoColorSpace *cs)
 {
     Q_UNUSED(hlgGamma);
-    Q_UNUSED(hlgNominalPeak);
     Q_UNUSED(cs);
 
     const int channels = static_cast<int>(CSTrait::channels_nb);

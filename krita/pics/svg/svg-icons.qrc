@@ -543,5 +543,15 @@
         <file>light_isolate-group.svg</file>
         <file>light_isolate-layer.svg</file>
         <file>dark_isolate-layer.svg</file>
+        <file>dark_brush-option-slider-1.svg</file>
+        <file>dark_brush-option-slider-2.svg</file>
+        <file>dark_brush-option-slider-3.svg</file>
+        <file>dark_brush-option-slider-4.svg</file>
+        <file>dark_brush-option-slider-5.svg</file>
+        <file>light_brush-option-slider-1.svg</file>
+        <file>light_brush-option-slider-2.svg</file>
+        <file>light_brush-option-slider-3.svg</file>
+        <file>light_brush-option-slider-4.svg</file>
+        <file>light_brush-option-slider-5.svg</file>
     </qresource>
 </RCC>

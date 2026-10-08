@@ -1,0 +1,40 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+
+<path d="M5 11H1V13H5V11ZM8 13H15V11H8V13Z" fill="#373737"/>
+<path d="M6.5 10C7.60457 10 8.5 10.8954 8.5 12C8.5 13.1046 7.60457 14 6.5 14C5.39543 14 4.5 13.1046 4.5 12C4.5 10.8954 5.39543 10 6.5 10Z" stroke="#373737"/>
+<path d="M15.978 0V1.69824C15.6204 2.23853 14.278 3.80513 13.5894 4.41211C13.3877 3.97768 13.079 3.60234 12.6665 3.33496C12.4562 3.19873 12.2291 3.09879 11.9917 3.03027C12.4056 2.17462 13.4689 0.365139 13.9321 0H15.978Z" fill="#373737"/>
+<path d="M10.783 3.973C9.7165 4.20425 9.313 5.1635 9.343 5.892C9.375 6.678 8.5305 7.3005 8 7.40825C8.72125 7.98075 9.7765 8.0665 10.73 7.87275C12.1255 7.5895 13.0758 6.50125 12.8218 5.25025C12.6308 4.31025 11.8285 3.7465 10.783 3.973Z" fill="#373737"/>
+<path d="M2.66721 5.85783L1 7L1 8H6L6 7L3 7L4.73675 5.67338C4.92678 5.5651 5.10564 5.4299 5.26777 5.26777C6.24408 4.29146 6.24408 2.70854 5.26777 1.73223C4.29146 0.755922 2.70854 0.755922 1.73223 1.73223C1.24408 2.22039 1 2.86019 1 3.5H2C2 3.11612 2.14645 2.73223 2.43934 2.43934C3.02513 1.85355 3.97487 1.85355 4.56066 2.43934C5.14645 3.02513 5.14645 3.97487 4.56066 4.56066L2.66721 5.85783Z" fill="#373737"/>
+</svg>

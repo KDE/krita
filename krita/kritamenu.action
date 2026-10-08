@@ -2023,7 +2023,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="brushslider1">
-      <icon></icon>
+      <icon>brush-option-slider-1</icon>
       <text>Brush option slider 1</text>
       <whatsThis></whatsThis>
       <toolTip>Brush option slider 1</toolTip>
@@ -2033,7 +2033,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="brushslider2">
-      <icon></icon>
+      <icon>brush-option-slider-2</icon>
       <text>Brush option slider 2</text>
       <whatsThis></whatsThis>
       <toolTip>Brush option slider 2</toolTip>
@@ -2043,7 +2043,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="brushslider3">
-      <icon></icon>
+      <icon>brush-option-slider-3</icon>
       <text>Brush option slider 3</text>
       <whatsThis></whatsThis>
       <toolTip>Brush option slider 3</toolTip>
@@ -2053,7 +2053,7 @@
       <statusTip></statusTip>
     </Action>
 	<Action name="brushslider4">
-      <icon></icon>
+      <icon>brush-option-slider-4</icon>
       <text>Brush option slider 4</text>
       <whatsThis></whatsThis>
       <toolTip>Brush option slider 4</toolTip>
@@ -2063,7 +2063,7 @@
       <statusTip></statusTip>
     </Action>
 	<Action name="brushslider5">
-      <icon></icon>
+      <icon>brush-option-slider-5</icon>
       <text>Brush option slider 5</text>
       <whatsThis></whatsThis>
       <toolTip>Brush option slider 5</toolTip>

@@ -1,0 +1,41 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+
+<path d="M6.5 11H1V13H6.5V11ZM9.5 13H15V11H9.5V13Z" fill="#373737"/>
+<path d="M8 10C9.10457 10 10 10.8954 10 12C10 13.1046 9.10457 14 8 14C6.89543 14 6 13.1046 6 12C6 10.8954 6.89543 10 8 10Z" stroke="#373737"/>
+<path d="M15.978 0V1.69824C15.6204 2.23853 14.278 3.80513 13.5894 4.41211C13.3877 3.97768 13.079 3.60234 12.6665 3.33496C12.4562 3.19873 12.2291 3.09879 11.9917 3.03027C12.4056 2.17462 13.4689 0.365139 13.9321 0H15.978Z" fill="#373737"/>
+<path d="M10.783 3.973C9.7165 4.20425 9.313 5.1635 9.343 5.892C9.375 6.678 8.5305 7.3005 8 7.40825C8.72125 7.98075 9.7765 8.0665 10.73 7.87275C12.1255 7.5895 13.0758 6.50125 12.8218 5.25025C12.6308 4.31025 11.8285 3.7465 10.783 3.973Z" fill="#373737"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 4H4V3.05001C4.1739 3.08531 4.34125 3.13866 4.5 3.20802C5.38295 3.5938 6 4.47484 6 5.5C6 6.88071 4.88071 8 3.5 8C2.11929 8 1 6.88071 1 5.5H2C2 6.32843 2.67157 7 3.5 7C4.32843 7 5 6.32843 5 5.5C5 4.67157 4.32843 4 3.5 4Z" fill="#373737"/>
+<path d="M1 1V2H4L2.5 3V4H3.5H4V3.05001C4.1739 3.08531 4.34125 3.13866 4.5 3.20802V3L6 2V1H1Z" fill="#373737"/>
+</svg>

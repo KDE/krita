@@ -339,7 +339,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
 
     if (shouldResetWheelDelta(event)) {
-        d->accumulatedScrollDelta = 0;
+        d->accumulatedScrollDelta = {};
     }
 
     if (event->type() == QEvent::MouseMove ||
@@ -532,8 +532,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
 #endif
 
-        d->accumulatedScrollDelta += wheelEvent->angleDelta().y();
-        KisSingleActionShortcut::WheelAction action;
+        d->accumulatedScrollDelta += wheelEvent->angleDelta();
 
         /**
          * Ignore delta 0 events on OSX, since they are triggered by tablet
@@ -546,32 +545,44 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
 #endif
 
-        if (wheelEvent->angleDelta().x() < 0) {
-            action = KisSingleActionShortcut::WheelRight;
-        } else if (wheelEvent->angleDelta().x() >0) {
-            action = KisSingleActionShortcut::WheelLeft;
-        }
-
-        if (wheelEvent->angleDelta().y() < 0) {
-            action = KisSingleActionShortcut::WheelDown;
-        } else if (wheelEvent->angleDelta().y() > 0) {
-            action = KisSingleActionShortcut::WheelUp;
-        }
-
         bool wasScrolled = false;
 
-        while (qAbs(d->accumulatedScrollDelta) >= QWheelEvent::DefaultDeltasPerStep) {
-            //Make sure the input actions know we are active.
-            KisAbstractInputAction::setInputManager(this);
-            retval = d->matcher.wheelEvent(action, wheelEvent);
-            d->accumulatedScrollDelta -=
-                KisAlgebra2D::signPZ(d->accumulatedScrollDelta) *
-                QWheelEvent::DefaultDeltasPerStep;
-            wasScrolled = true;
+        {
+            KisSingleActionShortcut::WheelAction yAction;
+
+            if (wheelEvent->angleDelta().y() < 0) {
+                yAction = KisSingleActionShortcut::WheelDown;
+            } else if (wheelEvent->angleDelta().y() > 0) {
+                yAction = KisSingleActionShortcut::WheelUp;
+            }
+
+            while (qAbs(d->accumulatedScrollDelta.y()) >= QWheelEvent::DefaultDeltasPerStep) {
+                // Make sure the input actions know we are active.
+                KisAbstractInputAction::setInputManager(this);
+                retval = d->matcher.wheelEvent(yAction, wheelEvent);
+                d->accumulatedScrollDelta.ry() -=
+                    KisAlgebra2D::signPZ(d->accumulatedScrollDelta.y()) * QWheelEvent::DefaultDeltasPerStep;
+                wasScrolled = true;
+            }
         }
 
-        if (wasScrolled) {
-            d->accumulatedScrollDelta = 0;
+        {
+            KisSingleActionShortcut::WheelAction xAction;
+
+            if (wheelEvent->angleDelta().x() < 0) {
+                xAction = KisSingleActionShortcut::WheelRight;
+            } else if (wheelEvent->angleDelta().x() > 0) {
+                xAction = KisSingleActionShortcut::WheelLeft;
+            }
+
+            while (qAbs(d->accumulatedScrollDelta.x()) >= QWheelEvent::DefaultDeltasPerStep) {
+                // Make sure the input actions know we are active.
+                KisAbstractInputAction::setInputManager(this);
+                retval = d->matcher.wheelEvent(xAction, wheelEvent);
+                d->accumulatedScrollDelta.rx() -=
+                    KisAlgebra2D::signPZ(d->accumulatedScrollDelta.x()) * QWheelEvent::DefaultDeltasPerStep;
+                wasScrolled = true;
+            }
         }
 
         retval = !wasScrolled;

@@ -69,6 +69,8 @@ private Q_SLOTS:
      */
     void slotRecentFilesModelIsUpToDate();
 
+    void recentFilesResized();
+
     void slotScrollerStateChanged(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 
 #ifdef ENABLE_UPDATERS

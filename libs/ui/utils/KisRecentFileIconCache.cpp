@@ -103,7 +103,7 @@ QIcon KisRecentFileIconCache::getOrQueueFileIcon(const QUrl &url)
             // We don't fetch thumbnails for non-local files.
             return QIcon();
         }
-        constexpr QSize iconSize(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH, KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH);
+        constexpr QSize iconSize(KisRecentDocumentsModelWrapper::MAX_ICON_SIZE_LENGTH, KisRecentDocumentsModelWrapper::MAX_ICON_SIZE_LENGTH);
         const GetFileIconParameters param = {
             url, // m_documentUrl
             iconSize, // m_iconSize

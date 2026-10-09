@@ -140,11 +140,6 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     recentDocumentsListView->installEventFilter(this);
     recentDocumentsListView->setViewMode(QListView::IconMode);
     recentDocumentsListView->setSelectionMode(QAbstractItemView::NoSelection);
-
-//    m_recentItemDelegate.reset(new RecentItemDelegate(this));
-//    m_recentItemDelegate->setItemHeight(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH);
-//    recentDocumentsListView->setItemDelegate(m_recentItemDelegate.data());
-    recentDocumentsListView->setIconSize(QSize(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH, KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH));
     recentDocumentsListView->setVerticalScrollMode(QListView::ScrollPerPixel);
     recentDocumentsListView->verticalScrollBar()->setSingleStep(50);
     {
@@ -155,6 +150,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     }
     recentDocumentsListView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(recentDocumentsListView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRecentDocContextMenuRequest(QPoint)));
+    recentFilesResized();
 
     // News widget...
     QMenu *newsOptionsMenu = new QMenu(this);
@@ -477,6 +473,8 @@ bool KisWelcomePageWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == recentDocumentsListView && event->type() == QEvent::Leave) {
         recentDocumentsListView->clearSelection();
+    }else if (watched == recentDocumentsListView && event->type() == QEvent::Resize) {
+        recentFilesResized();
     }
     return QWidget::eventFilter(watched, event);
 }
@@ -1006,4 +1004,18 @@ QFont KisWelcomePageWidget::largerFont()
         larger.setPixelSize(qRound(larger.pixelSize() * ratio));
     }
     return larger;
+}
+
+void KisWelcomePageWidget::recentFilesResized()
+{
+    int scrollSize = qApp->style()->pixelMetric(QStyle::PM_SliderThickness);
+    int spacing = 8;
+
+    int iconLength = KisRecentDocumentsModelWrapper::DEFALT_ICON_SIZE_LENGTH + spacing;
+
+    int currentSize = recentDocumentsListView->size().width()-scrollSize-2;
+    int iconAmount = floor(currentSize/iconLength);
+    int length = floor(currentSize / iconAmount)-spacing;
+
+    recentDocumentsListView->setIconSize(QSize(length,length));
 }

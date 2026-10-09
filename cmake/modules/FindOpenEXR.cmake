@@ -198,7 +198,6 @@ else()
       # find_package_handle_standard_args reports the value of the first variable
       # on success, so make sure this is the actual OpenEXR library
       find_package_handle_standard_args(OpenEXR
-         FOUND_VAR OpenEXR_FOUND
          REQUIRED_VARS
             OpenEXR_ILMIMF_LIBRARY
             OpenEXR_HALF_LIBRARY
@@ -349,7 +348,6 @@ else()
       # find_package_handle_standard_args reports the value of the first variable
       # on success, so make sure this is the actual OpenEXR library
       find_package_handle_standard_args(OpenEXR
-         FOUND_VAR OpenEXR_FOUND
          REQUIRED_VARS
             Imath_LIBRARY
             OpenEXR_IEX_LIBRARY

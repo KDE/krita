@@ -151,7 +151,6 @@ endif ()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(HarfBuzz
-    FOUND_VAR HarfBuzz_FOUND
     REQUIRED_VARS HarfBuzz_INCLUDE_DIR HarfBuzz_LIBRARY _HarfBuzz_REQUIRED_LIBS_FOUND
     VERSION_VAR HarfBuzz_VERSION
 )

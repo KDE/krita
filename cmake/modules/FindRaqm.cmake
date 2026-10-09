@@ -73,7 +73,6 @@ else()
 endif()
 
 find_package_handle_standard_args(Raqm
-    FOUND_VAR Raqm_FOUND
     REQUIRED_VARS Raqm_INCLUDE_DIR Raqm_LIBRARY
     HANDLE_COMPONENTS
     VERSION_VAR Raqm_VERSION

@@ -114,7 +114,6 @@ if(WebP_FOUND)
     endif ()
 
     find_package_handle_standard_args(WebP 
-        FOUND_VAR WebP_FOUND
         HANDLE_COMPONENTS
         CONFIG_MODE
     )
@@ -217,7 +216,6 @@ if ("sharpyuv" IN_LIST WebP_FIND_COMPONENTS OR WebP_webp_FOUND)
 endif ()
 
 find_package_handle_standard_args(WebP
-    FOUND_VAR WebP_FOUND
     REQUIRED_VARS WebP_INCLUDE_DIR WebP_LIBRARY
     HANDLE_COMPONENTS
     VERSION_VAR WebP_VERSION

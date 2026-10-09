@@ -77,7 +77,6 @@ else()
 endif()
 
 find_package_handle_standard_args(FriBidi
-    FOUND_VAR FriBidi_FOUND
     REQUIRED_VARS FriBidi_INCLUDE_DIR FriBidi_LIBRARY
     HANDLE_COMPONENTS
     VERSION_VAR FriBidi_VERSION

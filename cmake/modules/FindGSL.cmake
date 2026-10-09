@@ -153,8 +153,6 @@ endif()
 # handle the QUIETLY and REQUIRED arguments and set GSL_FOUND to TRUE if all
 # listed variables are TRUE
 find_package_handle_standard_args( GSL
-  FOUND_VAR
-    GSL_FOUND
   REQUIRED_VARS
     GSL_INCLUDE_DIR
     GSL_LIBRARY

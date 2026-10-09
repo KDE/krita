@@ -70,7 +70,6 @@ if(libheif_FOUND)
     get_target_property(HEIF_INCLUDE_DIRS HEIF::heif INTERFACE_INCLUDE_DIRECTORIES)
 
     find_package_handle_standard_args(HEIF 
-        FOUND_VAR HEIF_FOUND
         REQUIRED_VARS HEIF_INCLUDE_DIRS HEIF_LIBRARIES
         VERSION_VAR HEIF_VERSION
         NAME_MISMATCHED
@@ -118,7 +117,6 @@ else()
 endif()
 
 find_package_handle_standard_args(HEIF
-    FOUND_VAR HEIF_FOUND
     REQUIRED_VARS HEIF_INCLUDE_DIR HEIF_LIBRARY
     HANDLE_COMPONENTS
     VERSION_VAR HEIF_VERSION

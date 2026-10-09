@@ -60,7 +60,6 @@ if(libmypaint_FOUND)
     set(LibMyPaint_VERSION "${libmypaint_VERSION}")
 
     find_package_handle_standard_args(LibMyPaint
-        FOUND_VAR LibMyPaint_FOUND
         REQUIRED_VARS LibMyPaint_INCLUDE_DIRS LibMyPaint_LIBRARIES
         VERSION_VAR LibMyPaint_VERSION
         NAME_MISMATCHED
@@ -110,7 +109,6 @@ else()
 endif()
 
 find_package_handle_standard_args(LibMyPaint
-    FOUND_VAR LibMyPaint_FOUND
     REQUIRED_VARS LibMyPaint_INCLUDE_DIR LibMyPaint_LIBRARY
     HANDLE_COMPONENTS
     VERSION_VAR LibMyPaint_VERSION

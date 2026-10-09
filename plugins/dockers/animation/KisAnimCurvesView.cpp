@@ -122,15 +122,22 @@ KisAnimCurvesView::KisAnimCurvesView(QWidget *parent)
         viewport()->update();
     });
 
-    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
-    if (scroller){
-        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
-                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    // Kinetic scrolling via left-click completely breaks everything, it somehow
+    // ends up reporting left clicks as right clicks and makes the whole curves
+    // view behave erratically with regards to when it wants to scroll and when
+    // you're dragging pints. So we don't enable kinetic scrolling in that case
+    // and require the use of the scrollbar instead, like on the timeline.
+    if (KisKineticScroller::getConfiguredGestureType() != QScroller::LeftMouseButtonGesture) {
+        QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+        if (scroller){
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                    this, SLOT(slotScrollerStateChanged(QScroller::State)));
 
-        QScrollerProperties props = scroller->scrollerProperties();
-        props.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
-        props.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
-        scroller->setScrollerProperties(props);
+            QScrollerProperties props = scroller->scrollerProperties();
+            props.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+            props.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+            scroller->setScrollerProperties(props);
+        }
     }
 }
 

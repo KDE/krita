@@ -76,7 +76,6 @@ endif()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(LibExiv2
-    FOUND_VAR LibExiv2_FOUND
     REQUIRED_VARS  LibExiv2_LIBRARIES LibExiv2_INCLUDE_DIRS
     VERSION_VAR  LibExiv2_VERSION
 )

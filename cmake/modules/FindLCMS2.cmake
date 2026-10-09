@@ -64,7 +64,6 @@ endif()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(LCMS2
-  FOUND_VAR LCMS2_FOUND
   REQUIRED_VARS
     LCMS2_LIBRARY
     LCMS2_INCLUDE_DIR

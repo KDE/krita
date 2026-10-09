@@ -165,7 +165,6 @@ if(FFTW3_FOUND)
     # endif ()
 
     # find_package_handle_standard_args(FFTW3 
-    #     FOUND_VAR FFTW3_FOUND
     #     HANDLE_COMPONENTS
     #     CONFIG_MODE
     # )
@@ -405,7 +404,6 @@ if ("fftw3q_threads" IN_LIST FFTW3_FIND_COMPONENTS)
 endif ()
 
 find_package_handle_standard_args(FFTW3
-    FOUND_VAR FFTW3_FOUND
     REQUIRED_VARS FFTW3_INCLUDE_DIR FFTW3_LIBRARY
     HANDLE_COMPONENTS
     VERSION_VAR FFTW3_VERSION

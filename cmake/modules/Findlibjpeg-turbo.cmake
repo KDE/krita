@@ -79,7 +79,6 @@ if(libjpeg-turbo_FOUND)
     endif()
 
     find_package_handle_standard_args(libjpeg-turbo
-        FOUND_VAR libjpeg-turbo_FOUND
         HANDLE_COMPONENTS
         CONFIG_MODE
     )
@@ -160,7 +159,6 @@ if("jpeg_static" IN_LIST libjpeg-turbo_FIND_COMPONENTS)
 endif()
 
 find_package_handle_standard_args(libjpeg-turbo
-    FOUND_VAR libjpeg-turbo_FOUND
     REQUIRED_VARS libjpeg-turbo_INCLUDE_DIR libjpeg-turbo_LIBRARY
     HANDLE_COMPONENTS
     VERSION_VAR libjpeg-turbo_VERSION

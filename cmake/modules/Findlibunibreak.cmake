@@ -73,7 +73,6 @@ else()
 endif()
 
 find_package_handle_standard_args(libunibreak
-    FOUND_VAR libunibreak_FOUND
     REQUIRED_VARS libunibreak_INCLUDE_DIR libunibreak_LIBRARY
     HANDLE_COMPONENTS
     VERSION_VAR libunibreak_VERSION

@@ -79,7 +79,6 @@ find_library(JPEGXL_THREADS_LIBRARY
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(JPEGXL
-    FOUND_VAR JPEGXL_FOUND
     REQUIRED_VARS JPEGXL_LIBRARY JPEGXL_INCLUDE_DIR
     VERSION_VAR JPEGXL_VERSION
 )

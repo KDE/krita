@@ -121,7 +121,6 @@ if(OPENJPEG_FOUND)
     set(OpenJPEG_INCLUDE_DIRS "${OPENJPEG_INCLUDE_DIRS}")
 
     find_package_handle_standard_args(OpenJPEG 
-        FOUND_VAR OpenJPEG_FOUND
         REQUIRED_VARS OpenJPEG_INCLUDE_DIRS OpenJPEG_LIBRARIES
         HANDLE_COMPONENTS
         VERSION_VAR OpenJPEG_VERSION
@@ -193,7 +192,6 @@ if ("openjpip_server" IN_LIST OpenJPEG_FIND_COMPONENTS)
 endif ()
 
 find_package_handle_standard_args(OpenJPEG
-    FOUND_VAR OpenJPEG_FOUND
     REQUIRED_VARS OpenJPEG_INCLUDE_DIR OpenJPEG_LIBRARY
     HANDLE_COMPONENTS
     VERSION_VAR OpenJPEG_VERSION

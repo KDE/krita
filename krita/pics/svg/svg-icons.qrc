@@ -651,5 +651,25 @@
         <file>light_wrap-both.svg</file>
         <file>light_wrap-horizontally.svg</file>
         <file>light_wrap-vertically.svg</file>
+        <file>dark_column-insert-hold.svg</file>
+        <file>dark_column-insert-hold-multiple.svg</file>
+        <file>dark_column-insert-left.svg</file>
+        <file>dark_column-insert-multiple.svg</file>
+        <file>dark_column-insert-right.svg</file>
+        <file>dark_column-mirror.svg</file>
+        <file>dark_column-remove.svg</file>
+        <file>dark_column-remove-and-pull.svg</file>
+        <file>dark_column-remove-hold.svg</file>
+        <file>dark_column-remove-hold-multiple.svg</file>
+        <file>light_column-insert-hold.svg</file>
+        <file>light_column-insert-hold-multiple.svg</file>
+        <file>light_column-insert-left.svg</file>
+        <file>light_column-insert-multiple.svg</file>
+        <file>light_column-insert-right.svg</file>
+        <file>light_column-mirror.svg</file>
+        <file>light_column-remove.svg</file>
+        <file>light_column-remove-and-pull.svg</file>
+        <file>light_column-remove-hold-.svg</file>
+        <file>light_column-remove-hold-multiple.svg</file>
     </qresource>
 </RCC>

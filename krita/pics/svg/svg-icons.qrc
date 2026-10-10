@@ -645,5 +645,11 @@
         <file>light_remove-frame-16.svg</file>
         <file>dark_duplicate-frame-16.svg</file>
         <file>dark_remove-frame-16.svg</file>
+        <file>dark_wrap-both.svg</file>
+        <file>dark_wrap-horizontally.svg</file>
+        <file>dark_wrap-vertically.svg</file>
+        <file>light_wrap-both.svg</file>
+        <file>light_wrap-horizontally.svg</file>
+        <file>light_wrap-vertically.svg</file>
     </qresource>
 </RCC>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-18 02:39+0000\n"
+"POT-Creation-Date: 2026-10-10 03:17+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -44375,7 +44375,7 @@ msgid "Insert keyframe"
 msgstr "Матнни қўйиш"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:249
-#: plugins/dockers/animation/KisAnimCurvesView.cpp:723
+#: plugins/dockers/animation/KisAnimCurvesView.cpp:730
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust tangent"
@@ -44383,11 +44383,11 @@ msgstr "Энига мослаш"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:258
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:270
-#: plugins/dockers/animation/KisAnimCurvesView.cpp:870
-#: plugins/dockers/animation/KisAnimCurvesView.cpp:879
-#: plugins/dockers/animation/KisAnimCurvesView.cpp:888
-#: plugins/dockers/animation/KisAnimCurvesView.cpp:897
-#: plugins/dockers/animation/KisAnimCurvesView.cpp:925
+#: plugins/dockers/animation/KisAnimCurvesView.cpp:877
+#: plugins/dockers/animation/KisAnimCurvesView.cpp:886
+#: plugins/dockers/animation/KisAnimCurvesView.cpp:895
+#: plugins/dockers/animation/KisAnimCurvesView.cpp:904
+#: plugins/dockers/animation/KisAnimCurvesView.cpp:932
 #, fuzzy
 #| msgid "Section Title"
 msgctxt "(qtundo-format)"

@@ -2024,7 +2024,7 @@
       <statusTip/>
     </Action>
     <Action name="add_blank_frame">
-      <icon>addblankframe</icon>
+      <icon>addblankframe-16</icon>
       <text>Create Blank Frame</text>
       <whatsThis/>
       <toolTip>Add blank frame</toolTip>
@@ -2036,7 +2036,7 @@
       <statusTip/>
     </Action>
     <Action name="add_duplicate_frame">
-      <icon>addduplicateframe</icon>
+      <icon>duplicate-frame-16</icon>
       <text>Create Duplicate Frame</text>
       <whatsThis/>
       <toolTip>Add duplicate frame</toolTip>
@@ -2163,7 +2163,7 @@
       <statusTip/>
     </Action>
     <Action name="remove_frames">
-      <icon>deletekeyframe</icon>
+      <icon>remove-frame-16</icon>
       <text>Remove Keyframe</text>
       <whatsThis/>
       <toolTip>Remove keyframes without moving anything around</toolTip>

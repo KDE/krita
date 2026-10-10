@@ -665,16 +665,22 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
     KisAnimTimelineDockerTitlebar* titleBar = static_cast<KisAnimTimelineDockerTitlebar*>(titleBarWidget());
 
     action = actionManager->actionByName("add_blank_frame");
-    titleBar->btnAddKeyframe->setDefaultAction(action);
+    titleBar->btnAddKeyframe->setIcon(KisIconUtils::loadIcon("addblankframe"));
     titleBar->btnAddKeyframe->setIconSize(QSize(22, 22));
+    titleBar->btnAddKeyframe->setToolTip(action->toolTip());
+    QObject::connect(titleBar->btnAddKeyframe, SIGNAL(released()), action, SLOT(trigger()));
 
     action = actionManager->actionByName("add_duplicate_frame");
-    titleBar->btnDuplicateKeyframe->setDefaultAction(action);
+    titleBar->btnDuplicateKeyframe->setIcon(KisIconUtils::loadIcon("addduplicateframe"));
     titleBar->btnDuplicateKeyframe->setIconSize(QSize(22, 22));
+    titleBar->btnDuplicateKeyframe->setToolTip(action->toolTip());
+    QObject::connect(titleBar->btnDuplicateKeyframe, SIGNAL(released()), action, SLOT(trigger()));
 
     action = actionManager->actionByName("remove_frames");
-    titleBar->btnRemoveKeyframe->setDefaultAction(action);
+    titleBar->btnRemoveKeyframe->setIcon(KisIconUtils::loadIcon("deletekeyframe"));
     titleBar->btnRemoveKeyframe->setIconSize(QSize(22, 22));
+    titleBar->btnRemoveKeyframe->setToolTip(action->toolTip());
+    QObject::connect(titleBar->btnRemoveKeyframe, SIGNAL(released()), action, SLOT(trigger()));
 
     // Connect playback-related actions..
     action = actionManager->createAction("toggle_playback");

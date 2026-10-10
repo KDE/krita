@@ -2104,7 +2104,7 @@
       <statusTip/>
     </Action>
     <Action name="pin_to_timeline">
-      <icon/>
+      <icon>krita_tool_reference_images</icon>
       <text>Pin to Timeline</text>
       <whatsThis/>
       <toolTip>If checked, layer becomes pinned to the timeline, making it visible even when inactive.</toolTip>

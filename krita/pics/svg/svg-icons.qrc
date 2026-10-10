@@ -585,5 +585,9 @@
         <file>light_saturation-increase.svg</file>
         <file>light_scatter-decrease.svg</file>
         <file>light_scatter-increase.svg</file>
+        <file>light_duplicate-frame-16.svg</file>
+        <file>light_remove-frame-16.svg</file>
+        <file>dark_duplicate-frame-16.svg</file>
+        <file>dark_remove-frame-16.svg</file>
     </qresource>
 </RCC>

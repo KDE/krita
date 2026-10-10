@@ -409,17 +409,17 @@ class DitheredGradientStrategy : public KisGradientShapeStrategy
 {
 
 public:
-    DitheredGradientStrategy(KisGradientPainter::enumDither dither, int ditherSteps, QSharedPointer<KisGradientShapeStrategy> shapeStrategy);
+    DitheredGradientStrategy(KisGradientPainter::enumGradientDither dither, int ditherSteps, QSharedPointer<KisGradientShapeStrategy> shapeStrategy);
 
     double valueAt(double x, double y) const override;
 
 protected:
-    KisGradientPainter::enumDither m_dither;
+    KisGradientPainter::enumGradientDither m_dither;
     int m_ditherSteps;
     QSharedPointer<KisGradientShapeStrategy> m_shapeStrategy;
 };
 
-DitheredGradientStrategy::DitheredGradientStrategy(KisGradientPainter::enumDither dither,
+DitheredGradientStrategy::DitheredGradientStrategy(KisGradientPainter::enumGradientDither dither,
                                                    int ditherSteps,
                                                    QSharedPointer<KisGradientShapeStrategy> shapeStrategy)
         : m_dither(dither)
@@ -434,13 +434,13 @@ double DitheredGradientStrategy::valueAt(double x, double y) const
     double ditherFactor = 0.0;
 
     switch (m_dither) {
-    case KisGradientPainter::DitherBayer2:
+    case KisGradientPainter::GradientDitherBayer2:
         ditherFactor = KisDitherMaths::dither_factor_bayer_2_normalized(x, y);
         break;
-    case KisGradientPainter::DitherBayer4:
+    case KisGradientPainter::GradientDitherBayer4:
         ditherFactor = KisDitherMaths::dither_factor_bayer_4_normalized(x, y);
         break;
-    case KisGradientPainter::DitherBayer8:
+    case KisGradientPainter::GradientDitherBayer8:
         ditherFactor = KisDitherMaths::dither_factor_bayer_8_normalized(x, y);
         break;
     default:
@@ -1148,7 +1148,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        qint32 starty,
                                        qint32 width,
                                        qint32 height,
-                                       enumDither dither,
+                                       enumGradientDither dither,
                                        int ditherSteps)
 {
     return paintGradient(gradientVectorStart,
@@ -1167,7 +1167,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        double antiAliasThreshold,
                                        bool reverseGradient,
                                        const QRect &applyRect,
-                                       enumDither dither,
+                                       enumGradientDither dither,
                                        int ditherSteps)
 {
     // The following combinations of options have aliasing artifacts
@@ -1237,7 +1237,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                        enumGradientRepeat repeat,
                                        double antiAliasThreshold,
                                        bool reverseGradient,
-                                       enumDither dither,
+                                       enumGradientDither dither,
                                        int ditherSteps,
                                        const QRect &applyRect,
                                        T & paintPolicy)
@@ -1358,7 +1358,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     tmp->setDefaultBounds(dev->defaultBounds());
     tmp->clear();
 
-    const KisDitherOp* op = mixCs->ditherOp(destCs->colorDepthId().id(), dither == DitherBlueNoise ? DITHER_BEST : DITHER_NONE);
+    const KisDitherOp* op = mixCs->ditherOp(destCs->colorDepthId().id(), dither == GradientDitherBlueNoise ? DITHER_BEST : DITHER_NONE);
 
     Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
         QRect processRect = r.processRect;
@@ -1411,9 +1411,9 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     return true;
 }
 
-bool KisGradientPainter::isBayerDither(enumDither dither)
+bool KisGradientPainter::isBayerDither(enumGradientDither dither)
 {
-    return dither == KisGradientPainter::DitherBayer2 ||
-           dither == KisGradientPainter::DitherBayer4 ||
-           dither == KisGradientPainter::DitherBayer8;
+    return dither == KisGradientPainter::GradientDitherBayer2 ||
+           dither == KisGradientPainter::GradientDitherBayer4 ||
+           dither == KisGradientPainter::GradientDitherBayer8;
 }

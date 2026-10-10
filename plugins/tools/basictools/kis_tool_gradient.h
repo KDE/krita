@@ -84,7 +84,7 @@ private:
     KisGradientPainter::enumGradientShape m_shape;
     KisGradientPainter::enumGradientRepeat m_repeat;
 
-    KisGradientPainter::enumDither m_dither {KisGradientPainter::DitherNone};
+    KisGradientPainter::enumGradientDither m_dither {KisGradientPainter::GradientDitherNone};
     int m_ditherSteps {KisGradientPainter::defaultDitherSteps};
     bool m_reverse {false};
     double m_antiAliasThreshold {0.0};

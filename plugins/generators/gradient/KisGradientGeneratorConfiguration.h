@@ -77,14 +77,19 @@ public:
         return KisGradientPainter::GradientRepeatNone;
     }
 
+    static constexpr KisGradientPainter::enumGradientDither defaultDither()
+    {
+        return KisGradientPainter::GradientDitherNone;
+    }
+
+    static constexpr int defaultDitherSteps()
+    {
+        return KisGradientPainter::defaultDitherSteps;
+    }
+
     static constexpr qreal defaultAntiAliasThreshold()
     {
         return 0.0;
-    }
-
-    static constexpr bool defaultDither()
-    {
-        return false;
     }
 
     static constexpr bool defaultReverse()
@@ -177,8 +182,9 @@ public:
 
     KisGradientPainter::enumGradientShape shape() const;
     KisGradientPainter::enumGradientRepeat repeat() const;
+    KisGradientPainter::enumGradientDither dither() const;
+    int ditherSteps() const;
     qreal antiAliasThreshold() const;
-    bool dither() const;
     bool reverse() const;
     qreal startPositionX() const;
     qreal startPositionY() const;
@@ -200,8 +206,9 @@ public:
 
     void setShape(KisGradientPainter::enumGradientShape newShape);
     void setRepeat(KisGradientPainter::enumGradientRepeat newRepeat);
+    void setDither(KisGradientPainter::enumGradientDither newDither);
+    void setDitherSteps(int newDitherSteps);
     void setAntiAliasThreshold(qreal newAntiAliasThreshold);
-    void setDither(bool newDither);
     void setReverse(bool newReverse);
     void setStartPositionX(qreal newStartPositionX);
     void setStartPositionY(qreal newStartPositionY);
@@ -294,6 +301,40 @@ public:
             return KisGradientPainter::GradientRepeatAlternate;
         }
         return defaultRepeat;
+    }
+
+    static inline QString ditherToString(KisGradientPainter::enumGradientDither dither,
+                                         const QString & defaultDitherString = QString())
+    {
+        if (dither == KisGradientPainter::GradientDitherNone) {
+            return "none";
+        } else if (dither == KisGradientPainter::GradientDitherBlueNoise) {
+            return "blue_noise";
+        } else if (dither == KisGradientPainter::GradientDitherBayer2) {
+            return "bayer2";
+        } else if (dither == KisGradientPainter::GradientDitherBayer4) {
+            return "bayer4";
+        } else if (dither == KisGradientPainter::GradientDitherBayer8) {
+            return "bayer8";
+        }
+        return defaultDitherString;
+    }
+
+    static inline KisGradientPainter::enumGradientDither stringToDither(QString const & ditherString,
+                                                                        KisGradientPainter::enumGradientDither defaultDither = KisGradientPainter::GradientDitherNone)
+    {
+        if (ditherString == "none") {
+            return KisGradientPainter::GradientDitherNone;
+        } else if (ditherString == "blue_noise") {
+            return KisGradientPainter::GradientDitherBlueNoise;
+        } else if (ditherString == "bayer2") {
+            return KisGradientPainter::GradientDitherBayer2;
+        } else if (ditherString == "bayer4") {
+            return KisGradientPainter::GradientDitherBayer4;
+        } else if (ditherString == "bayer8") {
+            return KisGradientPainter::GradientDitherBayer8;
+        }
+        return defaultDither;
     }
 
     static inline QString coordinateSystemToString(CoordinateSystem coordinateSystem,

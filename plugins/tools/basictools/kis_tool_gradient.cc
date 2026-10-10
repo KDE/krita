@@ -58,7 +58,7 @@ KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
     m_startPos = QPointF(0, 0);
     m_endPos = QPointF(0, 0);
 
-    m_dither = KisGradientPainter::DitherNone;
+    m_dither = KisGradientPainter::GradientDitherNone;
     m_ditherSteps = KisGradientPainter::defaultDitherSteps;
     m_reverse = false;
     m_shape = KisGradientPainter::GradientShapeLinear;
@@ -278,7 +278,7 @@ QWidget* KisToolGradient::createOptionWidget()
     m_lbDitherSteps = new QLabel(i18n("Dither steps:"), widget);
     m_sbDitherSteps = new KisIntParseSpinBox(widget);
     m_sbDitherSteps->setObjectName("dither_steps");
-    m_sbDitherSteps->setRange(2, 10000);
+    m_sbDitherSteps->setRange(KisGradientPainter::minDitherSteps, KisGradientPainter::maxDitherSteps);
     addOptionWidgetOption(m_sbDitherSteps, m_lbDitherSteps);
     connect(m_sbDitherSteps, SIGNAL(valueChanged(int)), this, SLOT(slotSetDitherSteps(int)));
 
@@ -331,7 +331,7 @@ void KisToolGradient::slotSetDither(int dither)
         m_cmbDither->setCurrentIndex(dither);
     }
 
-    m_dither = static_cast<KisGradientPainter::enumDither>(dither);
+    m_dither = static_cast<KisGradientPainter::enumGradientDither>(dither);
     m_configGroup.writeEntry("dither", dither);
 
     showControl(m_sbDitherSteps, KisGradientPainter::isBayerDither(m_dither));

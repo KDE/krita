@@ -531,7 +531,7 @@ namespace KisLsUtils
                              repeat, 0.0,
                              config->reverse(),
                              applyRect,
-                             config->dither() ? KisGradientPainter::DitherBlueNoise : KisGradientPainter::DitherNone);
+                             config->dither() ? KisGradientPainter::GradientDitherBlueNoise : KisGradientPainter::GradientDitherNone);
         }
     }
 

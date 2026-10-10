@@ -36,7 +36,7 @@ private:
 private Q_SLOTS:
     void slot_radioButtonEndPositionCartesianCoordinates_toggled(bool enabled);
     void slot_radioButtonEndPositionPolarCoordinates_toggled(bool enabled);
-
+    void slot_comboBoxDither_currentIndexChanged(int dither);
 };
 
 #endif

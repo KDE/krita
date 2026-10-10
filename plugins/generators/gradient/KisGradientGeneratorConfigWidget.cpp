@@ -39,6 +39,13 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
         << i18nc("The gradient will not repeat", "None")
         << i18nc("The gradient will repeat forwards", "Forwards")
         << i18nc("The gradient will repeat alternatingly", "Alternating");
+    QStringList ditherNames =
+        QStringList()
+        << i18nc("The gradient will not be dithered", "None")
+        << i18nc("The gradient will be dithered with Blue Noise", "Blue Noise")
+        << i18nc("The gradient will be dithered with Bayer Matrix 2x2", "Bayer Matrix 2x2")
+        << i18nc("The gradient will be dithered with Bayer Matrix 4x4", "Bayer Matrix 4x4")
+        << i18nc("The gradient will be dithered with Bayer Matrix 8x8", "Bayer Matrix 8x8");
     QStringList spatialUnitsNames =
         QStringList()
         << i18nc("The position will be set in pixels", "Pixels")
@@ -55,6 +62,8 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
 
     m_ui.comboBoxShape->addItems(shapeNames);
     m_ui.comboBoxRepeat->addItems(repeatNames);
+    m_ui.comboBoxDither->addItems(ditherNames);
+    m_ui.spinBoxDitherSteps->setRange(KisGradientPainter::minDitherSteps, KisGradientPainter::maxDitherSteps);
     m_ui.sliderAntiAliasThreshold->setRange(0, 1, 3);
 
     m_ui.comboBoxStartPositionXUnits->addItems(spatialUnitsNames);
@@ -70,8 +79,9 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
 
     connect(m_ui.comboBoxShape, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxRepeat, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_ui.comboBoxDither, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxDither_currentIndexChanged(int)));
+    connect(m_ui.spinBoxDitherSteps, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderAntiAliasThreshold, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_ui.checkBoxDither, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.checkBoxReverse, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
 
     connect(m_ui.spinBoxStartPositionX, SIGNAL(valueChanged(double)), this, SIGNAL(sigConfigurationUpdated()));
@@ -120,8 +130,10 @@ void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfi
 
         m_ui.comboBoxShape->setCurrentIndex(generatorConfig->shape());
         m_ui.comboBoxRepeat->setCurrentIndex(generatorConfig->repeat());
+        m_ui.comboBoxDither->setCurrentIndex(generatorConfig->dither());
+        slot_comboBoxDither_currentIndexChanged(generatorConfig->dither());
+        m_ui.spinBoxDitherSteps->setValue(generatorConfig->ditherSteps());
         m_ui.sliderAntiAliasThreshold->setValue(generatorConfig->antiAliasThreshold());
-        m_ui.checkBoxDither->setChecked(generatorConfig->dither());
         m_ui.checkBoxReverse->setChecked(generatorConfig->reverse());
 
         m_ui.spinBoxStartPositionX->setValue(generatorConfig->startPositionX());
@@ -166,8 +178,9 @@ KisPropertiesConfigurationSP KisGradientGeneratorConfigWidget::configuration() c
 
     config->setShape(static_cast<KisGradientPainter::enumGradientShape>(m_ui.comboBoxShape->currentIndex()));
     config->setRepeat(static_cast<KisGradientPainter::enumGradientRepeat>(m_ui.comboBoxRepeat->currentIndex()));
+    config->setDither(static_cast<KisGradientPainter::enumGradientDither>(m_ui.comboBoxDither->currentIndex()));
+    config->setDitherSteps(m_ui.spinBoxDitherSteps->value());
     config->setAntiAliasThreshold(m_ui.sliderAntiAliasThreshold->value());
-    config->setDither(m_ui.checkBoxDither->isChecked());
     config->setReverse(m_ui.checkBoxReverse->isChecked());
 
     config->setStartPositionX(m_ui.spinBoxStartPositionX->value());
@@ -231,5 +244,14 @@ void KisGradientGeneratorConfigWidget::slot_radioButtonEndPositionPolarCoordinat
     }
 
     m_ui.stackedWidgetEndPosition->setCurrentIndex(1);
+    Q_EMIT sigConfigurationItemChanged();
+}
+
+void KisGradientGeneratorConfigWidget::slot_comboBoxDither_currentIndexChanged(int dither)
+{
+    bool ditherStepsVisible = KisGradientPainter::isBayerDither(static_cast<KisGradientPainter::enumGradientDither>(dither));
+    m_ui.spinBoxDitherSteps->setVisible(ditherStepsVisible);
+    m_ui.formLayout->labelForField(m_ui.spinBoxDitherSteps)->setVisible(ditherStepsVisible);
+
     Q_EMIT sigConfigurationItemChanged();
 }

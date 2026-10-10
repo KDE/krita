@@ -1063,7 +1063,7 @@ void KisScratchPad::fillGradient(const QPoint &gradientVectorStart,
                                   reverseGradient,
                                   gradientRect.left(), gradientRect.top(),
                                   gradientRect.width(), gradientRect.height(),
-                                  dither ? KisGradientPainter::DitherBlueNoise : KisGradientPainter::DitherNone);
+                                  dither ? KisGradientPainter::GradientDitherBlueNoise : KisGradientPainter::GradientDitherNone);
         } else {
             painter.paintGradient(gradientVectorStart,
                                   gradientVectorEnd,
@@ -1072,7 +1072,7 @@ void KisScratchPad::fillGradient(const QPoint &gradientVectorStart,
                                   reverseGradient,
                                   gradientRect.left(), gradientRect.top(),
                                   gradientRect.width(), gradientRect.height(),
-                                  dither ? KisGradientPainter::DitherBlueNoise : KisGradientPainter::DitherNone);
+                                  dither ? KisGradientPainter::GradientDitherBlueNoise : KisGradientPainter::GradientDitherNone);
         }
         t.end();
     }

@@ -42,6 +42,16 @@ KisGradientPainter::enumGradientRepeat KisGradientGeneratorConfiguration::repeat
     return stringToRepeat(getString("repeat"), defaultRepeat());
 }
 
+KisGradientPainter::enumGradientDither KisGradientGeneratorConfiguration::dither() const
+{
+    return stringToDither(getString("dither"), defaultDither());
+}
+
+int KisGradientGeneratorConfiguration::ditherSteps() const
+{
+    return getInt("dither_steps", defaultDitherSteps());
+}
+
 qreal KisGradientGeneratorConfiguration::antiAliasThreshold() const
 {
     return getDouble("antialias_threshold", defaultAntiAliasThreshold());
@@ -50,11 +60,6 @@ qreal KisGradientGeneratorConfiguration::antiAliasThreshold() const
 bool KisGradientGeneratorConfiguration::reverse() const
 {
     return getBool("reverse", defaultReverse());
-}
-
-bool KisGradientGeneratorConfiguration::dither() const
-{
-    return getBool("dither", defaultDither());
 }
 
 qreal KisGradientGeneratorConfiguration::startPositionX() const
@@ -188,14 +193,19 @@ void KisGradientGeneratorConfiguration::setRepeat(KisGradientPainter::enumGradie
     setProperty("repeat", repeatToString(newRepeat));
 }
 
+void KisGradientGeneratorConfiguration::setDither(KisGradientPainter::enumGradientDither newDither)
+{
+    setProperty("dither", ditherToString(newDither));
+}
+
+void KisGradientGeneratorConfiguration::setDitherSteps(int newDitherSteps)
+{
+    setProperty("dither_steps", newDitherSteps);
+}
+
 void KisGradientGeneratorConfiguration::setAntiAliasThreshold(qreal newAntiAliasThreshold)
 {
     setProperty("antialias_threshold", newAntiAliasThreshold);
-}
-
-void KisGradientGeneratorConfiguration::setDither(bool newDither)
-{
-    setProperty("dither", newDither);
 }
 
 void KisGradientGeneratorConfiguration::setReverse(bool newReverse)
@@ -300,6 +310,8 @@ void KisGradientGeneratorConfiguration::setDefaults()
 {
     setShape(defaultShape());
     setRepeat(defaultRepeat());
+    setDither(defaultDither());
+    setDitherSteps(defaultDitherSteps());
     setAntiAliasThreshold(defaultAntiAliasThreshold());
     setReverse(defaultReverse());
     setStartPositionX(defaultStartPositionX());

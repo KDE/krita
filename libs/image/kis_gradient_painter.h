@@ -49,14 +49,16 @@ public:
         GradientRepeatAlternate
     };
 
-    enum enumDither {
-        DitherNone,
-        DitherBlueNoise,
-        DitherBayer2,
-        DitherBayer4,
-        DitherBayer8
+    enum enumGradientDither {
+        GradientDitherNone,
+        GradientDitherBlueNoise,
+        GradientDitherBayer2,
+        GradientDitherBayer4,
+        GradientDitherBayer8
     };
 
+    static constexpr int minDitherSteps = 2;
+    static constexpr int maxDitherSteps = 10000;
     static constexpr int defaultDitherSteps = 2;
 
     void setGradientShape(enumGradientShape shape);
@@ -75,7 +77,7 @@ public:
                        qint32 starty,
                        qint32 width,
                        qint32 height,
-                       enumDither dither = DitherNone,
+                       enumGradientDither dither = GradientDitherNone,
                        int ditherSteps = defaultDitherSteps);
 
     // convenience overload
@@ -85,7 +87,7 @@ public:
                        double antiAliasThreshold,
                        bool reverseGradient,
                        const QRect &applyRect,
-                       enumDither dither = DitherNone,
+                       enumGradientDither dither = GradientDitherNone,
                        int ditherSteps = defaultDitherSteps);
 
     template <class T> 
@@ -94,12 +96,12 @@ public:
                        enumGradientRepeat repeat,
                        double antiAliasThreshold,
                        bool reverseGradient,
-                       enumDither dither,
+                       enumGradientDither dither,
                        int ditherSteps,
                        const QRect &applyRect,
                        T & paintPolicy);
 
-    static bool isBayerDither(enumDither dither);
+    static bool isBayerDither(enumGradientDither dither);
 
 private:
     struct Private;

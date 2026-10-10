@@ -660,7 +660,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="wrap_around_hv_axis">
-      <icon>wraparound</icon>
+      <icon>wrap-both</icon>
       <text>Wrap Around Both Directions</text>
       <whatsThis></whatsThis>
       <toolTip>Wrap Around Both Directions</toolTip>
@@ -672,7 +672,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="wrap_around_h_axis">
-      <icon>wraparound</icon>
+      <icon>wrap-horizontally</icon>
       <text>Wrap Around Horizontally</text>
       <whatsThis></whatsThis>
       <toolTip>Wrap Around Horizontally</toolTip>
@@ -684,7 +684,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="wrap_around_v_axis">
-      <icon>wraparound</icon>
+      <icon>wrap-vertically</icon>
       <text>Wrap Around Vertically</text>
       <whatsThis></whatsThis>
       <toolTip>Wrap Around Vertically</toolTip>

@@ -21183,7 +21183,7 @@ msgstr "Неподдерживаемая единица измерения"
 #, kde-format
 msgctxt "Category of brush engines"
 msgid "Brush engines"
-msgstr "Кистевые движки"
+msgstr "Кистевые модули"
 
 #: libs/image/brushengine/kis_paintop_registry.cc:126
 #, kde-format
@@ -23350,7 +23350,7 @@ msgstr "Неопределённая операция в цветовом про
 #: libs/pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
 #, kde-format
 msgid "Simple Color Conversion Engine"
-msgstr "Простой движок цветового преобразования"
+msgstr "Простой механизм цветового преобразования"
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:360
 #: libs/pigment/KoBasicHistogramProducers.cpp:427
@@ -32446,7 +32446,7 @@ msgstr "Сохранить"
 #: libs/ui/forms/wdgpaintopsettings.ui:230
 #, kde-format
 msgid "Current Brush Engine"
-msgstr "Движок текущей кисти"
+msgstr "Модуль текущей кисти"
 
 #. i18n: ectx: property (text), widget (QPushButton, saveNewBrushPresetButton)
 #: libs/ui/forms/wdgpaintopsettings.ui:368
@@ -32470,7 +32470,7 @@ msgstr "Профили"
 #: libs/ui/forms/wdgpaintopsettings.ui:472
 #, kde-format
 msgid "Engine:"
-msgstr "Движок:"
+msgstr "Модуль:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, eraserBrushSizeCheckBox)
 #: libs/ui/forms/wdgpaintopsettings.ui:643
@@ -38938,7 +38938,7 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:75
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
-msgstr "Движок кистей MyPaint недоступен для этого цветового пространства"
+msgstr "Модуль кистей MyPaint недоступен для этого цветового пространства"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:116
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
@@ -40490,12 +40490,12 @@ msgstr "Открепить редактор кистей"
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
-msgstr "Движок %1"
+msgstr "Модуль %1"
 
 #: libs/ui/widgets/kis_preset_live_preview_view.cpp:175
 #, kde-format
 msgid "No Preview for this engine"
-msgstr "Предварительный просмотр для этого движка отсутствует"
+msgstr "Предварительный просмотр для этого модуля отсутствует"
 
 #: libs/ui/widgets/kis_selection_options.cc:188
 #: plugins/tools/basictools/kis_tool_fill.cc:591
@@ -45329,7 +45329,7 @@ msgstr "Реестры"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:263
 #, kde-format
 msgid "Tile Engine"
-msgstr "Движок плитки"
+msgstr "Механизм плитки"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:271
 #, kde-format
@@ -45544,7 +45544,7 @@ msgstr "Вид:"
 #: plugins/dockers/lut/wdglut.ui:296
 #, kde-format
 msgid "Color Engine:"
-msgstr "Цветовой движок:"
+msgstr "Цветовой механизм:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_colorManagement)
 #: plugins/dockers/lut/wdglut.ui:310
@@ -51506,7 +51506,7 @@ msgstr ""
 #: plugins/extensions/pykrita/plugin/manager.ui:43
 #, kde-format
 msgid "Error: The Python engine could not be initialized"
-msgstr "Ошибка: не удалось инициализировать движок Python"
+msgstr "Ошибка: не удалось инициализировать механизм Python"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:72
@@ -51653,7 +51653,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Internal engine failure"
-msgstr "Внутренняя ошибка движка"
+msgstr "Внутренняя ошибка механизма"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:386
 #, kde-format
@@ -51935,7 +51935,7 @@ msgstr "Удалить источники"
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "
-msgstr "Движок: "
+msgstr "Модуль: "
 
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:21
 #, kde-format
@@ -63737,7 +63737,7 @@ msgstr "Параметры наклона"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:33
 #, kde-format
 msgid "A Brush Engine for Drawing 3d Tangent Normal Maps"
-msgstr "Кистевой движок для рисования трёхмерных карт нормалей"
+msgstr "Кистевой модуль для рисования трёхмерных карт нормалей"
 
 #. i18n: ectx: property (title), widget (QGroupBox, TangentEncoding)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:43

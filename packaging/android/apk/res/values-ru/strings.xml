@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="remote_action_click">Нажатие</string>
+  <string name="remote_action_doubleclick">Двойное нажатие</string>
+  <string name="remote_action_swipeup">Смахнуть вверх</string>
+  <string name="remote_action_swipedown">Смахнуть вниз</string>
+  <string name="remote_action_swipeleft">Смахнуть влево</string>
+  <string name="remote_action_swiperight">Смахнуть вправо</string>
+  <string name="remote_action_circlecw">Круг по часовой стрелке</string>
+  <string name="remote_action_circleccw">Круг против часовой стрелки</string>
+  <string name="something_wrong">Что-то пошло не так…</string>
+  <string name="cancelled">Отменено</string>
+  <string name="save_notification_text">Сохранение документа</string>
+  <string name="cancel_save_notification">Отмена</string>
+  <string name="donation_dialog_loading">Krita загружается…</string>
+  <string name="donation_dialog_loaded">Krita готова к работе</string>
+  <string name="donation_dialog_button_back">Назад</string>
+  <string name="donation_dialog_button_close">Закрыть</string>
+  <string name="donation_dialog_header_support">Поддержать Krita</string>
+  <string name="donation_dialog_header_button">♥︎ Показать предложения для спонсоров</string>
+  <string name="donation_dialog_supporter_text">Спасибо за поддержку Krita. Благодаря вашему вкладу её разработка продолжается.</string>
+  <string name="product_donations_description">&lt;h2&gt;Пожертвования&lt;/h2&gt;&lt;p&gt;Поддержите дальнейшую разработку Krita, пожертвовав напрямую через PayPal — с помощью кредитной или дебетовой карты и многих других способов оплаты.&lt;/p&gt;</string>
+  <string name="product_donations_button">Поддержать</string>
+  <string name="product_development_fund_description">&lt;h2&gt;Фонд разработки&lt;/h2&gt;&lt;p&gt;Присоединяйтесь к фонду разработки Krita и поддержите её дальнейшее развитие ежемесячным взносом. Доступны разные уровни с преимуществами.&lt;/p&gt;</string>
+  <string name="product_development_fund_button">Присоединиться к фонду</string>
+  <string name="product_button_subscribe">Подписаться</string>
+  <string name="product_button_subscribe_for_month">Подписаться за %s/месяц</string>
+  <string name="product_button_buy">Купить</string>
+  <string name="product_button_buy_for">Купить за %s</string>
+  <string name="product_supporter_badge_title">Значок за поддержку</string>
+  <string name="product_supporter_badge_description">&lt;p&gt;Значок для первых спонсоров Krita на Android.&lt;/p&gt;</string>
+  <string name="product_subscription_title">Подписка для спонсоров</string>
+  <string name="product_subscription_description">&lt;p&gt;Поддержите разработку Krita ежемесячным взносом. При активной подписке доступны &lt;strong&gt;все&lt;/strong&gt; преимущества для спонсоров по мере их появления. Сейчас доступно %1$d наборов ресурсов, содержащих в общей сложности более %2$d кистей, включая платный набор Digital Atelier, а в будущем планируется ещё больше.&lt;/p&gt;</string>
+  <string name="product_onetime_title">Набор для спонсоров Krita 5.3</string>
+  <string name="product_onetime_description">&lt;p&gt;В этот набор входят %1$d наборов ресурсов, которые вместе содержат более %2$d кистей, включая платный набор Digital Atelier. Это &lt;strong&gt;разовая покупка&lt;/strong&gt;, подписка не оформляется.&lt;/p&gt;</string>
+  <string name="show_this_dialog_when_krita_starts">Показывать это окно при запуске Krita</string>
+  <string name="ok">ОК</string>
+  <string name="interface_scale_default">Масштаб интерфейса: %d%% (по умолчанию)</string>
+  <string name="interface_scale">Масштаб интерфейса: %d%%</string>
+</resources>

@@ -23,14 +23,6 @@ namespace KoGamutMappingUtils {
 float KRITAPIGMENT_EXPORT deltaE76(const QVector<float> &a, const QVector<float> &b);
 
 /**
- * @brief deltaE2000
- * Like deltaE76, but instead this uses a more sophisticated algorithm, to compensate for various
- * issues in the LAB color mode.
- * @return The difference. Given that the input is scaled to [0 1], the output will also be [0 1]
- */
-float KRITAPIGMENT_EXPORT deltaE2000(const QVector<float> &a, const QVector<float> &b);
-
-/**
  * @brief XYZToOkLab
  * Ad-hoc implementation of OkLAB. This takes a QVector4D and transforms it to the OkLAB model.
  * @param xyz

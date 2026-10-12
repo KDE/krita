@@ -107,12 +107,6 @@ struct dE76 {
         return KoGamutMappingUtils::deltaE76(a, b);
     }
 };
-
-struct dE2000 {
-    static ALWAYS_INLINE float difference(const QVector<float> &a, const QVector<float> &b) {
-        return KoGamutMappingUtils::deltaE2000(a, b);
-    }
-};
 }
 
 template<class ModelType, class DifferenceType>

@@ -352,21 +352,21 @@ QMap<float, QPointF> KoGamutMappingUtils::getGamutCuspDescription(const KoColorP
     QVector<QVector<float>> colorList;
     if (profile->colorModelID() == RGBAColorModelID.id()) {
         for (int i = 0; i < samplesPerChannel; i++) {
-            const float ch = float(i)/float(samplesPerChannel);
+            const float ch = float(i)/float(samplesPerChannel-1);
             QVector<float> c = {ch, 1.0, 0.0, 1.0};
             colorList << c;
             QVector<float> c2 = {ch, 0.0, 1.0, 1.0};
             colorList << c2;
         }
         for (int i = 0; i < samplesPerChannel; i++) {
-            const float ch = float(i)/float(samplesPerChannel);
+            const float ch = float(i)/float(samplesPerChannel-1);
             QVector<float> c = {1.0, ch, 0.0, 1.0};
             colorList << c;
             QVector<float> c2 = {0.0, ch, 1.0, 1.0};
             colorList << c2;
         }
         for (int i = 0; i < samplesPerChannel; i++) {
-            const float ch = float(i)/float(samplesPerChannel);
+            const float ch = float(i)/float(samplesPerChannel-1);
             QVector<float> c = {1.0, 0.0, ch, 1.0};
             colorList << c;
             QVector<float> c2 = {0.0, 1.0, ch, 1.0};
@@ -374,21 +374,21 @@ QMap<float, QPointF> KoGamutMappingUtils::getGamutCuspDescription(const KoColorP
         }
     } else if (profile->colorModelID() == CMYKAColorModelID.id()) {
         for (int i = 0; i < samplesPerChannel; i++) {
-            const float ch = float(i)/float(samplesPerChannel);
+            const float ch = float(i)/float(samplesPerChannel-1);
             QVector<float> c = {ch, 1.0, 0.0, 0.0, 1.0};
             colorList << c;
             QVector<float> c2 = {ch, 0.0, 1.0, 0.0, 1.0};
             colorList << c2;
         }
         for (int i = 0; i < samplesPerChannel; i++) {
-            const float ch = float(i)/float(samplesPerChannel);
+            const float ch = float(i)/float(samplesPerChannel-1);
             QVector<float> c = {1.0, ch, 0.0, 0.0, 1.0};
             colorList << c;
             QVector<float> c2 = {0.0, ch, 1.0, 0.0, 1.0};
             colorList << c2;
         }
         for (int i = 0; i < samplesPerChannel; i++) {
-            const float ch = float(i)/float(samplesPerChannel);
+            const float ch = float(i)/float(samplesPerChannel-1);
             QVector<float> c = {1.0, 0.0, ch, 0.0, 1.0};
             colorList << c;
             QVector<float> c2 = {0.0, 1.0, ch, 0.0, 1.0};

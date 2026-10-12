@@ -333,23 +333,22 @@ QPointF KoGamutMappingUtils::cuspForHue(const QMap<float, QPointF> &gamutCuspDes
 {
     QPointF cusp;
 
+    int foundAngle = -1;
+
     for (int i = 0; i < gamutCuspDescription.size(); i++) {
-        const float angle = gamutCuspDescription.keys().at(i);
-        float nextAngle = gamutCuspDescription.keys().value(i+1, gamutCuspDescription.keys().first());
-        if (i +1 == gamutCuspDescription.size()) {
-            nextAngle += 1.0;
-        }
-        if (qFuzzyCompare(hue, angle)) {
-            cusp = gamutCuspDescription.value(angle);
-            break;
-        } else if (hue > angle && hue < nextAngle) {
-            QPointF lch1 = gamutCuspDescription.value(angle);
-            QPointF lch2 = gamutCuspDescription.value(nextAngle);
-            const float t = (hue - angle) / (nextAngle - angle);
-            cusp = QLineF(lch1, lch2).pointAt(t);
+        if (hue < gamutCuspDescription.keys().at(i)) {
             break;
         }
+        foundAngle = i;
     }
+    if (foundAngle < 0) foundAngle = gamutCuspDescription.size()-1;
+    const float angle = gamutCuspDescription.keys().at(foundAngle);
+    float nextAngle = gamutCuspDescription.keys().value(foundAngle+1, gamutCuspDescription.keys().first());
+
+    QPointF lch1 = gamutCuspDescription.value(angle);
+    QPointF lch2 = gamutCuspDescription.value(nextAngle);
+    const float t = (hue - angle) / (nextAngle - angle);
+    cusp = QLineF(lch1, lch2).pointAt(t);
 
     return cusp;
 }

@@ -47,8 +47,8 @@ struct xyzToOkLabModel {
         return channels;
     }
 
-    static ALWAYS_INLINE float linearizeLightness(float lightness) {
-        return powf(lightness, 3.0);
+    static ALWAYS_INLINE float cuberootLightness(float lightness) {
+        return lightness;
     }
 };
 
@@ -76,8 +76,8 @@ struct xyzToICtCpModel {
         return channels;
     }
 
-    static ALWAYS_INLINE float linearizeLightness(float lightness) {
-        return removeSmpte2048Curve(lightness);
+    static ALWAYS_INLINE float cuberootLightness(float lightness) {
+        return cbrtf(removeSmpte2048Curve(lightness));
     }
 };
 
@@ -97,8 +97,8 @@ struct labModel {
         return channels;
     }
 
-    static ALWAYS_INLINE float linearizeLightness(float lightness) {
-        return powf(lightness, 3.0);
+    static ALWAYS_INLINE float cuberootLightness(float lightness) {
+        return lightness;
     }
 };
 
@@ -166,16 +166,18 @@ public:
                  if (!m_cuspDescription.isEmpty()) {
                     QPointF cusp = KoGamutMappingUtils::cuspForHue(m_cuspDescription, LCH[2]);
 
-                    /// We are treating the cusp triangle as linear inside linear space.
+                    /// We are treating the cusp triangle as linear inside the SDR standard range.
+                    /// Within the standard range, cube root works better than hdr's PQ.
                     /// This is good enough for RGB profiles, CMYK profiles might get better
                     /// results with the MINDE method. Overall though, we just want to move
                     /// the colors into gamut enough so that we don't get hue shifts when converting,
                     /// and this method delivers on that nicely.
-                    const float L = ModelType::linearizeLightness(LCH[0]);
-                    const float cuspL = ModelType::linearizeLightness(cusp.y());
+                    const float L = ModelType::cuberootLightness(LCH[0]);
+                    const float cuspL = ModelType::cuberootLightness(cusp.y());
                     if (LCH[0] > cusp.y()) {
                         const float t = (L - cuspL) / (1.0 - cuspL);
                         const float c = qMax(0.0, cusp.x()* (1.0-t));
+
                         LCH[1] = qMin(LCH[1], c);
 
                     } else {

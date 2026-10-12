@@ -88,7 +88,7 @@ void KisResourceThumbnailCache::Private::insertOriginal(const ResourceKey &key, 
 {
     // Someone else has added the image to this cache, when the only path to here is from a method which
     // checks whether this cache contains it or not.
-    KIS_ASSERT(!originalImageCache.contains(key));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!originalImageCache.contains(key));
     originalImageCache.insert(key, image);
 }
 

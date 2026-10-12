@@ -8554,7 +8554,7 @@ msgstr "Включить диагностику планшета"
 #, kde-format
 msgctxt "action"
 msgid "Show Krita log for bug reports."
-msgstr "Показать журнал Krita для отчётов об ошибкахс."
+msgstr "Показать журнал Krita для отчётов об ошибках."
 
 #. i18n: context: text @ Action (sysinfo), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (sysinfo), Actions (General), ActionCollection (Krita)
@@ -10689,7 +10689,7 @@ msgstr "Выбрать режим наложения «Мягкий свет»"
 #, kde-format
 msgctxt "action"
 msgid "Select Hard Light Blending Mode"
-msgstr "Выбрать режим наложения «Жёсткое осветление»"
+msgstr "Выбрать режим наложения «Жёсткий свет»"
 
 #. i18n: context: text @ Action (Select Vivid Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Vivid Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10713,7 +10713,7 @@ msgstr "Выбрать режим наложения «Яркое осветле
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Light Blending Mode"
-msgstr "Выбрать режим наложения «Линейное осветление»"
+msgstr "Выбрать режим наложения «Линейный свет»"
 
 #. i18n: context: text @ Action (Select Pin Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Pin Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -23609,7 +23609,7 @@ msgstr "Осветление"
 #, kde-format
 msgctxt "Blending mode - Linear Light"
 msgid "Linear Light"
-msgstr "Линейное осветление"
+msgstr "Линейный свет"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:75
 #, kde-format
@@ -23645,7 +23645,7 @@ msgstr "Плоский свет"
 #, kde-format
 msgctxt "Blending mode - Hard Light"
 msgid "Hard Light"
-msgstr "Жёсткое осветление"
+msgstr "Жёсткий свет"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:81
 #, kde-format
@@ -23795,7 +23795,7 @@ msgstr "Исключение"
 #, kde-format
 msgctxt "Blending mode - Arcus Tangent"
 msgid "Arcus Tangent"
-msgstr "Касательная дуга"
+msgstr "Арктангенс"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:108
 #, kde-format
@@ -30935,7 +30935,7 @@ msgstr "Цвет контура ластика:"
 #: libs/ui/forms/wdggeneralsettings.ui:886
 #, kde-format
 msgid "Color Sampler Shape:"
-msgstr "Форма цветового миксера:"
+msgstr "Форма пипетки:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerPreviewSize)
 #. i18n: ectx: property (text), widget (QLabel, DiameterLbl)
@@ -34645,7 +34645,7 @@ msgstr "Переключиться на предыдущий профиль ки
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
 #, kde-format
 msgid "Color Sampler"
-msgstr "Цветовой миксер"
+msgstr "Пипетка"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
 #: libs/ui/kis_selection_actions_panel.cpp:91
@@ -38720,7 +38720,7 @@ msgstr "Группу нельзя редактировать."
 #: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:581
 #, kde-format
 msgid "Color sampler does not work on this layer."
-msgstr "Цветовой миксер недоступен на этом слое."
+msgstr "Пипетка недоступна на этом слое."
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:27
 #, kde-format
@@ -48820,7 +48820,7 @@ msgstr "word-spacing, tracking, white space, интервал, отслежив�
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Writing Mode"
-msgstr "Режим ввода"
+msgstr "Режим письма"
 
 #: plugins/dockers/textproperties/qml/WritingMode.qml:16
 #, kde-format
@@ -48829,7 +48829,7 @@ msgid ""
 "Writing mode sets whether the text flows horizontally or vertically, and in "
 "the latter case, whether the block flows right to left or left to right."
 msgstr ""
-"Режим ввода определяет, располагается ли текст горизонтально или "
+"Режим письма определяет, располагается ли текст горизонтально или "
 "вертикально, а в последнем случае — идёт ли блок справа налево или слева "
 "направо."
 
@@ -52798,7 +52798,7 @@ msgstr "Порог:"
 #: plugins/filters/colors/wdgcolortoalphabase.ui:164
 #, kde-format
 msgid "Color Sampler:"
-msgstr "Цветовой миксер:"
+msgstr "Пипетка:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
@@ -61932,7 +61932,7 @@ msgstr "Высота (Photoshop)"
 #, kde-format
 msgctxt "Linear Height (Photoshop) blend mode for brush texture"
 msgid "Linear Height (Photoshop)"
-msgstr "Мягкий свет (Photoshop)"
+msgstr "Линейная высота (Photoshop)"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:82
 #, kde-format
@@ -62326,7 +62326,7 @@ msgstr "Размер -> Угасание (сенсор)"
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:38
 #, kde-format
 msgid "Isotropic Spacing"
-msgstr "Изотропная среда"
+msgstr "Изотропный интервал"
 
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:39
 #, kde-format
@@ -66341,7 +66341,7 @@ msgstr "Рисование от руки"
 #: plugins/tools/basictools/kis_tool_colorsampler.h:124
 #, kde-format
 msgid "Color Sampler Tool"
-msgstr "Инструмент «Цветовой миксер»"
+msgstr "Инструмент «Пипетка»"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:64
 msgctxt "(qtundo-format)"
@@ -66783,12 +66783,12 @@ msgstr "Снежинка"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:453
 #, kde-format
 msgid "Copy Translate"
-msgstr "Скопировать перевод"
+msgstr "Копирование с переносом"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, kde-format
 msgid "Copy Translate at Intervals"
-msgstr "Копировать преобразование с интервалами"
+msgstr "Копирование с переносом через интервал"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:565
 #, kde-format
@@ -66925,8 +66925,8 @@ msgid ""
 "<nobr>Determines whether the color sampler will sample</nobr> colors from "
 "all visible layers or only the currently selected layer."
 msgstr ""
-"<nobr>Определяет, будет ли цветовой миксер брать образец</nobr> цвета из "
-"всех видимых слоёв или только из текущего выделенного слоя."
+"<nobr>Определяет, будет ли пипетка брать образец</nobr> цвета из всех "
+"видимых слоёв или только из текущего выделенного слоя."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:140
@@ -66991,8 +66991,8 @@ msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
 "foreground or not."
 msgstr ""
-"<nobr>Определяет, будет ли цветовой миксер обновлять</nobr> текущий цвет "
-"переднего плана или нет."
+"<nobr>Определяет, будет ли пипетка обновлять</nobr> текущий цвет переднего "
+"плана или нет."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:251
@@ -70831,7 +70831,7 @@ msgstr "Выбор форм"
 #, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "Цветовой миксер"
+msgstr "Пипетка"
 
 #. i18n: context: toolTip @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:76

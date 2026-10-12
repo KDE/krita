@@ -49,6 +49,7 @@
 #include <KisMainWindow.h>
 #include <QApplication>
 #include <QClipboard>
+#include <kis_tool_utils.h>
 
 namespace {
 QPointF getFittingOffset(QList<KoShape*> shapes,
@@ -226,15 +227,12 @@ void KisPasteActionFactory::run(Flags flags, KisViewManager *view)
         return;
     }
 
-    const QRect fittingBounds =
-        pasteAtCursorPosition ? QRect() : image->bounds();
-
     // If no shapes, check for layers
     if (KisClipboard::instance()->hasLayers()) {
         const QPointF offsetTopLeft = [&]() -> QPointF {
             KisPaintDeviceSP clip =
                 KisClipboard::instance()->clipFromKritaLayers(
-                    image->colorSpace());
+                    image->colorSpace(), new KisDefaultBounds(image));
 
             if (!clip) {
                 pasteAtCursorPosition = false;
@@ -279,18 +277,13 @@ void KisPasteActionFactory::run(Flags flags, KisViewManager *view)
         return;
     }
 
-    KisTimeSpan range;
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true, -1, &range);
+    KisImageSP clipImage = KisClipboard::instance()->clipImageFromBoardContents(true, -1);
+    if (clipImage) {
+        KisPaintDeviceSP clip = new KisPaintDevice(*clipImage->projection());
 
-    if (clip) {
-        if (pasteAtCursorPosition) {
-            const QPointF imagePos = view->canvasBase()->coordinatesConverter()->documentToImage(docPos);
-
-            const QPoint offset =
-                (imagePos - QRectF(clip->exactBounds()).center()).toPoint();
-
-            clip->setX(clip->x() + offset.x());
-            clip->setY(clip->y() + offset.y());
+            if (pasteAtCursorPosition) {
+            const QPoint imagePos = view->canvasBase()->coordinatesConverter()->documentToImage(docPos).toPoint();
+            KisToolUtils::recenterClip(clip, imagePos);
         }
 
         KisImportCatcher::adaptClipToImageColorSpace(clip, image);
@@ -303,21 +296,9 @@ void KisPasteActionFactory::run(Flags flags, KisViewManager *view)
         KisNodeSP aboveNode = view->activeLayer();
         KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();
 
-        if (range.isValid()) {
-            newLayer->enableAnimation();
-            KisKeyframeChannel *channel = newLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
-            KisRasterKeyframeChannel *rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(channel);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(rasterChannel);
-            rasterChannel->importFrame(range.start(), clip, nullptr);
-
-            if (!range.isInfinite()) {
-                rasterChannel->addKeyframe(range.end() + 1, 0);
-            }
-        } else {
-            const QRect rc = clip->extent();
+                    const QRect rc = clip->extent();
             KisPainter::copyAreaOptimized(rc.topLeft(), clip, newLayer->paintDevice(), rc);
-        }
-
+        
         KUndo2Command *cmd = new KisImageLayerAddCommand(image, newLayer, parentNode, aboveNode);
         KisProcessingApplicator *ap = beginAction(view, cmd->text());
         ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
@@ -343,29 +324,11 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
     KisImageSP image = viewManager->image();
     if (!image) return;
 
-    QRect imageBounds = image->bounds();
-
-    KisPaintDeviceSP clipdev = KisClipboard::instance()->clipFromKritaLayers(image->colorSpace());
-    KisPaintDeviceSP clip = clipdev ? new KisPaintDevice(*clipdev) : nullptr;
-
-    if (clip)
-    {
-        QRect clipBounds = clip->exactBounds();
-
-        if (!clipBounds.intersects(imageBounds))
-        {
-            QPoint diff = imageBounds.center() - clipBounds.center();
-            clip->setX(diff.x());
-            clip->setY(diff.y());
-        }
-    }
-    else
-    {
-        clip = KisClipboard::instance()->clip(imageBounds, true, -1, nullptr);
-    }
-
+        KisPaintDeviceSP clip = KisClipboard::instance()->clip(new KisDefaultBounds(image), true, -1);
+    
     if (!clip) return;
 
+KisToolUtils::ensureClipVisible(image->bounds(), clip);
     KisImportCatcher::adaptClipToImageColorSpace(clip, image);
 
     if (viewManager->selection()) {
@@ -382,27 +345,24 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
 {
     Q_UNUSED(viewManager);
 
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
-    if (!clip) return;
-
-    QRect rect = clip->exactBounds();
-    if (rect.isEmpty()) return;
+    KisImageSP clipImage = KisClipboard::instance()->clipImage(true);
+    if (!clipImage) return;
 
     KisDocument *doc = KisPart::instance()->createDocument();
     doc->documentInfo()->setAboutInfo("title", i18n("Untitled"));
     KisImageSP image = new KisImage(doc->createUndoStore(),
-                                    rect.width(),
-                                    rect.height(),
-                                    clip->colorSpace(),
+                                    clipImage->width(),
+                                    clipImage->height(),
+                                    clipImage->colorSpace(),
                                     i18n("Pasted"));
     bool renamePastedLayers = KisConfig(true).renamePastedLayers();
     QString pastedLayerName = renamePastedLayers ? image->nextLayerName() + " " + i18n("(pasted)") :
                                                    image->nextLayerName();
     KisPaintLayerSP layer =
             new KisPaintLayer(image.data(), pastedLayerName,
-                              OPACITY_OPAQUE_U8, clip->colorSpace());
+                              OPACITY_OPAQUE_U8, clipImage->colorSpace());
 
-    KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), rect);
+    KisPainter::copyAreaOptimized(QPoint(), clipImage->projection(), layer->paintDevice(), clipImage->bounds());
 
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);

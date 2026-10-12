@@ -32,6 +32,7 @@
 #include "KisImageBarrierLock.h"
 #include <KisResourceUserOperations.h>
 #include "kis_clipboard.h"
+#include <kis_tool_utils.h>
 #include "KisMainWindow.h"
 #include "KisViewManager.h"
 #include "KisPart.h"
@@ -329,12 +330,15 @@ void KisCustomBrushWidget::loadImage()
         KisImageWSP image;
         if (!m_dev) {
             if (m_useClipboard) {
-                KisClipboard* clipboard = KisClipboard::instance();
-                if (clipboard->hasImage()) {
-                    m_dev = clipboard->clip(QRect(), false);
-                    if (m_dev) {
-                        m_devRect = m_dev->exactBounds();
-                    }
+                KisImageSP clipImage = KisClipboard::instance()->clipImage(false);
+                if (clipImage) {
+                    m_dev = new KisPaintDevice(*clipImage->projection());
+                    m_devRect = clipImage->projection()->exactBounds();
+
+                    // if the device has non-transparent default pixel, we
+                    // should bake that, otherwise calls to exactBounds() will
+                    // have negative effects
+                    KisToolUtils::bakeDefaultPixel(m_dev, m_devRect);
                 }
             } else if ((image = currentImage())) {
                 // create copy of the data

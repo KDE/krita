@@ -119,6 +119,50 @@ public:
 private:
     std::vector<int> m_sizes;
 };
+
+/**
+ * Trims the device for uploading to the clipboard
+ *
+ * - if \p selection is present, then selection is baked
+ *   into the device, the whole device is cropped by the
+ *   selection and the default pixel is reset to "transparent
+ * - if \p selection is null, then device is just cropped
+ *   by the image bounds
+ */
+void KRITAUI_EXPORT trimDeviceForClipboard(KisImageSP image,
+                                           KisPaintDeviceSP device,
+                                           KisSelectionSP selection,
+                                           bool makeSharpClip = false);
+
+/**
+ * Creates an image that has the same resolution and size as
+ * \p srcImage, which can be used as a container image for
+ * uploading nodes into clipboard.
+ */
+KisImageSP KRITAUI_EXPORT buildImageForClipboard(KisImageSP srcImage, KisNodeList nodes);
+
+
+/**
+ * Moves the center of non-default area to the requested position
+ */
+void KRITAUI_EXPORT recenterClip(KisPaintDeviceSP clip, const QPoint &newCenter);
+
+/**
+ * Make sure non-default area of the clip device is visible within image bounds
+ *
+ * The function uses nonDefaultPixelArea() instead of exactBounds(), because the
+ * clip may have non-transparent default pixel.
+ */
+void KRITAUI_EXPORT ensureClipVisible(const QRect &imageBounds, KisPaintDeviceSP clip);
+
+/**
+ * If \p clip has non-transparent default pixel, it will be written
+ * into pixels explicitly in the area \p rc. After that, the default
+ * pixel will be reset to "transparent".
+ */
+void KRITAUI_EXPORT bakeDefaultPixel(KisPaintDeviceSP clip, const QRect &rc);
+
+
 }
 
 #endif // KIS_TOOL_UTILS_H

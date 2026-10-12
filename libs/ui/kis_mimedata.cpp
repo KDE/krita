@@ -59,7 +59,7 @@ KisNodeSP safeCopyNode(KisNodeSP node, bool detachClones = true) {
 }
 
 
-KisMimeData::KisMimeData(QList<KisNodeSP> nodes, KisImageSP image, bool forceCopy)
+KisMimeData::KisMimeData(QList<KisNodeSP> nodes, KisImageSP image, const QRect referenceRect, bool forceCopy)
     : QMimeData()
     , m_nodes(nodes)
     , m_forceCopy(forceCopy)
@@ -69,8 +69,16 @@ KisMimeData::KisMimeData(QList<KisNodeSP> nodes, KisImageSP image, bool forceCop
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(image);
 
-    Q_FOREACH (KisNodeSP node, nodes) {
-        m_copiedBounds |= KisLayerUtils::recursiveTightNodeVisibleBounds(node);
+    m_referenceColorSpace = image->colorSpace();
+    m_referenceResX = image->xRes();
+    m_referenceResY = image->yRes();
+
+    if (referenceRect.isEmpty()) {
+        Q_FOREACH (KisNodeSP node, nodes) {
+            m_referenceRect |= KisLayerUtils::recursiveTightNodeVisibleBounds(node);
+        }
+    } else {
+        m_referenceRect = referenceRect;
     }
 }
 
@@ -138,60 +146,135 @@ QStringList KisMimeData::formats () const
     return f;
 }
 
-KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage, const QRect &copiedBounds)
+KisPaintDeviceSP KisMimeData::clipFromKritaLayersImpl(const KoColorSpace *cs, const QRect &referenceImageRect) const
 {
-    KisDocument *doc = KisPart::instance()->createTemporaryDocument();
-    QRect rc = copiedBounds;
+    KisNodeList nodes = m_nodes;
 
-    QRect offset(0, 0, rc.width(), rc.height());
-    rc |= offset;
-
-    if (rc.isEmpty() && srcImage) {
-        rc = srcImage->bounds();
-    }
-
-    KisImageSP image = new KisImage(0, rc.width(), rc.height(), nodes.first()->colorSpace(), nodes.first()->name());
-    image->setAllowMasksOnRootNode(true);
-
-    if (srcImage) {
-        image->setResolution(srcImage->xRes(), srcImage->yRes());
-    }
-
-    {
-        KisImageReadOnlyBarrierLock lock(srcImage, std::defer_lock);
-        if (srcImage) {
-            lock.lock();
+    if (nodes.size() > 1) {
+        if (cs == nullptr) {
+            cs = m_referenceColorSpace;
         }
 
-        Q_FOREACH (KisNodeSP node, nodes) {
-            KisNodeSP clonedNode = safeCopyNode(node);
-            /// HACK ALERT: here we just initialize parent image link
-            ///             and skip initializing shapeController!
-            ///             Ideally, we should call initializeExternalNode()
-            ///             instead.
-            image->addNode(clonedNode);
-            KIS_SAFE_ASSERT_RECOVER(clonedNode->image() == KisImageWSP(image)) {
-                clonedNode->setImage(image);
+        if (cs == nullptr) {
+            // if no color space provided choose the most used one in the layer data
+            QHash<const KoColorSpace *, int> colorSpacesCount;
+
+            Q_FOREACH (KisNodeSP node, nodes) {
+                const KoColorSpace *colorSpace = node->colorSpace();
+                if (colorSpace != nullptr) {
+                    colorSpacesCount.insert(colorSpace, colorSpacesCount.value(colorSpace) + 1);
+                }
+            }
+
+            int max = 0;
+            for (auto it = colorSpacesCount.begin(); it != colorSpacesCount.end(); ++it) {
+                if (it.value() > max) {
+                    max = it.value();
+                    cs = it.key();
+                }
             }
         }
+
+        // fallback to rgb8 if no color space found
+        // It is likely that this will never be triggered, but it's probably best to handle this just in case
+        if (cs == nullptr) {
+            cs = KoColorSpaceRegistry::instance()->rgb8();
+        }
+
+        KisImageSP tempImage = new KisImage(nullptr,
+                                            referenceImageRect.width(),
+                                            referenceImageRect.height(),
+                                            cs,
+                                            "ClipImage");
+
+        tempImage->setResolution(m_referenceResX, m_referenceResY);
+
+        {
+            // The nodes are still connected to the original image,
+            // so we should lock it before cloning
+            KisImageReadOnlyBarrierLock lock(m_image, std::defer_lock);
+            if (m_image) {
+                lock.lock();
+            }
+
+            // If having multiple nodes, the masks are filtered out
+            KisLayerUtils::filterMergeableNodes(nodes, false);
+            for (KisNodeSP node : nodes) {
+                KisNodeSP clonedNode = safeCopyNode(node);
+
+                if (referenceImageRect.x() != 0) {
+                    clonedNode->setX(clonedNode->x() - referenceImageRect.x());
+                }
+
+                if (referenceImageRect.y() != 0) {
+                    clonedNode->setY(clonedNode->y() - referenceImageRect.y());
+                }
+
+                /// HACK ALERT: here we just initialize parent image link
+                ///             and skip initializing shapeController!
+                ///             Ideally, we should call initializeExternalNode()
+                ///             instead.
+                tempImage->addNode(clonedNode, tempImage->root());
+                KIS_SAFE_ASSERT_RECOVER(clonedNode->image() == KisImageWSP(tempImage))
+                {
+                    clonedNode->setImage(tempImage);
+                }
+            }
+        }
+        tempImage->refreshGraphAsync();
+        KisLayerUtils::refreshHiddenAreaAsync(tempImage, tempImage->root(), tempImage->bounds());
+        tempImage->waitForDone();
+
+        // returns a device without default bounds set!
+        return tempImage->projection();
+    } else if (!nodes.isEmpty()) {
+
+        KisPaintDeviceSP dev = new KisPaintDevice(*nodes.first()->projection());
+        if (!referenceImageRect.topLeft().isNull()) {
+            dev->moveTo(dev->offset() - referenceImageRect.topLeft());
+        }
+
+        // returns a device without default bounds set!
+        return dev;
     }
 
-    doc->setCurrentImage(image);
-
-    return doc;
+    return nullptr;
 }
 
-QByteArray serializeToByteArray(QList<KisNodeSP> nodes, KisImageSP srcImage, const QRect &copiedBounds)
+KisPaintDeviceSP KisMimeData::clipFromKritaLayers(const KoColorSpace *cs, KisDefaultBoundsBaseSP defaultBounds) const
 {
-    QScopedPointer<KisDocument> doc(createDocument(nodes, srcImage, copiedBounds));
-    QByteArray result = doc->serializeToNativeByteArray();
+    KisPaintDeviceSP result;
 
-    // avoid a sanity check failure caused by the fact that the image outlives
-    // the document (and it does)
-    doc->setCurrentImage(0);
+    KisPaintDeviceSP dev = clipFromKritaLayersImpl(cs, defaultBounds->bounds());
 
+    if (dev) {
+        result = new KisPaintDevice(*dev);
+        result->setDefaultBounds(defaultBounds);
+    }
     return result;
 }
+
+KisImageSP KisMimeData::clipImageFromKritaLayers(const KoColorSpace *cs) const
+{
+    KisImageSP resultImage;
+
+    const QRect referenceRect = m_referenceRect;
+    if (referenceRect.isEmpty()) return resultImage;
+
+    KisPaintDeviceSP clip = clipFromKritaLayersImpl(cs, referenceRect);
+
+    if (clip) {
+        resultImage =
+            new KisImage(nullptr, referenceRect.width(), referenceRect.height(), clip->colorSpace(), "clip image");
+        resultImage->setResolution(m_referenceResX, m_referenceResY);
+
+        KisPaintLayerSP paintLayer = new KisPaintLayer(resultImage, "layer", OPACITY_OPAQUE_U8, clip);
+        resultImage->addNode(paintLayer);
+    }
+
+    return resultImage;
+}
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type preferredType) const
 #else
@@ -211,19 +294,29 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QMetaType preferredT
     Q_ASSERT(m_nodes.size() > 0);
 
     if (mimetype == "application/x-qt-image") {
-        KisConfig cfg(true);
-
-        QScopedPointer<KisDocument> doc(createDocument(m_nodes, m_image, m_copiedBounds));
+        KisImageSP image = clipImageFromKritaLayers(nullptr);
 
         const KisDisplayConfig displayConfig = this->displayConfigForMimePastes();
-        return doc->image()->projection()->convertToQImage(displayConfig.profile,
-                                                           displayConfig.intent,
-                                                           displayConfig.conversionFlags);
+        QImage result = image->projection()->convertToQImage(displayConfig.profile,
+                                                             image->bounds(),
+                                                             displayConfig.intent,
+                                                             displayConfig.conversionFlags);
+        result.setDotsPerMeterX(qRound(image->xRes() * 72.0 / 2.54 * 100.0));
+        result.setDotsPerMeterY(qRound(image->yRes() * 72.0 / 2.54 * 100.0));
+        return result;
     }
     else if (mimetype == "application/zip") {
+        QByteArray result;
 
-        QByteArray ba = serializeToByteArray(m_nodes, m_image, m_copiedBounds);
-        return ba;
+        {
+            std::unique_ptr<KisDocument> doc(KisPart::instance()->createTemporaryDocument());
+            KisImageSP image = clipImageFromKritaLayers(nullptr);
+            doc->setCurrentImage(image, false);
+
+            result = doc->serializeToNativeByteArray();
+        }
+
+        return result;
 
     }
     else if (mimetype == "application/x-krita-node-internal-pointer") {
@@ -396,18 +489,18 @@ QMimeData* KisMimeData::mimeForLayers(const KisNodeList &nodes, KisImageSP image
     KisLayerUtils::sortMergeableNodes(image->root(), inputNodes, sortedNodes);
     if (sortedNodes.isEmpty()) return 0;
 
-    KisMimeData* data = new KisMimeData(sortedNodes, image, forceCopy);
+    KisMimeData* data = new KisMimeData(sortedNodes, image, QRect(), forceCopy);
     return data;
 }
 
-QMimeData* KisMimeData::mimeForLayersDeepCopy(const KisNodeList &nodes, KisImageSP image, bool forceCopy)
+QMimeData* KisMimeData::mimeForLayersDeepCopy(const KisNodeList &nodes, KisImageSP image, const QRect referenceRect, bool forceCopy)
 {
     KisNodeList inputNodes = nodes;
     KisNodeList sortedNodes;
     KisLayerUtils::sortMergeableNodes(image->root(), inputNodes, sortedNodes);
     if (sortedNodes.isEmpty()) return 0;
 
-    KisMimeData* data = new KisMimeData(sortedNodes, image, forceCopy);
+    KisMimeData* data = new KisMimeData(sortedNodes, image, referenceRect, forceCopy);
     data->deepCopyNodes();
     return data;
 }

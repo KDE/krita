@@ -577,12 +577,13 @@ void KisView::dropEvent(QDropEvent *event)
                 }
             }
 
-            KisPaintDeviceSP clip = KisClipboard::instance()->clipFromBoardContentsWithData(qimage, urls, QRect(), true, -1, source);
-            if (clip) {
+            KisImageSP clipImage = KisClipboard::instance()->clipFromBoardContentsWithData(qimage, urls, true, -1, source);
+            if (clipImage) {
                 const auto pos = this->viewConverter()
                                      ->imageToDocument(imgCursorPos)
                                      .toPoint();
 
+                KisPaintDeviceSP clip = new KisPaintDevice(*clipImage->projection());
                 clip->moveTo(pos.x(), pos.y());
 
                 KisImportCatcher::adaptClipToImageColorSpace(clip,
@@ -604,8 +605,10 @@ void KisView::dropEvent(QDropEvent *event)
             }
         } else if (action == KisCanvasDrop::INSERT_AS_REFERENCE_IMAGE) {
 
-            KisPaintDeviceSP clip = KisClipboard::instance()-> clipFromBoardContentsWithData(qimage, urls, QRect(), true);
-            if (clip) {
+            KisImageSP clipImage = KisClipboard::instance()->clipFromBoardContentsWithData(qimage, urls, true);
+            if (clipImage) {
+                KisPaintDeviceSP clip = new KisPaintDevice(*clipImage->projection());
+
                 KisImportCatcher::adaptClipToImageColorSpace(clip,
                                                              this->image());
 

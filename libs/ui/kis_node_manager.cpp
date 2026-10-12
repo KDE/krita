@@ -1570,7 +1570,7 @@ void KisNodeManager::cutLayersToClipboard()
         it++;
     }
 
-    KisClipboard::instance()->setLayers(nodes, m_d->view->image(), false);
+    KisClipboard::instance()->setLayers(nodes, m_d->view->image(), m_d->view->image()->bounds(), false);
 
     if (canModifyLayers(nodes)) {
         KUndo2MagicString actionName = kundo2_i18n("Cut Nodes");
@@ -1582,7 +1582,7 @@ void KisNodeManager::cutLayersToClipboard()
 void KisNodeManager::copyLayersToClipboard()
 {
     KisNodeList nodes = this->selectedNodes();
-    KisClipboard::instance()->setLayers(nodes, m_d->view->image(), true);
+    KisClipboard::instance()->setLayers(nodes, m_d->view->image(), m_d->view->image()->bounds(), true);
 }
 
 void KisNodeManager::pasteLayersFromClipboard(bool changeOffset, QPointF offset, KisProcessingApplicator *applicator)

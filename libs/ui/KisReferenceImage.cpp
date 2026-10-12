@@ -205,9 +205,8 @@ KisReferenceImage * KisReferenceImage::fromFile(const QString &filename, const K
 
 KisReferenceImage *KisReferenceImage::fromClipboard(const KisCoordinatesConverter &converter)
 {
-    const auto sz = KisClipboard::instance()->clipSize();
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip({0, 0, sz.width(), sz.height()}, true);
-    return fromPaintDevice(clip, converter, nullptr);
+    KisImageSP clipImage = KisClipboard::instance()->clipImage(true);
+    return fromPaintDevice(clipImage->projection(), converter, nullptr);
 }
 
 KisReferenceImage *

@@ -64,8 +64,8 @@ void KisImageFromClipboardWidget::createImage()
 {
     newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
-    if (!clip) {
+    KisImageSP clipImage = KisClipboard::instance()->clipImage(true);
+    if (!clipImage) {
         enableImageCreation(QImage());
         return;
     }
@@ -92,10 +92,7 @@ void KisImageFromClipboardWidget::createImage()
             KIS_SAFE_ASSERT_RECOVER_RETURN(layer);
 
             layer->setOpacity(OPACITY_OPAQUE_U8);
-            const QRect r = clip->exactBounds();
-            KisImportCatcher::adaptClipToImageColorSpace(clip, image);
-
-            KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), r);
+            KisPainter::copyAreaOptimized(QPoint(), clipImage->projection(), layer->paintDevice(), clipImage->bounds());
             layer->setDirty();
         }
         doc->setModified(true);

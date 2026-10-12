@@ -13,12 +13,15 @@
 #include <kis_types.h>
 #include <kritaui_export.h>
 
+#include <kis_default_bounds_base.h>
+
 class KisShapeController;
 class KisNodeDummy;
 class KisNodeInsertionAdapter;
 class KisNodeGraphListener;
 class KisProcessingApplicator;
 class KisDisplayConfig;
+class KoColorSpace;
 
 /**
  * KisMimeData implements delayed retrieval of nodes for d&d and copy/paste.
@@ -29,7 +32,7 @@ class KRITAUI_EXPORT KisMimeData : public QMimeData
 {
     Q_OBJECT
 public:
-    KisMimeData(QList<KisNodeSP> nodes, KisImageSP image, bool forceCopy = false);
+    KisMimeData(QList<KisNodeSP> nodes, KisImageSP image, const QRect referenceRect, bool forceCopy = false);
 
     /// return the node set on this mimedata object -- for internal use
     QList<KisNodeSP> nodes() const;
@@ -82,6 +85,9 @@ public:
      */
     static KisDisplayConfig displayConfigForMimePastes();
 
+    KisPaintDeviceSP clipFromKritaLayers(const KoColorSpace *cs, KisDefaultBoundsBaseSP defaultBounds) const;
+    KisImageSP clipImageFromKritaLayers(const KoColorSpace *cs) const;
+
 private:
     /**
      * Loads a node from a mime container
@@ -101,7 +107,7 @@ private:
 
 public:
     static QMimeData* mimeForLayers(const KisNodeList &nodes, KisImageSP image, bool forceCopy = false);
-    static QMimeData* mimeForLayersDeepCopy(const KisNodeList &nodes, KisImageSP image, bool forceCopy);
+    static QMimeData* mimeForLayersDeepCopy(const KisNodeList &nodes, KisImageSP image, const QRect referenceRect, bool forceCopy);
     static bool insertMimeLayers(const QMimeData *data,
                                  KisImageSP image,
                                  KisShapeController *shapeController,
@@ -125,12 +131,17 @@ private:
                                        KisImageSP srcImage, KisImageSP dstImage,
                                        KisShapeController *shapeController);
 
+
+    KisPaintDeviceSP clipFromKritaLayersImpl(const KoColorSpace *cs, const QRect &referenceImageRect) const;
 private:
 
     QList<KisNodeSP> m_nodes;
     bool m_forceCopy;
     KisImageSP m_image;
-    QRect m_copiedBounds;
+    QRect m_referenceRect;
+    qreal m_referenceResX {1.0};
+    qreal m_referenceResY {1.0};
+    const KoColorSpace *m_referenceColorSpace {nullptr};
 };
 
 #endif // KIS_MIMEDATA_H

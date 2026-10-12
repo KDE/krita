@@ -17,8 +17,11 @@
 
 #include <kritaui_export.h>
 
+#include <kis_default_bounds_base.h>
+
 class QRect;
 class QMimeData;
+class KisMimeData;
 class KisTimeSpan;
 class KoColorSpace;
 
@@ -45,24 +48,50 @@ public:
     static KisClipboard* instance();
 
     /**
-     * Sets the clipboard to the contents of the specified paint device; also
-     * set the system clipboard to a QImage representation of the specified
-     * paint device.
+     * Get the contents of the clipboard in the form of a paint device.
      *
-     * @param dev The paint device that will be stored on the clipboard
-     * @param topLeft a hint about the place where the clip should be pasted by default
+     * If the paint device originates from Krita itself, it may have
+     * non-transparent default pixel and hence infinite visual extent.
+     * To handle the case properly, the caller must provide a valid
+     * \p defaultBounds object, which will make the infinite clip to
+     * limit itself inside the bounds of the relevant image.
      */
-    void setClip(KisPaintDeviceSP dev, const QPoint& topLeft);
-
-    void setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const KisTimeSpan &range);
+    KisPaintDeviceSP clip(KisDefaultBoundsBaseSP defaultBounds,
+                          bool showPopup,
+                          int overridePasteBehaviour = -1) const;
 
     /**
-     * Get the contents of the clipboard in the form of a paint device.
+     * Get the contents of the clipboard in a form of a bounded
+     * image. To get the contents of the image just use the normal
+     * `image->projection()` device.
+     *
+     * The origin of the "clip" is always placed at point (0,0)
+     * of the image. The size of the image equals to the size of
+     * the original "clip"
+     *
+     * The meaning of the "clip size" depends on where the clip
+     * comes from:
+     *
+     * - when pasted from the clipboard buffer (i.e. QClipboard::image()),
+     *   the size of the image equals to the size of the image in the buffer
+     *
+     * - when pasted from a URL, the size of the image also equals
+     *   the size of the image in the file.
+     *
+     *   There is small complication though: if the source file is .kra, then
+     *  `image->projection()` may have non-transparent default pixel. The caller
+     *   should be ready to handle that by either keeping the parent KisImage
+     *   alive all the time or by setting his own defaultBounds object on it.
+     *
+     * - when pasted from a Krita selection, then the top-left of the selection
+     *   is placed at point (0,0) and the size of the image equals to the original
+     *   size of the selection
+     *
+     * - when paster from a Krita layer, then the size of the image equals to
+     *   the size of the original source image
      */
-    KisPaintDeviceSP clip(const QRect &imageBounds,
-                          bool showPopup,
-                          int overridePasteBehaviour = -1,
-                          KisTimeSpan *clipRange = nullptr) const;
+    KisImageSP clipImage(bool showPopup,
+                         int overridePasteBehaviour = -1) const;
 
     /**
      * Given the mimedata for a paste event, ask user which source
@@ -79,43 +108,24 @@ public:
     QPair<bool, PasteFormatBehaviour> askUserForSourceWithData(QImage qimage,
                                                                const QList<QUrl> urls,
                                                                bool useClipboardFallback = false) const;
-    /**
-     * Get the contents of the specified mimedata buffer in the form of a paint device.
-     */
-    KisPaintDeviceSP clipFromMimeData(const QMimeData *data,
-                                      const QRect &imageBounds,
-                                      bool showPopup,
-                                      int overridePasteBehaviour = -1,
-                                      KisTimeSpan *clipRange = nullptr,
-                                      bool useClipboardFallback = false) const;
 
-    KisPaintDeviceSP clipFromKritaLayers(const KoColorSpace *cs) const;
+    KisPaintDeviceSP clipFromKritaLayers(const KoColorSpace *cs, KisDefaultBoundsBaseSP defaultBounds) const;
+    KisImageSP clipImageFromKritaLayers(const KoColorSpace *cs = nullptr) const;
+    KisImageSP clipImageFromBoardContents(bool showPopup, int overridePasteBehaviour, QPair<bool, PasteFormatBehaviour> source = {false, PasteFormatBehaviour::PASTE_FORMAT_ASK}) const;
 
-    KisPaintDeviceSP clipFromBoardContents(const QMimeData *data,
-                          const QRect &imageBounds,
-                          bool showPopup,
-                          int overridePasteBehaviour = -1,
-                          bool useClipboardFallback = false,
-                          QPair<bool, PasteFormatBehaviour> source = {
-                              false,
-                              PasteFormatBehaviour::PASTE_FORMAT_ASK}) const;
-
-    //A function to allow for caching the clipboard data
-    KisPaintDeviceSP clipFromBoardContentsWithData(
+    QImage getImageWithFallback(const QMimeData *cbData, bool useClipboardFallback = false) const;
+    KisImageSP clipFromBoardContentsWithData(
         QImage image,
         const QList<QUrl> urls,
-        const QRect &imageBounds,
         bool showPopup,
         int overridePasteBehaviour = -1,
         QPair<bool, PasteFormatBehaviour> source = {false, PasteFormatBehaviour::PASTE_FORMAT_ASK}) const;
 
-    QImage getImageWithFallback(const QMimeData *cbData, bool useClipboardFallback = false) const;
+    KisImageSP fetchImageByURL(const QUrl &originalUrl) const;
 
     bool hasClip() const;
 
-    QSize clipSize() const;
-
-    void setLayers(KisNodeList nodes, KisImageSP image, bool forceCopy = false);
+    void setLayers(KisNodeList nodes, KisImageSP image, const QRect referenceRect, bool forceCopy = false);
     bool hasLayers() const;
     bool hasLayerStyles() const;
 
@@ -132,11 +142,6 @@ private Q_SLOTS:
 
 private:
     Q_DISABLE_COPY(KisClipboard);
-
-    KisPaintDeviceSP
-    clipFromKritaSelection(const QMimeData *data, const QRect &imageBounds, KisTimeSpan *clipRange) const;
-
-    KisPaintDeviceSP fetchImageByURL(const QUrl &originalUrl) const;
 
     QImage getImageFromMimeData(const QMimeData *cbData) const;
 

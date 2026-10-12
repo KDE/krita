@@ -25,44 +25,10 @@
 namespace
 {
 
-const QMatrix4x4 xyz50To65 {QMatrix4x4(
-    0.955473421488075,    -0.02309845494876471,   0.06325924320057072, 0.0,
-    -0.0283697093338637,    1.0099953980813041,    0.021041441191917323, 0.0,
-    0.012314014864481998, -0.020507649298898964,  1.330365926242124, 0.0,
-    0.0, 0.0, 0.0, 1.0
-    )};
-
-const QMatrix4x4 xyz50To65_inv = xyz50To65.inverted();
-
-const QMatrix4x4 XYZtoOkLABLMS {QMatrix4x4(
-    0.8190224379967030, 0.3619062600528904, -0.1288737815209879, 0.0,
-    0.0329836539323885, 0.9292868615863434,  0.0361446663506424, 0.0,
-    0.0481771893596242, 0.2642395317527308,  0.6335478284694309, 0.0,
-    0.0, 0.0, 0.0, 1.0
-    )};
-
-const QMatrix4x4 XYZtoOkLABLMS_inv = XYZtoOkLABLMS.inverted();
-
-const QMatrix4x4 lmsToOkLab {QMatrix4x4(
-    0.2104542683093140,  0.7936177747023054, -0.0040720430116193, 0.0,
-    1.9779985324311684, -2.4285922420485799,  0.4505937096174110, 0.0,
-    0.0259040424655478,  0.7827717124575296, -0.8086757549230774, 0.0,
-    0.0, 0.0, 0.0, 1.0
-    )};
-
-const QMatrix4x4 lmsToOkLab_inv = lmsToOkLab.inverted();
 
 struct xyzToOkLabModel {
     static ALWAYS_INLINE std::array<qreal, 3> toLCH (const QVector<float> &channels) {
-        QVector4D color (channels[0], channels[1], channels[2], 0.0);
-
-        const QVector4D lms = XYZtoOkLABLMS * (xyz50To65 * color);
-
-        const QVector4D lmsPrime = QVector4D(cbrtf(lms.x()),
-                                             cbrtf(lms.y()),
-                                             cbrtf(lms.z()), 0.0);
-
-        const QVector4D OkLab = lmsToOkLab * lmsPrime;
+        const QVector4D OkLab = KoGamutMappingUtils::XYZToOkLab(QVector4D(channels[0], channels[1], channels[2], 0.0));
         std::array<qreal, 3> lch {0.0, 0.0, 0.0};
         LabToLCH(OkLab.x(), OkLab.y()+0.5, OkLab.z()+0.5, &lch[0], &lch[1], &lch[2]);
         return lch;
@@ -72,14 +38,7 @@ struct xyzToOkLabModel {
         std::array<qreal, 3> output {0.0, 0.0, 0.0};
         LCHToLab(lch[0], lch[1], lch[2], &output[0], &output[1], &output[2]);
 
-
-        QVector4D color (output[0], output[1]-0.5, output[2]-0.5, 0.0);
-
-        const QVector4D lmsPrime = lmsToOkLab_inv * color;
-        const QVector4D lms = QVector4D(powf(lmsPrime.x(), 3.0),
-                                        powf(lmsPrime.y(), 3.0),
-                                        powf(lmsPrime.z(), 3.0), 0.0);
-        const QVector4D xyz = xyz50To65_inv * (XYZtoOkLABLMS_inv * lms);
+        const QVector4D xyz = KoGamutMappingUtils::OkLabToXYZ(QVector4D(output[0], output[1]-0.5, output[2]-0.5, 0.0));
         channels[0] = xyz.x();
         channels[1] = xyz.y();
         channels[2] = xyz.z();
@@ -87,37 +46,16 @@ struct xyzToOkLabModel {
         //qDebug() << "lch" << lch << "col" << color << "lmsprime" << lmsPrime << "lms" << lms << "xyz" << channels;
         return channels;
     }
+
+    static ALWAYS_INLINE float linearizeLightness(float lightness) {
+        return powf(lightness, 3.0);
+    }
 };
-
-const QMatrix4x4 XYZd65toDolbyLMS {QMatrix4x4(
-    0.3592832590121217,  0.6976051147779502, -0.0358915932320290, 0.0,
-    -0.1920808463704993,  1.1004767970374321,  0.0753748658519118, 0.0,
-    0.0070797844607479,  0.0748396662186362,  0.8433265453898765, 0.0,
-    0.0, 0.0, 0.0, 1.0
-    )};
-
-const QMatrix4x4 XYZd65toDolbyLMS_inv = XYZd65toDolbyLMS.inverted();
-
-const QMatrix4x4 lmsToICtCp {QMatrix4x4(
-    2048.0 / 4096.0,   2048.0 / 4096.0,       0.0 , 0.0,
-    6610.0 / 4096.0, -13613.0 / 4096.0,  7003.0 / 4096.0 , 0.0,
-    17933.0 / 4096.0, -17390.0 / 4096.0,  -543.0 / 4096.0, 0.0,
-    0.0, 0.0, 0.0, 1.0
-    )};
-
-const QMatrix4x4 lmsToICtCp_inv = lmsToICtCp.inverted();
 
 struct xyzToICtCpModel {
     static ALWAYS_INLINE std::array<qreal, 3> toLCH (const QVector<float> &channels) {
         QVector4D color (channels[0], channels[1], channels[2], 0.0);
-
-        const QVector4D lms =  XYZd65toDolbyLMS * (xyz50To65 * color);
-
-        const QVector4D lmsPrime = QVector4D(applySmpte2048Curve(lms.x()),
-                                             applySmpte2048Curve(lms.y()),
-                                             applySmpte2048Curve(lms.z()), 0.0);
-
-        const QVector4D ICtCp = lmsToICtCp * lmsPrime;
+        const QVector4D ICtCp = KoGamutMappingUtils::XYZToICtCp(color);
         std::array<qreal, 3> lch {0.0, 0.0, 0.0};
         LabToLCH(ICtCp.x(), (ICtCp.y()+0.5), (ICtCp.z()+0.5), &lch[0], &lch[1], &lch[2]);
 
@@ -130,17 +68,16 @@ struct xyzToICtCpModel {
 
 
         QVector4D color (output[0], output[1]-0.5, output[2]-0.5, 0.0);
-
-        const QVector4D lmsPrime = lmsToICtCp_inv * color;
-        const QVector4D lms = QVector4D(removeSmpte2048Curve(lmsPrime.x()),
-                                        removeSmpte2048Curve(lmsPrime.y()),
-                                        removeSmpte2048Curve(lmsPrime.z()), 0.0);
-        const QVector4D xyz = xyz50To65_inv * (XYZd65toDolbyLMS_inv * lms);
+        const QVector4D xyz = KoGamutMappingUtils::ICtCpToXYZ(color);
         channels[0] = xyz.x();
         channels[1] = xyz.y();
         channels[2] = xyz.z();
 
         return channels;
+    }
+
+    static ALWAYS_INLINE float linearizeLightness(float lightness) {
+        return removeSmpte2048Curve(lightness);
     }
 };
 
@@ -158,6 +95,10 @@ struct labModel {
         channels[1] = output[1];
         channels[2] = output[2];
         return channels;
+    }
+
+    static ALWAYS_INLINE float linearizeLightness(float lightness) {
+        return powf(lightness, 3.0);
     }
 };
 
@@ -178,12 +119,14 @@ template<class ModelType, class DifferenceType>
 class KisGamutMapClipAdjustment : public KoColorTransformation
 {
 public:
-    KisGamutMapClipAdjustment(const KoColorSpace *sourceSpace): m_sourceSpace(sourceSpace) {}
+    KisGamutMapClipAdjustment(const KoColorSpace *sourceSpace)
+        : m_sourceSpace(sourceSpace) {}
 public:
 
     // Algorithm based of https://drafts.csswg.org/css-color-4/#pseudo-binsearch
     void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const override
     {
+
         if (!m_sourceSpace) {
             qWarning() << "no source space!";
             return;
@@ -193,6 +136,7 @@ public:
             qWarning() << "no target profile found for..." << m_targetColorProfileName;
             return;
         }
+        const bool greyscale = targetProfile->colorModelID() == GrayAColorModelID.id();
         const KoColorSpace *targetSpace = KoColorSpaceRegistry::instance()->colorSpace(targetProfile->colorModelID(), Integer16BitsColorDepthID.id(), targetProfile);
         if (!targetSpace) {
             qWarning() << "no target space!";
@@ -217,29 +161,58 @@ public:
             m_sourceSpace->normalisedChannelsValue(tmpClipped.get(), clippedChannels);
 
 
-            if (DifferenceType::difference(originalChannels, clippedChannels) > 0.02) {
+            if (greyscale) {
                 LCH = ModelType::toLCH(originalChannels);
-                float min = 0;
-                float max = LCH[1];
+                LCH[1] = 0;
+                originalChannels = ModelType::fromLCH(LCH, originalChannels);
+                m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
+            } else if (DifferenceType::difference(originalChannels, clippedChannels) > 0.02) {
+                LCH = ModelType::toLCH(originalChannels);
 
+                 if (!m_cuspDescription.isEmpty()) {
+                    QPointF cusp = KoGamutMappingUtils::cuspForHue(m_cuspDescription, LCH[2]);
 
-                while (max-min > 0.0001) {
+                    /// We are treating the cusp triangle as linear inside linear space.
+                    /// This is good enough for RGB profiles, CMYK profiles might get better
+                    /// results with the MINDE method. Overall though, we just want to move
+                    /// the colors into gamut enough so that we don't get hue shifts when converting,
+                    /// and this method delivers on that nicely.
+                    const float L = ModelType::linearizeLightness(LCH[0]);
+                    const float cuspL = ModelType::linearizeLightness(cusp.y());
+                    if (LCH[0] > cusp.y()) {
+                        const float t = (L - cuspL) / (1.0 - cuspL);
+                        const float c = qMax(0.0, cusp.x()* (1.0-t));
+                        LCH[1] = qMin(LCH[1], c);
 
-                    LCH[1] = (max + min) * 0.5;
-                    originalChannels = ModelType::fromLCH(LCH, originalChannels);
-
-
-                    m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
-                    m_sourceSpace->convertPixelsTo(tmpOriginal.get(), tmpTarget.get(), targetSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
-                    targetSpace->convertPixelsTo(tmpTarget.get(), tmpClipped.get(), m_sourceSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
-                    m_sourceSpace->normalisedChannelsValue(tmpClipped.get(), clippedChannels);
-
-                    if (DifferenceType::difference(originalChannels, clippedChannels) < 0.02) {
-                        min = LCH[1];
                     } else {
-                        max = LCH[1];
+                        const float t = L / (cuspL);
+                        const float c = qMax(0.0, cusp.x()*t);
+                        LCH[1] = qMin(LCH[1], c);
                     }
-                }
+                    originalChannels = ModelType::fromLCH(LCH, originalChannels);
+                    m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
+                 } else {
+                     float min = 0;
+                     float max = LCH[1];
+
+                     while (max-min > 0.0001) {
+
+                         LCH[1] = (max + min) * 0.5;
+                         originalChannels = ModelType::fromLCH(LCH, originalChannels);
+
+
+                         m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
+                         m_sourceSpace->convertPixelsTo(tmpOriginal.get(), tmpTarget.get(), targetSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
+                         targetSpace->convertPixelsTo(tmpTarget.get(), tmpClipped.get(), m_sourceSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
+                         m_sourceSpace->normalisedChannelsValue(tmpClipped.get(), clippedChannels);
+
+                         if (DifferenceType::difference(originalChannels, clippedChannels) < 0.02) {
+                             min = LCH[1];
+                         } else {
+                             max = LCH[1];
+                         }
+                     }
+                 }
             }
 
             memcpy(dstU8, tmpOriginal.get(), m_sourceSpace->pixelSize());
@@ -254,6 +227,7 @@ public:
     {
         QList<QString> list;
         list << "targetColorProfileName";
+        list << "cuspDescription";
         return list;
     }
 
@@ -261,6 +235,8 @@ public:
     {
         if (name == "targetColorProfileName") {
             return 0;
+        } else if (name == "cuspDescription") {
+            return 1;
         }
         return -1;
     }
@@ -272,6 +248,16 @@ public:
         case 0:
             m_targetColorProfileName = parameter.toString();
             break;
+        case 1:
+
+            m_cuspDescription = QMap<float, QPointF>();
+            {
+                const QVariantMap map = parameter.toMap();
+                Q_FOREACH (QString key, map.keys()){
+                    m_cuspDescription.insert(key.toFloat(), map.value(key).toPointF());
+                }
+            }
+            break;
         default:
             ;
         }
@@ -280,7 +266,7 @@ public:
 private:
 
     QString m_targetColorProfileName;
-    QString m_targetColorSpaceModel;
+    QMap<float, QPointF> m_cuspDescription;
     const KoColorSpace *m_sourceSpace;
 };
 

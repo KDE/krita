@@ -30,6 +30,7 @@ const QString TONE_MAP_ENABLED = "toneMap/Enabled"; ///< bool, whether to do ton
 const QString TONE_MAP_MAX_WHITE = "toneMap/reinhard/MaxWhite"; ///< double, the maximum white that needs to be tonemapped.
 const QString GAMUT_MAP_ENABLED = "gamutMap/Enabled"; ///< bool, whether to do gamt mapping.
 const QString GAMUT_MAP_TARGET_PROFILE = "gamutMap/TargetProfile"; ///< QString, name of the color profile that is the target gamut.
+const QString GAMUT_MAP_METHOD = "gamutMap/method"; ///String, indicates whether to use the cusp map or the MINDE method.
 
 const QString TONE_MAP_TYPE = "toneMap/CurveType";
 
@@ -93,6 +94,19 @@ KoColorTransformation *KisToneGamutMapFilter::createTransformation(const KoColor
     if (config->getProperty(GAMUT_MAP_ENABLED).toBool()) {
         QHash<QString, QVariant> params;
         params["targetColorProfileName"] = config->getProperty(GAMUT_MAP_TARGET_PROFILE);
+
+        const KoColorProfile *targetProfile = KoColorSpaceRegistry::instance()->profileByName(config->getProperty(GAMUT_MAP_TARGET_PROFILE).toString());
+        if (targetProfile && config->getProperty(GAMUT_MAP_METHOD).toString() == "CUSP_MAP") {
+            QVariantMap cuspDescription;
+            QMap<float, QPointF> tempCuspDescription = KoGamutMappingUtils::getGamutCuspDescription(targetProfile, KoGamutMappingUtils::MappingModel(config->getProperty(MAPPING_MODEL).toInt()));
+            if (!tempCuspDescription.isEmpty()) {
+                Q_FOREACH(const float key, tempCuspDescription.keys()) {
+                    cuspDescription.insert(QString::number(key), tempCuspDescription.value(key));
+                }
+                params["cuspDescription"] = cuspDescription;
+            }
+        }
+
         params["mappingModel"] = config->getProperty(MAPPING_MODEL);
         KoColorTransformation *gamutMap = mappingCs->createColorTransformation("gamutmap_clip_adjustment", params);
         allTransforms << gamutMap;
@@ -116,6 +130,7 @@ KisFilterConfigurationSP KisToneGamutMapFilter::defaultConfiguration(KisResource
     config->setProperty(TONE_PIECE_WISE_SHOULDER_ANGLE, 1.0);
 
     config->setProperty(GAMUT_MAP_ENABLED, true);
+    config->setProperty(GAMUT_MAP_METHOD, "CUSP_MAP");
     config->setProperty(GAMUT_MAP_TARGET_PROFILE, "sRGB-elle-V2-srgbtrc.icc");
     return config;
 }
@@ -144,6 +159,16 @@ KisToneGamutMapWidget::KisToneGamutMapWidget(QWidget *parent, KisPaintDeviceSP d
     ui->cmbToneCurveType->addItem(i18n("Reinhard"), KoGamutMappingUtils::Reinhard);
     ui->cmbToneCurveType->addItem(i18n("Piecewise Filmic"), KoGamutMappingUtils::PiecewiseFilmic);
 
+    ui->cmbGamutMapMethod->addItem(i18n("Use Chroma-Lightness Cusp Map"), "CUSP_MAP");
+    ui->cmbGamutMapMethod->addItem(i18n("Minimum Delta E"), "MINDE");
+
+    ui->cmbGamutMapMethod->setItemData(0, i18nc("@info:tooltip", "Use a chroma-lightness cusp map for a faster,"
+                                                " if more inaccurate gamut mapping. Only works for RGB and CMYK profiles,"
+                                                " will fall back on Minimum Delta E."), Qt::ToolTipRole);
+    ui->cmbGamutMapMethod->setItemData(1, i18nc("@info:tooltip", "Will use the Minimum Delta E method,"
+                                                " where colors are brought into gamut until they minimally different from the transformed color."
+                                                " Slow but accurate."), Qt::ToolTipRole);
+
     connect(ui->cmbMappingModel, SIGNAL(activated(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->cmbToneCurveType, SIGNAL(activated(int)), ui->stkToneMap, SLOT(setCurrentIndex(int)));
     connect(ui->cmbToneCurveType, SIGNAL(activated(int)), SIGNAL(sigConfigurationItemChanged()));
@@ -160,6 +185,8 @@ KisToneGamutMapWidget::KisToneGamutMapWidget(QWidget *parent, KisPaintDeviceSP d
 
     connect(ui->chkGamutMap, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->targetGamut, SIGNAL(colorSpaceChanged(const KoColorSpace*)), SIGNAL(sigConfigurationItemChanged()));
+    connect(ui->cmbGamutMapMethod, SIGNAL(activated(int)), SIGNAL(sigConfigurationItemChanged()));
+
 }
 
 KisToneGamutMapWidget::~KisToneGamutMapWidget()
@@ -214,6 +241,8 @@ void KisToneGamutMapWidget::setConfiguration(const KisPropertiesConfigurationSP 
                                                              profile));
         }
     }
+    int idx = ui->cmbGamutMapMethod->findData(config->getProperty(GAMUT_MAP_METHOD));
+    ui->cmbGamutMapMethod->setCurrentIndex(idx);
     Q_EMIT sigConfigurationItemChanged();
 }
 
@@ -265,6 +294,7 @@ KisPropertiesConfigurationSP KisToneGamutMapWidget::configuration() const
     if (ui->targetGamut->currentColorSpace()) {
         config->setProperty(GAMUT_MAP_TARGET_PROFILE, ui->targetGamut->currentColorSpace()->profile()->name());
     }
+    config->setProperty(GAMUT_MAP_METHOD, ui->cmbGamutMapMethod->currentData());
     return config;
 }
 

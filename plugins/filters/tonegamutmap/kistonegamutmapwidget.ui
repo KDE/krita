@@ -223,6 +223,9 @@
       <item>
        <widget class="KisColorSpaceSelector" name="targetGamut" native="true"/>
       </item>
+      <item>
+       <widget class="QComboBox" name="cmbGamutMapMethod"/>
+      </item>
      </layout>
     </widget>
    </item>

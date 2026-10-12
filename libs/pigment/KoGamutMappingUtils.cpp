@@ -6,6 +6,12 @@
 #include "KoGamutMappingUtils.h"
 #include <kis_global.h>
 
+#include <KoColorModelStandardIds.h>
+#include <KoColorSpace.h>
+#include <KoColor.h>
+#include <KoColorConversions.h>
+#include <KoColorTransferFunctions.h>
+
 #include <QtMath>
 
 float KoGamutMappingUtils::deltaE76(const QVector<float> &a, const QVector<float> &b) {
@@ -250,3 +256,196 @@ KoGamutMappingUtils::PiecewiseFilmicCurve KoGamutMappingUtils::PiecewiseFilmicCu
 
     return PiecewiseFilmicCurve(maxWhite, point0, point1, overshoot);
 }
+
+const QMatrix4x4 xyz50To65 {QMatrix4x4(
+    0.955473421488075,    -0.02309845494876471,   0.06325924320057072, 0.0,
+    -0.0283697093338637,    1.0099953980813041,    0.021041441191917323, 0.0,
+    0.012314014864481998, -0.020507649298898964,  1.330365926242124, 0.0,
+    0.0, 0.0, 0.0, 1.0
+    )};
+
+const QMatrix4x4 xyz50To65_inv = xyz50To65.inverted();
+
+const QMatrix4x4 XYZtoOkLABLMS {QMatrix4x4(
+    0.8190224379967030, 0.3619062600528904, -0.1288737815209879, 0.0,
+    0.0329836539323885, 0.9292868615863434,  0.0361446663506424, 0.0,
+    0.0481771893596242, 0.2642395317527308,  0.6335478284694309, 0.0,
+    0.0, 0.0, 0.0, 1.0
+    )};
+
+const QMatrix4x4 XYZtoOkLABLMS_inv = XYZtoOkLABLMS.inverted();
+
+const QMatrix4x4 lmsToOkLab {QMatrix4x4(
+    0.2104542683093140,  0.7936177747023054, -0.0040720430116193, 0.0,
+    1.9779985324311684, -2.4285922420485799,  0.4505937096174110, 0.0,
+    0.0259040424655478,  0.7827717124575296, -0.8086757549230774, 0.0,
+    0.0, 0.0, 0.0, 1.0
+    )};
+
+const QMatrix4x4 lmsToOkLab_inv = lmsToOkLab.inverted();
+
+const QMatrix4x4 XYZd65toDolbyLMS {QMatrix4x4(
+    0.3592832590121217,  0.6976051147779502, -0.0358915932320290, 0.0,
+    -0.1920808463704993,  1.1004767970374321,  0.0753748658519118, 0.0,
+    0.0070797844607479,  0.0748396662186362,  0.8433265453898765, 0.0,
+    0.0, 0.0, 0.0, 1.0
+    )};
+
+const QMatrix4x4 XYZd65toDolbyLMS_inv = XYZd65toDolbyLMS.inverted();
+
+const QMatrix4x4 lmsToICtCp {QMatrix4x4(
+    2048.0 / 4096.0,   2048.0 / 4096.0,       0.0 , 0.0,
+    6610.0 / 4096.0, -13613.0 / 4096.0,  7003.0 / 4096.0 , 0.0,
+    17933.0 / 4096.0, -17390.0 / 4096.0,  -543.0 / 4096.0, 0.0,
+    0.0, 0.0, 0.0, 1.0
+    )};
+
+const QMatrix4x4 lmsToICtCp_inv = lmsToICtCp.inverted();
+
+QVector4D KoGamutMappingUtils::XYZToOkLab(const QVector4D &xyz) {
+    const QVector4D lms = XYZtoOkLABLMS * (xyz50To65 * xyz);
+
+    const QVector4D lmsPrime = QVector4D(cbrtf(lms.x()),
+                                         cbrtf(lms.y()),
+                                         cbrtf(lms.z()), 0.0);
+
+    return lmsToOkLab * lmsPrime;
+}
+
+QVector4D KoGamutMappingUtils::OkLabToXYZ(const QVector4D &okLab) {
+    const QVector4D lmsPrime = lmsToOkLab_inv * okLab;
+    const QVector4D lms = QVector4D(powf(lmsPrime.x(), 3.0),
+                                    powf(lmsPrime.y(), 3.0),
+                                    powf(lmsPrime.z(), 3.0), 0.0);
+    return xyz50To65_inv * (XYZtoOkLABLMS_inv * lms);
+}
+
+QVector4D KoGamutMappingUtils::XYZToICtCp(const QVector4D &xyz)
+{
+    const QVector4D lms =  XYZd65toDolbyLMS * (xyz50To65 * xyz);
+
+    const QVector4D lmsPrime = QVector4D(applySmpte2048Curve(lms.x()),
+                                         applySmpte2048Curve(lms.y()),
+                                         applySmpte2048Curve(lms.z()), 0.0);
+
+    return lmsToICtCp * lmsPrime;
+}
+
+QVector4D KoGamutMappingUtils::ICtCpToXYZ(const QVector4D &iCtCp)
+{
+    const QVector4D lmsPrime = lmsToICtCp_inv * iCtCp;
+    const QVector4D lms = QVector4D(removeSmpte2048Curve(lmsPrime.x()),
+                                    removeSmpte2048Curve(lmsPrime.y()),
+                                    removeSmpte2048Curve(lmsPrime.z()), 0.0);
+    return xyz50To65_inv * (XYZd65toDolbyLMS_inv * lms);
+}
+
+QMap<float, QPointF> KoGamutMappingUtils::getGamutCuspDescription(const KoColorProfile *profile, KoGamutMappingUtils::MappingModel model, const int samplesPerChannel)
+{
+    QMap<float, QPointF> bounds;
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(profile->colorModelID(), Integer8BitsColorDepthID.id(), profile);
+    const KoColorSpace *xyzCs = KoColorSpaceRegistry::instance()->colorSpace(XYZAColorModelID.id(), Float32BitsColorDepthID.id(), "");
+    const KoColorSpace *labCs = KoColorSpaceRegistry::instance()->colorSpace(LABAColorModelID.id(), Float32BitsColorDepthID.id(), "");
+    QVector<float> xyzChannels(xyzCs->channelCount());
+    QVector<float> labChannels(xyzCs->channelCount());
+
+    QVector<QVector<float>> colorList;
+    if (profile->colorModelID() == RGBAColorModelID.id()) {
+        for (int i = 0; i < samplesPerChannel; i++) {
+            const float ch = float(i)/float(samplesPerChannel);
+            QVector<float> c = {ch, 1.0, 0.0, 1.0};
+            colorList << c;
+            QVector<float> c2 = {ch, 0.0, 1.0, 1.0};
+            colorList << c2;
+        }
+        for (int i = 0; i < samplesPerChannel; i++) {
+            const float ch = float(i)/float(samplesPerChannel);
+            QVector<float> c = {1.0, ch, 0.0, 1.0};
+            colorList << c;
+            QVector<float> c2 = {0.0, ch, 1.0, 1.0};
+            colorList << c2;
+        }
+        for (int i = 0; i < samplesPerChannel; i++) {
+            const float ch = float(i)/float(samplesPerChannel);
+            QVector<float> c = {1.0, 0.0, ch, 1.0};
+            colorList << c;
+            QVector<float> c2 = {0.0, 1.0, ch, 1.0};
+            colorList << c2;
+        }
+    } else if (profile->colorModelID() == CMYKAColorModelID.id()) {
+        for (int i = 0; i < samplesPerChannel; i++) {
+            const float ch = float(i)/float(samplesPerChannel);
+            QVector<float> c = {ch, 1.0, 0.0, 0.0, 1.0};
+            colorList << c;
+            QVector<float> c2 = {ch, 0.0, 1.0, 0.0, 1.0};
+            colorList << c2;
+        }
+        for (int i = 0; i < samplesPerChannel; i++) {
+            const float ch = float(i)/float(samplesPerChannel);
+            QVector<float> c = {1.0, ch, 0.0, 0.0, 1.0};
+            colorList << c;
+            QVector<float> c2 = {0.0, ch, 1.0, 0.0, 1.0};
+            colorList << c2;
+        }
+        for (int i = 0; i < samplesPerChannel; i++) {
+            const float ch = float(i)/float(samplesPerChannel);
+            QVector<float> c = {1.0, 0.0, ch, 0.0, 1.0};
+            colorList << c;
+            QVector<float> c2 = {0.0, 1.0, ch, 0.0, 1.0};
+            colorList << c2;
+        }
+    }
+    KoColor c(cs);
+
+    Q_FOREACH( const QVector<float> channels, colorList) {
+        cs->fromNormalisedChannelsValue(c.data(), channels);
+        std::array<qreal, 3> lch;
+        if (model == LAB) {
+            KoColor xyc = c.convertedTo(labCs);
+            labCs->normalisedChannelsValue(xyc.data(), labChannels);
+            LabToLCH(labChannels[0], labChannels[1], labChannels[2], &lch[0], &lch[1], &lch[2]);
+        } else {
+            KoColor xyc = c.convertedTo(xyzCs);
+            xyzCs->normalisedChannelsValue(xyc.data(), xyzChannels);
+
+            if (model == ICtCp) {
+                QVector4D ictcp = KoGamutMappingUtils::XYZToICtCp(QVector4D (xyzChannels[0], xyzChannels[1], xyzChannels[2], 0));
+                LabToLCH(ictcp.x(), ictcp.y()+0.5, ictcp.z()+0.5, &lch[0], &lch[1], &lch[2]);
+            } else {
+                QVector4D okLab = KoGamutMappingUtils::XYZToOkLab(QVector4D (xyzChannels[0], xyzChannels[1], xyzChannels[2], 0));
+                LabToLCH(okLab.x(), okLab.y()+0.5, okLab.z()+0.5, &lch[0], &lch[1], &lch[2]);
+            }
+        }
+
+        bounds.insert(lch[2], QPointF(lch[1], lch[0]));
+    }
+
+    return bounds;
+}
+
+QPointF KoGamutMappingUtils::cuspForHue(const QMap<float, QPointF> &gamutCuspDescription, const float hue)
+{
+    QPointF cusp;
+
+    for (int i = 0; i < gamutCuspDescription.size(); i++) {
+        const float angle = gamutCuspDescription.keys().at(i);
+        float nextAngle = gamutCuspDescription.keys().value(i+1, gamutCuspDescription.keys().first());
+        if (i +1 == gamutCuspDescription.size()) {
+            nextAngle += 1.0;
+        }
+        if (qFuzzyCompare(hue, angle)) {
+            cusp = gamutCuspDescription.value(angle);
+            break;
+        } else if (hue > angle && hue < nextAngle) {
+            QPointF lch1 = gamutCuspDescription.value(angle);
+            QPointF lch2 = gamutCuspDescription.value(nextAngle);
+            const float t = (hue - angle) / (nextAngle - angle);
+            cusp = QLineF(lch1, lch2).pointAt(t);
+            break;
+        }
+    }
+
+    return cusp;
+}
+
+

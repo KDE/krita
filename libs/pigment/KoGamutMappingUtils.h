@@ -9,6 +9,9 @@
 #include <QPointF>
 #include <QVector>
 
+#include <KoColorimetryUtils.h>
+#include <KoColorProfile.h>
+
 #include "kritapigment_export.h"
 
 namespace KoGamutMappingUtils {
@@ -28,6 +31,25 @@ float KRITAPIGMENT_EXPORT deltaE76(const QVector<float> &a, const QVector<float>
 float KRITAPIGMENT_EXPORT deltaE2000(const QVector<float> &a, const QVector<float> &b);
 
 /**
+ * @brief XYZToOkLab
+ * Ad-hoc implementation of OkLAB. This takes a QVector4D and transforms it to the OkLAB model.
+ * @param xyz
+ * @return Oklab color.
+ */
+QVector4D KRITAPIGMENT_EXPORT XYZToOkLab(const QVector4D &xyz);
+QVector4D KRITAPIGMENT_EXPORT OkLabToXYZ(const QVector4D &okLab);
+
+/**
+ * @brief XYZToICtCp
+ * Ad-hoc implementation of ICtCp for use in filters.
+ * Unlike the official YCbCr-compatible standard, this one doesn't have a 0.5 offset in the Ct and Cp channels.
+ * @param xyz
+ * @return
+ */
+QVector4D KRITAPIGMENT_EXPORT XYZToICtCp(const QVector4D &xyz);
+QVector4D KRITAPIGMENT_EXPORT ICtCpToXYZ(const QVector4D &iCtCp);
+
+/**
  * @brief The MappingModel enum
  * This represents the preferred model to do gamut and/or tone mapping in.
  *
@@ -38,6 +60,16 @@ enum MappingModel {
     ICtCp,
     OkLAB
 };
+
+/**
+ * @brief getGamutCuspDescription
+ * Generates a hexagonal gamut cusp description from a RGB or CMYK profile.
+ * @param profile cmyk or RGB profile to use.
+ * @return gamut cusp description, consisting of hue and the XYZ of the maximum chroma.
+ */
+QMap<float, QPointF> KRITAPIGMENT_EXPORT getGamutCuspDescription(const KoColorProfile *profile, KoGamutMappingUtils::MappingModel model, const int samplesPerChannel = 5);
+QPointF KRITAPIGMENT_EXPORT cuspForHue(const QMap<float, QPointF> &gamutCuspDescription, const float hue);
+
 
 enum CurveType {
     Reinhard,

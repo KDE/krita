@@ -187,6 +187,12 @@ KisToneGamutMapWidget::KisToneGamutMapWidget(QWidget *parent, KisPaintDeviceSP d
     connect(ui->targetGamut, SIGNAL(colorSpaceChanged(const KoColorSpace*)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->cmbGamutMapMethod, SIGNAL(activated(int)), SIGNAL(sigConfigurationItemChanged()));
 
+    QStringList yAxisValues;
+    for (int i = 0; i < 10; i++) {
+        yAxisValues << QString::number(float(i)/10.0, 'f', 1);
+    }
+    ui->toneCurvePreview->setYAxisValues(yAxisValues, 64);
+
 }
 
 KisToneGamutMapWidget::~KisToneGamutMapWidget()
@@ -262,31 +268,43 @@ KisPropertiesConfigurationSP KisToneGamutMapWidget::configuration() const
     config->setProperty(TONE_PIECE_WISE_SHOULDER_LENGTH, ui->spnShoulderLength->value());
     config->setProperty(TONE_PIECE_WISE_SHOULDER_ANGLE, ui->spnShoulderAngle->value());
 
+
     if (ui->cmbToneCurveType->currentData() == KoGamutMappingUtils::PiecewiseFilmic) {
         KoGamutMappingUtils::PiecewiseFilmicCurve curve
             = KoGamutMappingUtils::PiecewiseFilmicCurve::fromUserParams(ui->spnToeStrength->value(), ui->spnToeLength->value(), ui->spnShoulderStrength->value(), ui->spnShoulderLength->value(), ui->spnShoulderAngle->value());
         QPolygonF poly;
         const float white = 1.0/curve.inverseMaxWhite;
+        QStringList xAxisValues;
         for (int x = 0; x < 20; x++) {
-            const float val = (float(x)/20.0)*white;
+            const float val = (float(x)/19.0)*white;
             const float y = curve.evalCurve(val);
+            if (x%2 == 0) {
+                xAxisValues << QString::number(val, 'f', 1);
+
+            }
             poly.append(QPointF(val/white, y));
         }
         ui->toneCurvePreview->setGreyscaleCurve(poly);
         ui->toneCurvePreview->setProfileDataAvailable(true);
-        ui->toneCurvePreview->setToolTip(i18n("Current Maximum White: %1", QString::number(white)));
+        ui->toneCurvePreview->setToolTip(i18n("Current Maximum White: %1", QString::number(white, 'f', 2)));
+        ui->toneCurvePreview->setXAxisValues(xAxisValues);
         ui->toneCurvePreview->update();
     } else {
         QPolygonF poly;
         const float white = ui->spnMaxWhite->value();
+        QStringList xAxisValues;
         for (int x = 0; x < 20; x++) {
-            const float val = (float(x)/20.0)*white;
+            const float val = (float(x)/19.0)*white;
             const float y = KoGamutMappingUtils::reinhardToneMapping(val, white);
+            if (x%2 == 0) {
+                xAxisValues << QString::number(val, 'f', 1);
+            }
             poly.append(QPointF(val/white, y));
         }
         ui->toneCurvePreview->setGreyscaleCurve(poly);
         ui->toneCurvePreview->setProfileDataAvailable(true);
-        ui->toneCurvePreview->setToolTip(i18n("Current Maximum White: %1", QString::number(white)));
+        ui->toneCurvePreview->setToolTip(i18n("Current Maximum White: %1", QString::number(white, 'f', 2)));
+        ui->toneCurvePreview->setXAxisValues(xAxisValues);
         ui->toneCurvePreview->update();
     }
 

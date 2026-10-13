@@ -32,6 +32,8 @@ public:
     void setRGBCurve(QPolygonF red, QPolygonF green, QPolygonF blue);
     void setCMYKCurve(QPolygonF cyan, QPolygonF magenta, QPolygonF yellow, QPolygonF key);
     void setProfileDataAvailable(bool dataAvailable);
+    void setXAxisValues(const QStringList &values, const int offset = 20);
+    void setYAxisValues(const QStringList &values, const int offset = 32);
 protected:
  
     int  grids(double val) const;

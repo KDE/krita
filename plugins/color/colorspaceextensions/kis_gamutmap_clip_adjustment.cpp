@@ -149,45 +149,45 @@ public:
             m_sourceSpace->normalisedChannelsValue(srcU8, originalChannels);
             m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
 
-            m_sourceSpace->convertPixelsTo(tmpOriginal.get(), tmpTarget.get(), targetSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
-            targetSpace->convertPixelsTo(tmpTarget.get(), tmpClipped.get(), m_sourceSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
-
-            m_sourceSpace->normalisedChannelsValue(tmpClipped.get(), clippedChannels);
-
-
             if (greyscale) {
                 LCH = ModelType::toLCH(originalChannels);
                 LCH[1] = 0;
                 originalChannels = ModelType::fromLCH(LCH, originalChannels);
                 m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
-            } else if (DifferenceType::difference(originalChannels, clippedChannels) > 0.02) {
+            } else if (!m_cuspDescription.isEmpty()) {
+                LCH = ModelType::toLCH(originalChannels);
+                QPointF cusp = KoGamutMappingUtils::cuspForHue(m_cuspDescription, LCH[2]);
+
+                       /// We are treating the cusp triangle as linear inside the SDR standard range.
+                       /// Within the standard range, cube root works better than hdr's PQ.
+                       /// This is good enough for RGB profiles, CMYK profiles might get better
+                       /// results with the MINDE method. Overall though, we just want to move
+                       /// the colors into gamut enough so that we don't get hue shifts when converting,
+                       /// and this method delivers on that nicely.
+                const float L = ModelType::cuberootLightness(LCH[0]);
+                const float cuspL = ModelType::cuberootLightness(cusp.y());
+                if (LCH[0] > cusp.y()) {
+                    const float t = (L - cuspL) / (1.0 - cuspL);
+                    const float c = qMax(0.0, cusp.x()* (1.0-t));
+
+                    LCH[1] = qMin(LCH[1], c);
+
+                } else {
+                    const float t = L / (cuspL);
+                    const float c = qMax(0.0, cusp.x()*t);
+                    LCH[1] = qMin(LCH[1], c);
+                }
+                originalChannels = ModelType::fromLCH(LCH, originalChannels);
+                m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
+            } else {
+                m_sourceSpace->convertPixelsTo(tmpOriginal.get(), tmpTarget.get(), targetSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
+                targetSpace->convertPixelsTo(tmpTarget.get(), tmpClipped.get(), m_sourceSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
+
+                m_sourceSpace->normalisedChannelsValue(tmpClipped.get(), clippedChannels);
+
+                if (DifferenceType::difference(originalChannels, clippedChannels) > 0.02) {
                 LCH = ModelType::toLCH(originalChannels);
 
-                 if (!m_cuspDescription.isEmpty()) {
-                    QPointF cusp = KoGamutMappingUtils::cuspForHue(m_cuspDescription, LCH[2]);
-
-                    /// We are treating the cusp triangle as linear inside the SDR standard range.
-                    /// Within the standard range, cube root works better than hdr's PQ.
-                    /// This is good enough for RGB profiles, CMYK profiles might get better
-                    /// results with the MINDE method. Overall though, we just want to move
-                    /// the colors into gamut enough so that we don't get hue shifts when converting,
-                    /// and this method delivers on that nicely.
-                    const float L = ModelType::cuberootLightness(LCH[0]);
-                    const float cuspL = ModelType::cuberootLightness(cusp.y());
-                    if (LCH[0] > cusp.y()) {
-                        const float t = (L - cuspL) / (1.0 - cuspL);
-                        const float c = qMax(0.0, cusp.x()* (1.0-t));
-
-                        LCH[1] = qMin(LCH[1], c);
-
-                    } else {
-                        const float t = L / (cuspL);
-                        const float c = qMax(0.0, cusp.x()*t);
-                        LCH[1] = qMin(LCH[1], c);
-                    }
-                    originalChannels = ModelType::fromLCH(LCH, originalChannels);
-                    m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
-                 } else {
                      float min = 0;
                      float max = LCH[1];
 

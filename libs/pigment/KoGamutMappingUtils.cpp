@@ -307,12 +307,19 @@ QMap<float, QPointF> KoGamutMappingUtils::getGamutCuspDescription(const KoColorP
         cs->fromNormalisedChannelsValue(c.data(), channels);
         std::array<qreal, 3> lch;
         if (model == LAB) {
-            KoColor xyc = c.convertedTo(labCs);
-            labCs->normalisedChannelsValue(xyc.data(), labChannels);
+            KoColor labC;
+            cs->convertPixelsTo(c.data(), labC.data(), labCs,  1,
+                                KoColorConversionTransformation::IntentRelativeColorimetric,
+                                KoColorConversionTransformation::adjustmentConversionFlags());
+            labCs->normalisedChannelsValue(labC.data(), labChannels);
             LabToLCH(labChannels[0], labChannels[1], labChannels[2], &lch[0], &lch[1], &lch[2]);
         } else {
-            KoColor xyc = c.convertedTo(xyzCs);
-            xyzCs->normalisedChannelsValue(xyc.data(), xyzChannels);
+
+            KoColor xyzC;
+            cs->convertPixelsTo(c.data(), xyzC.data(), xyzCs,  1,
+                                KoColorConversionTransformation::IntentRelativeColorimetric,
+                                KoColorConversionTransformation::adjustmentConversionFlags());
+            xyzCs->normalisedChannelsValue(xyzC.data(), xyzChannels);
 
             if (model == ICtCp) {
                 QVector4D ictcp = KoGamutMappingUtils::XYZToICtCp(QVector4D (xyzChannels[0], xyzChannels[1], xyzChannels[2], 0));

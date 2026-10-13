@@ -170,12 +170,12 @@ public:
                     const float t = (L - cuspL) / (1.0 - cuspL);
                     const float c = qMax(0.0, cusp.x()* (1.0-t));
 
-                    LCH[1] = qMin(LCH[1], c);
+                    LCH[1] = qMin(LCH[1], qreal(c));
 
                 } else {
                     const float t = L / (cuspL);
                     const float c = qMax(0.0, cusp.x()*t);
-                    LCH[1] = qMin(LCH[1], c);
+                    LCH[1] = qMin(LCH[1], qreal(c));
                 }
                 originalChannels = ModelType::fromLCH(LCH, originalChannels);
                 m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);

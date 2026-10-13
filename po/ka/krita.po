@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-10 03:17+0000\n"
-"PO-Revision-Date: 2026-08-17 08:13+0200\n"
+"PO-Revision-Date: 2026-10-13 04:26+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -44804,7 +44804,7 @@ msgstr "ჩაწერა"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:294
 #, kde-format
 msgid "Image too large to be recorded"
-msgstr ""
+msgstr "გამოსახულების ფაილი ჩასაწერად ძალიან დიდია"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:341
 #, kde-format
@@ -55583,6 +55583,9 @@ msgid ""
 "'Center first' prioritizes the center of the image for progressive loading, "
 "useful for web content.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>განსაზღვრავს მიმდევრობას, რომლითაც გამოსახულების "
+"ფილების კოდირება ხდება. 'ჯერ ცენტრი' პრიორიტეტს ანიჭებს გამოსახულების "
+"ცენტრის ჩატვირთვას. ეს სასარგებლოა ვებისთვის</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:660
@@ -55599,6 +55602,9 @@ msgid ""
 "file size. Very effective for natural images where brightness and color are "
 "correlated.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>გამოიცნობს ფერს სიკაშკაშის ინფორმაციიდან და ამით "
+"ფაილის ზომას ამცირებს. ძალიან ეფექტურია ბუნებრივი გამოსახულებებისთვის, სადაც "
+"სიკაშკაშის და ფერის კორელაცია ხდება.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:673
@@ -56691,6 +56697,9 @@ msgid ""
 "not, they will be loaded as pixel data, which will be visually more accurate "
 "to the original file."
 msgstr ""
+"აღმოჩენილია ტექსტის ობიექტები. გნებავთ მათი ჩატვირთვა ჩასწორებადი ტექსტური "
+"ფიგურების სახით? თუ არა, ისინი პიქსელის მონაცემები სახით ჩაიტვირთება, "
+"რომელიც ვიზუალურად ორიგინალ ფაილზე უფრო ზუსტი იქნება."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

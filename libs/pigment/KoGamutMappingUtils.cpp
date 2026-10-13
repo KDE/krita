@@ -350,11 +350,14 @@ QPointF KoGamutMappingUtils::cuspForHue(const QMap<float, QPointF> &gamutCuspDes
     }
     if (foundAngle < 0) foundAngle = gamutCuspDescription.size()-1;
     const float angle = gamutCuspDescription.keys().at(foundAngle);
-    float nextAngle = gamutCuspDescription.keys().value(foundAngle+1, gamutCuspDescription.keys().first());
+    const float nextAngle = gamutCuspDescription.keys().value(foundAngle+1, gamutCuspDescription.keys().first());
 
     QPointF lch1 = gamutCuspDescription.value(angle);
     QPointF lch2 = gamutCuspDescription.value(nextAngle);
-    const float t = (hue - angle) / (nextAngle - angle);
+    float t = (hue - angle) / (nextAngle - angle);
+    if (hue < angle) {
+        t = (hue - angle + 1.0) / (nextAngle + 1.0 - angle);
+    }
     cusp = QLineF(lch1, lch2).pointAt(t);
 
     return cusp;

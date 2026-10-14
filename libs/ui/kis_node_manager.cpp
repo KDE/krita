@@ -1585,7 +1585,7 @@ void KisNodeManager::copyLayersToClipboard()
     KisClipboard::instance()->setLayers(nodes, m_d->view->image(), m_d->view->image()->bounds(), true);
 }
 
-void KisNodeManager::pasteLayersFromClipboard(bool changeOffset, QPointF offset, KisProcessingApplicator *applicator)
+void KisNodeManager::pasteLayersFromClipboard(std::optional<QPoint> preferredClipCenter, KisProcessingApplicator *applicator)
 {
     const QMimeData *data = KisClipboard::instance()->layersMimeData();
     if (!data) return;
@@ -1610,8 +1610,7 @@ void KisNodeManager::pasteLayersFromClipboard(bool changeOffset, QPointF offset,
                                   aboveThisDummy,
                                   copyNode,
                                   nodeInsertionAdapter(),
-                                  changeOffset,
-                                  offset,
+                                  preferredClipCenter,
                                   applicator);
 }
 

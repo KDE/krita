@@ -209,7 +209,7 @@ bool tryPasteShapes(KisPasteActionFactory::Flags flags, KisViewManager *view)
 
 void KisPasteActionFactory::run(Flags flags, KisViewManager *view)
 {
-    bool pasteAtCursorPosition = flags.testFlag(PasteAtCursor);
+    const bool pasteAtCursorPosition = flags.testFlag(PasteAtCursor);
 
     KisImageSP image = view->image();
     if (!image) return;
@@ -229,35 +229,9 @@ void KisPasteActionFactory::run(Flags flags, KisViewManager *view)
 
     // If no shapes, check for layers
     if (KisClipboard::instance()->hasLayers()) {
-        const QPointF offsetTopLeft = [&]() -> QPointF {
-            KisPaintDeviceSP clip =
-                KisClipboard::instance()->clipFromKritaLayers(
-                    image->colorSpace(), new KisDefaultBounds(image));
-
-            if (!clip) {
-                pasteAtCursorPosition = false;
-                return {};
-            }
-
-
-            QPointF imagePos;
-            if (pasteAtCursorPosition) {
-                imagePos =
-                    view->canvasBase()->coordinatesConverter()->documentToImage(
-                        docPos);
-
-            } else if (!clip->exactBounds().intersects(image->bounds())) {
-                 // BUG:459111
-                pasteAtCursorPosition = true;
-                imagePos = QPointF(image->bounds().center());
-            } else {
-                return {};
-            }
-            const QPointF offset =
-                (imagePos - QRectF(clip->exactBounds()).center()).toPoint();
-            return offset;
-        }();
-
+        const std::optional<QPoint> preferredClipCenter = pasteAtCursorPosition
+            ? std::make_optional(view->canvasBase()->coordinatesConverter()->documentToImage(docPos).toPoint())
+            : std::nullopt;
 
         if (view->selection()) {
             /// TODO: we are relying on a sticky translated string from KisImageLayerAddCommand
@@ -265,13 +239,11 @@ void KisPasteActionFactory::run(Flags flags, KisViewManager *view)
             KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Add Layer"));
             KUndo2Command *deselectCmd = new KisDeselectActiveSelectionCommand(view->selection(), image);
             ap->applyCommand(deselectCmd);
-            view->nodeManager()->pasteLayersFromClipboard(pasteAtCursorPosition,
-                                                          offsetTopLeft,
+            view->nodeManager()->pasteLayersFromClipboard(preferredClipCenter,
                                                           ap);
             endAction(ap, KisOperationConfiguration(id()).toXML());
         } else {
-            view->nodeManager()->pasteLayersFromClipboard(pasteAtCursorPosition,
-                                                          offsetTopLeft);
+            view->nodeManager()->pasteLayersFromClipboard(preferredClipCenter);
         }
 
         return;
@@ -281,7 +253,7 @@ void KisPasteActionFactory::run(Flags flags, KisViewManager *view)
     if (clipImage) {
         KisPaintDeviceSP clip = new KisPaintDevice(*clipImage->projection());
 
-            if (pasteAtCursorPosition) {
+        if (pasteAtCursorPosition) {
             const QPoint imagePos = view->canvasBase()->coordinatesConverter()->documentToImage(docPos).toPoint();
             KisToolUtils::recenterClip(clip, imagePos);
         }
@@ -296,9 +268,9 @@ void KisPasteActionFactory::run(Flags flags, KisViewManager *view)
         KisNodeSP aboveNode = view->activeLayer();
         KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();
 
-                    const QRect rc = clip->extent();
-            KisPainter::copyAreaOptimized(rc.topLeft(), clip, newLayer->paintDevice(), rc);
-        
+        const QRect rc = clip->extent();
+        KisPainter::copyAreaOptimized(rc.topLeft(), clip, newLayer->paintDevice(), rc);
+
         KUndo2Command *cmd = new KisImageLayerAddCommand(image, newLayer, parentNode, aboveNode);
         KisProcessingApplicator *ap = beginAction(view, cmd->text());
         ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
@@ -324,11 +296,11 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
     KisImageSP image = viewManager->image();
     if (!image) return;
 
-        KisPaintDeviceSP clip = KisClipboard::instance()->clip(new KisDefaultBounds(image), true, -1);
-    
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(new KisDefaultBounds(image), true, -1);
+
     if (!clip) return;
 
-KisToolUtils::ensureClipVisible(image->bounds(), clip);
+    KisToolUtils::ensureClipVisible(image->bounds(), clip);
     KisImportCatcher::adaptClipToImageColorSpace(clip, image);
 
     if (viewManager->selection()) {

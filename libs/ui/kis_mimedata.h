@@ -115,8 +115,7 @@ public:
                                  KisNodeDummy *aboveThisDummy,
                                  bool copyNode,
                                  KisNodeInsertionAdapter *nodeInsertionAdapter,
-                                 bool changeOffset = false,
-                                 QPointF offset = QPointF(),
+                                 std::optional<QPoint> preferredClipCenter = std::nullopt,
                                  KisProcessingApplicator *applicator = nullptr);
 
 protected:

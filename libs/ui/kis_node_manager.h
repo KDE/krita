@@ -248,7 +248,7 @@ public Q_SLOTS:
 
     void cutLayersToClipboard();
     void copyLayersToClipboard();
-    void pasteLayersFromClipboard(bool changeOffset = false, QPointF offset = QPointF(), KisProcessingApplicator *applicator = nullptr);
+    void pasteLayersFromClipboard(std::optional<QPoint> preferredClipCenter = std::nullopt, KisProcessingApplicator *applicator = nullptr);
 
     void createQuickGroup();
     void createQuickClippingGroup();

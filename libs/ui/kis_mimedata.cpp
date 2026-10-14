@@ -594,15 +594,34 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
                                    KisNodeDummy *aboveThisDummy,
                                    bool copyNode,
                                    KisNodeInsertionAdapter *nodeInsertionAdapter,
-                                   bool changeOffset,
-                                   QPointF offset,
+                                   std::optional<QPoint> preferredClipCenter,
                                    KisProcessingApplicator *applicator)
 {
     QList<KisNodeSP> nodes = loadNodesFast(data, image, shapeController, copyNode /* IN-OUT */);
 
-    if (changeOffset) {
+    QRect clipBounds;
+
+    if (const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data)) {
+        clipBounds = mimedata->m_referenceRect;
+    } else {
+        clipBounds = std::accumulate(nodes.begin(), nodes.end(), QRect(), [](QRect rect, KisNodeSP node) {
+            // we don't use exactBounds() here, because the nodes are
+            // not connected to any image and may be infinite
+            return rect | node->projection()->nonDefaultPixelArea();
+        });
+    }
+
+    std::optional<QPoint> offset;
+
+    if (preferredClipCenter) {
+        offset = *preferredClipCenter - clipBounds.center();
+    } else if (!image->bounds().intersects(clipBounds)) {
+        offset = image->bounds().center() - clipBounds.center();
+    }
+
+    if (offset) {
         Q_FOREACH (KisNodeSP node, nodes) {
-            KisLayerUtils::recursiveApplyNodes(node, [offset] (KisNodeSP node){
+            KisLayerUtils::recursiveApplyNodes(node, [offset = *offset] (KisNodeSP node){
                 const QPoint newOffset(node->x() + offset.x(), node->y() + offset.y());
                 node->setX(newOffset.x());
                 node->setY(newOffset.y());

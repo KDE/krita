@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-10 00:43+0000\n"
-"PO-Revision-Date: 2026-10-06 07:58-0300\n"
+"PO-Revision-Date: 2026-10-13 08:53-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.1\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -45076,7 +45076,7 @@ msgstr "Gravador"
 #, kde-format
 msgctxt "action"
 msgid "Record Timelapse"
-msgstr "Gravar linha do tempo"
+msgstr "Gravar timelapse"
 
 #. i18n: context: iconText @ Action (recorder_export), Actions (Recorder), ActionCollection (Recorder)
 #. i18n: context: toolTip @ Action (recorder_export), Actions (Recorder), ActionCollection (Recorder)
@@ -45090,7 +45090,7 @@ msgstr "Gravar linha do tempo"
 #, kde-format
 msgctxt "action"
 msgid "Export Timelapse..."
-msgstr "Exportar linha do tempo..."
+msgstr "Exportar timelapse..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:112
 #, kde-format
@@ -45112,7 +45112,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorder_export.cpp:234
 #, kde-format
 msgid "Abort encoding the timelapse video?"
-msgstr "Abortar a codificação do vídeo do lapso de tempo (timelapse)?"
+msgstr "Abortar a codificação do vídeo do timelapse?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:328
 #, kde-format
@@ -45123,7 +45123,7 @@ msgstr "Iniciando o exportador..."
 #: plugins/dockers/recorder/recorder_export.cpp:447
 #, kde-format
 msgid "Export Timelapse Video As"
-msgstr "Exportar vídeo da linha do tempo como"
+msgstr "Exportar vídeo do timelapse como"
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportGroupBox)
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
@@ -45202,8 +45202,8 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "As gravações deste documento serão excluídas e você não poderá exportar um "
-"intervalo de tempo para ele novamente (os intervalos de tempo já exportados "
-"serão preservados). \n"
+"timelapse para ele novamente (os timelapses já exportados serão "
+"preservados). \n"
 "Você deseja continuar?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:899
@@ -45217,7 +45217,7 @@ msgstr "Limpando..."
 #: plugins/dockers/recorder/recorder_export.ui:18
 #, kde-format
 msgid "Export Timelapse"
-msgstr "Exportar linha do tempo"
+msgstr "Exportar timelapse"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseDirectory)
 #: plugins/dockers/recorder/recorder_export.ui:64
@@ -45276,8 +45276,8 @@ msgid ""
 "twice larger of the Video FPS."
 msgstr ""
 "A velocidade de leitura do fluxo de entrada. \n"
-"Por exemplo, para tornar sua linha do tempo duas vezes mais rápida, ele deve "
-"ser duas vezes maior do que o FPS de vídeo."
+"Por exemplo, para tornar seu timelapse duas vezes mais rápido, ele deve ser "
+"duas vezes maior do que o FPS de vídeo."
 
 #. i18n: ectx: property (text), widget (QLabel, labelFpsInput)
 #: plugins/dockers/recorder/recorder_export.ui:374
@@ -45519,8 +45519,8 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "As gravações selecionadas serão excluídas e você não poderá exportar um "
-"intervalo de tempo para elas novamente (os intervalos de tempo já exportados "
-"serão preservados). \n"
+"timelapse para elas novamente (os timelapses já exportados serão "
+"preservados). \n"
 "Você deseja continuar?"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderSnapshotsManager)
@@ -45660,8 +45660,8 @@ msgid ""
 "video."
 msgstr ""
 "Grave quadros quando o modo Isolar Camada ou Isolar Grupo estiver ativo. \n"
-"Dependendo da velocidade do lapso de tempo, isso pode causar oscilação no "
-"vídeo resultante."
+"Dependendo da velocidade do timelapse, isso pode causar oscilação no vídeo "
+"resultante."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRecordIsolateMode)
 #: plugins/dockers/recorder/recorderdocker.ui:359

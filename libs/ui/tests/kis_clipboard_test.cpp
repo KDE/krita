@@ -15,9 +15,12 @@
 #include <KisDocument.h>
 #include <KisPart.h>
 
-#include "kis_paint_device.h"
 #include "kis_clipboard.h"
+#include <kis_clone_layer.h>
 #include "kis_default_bounds.h"
+#include "kis_paint_device.h"
+#include <kis_pixel_selection.h>
+#include <kis_transparency_mask.h>
 
 #include <QClipboard>
 
@@ -74,18 +77,32 @@ struct TestImageWrapper
         KisPaintDeviceSP dev = paintLayer->paintDevice();
         QCOMPARE(dev->defaultBounds()->bounds(), image->bounds());
 
-        if (defaultPixelName == "transparent") {
-            defaultPixel = KoColor(Qt::transparent, cs);
-        } else if (defaultPixelName == "blue") {
-            defaultPixel = KoColor(Qt::blue, cs);
-        } else {
-            qFatal("Unknown default pixel name: %s", defaultPixelName.toLatin1().data());
-        }
-
+        defaultPixel = getPixel(defaultPixelName);
         dev->setDefaultPixel(defaultPixel);
 
-        fillPixel = KoColor(Qt::red, cs);
+        fillPixel = getFillPixel();
         dev->fill(fillRect, fillPixel);
+    }
+
+    static KoColor getPixel(const QString &pixelName) {
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+
+        KoColor pixel;
+
+        if (pixelName == "transparent") {
+            pixel = KoColor(Qt::transparent, cs);
+        } else if (pixelName == "blue") {
+            pixel = KoColor(Qt::blue, cs);
+        } else {
+            qFatal("Unknown default pixel name: %s", pixelName.toLatin1().data());
+        }
+
+        return pixel;
+    }
+
+    static KoColor getFillPixel() {
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+        return KoColor(Qt::red, cs);
     }
 
     KoColor defaultPixel;
@@ -383,6 +400,162 @@ void KisClipboardTest::testLoadFromPngClipboard()
     QVERIFY(checkHole(device, QRect(QPoint(), imageSize), w.defaultPixel, fillRect, w.fillPixel));
 }
 
+void KisClipboardTest::testLoadFromCloneLayer_data()
+{
+    QTest::addColumn<QString>("defaultPixelName");
+    QTest::addColumn<QSize>("srcImageSize");
+    QTest::addColumn<QSize>("dstImageSize");
+    QTest::addColumn<QRect>("srcFillRect");
 
+    QTest::addRow("transparent-copy") << "transparent" << QSize(100, 100) << QSize(100, 100) <<  QRect(10,10,20,20);
+    QTest::addRow("opaque-copy") << "blue" << QSize(100, 100) << QSize(100, 100) <<  QRect(10,10,20,20);
+
+    // clone layer's reincarnation should preserve the default pixel
+    // of the original, so the pasted layer will grow together with
+    // the destination image!
+    QTest::addRow("transparent-copy-grow") << "transparent" << QSize(100, 100) << QSize(150, 150) <<  QRect(10,10,20,20);
+    QTest::addRow("opaque-copy-grow") << "blue" << QSize(100, 100) << QSize(150, 150) <<  QRect(10,10,20,20);
+
+}
+
+void KisClipboardTest::testLoadFromCloneLayer()
+{
+    QFETCH(QString, defaultPixelName);
+    QFETCH(QSize, srcImageSize);
+    QFETCH(QSize, dstImageSize);
+    QFETCH(QRect, srcFillRect);
+
+    const KoColor defaultPixel = TestImageWrapper::getPixel(defaultPixelName);
+    const KoColor fillPixel = TestImageWrapper::getFillPixel();
+
+    const QRect expectedFillCloneLayerRect = srcFillRect.translated(5, 5);
+    const QRect expectedSrcCloneExactBounds =
+         defaultPixel.opacityU8() > 0 ? QRect(QPoint(), srcImageSize) : expectedFillCloneLayerRect;
+
+    {
+        TestImageWrapper w({srcImageSize, srcFillRect, defaultPixelName});
+        KisImageSP srcImage = w.image;
+        KisPaintLayerSP paintLayer = w.paintLayer;
+        KisPaintDeviceSP dev = paintLayer->paintDevice();
+
+        const QRect expectedSrcExactBounds = w.defaultPixel.opacityU8() > 0 ? srcImage->bounds() : srcFillRect;
+
+        QCOMPARE(dev->exactBounds(), expectedSrcExactBounds);
+        QVERIFY(checkHole(dev, srcImage->bounds(), w.defaultPixel, srcFillRect, w.fillPixel));
+
+        KisCloneLayerSP cloneLayer = new KisCloneLayer(paintLayer, srcImage, "clonelayer", OPACITY_OPAQUE_U8);
+        cloneLayer->setX(5);
+        cloneLayer->setY(5);
+        srcImage->addNode(cloneLayer);
+        srcImage->initialRefreshGraph();
+
+        QCOMPARE(cloneLayer->projection()->exactBounds(), expectedSrcCloneExactBounds);
+        QVERIFY(checkHole(cloneLayer->projection(),
+                          srcImage->bounds(),
+                          w.defaultPixel,
+                          expectedFillCloneLayerRect,
+                          w.fillPixel));
+
+        KisClipboard::instance()->setLayers({cloneLayer}, srcImage, QRect(), false);
+    }
+
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP dstImage = new KisImage(nullptr, dstImageSize.width(), dstImageSize.height(), cs, "dst test image");
+    KisDefaultBoundsSP dstDefaultBounds = new KisDefaultBounds(dstImage);
+
+    KisPaintDeviceSP newDev = KisClipboard::instance()->clipFromKritaLayers(nullptr, dstDefaultBounds);
+
+    // reincarnation preserves the default pixel
+    QCOMPARE(newDev->defaultPixel(), defaultPixel);
+
+    const QRect expectedDstCloneExactBounds =
+         defaultPixel.opacityU8() > 0 ? QRect(QPoint(), dstImageSize) : expectedFillCloneLayerRect;
+
+    QCOMPARE(newDev->exactBounds(), expectedDstCloneExactBounds);
+    QVERIFY(checkHole(newDev, dstImage->bounds(), defaultPixel, expectedFillCloneLayerRect, fillPixel));
+}
+
+void KisClipboardTest::testCopyLayerWithMask_data()
+{
+    QTest::addColumn<QString>("testMode");
+    QTest::addRow("single-layer") << "one-layer";
+    QTest::addRow("multi-layer") << "two-layers";
+    QTest::addRow("single-mask") << "one-mask";
+    QTest::addRow("multi-mask") << "two-masks";
+}
+
+void KisClipboardTest::testCopyLayerWithMask()
+{
+    QFETCH(QString, testMode);
+
+    TestImageWrapper w({QSize(100,100), QRect(10,10,20,20), "transparent"});
+    KisImageSP srcImage = w.image;
+    KisPaintLayerSP paintLayer = w.paintLayer;
+    KisPaintDeviceSP dev = paintLayer->paintDevice();
+
+    KisNodeList nodes;
+
+    KisTransparencyMaskSP mask = new KisTransparencyMask(srcImage, "mask");
+    mask->setSelection(new KisSelection());
+    mask->selection()->pixelSelection()->select(QRect(20,20,20,20), OPACITY_OPAQUE_U8);
+    srcImage->addNode(mask, paintLayer);
+
+    if (testMode == "one-layer") {
+        nodes << paintLayer;
+    } else if (testMode == "two-layers") {
+        KisPaintLayerSP paintLayer2 = new KisPaintLayer(srcImage, "paintlayer2", OPACITY_OPAQUE_U8);
+        srcImage->addNode(paintLayer2);
+
+        nodes << paintLayer;
+        nodes << paintLayer2;
+    } else if (testMode == "one-mask") {
+        nodes << mask;
+    } else if (testMode == "two-masks") {
+        // the second mask is fully contained in the first mask, so it
+        // does not change the projection
+        KisTransparencyMaskSP mask2 = new KisTransparencyMask(srcImage, "mask");
+        mask2->setSelection(new KisSelection());
+        mask2->selection()->pixelSelection()->select(QRect(20,20,10,10), OPACITY_OPAQUE_U8);
+        srcImage->addNode(mask2, paintLayer);
+
+        nodes << mask;
+        nodes << mask2;
+
+    } else {
+        qFatal("Unknown test mode: %s", testMode.toLatin1().data());
+    }
+
+    srcImage->initialRefreshGraph();
+
+    const QRect expectedMaskClippedRect(20,20,10,10);
+
+    QCOMPARE(srcImage->projection()->exactBounds(), expectedMaskClippedRect);
+
+    KisClipboard::instance()->setLayers(nodes, srcImage, srcImage->bounds());
+
+    if (testMode == "one-layer" || testMode == "two-layers") {
+        KisImageSP loadedImage = KisClipboard::instance()->clipImageFromKritaLayers(nullptr);
+        QVERIFY(loadedImage);
+        // when copying layers we copy them together with all the attached masks,
+        // so the cropped area will persist!
+        QCOMPARE(loadedImage->projection()->exactBounds(), expectedMaskClippedRect);
+    } else if (testMode == "one-mask") {
+        KisImageSP loadedImage = KisClipboard::instance()->clipImageFromKritaLayers(nullptr);
+        QVERIFY(loadedImage);
+
+        loadedImage->convertImageColorSpace(srcImage->colorSpace(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        loadedImage->waitForDone();
+
+        QCOMPARE(loadedImage->projection()->exactBounds(), srcImage->bounds());
+
+        const KoColor blackPixel(Qt::black, srcImage->colorSpace());
+        const KoColor whitePixel(Qt::white, srcImage->colorSpace());
+
+        QVERIFY(checkHole(loadedImage->projection(), loadedImage->bounds(), blackPixel, QRect(20,20,20,20), whitePixel));
+    } else if (testMode == "two-masks") {
+        KisImageSP loadedImage = KisClipboard::instance()->clipImageFromKritaLayers(nullptr);
+        QVERIFY(!loadedImage);
+    }
+}
 
 KISTEST_MAIN(KisClipboardTest)

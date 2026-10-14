@@ -199,6 +199,10 @@ KisPaintDeviceSP KisMimeData::clipFromKritaLayersImpl(const KoColorSpace *cs, co
 
             // If having multiple nodes, the masks are filtered out
             KisLayerUtils::filterMergeableNodes(nodes, false);
+
+            // if nothing is left to paste, just return immediately
+            if (nodes.isEmpty()) return nullptr;
+
             for (KisNodeSP node : nodes) {
                 KisNodeSP clonedNode = safeCopyNode(node);
 

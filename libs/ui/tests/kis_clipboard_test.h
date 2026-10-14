@@ -26,7 +26,11 @@ private Q_SLOTS:
 
     void testLoadFromPngClipboard();
 
+    void testLoadFromCloneLayer_data();
+    void testLoadFromCloneLayer();
 
+    void testCopyLayerWithMask_data();
+    void testCopyLayerWithMask();
 };
 
 #endif /* __KIS_CLIPBOARD_TEST_H */

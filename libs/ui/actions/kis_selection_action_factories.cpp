@@ -271,7 +271,12 @@ void KisCutCopyActionFactory::run(Flags flags, KisViewManager *view)
         KisNodeList nodes;
         Q_FOREACH (KisNodeSP node, selectedNodes) {
             KisNodeSP dupNode;
-            if (node->inherits("KisShapeLayer") || node->inherits("KisFileLayer")) {
+            if (node->inherits("KisShapeLayer") || node->inherits("KisFileLayer")
+
+                // also recreate the node for animated layers, since we have no
+                // API for making a node non-animated
+                || (node->inherits("KisPaintLayer") && node->isAnimated())) {
+
                 KisPaintDeviceSP dev = new KisPaintDevice(*node->projection());
                 // might have to change node's name (vector to paint layer)
                 dupNode = new KisPaintLayer(image, node->name(), node->opacity(), dev);
@@ -283,10 +288,6 @@ void KisCutCopyActionFactory::run(Flags flags, KisViewManager *view)
 
         Q_FOREACH (KisNodeSP node, nodes) {
             KisLayerUtils::recursiveApplyNodes(node, [image, view, flags] (KisNodeSP node) {
-                if (node && node->paintDevice()) {
-                    node->paintDevice()->burnKeyframe();
-                }
-
                 if (node && node->paintDevice() && !node->inherits("KisMask")) {
                     KisToolUtils::trimDeviceForClipboard(image, node->paintDevice(), view->selection(), flags.testFlag(SharpClip));
                 }

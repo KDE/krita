@@ -10,6 +10,8 @@
 #include <QMimeData>
 #include <QRect>
 
+#include <optional>
+
 #include <kis_types.h>
 #include <kritaui_export.h>
 

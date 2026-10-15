@@ -102,14 +102,13 @@ public:
         SimpleShapeContainerModel::remove(child);
     }
 
-    void setResolution(qreal xRes, qreal yRes) {
+    bool setResolution(qreal xRes, qreal yRes) {
         if (!qFuzzyCompare(m_xRes, xRes) || !qFuzzyCompare(m_yRes, yRes)) {
             m_xRes = xRes;
             m_yRes = yRes;
-            Q_FOREACH (KoShape *shape, shapes()) {
-                shape->setResolution(xRes, yRes);
-            }
+            return true;
         }
+        return false;
     }
 
 private:
@@ -802,7 +801,9 @@ void KisShapeLayer::slotImageResolutionChanged()
     ShapeLayerContainerModel *model = dynamic_cast<ShapeLayerContainerModel*>(this->model());
     KIS_SAFE_ASSERT_RECOVER_RETURN(model);
     if (this->image()) {
-        model->setResolution(image()->xRes() * 72.0, image()->yRes() * 72.0);
+        if (model->setResolution(image()->xRes() * 72.0, image()->yRes() * 72.0)) {
+            resetCache(nullptr);
+        }
     }
 }
 

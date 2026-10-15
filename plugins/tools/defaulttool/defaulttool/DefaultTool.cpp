@@ -406,20 +406,20 @@ class SelectionHandler : public KoToolSelection
 public:
     SelectionHandler(DefaultTool *parent)
         : KoToolSelection(parent)
-        , m_selection(parent->koSelection())
+        , m_parent(parent)
     {
     }
 
-    bool hasSelection() override
-    {
-        if (m_selection) {
-            return m_selection->count();
+    bool hasSelection() override {
+        KoSelection *selection = m_parent->koSelection();
+        if (selection) {
+            return selection->count() > 0;
         }
         return false;
     }
 
 private:
-    QPointer<KoSelection> m_selection;
+    DefaultTool *m_parent;
 };
 
 DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy)

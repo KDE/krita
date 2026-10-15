@@ -38,6 +38,8 @@
 #include "kis_shape_layer.h"
 #include "KisViewManager.h"
 #include "kis_node.h"
+#include <kis_selection_mask.h>
+#include <KoShapeStroke.h>
 
 #include <KoDocumentResourceManager.h>
 #include <commands/kis_image_layer_add_command.h>
@@ -173,20 +175,57 @@ KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape 
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!baseBelongsToSelection || allSameBelongsToShapeSelection, resultParent);
 
-    if (baseBelongsToSelection && allSameBelongsToShapeSelection) {
-        KisSelectionSP selection = canvas->viewManager()->selection();
-        if (selection) {
-            KisSelectionComponent* shapeSelectionComponent = selection->shapeSelection();
+    KisSelectionSP parentSelection;
 
-            if (!shapeSelectionComponent) {
-                shapeSelectionComponent = new KisShapeSelection(this, selection);
-                resultCommand->addCommand(selection->convertToVectorSelection(shapeSelectionComponent));
+    if (baseBelongsToSelection && allSameBelongsToShapeSelection) {
+        parentSelection = canvas->viewManager()->selection(); // TODO: fix logic
+    }
+
+    if (KisNodeSP activeNode = canvas->viewManager()->activeNode()) {
+        if (KisSelectionMask *selectionMask = qobject_cast<KisSelectionMask *>(activeNode.data())) {
+            if (KisSelectionSP selection = selectionMask->selection()) {
+                parentSelection = selection;
+            }
+        }
+    }
+
+    if (parentSelection) {
+        KisSelectionComponent *shapeSelectionComponent = parentSelection->shapeSelection();
+
+        Q_FOREACH (KoShape *shape, shapes) {
+            if (!belongsToShapeSelection(shape)) {
+                shape->setUserData(new KisShapeSelectionMarker);
+            }
+        }
+
+        if (!shapeSelectionComponent) {
+            shapeSelectionComponent = new KisShapeSelection(this, parentSelection);
+            resultCommand->addCommand(parentSelection->convertToVectorSelection(shapeSelectionComponent));
+        }
+
+        KisShapeSelection *shapeSelection = static_cast<KisShapeSelection *>(shapeSelectionComponent);
+        resultParent = shapeSelection;
+    }
+
+    if (!resultParent) {
+        Q_FOREACH (KoShape *shape, shapes) {
+            if (belongsToShapeSelection(shape)) {
+                shape->setUserData(nullptr);
             }
 
-            KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(shapeSelectionComponent);
-            resultParent = shapeSelection;
+            /**
+             * We should try to avoid pasting fully invisible shapes, add some
+             * default stroke to them.
+             *
+             * Such shapes may be appear when pasting a shape from a vector selection
+             * to a normal layer
+             */
+            if ((!shape->stroke() || !shape->stroke()->isVisible()) && !shape->background()) {
+                shape->setStroke(toQShared(new KoShapeStroke(1, Qt::black)));
+            }
         }
-    } else {
+
+
         KisShapeLayer *shapeLayer =
                 dynamic_cast<KisShapeLayer*>(
                     canvas->selectedShapesProxy()->selection()->activeLayer());

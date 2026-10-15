@@ -599,24 +599,26 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
 {
     QList<KisNodeSP> nodes = loadNodesFast(data, image, shapeController, copyNode /* IN-OUT */);
 
+    const QRect clipVisualBounds = std::accumulate(nodes.begin(), nodes.end(), QRect(), [](QRect rect, KisNodeSP node) {
+        // we don't use exactBounds() here, because the nodes are
+        // not connected to any image and may be infinite
+        return rect | node->projection()->nonDefaultPixelArea();
+    });
+
     QRect clipBounds;
 
     if (const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data)) {
         clipBounds = mimedata->m_referenceRect;
     } else {
-        clipBounds = std::accumulate(nodes.begin(), nodes.end(), QRect(), [](QRect rect, KisNodeSP node) {
-            // we don't use exactBounds() here, because the nodes are
-            // not connected to any image and may be infinite
-            return rect | node->projection()->nonDefaultPixelArea();
-        });
+        clipBounds = clipVisualBounds;
     }
 
     std::optional<QPoint> offset;
 
     if (preferredClipCenter) {
         offset = *preferredClipCenter - clipBounds.center();
-    } else if (!image->bounds().intersects(clipBounds)) {
-        offset = image->bounds().center() - clipBounds.center();
+    } else if (!image->bounds().intersects(clipVisualBounds)) {
+        offset = image->bounds().center() - clipVisualBounds.center();
     }
 
     if (offset) {

@@ -145,6 +145,7 @@ QStringList KisMimeData::formats () const
     QStringList f = QMimeData::formats();
     if (m_nodes.size() > 0) {
         f << "application/x-qt-image"
+          << "application/x-qt-image-has-alpha"
           << "application/zip"
           << "application/x-krita-node-internal-pointer";
     }
@@ -313,6 +314,22 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QMetaType preferredT
         result.setDotsPerMeterX(qRound(image->xRes() * 72.0 / 2.54 * 100.0));
         result.setDotsPerMeterY(qRound(image->yRes() * 72.0 / 2.54 * 100.0));
         return result;
+    }
+    else if (mimetype == "application/x-qt-image-has-alpha") {
+        /**
+         * In Krita, when adding an image to the clipboard (via "application/x-qt-image"),
+         * we **always** add alpha channel. We need to notify Qt about that separately, to
+         * make sure Qt does not request "application/x-qt-image" to build the entire QImage
+         * every time we add something to clipboard.
+         *
+         * [Windows-only] If we don't do that, for biggger imaged Krita may hang up for
+         * 500-800ms every time we create a mime data, i.e. press Ctrl+C or start D&D
+         * operation.
+         *
+         * NOTE: this mime type is a custom type that we patch into our version of Qt,
+         * it is not present upstream!
+         */
+        return QByteArray("1");
     }
     else if (mimetype == "application/zip") {
         QByteArray result;

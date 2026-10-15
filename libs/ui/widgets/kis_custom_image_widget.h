@@ -43,15 +43,10 @@ public:
     /**
      * Constructor. Please note that this class is being used/created by KisDoc.
      * @param parent the parent widget
-     * @param defWidth The defined width
-     * @param defHeight The defined height
-     * @param resolution The image resolution
-     * @param defColorModel The defined color model
-     * @param defColorDepth The defined color depth
-     * @param defColorProfile The defined color profile
      * @param imageName the document that wants to be altered
+     * @param dialogType is a prefix that will be used for fetching image layout settings
      */
-    KisCustomImageWidget(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
+    KisCustomImageWidget(QWidget *parent, const QString & imageName, const QLatin1String &dialogType);
     ~KisCustomImageWidget() override;
     
 private Q_SLOTS:
@@ -65,7 +60,7 @@ private Q_SLOTS:
     void setLandscape();
     void setPortrait();
     void switchWidthHeight();
-    void createImage();
+    virtual void createImage();
     void switchPortraitLandscape();
     void changeDocumentInfoLabel();
     void resolutionUnitChanged();
@@ -73,9 +68,10 @@ private Q_SLOTS:
 protected:
     
     KisDocument *createNewImage();
-    
+
     /// Set the number of layers that will be created
     void setNumberOfLayers(int layers);
+    virtual bool shouldSaveImageDimensions() const;
 
     void showEvent(QShowEvent *) override;
 
@@ -91,7 +87,7 @@ private:
     
     KoUnit m_widthUnit, m_heightUnit;
     QList<KisPropertiesConfigurationSP> m_predefined;
-
+    QLatin1String m_dialogType;
 };
 
 #endif

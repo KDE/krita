@@ -41,8 +41,8 @@
 #include "kis_import_catcher.h"
 #include "widgets/kis_cmb_idlist.h"
 
-KisImageFromClipboardWidget::KisImageFromClipboardWidget(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
-    : KisCustomImageWidget(parent, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile, imageName)
+KisImageFromClipboardWidget::KisImageFromClipboardWidget(QWidget* parent, const QString& imageName, const QLatin1String &dialogType)
+    : KisCustomImageWidget(parent, imageName, dialogType)
 {
     setObjectName("KisImageFromClipboard");
 
@@ -103,6 +103,11 @@ void KisImageFromClipboardWidget::createImage()
     newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
 
+bool KisImageFromClipboardWidget::shouldSaveImageDimensions() const
+{
+    return false;
+}
+
 void KisImageFromClipboardWidget::clipboardDataChanged()
 {
     createClipboardPreview();
@@ -150,6 +155,18 @@ void KisImageFromClipboardWidget::enableImageCreation(const QImage &qimage)
 
         doubleWidth->setValue(qimage.width());
         doubleHeight->setValue(qimage.height());
+
+        const qreal dotsPerMeter = qMax(qimage.dotsPerMeterX(), qimage.dotsPerMeterY());
+
+        if (dotsPerMeter > 0) {
+            doubleResolution->setValue(dotsPerMeter / 100.0 * 2.54);
+        }
+
+        const KoColorSpace *referenceColorSpace = KisClipboard::instance()->referenceColorSpace();
+        if (!referenceColorSpace) {
+            referenceColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+        }
+        colorSpaceSelector->setCurrentColorSpace(referenceColorSpace);
 
         tabWidget->setEnabled(true);
     }

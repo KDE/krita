@@ -40,6 +40,16 @@ public:
     QList<KisNodeSP> nodes() const;
 
     /**
+     * If mime data contains Krita layers, then referenceColorSpace()
+     * will return the color space associated with those layers.
+     *
+     * NOTE: this color space may be **not** the color space the layers
+     * are written in. Usually, it is the color space of the image that
+     * contained the layers.
+     */
+    const KoColorSpace* referenceColorSpace() const;
+
+    /**
      * For Cut/Copy/Paste operations we should detach the contents of
      * the mime data from the actual image because the user can modify
      * our image between the Copy/Cut and Paste calls. So we just copy

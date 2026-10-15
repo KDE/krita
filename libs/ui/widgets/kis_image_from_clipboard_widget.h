@@ -7,8 +7,6 @@
 #ifndef KIS_IMAGE_FROM_CLIPBOARD_WIDGET_H
 #define KIS_IMAGE_FROM_CLIPBOARD_WIDGET_H
 
-#include "kis_global.h"
-#include "kis_properties_configuration.h"
 #include "kis_custom_image_widget.h"
 
 /**
@@ -22,24 +20,20 @@ public:
     /**
      * Constructor. Please note that this class is being used/created by KisDoc.
      * @param parent the parent widget
-     * @param defWidth The defined width
-     * @param defHeight The defined height
-     * @param resolution The image resolution
-     * @param defColorModel The defined color model
-     * @param defColorDepth The defined color depth
-     * @param defColorProfile The defined color profile
      * @param imageName the document that wants to be altered
+     * @param dialogType is a prefix that will be used for fetching image layout settings
      */
-    KisImageFromClipboardWidget(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
+    KisImageFromClipboardWidget(QWidget *parent, const QString & imageName, const QLatin1String &dialogType);
     ~KisImageFromClipboardWidget() override;
 
 protected:
 
     void showEvent(QShowEvent *event) override;
+    bool shouldSaveImageDimensions() const override;
 
 private Q_SLOTS:
     void createClipboardPreview();
-    void createImage();
+    void createImage() override;
     void clipboardDataChanged();
     void enableImageCreation(const QImage &);
 };

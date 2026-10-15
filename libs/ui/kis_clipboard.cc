@@ -63,7 +63,8 @@ public:
     {
     }
 
-    bool hasClip{};
+    bool hasClip {};
+    const KoColorSpace *referenceColorSpace = nullptr;
     QClipboard *clipboard;
 };
 
@@ -358,6 +359,14 @@ KisImageSP KisClipboard::clipFromBoardContentsWithData(
 void KisClipboard::clipboardDataChanged()
 {
     d->hasClip = d->clipboard->mimeData()->hasImage();
+
+    const KisMimeData *mimedata = qobject_cast<const KisMimeData *>(d->clipboard->mimeData());
+    if (mimedata) {
+        d->referenceColorSpace = mimedata->referenceColorSpace();
+    } else {
+        d->referenceColorSpace = nullptr;
+    }
+
     Q_EMIT clipChanged();
 }
 
@@ -375,6 +384,11 @@ QImage KisClipboard::getImageWithFallback(const QMimeData *cbData, bool useClipb
 bool KisClipboard::hasClip() const
 {
     return d->hasClip;
+}
+
+const KoColorSpace* KisClipboard::referenceColorSpace() const
+{
+    return d->referenceColorSpace;
 }
 
 void KisClipboard::setLayers(KisNodeList nodes, KisImageSP image, const QRect referenceRect, bool forceCopy)

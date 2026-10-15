@@ -2690,17 +2690,7 @@ bool KisDocument::newImage(const QString& name,
     documentInfo()->setAboutInfo("abstract", description);
 
     KisConfig cfg(false);
-    cfg.defImageWidth(width);
-    cfg.defImageHeight(height);
-    cfg.defImageResolution(imageResolution);
-    if (!cfg.useDefaultColorSpace())
-    {
-        cfg.defColorModel(image->colorSpace()->colorModelId().id());
-        cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
-        cfg.defColorProfile(image->colorSpace()->profile()->name());
-    }
-
-    bool autopin = cfg.autoPinLayersToTimeline();
+    const bool autopin = cfg.autoPinLayersToTimeline();
 
     KisLayerSP bgLayer;
     if (bgStyle == KisConfig::RASTER_LAYER || bgStyle == KisConfig::FILL_LAYER) {

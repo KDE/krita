@@ -135,6 +135,11 @@ QList<KisNodeSP> KisMimeData::nodes() const
     return m_nodes;
 }
 
+const KoColorSpace* KisMimeData::referenceColorSpace() const
+{
+    return m_referenceColorSpace;
+}
+
 QStringList KisMimeData::formats () const
 {
     QStringList f = QMimeData::formats();

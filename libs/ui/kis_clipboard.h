@@ -125,6 +125,11 @@ public:
 
     bool hasClip() const;
 
+    /**
+     * \see KisMimeData::referenceColorSpace()
+     */
+    const KoColorSpace* referenceColorSpace() const;
+
     void setLayers(KisNodeList nodes, KisImageSP image, const QRect referenceRect, bool forceCopy = false);
     bool hasLayers() const;
     bool hasLayerStyles() const;

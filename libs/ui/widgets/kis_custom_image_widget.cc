@@ -44,7 +44,6 @@
 #include "kis_config.h"
 #include "KisPart.h"
 #include "KisDocument.h"
-#include "widgets/kis_cmb_idlist.h"
 #include <KisSpinBoxI18nHelper.h>
 #include <KisSqueezedComboBox.h>
 #include "kis_signals_blocker.h"
@@ -61,12 +60,22 @@ static const QString pixelsCentimeterStr()
     return str;
 }
 
-KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
+KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, const QString& imageName, const QLatin1String &dialogType)
     : WdgNewImage(parent)
+    , m_dialogType(dialogType)
 {
     setObjectName("KisCustomImageWidget");
     m_openPane = qobject_cast<KisOpenPane*>(parent);
     Q_ASSERT(m_openPane);
+
+    KisConfig cfg(true);
+
+    const qint32 defWidth = cfg.defImageWidth();
+    const qint32 defHeight = cfg.defImageHeight();
+    const double resolution = cfg.defImageResolution();
+    const QString& defColorModel = cfg.defColorModel();
+    const QString& defColorDepth = cfg.defaultColorDepth();
+    const QString& defColorProfile = cfg.defColorProfile();
 
     txtName->setText(imageName);
     m_widthUnit = KoUnit(KoUnit::Pixel, resolution);
@@ -137,15 +146,13 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
 
     connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SLOT(setEnabled(bool)));
 
-
-    KisConfig cfg(true);
-    intNumLayers->setValue(cfg.numDefaultLayers());
+    intNumLayers->setValue(cfg.numDefaultLayers(m_dialogType));
     KoColor bcol(KoColorSpaceRegistry::instance()->rgb8());
-    bcol.fromQColor(cfg.defaultBackgroundColor());
+    bcol.fromQColor(cfg.defaultBackgroundColor(m_dialogType));
     cmbColor->setColor(bcol);
-    setBackgroundOpacity(cfg.defaultBackgroundOpacity());
+    setBackgroundOpacity(cfg.defaultBackgroundOpacity(m_dialogType));
 
-    KisConfig::BackgroundStyle bgStyle = cfg.defaultBackgroundStyle();
+    KisConfig::BackgroundStyle bgStyle = cfg.defaultBackgroundStyle(m_dialogType);
 
     if (bgStyle == KisConfig::RASTER_LAYER) {
       radioBackgroundAsRaster->setChecked(true);
@@ -333,13 +340,29 @@ KisDocument* KisCustomImageWidget::createNewImage()
 
     doc->newImage(txtName->text(), width, height, cs, bgColor, bgStyle, intNumLayers->value(), txtDescription->toPlainText(), resolution);
 
-    KisConfig cfg(true);
-    cfg.setNumDefaultLayers(intNumLayers->value());
-    cfg.setDefaultBackgroundOpacity(backgroundOpacity());
-    cfg.setDefaultBackgroundColor(cmbColor->color().toQColor());
-    cfg.setDefaultBackgroundStyle(bgStyle);
+    KisConfig cfg(false);
+    cfg.setNumDefaultLayers(m_dialogType, intNumLayers->value());
+    cfg.setDefaultBackgroundOpacity(m_dialogType, backgroundOpacity());
+    cfg.setDefaultBackgroundColor(m_dialogType, cmbColor->color().toQColor());
+    cfg.setDefaultBackgroundStyle(m_dialogType, bgStyle);
+
+    if (shouldSaveImageDimensions()) {
+        cfg.defImageWidth(width);
+        cfg.defImageHeight(height);
+        cfg.defImageResolution(resolution);
+        if (!cfg.useDefaultColorSpace()) {
+            cfg.defColorModel(cs->colorModelId().id());
+            cfg.setDefaultColorDepth(cs->colorDepthId().id());
+            cfg.defColorProfile(cs->profile() ? cs->profile()->name() : "");
+        }
+    }
 
     return doc;
+}
+
+bool KisCustomImageWidget::shouldSaveImageDimensions() const
+{
+    return true;
 }
 
 void KisCustomImageWidget::setNumberOfLayers(int layers)

@@ -2191,44 +2191,44 @@ void KisConfig::setHidePopups(bool hidePopups)
     m_cfg.writeEntry("hidePopups", hidePopups);
 }
 
-int KisConfig::numDefaultLayers(bool defaultValue) const
+int KisConfig::numDefaultLayers(const QLatin1String &dialogType, bool defaultValue) const
 {
-    return (defaultValue ? 2 : m_cfg.readEntry("NumberOfLayersForNewImage", 2));
+    return (defaultValue ? 2 : m_cfg.readEntry(dialogType + "NumberOfLayersForNewImage", 2));
 }
 
-void KisConfig::setNumDefaultLayers(int num)
+void KisConfig::setNumDefaultLayers(const QLatin1String &dialogType, int num)
 {
-    m_cfg.writeEntry("NumberOfLayersForNewImage", num);
+    m_cfg.writeEntry(dialogType + "NumberOfLayersForNewImage", num);
 }
 
-quint8 KisConfig::defaultBackgroundOpacity(bool defaultValue) const
+quint8 KisConfig::defaultBackgroundOpacity(const QLatin1String &dialogType, bool defaultValue) const
 {
-  return (defaultValue ? (int)OPACITY_OPAQUE_U8 : m_cfg.readEntry("BackgroundOpacityForNewImage", (int)OPACITY_OPAQUE_U8));
+  return (defaultValue ? (int)OPACITY_OPAQUE_U8 : m_cfg.readEntry(dialogType + "BackgroundOpacityForNewImage", (int)OPACITY_OPAQUE_U8));
 }
 
-void KisConfig::setDefaultBackgroundOpacity(quint8 value)
+void KisConfig::setDefaultBackgroundOpacity(const QLatin1String &dialogType, quint8 value)
 {
-  m_cfg.writeEntry("BackgroundOpacityForNewImage", (int)value);
+  m_cfg.writeEntry(dialogType + "BackgroundOpacityForNewImage", (int)value);
 }
 
-QColor KisConfig::defaultBackgroundColor(bool defaultValue) const
+QColor KisConfig::defaultBackgroundColor(const QLatin1String &dialogType, bool defaultValue) const
 {
-  return (defaultValue ? QColor(Qt::white) : m_cfg.readEntry("BackgroundColorForNewImage", QColor(Qt::white)));
+  return (defaultValue ? QColor(Qt::white) : m_cfg.readEntry(dialogType + "BackgroundColorForNewImage", QColor(Qt::white)));
 }
 
-void KisConfig::setDefaultBackgroundColor(const QColor &value)
+void KisConfig::setDefaultBackgroundColor(const QLatin1String &dialogType, const QColor &value)
 {
-  m_cfg.writeEntry("BackgroundColorForNewImage", value);
+  m_cfg.writeEntry(dialogType + "BackgroundColorForNewImage", value);
 }
 
-KisConfig::BackgroundStyle KisConfig::defaultBackgroundStyle(bool defaultValue) const
+KisConfig::BackgroundStyle KisConfig::defaultBackgroundStyle(const QLatin1String &dialogType, bool defaultValue) const
 {
-  return (KisConfig::BackgroundStyle)(defaultValue ? RASTER_LAYER : m_cfg.readEntry("BackgroundStyleForNewImage", (int)RASTER_LAYER));
+  return (KisConfig::BackgroundStyle)(defaultValue ? RASTER_LAYER : m_cfg.readEntry(dialogType + "BackgroundStyleForNewImage", (int)RASTER_LAYER));
 }
 
-void KisConfig::setDefaultBackgroundStyle(KisConfig::BackgroundStyle value)
+void KisConfig::setDefaultBackgroundStyle(const QLatin1String &dialogType, KisConfig::BackgroundStyle value)
 {
-  m_cfg.writeEntry("BackgroundStyleForNewImage", (int)value);
+  m_cfg.writeEntry(dialogType + "BackgroundStyleForNewImage", (int)value);
 }
 
 int KisConfig::lineSmoothingType(bool defaultValue) const

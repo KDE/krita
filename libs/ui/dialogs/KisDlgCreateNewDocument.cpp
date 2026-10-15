@@ -21,21 +21,17 @@ KisDlgCreateNewDocument::KisDlgCreateNewDocument(QWidget* parent)
 
     KisConfig cfg(true);
 
-    int w = cfg.defImageWidth();
-    int h = cfg.defImageHeight();
-    const double resolution = cfg.defImageResolution();
-    const QString colorModel = cfg.defColorModel();
-    const QString colorDepth = cfg.defaultColorDepth();
-    const QString colorProfile = cfg.defColorProfile();
+    const QLatin1String customDocumentConfigSection("");
+    const QLatin1String fromClipboardConfigSection("FromClipboard");
 
     addCustomDocumentWidget(
-        new KisCustomImageWidget(this, w, h, resolution, colorModel, colorDepth, colorProfile, i18n("Unnamed")),
+        new KisCustomImageWidget(this, i18n("Unnamed"), customDocumentConfigSection),
         i18n("Custom Document"),
         "Custom Document",
         "document-new");
 
    addCustomDocumentWidget(
-        new KisImageFromClipboardWidget(this, 0, 0, resolution, colorModel, colorDepth, colorProfile, i18n("Unnamed")),
+        new KisImageFromClipboardWidget(this, i18n("Unnamed"), fromClipboardConfigSection),
         i18n("Create from Clipboard"),
         "Create from ClipBoard",
         "tab-new");

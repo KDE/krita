@@ -1,7 +1,3 @@
- <!--
-  SPDX-FileCopyrightText: none
-  SPDX-License-Identifier: CC0-1.0
--->
 <RCC>
     <qresource prefix="/">
         <file>dark_reselect.svg</file>
@@ -671,5 +667,11 @@
         <file>light_column-remove-and-pull.svg</file>
         <file>light_column-remove-hold-.svg</file>
         <file>light_column-remove-hold-multiple.svg</file>
+        <file>dark_clear-cache.svg</file>
+        <file>dark_time-set-end.svg</file>
+        <file>dark_time-set-start.svg</file>
+        <file>light_clear-cache.svg</file>
+        <file>light_time-set-end.svg</file>
+        <file>light_time-set-start.svg</file>
     </qresource>
 </RCC>

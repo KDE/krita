@@ -2379,7 +2379,7 @@
       <statusTip/>
     </Action>
     <Action name="clear_animation_cache">
-        <icon/>
+        <icon>clear-cache</icon>
         <text>Clear Cache</text>
         <whatsThis/>
         <toolTip>Clear entire animation cache. Useful for debugging.</toolTip>
@@ -2487,7 +2487,7 @@
       <statusTip/>
     </Action>
     <Action name="set_start_time">
-      <icon/>
+      <icon>time-set-start</icon>
       <text>Set Start Time</text>
       <whatsThis/>
       <toolTip/>
@@ -2499,7 +2499,7 @@
       <statusTip/>
     </Action>
     <Action name="set_end_time">
-      <icon/>
+      <icon>time-set-end</icon>
       <text>Set End Time</text>
       <whatsThis/>
       <toolTip/>

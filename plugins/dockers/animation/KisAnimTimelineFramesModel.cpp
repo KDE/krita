@@ -766,7 +766,7 @@ bool KisAnimTimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt:
     const bool cloneFrames = action == Qt::LinkAction || copyPolicy == CloneFramesPolicy;
 
     if (dataMoved) {
-        *dataMoved = !copyFrames;
+        *dataMoved = !copyFrames && !cloneFrames;
     }
 
     KUndo2Command *cmd = 0;

@@ -1,6 +1,7 @@
 kis_add_tests(
     kis_image_view_converter_test.cpp
     kis_shape_selection_test.cpp
+    kis_clipboard_test.cpp
     kis_coordinates_converter_test.cpp
     kis_grid_config_test.cpp
     kis_temporary_paint_constraint_test.cpp
@@ -125,11 +126,6 @@ kis_add_test(
 krita_add_broken_unit_test(
     kis_painting_assistants_decoration_test.cpp ../../../sdk/tests/testutil.cpp
     TEST_NAME KisPaintingAssistantsDecorationTest
-    LINK_LIBRARIES kritaui kritatestsdk
-    )
-
-krita_add_broken_unit_test( kis_clipboard_test.cpp
-    TEST_NAME KisClipboardTest
     LINK_LIBRARIES kritaui kritatestsdk
     )
 

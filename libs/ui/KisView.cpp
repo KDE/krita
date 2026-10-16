@@ -492,9 +492,9 @@ void KisView::dropEvent(QDropEvent *event)
         QList<KisNodeSP> nodes;
 
         if (forcedCenter) {
-            nodes = KisMimeData::loadNodesFastAndRecenter(*forcedCenter, event->mimeData(), kisimage, kritaShapeController, copyNode);
+            nodes = KisMimeData::loadNodesFastAndRecenter(*forcedCenter, event->mimeData(), KisMimeData::MimeFromDragAndDrop, kisimage, kritaShapeController, copyNode);
         } else {
-            nodes = KisMimeData::loadNodesFast(event->mimeData(), kisimage, kritaShapeController, copyNode);
+            nodes = KisMimeData::loadNodesFast(event->mimeData(), KisMimeData::MimeFromDragAndDrop, kisimage, kritaShapeController, copyNode);
         }
 
         Q_FOREACH (KisNodeSP node, nodes) {

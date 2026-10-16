@@ -1604,6 +1604,7 @@ void KisNodeManager::pasteLayersFromClipboard(std::optional<QPoint> preferredCli
     KisNodeDummy *aboveThisDummy = parentDummy ? parentDummy->lastChild() : 0;
 
     KisMimeData::insertMimeLayers(data,
+                                  KisMimeData::MimeFromClipboard,
                                   image,
                                   shapeController,
                                   parentDummy,

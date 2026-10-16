@@ -393,6 +393,7 @@ void KisMimeData::initializeExternalNode(KisNodeSP *node,
 }
 
 QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
+                                                   MimeSource mimeSource,
                                                    KisImageSP image,
                                                    KisShapeController *shapeController,
                                                    bool /* IN-OUT */ &copyNode)
@@ -410,7 +411,14 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
     }
 
     // Qt 4.8 way
-    if (nodes.isEmpty() && data->hasFormat("application/x-krita-node-internal-pointer")) {
+    if (nodes.isEmpty()
+        // The user might have some clipboard manager installed, which
+        // could store this mime data indefinitely, so the pointers to
+        // layers could have stunk already. That is why we can use the
+        // internal pointer mime data **only** when it comes from drag
+        // and drop event, which is usually not stored anywhere.
+        && mimeSource == MimeFromDragAndDrop
+        && data->hasFormat("application/x-krita-node-internal-pointer")) {
         QByteArray nodeXml = data->data("application/x-krita-node-internal-pointer");
 
         QDomDocument doc;
@@ -572,12 +580,14 @@ bool KisMimeData::isNodeMimeDataFromSameImage(const QMimeData *data, KisImageSP 
 
 KisNodeList KisMimeData::loadNodesFast(
     const QMimeData *data,
+    MimeSource mimeSource,
     KisImageSP image,
     KisShapeController *shapeController,
     bool &copyNode)
 {
     QList<KisNodeSP> nodes =
         KisMimeData::tryLoadInternalNodes(data,
+                                          mimeSource,
                                           image,
                                           shapeController,
                                           copyNode /* IN-OUT */);
@@ -594,9 +604,9 @@ KisNodeList KisMimeData::loadNodesFast(
     return nodes;
 }
 
-KisNodeList KisMimeData::loadNodesFastAndRecenter(const QPoint &preferredCenter, const QMimeData *data, KisImageSP image, KisShapeController *shapeController, bool &copyNode)
+KisNodeList KisMimeData::loadNodesFastAndRecenter(const QPoint &preferredCenter, const QMimeData *data, MimeSource mimeSource, KisImageSP image, KisShapeController *shapeController, bool &copyNode)
 {
-    KisNodeList nodes = loadNodesFast(data, image, shapeController, copyNode);
+    KisNodeList nodes = loadNodesFast(data, mimeSource, image, shapeController, copyNode);
 
     Q_FOREACH (KisNodeSP node, nodes) {
         const QRect layerBounds = node->exactBounds();
@@ -610,6 +620,7 @@ KisNodeList KisMimeData::loadNodesFastAndRecenter(const QPoint &preferredCenter,
 }
 
 bool KisMimeData::insertMimeLayers(const QMimeData *data,
+                                   MimeSource mimeSource,
                                    KisImageSP image,
                                    KisShapeController *shapeController,
                                    KisNodeDummy *parentDummy,
@@ -619,7 +630,7 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
                                    std::optional<QPoint> preferredClipCenter,
                                    KisProcessingApplicator *applicator)
 {
-    QList<KisNodeSP> nodes = loadNodesFast(data, image, shapeController, copyNode /* IN-OUT */);
+    QList<KisNodeSP> nodes = loadNodesFast(data, mimeSource, image, shapeController, copyNode /* IN-OUT */);
 
     const QRect clipVisualBounds = std::accumulate(nodes.begin(), nodes.end(), QRect(), [](QRect rect, KisNodeSP node) {
         // we don't use exactBounds() here, because the nodes are

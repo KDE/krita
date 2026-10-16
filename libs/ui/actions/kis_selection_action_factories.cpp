@@ -301,7 +301,10 @@ void KisCutCopyActionFactory::run(Flags flags, KisViewManager *view)
         KUndo2MagicString actionName = flags & CutClip ?
                     kundo2_i18n("Cut") :
                     kundo2_i18n("Copy");
-        KisProcessingApplicator *ap = beginAction(view, actionName);
+        KisProcessingApplicator *ap =
+            beginAction(view,
+                        actionName,
+                        flags & CutClip ? KisOperation::Normal : KisOperation::ReadOnly);
 
         if (flags & CutClip) {
             selectedNodes.append(masks);
@@ -386,7 +389,7 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
     KisClipboard::instance()->setLayers(nodes, tempImage, view->selection() ? view->selection()->selectedExactRect() : image->bounds());
     image->unlock();
 
-    KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Copy Merged"));
+    KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Copy Merged"), KisOperation::ReadOnly);
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 

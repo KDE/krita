@@ -19,6 +19,13 @@ class KisProcessingApplicator;
 class KRITAUI_EXPORT KisOperation
 {
 public:
+    enum Flag {
+        Normal = 0x0,
+        ReadOnly = 0x1
+    };
+    Q_DECLARE_FLAGS(Flags, Flag)
+
+public:
     KisOperation(const QString &id);
     virtual ~KisOperation();
 
@@ -27,10 +34,12 @@ public:
     virtual void runFromXML(KisViewManager *view, const KisOperationConfiguration &config);
 
 protected:
-    KisProcessingApplicator* beginAction(KisViewManager *view, const KUndo2MagicString &actionName);
+    KisProcessingApplicator* beginAction(KisViewManager *view, const KUndo2MagicString &actionName, Flags flags = Normal);
     void endAction(KisProcessingApplicator *applicator, const QString &xmlData);
 private:
     const QString m_id;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisOperation::Flags)
 
 #endif /* __KIS_OPERATION_H */

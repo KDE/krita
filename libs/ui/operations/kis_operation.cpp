@@ -31,14 +31,14 @@ void KisOperation::runFromXML(KisViewManager *view, const KisOperationConfigurat
     qFatal("Not implemented yet");
 }
 
-KisProcessingApplicator* KisOperation::beginAction(KisViewManager *view, const KUndo2MagicString &actionName) {
+KisProcessingApplicator* KisOperation::beginAction(KisViewManager *view, const KUndo2MagicString &actionName, KisOperation::Flags flags) {
     KisImageSP image = view->image();
     Q_ASSERT(image);
 
     KisImageSignalVector emitSignals;
 
     return new KisProcessingApplicator(image, 0,
-                                        KisProcessingApplicator::NONE,
+                                        flags.testFlag(ReadOnly) ? KisProcessingApplicator::READ_ONLY_ACTION : KisProcessingApplicator::NONE,
                                         emitSignals, actionName);
 }
 

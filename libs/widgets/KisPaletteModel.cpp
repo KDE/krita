@@ -275,6 +275,8 @@ Qt::DropActions KisPaletteModel::supportedDropActions() const
 
 void KisPaletteModel::setSwatch(const KisSwatch &entry, const QModelIndex &index)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_colorSet);
+
     if (m_colorSet->isGroupTitleRow(index.row())) return;
 
     Q_ASSERT(index.column() < m_colorSet->columnCount());
@@ -466,8 +468,9 @@ void KisPaletteModel::slotExternalPaletteModified(QSharedPointer<KoColorSet> res
 
 QModelIndex KisPaletteModel::indexForClosest(const KoColor &compare)
 {
-    KisSwatchGroup::SwatchInfo info = colorSet()->getClosestSwatchInfo(compare);
-    return createIndex(indexRowForInfo(info), info.column, colorSet()->getGroup(info.group).data());
+    if (!m_colorSet) return {};
+    KisSwatchGroup::SwatchInfo info = m_colorSet->getClosestSwatchInfo(compare);
+    return createIndex(indexRowForInfo(info), info.column, m_colorSet->getGroup(info.group).data());
 }
 
 int KisPaletteModel::indexRowForInfo(const KisSwatchGroup::SwatchInfo &info)

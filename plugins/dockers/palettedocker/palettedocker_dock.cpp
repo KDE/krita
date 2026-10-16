@@ -446,12 +446,14 @@ void PaletteDockerDock::setRedoToolTip(const QString &text)
 
 void PaletteDockerDock::undo()
 {
+    if (!m_currentColorSet) return;
     m_currentColorSet->undoStack()->undo();
     slotUpdateLblPaletteName();
 }
 
 void PaletteDockerDock::redo()
 {
+    if (!m_currentColorSet) return;
     m_currentColorSet->undoStack()->redo();
     slotUpdateLblPaletteName();
 }

@@ -353,6 +353,7 @@ void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
     Q_ASSERT(m_d->model);
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
+    if (!m_d->model->colorSet()) { return; }
     KisSwatch c = KisSwatch(color);
     c.setId(QString::number(m_d->model->colorSet()->colorCount() + 1));
     c.setName(i18nc("Default name for a color swatch","Color %1", QString::number(m_d->model->colorSet()->colorCount()+1)));
@@ -386,6 +387,7 @@ void KisPaletteEditor::modifyEntry(const QModelIndex &index)
 {
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
+    if (!m_d->model->colorSet()) { return; }
 
     KoDialog dialog;
     dialog.setCaption(i18nc("@title:dialog", "Add a new Color Swatch"));

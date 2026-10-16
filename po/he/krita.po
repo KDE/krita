@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-10 00:43+0000\n"
-"PO-Revision-Date: 2026-09-30 08:47+0300\n"
+"PO-Revision-Date: 2026-10-09 11:21+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -59731,59 +59731,51 @@ msgid "Text"
 msgstr "טקסט"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:79
-#, fuzzy, kde-format
-#| msgid "Source:"
+#, kde-format
 msgctxt "@label:listbox image source"
 msgid "Source:"
 msgstr "מקור:"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Image"
 msgstr "תמונה"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Clipboard"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Clipboard"
 msgstr "לוח גזירים"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:87
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button reload image"
 msgid "Reload"
-msgstr "הורד"
+msgstr "ריענון"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:250
-#, fuzzy, kde-format
-#| msgctxt "Empty locale"
-#| msgid "Empty"
+#, kde-format
 msgctxt "@info empty image"
 msgid "Empty"
 msgstr "ריק"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
-#, fuzzy, kde-format
-#| msgid "Overwrite"
+#, kde-format
 msgctxt "@action:button"
 msgid "Overwrite"
 msgstr "שכתוב"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
-#, fuzzy, kde-format
-#| msgid "Save"
+#, kde-format
 msgctxt "@action:button"
 msgid "Save"
 msgstr "שמירה"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
-#, fuzzy, kde-format
-#| msgid "Creates a brush tip from the image in the clipboard."
+#, kde-format
 msgid "Creates a brush tip from the current image, selection, or clipboard."
-msgstr "יצירת קצה מכחול מהתמונה שבלוח הגזירים."
+msgstr "יצירת קצה מכחול מהתמונה הנוכחית, מהבחירה או מלוח הגזירים."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
@@ -59822,10 +59814,9 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
-#, fuzzy, kde-format
-#| msgid "Current Brush Tip"
+#, kde-format
 msgid "Create New Brushtip"
-msgstr "קצה המכחול הנוכחי"
+msgstr "יצירת קצה מכחול חדש"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format

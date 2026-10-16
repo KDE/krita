@@ -106,7 +106,9 @@ void KisPaletteChooser::slotExport()
         m_d->itemChooser->setCurrentItem(0);
     }
     KoColorSetSP palette = m_d->itemChooser->currentResource().dynamicCast<KoColorSet>();
-    Q_EMIT sigExportPalette(palette);
+    if (palette) {
+        Q_EMIT sigExportPalette(palette);
+    }
 }
 
 /************************* KisPaletteChooserPrivate **********************/

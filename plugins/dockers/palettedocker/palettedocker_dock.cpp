@@ -223,6 +223,8 @@ void PaletteDockerDock::slotImportPalette()
 
 void PaletteDockerDock::slotExportPalette(KoColorSetSP palette)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(palette);
+
     KoFileDialog dialog(this, KoFileDialog::SaveFile, "Save Palette");
     dialog.setCaption(i18n("Export Palette"));
     dialog.setDefaultDir(palette->filename());

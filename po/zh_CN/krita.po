@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-10 00:43+0000\n"
+"POT-Creation-Date: 2026-10-17 00:47+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16768,7 +16768,7 @@ msgstr "无法将 %1 保存到 HTML"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:136
-#: libs/ui/flake/kis_shape_layer.cc:613
+#: libs/ui/flake/kis_shape_layer.cc:612
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -21018,7 +21018,7 @@ msgstr "取消选择"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:37
-#: libs/ui/actions/KisPasteActionFactories.cpp:267
+#: libs/ui/actions/KisPasteActionFactories.cpp:239
 #: libs/ui/kis_layer_manager.cc:744 libs/ui/kis_layer_manager.cc:797
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -21405,7 +21405,7 @@ msgstr "导入的图像"
 
 #. i18n.
 #: libs/image/kis_image.cc:762 libs/ui/kis_import_catcher.cc:50
-#: libs/ui/KisDocument.cpp:2711 plugins/impex/psd/psd_loader.cpp:221
+#: libs/ui/KisDocument.cpp:2701 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
@@ -21677,7 +21677,7 @@ msgstr "图层色彩空间不匹配"
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
 #: libs/image/kis_layer_properties_icons.cpp:39
-#: libs/ui/flake/kis_shape_layer.cc:327
+#: libs/ui/flake/kis_shape_layer.cc:326
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
@@ -21763,8 +21763,8 @@ msgid "Processing"
 msgstr "正在处理"
 
 #: libs/image/kis_psd_layer_style.cpp:106
-#: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:32
-#: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:38
+#: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:28
+#: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:34
 #: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1487
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
@@ -23815,8 +23815,8 @@ msgstr "输出"
 #: libs/pigment/resources/KoColorSet.cpp:1447
 #: libs/pigment/resources/KoColorSet.cpp:1527
 #: libs/pigment/resources/KoColorSet.cpp:1944
-#: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1167
+#: libs/ui/actions/KisPasteActionFactories.cpp:324
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1170
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -23866,7 +23866,7 @@ msgstr "本地资源"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1202
-#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:777
+#: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:506
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
 #: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
@@ -23885,11 +23885,11 @@ msgstr "本地资源"
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:683 libs/ui/KisView.cpp:1170
+#: libs/ui/KisView.cpp:686 libs/ui/KisView.cpp:1173
 #: libs/ui/KisWelcomePageWidget.cpp:730 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
-#: libs/ui/widgets/kis_custom_image_widget.cc:291
-#: libs/ui/widgets/kis_custom_image_widget.cc:433
+#: libs/ui/widgets/kis_custom_image_widget.cc:298
+#: libs/ui/widgets/kis_custom_image_widget.cc:456
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1581
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
@@ -24739,85 +24739,85 @@ msgstr "删除此标签"
 msgid "Undelete"
 msgstr "取消删除"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:156
+#: libs/ui/actions/kis_selection_action_factories.cpp:80
 msgctxt "(qtundo-format)"
 msgid "Select All"
 msgstr "选择全部"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:778
+#: libs/ui/actions/kis_selection_action_factories.cpp:167
+#: libs/ui/KisView.cpp:781
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "浸漫填充图层"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:385
+#: libs/ui/actions/kis_selection_action_factories.cpp:302
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "剪切"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:386
+#: libs/ui/actions/kis_selection_action_factories.cpp:303
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "复制"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:472
+#: libs/ui/actions/kis_selection_action_factories.cpp:392
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "合并复制"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:489
+#: libs/ui/actions/kis_selection_action_factories.cpp:409
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr "选区已是矢量格式 "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:514
-#: libs/ui/actions/kis_selection_action_factories.cpp:534
+#: libs/ui/actions/kis_selection_action_factories.cpp:434
+#: libs/ui/actions/kis_selection_action_factories.cpp:454
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "转换为矢量选区"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:529
+#: libs/ui/actions/kis_selection_action_factories.cpp:449
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "选区已是栅格格式 "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:576
+#: libs/ui/actions/kis_selection_action_factories.cpp:496
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "此形状已属于一个选区"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:582
+#: libs/ui/actions/kis_selection_action_factories.cpp:502
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "转换形状为矢量选区"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:635
-#: libs/ui/actions/kis_selection_action_factories.cpp:694
+#: libs/ui/actions/kis_selection_action_factories.cpp:555
+#: libs/ui/actions/kis_selection_action_factories.cpp:614
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:55
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
 msgstr "绘制多段线"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:120
+#: libs/ui/actions/KisPasteActionFactories.cpp:121
 msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "粘贴形状"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:593
+#: libs/ui/actions/KisPasteActionFactories.cpp:263
+#: libs/ui/actions/KisPasteActionFactories.cpp:331 libs/ui/KisView.cpp:594
 #, kde-format
 msgid "(pasted)"
 msgstr "(粘贴)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:397
+#: libs/ui/actions/KisPasteActionFactories.cpp:329
 #, kde-format
 msgid "Pasted"
 msgstr "粘贴"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:452
+#: libs/ui/actions/KisPasteActionFactories.cpp:384
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "粘贴样式"
@@ -27015,7 +27015,8 @@ msgstr "图层属性"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2003
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2472
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2530 libs/ui/kis_paintop_box.cc:279
-#: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
+#: libs/ui/kis_paintop_box.cc:280
+#: libs/ui/widgets/kis_custom_image_widget.cc:105
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
 #: plugins/dockers/layerdocker/LayerBox.cpp:213
@@ -28080,12 +28081,12 @@ msgstr ""
 msgid "Create new document"
 msgstr "新建图像"
 
-#: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:33
+#: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:29
 #, kde-format
 msgid "Custom Document"
 msgstr "新建图像 - 自定义"
 
-#: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:39
+#: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:35
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "新建图像 - 剪贴板"
@@ -28418,7 +28419,7 @@ msgstr "重命名会话"
 msgid "New name:"
 msgstr "新名称："
 
-#: libs/ui/flake/kis_shape_controller.cpp:196
+#: libs/ui/flake/kis_shape_controller.cpp:235
 #, kde-format
 msgid "Vector Layer %1"
 msgstr "矢量图层 %1"
@@ -33145,13 +33146,13 @@ msgid "Anchor:"
 msgstr "锚点："
 
 #: libs/ui/imagesize/wdg_imagesize.cc:54
-#: libs/ui/widgets/kis_custom_image_widget.cc:54
+#: libs/ui/widgets/kis_custom_image_widget.cc:53
 #, kde-format
 msgid "Pixels/Inch"
 msgstr "像素/英寸"
 
 #: libs/ui/imagesize/wdg_imagesize.cc:60
-#: libs/ui/widgets/kis_custom_image_widget.cc:60
+#: libs/ui/widgets/kis_custom_image_widget.cc:59
 #, kde-format
 msgid "Pixels/Centimeter"
 msgstr "像素/厘米"
@@ -34290,7 +34291,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "更改文件图层"
 
-#: libs/ui/kis_clipboard.cc:778 libs/ui/KisView.cpp:684
+#: libs/ui/kis_clipboard.cc:507 libs/ui/KisView.cpp:687
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -34527,7 +34528,7 @@ msgstr "转换为文件图层"
 msgid "New Filter Layer"
 msgstr "新建滤镜图层"
 
-#: libs/ui/kis_layer_manager.cc:801 libs/ui/kis_mimedata.cpp:357
+#: libs/ui/kis_layer_manager.cc:801 libs/ui/kis_mimedata.cpp:485
 #, kde-format
 msgid "Fill Layer"
 msgstr "填充图层"
@@ -35773,13 +35774,13 @@ msgstr "打开 %1 时遇到问题。"
 msgid "Not Saved"
 msgstr "未保存图像"
 
-#: libs/ui/KisDocument.cpp:2718
+#: libs/ui/KisDocument.cpp:2708
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "背景色填充"
 
-#: libs/ui/KisDocument.cpp:2780
+#: libs/ui/KisDocument.cpp:2770
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -36432,20 +36433,20 @@ msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
 msgstr "保留颜色"
 
-#: libs/ui/KisPaletteEditor.cpp:358 libs/ui/KisPaletteEditor.cpp:449
+#: libs/ui/KisPaletteEditor.cpp:359 libs/ui/KisPaletteEditor.cpp:451
 #, kde-format
 msgctxt "Default name for a color swatch"
 msgid "Color %1"
 msgstr "颜色 %1"
 
-#: libs/ui/KisPaletteEditor.cpp:391 libs/ui/KisPaletteEditor.cpp:437
+#: libs/ui/KisPaletteEditor.cpp:393 libs/ui/KisPaletteEditor.cpp:439
 #: libs/widgets/kis_palette_view.cpp:129
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "新建色块"
 
-#: libs/ui/KisPaletteEditor.cpp:406 libs/ui/KisPaletteEditor.cpp:456
+#: libs/ui/KisPaletteEditor.cpp:408 libs/ui/KisPaletteEditor.cpp:458
 #: libs/widgets/kis_palette_view.cpp:140
 #, kde-format
 msgctxt "@info:tooltip"
@@ -36454,37 +36455,37 @@ msgid ""
 "paints it has available to it. The opposite is called a process color."
 msgstr "专色：打印机无需混合色料直接打印出来的颜色，反之则是混色。"
 
-#: libs/ui/KisPaletteEditor.cpp:410 libs/ui/KisPaletteEditor.cpp:459
+#: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
 #: libs/widgets/kis_palette_view.cpp:142
 #, kde-format
 msgid "Swatch ID:"
 msgstr "色块 ID："
 
-#: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
+#: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
 #: libs/widgets/kis_palette_view.cpp:143
 #, kde-format
 msgid "Color swatch name:"
 msgstr "色块名称："
 
-#: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
+#: libs/ui/KisPaletteEditor.cpp:414 libs/ui/KisPaletteEditor.cpp:463
 #: libs/widgets/kis_palette_view.cpp:144
 #, kde-format
 msgctxt "Color as the Color of a Swatch in a Palette"
 msgid "Color:"
 msgstr "颜色："
 
-#: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
+#: libs/ui/KisPaletteEditor.cpp:415 libs/ui/KisPaletteEditor.cpp:464
 #: libs/widgets/kis_palette_view.cpp:145
 #, kde-format
 msgid "Spot color:"
 msgstr "专色："
 
-#: libs/ui/KisPaletteEditor.cpp:458 libs/widgets/kis_palette_view.cpp:141
+#: libs/ui/KisPaletteEditor.cpp:460 libs/widgets/kis_palette_view.cpp:141
 #, kde-format
 msgid "Swatch Group:"
 msgstr "色块组："
 
-#: libs/ui/KisPaletteEditor.cpp:620 libs/ui/KisPaletteEditor.cpp:623
+#: libs/ui/KisPaletteEditor.cpp:622 libs/ui/KisPaletteEditor.cpp:625
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"
@@ -36675,74 +36676,74 @@ msgstr "没有可用的图片。"
 msgid "Use This Template"
 msgstr "加载此模板"
 
-#: libs/ui/KisView.cpp:753
+#: libs/ui/KisView.cpp:756
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "您不能在所选图层类型上拖放颜色。"
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:419
+#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool_utils.cpp:420
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "图层已锁定且不可见。"
 
-#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:421
+#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool_utils.cpp:422
 #, kde-format
 msgid "Layer is locked."
 msgstr "图层已锁定。"
 
-#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:423
+#: libs/ui/KisView.cpp:768 libs/ui/tool/kis_tool_utils.cpp:424
 #, kde-format
 msgid "Layer is invisible."
 msgstr "图层不可见。"
 
-#: libs/ui/KisView.cpp:1171
+#: libs/ui/KisView.cpp:1174
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>图像<b>“%1”</b> 已被修改。</p><p>您想要保存它吗？</p>"
 
-#: libs/ui/KisView.cpp:1245
+#: libs/ui/KisView.cpp:1248
 #, kde-format
 msgid "Write Protected"
 msgstr "写保护"
 
-#: libs/ui/KisView.cpp:1249
+#: libs/ui/KisView.cpp:1252
 #, kde-format
 msgid "Recovered"
 msgstr "已恢复"
 
-#: libs/ui/KisView.cpp:1351
+#: libs/ui/KisView.cpp:1354
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "色彩校样不支持浮点通道。"
 
-#: libs/ui/KisView.cpp:1356
+#: libs/ui/KisView.cpp:1359
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "色彩校样已启用。"
 
-#: libs/ui/KisView.cpp:1358
+#: libs/ui/KisView.cpp:1361
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "色彩校样已关闭。"
 
-#: libs/ui/KisView.cpp:1370
+#: libs/ui/KisView.cpp:1373
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "色域超出警告不支持浮点通道。"
 
-#: libs/ui/KisView.cpp:1376
+#: libs/ui/KisView.cpp:1379
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "色域超出警告色已启用。"
 
-#: libs/ui/KisView.cpp:1378
+#: libs/ui/KisView.cpp:1381
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "但色彩校样尚未启用。"
 
-#: libs/ui/KisView.cpp:1381
+#: libs/ui/KisView.cpp:1384
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "色域超出警告色已关闭。"
@@ -37976,23 +37977,23 @@ msgstr ""
 "X：%1 像素\n"
 "Y：%2 像素"
 
-#: libs/ui/tool/kis_tool_utils.cpp:213 libs/ui/tool/kis_tool_utils.cpp:225
+#: libs/ui/tool/kis_tool_utils.cpp:214 libs/ui/tool/kis_tool_utils.cpp:226
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "清除"
 
-#: libs/ui/tool/kis_tool_utils.cpp:322
+#: libs/ui/tool/kis_tool_utils.cpp:323
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr "笔刷大小：%1 像素"
 
-#: libs/ui/tool/kis_tool_utils.cpp:425
+#: libs/ui/tool/kis_tool_utils.cpp:426
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr "此图层只能在冲染模式下进行绘制。"
 
-#: libs/ui/tool/kis_tool_utils.cpp:427
+#: libs/ui/tool/kis_tool_utils.cpp:428
 #, kde-format
 msgid "Group not editable."
 msgstr "图层组不可编辑。"
@@ -39199,12 +39200,12 @@ msgstr "无标签"
 msgid "Select a Color Space"
 msgstr "选择色彩空间"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:114
+#: libs/ui/widgets/kis_custom_image_widget.cc:123
 #, kde-format
 msgid "&Create"
 msgstr "创建(&C)"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:292
+#: libs/ui/widgets/kis_custom_image_widget.cc:299
 #, kde-format
 msgid ""
 "Linear gamma RGB color spaces are not supposed to be used in 8-bit integer "
@@ -39219,7 +39220,7 @@ msgstr ""
 "\n"
 "点击“确定”创建 8 位整数线性 RGB 色彩空间，或者点击“取消”回到设定对话框。"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:434
+#: libs/ui/widgets/kis_custom_image_widget.cc:457
 #: plugins/dockers/logdocker/LogDockerDock.cpp:227
 #, kde-format
 msgid ""
@@ -39229,7 +39230,7 @@ msgstr ""
 "无法保存 %1。\n"
 "原因：%2。"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:536
+#: libs/ui/widgets/kis_custom_image_widget.cc:559
 #, kde-format
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
@@ -39251,7 +39252,7 @@ msgstr "滤镜设置 XML 文件"
 msgid "No configuration options"
 msgstr "无配置选项"
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:145
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:147
 #, kde-format
 msgid "The clipboard is empty or does not have an image in it."
 msgstr "剪贴板为空或者不含图像。"
@@ -40404,7 +40405,7 @@ msgstr "导入色板文件"
 msgid "Export current palette to file"
 msgstr "导出选中色板文件"
 
-#: libs/widgets/KisPaletteModel.cpp:376
+#: libs/widgets/KisPaletteModel.cpp:378
 #, kde-format
 msgid "Empty slot"
 msgstr "空格"
@@ -44348,25 +44349,25 @@ msgstr "编辑当前色板"
 msgid "Save current palette"
 msgstr "保存当前色板"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:224
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:229
 #, kde-format
 msgid "Export Palette"
 msgstr "导出色板"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:237
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:242
 #, kde-format
 msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
 msgstr "色板导出成功"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:397
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:403
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Save palette explicitly, will also happen automatically on exiting Krita."
 msgstr "手动保存色板，且在退出 Krita 时将自动再次保存。"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:400
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:406
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."
@@ -60540,35 +60541,35 @@ msgctxt "Text Brush tip mode"
 msgid "Text"
 msgstr "文本笔尖"
 
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:79
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:80
 #, fuzzy, kde-format
 #| msgid "Source:"
 msgctxt "@label:listbox image source"
 msgid "Source:"
 msgstr "来源："
 
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:83
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
 #, fuzzy, kde-format
 #| msgid "Image"
 msgctxt "@item:inlistbox"
 msgid "Image"
 msgstr "图像"
 
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:85
 #, fuzzy, kde-format
 #| msgid "Clipboard"
 msgctxt "@item:inlistbox"
 msgid "Clipboard"
 msgstr "剪贴板图像"
 
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:87
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:88
 #, fuzzy, kde-format
 #| msgid "Reload File"
 msgctxt "@action:button reload image"
 msgid "Reload"
 msgstr "重新加载文件"
 
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:250
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:251
 #, fuzzy, kde-format
 #| msgctxt "Empty locale"
 #| msgid "Empty"
@@ -60576,14 +60577,14 @@ msgctxt "@info empty image"
 msgid "Empty"
 msgstr "空"
 
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:277
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:278
 #, fuzzy, kde-format
 #| msgid "Overwrite"
 msgctxt "@action:button"
 msgid "Overwrite"
 msgstr "覆盖"
 
-#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:279
+#: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:280
 #, fuzzy, kde-format
 #| msgid "Save"
 msgctxt "@action:button"

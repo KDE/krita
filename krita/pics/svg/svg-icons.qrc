@@ -792,5 +792,7 @@
         <file>dark_paste-keyframes-22.svg</file>
         <file>light_copy-keyframe-22.svg</file>
         <file>light_paste-keyframes-22.svg</file>
+        <file>light_scripter.svg</file>
+        <file>dark_scripter.svg</file>
     </qresource>
 </RCC>

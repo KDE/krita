@@ -5,13 +5,13 @@ SPDX-License-Identifier: GPL-2.0-or-later
 """
 try:
     from PyQt6.QtWidgets import QMessageBox
-    from PyQt6.QtGui import QKeySequence, QAction
+    from PyQt6.QtGui import QKeySequence, QAction, QIcon
     from PyQt6.QtCore import Qt
 except:
     from PyQt5.QtWidgets import QAction, QMessageBox
-    from PyQt5.QtGui import QKeySequence
+    from PyQt5.QtGui import QKeySequence, QIcon
     from PyQt5.QtCore import Qt
-
+from krita import Krita
 from builtins import i18n
 
 class CloseAction(QAction):
@@ -24,6 +24,7 @@ class CloseAction(QAction):
 
         self.setText(i18n("Close"))
         self.setObjectName('close')
+        self.setIcon(Krita.instance().icon("application-exit"))
         self.setShortcut(QKeySequence(Qt.Modifier.CTRL | Qt.Key.Key_Q))
 
     @property

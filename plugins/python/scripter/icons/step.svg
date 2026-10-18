@@ -1,9 +1,38 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
-<path d="M9.488,3.907H24v2.791H9.488V3.907z M11.163,8.372H24v2.791H11.163V8.372z M11.163,12.837H24v2.791H11.163V12.837z
-	 M9.488,17.302H24v2.791H9.488V17.302z M2.791,10.604c0,1.233,1,2.233,2.233,2.233H6.14v-2.233l3.767,3.628L6.14,17.86v-2.232H5.023
-	C2.249,15.628,0,13.379,0,10.604V8.93c0-2.774,2.249-5.023,5.023-5.023H6.14v2.791H5.023c-1.233,0-2.233,1-2.233,2.232V10.604z"/>
+<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog and Halla Rempt</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<path d="M9 18.5C9 20.1569 7.65685 21.5 6 21.5C4.34315 21.5 3 20.1569 3 18.5L3.5 16.5H8.5L9 18.5Z" fill="#FFFFFF"/>
+<path d="M9.5 7.5C9.5 5.567 7.933 4 6 4C4.067 4 2.5 5.567 2.5 7.5L3.5 14.5H8.5L9.5 7.5Z" fill="#FFFFFF"/>
+<path d="M19 15C19 16.6569 17.6569 18 16 18C14.3431 18 13 16.6569 13 15L13.5 13H18.5L19 15Z" fill="#FFFFFF"/>
+<path d="M19.5 4C19.5 2.067 17.933 0.5 16 0.5C14.067 0.5 12.5 2.067 12.5 4L13.5 11H18.5L19.5 4Z" fill="#FFFFFF"/>
 </svg>

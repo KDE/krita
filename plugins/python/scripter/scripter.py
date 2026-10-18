@@ -7,7 +7,7 @@ try:
     from PyQt6.QtCore import QSettings, QStandardPaths
 except:
     from PyQt5.QtCore import QSettings, QStandardPaths
-from krita import Krita, Extension
+from krita import Krita, Extension, utils
 from builtins import i18n
 from . import uicontroller, documentcontroller, debugcontroller
 

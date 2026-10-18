@@ -11,6 +11,7 @@ except:
     from PyQt5.QtGui import QKeySequence
     from PyQt5.QtCore import Qt
 from krita import FileDialog
+from krita import Krita
 from builtins import i18n
 
 
@@ -25,6 +26,7 @@ class SaveAsAction(QAction):
 
         self.setText(i18n("Save As"))
         self.setObjectName('saveas')
+        self.setIcon(Krita.instance().icon("document-save-as"))
         self.setShortcut(QKeySequence(Qt.Modifier.CTRL | Qt.Modifier.SHIFT | Qt.Key.Key_S))
 
     @property

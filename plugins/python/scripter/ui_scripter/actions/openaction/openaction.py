@@ -12,6 +12,7 @@ except:
     from PyQt5.QtGui import QKeySequence
     from PyQt5.QtCore import Qt
 from krita import FileDialog
+from krita import Krita
 from builtins import i18n
 
 import os.path
@@ -26,6 +27,7 @@ class OpenAction(QAction):
         self.triggered.connect(self.open)
 
         self.setText(i18n("Open"))
+        self.setIcon(Krita.instance().icon("document-open"))
         self.setObjectName('open')
         self.setShortcut(QKeySequence(Qt.Modifier.CTRL | Qt.Key.Key_O))
 

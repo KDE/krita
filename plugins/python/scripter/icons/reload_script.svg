@@ -1,79 +1,38 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   height="512px"
-   width="512px"
-   xml:space="preserve"
-   style="enable-background:new 0 0 41.999 41.999;"
-   viewBox="0 0 41.999 41.999"
-   y="0px"
-   x="0px"
-   id="Capa_1"
-   version="1.1"><metadata
-     id="metadata39"><rdf:RDF><cc:Work
-         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
-     id="defs37" /><g
-     id="g4" /><g
-     id="g6" /><g
-     id="g8" /><g
-     id="g10" /><g
-     id="g12" /><g
-     id="g14" /><g
-     id="g16" /><g
-     id="g18" /><g
-     id="g20" /><g
-     id="g22" /><g
-     id="g24" /><g
-     id="g26" /><g
-     id="g28" /><g
-     id="g30" /><g
-     id="g32" /><g
-     style="stroke:none;fill:#ffffff;fill-opacity:1"
-     id="layer1"
-     transform="matrix(2.6249375,0,0,2.6249375,-7.8748125,-2712.5112)"><path
-       style="fill:#ffffff;fill-opacity:1;stroke:none"
-       d="m 4,3 v 16 h 1 8 1 c 1.374765,-1.357993 2.779209,-2.768314 4,-4 V 13.59375 3 H 17 5 Z m 0.625,0.6250039 h 12.75 V 14 15.000004 H 14 v 1.1875 2.1875 H 13 4.625 Z"
-       transform="translate(0,1030.3622)"
-       id="rect4139" /></g><g
-     style="fill:#ffffff;fill-opacity:1;stroke:none"
-     id="layer1-7"
-     transform="matrix(1.5380493,0,0,1.5380493,4.0809577,-1580.6669)"><path
-       style="fill:#ffffff;fill-opacity:1;stroke:none"
-       d="m 11,1049.3622 c -4.431966,0 -8,-3.568 -8,-8 0,-1.4417 0.382871,-2.7893 1.044922,-3.9551 l 0.738281,0.7383 C 4.285829,1039.1083 4,1040.1997 4,1041.3622 c 0,3.878 3.12203,7 7,7 1.162509,0 2.25389,-0.2858 3.216797,-0.7832 l 0.738281,0.7383 c -1.165789,0.662 -2.513364,1.0449 -3.955078,1.0449 z m 6.955078,-4.0449 -0.738281,-0.7383 C 17.714172,1043.6161 18,1042.5247 18,1041.3622 c 0,-3.878 -3.12203,-7 -7,-7 -1.16251,0 -2.25389,0.2858 -3.216797,0.7832 l -0.738281,-0.7383 c 1.165789,-0.662 2.513364,-1.0449 3.955078,-1.0449 4.431966,0 8,3.568 8,8 0,1.4417 -0.382871,2.7893 -1.044922,3.9551 z"
-       id="rect4085" /><rect
-       style="color:#000000;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect4336"
-       width="1"
-       height="4"
-       x="-726.45117"
-       y="737.3905"
-       transform="rotate(-45)" /><rect
-       style="color:#000000;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="rect4336-5"
-       width="1"
-       height="4"
-       x="-731.69507"
-       y="746.88037"
-       transform="rotate(-45)" /></g><g
-     transform="translate(-1.5159899,11.623502)"
-     id="g1153"><g
-       id="g1100" /><g
-       id="g1102" /><g
-       id="g1104" /><g
-       id="g1106" /><g
-       id="g1108" /><g
-       id="g1110" /><g
-       id="g1112" /><g
-       id="g1114" /><g
-       id="g1116" /><g
-       id="g1118" /><g
-       id="g1120" /><g
-       id="g1122" /><g
-       id="g1124" /><g
-       id="g1126" /><g
-       id="g1128" /></g></svg>
+<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<path d="M18 3V15.0078L14.0078 19L14 18.9902V19H4V11.4707C4.30655 11.7452 4.64161 11.9879 5 12.1953V18H13V14H17V4H13.1953C12.9879 3.64161 12.7452 3.30655 12.4707 3H18Z" fill="#D2D2D2"/>
+<path d="M11.4363 3.36295C10.5779 2.55419 9.46077 2.07435 8.2823 2.00795C7.10383 1.94155 5.93975 2.29294 4.99557 3.00012C4.80775 3.14403 4.6304 3.30102 4.46484 3.46997L5.16629 4.17418C5.29921 4.03996 5.44148 3.91529 5.59203 3.8011C6.34819 3.23479 7.2806 2.95333 8.22456 3.00648C9.16851 3.05964 10.0633 3.44399 10.7508 4.0916C10.9158 4.24762 11.0672 4.41737 11.2034 4.599C11.5684 5.08539 11.8175 5.64829 11.9318 6.24507C12.0462 6.84186 12.0228 7.45689 11.8635 8.04332L12.653 8.81663C12.965 8.02419 13.069 7.16526 12.9553 6.32142C12.8415 5.47757 12.5138 4.67679 12.0031 3.99487C11.8325 3.7686 11.6429 3.55715 11.4363 3.36295ZM10.8305 9.82711C10.6988 9.9605 10.5579 10.0845 10.4088 10.1982L10.3988 10.2082C9.54763 10.8434 8.47848 11.1153 7.42641 10.9642C6.37435 10.8131 5.42548 10.2513 4.78841 9.40229C4.42461 8.91592 4.17648 8.35328 4.06282 7.75707C3.94915 7.16085 3.97293 6.5467 4.13235 5.96101L3.34632 5.18353C3.03525 5.97456 2.93132 6.83169 3.04433 7.67398C3.15734 8.51627 3.48357 9.31596 3.9922 9.99736C4.78767 11.058 5.97241 11.7599 7.28604 11.9489C8.59968 12.1379 9.93471 11.7984 10.9977 11.005L11.0108 10.995C11.1963 10.8528 11.3716 10.6978 11.5355 10.5312L11.0422 10.0281L10.8305 9.82711Z" fill="white"/>
+<path d="M5.915 3.5H4.5L6.5 5.5L7.207 4.79297L5.915 3.5Z" fill-rule="evenodd" clip-rule="evenodd" fill="white"/>
+<path d="M9.49997 8.5L8.79297 9.20703L10.207 10.5996L11.5 10.5L9.49997 8.5Z" fill-rule="evenodd" clip-rule="evenodd" fill="white"/>
+</svg>

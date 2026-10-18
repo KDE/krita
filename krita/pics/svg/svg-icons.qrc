@@ -723,5 +723,7 @@
         <file>light_hue-shift-CW.svg</file>
         <file>dark_render-animation.svg</file>
         <file>light_render-animation.svg</file>
+        <file>light_scripter.svg</file>
+        <file>dark_scripter.svg</file>
     </qresource>
 </RCC>

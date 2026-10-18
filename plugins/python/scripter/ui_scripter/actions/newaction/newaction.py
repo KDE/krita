@@ -11,6 +11,7 @@ except:
     from PyQt5.QtWidgets import QAction, QMessageBox
     from PyQt5.QtGui import QKeySequence
     from PyQt5.QtCore import Qt
+from krita import Krita
 from builtins import i18n
 
 
@@ -24,6 +25,7 @@ class NewAction(QAction):
 
         self.setText(i18n("New"))
         self.setObjectName('new')
+        self.setIcon(Krita.instance().icon("document-new"))
         self.setShortcut(QKeySequence(Qt.Modifier.CTRL | Qt.Key.Key_N))
 
     @property

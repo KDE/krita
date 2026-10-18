@@ -10,6 +10,7 @@ except:
     from PyQt5.QtWidgets import QAction
     from PyQt5.QtCore import Qt
 from . import settingsdialog
+from krita import Krita
 from builtins import i18n
 
 
@@ -26,6 +27,7 @@ class SettingsAction(QAction):
         self.settingsDialog.setFixedSize(400, 250)
 
         self.setText(i18n("Settings"))
+        self.setIcon(Krita.instance().icon("configure"))
 
     @property
     def parent(self):

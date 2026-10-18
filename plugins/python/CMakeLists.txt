@@ -97,8 +97,8 @@ install( FILES
     # highpass/highpass.action
     krita_script_starter/krita_script_starter.action
     mutator/mutator.action
-    plugin_importer/plugin_importer.action
     scripter/scripter.action
+    plugin_importer/plugin_importer.action
     tenbrushes/tenbrushes.action
     tenscripts/tenscripts.action
 DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions)

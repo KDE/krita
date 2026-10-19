@@ -1379,51 +1379,47 @@ bool KoColorSet::Private::saveGpl(QIODevice *dev) const
 
 bool KoColorSet::Private::loadGpl()
 {
-    if (data.isEmpty() || data.isNull() || data.length() < 50) {
+    if (data.isEmpty() || data.isNull() || data.length() < 12) {
         warnPigment << "Illegal Gimp palette file: " << colorSet->filename();
         return false;
     }
-
-    quint32 index = 0;
 
     QStringList lines = readAllLinesSafe(&data);
 
-    if (lines.size() < 3) {
-        warnPigment << "Not enough lines in palette file: " << colorSet->filename();
-        return false;
-    }
-
-    QString columnsText;
-    qint32 r, g, b;
-    KisSwatch swatch;
-
-    // Read name
-    if (!lines[0].startsWith("GIMP") || !lines[1].toLower().contains("name")) {
+    if (!lines[0].startsWith("GIMP Palette")) {
         warnPigment << "Illegal Gimp palette file: " << colorSet->filename();
         return false;
     }
 
-    // translated name will be in a tooltip, here don't translate
-    colorSet->setName(lines[1].split(":")[1].trimmed());
+    bool isGplVersion1 = true;
+    quint32 index = 1;
 
-    index = 2;
-
-    // Read columns
-    int columns = 0;
-    if (lines[index].toLower().contains("columns")) {
-        columnsText = lines[index].split(":")[1].trimmed();
-        columns = columnsText.toInt();
-        if (columns > MAXIMUM_ALLOWED_COLUMNS) {
-            warnPigment << "Refusing to set unreasonable number of columns (" << columns << ") in GIMP Palette file " << colorSet->filename() << " - using maximum number of allowed columns instead";
-            global()->setColumnCount(MAXIMUM_ALLOWED_COLUMNS);
-        }
-        else {
-            global()->setColumnCount(columns);
-        }
-        index = 3;
+    // Read name, if one exists
+    // If it exists, then that also means that this is not a "version 1" palette
+    if (lines.size() >= 2 && lines[index].startsWith("Name: ")) {
+        isGplVersion1 = false;
+        colorSet->setName(lines[index].split(":")[1].trimmed());
+        index += 1;
+    }
+    else {
+        colorSet->setName(colorSet->filename().split("/").last().split(".")[0]);
     }
 
+    // If the palette isn't version 1, load and set the column count if it's defined
+    if (!isGplVersion1 && lines.size() >= 3) {
+        if (lines[index].startsWith("Columns: ")) {
+            int columns = lines[index].split(":")[1].trimmed().toInt();
+            if (columns > MAXIMUM_ALLOWED_COLUMNS) {
+                warnPigment << "Refusing to set unreasonable number of columns (" << columns << ") in GIMP Palette file " << colorSet->filename() << " - using maximum number of allowed columns instead";
+                columns = MAXIMUM_ALLOWED_COLUMNS;
+            }
+            global()->setColumnCount(columns);
+            index += 1;
+        }
+    }
 
+    qint32 r, g, b;
+    KisSwatch swatch;
     for (qint32 i = index; i < lines.size(); i++) {
         if (lines[i].startsWith('#')) {
             comment += lines[i].mid(1).trimmed() + ' ';
@@ -1434,15 +1430,12 @@ bool KoColorSet::Private::loadGpl()
                 continue;
             }
 
-            r = qBound(0, a[0].toInt(), 255);
-            g = qBound(0, a[1].toInt(), 255);
-            b = qBound(0, a[2].toInt(), 255);
+            r = qBound(0, a.takeFirst().toInt(), 255);
+            g = qBound(0, a.takeFirst().toInt(), 255);
+            b = qBound(0, a.takeFirst().toInt(), 255);
 
             swatch.setColor(KoColor(QColor(r, g, b), KoColorSpaceRegistry::instance()->rgb8()));
 
-            for (int i = 0; i != 3; i++) {
-                a.pop_front();
-            }
             QString name = a.join(" ");
             swatch.setName(name.isEmpty() || name == "Untitled" ? i18n("Untitled") : name);
 

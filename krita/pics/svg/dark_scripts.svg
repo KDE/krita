@@ -1,0 +1,36 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:description>inspired from the script icon in Godot by Daniel J. Ramirez</dc:description> 
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<path d="M11.5 5.5H14.5V3.5C14.5 2.39543 13.6046 1.5 12.5 1.5H6M11.5 5.5H7.5V3C7.5 2.17157 6.82843 1.5 6 1.5M11.5 5.5V12.5C11.5 13.6046 10.6046 14.5 9.5 14.5H5H3M6 1.5C5.17157 1.5 4.5 2.17157 4.5 3V10.5M3 14.5C3.82843 14.5 4.5 13.8284 4.5 13V10.5M3 14.5C2.17157 14.5 1.5 13.8284 1.5 13V10.5H4.5" stroke="#373737"/>
+</svg>

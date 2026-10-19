@@ -681,5 +681,7 @@
         <file>dark_edit-copy-16.svg</file>
         <file>light_document-open-recent.svg</file>
         <file>dark_document-open-recent.svg</file>
+        <file>light_scripts.svg</file>
+        <file>dark_scripts.svg</file>
     </qresource>
 </RCC>

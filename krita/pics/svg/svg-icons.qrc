@@ -679,5 +679,7 @@
         <file>light_time-set-start.svg</file>
         <file>light_edit-copy-16.svg</file>
         <file>dark_edit-copy-16.svg</file>
+        <file>light_document-open-recent.svg</file>
+        <file>dark_document-open-recent.svg</file>
     </qresource>
 </RCC>

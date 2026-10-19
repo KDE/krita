@@ -1505,6 +1505,7 @@ bool KoColorSet::Private::loadPsp()
     if (l[1] != "0100") return false;
 
     int entries = l[2].toInt();
+    if (entries < 0 || l.size() < entries + 3) return false;
 
     KisSwatchGroupSP global = colorSet->getGlobalGroup();
 

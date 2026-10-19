@@ -576,7 +576,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
 
     connect(&m_optionWidgetUpdateCompressor, SIGNAL(timeout()), this, SLOT(slotUpdateOptionsWidgetPopup()));
 
-    slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
+    slotInputDeviceChanged(m_viewManager->toolManager()->currentInputDevice());
 
     m_brushSelectPresetAction->setChecked(true);
 }
@@ -970,7 +970,7 @@ void KisPaintopBox::slotToggleEraserPreset(bool usingEraser)
 void KisPaintopBox::slotSelectEraserPreset()
 {
     // automatically select freehand brush tool for these select actions
-    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
+    m_viewManager->toolManager()->switchToolRequested("KritaShape/KisToolBrush");
 
     KoInputDevice::InputDevice dev = KoInputDevice::InputDevice::Unknown;
     KoInputDevice::Pointer ptr = KoInputDevice::Pointer::Eraser;
@@ -983,7 +983,7 @@ void KisPaintopBox::slotSelectEraserPreset()
 void KisPaintopBox::slotSelectBrushPreset()
 {
     // automatically select freehand brush tool for these select actions
-    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
+    m_viewManager->toolManager()->switchToolRequested("KritaShape/KisToolBrush");
 
     KoInputDevice::InputDevice dev = KoInputDevice::InputDevice::Unknown;
     KoInputDevice::Pointer ptr = KoInputDevice::Pointer::Pen;
@@ -1275,8 +1275,8 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas)
 
     if (!m_viewManager->canvasBase()) return;
 
-    QString  id   = KoToolManager::instance()->activeToolId();
-    KisTool* tool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(m_viewManager->canvasBase(), id));
+    QString  id   = m_viewManager->toolManager()->activeToolId();
+    KisTool* tool = dynamic_cast<KisTool*>(m_viewManager->toolManager()->toolById(m_viewManager->canvasBase(), id));
 
     setSliderValue("opacity", m_resourceProvider->opacity());
 
@@ -1576,4 +1576,3 @@ void KisPaintopBox::updatePresetConfig()
         }
     }
 }
-

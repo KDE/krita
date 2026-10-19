@@ -46,7 +46,6 @@ public:
 
     void detachCanvas(KoCanvasController *controller);
     void attachCanvas(KoCanvasController *controller);
-    void movedFocus(QWidget *from, QWidget *to);
     void updateCursor(const QCursor &cursor);
     void switchBackRequested();
     void selectionChanged(const QList<KoShape*> &shapes);
@@ -61,15 +60,6 @@ public:
      * This will cause the tool for that device to be selected.
      */
     void switchInputDevice(const KoInputDevice &device);
-
-    /**
-     * Whenever a new tool proxy class is instantiated, it will use this method to register itself
-     * so the toolManager can update it to the latest active tool.
-     * @param proxy the proxy to register.
-     * @param canvas which canvas the proxy is associated with; whenever a new tool is selected for that canvas,
-     *        the proxy gets an update.
-     */
-    void registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas);
 
     KoToolManager *q;
 

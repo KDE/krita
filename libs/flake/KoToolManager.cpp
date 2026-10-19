@@ -39,7 +39,6 @@
 #include <QTabletEvent>
 #include <QVBoxLayout>
 #include <QStringList>
-#include <QApplication>
 #include <kactioncollection.h>
 #include <kactioncategory.h>
 #include <FlakeDebug.h>
@@ -49,11 +48,6 @@
 #include <QKeySequence>
 #include <QStack>
 #include <QLabel>
-#include <QGlobalStatic>
-
-Q_GLOBAL_STATIC(KoToolManager, s_instance)
-
-
 class CanvasData
 {
 public:
@@ -189,15 +183,16 @@ public:
 
 // ******** KoToolManager **********
 KoToolManager::KoToolManager()
-    : QObject(),
-      d(new Private(this))
+    : d(new Private(this))
 {
-    connect(QApplication::instance(), SIGNAL(focusChanged(QWidget*,QWidget*)),
-            this, SLOT(movedFocus(QWidget*,QWidget*)));
 }
 
 KoToolManager::~KoToolManager()
 {
+    // the canvasses should have been destroyed **before** the
+    // tool manager and, hence, they should have deregister
+    // themselves explicitly
+    KIS_SAFE_ASSERT_RECOVER_NOOP(d->canvasses.isEmpty());
     delete d;
 }
 
@@ -336,11 +331,6 @@ void KoToolManager::themeChanged()
     }
 }
 
-KoToolManager* KoToolManager::instance()
-{
-    return s_instance;
-}
-
 QString KoToolManager::activeToolId() const
 {
     if (!d->canvasData) return QString();
@@ -363,6 +353,31 @@ KoToolManager::Private *KoToolManager::priv()
     return d;
 }
 
+void KoToolManager::setCurrentCanvas(KoCanvasController *controller)
+{
+    if (d->canvasData && !controller) {
+        // removing the current and the only canvas
+        Q_EMIT toolOptionWidgetsChanged(d->canvasData->canvas, QList<QPointer<QWidget>>());
+        d->switchCanvasData(nullptr);
+        return;
+    }
+
+    if (!controller) return;
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->canvasses.contains(controller));
+
+    // switch to canvasdata matching inputdevice used last with this app instance
+    Q_FOREACH (CanvasData *data, d->canvasses.value(controller)) {
+        if (data->inputDevice == d->inputDevice) {
+            if (d->canvasData != data) {
+                d->switchCanvasData(data);
+                return;
+            }
+        }
+    }
+    // if no such inputDevice for this canvas, then simply fallback to first one
+    d->switchCanvasData(d->canvasses.value(controller).first());
+}
 
 /**** KoToolManager::Private ****/
 
@@ -431,7 +446,7 @@ void KoToolManager::Private::setup()
     KoShapeRegistry::instance();
     KoToolRegistry *registry = KoToolRegistry::instance();
     Q_FOREACH (const QString & id, registry->keys()) {
-        toolActionList.append(new KoToolAction(registry->value(id)));
+        toolActionList.append(new KoToolAction(registry->value(id), q));
     }
 }
 
@@ -615,38 +630,35 @@ void KoToolManager::Private::postSwitchTool()
 
 void KoToolManager::Private::switchCanvasData(CanvasData *cd)
 {
-    Q_ASSERT(cd);
-
-    KoCanvasBase *oldCanvas = 0;
+    KoCanvasController *oldCanvasController = 0;
     KoInputDevice oldInputDevice;
 
     if (canvasData) {
-        oldCanvas = canvasData->canvas->canvas();
+        oldCanvasController = canvasData->canvas;
         oldInputDevice = canvasData->inputDevice;
 
         if (canvasData->activeTool) {
             disconnectActiveTool();
         }
 
-        KoToolProxy *proxy = proxies.value(oldCanvas);
+        KoToolProxy *proxy = proxies.value(oldCanvasController->canvas());
         Q_ASSERT(proxy);
         proxy->setActiveTool(0);
     }
 
     canvasData = cd;
-    inputDevice = canvasData->inputDevice;
 
-    if (canvasData->activeTool) {
-        connectActiveTool();
-        postSwitchTool();
-    }
+    if (canvasData) {
+        inputDevice = canvasData->inputDevice;
 
-    if (oldInputDevice != canvasData->inputDevice) {
-        Q_EMIT q->inputDeviceChanged(canvasData->inputDevice);
-    }
+        if (canvasData->activeTool) {
+            connectActiveTool();
+            postSwitchTool();
+        }
 
-    if (oldCanvas != canvasData->canvas->canvas()) {
-        Q_EMIT q->changedCanvas(canvasData->canvas->canvas());
+        if (oldInputDevice != canvasData->inputDevice) {
+            Q_EMIT q->inputDeviceChanged(canvasData->inputDevice);
+        }
     }
 }
 
@@ -690,8 +702,8 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
     Q_FOREACH (KoToolBase *tool, tools) {
         delete tool;
     }
+    proxies.remove(controller->canvas());
     canvasses.remove(controller);
-    Q_EMIT q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
 }
 
 void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
@@ -707,9 +719,11 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
     canvasses_.append(cd);
     canvasses[controller] = canvasses_;
 
-    KoToolProxy *tp = proxies[controller->canvas()];
-    if (tp)
+    KoToolProxy *tp = controller->canvas()->toolProxy();
+    if (tp) {
+        proxies.insert(controller->canvas(), tp);
         tp->priv()->setCanvasController(controller);
+    }
 
     if (cd->activeTool == 0) {
         // no active tool, so we activate the highest priority main tool
@@ -733,50 +747,6 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
     connect(controller->canvas()->selectedShapesProxy(),
             SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             q, SLOT(currentLayerChanged(const KoShapeLayer*)));
-
-    Q_EMIT q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
-}
-
-void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
-{
-    Q_UNUSED(from);
-    // no canvas anyway or no focus set anyway?
-    if (!canvasData || to == 0) {
-        return;
-    }
-
-    // focus returned to current canvas?
-    if (to == canvasData->canvas->canvas()->canvasWidget()) {
-        // nothing to do
-        return;
-    }
-
-    // if the 'to' is one of our canvasWidgets, then switch.
-
-    // for code simplicity the current canvas will be checked again,
-    // but would have been caught already in the lines above, so no issue
-    KoCanvasController *newCanvas = 0;
-    Q_FOREACH (KoCanvasController* canvas, canvasses.keys()) {
-        if (canvas->canvas()->canvasWidget() == to) {
-            newCanvas = canvas;
-            break;
-        }
-    }
-
-    // none of our canvasWidgets got focus?
-    if (newCanvas == 0) {
-        return;
-    }
-
-    // switch to canvasdata matching inputdevice used last with this app instance
-    Q_FOREACH (CanvasData *data, canvasses.value(newCanvas)) {
-        if (data->inputDevice == inputDevice) {
-            switchCanvasData(data);
-            return;
-        }
-    }
-    // if no such inputDevice for this canvas, then simply fallback to first one
-    switchCanvasData(canvasses.value(newCanvas).first());
 }
 
 void KoToolManager::Private::updateCursor(const QCursor &cursor)
@@ -888,17 +858,6 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
     switchCanvasData(cd);
 
     switchTool(oldTool);
-}
-
-void KoToolManager::Private::registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas)
-{
-    proxies.insert(canvas, proxy);
-    Q_FOREACH (KoCanvasController *controller, canvasses.keys()) {
-        if (controller->canvas() == canvas) {
-            proxy->priv()->setCanvasController(controller);
-            break;
-        }
-    }
 }
 
 //have to include this because of Q_PRIVATE_SLOT

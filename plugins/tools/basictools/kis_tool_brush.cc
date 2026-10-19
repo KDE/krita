@@ -605,11 +605,11 @@ QWidget * KisToolBrush::createOptionWidget()
     return optionsWidget;
 }
 
-QList<QAction *> KisToolBrushFactory::createActionsImpl()
+QList<QAction *> KisToolBrushFactory::createActionsImpl(KoToolManager *toolManager)
 {
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
 
-    QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
+    QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl(toolManager);
 
     actions << actionRegistry->makeQAction("set_no_brush_smoothing", this);
     actions << actionRegistry->makeQAction("set_simple_brush_smoothing", this);

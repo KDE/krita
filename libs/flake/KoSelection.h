@@ -146,7 +146,7 @@ protected:
 
 private:
     class Private;
-    QSharedDataPointer<Private> d;
+    QScopedPointer<Private> d;
 };
 
 #endif

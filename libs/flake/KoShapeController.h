@@ -109,17 +109,6 @@ public:
     KUndo2Command* removeShapes(const QList<KoShape*> &shapes, KUndo2Command *parent = 0);
 
     /**
-     * @brief Set the KoShapeControllerBase used to add/remove shapes.
-     *
-     * NOTE: only Sheets uses this method. Do not use it in your application. Sheets
-     * has to also call:
-     * <code>KoToolManager::instance()->updateShapeControllerBase(shapeController, canvas->canvasController());</code>
-     *
-     * @param shapeController the new shapeController.
-     */
-    void setShapeControllerBase(KoShapeControllerBase *shapeController);
-
-    /**
      * The size of the document measured in rasterized pixels. This information is needed for loading
      * SVG documents that use 'px' as the default unit.
      */

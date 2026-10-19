@@ -28,6 +28,7 @@ class QRectF;
 
 class KoShape;
 class KoCanvasBase;
+class KoToolManager;
 class KoCanvasControllerProxyObject;
 class KoViewTransformStillPoint;
 
@@ -70,6 +71,14 @@ public:
      */
     explicit KoCanvasController(KisKActionCollection* actionCollection);
     virtual ~KoCanvasController();
+
+    void setToolManager(KoToolManager *toolManager);
+
+    /**
+     * Returns the tool manager of the parent main window. May be null during
+     * the initialization phase, until the view (KoView) is fully initialized
+     */
+    KoToolManager *toolManager() const;
 
 public:
 

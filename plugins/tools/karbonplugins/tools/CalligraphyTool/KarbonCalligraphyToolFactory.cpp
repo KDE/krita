@@ -33,8 +33,10 @@ KoToolBase *KarbonCalligraphyToolFactory::createTool(KoCanvasBase *canvas)
     return new KarbonCalligraphyTool(canvas);
 }
 
-QList<QAction *> KarbonCalligraphyToolFactory::createActionsImpl()
+QList<QAction *> KarbonCalligraphyToolFactory::createActionsImpl(KoToolManager *toolManager)
 {
+    Q_UNUSED(toolManager);
+
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction *> actions;
 

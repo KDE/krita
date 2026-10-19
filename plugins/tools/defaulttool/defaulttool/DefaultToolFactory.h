@@ -20,6 +20,6 @@ public:
     ~DefaultToolFactory() override;
 
     KoToolBase *createTool(KoCanvasBase *canvas) override;
-    QList<QAction *> createActionsImpl() override;
+    QList<QAction *> createActionsImpl(KoToolManager *toolManager) override;
 };
 #endif

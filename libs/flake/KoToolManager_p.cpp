@@ -18,12 +18,14 @@ class Q_DECL_HIDDEN KoToolAction::Private
 {
 public:
     KoToolFactoryBase *toolFactory;
+    KoToolManager *toolManager;
 };
 
-KoToolAction::KoToolAction(KoToolFactoryBase* toolFactory)
+KoToolAction::KoToolAction(KoToolFactoryBase* toolFactory, KoToolManager *toolManager)
     : d(new Private)
 {
     d->toolFactory = toolFactory;
+    d->toolManager = toolManager;
 }
 
 KoToolAction::~KoToolAction()
@@ -33,7 +35,7 @@ KoToolAction::~KoToolAction()
 
 void KoToolAction::trigger()
 {
-    KoToolManager::instance()->switchToolRequested(id());
+    d->toolManager->switchToolRequested(id());
 }
 
 

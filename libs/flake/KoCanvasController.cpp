@@ -26,6 +26,7 @@ public:
     qreal preferredCenterFractionX;
     qreal preferredCenterFractionY;
     KisKActionCollection* actionCollection;
+    QPointer<KoToolManager> toolManager;
 };
 
 KoCanvasController::KoCanvasController(KisKActionCollection* actionCollection)
@@ -37,9 +38,31 @@ KoCanvasController::KoCanvasController(KisKActionCollection* actionCollection)
 
 KoCanvasController::~KoCanvasController()
 {
-    KoToolManager::instance()->removeCanvasController(this);
+    if (d->toolManager) {
+        d->toolManager->removeCanvasController(this);
+    }
     delete d;
     delete proxyObject;
+}
+
+void KoCanvasController::setToolManager(KoToolManager *toolManager)
+{
+    if (toolManager == d->toolManager) return;
+
+    if (d->toolManager) {
+        d->toolManager->removeCanvasController(this);
+    }
+
+    d->toolManager = toolManager;
+
+    if (d->toolManager) {
+        d->toolManager->addController(this);
+    }
+}
+
+KoToolManager *KoCanvasController::toolManager() const
+{
+    return d->toolManager.data();
 }
 
 KoCanvasBase* KoCanvasController::canvas() const

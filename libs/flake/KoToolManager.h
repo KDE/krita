@@ -25,6 +25,7 @@ class KisKActionCollection;
 class KoShape;
 class KoShapeLayer;
 class QKeySequence;
+class KoToolManager;
 
 class QCursor;
 
@@ -34,14 +35,14 @@ class QCursor;
  * It allows to implement a custom UI to control the activation of tools.
  * See KoToolBox & KoModeBox in the kowidgets library.
  *
- * KoToolAction objects are owned by the KoToolManager singleton
+ * KoToolAction objects are owned by the KoToolManager
  * and live until the end of its lifetime.
  */
 class KRITAFLAKE_EXPORT KoToolAction : public QObject
 {
     Q_OBJECT
 public:
-    explicit KoToolAction(KoToolFactoryBase *toolFactory);
+    KoToolAction(KoToolFactoryBase *toolFactory, KoToolManager *toolManager);
     ~KoToolAction() override;
 
 public:
@@ -76,23 +77,20 @@ private:
  *
  * Managing the active tool and switching tool based on various variables.
  *
- * The state of the toolbox will be the same for all views in the process so practically
- * you can say we have one toolbox per application instance (process).  Implementation
- * does not allow one widget to be in more then one view, so we just make sure the toolbox
- * is hidden in not-in-focus views.
- *
- * The ToolManager is a singleton and will manage all views in all applications that
- * are loaded in this process. This means you will have to register and unregister your view.
- * When creating your new view you should use a KoCanvasController() and register that
- * with the ToolManager like this:
+ * There is only one tool box and a tool manager per one main vindow and
+ * view manager. This tool manager manages all the canvases of the main
+ * window via their corresponding KoCanvasController() objects.
 @code
-    MyGuiWidget::MyGuiWidget() {
+    MyGuiWidget::MyGuiWidget(KoToolManager *toolManager)
+        : m_toolManager(toolManager)
+    {
+
         m_canvasController = new KoCanvasController(this);
         m_canvasController->setCanvas(m_canvas);
-        KoToolManager::instance()->addControllers(m_canvasController));
+        m_toolManager->addController(m_canvasController);
     }
     MyGuiWidget::~MyGuiWidget() {
-        KoToolManager::instance()->removeCanvasController(m_canvasController);
+        m_toolManager->removeCanvasController(m_canvasController);
     }
 @endcode
  *
@@ -130,8 +128,6 @@ class KRITAFLAKE_EXPORT KoToolManager : public QObject
 
 public:
     KoToolManager();
-    /// Return the toolmanager singleton
-    static KoToolManager* instance();
     ~KoToolManager() override;
 
     /**
@@ -194,6 +190,9 @@ public:
 
     /// Request tool activation for the given canvas controller
     void requestToolActivation(KoCanvasController *controller);
+
+    /// Set the active canvas when the owning view manager changes its current view.
+    void setCurrentCanvas(KoCanvasController *controller);
 
     /// Returns the toolId of the currently active tool
     QString activeToolId() const;
@@ -266,12 +265,6 @@ Q_SIGNALS:
     void inputDeviceChanged(const KoInputDevice &device);
 
     /**
-     * Emitted whenever the active canvas changed.
-     * @param canvas the new activated canvas (might be 0)
-     */
-    void changedCanvas(const KoCanvasBase *canvas);
-
-    /**
      * Emitted whenever the active tool changes the status text.
      * @param statusText the new status text
      */
@@ -305,7 +298,6 @@ private:
 
     Q_PRIVATE_SLOT(d, void detachCanvas(KoCanvasController *controller))
     Q_PRIVATE_SLOT(d, void attachCanvas(KoCanvasController *controller))
-    Q_PRIVATE_SLOT(d, void movedFocus(QWidget *from, QWidget *to))
     Q_PRIVATE_SLOT(d, void updateCursor(const QCursor &cursor))
     Q_PRIVATE_SLOT(d, void selectionChanged(const QList<KoShape*> &shapes))
     Q_PRIVATE_SLOT(d, void currentLayerChanged(const KoShapeLayer *layer))

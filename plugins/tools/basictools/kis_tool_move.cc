@@ -817,10 +817,10 @@ void KisToolMove::slotSelectionChanged()
     requestHandlesRectUpdate();
 }
 
-QList<QAction *> KisToolMoveFactory::createActionsImpl()
+QList<QAction *> KisToolMoveFactory::createActionsImpl(KoToolManager *toolManager)
 {
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-    QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
+    QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl(toolManager);
 
     actions << actionRegistry->makeQAction("movetool-move-up", this);
     actions << actionRegistry->makeQAction("movetool-move-down", this);

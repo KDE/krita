@@ -92,18 +92,19 @@ void KisViewSignalsTest::cleanupTestCase()
 void KisViewSignalsTest::testCurrentToolChanged()
 {
     const QString brushToolId = "KritaShape/KisToolBrush";
-    const QString currentToolId = KoToolManager::instance()->activeToolId();
+    KoToolManager *toolManager = m_viewManager->toolManager();
+    const QString currentToolId = toolManager->activeToolId();
     const QString targetToolId = currentToolId == brushToolId ? QString::fromLatin1(KoInteractionTool_ID) : brushToolId;
 
     QSignalSpy spy(m_view, SIGNAL(currentToolChanged(QString)));
     QVERIFY(spy.isValid());
 
-    KoToolManager::instance()->switchToolRequested(targetToolId);
+    toolManager->switchToolRequested(targetToolId);
     QApplication::processEvents();
 
     QVERIFY(spy.count() >= 1);
     QCOMPARE(spy.takeFirst().at(0).toString(), targetToolId);
-    QCOMPARE(KoToolManager::instance()->activeToolId(), targetToolId);
+    QCOMPARE(toolManager->activeToolId(), targetToolId);
 }
 
 void KisViewSignalsTest::testCurrentBrushPresetChanged()

@@ -243,6 +243,11 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
             }
         }
 
+        // TODO: ideally, we should move "selected nodes" property into KisView
+        // to make sure the selection persists after window switching; right now
+        // we just reset it to the active node on every switch
+        m_d->selectedNodes = m_d->imageView->currentNode() ? KisNodeList{m_d->imageView->currentNode()} : KisNodeList{};
+
         m_d->activateNodeConnection.connectInputSignal(m_d->imageView->image(), &KisImage::sigRequestNodeReselection);
         m_d->imageView->resourceProvider()->slotNodeActivated(m_d->imageView->currentNode());
         connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()), this, SLOT(handleExternalIsolationChange()));
@@ -766,7 +771,7 @@ void KisNodeManager::createReferenceImage(bool fromLayer) {
         }
         canvas->addCommand(KisReferenceImagesLayer::addReferenceImages(document, {reference.release()}));
 
-        KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+        m_d->view->toolManager()->switchToolRequested("ToolReferenceImages");
 
     } else {
         if (canvas->canvasWidget()) {
@@ -858,13 +863,13 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
                 (selectionMask && selectionMask->selection()->hasShapeSelection());
 
         if (nodeHasVectorAbilities) {
-            if (pixelTools.contains(KoToolManager::instance()->activeToolId())) {
-                KoToolManager::instance()->switchToolRequested("InteractionTool");
+            if (pixelTools.contains(m_d->view->toolManager()->activeToolId())) {
+                m_d->view->toolManager()->switchToolRequested("InteractionTool");
             }
         }
         else {
-            if (vectorTools.contains(KoToolManager::instance()->activeToolId())) {
-                KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
+            if (vectorTools.contains(m_d->view->toolManager()->activeToolId())) {
+                m_d->view->toolManager()->switchToolRequested("KritaShape/KisToolBrush");
             }
         }
     }

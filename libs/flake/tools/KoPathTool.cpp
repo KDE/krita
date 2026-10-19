@@ -25,6 +25,7 @@
 #include "KoShapeManager.h"
 #include "KoSnapGuide.h"
 #include "KoToolBase_p.h"
+#include "KoCanvasController.h"
 #include "KoToolManager.h"
 #include "KoViewConverter.h"
 #include "PathToolOptionWidget.h"
@@ -1219,7 +1220,7 @@ void KoPathTool::requestStrokeEnd()
 
 void KoPathTool::explicitUserStrokeEndRequest()
 {
-    KoToolManager::instance()->switchToolRequested("InteractionTool");
+    canvas()->canvasController()->toolManager()->switchToolRequested("InteractionTool");
 }
 
 bool KoPathTool::selectAll()

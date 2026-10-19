@@ -84,12 +84,10 @@ void KisZoomManager::setup(KisKActionCollection * actionCollection)
 
     m_horizontalRuler = new KoRuler(m_view, Qt::Horizontal, m_zoomHandler);
     m_horizontalRuler->setShowMousePosition(true);
-    m_horizontalRuler->createGuideToolConnection(m_view->canvasBase());
     m_horizontalRuler->setVisible(false); // this prevents the rulers from flashing on to off when a new document is created
 
     m_verticalRuler = new KoRuler(m_view, Qt::Vertical, m_zoomHandler);
     m_verticalRuler->setShowMousePosition(true);
-    m_verticalRuler->createGuideToolConnection(m_view->canvasBase());
     m_verticalRuler->setVisible(false);
 
 

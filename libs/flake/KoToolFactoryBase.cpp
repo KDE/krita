@@ -44,17 +44,17 @@ KoToolFactoryBase::~KoToolFactoryBase()
     delete d;
 }
 
-QList<QAction *> KoToolFactoryBase::createActions(KisKActionCollection *actionCollection)
+QList<QAction *> KoToolFactoryBase::createActions(KisKActionCollection *actionCollection, KoToolManager *toolManager)
 {
     QList<QAction *> toolActions;
 
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-    QList<QAction*> actions = createActionsImpl();
+    QList<QAction*> actions = createActionsImpl(toolManager);
     QAction *action = actionRegistry->makeQAction(id(), this);
     actionCollection->addAction(id(), action);
-    connect(action, SIGNAL(triggered()), SLOT(activateTool()));
-    //qDebug() << action << action->shortcut();
-
+    connect(action, &QAction::triggered, toolManager, [toolId = id(), toolManager] () {
+        toolManager->switchToolRequested(toolId);
+    });
 
     Q_FOREACH(QAction *action, actions) {
         if (action->objectName().isEmpty()) {
@@ -200,13 +200,8 @@ void KoToolFactoryBase::setShortcut(const QKeySequence &shortcut)
     d->shortcut = shortcut;
 }
 
-QList<QAction *> KoToolFactoryBase::createActionsImpl()
+QList<QAction *> KoToolFactoryBase::createActionsImpl(KoToolManager *toolManager)
 {
+    Q_UNUSED(toolManager);
     return QList<QAction *>();
 }
-
-void KoToolFactoryBase::activateTool()
-{
-    KoToolManager::instance()->switchToolRequested(sender()->objectName());
-}
-

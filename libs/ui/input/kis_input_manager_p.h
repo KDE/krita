@@ -21,12 +21,14 @@
 #include "kis_signal_auto_connection.h"
 #include "kis_latency_tracker.h"
 
+#include <KoToolManager.h>
+
 class KisToolInvocationAction;
 
 class KisInputManager::Private
 {
 public:
-    Private(KisInputManager *qq);
+    Private(KisInputManager *qq, KoToolManager *toolManagerArg);
     void addStrokeShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, Qt::MouseButtons buttons);
     void addKeyShortcut(KisAbstractInputAction* action, int index,const QList<Qt::Key> &keys);
     void addTouchShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::TouchGestureAction gesture, bool isTouchPainting = false);
@@ -41,6 +43,7 @@ public:
     KisInputManager *q;
 
     QPointer<KisCanvas2> canvas;
+    QPointer<KoToolManager> toolManager;
     QPointer<KisToolProxy> toolProxy;
 
     bool forwardAllEventsToTool = false;

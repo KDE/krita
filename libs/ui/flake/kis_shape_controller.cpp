@@ -152,7 +152,7 @@ static inline bool belongsToShapeSelection(KoShape* shape) {
     return dynamic_cast<KisShapeSelectionMarker*>(shape->userData());
 }
 
-KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape *> shapes, bool forceNewLayer, KUndo2Command *parentCommand)
+KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape *> shapes, bool forceNewLayer, KoCanvasBase *canvas, KUndo2Command *parentCommand)
 {
     KoShapeContainer *resultParent = 0;
     KisCommandUtils::CompositeCommand *resultCommand =
@@ -163,8 +163,10 @@ KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape 
         KIS_SAFE_ASSERT_RECOVER_BREAK(!shape->parent());
     }
 
-    KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas());
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(canvas, resultParent);
+    // TODO: think about moving selection to the canvas resources and pass resources instead
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, resultParent);
+    KisView *view = kisCanvas ? kisCanvas->imageView() : 0;
 
     const bool baseBelongsToSelection = belongsToShapeSelection(shapes.first());
     bool allSameBelongsToShapeSelection = true;
@@ -178,10 +180,10 @@ KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape 
     KisSelectionSP parentSelection;
 
     if (baseBelongsToSelection && allSameBelongsToShapeSelection) {
-        parentSelection = canvas->viewManager()->selection(); // TODO: fix logic
+        parentSelection = view->selection();
     }
 
-    if (KisNodeSP activeNode = canvas->viewManager()->activeNode()) {
+    if (KisNodeSP activeNode = view->currentNode()) {
         if (KisSelectionMask *selectionMask = qobject_cast<KisSelectionMask *>(activeNode.data())) {
             if (KisSelectionSP selection = selectionMask->selection()) {
                 parentSelection = selection;
@@ -272,7 +274,8 @@ void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)
         KoSelection *selection = canvas->shapeManager()->selection();
         if (selection && m_d->shapesGraph.nodeToShape(rootNode)) {
             selection->select(m_d->shapesGraph.nodeToShape(rootNode));
-            KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
+            KoToolManager *toolManager = canvas->canvasController()->toolManager();
+            toolManager->switchToolRequested(toolManager->preferredToolForSelection(selection->selectedShapes()));
         }
     }
 }

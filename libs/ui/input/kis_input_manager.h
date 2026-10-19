@@ -18,6 +18,7 @@ class QPointF;
 class QTouchEvent;
 class KisCanvas2;
 class KisToolInvocationAction;
+class KoToolManager;
 /**
  * \brief Central object to manage canvas input.
  *
@@ -43,7 +44,7 @@ public:
     /**
      * Constructor.
      */
-    KisInputManager(QObject *parent);
+    KisInputManager(QObject *parent, KoToolManager *toolManager);
 
     /**
      * Destructor.

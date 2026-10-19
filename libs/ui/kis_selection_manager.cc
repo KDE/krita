@@ -471,7 +471,7 @@ void KisSelectionManager::editSelection()
         KisShapeSelection *shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
         KIS_SAFE_ASSERT_RECOVER_RETURN(shapeSelection);
 
-        KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+        m_view->toolManager()->switchToolRequested(KoInteractionTool_ID);
 
         QList<KoShape*> shapes = shapeSelection->shapes();
 
@@ -484,7 +484,7 @@ void KisSelectionManager::editSelection()
             m_view->canvasBase()->selectedShapesProxy()->selection()->select(shape);
         }
     } else {
-        KoToolManager::instance()->switchToolRequested("KisToolTransform");
+        m_view->toolManager()->switchToolRequested("KisToolTransform");
     }
 }
 

@@ -103,10 +103,10 @@ KisToolPanFactory::~KisToolPanFactory()
 {
 }
 
-QList<QAction *> KisToolPanFactory::createActionsImpl()
+QList<QAction *> KisToolPanFactory::createActionsImpl(KoToolManager *toolManager)
 {
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-    QList<QAction *> actions = KoToolFactoryBase::createActionsImpl();
+    QList<QAction *> actions = KoToolFactoryBase::createActionsImpl(toolManager);
 
     actions << actionRegistry->makeQAction("movetool-move-up", this);
     actions << actionRegistry->makeQAction("movetool-move-down", this);

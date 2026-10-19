@@ -43,7 +43,7 @@ public:
     KisToolPanFactory();
     ~KisToolPanFactory() override;
 
-    QList<QAction *> createActionsImpl() override;
+    QList<QAction *> createActionsImpl(KoToolManager *toolManager) override;
     KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 

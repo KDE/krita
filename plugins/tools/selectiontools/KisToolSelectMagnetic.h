@@ -113,10 +113,10 @@ public:
         return new KisToolSelectMagnetic(canvas);
     }
 
-    QList<QAction *> createActionsImpl() override
+    QList<QAction *> createActionsImpl(KoToolManager *toolManager) override
     {
         KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-        QList<QAction *> actions = KisSelectionToolFactoryBase::createActionsImpl();
+        QList<QAction *> actions = KisSelectionToolFactoryBase::createActionsImpl(toolManager);
 
         actions << actionRegistry->makeQAction("undo_polygon_selection", this);
 

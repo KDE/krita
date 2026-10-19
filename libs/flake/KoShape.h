@@ -109,7 +109,8 @@ public:
         ConnectionPointChanged, ///< a connection point has changed
         ClipPathChanged, ///< the shapes clip path has changed
         ClipMaskChanged, ///< the shapes clip path has changed
-        TransparencyChanged ///< the shapetransparency value has changed
+        TransparencyChanged, ///< the shapetransparency value has changed
+        GeometryProtectedChanged, ///< used after a setPosition()
     };
 
     enum PaintOrder {

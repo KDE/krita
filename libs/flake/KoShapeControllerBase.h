@@ -16,6 +16,7 @@
 #include <QList>
 
 class QRectF;
+class KoCanvasBase;
 class KoShape;
 class KoShapeContainer;
 class KoshapeControllerBasePrivate;
@@ -43,7 +44,7 @@ public:
      *                      proposed parent will be added to the document (if
      *                      new layer should be created)
      */
-    virtual KoShapeContainer* createParentForShapes(const QList<KoShape*> shapes, bool forceNewLayer, KUndo2Command *parentCommand);
+    virtual KoShapeContainer* createParentForShapes(const QList<KoShape*> shapes, bool forceNewLayer, KoCanvasBase *canvas, KUndo2Command *parentCommand);
 
     /**
      * Return a pointer to the resource manager associated with the

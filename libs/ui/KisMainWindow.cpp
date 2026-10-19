@@ -395,7 +395,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
     connect(this, SIGNAL(themeChanged()), d->viewManager, SLOT(updateIcons()));
-    connect(this, SIGNAL(themeChanged()), KoToolManager::instance(), SLOT(themeChanged()));
+    connect(this, SIGNAL(themeChanged()), d->viewManager->toolManager(), SLOT(themeChanged()));
     connect(KisPart::instance(), SIGNAL(documentClosed(QString)), SLOT(updateWindowMenu()));
     connect(KisPart::instance(), SIGNAL(documentOpened(QString)), SLOT(updateWindowMenu()));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
@@ -434,7 +434,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     if (d->toolOptionsDocker) {
         dockwidgetActions[d->toolOptionsDocker->toggleViewAction()->text()] = d->toolOptionsDocker->toggleViewAction();
     }
-    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(KoCanvasController*,QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(KoCanvasController*,QList<QPointer<QWidget> >)));
+    connect(d->viewManager->toolManager(), SIGNAL(toolOptionWidgetsChanged(KoCanvasController*,QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(KoCanvasController*,QList<QPointer<QWidget> >)));
 
     Q_FOREACH (QString title, dockwidgetActions.keys()) {
         d->dockWidgetMenu->addAction(dockwidgetActions[title]);
@@ -472,7 +472,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     // Load all the actions from the tool plugins
     // ToolBoxDocker needs them when at setViewManager()
     Q_FOREACH(KoToolFactoryBase *toolFactory, KoToolRegistry::instance()->values()) {
-        toolFactory->createActions(actionCollection());
+        toolFactory->createActions(actionCollection(), d->viewManager->toolManager());
     }
 
 
@@ -850,7 +850,7 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
          * So here we just explicitly call the tool activation stub.
          */
 
-        KoToolManager::instance()->initializeCurrentToolForCanvas();
+        d->viewManager->toolManager()->initializeCurrentToolForCanvas();
 
         // No, no, no: do not try to call this _before_ the show() has
         // been called on the view; only when that has happened is the
@@ -3041,7 +3041,7 @@ QPointer<KisView> KisMainWindow::activeKisView()
 
 void KisMainWindow::newOptionWidgets(KoCanvasController *controller, const QList<QPointer<QWidget> > &optionWidgetList)
 {
-    KIS_ASSERT_RECOVER_NOOP(controller == KoToolManager::instance()->activeCanvasController());
+    KIS_ASSERT_RECOVER_NOOP(controller == d->viewManager->toolManager()->activeCanvasController());
     bool isOurOwnView = false;
 
     Q_FOREACH (QPointer<KisView> view, KisPart::instance()->views()) {

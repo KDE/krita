@@ -40,9 +40,6 @@ KisMyPaintPaintOp::KisMyPaintPaintOp(const KisPaintOpSettingsSP settings, KisPai
 
     m_brush->setColor(this->painter()->paintColor(), painter->device()->colorSpace());
 
-    if (KoToolManager::instance()->activeToolId() != "KritaShape/KisToolBrush") {
-        mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_SLOW_TRACKING, 0.0);
-    }
 
     m_settings = settings;
     m_airBrushData.read(m_settings.data());
@@ -59,6 +56,16 @@ KisSpacingInformation KisMyPaintPaintOp::paintAt(const KisPaintInformation& info
 
     if (!painter()) {
         return KisSpacingInformation(1.0);
+    }
+
+    if (info.currentTime() == 0.0 && info.drawingSpeed() == 0.0) {
+        // the brush is most probably used for figure painting, like
+        // rectangles or polygons, we should disable slow tracking to
+        // avoid artifacts
+        //
+        // NOTE: we are checking for the exact zero, because this value
+        // is normally **not initialized** for figure painting strokes
+        mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_SLOW_TRACKING, 0.0);
     }
 
     const qreal lodScale = KisLodTransform::lodToScale(painter()->device());

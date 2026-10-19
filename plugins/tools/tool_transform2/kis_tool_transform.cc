@@ -810,7 +810,7 @@ void KisToolTransform::newActivationWithExternalSource(KisPaintDeviceSP external
         deactivate();
         activate(dummy);
     } else {
-        KoToolManager::instance()->switchToolRequested("KisToolTransform");
+        canvas()->canvasController()->toolManager()->switchToolRequested("KisToolTransform");
     }
 }
 
@@ -1489,10 +1489,10 @@ void KisToolTransform::setTranslateX(double translation)
     }
 }
 
-QList<QAction *> KisToolTransformFactory::createActionsImpl()
+QList<QAction *> KisToolTransformFactory::createActionsImpl(KoToolManager *toolManager)
 {
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-    QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
+    QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl(toolManager);
 
     actions << actionRegistry->makeQAction("movetool-move-up", this);
     actions << actionRegistry->makeQAction("movetool-move-down", this);
@@ -1503,25 +1503,33 @@ QList<QAction *> KisToolTransformFactory::createActionsImpl()
     actions << actionRegistry->makeQAction("movetool-move-left-more", this);
     actions << actionRegistry->makeQAction("movetool-move-right-more", this);
 
-    auto makeSubtoolAction = [&actionRegistry, &actions, this](QString actionName, const char *slot) {
+    QPointer<KoToolManager> toolManagerSafePtr = toolManager;
+
+    auto makeSubtoolAction = [&actionRegistry, &actions, toolManagerSafePtr, this](QString actionName, KisToolTransform::TransformToolMode mode) {
         QAction *action = actionRegistry->makeQAction(actionName, this);
         action->setProperty("always_enabled", true); // To allow this action to be triggered when the transform tool isn't already active
-        connect(action, SIGNAL(triggered()), slot);
+
+        connect(action, &QAction::triggered, this, [toolManagerSafePtr, mode, this] () {
+            KIS_SAFE_ASSERT_RECOVER_RETURN(toolManagerSafePtr);
+            this->activateSubtool(toolManagerSafePtr, mode);
+        });
+
         actions << action;
     };
-    makeSubtoolAction("KisToolTransformFree", SLOT(activateSubtoolFree()));
-    makeSubtoolAction("KisToolTransformPerspective", SLOT(activateSubtoolPerspective()));
-    makeSubtoolAction("KisToolTransformWarp", SLOT(activateSubtoolWarp()));
-    makeSubtoolAction("KisToolTransformCage", SLOT(activateSubtoolCage()));
-    makeSubtoolAction("KisToolTransformLiquify", SLOT(activateSubtoolLiquify()));
-    makeSubtoolAction("KisToolTransformMesh", SLOT(activateSubtoolMesh()));
+
+    makeSubtoolAction("KisToolTransformFree", KisToolTransform::FreeTransformMode);
+    makeSubtoolAction("KisToolTransformPerspective", KisToolTransform::PerspectiveTransformMode);
+    makeSubtoolAction("KisToolTransformWarp", KisToolTransform::WarpTransformMode);
+    makeSubtoolAction("KisToolTransformCage", KisToolTransform::CageTransformMode);
+    makeSubtoolAction("KisToolTransformLiquify", KisToolTransform::LiquifyTransformMode);
+    makeSubtoolAction("KisToolTransformMesh", KisToolTransform::MeshTransformMode);
 
     return actions;
 }
 
-void KisToolTransformFactory::activateSubtool(KisToolTransform::TransformToolMode mode)
+void KisToolTransformFactory::activateSubtool(KoToolManager *toolManager, KisToolTransform::TransformToolMode mode)
 {
-    KoToolManager *toolManager = KoToolManager::instance();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(toolManager);
 
     KoCanvasController *canvasController = toolManager->activeCanvasController();
     if (!canvasController) return;
@@ -1541,28 +1549,4 @@ void KisToolTransformFactory::activateSubtool(KisToolTransform::TransformToolMod
         transformTool->setNextActivationTransformMode(mode);
         toolManager->switchToolRequested(id());
     }
-}
-void KisToolTransformFactory::activateSubtoolFree()
-{
-    activateSubtool(KisToolTransform::FreeTransformMode);
-}
-void KisToolTransformFactory::activateSubtoolPerspective()
-{
-    activateSubtool(KisToolTransform::PerspectiveTransformMode);
-}
-void KisToolTransformFactory::activateSubtoolWarp()
-{
-    activateSubtool(KisToolTransform::WarpTransformMode);
-}
-void KisToolTransformFactory::activateSubtoolCage()
-{
-    activateSubtool(KisToolTransform::CageTransformMode);
-}
-void KisToolTransformFactory::activateSubtoolLiquify()
-{
-    activateSubtool(KisToolTransform::LiquifyTransformMode);
-}
-void KisToolTransformFactory::activateSubtoolMesh()
-{
-    activateSubtool(KisToolTransform::MeshTransformMode);
 }

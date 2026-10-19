@@ -11,6 +11,7 @@
 #include "KoSelection.h"
 #include "KoSelection_p.h"
 #include "KoShapeContainer.h"
+#include "KoShapeLayer.h"
 #include "KoShapeGroup.h"
 #include "KoPointerEvent.h"
 #include "kis_algebra_2d.h"
@@ -18,11 +19,26 @@
 
 #include <QPainter>
 
+void KoSelection::Private::LayerShapeGeometryProtectedListener::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shape == m_parent->activeLayer());
+
+    if (type == KoShape::Deleted) {
+        m_parent->d->activeLayer = nullptr;
+        Q_EMIT m_parent->currentLayerChanged(m_parent->d->activeLayer);
+    } else if (type == KoShape::GeometryProtectedChanged) {
+        // we should reemit the signal with the same value
+        // to make sure all the clients see the geometry
+        // lock change
+        Q_EMIT m_parent->currentLayerChanged(m_parent->d->activeLayer);
+    }
+}
+
 #include "kis_debug.h"
 KoSelection::KoSelection(QObject *parent)
     : QObject(parent)
     , KoShape()
-    , d(new Private)
+    , d(new Private(this))
 {
     connect(d->selectionChangedCompressor, SIGNAL(timeout()), SIGNAL(selectionChanged()));
 }
@@ -30,7 +46,7 @@ KoSelection::KoSelection(QObject *parent)
 KoSelection::KoSelection(const KoSelection &rhs)
     : QObject()
     , KoShape(rhs)
-    , d(rhs.d)
+    , d(new Private(*rhs.d, this))
 {
 }
 
@@ -222,7 +238,18 @@ KoShape *KoSelection::firstSelectedShape() const
 
 void KoSelection::setActiveLayer(KoShapeLayer *layer)
 {
+    const bool layerChanged = d->activeLayer != layer;
+
+    if (d->activeLayer && layerChanged) {
+        d->activeLayer->removeShapeChangeListener(&d->activeLayerStateListener);
+    }
+
     d->activeLayer = layer;
+
+    if (d->activeLayer && layerChanged) {
+        d->activeLayer->addShapeChangeListener(&d->activeLayerStateListener);
+    }
+
     Q_EMIT currentLayerChanged(layer);
 }
 

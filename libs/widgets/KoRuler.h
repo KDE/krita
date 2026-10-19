@@ -218,14 +218,6 @@ public Q_SLOTS:
      */
     bool removeHotSpot(int id);
 
-    /**
-     * Connect the ruler to a guides tool
-     * This allows the user to drag a guide out of the ruler and get in one smooth operation
-     * the guide tool to draw and position the guide line.
-     * @param canvas the canvas that has had the KoToolManager create the tool for previously.
-     */
-    void createGuideToolConnection(KoCanvasBase *canvas);
-
     void setUnitPixelMultiple2(bool enabled);
 
 Q_SIGNALS:

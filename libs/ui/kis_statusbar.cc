@@ -83,7 +83,7 @@ void KisStatusBar::setup()
     m_statusBarStatusLabel->setObjectName("statsBarStatusLabel");
     m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusBarStatusLabel->setContentsMargins(5, 5, 5, 5);
-    connect(KoToolManager::instance(), SIGNAL(changedStatusText(QString)),
+    connect(m_viewManager->toolManager(), SIGNAL(changedStatusText(QString)),
             m_statusBarStatusLabel, SLOT(setText(QString)));
     addStatusBarItem(m_statusBarStatusLabel, 2);
     m_statusBarStatusLabel->setVisible(false);

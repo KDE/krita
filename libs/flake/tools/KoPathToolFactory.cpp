@@ -31,8 +31,10 @@ KoToolBase * KoPathToolFactory::createTool(KoCanvasBase *canvas)
     return new KoPathTool(canvas);
 }
 
-QList<QAction *> KoPathToolFactory::createActionsImpl()
+QList<QAction *> KoPathToolFactory::createActionsImpl(KoToolManager *toolManager)
 {
+    Q_UNUSED(toolManager);
+
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction *> actions;
     actions << actionRegistry->makeQAction("pathpoint-corner", this);

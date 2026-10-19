@@ -35,8 +35,9 @@ void KisInputManager::Private::setMaskSyntheticEvents(bool value)
     // TODO: remove
 }
 
-KisInputManager::Private::Private(KisInputManager *qq)
+KisInputManager::Private::Private(KisInputManager *qq, KoToolManager *toolManagerArg)
     : q(qq)
+    , toolManager(toolManagerArg)
     , moveEventCompressor(10 /* ms */,
                           KisSignalCompressor::FIRST_ACTIVE,
                           KisSignalCompressor::ADDITIVE_INTERVAL)

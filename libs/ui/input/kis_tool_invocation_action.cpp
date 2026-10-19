@@ -11,6 +11,7 @@
 #include <klocalizedstring.h>
 
 #include <KoToolManager.h>
+#include <KoCanvasController.h>
 
 #include <kis_tool_proxy.h>
 #include <kis_canvas2.h>
@@ -106,7 +107,7 @@ void KisToolInvocationAction::activate(int shortcut)
     }
 
     if (!temporaryToolId.isEmpty()) {
-        KoToolManager::instance()->switchToolRequested(temporaryToolId);
+        inputManager()->canvas()->canvasController()->toolManager()->switchToolRequested(temporaryToolId);
     }
 
     d->activatedToolProxy = inputManager()->toolProxy();
@@ -142,7 +143,7 @@ void KisToolInvocationAction::deactivate(int shortcut)
     if (shortcut != ActivateShortcut && shortcut != ConfirmShortcut && shortcut != CancelShortcut && shortcut != ActivateWithOtherColorShortcut && !d->deactivating) {
         // Switching tool will force deactivation and will re-enter
         d->deactivating = true;
-        KoToolManager::instance()->switchBackRequested();
+        inputManager()->canvas()->canvasController()->toolManager()->switchBackRequested();
         d->deactivating = false;
     }
 }

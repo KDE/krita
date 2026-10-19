@@ -34,8 +34,10 @@ KoToolBase *SvgTextToolFactory::createTool(KoCanvasBase *canvas)
     return new SvgTextTool(canvas);
 }
 
-QList<QAction *> SvgTextToolFactory::createActionsImpl()
+QList<QAction *> SvgTextToolFactory::createActionsImpl(KoToolManager *toolManager)
 {
+    Q_UNUSED(toolManager);
+
     QList<QAction *> actions;
     Q_FOREACH(const QString name, SvgTextShortCuts::possibleActions()) {
         actions << KisActionRegistry::instance()->makeQAction(name, this);

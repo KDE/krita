@@ -99,6 +99,7 @@ public:  // Krita specific interfaces
 
     /// The node manager handles everything about nodes
     KisNodeManager *nodeManager() const;
+    KoToolManager *toolManager() const;
 
     KisActionManager *actionManager() const;
 

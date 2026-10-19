@@ -16,7 +16,7 @@ public:
     explicit KisSelectionToolFactoryBase(const QString &id);
     ~KisSelectionToolFactoryBase() override;
 protected:
-    QList<QAction *> createActionsImpl() override;
+    QList<QAction *> createActionsImpl(KoToolManager *toolManager) override;
 };
 
 class KRITAUI_EXPORT KisToolPolyLineFactoryBase : public KisToolPaintFactoryBase
@@ -25,7 +25,7 @@ public:
     explicit KisToolPolyLineFactoryBase(const QString &id);
     ~KisToolPolyLineFactoryBase() override;
 protected:
-    QList<QAction *> createActionsImpl() override;
+    QList<QAction *> createActionsImpl(KoToolManager *toolManager) override;
 };
 
 

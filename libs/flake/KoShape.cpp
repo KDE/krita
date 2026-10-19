@@ -836,7 +836,10 @@ bool KoShape::isSelectable() const
 
 void KoShape::setGeometryProtected(bool on)
 {
+    if (on != s->geometryProtected) return;
+
     s->geometryProtected = on;
+    shapeChangedPriv(GeometryProtectedChanged);
 }
 
 bool KoShape::isGeometryProtected() const

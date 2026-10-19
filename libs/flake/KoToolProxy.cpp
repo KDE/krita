@@ -120,8 +120,6 @@ KoToolProxy::KoToolProxy(KoCanvasBase *canvas, QObject *parent)
     : QObject(parent),
       d(new KoToolProxyPrivate(this))
 {
-    KoToolManager::instance()->priv()->registerToolProxy(this, canvas);
-
     connect(&d->scrollTimer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
 
@@ -203,7 +201,7 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
 
     KoInputDevice id(KoInputDevice::convertDeviceType(event),
                      KoInputDevice::convertPointerType(event), event->uniqueId());
-    KoToolManager::instance()->priv()->switchInputDevice(id);
+    d->controller->toolManager()->priv()->switchInputDevice(id);
 
     KoPointerEvent ev(event, point);
 
@@ -232,7 +230,7 @@ void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
 {
     d->mouseLeaveWorkaround = false;
     KoInputDevice id;
-    KoToolManager::instance()->priv()->switchInputDevice(id);
+    d->controller->toolManager()->priv()->switchInputDevice(id);
     d->mouseDownPoint = ev->pos();
 
 
@@ -290,7 +288,7 @@ void KoToolProxy::mouseMoveEvent(KoPointerEvent *event)
         return;
     }
     KoInputDevice id;
-    KoToolManager::instance()->priv()->switchInputDevice(id);
+    d->controller->toolManager()->priv()->switchInputDevice(id);
     if (d->activeTool == 0) {
         event->ignore();
         return;
@@ -312,7 +310,7 @@ void KoToolProxy::mouseReleaseEvent(KoPointerEvent* event)
 {
     d->mouseLeaveWorkaround = false;
     KoInputDevice id;
-    KoToolManager::instance()->priv()->switchInputDevice(id);
+    d->controller->toolManager()->priv()->switchInputDevice(id);
     d->scrollTimer.stop();
 
     if (d->activeTool) {

@@ -37,8 +37,10 @@ KoToolBase *DefaultToolFactory::createTool(KoCanvasBase *canvas)
     return new DefaultTool(canvas, true);
 }
 
-QList<QAction *> DefaultToolFactory::createActionsImpl()
+QList<QAction *> DefaultToolFactory::createActionsImpl(KoToolManager *toolManager)
 {
+    Q_UNUSED(toolManager);
+
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
 
     QList<QAction *> actions;

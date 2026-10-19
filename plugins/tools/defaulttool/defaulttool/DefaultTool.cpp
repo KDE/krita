@@ -2349,9 +2349,12 @@ void DefaultTool::addTransformActions(QMenu *menu) const {
 void DefaultTool::explicitUserStrokeEndRequest()
 {
     QList<KoShape *> shapes = koSelection()->selectedEditableShapesAndDelegates();
-    QString tool = KoToolManager::instance()->preferredToolForSelection(shapes);
-    QTimer::singleShot(0, [tool = std::move(tool)]() {
-        KoToolManager::instance()->switchToolRequested(tool);
+    KoToolManager *toolManager = canvas()->canvasController()->toolManager();
+    QString tool = toolManager->preferredToolForSelection(shapes);
+    QTimer::singleShot(0, [toolManager, tool = std::move(tool)]() {
+        if (toolManager) {
+            toolManager->switchToolRequested(tool);
+        }
     });
 }
 

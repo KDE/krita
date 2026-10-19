@@ -48,6 +48,7 @@ public:
         currentAuxWidgets.clear();
 
         currentWidgetList = optionWidgetList;
+        if (currentWidgetList.isEmpty()) return;
 
         // need to unstretch row that have previously been stretched
         housekeeperLayout->setRowStretch(housekeeperLayout->rowCount()-1, 0);

@@ -381,18 +381,10 @@ public:
         return new KisToolTransform(canvas);
     }
 
-    QList<QAction *> createActionsImpl() override;
-
-private:
-    void activateSubtool(KisToolTransform::TransformToolMode mode);
+    QList<QAction *> createActionsImpl(KoToolManager *toolManager) override;
 
 private Q_SLOTS:
-    void activateSubtoolFree();
-    void activateSubtoolPerspective();
-    void activateSubtoolWarp();
-    void activateSubtoolCage();
-    void activateSubtoolLiquify();
-    void activateSubtoolMesh();
+    void activateSubtool(KoToolManager *toolManager, KisToolTransform::TransformToolMode mode);
 };
 
 

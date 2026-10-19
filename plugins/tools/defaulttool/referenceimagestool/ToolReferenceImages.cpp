@@ -411,9 +411,9 @@ KisDocument *ToolReferenceImages::document() const
     return kisCanvas->imageView()->document();
 }
 
-QList<QAction *> ToolReferenceImagesFactory::createActionsImpl()
+QList<QAction *> ToolReferenceImagesFactory::createActionsImpl(KoToolManager *toolManager)
 {
-    QList<QAction *> defaultActions = DefaultToolFactory::createActionsImpl();
+    QList<QAction *> defaultActions = DefaultToolFactory::createActionsImpl(toolManager);
     QList<QAction *> actions;
 
     QStringList actionNames;

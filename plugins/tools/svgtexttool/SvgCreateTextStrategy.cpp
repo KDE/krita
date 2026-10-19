@@ -158,7 +158,7 @@ KUndo2Command *SvgCreateTextStrategy::createCommand()
 
     new KoKeepShapesSelectedCommand(tool->koSelection()->selectedShapes(), {}, tool->canvas()->selectedShapesProxy(), false, parentCommand);
 
-    KoShapeContainer* parent = tool->canvas()->shapeController()->documentBase()->createParentForShapes({textShape}, false, parentCommand);
+    KoShapeContainer* parent = tool->canvas()->shapeController()->documentBase()->createParentForShapes({textShape}, false, tool->canvas(), parentCommand);
     KUndo2Command *cmd = tool->canvas()->shapeController()->addShape(textShape, parent, parentCommand);
 
     parentCommand->setText(cmd->text());

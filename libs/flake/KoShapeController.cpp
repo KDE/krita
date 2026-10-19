@@ -93,7 +93,7 @@ public:
 
         if (!parentShape) {
             resultCommand = new KUndo2Command(parent);
-            parentShape = shapeController->createParentForShapes(shapes, false, resultCommand);
+            parentShape = shapeController->createParentForShapes(shapes, false, canvas, resultCommand);
             KUndo2Command *addShapeCommand = new KoShapeCreateCommand(shapeController, shapes, parentShape, resultCommand);
             resultCommand->setText(addShapeCommand->text());
         } else {
@@ -146,11 +146,6 @@ KUndo2Command* KoShapeController::removeShapes(const QList<KoShape*> &shapes, KU
 {
     KUndo2Command *cmd = new KoShapeDeleteCommand(d->shapeController, shapes, parent);
     return cmd;
-}
-
-void KoShapeController::setShapeControllerBase(KoShapeControllerBase *shapeController)
-{
-    d->shapeController = shapeController;
 }
 
 QRectF KoShapeController::documentRectInPixels() const

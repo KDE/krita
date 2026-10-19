@@ -16,6 +16,7 @@
 
 class KoCanvasBase;
 class KoToolBase;
+class KoToolManager;
 class QKeySequence;
 class KisKActionCollection;
 class QAction;
@@ -73,7 +74,7 @@ public:
      * Create the actions for this tool. Actions are unique per window, not per
      * tool instance; tool instances are unique per view/canvas.
      */
-    QList<QAction *> createActions(KisKActionCollection *actionCollection);
+    QList<QAction *> createActions(KisKActionCollection *actionCollection, KoToolManager *toolManager);
 
     /**
      * Instantiate a new tool
@@ -177,11 +178,7 @@ protected:
      *
      * @return the list of actions this tool wishes to be available.
      */
-    virtual QList<QAction *> createActionsImpl();
-
-private Q_SLOTS:
-
-    void activateTool();
+    virtual QList<QAction *> createActionsImpl(KoToolManager *toolManager);
 
 private:
     class Private;

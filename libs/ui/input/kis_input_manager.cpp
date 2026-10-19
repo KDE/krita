@@ -55,17 +55,17 @@ uint qHash(QPointer<T> value) {
     return reinterpret_cast<quintptr>(value.data());
 }
 
-KisInputManager::KisInputManager(QObject *parent)
-    : QObject(parent), d(new Private(this))
+KisInputManager::KisInputManager(QObject *parent, KoToolManager *toolManager)
+    : QObject(parent), d(new Private(this, toolManager))
 {
     d->setupActions();
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
 
-    connect(KoToolManager::instance(), SIGNAL(aboutToChangeTool(KoCanvasController*)), SLOT(slotAboutToChangeTool()));
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*)), SLOT(slotToolChanged()));
-    connect(KoToolManager::instance(), SIGNAL(textModeChanged(bool)), SLOT(slotTextModeChanged()));
+    connect(d->toolManager, SIGNAL(aboutToChangeTool(KoCanvasController*)), SLOT(slotAboutToChangeTool()));
+    connect(d->toolManager, SIGNAL(changedTool(KoCanvasController*)), SLOT(slotToolChanged()));
+    connect(d->toolManager, SIGNAL(textModeChanged(bool)), SLOT(slotTextModeChanged()));
     connect(&d->moveEventCompressor, SIGNAL(timeout()), SLOT(slotCompressedMoveEvent()));
 
 
@@ -832,8 +832,7 @@ void KisInputManager::slotAboutToChangeTool()
 void KisInputManager::slotToolChanged()
 {
     if (!d->canvas) return;
-    KoToolManager *toolManager = KoToolManager::instance();
-    KoToolBase *tool = toolManager->toolById(canvas(), toolManager->activeToolId());
+    KoToolBase *tool = d->toolManager->toolById(canvas(), d->toolManager->activeToolId());
     if (tool) {
         // once more, don't forget the global state whenever matcher may trigger a KisAbstractInputAction
         KisAbstractInputAction::setInputManager(this);
@@ -855,8 +854,7 @@ void KisInputManager::slotToolChanged()
 void KisInputManager::slotTextModeChanged()
 {
     if (!d->canvas) return;
-    KoToolManager *toolManager = KoToolManager::instance();
-    KoToolBase *tool = toolManager->toolById(canvas(), toolManager->activeToolId());
+    KoToolBase *tool = d->toolManager->toolById(canvas(), d->toolManager->activeToolId());
     if (tool) {
         if (tool->isInTextMode()) {
             d->forwardAllEventsToTool = true;

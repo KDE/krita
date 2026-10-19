@@ -47,6 +47,7 @@
 #include <KoFileDialog.h>
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoShapeController.h>
@@ -804,7 +805,7 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
         if (m_textOutlineHelper->contourModeButtonHovered(event->point)) {
             m_textOutlineHelper->toggleTextContourMode(selectedShape);
             event->accept();
-            KoToolManager::instance()->switchToolRequested("InteractionTool");
+            canvas()->canvasController()->toolManager()->switchToolRequested("InteractionTool");
             return;
         }
 

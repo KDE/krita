@@ -272,7 +272,7 @@ KisView::~KisView()
      */
     d->canvas.disconnectImage();
 
-    KoToolManager::instance()->removeCanvasController(&d->canvasController);
+    d->canvasController.setToolManager(0);
     d->canvasController.setCanvas(0);
 
     KisPart::instance()->removeView(this);
@@ -336,13 +336,16 @@ bool KisView::canvasIsMirrored() const
 
 void KisView::setViewManager(KisViewManager *view)
 {
+    // we never call this method with nullptr and the code here is not
+    // capable of detaching from the previous connections
+    KIS_SAFE_ASSERT_RECOVER_RETURN(view);
+
     d->viewManager = view;
 
-    if (!d->viewManager) {
-        return;
+    if (!d->canvasController.toolManager()) {
+        d->canvasController.setToolManager(d->viewManager->toolManager());
     }
 
-    KoToolManager::instance()->addController(&d->canvasController);
     KisShapeController* shapeController = dynamic_cast<KisShapeController*>(d->document->shapeController());
     shapeController->setInitialShapeForCanvas(&d->canvas);
 
@@ -365,7 +368,7 @@ void KisView::setViewManager(KisViewManager *view)
 
     d->viewManager->updateGUI();
 
-    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
+    d->canvasController.toolManager()->switchToolRequested("KritaShape/KisToolBrush");
 }
 
 KisViewManager* KisView::viewManager() const
@@ -632,7 +635,7 @@ void KisView::dropEvent(QDropEvent *event)
                     this->canvasBase()
                         ->referenceImagesDecoration()
                         ->addReferenceImage(reference);
-                    KoToolManager::instance()->switchToolRequested(
+                    d->viewManager->toolManager()->switchToolRequested(
                         "ToolReferenceImages");
                     return;
                 }
@@ -736,7 +739,7 @@ void KisView::dropEvent(QDropEvent *event)
                                 ->referenceImagesDecoration()
                                 ->addReferenceImage(reference);
 
-                            KoToolManager::instance()->switchToolRequested(
+                            d->viewManager->toolManager()->switchToolRequested(
                                 "ToolReferenceImages");
                         }
                     }

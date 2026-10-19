@@ -19,8 +19,10 @@ KisToolPaintFactoryBase::~KisToolPaintFactoryBase()
 {
 }
 
-QList<QAction *> KisToolPaintFactoryBase::createActionsImpl()
+QList<QAction *> KisToolPaintFactoryBase::createActionsImpl(KoToolManager *toolManager)
 {
+    Q_UNUSED(toolManager);
+
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction *> actions;
 

@@ -124,7 +124,7 @@ bool tryPasteShapes(KisPasteActionFactory::Flags flags, KisViewManager *view)
             KoShapeContainer *parentLayer = nullptr;
 
             if (forceCreateNewLayer) {
-                parentLayer = canvas->shapeController()->documentBase()->createParentForShapes(shapes, true, parentCommand);
+                parentLayer = canvas->shapeController()->documentBase()->createParentForShapes(shapes, true, canvas, parentCommand);
             }
 
             canvas->shapeController()->addShapesDirect(shapes, parentLayer, parentCommand);
@@ -308,7 +308,7 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
         KisProcessingApplicator::runSingleCommandStroke(viewManager->image(), deselectCmd);
     }
 
-    KisTool* tool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(viewManager->canvasBase(), "KisToolTransform"));
+    KisTool* tool = dynamic_cast<KisTool*>(viewManager->toolManager()->toolById(viewManager->canvasBase(), "KisToolTransform"));
     KIS_ASSERT(tool);
     tool->newActivationWithExternalSource(clip);
 }
@@ -355,7 +355,7 @@ void KisPasteReferenceActionFactory::run(KisViewManager *viewManager)
     KisDocument *doc = viewManager->document();
     canvasBase->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
 
-    KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+    viewManager->toolManager()->switchToolRequested("ToolReferenceImages");
 }
 
 void KisPasteShapeStyleActionFactory::run(KisViewManager *view)

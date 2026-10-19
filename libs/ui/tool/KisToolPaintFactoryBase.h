@@ -16,7 +16,7 @@ public:
     explicit KisToolPaintFactoryBase(const QString &id);
     ~KisToolPaintFactoryBase() override;
 protected:
-    QList<QAction *> createActionsImpl() override;
+    QList<QAction *> createActionsImpl(KoToolManager *toolManager) override;
 
 };
 

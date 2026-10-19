@@ -194,7 +194,7 @@ public:
         return new KisToolMove(canvas);
     }
 
-    QList<QAction *> createActionsImpl() override;
+    QList<QAction *> createActionsImpl(KoToolManager *toolManager) override;
 };
 
 #endif // KIS_TOOL_MOVE_H_

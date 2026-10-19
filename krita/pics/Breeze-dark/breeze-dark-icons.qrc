@@ -14,7 +14,6 @@
         <file>dark_dialog-ok.svg</file>
         <file>dark_dialog-warning.svg</file>
         <file>dark_document-new.svg</file>
-        <file>dark_document-open-recent.svg</file>
         <file>dark_document-open.svg</file>
         <file>dark_document-print-preview.svg</file>
         <file alias="dark_document-properties.svg">dark_configure.svg</file>

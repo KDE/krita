@@ -297,7 +297,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="edit_copy">
-      <icon>edit-copy</icon>
+      <icon>edit-copy-16</icon>
       <text>&amp;Copy</text>
       <whatsThis></whatsThis>
       <toolTip>Copy selection to clipboard</toolTip>
@@ -357,7 +357,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="edit_paste">
-      <icon>edit-paste</icon>
+      <icon>edit-paste-16</icon>
       <text>&amp;Paste</text>
       <whatsThis></whatsThis>
       <toolTip>Paste clipboard content</toolTip>

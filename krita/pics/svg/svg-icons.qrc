@@ -621,5 +621,7 @@
         <file>light_clear-cache.svg</file>
         <file>light_time-set-end.svg</file>
         <file>light_time-set-start.svg</file>
+        <file>light_edit-copy-16.svg</file>
+        <file>dark_edit-copy-16.svg</file>
     </qresource>
 </RCC>

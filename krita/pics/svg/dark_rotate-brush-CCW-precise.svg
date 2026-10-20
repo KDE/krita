@@ -1,0 +1,38 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:date>2026</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>superfurryfrog</dc:title>
+          </cc:Agent>
+        </dc:creator>
+         <dc:description>Based on the freehand tool icon by Timothée Giet, 2015</dc:description>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+<path d="M5.60938 7.94629C7.70038 7.49329 9.3055 8.62098 9.6875 10.501C10.1952 13.0028 8.29473 15.1787 5.50391 15.7451C3.59691 16.1326 1.48644 15.9614 0.0439453 14.8164C1.1049 14.6009 2.79432 13.3561 2.73047 11.7842C2.67048 10.3273 3.47687 8.40904 5.60938 7.94629ZM8.32812 5.7666C9.54708 5.7246 10.9022 6.67353 11.5322 8.06445C11.7097 8.73945 10.5413 9.72052 10.4023 9.24902C10.1573 8.24303 8.87696 7.15346 7.70996 6.95996C7.35364 6.93688 7.88771 5.77426 8.32812 5.7666ZM16 3.39648C15.0453 4.83878 12.2934 7.63934 12.1797 7.25977C11.9347 6.25377 10.4902 5.06459 9.32324 4.87109C9.00958 4.84916 10.6902 0.959982 11.9082 0H16V3.39648Z" fill="#373737"/>
+<path d="M0 7H4L2 10L0 7Z" fill="#373737"/>
+<path d="M6.2334 1.79102C6.78797 1.603 7.3819 1.5 8 1.5V0.5C7.22121 0.5 6.47426 0.636544 5.78223 0.887695L6.2334 1.79102ZM3.88281 3.35352C4.18126 3.01679 4.52048 2.71719 4.89258 2.46191L4.44238 1.56152C3.91928 1.90441 3.44849 2.31985 3.04492 2.79492L3.88281 3.35352ZM2.5 7C2.5 6.1399 2.69682 5.32562 3.04883 4.60059L2.21094 4.04199C1.75663 4.92932 1.5 5.93465 1.5 7H2.5Z" fill="#373737"/>
+</svg>

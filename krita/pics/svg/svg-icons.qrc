@@ -625,5 +625,13 @@
         <file>dark_edit-copy-16.svg</file>
         <file>light_document-open-recent.svg</file>
         <file>dark_document-open-recent.svg</file>
+        <file>dark_rotate-brush-CCW-precise.svg</file>
+        <file>dark_rotate-brush-CW-precise.svg</file>
+        <file>dark_rotate-brush-CCW.svg</file>
+        <file>dark_rotate-brush-CW.svg</file>
+        <file>light_rotate-brush-CW-precise.svg</file>
+        <file>light_rotate-brush-CCW-precise.svg</file>
+        <file>light_rotate-brush-CCW.svg</file>
+        <file>light_rotate-brush-CW.svg</file>
     </qresource>
 </RCC>

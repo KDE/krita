@@ -13,6 +13,7 @@
 #include <QOpenGLFunctions>
 #include <QWindow>
 #include <QColorSpace>
+#include <QScopeGuard>
 #include <KoConfig.h>
 
 #ifdef HAVE_HDR

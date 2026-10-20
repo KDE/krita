@@ -100,6 +100,24 @@ private:
     bool m_oldValue = false;
 };
 
+#ifdef HAVE_DBUS
+struct DisableDesktopAwareSetter
+{
+    DisableDesktopAwareSetter()
+        : m_oldValue(QGuiApplication::desktopSettingsAware())
+    {
+        QGuiApplication::setDesktopSettingsAware(false);
+    }
+
+    ~DisableDesktopAwareSetter() {
+        QGuiApplication::setDesktopSettingsAware(m_oldValue);
+    }
+
+private:
+    bool m_oldValue = false;
+};
+#endif
+
 struct SurfaceFormatSetter
 {
     SurfaceFormatSetter(const QSurfaceFormat &format)
@@ -162,6 +180,9 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
     QScopedPointer<SurfaceFormatSetter> formatSetter;
     QScopedPointer<EnvironmentSetter> rendererSetter;
     QScopedPointer<EnvironmentSetter> portalSetter;
+#ifdef HAVE_DBUS
+    QScopedPointer<DisableDesktopAwareSetter> desktopAwareSetter;
+#endif
     QScopedPointer<QGuiApplication> application;
 
     int argc = 1;
@@ -183,22 +204,42 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
         portalSetter.reset(new EnvironmentSetter(QLatin1String("QT_NO_XDG_DESKTOP_PORTAL"), QLatin1String("1")));
         formatSetter.reset(new SurfaceFormatSetter(format));
 
-        // Disable this workaround for plasma (BUG:408015), because it causes 
-        // a crash on Windows with Qt 5.15.7
-        const bool runningInKDE =  qEnvironmentVariableIsSet("KDE_FULL_SESSION");
-        const bool isInAppimage = qEnvironmentVariableIsSet("APPIMAGE");
-
-        if (runningInKDE && !isInAppimage) {
-            QGuiApplication::setDesktopSettingsAware(false);
+#ifdef HAVE_DBUS
+        if (!qEnvironmentVariableIsSet("KRITA_DISABLE_DESKTOP_UNAWARE_PROBING_WORKAROUND")) {
+            // When QGuiApplication is created, it also creates platform-specific GUI
+            // elements, like QPlatformMenu and QPlatformSystemTrayIcon. These classes
+            // can utilize DBus for communicating the platform. If we create a DBus
+            // connection, but do not start an event loop, then the connection will
+            // stuck in a "suspended delivery" state and will not be able to process
+            // anything. See bug 408015 and bug 515889
+            desktopAwareSetter.reset(new DisableDesktopAwareSetter());
         }
+#endif /* HAVE_DBUS */
 
         application.reset(new QGuiApplication(argc, &argv));
-
-        if (runningInKDE && !isInAppimage) {
-            QGuiApplication::setDesktopSettingsAware(true);
-        }
-
     }
+
+#ifdef HAVE_DBUS
+    if (!qEnvironmentVariableIsSet("KRITA_DISABLE_TEMPORARY_APP_EVENTS_PROCESSING_WORKAROUND")) {
+        // If an application has been created, force it to process
+        // all the queued events and exit. Some internal
+        // Qt systems' initialization process rely on the queued
+        // events to be processed. See bug 515889.
+        QScopeGuard forceEventProcessingGuard([&]() {
+            if (!application)
+                return;
+
+            QMetaObject::invokeMethod(
+                application.data(),
+                [app = application.data()]() {
+                    app->quit();
+                },
+                Qt::QueuedConnection);
+
+            application->exec();
+        });
+    }
+#endif /* HAVE_DBUS */
 
     QWindow surface;
     surface.setFormat(format);

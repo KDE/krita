@@ -684,5 +684,13 @@
         <file>light_scripts.svg</file>
         <file>dark_scripts.svg</file>
         <file>notification-dot.svg</file>
+        <file>dark_rotate-brush-CCW-precise.svg</file>
+        <file>dark_rotate-brush-CW-precise.svg</file>
+        <file>dark_rotate-brush-CCW.svg</file>
+        <file>dark_rotate-brush-CW.svg</file>
+        <file>light_rotate-brush-CW-precise.svg</file>
+        <file>light_rotate-brush-CCW-precise.svg</file>
+        <file>light_rotate-brush-CCW.svg</file>
+        <file>light_rotate-brush-CW.svg</file>
     </qresource>
 </RCC>

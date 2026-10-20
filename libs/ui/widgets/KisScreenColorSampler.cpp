@@ -28,6 +28,7 @@
 #include "KisDlgInternalColorSelector.h"
 #include <KisStaticInitializer.h>
 #include <KisPortingUtils.h>
+#include <KoColorProfileQuery.h>
 
 #include <KisGrabKeyboardFocusRecoveryWorkaround.h>
 
@@ -356,8 +357,13 @@ bool KisScreenColorSampler::tryToUsePlatformIntegration()
 
 void KisScreenColorSampler::colorPicked(const QColor& color)
 {
-    KoColor col;
+    KoColor col(Qt::white, KoColorSpaceRegistry::instance()->rgb8());
     col.fromQColor(color);
+    if (qEnvironmentVariableIsSet("KRITA_USE_GAMMA22_FOR_COLOR_PICKING")) {
+        const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileFor(KoColorProfileQuery(PRIMARIES_ITU_R_BT_709_5, TRC_ITU_R_BT_470_6_SYSTEM_M));
+        col.setProfile(profile);
+    }
+
     setCurrentColor(col);
 
     Q_EMIT sigNewColorSampled(currentColor());

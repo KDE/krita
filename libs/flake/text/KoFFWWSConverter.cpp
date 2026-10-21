@@ -1037,13 +1037,21 @@ KisForest<FontFamilyNode>::composition_iterator searchNodes (KisForest<FontFamil
         familySimplified = family.split("[", Qt::SkipEmptyParts).first().trimmed();
     }
 
-    auto presentInLocalizedNames = [&familySimplified, &family](const QHash<QLocale, QString> &localizedFontFamilies) {
-        auto matchingLocalizedFamilyIt = std::find_if(
+    auto partialMatch = endIt;
+
+    auto presentInLocalizedNames = [&familySimplified, &family](const QHash<QLocale, QString> &localizedFontFamilies, bool partialMatch) {
+        auto matchingLocalizedFamilyIt = partialMatch? std::find_if(
             localizedFontFamilies.begin(),
             localizedFontFamilies.end(),
             [&](const QString &localizedFamily) {
                 return localizedFamily.contains(family, Qt::CaseInsensitive)
                     || (!familySimplified.isEmpty() && localizedFamily.contains(familySimplified, Qt::CaseInsensitive));
+            }) : std::find_if(
+            localizedFontFamilies.begin(),
+            localizedFontFamilies.end(),
+            [&](const QString &localizedFamily) {
+                return localizedFamily.compare(family, Qt::CaseInsensitive)
+                || (!familySimplified.isEmpty() && localizedFamily.compare(familySimplified, Qt::CaseInsensitive));
             });
 
         return matchingLocalizedFamilyIt != localizedFontFamilies.end();
@@ -1057,11 +1065,12 @@ KisForest<FontFamilyNode>::composition_iterator searchNodes (KisForest<FontFamil
         if (childBegin(it) == childEnd(it)) {
             if (
                 // For the lowest nodes, we only want to test the full name.
-                presentInLocalizedNames(it->localizedFullName)
+                presentInLocalizedNames(it->localizedFullName, false)
 
                 // For some fonts, the full name is the exact same as the typographic family name,
                 // in which case, we want to ignore the full name.
-                || presentInLocalizedNames(it->localizedFontFamilies)) {
+                || presentInLocalizedNames(it->localizedFontFamilies, false)) {
+
 
                 break;
             } else {
@@ -1071,11 +1080,16 @@ KisForest<FontFamilyNode>::composition_iterator searchNodes (KisForest<FontFamil
 
         if (it->fontFamily.compare(family, Qt::CaseInsensitive) == 0
             || (!familySimplified.isEmpty() && it->fontFamily.compare(familySimplified, Qt::CaseInsensitive) == 0)
-            || presentInLocalizedNames(it->localizedFontFamilies)) {
+            || presentInLocalizedNames(it->localizedFontFamilies, false)) {
             break;
+        } else if (it->fontFamily.compare(family, Qt::CaseInsensitive) == 0
+                   || (!familySimplified.isEmpty() && it->fontFamily.compare(familySimplified, Qt::CaseInsensitive) == 0)
+                   || presentInLocalizedNames(it->localizedFontFamilies, true)) {
+                partialMatch = it;
+            continue;
         }
     }
-    return it;
+    return it != endIt? it: partialMatch != endIt? partialMatch: it;
 }
 
 std::optional<KoFontFamilyWWSRepresentation> KoFFWWSConverter::representationByFamilyName(const QString &familyName) const

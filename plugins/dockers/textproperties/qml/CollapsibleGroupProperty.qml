@@ -11,7 +11,7 @@ TextPropertyBase {
     id: root;
     property alias contentItem: contentItemContainer.data;
     property alias titleItem: titleItemContainer.data;
-    spacing: columnSpacing;
+    spacing: contentItemContainer.visible? columnSpacing: 0;
 
 
     GridLayout {

@@ -13,6 +13,7 @@ Column {
     property int firstColumnWidth: 32;
     property int columnSpacing: 5;
     padding: columnSpacing;
+    bottomPadding: 0;
     width: ListView.view? ListView.view.width - (padding * 2): 100;
     height: visible? implicitHeight: 0;
 
@@ -68,7 +69,7 @@ Column {
                 id: separator;
                 orientation: Qt.Horizontal;
                 width: parent && typeof parent != 'undefined'? parent.width: 100;
-                topPadding: parent.padding;
+                bottomPadding: 0;
                 }", root)
     }
 

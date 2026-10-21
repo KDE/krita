@@ -338,29 +338,32 @@ QMap<float, QPointF> KoGamutMappingUtils::getGamutCuspDescription(const KoColorP
 
 QPointF KoGamutMappingUtils::cuspForHue(const QMap<float, QPointF> &gamutCuspDescription, const float hue)
 {
-    QPointF cusp;
+    if (gamutCuspDescription.isEmpty()) return QPointF();
 
-    int foundAngle = -1;
+    float firstAngle = 0.0;
+    float secondAngle = 0.0;
 
-    for (int i = 0; i < gamutCuspDescription.size(); i++) {
-        if (hue < gamutCuspDescription.keys().at(i)) {
-            break;
-        }
-        foundAngle = i;
+    auto it = gamutCuspDescription.upperBound(hue);
+    if (it == gamutCuspDescription.begin()) {
+        firstAngle = gamutCuspDescription.lastKey();
+        secondAngle = gamutCuspDescription.firstKey();
+    } else if (it == gamutCuspDescription.end()) {
+        firstAngle = gamutCuspDescription.lastKey();
+        secondAngle = gamutCuspDescription.firstKey();
+    } else {
+        firstAngle = std::prev(it).key();
+        secondAngle = it.key();
     }
-    if (foundAngle < 0) foundAngle = gamutCuspDescription.size()-1;
-    const float angle = gamutCuspDescription.keys().at(foundAngle);
-    const float nextAngle = gamutCuspDescription.keys().value(foundAngle+1, gamutCuspDescription.keys().first());
+
+    const float angle = firstAngle;
+    const float nextAngle = secondAngle;
 
     QPointF lch1 = gamutCuspDescription.value(angle);
     QPointF lch2 = gamutCuspDescription.value(nextAngle);
-    float t = (hue - angle) / (nextAngle - angle);
-    if (hue < angle) {
-        t = (hue - angle + 1.0) / (nextAngle + 1.0 - angle);
-    }
-    cusp = QLineF(lch1, lch2).pointAt(t);
-
-    return cusp;
+    const float t = hue < angle
+        ? (hue - angle + 1.0) / (nextAngle + 1.0 - angle)
+        : (hue - angle) / (nextAngle - angle);
+    return QLineF(lch1, lch2).pointAt(t);
 }
 
 

@@ -102,11 +102,11 @@ Button {
                 completerView.applyHighlightedIndex();
             }
 
-            testInput();
+            testInput(true);
             resourceCmb.activated();
         }
         onTextChanged: {
-            testInput();
+            testInput(false);
         }
 
         onTextEdited: {
@@ -124,7 +124,7 @@ Button {
 
         warningTimeOut: activeFocus? 1000: 0;
 
-        function testInput() {
+        function testInput(adjustInput) {
             let test = resourceCmb.useFileName? modelWrapper.testFileName(text): modelWrapper.testName(text);
 
             if (typeof test === 'undefined') {
@@ -133,11 +133,13 @@ Button {
                 }
             } else {
                 stopWarning();
-                text = test;
-                if (resourceCmb.useFileName) {
-                    modelWrapper.resourceFilename = text;
-                } else {
-                    modelWrapper.resourceName = text;
+                if (adjustInput) {
+                    text = test;
+                    if (resourceCmb.useFileName) {
+                        modelWrapper.resourceFilename = text;
+                    } else {
+                        modelWrapper.resourceName = text;
+                    }
                 }
             }
         }

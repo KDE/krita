@@ -64,7 +64,7 @@ public:
         }
 
         QVector<float> originalChannels(m_sourceSpace->channelCount());
-        std::unique_ptr<quint8[]> tmpOriginal(new quint8(m_sourceSpace->pixelSize()));
+        std::unique_ptr<quint8[]> tmpOriginal(new quint8[m_sourceSpace->pixelSize()]);
         while (nPixels > 0) {
 
             m_sourceSpace->normalisedChannelsValue(srcU8, originalChannels);
@@ -132,7 +132,7 @@ public:
             KoGamutMappingUtils::PiecewiseFilmicCurve::fromUserParams(m_toeStrength, m_toeLength, m_shoulderStrength, m_shoulderLength, m_shoulderAngle);
 
         QVector<float> originalChannels(m_sourceSpace->channelCount());
-        std::unique_ptr<quint8[]> tmpOriginal(new quint8(m_sourceSpace->pixelSize()));
+        std::unique_ptr<quint8[]> tmpOriginal(new quint8[m_sourceSpace->pixelSize()]);
         while (nPixels > 0) {
             m_sourceSpace->normalisedChannelsValue(srcU8, originalChannels);
 

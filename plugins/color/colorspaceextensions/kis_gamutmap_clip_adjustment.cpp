@@ -139,9 +139,9 @@ public:
 
         QVector<float> originalChannels(m_sourceSpace->channelCount());
         QVector<float> clippedChannels(m_sourceSpace->channelCount());
-        std::unique_ptr<quint8[]> tmpOriginal(new quint8(m_sourceSpace->pixelSize()));
-        std::unique_ptr<quint8[]> tmpTarget (new quint8(targetSpace->pixelSize()));
-        std::unique_ptr<quint8[]> tmpClipped (new quint8(m_sourceSpace->pixelSize()));
+        std::unique_ptr<quint8[]> tmpOriginal(new quint8[m_sourceSpace->pixelSize()]);
+        std::unique_ptr<quint8[]> tmpTarget (new quint8[targetSpace->pixelSize()]);
+        std::unique_ptr<quint8[]> tmpClipped (new quint8[m_sourceSpace->pixelSize()]);
         std::array<qreal, 3> LCH {0.0, 0.0, 0.0};
 
         while (nPixels > 0) {

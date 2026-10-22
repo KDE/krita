@@ -15,42 +15,8 @@
 
 #include <KoColorSpace.h>
 
-#include <boost/container/static_vector.hpp>
+#include <KisRotatingCache.h>
 
-template <typename Key, typename Value, size_t CacheSize>
-class RotatingCache
-{
-public:
-    using CacheItem = std::pair<Key, Value>;
-public:
-    RotatingCache()
-        : m_storage()
-    {
-    }
-
-    void push(Key key, Value value) {
-        if (m_storage.size() == m_storage.max_size()) {
-            m_storage.erase(m_storage.begin());
-        }
-        m_storage.emplace_back(std::move(key), std::move(value));
-    }
-
-    inline std::optional<Value> find(const Key &key) const {
-        for (auto it = m_storage.begin(); it != m_storage.end(); ++it) {
-            if (it->first == key) {
-                return it->second;
-            }
-        }
-        return std::nullopt;
-    }
-
-    void clear() {
-        m_storage.clear();
-    }
-
-private:
-    boost::container::static_vector<CacheItem, CacheSize> m_storage;
-};
 
 struct KoColorConversionCacheKey {
 
@@ -86,7 +52,7 @@ struct KoColorConversionCache::Private {
     QMultiHash< KoColorConversionCacheKey, CachedTransformation*> cache;
     QMutex cacheMutex;
 
-    using PerThreadRotatingCache = RotatingCache<KoColorConversionCacheKey, KoCachedColorConversionTransformation, 4>;
+    using PerThreadRotatingCache = KisRotatingCache<KoColorConversionCacheKey, KoCachedColorConversionTransformation, 4>;
     QThreadStorage<PerThreadRotatingCache> fastStorage;
 };
 

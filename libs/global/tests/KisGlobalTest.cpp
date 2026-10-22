@@ -9,6 +9,7 @@
 #include "simpletest.h"
 
 #include "KisFileUtils.h"
+#include "KisRotatingCache.h"
 
 #include <QTest>
 
@@ -125,6 +126,30 @@ void KisGlobalTest::testDeduplicateFileName()
     const QString result = KritaUtils::deduplicateFileName(fileName, separator, fileAllowedCallback);
 
     QCOMPARE(result, expectedResult);
+}
+
+void KisGlobalTest::testRotatingCacheOverflow()
+{
+    KisRotatingCache<int, int, 3> cache;
+
+    cache.push(1, 1);
+    QCOMPARE(cache.find(1), std::make_optional(1));
+
+    cache.push(2, 2);
+    QCOMPARE(cache.find(1), std::make_optional(1));
+    QCOMPARE(cache.find(2), std::make_optional(2));
+
+    cache.push(3, 3);
+    QCOMPARE(cache.find(1), std::make_optional(1));
+    QCOMPARE(cache.find(2), std::make_optional(2));
+    QCOMPARE(cache.find(3), std::make_optional(3));
+
+    cache.push(4, 4);
+    QCOMPARE(cache.find(1), std::nullopt);
+    QCOMPARE(cache.find(2), std::make_optional(2));
+    QCOMPARE(cache.find(3), std::make_optional(3));
+    QCOMPARE(cache.find(4), std::make_optional(4));
+
 }
 
 SIMPLE_TEST_MAIN(KisGlobalTest);

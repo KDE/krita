@@ -633,5 +633,17 @@
         <file>light_rotate-brush-CCW-precise.svg</file>
         <file>light_rotate-brush-CCW.svg</file>
         <file>light_rotate-brush-CW.svg</file>
+        <file>dark_save-back-up.svg</file>
+        <file>dark_save-merged.svg</file>
+        <file>dark_save-version.svg</file>
+        <file>dark_save-layers.svg</file>
+        <file>dark_save-group-layers.svg</file>
+        <file>dark_save-as-vector.svg</file>
+        <file>light_save-as-vector.svg</file>
+        <file>light_save-group-layers.svg</file>
+        <file>light_save-merged.svg</file>
+        <file>light_save-layers.svg</file>
+        <file>light_save-version.svg</file>
+        <file>light_save-back-up.svg</file>
     </qresource>
 </RCC>

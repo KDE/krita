@@ -13,6 +13,43 @@
 
 #include <KoColorSpace.h>
 
+#include <boost/container/static_vector.hpp>
+
+template <typename Key, typename Value, size_t CacheSize>
+class RotatingCache
+{
+public:
+    using CacheItem = std::pair<Key, Value>;
+public:
+    RotatingCache()
+        : m_storage()
+    {
+    }
+
+    void push(Key key, Value value) {
+        if (m_storage.size() == m_storage.max_size()) {
+            m_storage.erase(m_storage.begin());
+        }
+        m_storage.emplace_back(std::move(key), std::move(value));
+    }
+
+    inline std::optional<Value> find(const Key &key) const {
+        for (auto it = m_storage.begin(); it != m_storage.end(); ++it) {
+            if (it->first == key) {
+                return it->second;
+            }
+        }
+        return std::nullopt;
+    }
+
+    void clear() {
+        m_storage.clear();
+    }
+
+private:
+    boost::container::static_vector<CacheItem, CacheSize> m_storage;
+};
+
 struct KoColorConversionCacheKey {
 
     KoColorConversionCacheKey(const KoColorSpace* _src,
@@ -43,31 +80,12 @@ uint qHash(const KoColorConversionCacheKey& key)
     return qHash(key.src) + qHash(key.dst) + qHash(key.renderingIntent) + qHash(key.conversionFlags);
 }
 
-struct KoColorConversionCache::CachedTransformation {
-
-    CachedTransformation(KoColorConversionTransformation* _transfo)
-        : transfo(_transfo), use(0)
-    {}
-
-    ~CachedTransformation() {
-        delete transfo;
-    }
-
-    bool isNotInUse() {
-        return !use;
-    }
-
-    KoColorConversionTransformation* transfo;
-    QAtomicInt use;
-};
-
-typedef QPair<KoColorConversionCacheKey, KoCachedColorConversionTransformation> FastPathCacheItem;
-
 struct KoColorConversionCache::Private {
     QMultiHash< KoColorConversionCacheKey, CachedTransformation*> cache;
     QMutex cacheMutex;
 
-    QThreadStorage<std::optional<FastPathCacheItem>> fastStorage;
+    using PerThreadRotatingCache = RotatingCache<KoColorConversionCacheKey, KoCachedColorConversionTransformation, 4>;
+    QThreadStorage<PerThreadRotatingCache> fastStorage;
 };
 
 
@@ -90,19 +108,17 @@ KoCachedColorConversionTransformation KoColorConversionCache::cachedConverter(co
 {
     KoColorConversionCacheKey key(src, dst, _renderingIntent, _conversionFlags);
 
-    std::optional<FastPathCacheItem> cacheItem;
+    std::optional<KoCachedColorConversionTransformation> cachedTransformation;
 
-    if (d->fastStorage.hasLocalData()) {
-        cacheItem = d->fastStorage.localData();
+    if (!d->fastStorage.hasLocalData()) {
+        d->fastStorage.setLocalData(Private::PerThreadRotatingCache());
+    } else {
+        cachedTransformation = d->fastStorage.localData().find(key);
     }
 
-    if (cacheItem) {
-        if (cacheItem->first == key) {
-            return cacheItem->second;
-        }
+    if (cachedTransformation) {
+        return *cachedTransformation;
     }
-
-    cacheItem = std::nullopt;
 
     QMutexLocker lock(&d->cacheMutex);
 
@@ -111,21 +127,23 @@ KoCachedColorConversionTransformation KoColorConversionCache::cachedConverter(co
         CachedTransformation* ct = it.value();
         ct->transfo->setSrcColorSpace(src);
         ct->transfo->setDstColorSpace(dst);
-        cacheItem.emplace(key, KoCachedColorConversionTransformation(ct));
+        cachedTransformation = KoCachedColorConversionTransformation(ct);
     } else {
         KoColorConversionTransformation* transfo = src->createColorConverter(dst, _renderingIntent, _conversionFlags);
         CachedTransformation* ct = new CachedTransformation(transfo);
         d->cache.insert(key, ct);
-        cacheItem.emplace(key, KoCachedColorConversionTransformation(ct));
+        cachedTransformation = KoCachedColorConversionTransformation(ct);
     }
+    d->fastStorage.localData().push(key, *cachedTransformation);
 
-    d->fastStorage.setLocalData(cacheItem);
-    return cacheItem->second;
+    return *cachedTransformation;
 }
 
 void KoColorConversionCache::colorSpaceIsDestroyed(const KoColorSpace* cs)
 {
-    d->fastStorage.setLocalData(std::nullopt);
+    if (d->fastStorage.hasLocalData()) {
+        d->fastStorage.localData().clear();
+    }
 
     QMutexLocker lock(&d->cacheMutex);
     QMultiHash< KoColorConversionCacheKey, CachedTransformation*>::iterator endIt = d->cache.end();
@@ -139,6 +157,25 @@ void KoColorConversionCache::colorSpaceIsDestroyed(const KoColorSpace* cs)
         }
     }
 }
+
+//--------- KoColorConversionCache::CachedTransformation ----------//
+
+KoColorConversionCache::CachedTransformation::CachedTransformation(KoColorConversionTransformation *_transfo)
+    : transfo(_transfo)
+    , use(0)
+{
+}
+
+KoColorConversionCache::CachedTransformation::~CachedTransformation()
+{
+    delete transfo;
+}
+
+bool KoColorConversionCache::CachedTransformation::isNotInUse()
+{
+    return !use;
+}
+
 
 //--------- KoCachedColorConversionTransformation ----------//
 
@@ -160,9 +197,3 @@ KoCachedColorConversionTransformation::~KoCachedColorConversionTransformation()
     Q_ASSERT(m_transfo->use > 0);
     m_transfo->use.deref();
 }
-
-const KoColorConversionTransformation* KoCachedColorConversionTransformation::transformation() const
-{
-    return m_transfo->transfo;
-}
-

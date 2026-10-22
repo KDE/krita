@@ -20,7 +20,14 @@ class KoColorSpace;
 class KoColorConversionCache
 {
 public:
-    struct CachedTransformation;
+    struct CachedTransformation {
+        CachedTransformation(KoColorConversionTransformation* _transfo);
+        ~CachedTransformation();
+        bool isNotInUse();
+
+        KoColorConversionTransformation* transfo;
+        QAtomicInt use;
+    };
 public:
     KoColorConversionCache();
     ~KoColorConversionCache();
@@ -66,7 +73,12 @@ public:
     KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation&);
     ~KoCachedColorConversionTransformation();
 public:
-    const KoColorConversionTransformation* transformation() const;
+    inline const KoColorConversionTransformation* transformation() const {
+        /**
+         * This function is extremely hot, so it should be inlined!
+         */
+        return m_transfo->transfo;
+    }
 private:
     KoColorConversionCache::CachedTransformation* m_transfo;
 };

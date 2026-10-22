@@ -434,8 +434,8 @@ public:
         bool alreadyWarn = false;
         bool alreadyErr = false;
 
-        for (auto &el : writerPool) {
-            if (el.inUse && !el.writer->isActive()) {
+        for (int i = 0; i < writerPool.count(); i++) {
+            if (writerPool[i].inUse && !writerPool[i].writer->isActive()) {
                 // There's a pending job, but the writer didn't recieve the signal yet
 
                 // Wait until all the jobs processes
@@ -444,8 +444,10 @@ public:
                 // Make sure the signals are delivered
                 QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
-                //we can exit the loop, all the signals have been delivered and we don't need to check further
-                break;
+                //Iterate over and over to make 100% sure that everything is processed
+                i = 0;
+                //Additional waiting JUST in case
+                QThread::currentThread()->msleep(100);
             }
         }
 

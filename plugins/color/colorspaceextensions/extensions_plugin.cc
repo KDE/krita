@@ -19,6 +19,8 @@
 #include "kis_burnshadows_adjustment.h"
 #include "kis_color_balance_adjustment.h"
 #include "kis_desaturate_adjustment.h"
+#include "kis_gamutmap_clip_adjustment.h"
+#include "kis_tonemap_adjustment.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(ExtensionsPluginFactory, "krita_colorspaces_extensions_plugin.json", registerPlugin<ExtensionsPlugin>();)
 
@@ -39,6 +41,9 @@ ExtensionsPlugin::ExtensionsPlugin(QObject *parent, const QVariantList &)
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisColorBalanceAdjustmentFactory);
 
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisDesaturateAdjustmentFactory);
+
+    KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisGamutMapClipAdjustmentFactory);
+    KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisToneMapAdjustmentFactory);
 }
 
 ExtensionsPlugin::~ExtensionsPlugin()

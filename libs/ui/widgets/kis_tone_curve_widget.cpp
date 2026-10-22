@@ -46,6 +46,11 @@ public:
     QPainter        painter2;
     QPixmap         pixmap;
     QPixmap         curvemap;
+
+    QStringList     xAxisValues;
+    QStringList     yAxisValues;
+    int prefYBias{20};
+    int prefXBias{32};
 };
 
 KisToneCurveWidget::KisToneCurveWidget(QWidget *parent) :
@@ -93,6 +98,17 @@ void KisToneCurveWidget::setProfileDataAvailable(bool dataAvailable)
 {
     d->profileDataAvailable = dataAvailable;
 }
+
+void KisToneCurveWidget::setXAxisValues(const QStringList &values, const int offset) {
+    d->xAxisValues = values;
+    d->prefYBias = offset;
+}
+
+void KisToneCurveWidget::setYAxisValues(const QStringList &values, const int offset) {
+    d->yAxisValues = values;
+    d->prefXBias = offset;
+}
+
 int KisToneCurveWidget::grids(double val) const
 {
     return (int) floor(val * d->gridside + 0.5);
@@ -132,13 +148,14 @@ void KisToneCurveWidget::drawGrid()
         int xstart = (y * (d->pxcols - 1)) / 10;
         int ystart = (y * (d->pxrows - 1)) / 10;
  
-        QTextStream(&s) << y;
+        QTextStream(&s) << d->xAxisValues.value(y, QString::number(y));
         biasedLine(xstart, d->pxrows - grids(1), xstart,   d->pxrows - grids(4));
-        biasedText(xstart - grids(11), d->pxrows + grids(15), s);
- 
-        QTextStream(&s) << 10 - y;
+        biasedText(xstart - grids(floor(float(d->prefYBias)/2)), d->pxrows + grids(15), s);
+
+        QString s2;
+        QTextStream(&s2)  << d->yAxisValues.value(10-y, QString::number(10 - y));
         biasedLine(0, ystart, grids(3), ystart);
-        biasedText(grids(-25), ystart + grids(5), s);
+        biasedText(grids(-(d->prefXBias-7)), ystart + grids(5), s2);
     }
     
     d->painter.setPen(qRgb(128, 128, 128));
@@ -174,8 +191,8 @@ void KisToneCurveWidget::updatePixmap()
         static_cast<int>(d->pixmap.height() / d->pixmap.devicePixelRatioF());
 
     d->gridside = (qMin(pixcols, pixrows)) / 512.0;
-    d->xBias    = grids(32);
-    d->yBias    = grids(20);
+    d->xBias    = grids(d->prefXBias); ///< Offset from the left.
+    d->yBias    = grids(d->prefYBias); ///< Offset from the bottom.
     d->pxcols   = pixcols - d->xBias;
     d->pxrows   = pixrows - d->yBias;
 

@@ -9,8 +9,16 @@ set( extensions_plugin_SOURCES
     kis_burnshadows_adjustment.cpp
     kis_color_balance_adjustment.cpp
     kis_desaturate_adjustment.cpp
+    kis_gamutmap_clip_adjustment.cpp
+    kis_tonemap_adjustment.cpp
 )
 
 kis_add_library(krita_colorspaces_extensions MODULE ${extensions_plugin_SOURCES})
+
+target_sources(krita_colorspaces_extensions
+  PRIVATE
+    kis_gamutmap_clip_adjustment.h kis_gamutmap_clip_adjustment.cpp
+    kis_tonemap_adjustment.h kis_tonemap_adjustment.cpp
+)
 target_link_libraries(krita_colorspaces_extensions kritapigment kritaglobal ${LINK_OPENEXR_LIB} KF${KF_MAJOR}::I18n KF${KF_MAJOR}::CoreAddons)
 install( TARGETS krita_colorspaces_extensions DESTINATION ${KRITA_PLUGIN_INSTALL_DIR} )

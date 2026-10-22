@@ -15,6 +15,8 @@ class KisGlobalTest : public QObject
 private Q_SLOTS:
     void testDeduplicateFileName_data();
     void testDeduplicateFileName();
+
+    void testRotatingCacheOverflow();
 };
 
 #endif // KISGLOBALTEST_H

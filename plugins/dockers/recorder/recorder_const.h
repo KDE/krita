@@ -16,6 +16,7 @@ namespace RecorderConst
 {
 
 constexpr int waitThreadTimeoutMs = 30000;
+const QString recorderMetaDataName = "krita-timelapse-metadata.txt";
 
 QRegularExpression snapshotFilePatternFor(const QString &extension);
 

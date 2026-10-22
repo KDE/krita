@@ -640,7 +640,7 @@ bool RecorderWriterManager::stop(bool toggleEnabled, bool saveState)
     // This function is called in a lot of places, so we need to save state very slectively to avoid huge performance
     // losses
     if (saveState) {
-      this->saveState();
+        this->saveState();
     }
 
     d->timer.stop();
@@ -833,37 +833,19 @@ void RecorderWriterManager::onToolPrimaryActionActivated(bool activated)
 //Need to save the region, so that there are no jumps when stopping and resuming the recording
 void RecorderWriterManager::saveRegion()
 {
-    const QString filename = "region";
-    QDir dir(d->outputDir);
+    const QString filename = RecorderConst::recorderMetaDataName;
+    auto config = KSharedConfig ::openConfig(d->outputDir.filePath(RecorderConst::recorderMetaDataName));
+    KConfigGroup cfg = KConfigGroup(config, "");
 
-    QFile file(dir.filePath(filename));
-
-    if (!file.open(QIODevice::WriteOnly)) {
-        return;
-    }
-
-    QDataStream out(&file);
-    out << d->oldRegion;
-
-    file.close();
+    cfg.writeEntry("region", d->oldRegion);
 }
 
 void RecorderWriterManager::tryRestoreRegion()
 {
-    const QString filename = "region";
-    QDir dir(d->outputDir);
+    auto config = KSharedConfig ::openConfig(d->outputDir.filePath(RecorderConst::recorderMetaDataName));
+    KConfigGroup cfg = KConfigGroup(config, "");
 
-    QFile file(dir.filePath(filename));
-
-    if (!file.open(QIODevice::ReadOnly)) {
-        d->oldRegion = QRect(-1, -1, -1, -1);
-        return;
-    }
-
-    QDataStream out(&file);
-    out >> d->oldRegion;
-
-    file.close();
+    d->oldRegion = cfg.readEntry("region", QRect(-1, -1, -1, -1));
 }
 
 void RecorderWriterManager::saveState()
@@ -890,42 +872,26 @@ void RecorderWriterManager::saveState()
         fileNames.push_back(filePathForIndex(i, "", d->settings.format));
     }
 
-    QFile file(d->outputDir.filePath(filename));
+    auto config = KSharedConfig ::openConfig(d->outputDir.filePath(RecorderConst::recorderMetaDataName));
+    KConfigGroup cfg = KConfigGroup(config, "");
 
-    if (!file.open(QIODevice::WriteOnly)) {
-        return;
-    }
-
-    QDataStream out(&file);
-    out << fileNames;
-
-    file.close();
+    cfg.writeEntry("tails", fileNames);
 }
 
 void RecorderWriterManager::restoreState()
 {
     tryRestoreRegion();
+    auto config = KSharedConfig ::openConfig(d->outputDir.filePath(RecorderConst::recorderMetaDataName));
+    KConfigGroup cfg = KConfigGroup(config, "");
+    
+    QStringList fileNames = cfg.readEntry("tails", QStringList());
 
-    // Remove all tail frames
-    const QString filename = "tail";
-
-    QStringList fileNames;
-
-    QFile file(d->outputDir.filePath(filename));
-
-    if (!file.exists()) {
+    if (fileNames.isEmpty()) {
         return;
     }
 
-    if (!file.open(QIODevice::ReadOnly)) {
-        return;
-    }
-
-    QDataStream out(&file);
-    out >> fileNames;
-
-    file.close();
-    d->outputDir.remove(filename);
+    //Clear it out if the tail is not generated next time
+    cfg.writeEntry("tails", QStringList());
 
     Q_FOREACH (QString name, fileNames) {
         d->outputDir.remove(name);

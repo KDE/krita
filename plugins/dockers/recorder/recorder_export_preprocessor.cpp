@@ -10,6 +10,8 @@
 #include <QRegularExpression>
 #include <algorithm>
 #include <QRegion>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 struct RecorderExportPreprocessor::Private {
     QDir directory;
@@ -28,43 +30,19 @@ struct RecorderExportPreprocessor::Private {
 
     void getTail()
     {
-        if (!directory.exists())
-            return;
+        auto config = KSharedConfig ::openConfig(directory.filePath(RecorderConst::recorderMetaDataName));
+        KConfigGroup cfg = KConfigGroup(config, "");
 
-        const QString filename = "tail";
-
-        QFile file(directory.filePath(filename));
-
-        if (!file.exists()) {
-            return;
-        }
-
-        if (!file.open(QIODevice::ReadOnly)) {
-            return;
-        }
-
-        tails.clear();
-        QDataStream out(&file);
-        out >> tails;
+        tails = cfg.readEntry("tails", QStringList());
     }
 
     void saveTail()
     {
-        if (!directory.exists())
-            return;
+        auto config = KSharedConfig ::openConfig(directory.filePath(RecorderConst::recorderMetaDataName));
+        KConfigGroup cfg = KConfigGroup(config, "");
 
-        const QString filename = "tail";
+        cfg.writeEntry("tails", tails);
 
-        QFile file(directory.filePath(filename));
-
-        if (!file.open(QIODevice::WriteOnly)) {
-            return;
-        }
-
-        QDataStream out(&file);
-        out << tails;
-
-        file.close();
         tails.clear();
     }
 };

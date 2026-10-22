@@ -3090,7 +3090,7 @@
       <statusTip/>
     </Action>
     <Action name="save_node_as_image">
-      <icon>document-save</icon>
+      <icon>save-layers</icon>
       <text>&amp;Save Layer/Mask...</text>
       <whatsThis/>
       <toolTip>Save Layer/Mask</toolTip>
@@ -3102,7 +3102,7 @@
       <statusTip/>
     </Action>
     <Action name="save_vector_node_to_svg">
-      <icon>document-save</icon>
+      <icon>save-as-vector</icon>
       <text>Save Vector Layer as SVG...</text>
       <whatsThis/>
       <toolTip>Save Vector Layer as SVG</toolTip>
@@ -3114,7 +3114,7 @@
       <statusTip/>
     </Action>
     <Action name="save_groups_as_images">
-      <icon>document-save</icon>
+      <icon>save-group-layers</icon>
       <text>Save &amp;Group Layers...</text>
       <whatsThis/>
       <toolTip>Save Group Layers</toolTip>
@@ -3282,7 +3282,7 @@
       <statusTip/>
     </Action>
     <Action name="split_alpha_save_merged">
-      <icon>document-save</icon>
+      <icon>save-merged</icon>
       <text>&amp;Save Merged...</text>
       <whatsThis/>
       <toolTip>Save Merged</toolTip>

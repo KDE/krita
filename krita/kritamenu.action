@@ -161,7 +161,7 @@
       <statusTip></statusTip>
     </Action>    
     <Action name="save_incremental_version">
-      <icon></icon>
+      <icon>save-version</icon>
       <text>Save Incremental &amp;Version</text>
       <whatsThis></whatsThis>
       <toolTip>Save Incremental Version</toolTip>
@@ -173,7 +173,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="save_incremental_backup">
-      <icon></icon>
+      <icon>save-back-up</icon>
       <text>Save Incremental &amp;Backup</text>
       <whatsThis></whatsThis>
       <toolTip>Save Incremental Backup</toolTip>

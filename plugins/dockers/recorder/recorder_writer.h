@@ -91,7 +91,7 @@ Q_SIGNALS:
     void capturingDone(int writerId, bool success);
 
 public Q_SLOTS:
-    void onCaptureImage(int writerId, int index, QVector<QRect> regions, KisPaintDeviceSP device);
+    void onCaptureImage(int index, QVector<QRect> regions, KisPaintDeviceSP device);
 
 private:
     bool onCaptureImageImpl(int index, QRect region, KisPaintDevice* device);
@@ -158,8 +158,6 @@ Q_SIGNALS:
     void frameWriteFailed();
     void lowPerformanceWarning();
     void recorderStopWarning();
-
-    void startCapturing(int writerId, int index, QVector<QRect> regions, KisPaintDeviceSP device);
 
 private Q_SLOTS:
     void onTimer();

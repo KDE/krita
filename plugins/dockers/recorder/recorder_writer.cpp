@@ -331,11 +331,8 @@ bool RecorderWriter::isActive()
     return d->isActive;
 }
 
-void RecorderWriter::onCaptureImage(int writerId, int index, QVector<QRect> regions, KisPaintDeviceSP device)
+void RecorderWriter::onCaptureImage(int index, QVector<QRect> regions, KisPaintDeviceSP device)
 {
-    if (static_cast<int>(id) != writerId)
-        return;
-
     d->isActive = true;
 
     // Sanity check
@@ -446,15 +443,12 @@ public:
 
                 //Iterate over and over to make 100% sure that everything is processed
                 i = 0;
-                //Additional waiting JUST in case
-                QThread::currentThread()->msleep(100);
             }
         }
 
         for (auto &el : writerPool) {
             el.thread->quit();
             el.thread->wait(RecorderConst::waitThreadTimeoutMs);
-            disconnect(q, SIGNAL(startCapturing(int, int, QVector<QRect>, KisPaintDeviceSP)), el.writer.get(), SLOT(onCaptureImage(int, int, QVector<QRect>, KisPaintDeviceSP)));
             disconnect(el.writer.get(), SIGNAL(capturingDone(int, bool)), q, SLOT(onCapturingDone(int, bool)));
             if (el.thread->isRunning())
             {
@@ -485,7 +479,7 @@ public:
         return result;
     }
 
-    void enlargeWriterPool()
+    void createWriters()
     {
         writerPool.reserve(recorderThreads.get());
         while (static_cast<int>(recorderThreads.get()) > writerPool.size()) {
@@ -498,7 +492,6 @@ public:
             auto writerPtr = writerPool[newWorkerId].writer;
             auto threadPtr = writerPool[newWorkerId].thread;
             threadPtr->setObjectName(QString("Krita-Recorder-WriterPool#%1").arg(newWorkerId));
-            connect(q, SIGNAL(startCapturing(int, int,  QVector<QRect>, KisPaintDeviceSP)), writerPtr.get(), SLOT(onCaptureImage(int, int, QVector<QRect>, KisPaintDeviceSP)));
             connect(writerPtr.get(), SIGNAL(capturingDone(int, bool)), q, SLOT(onCapturingDone(int, bool)));
             writerPtr->moveToThread(threadPtr.get());
             threadPtr->start(QThread::IdlePriority);
@@ -624,7 +617,7 @@ void RecorderWriterManager::start(bool toggleEnabled, bool restoreState)
     } else {
         d->interval = static_cast<int>(qMax(d->settings.captureInterval, .1) * 1000.0);
     }
-    d->enlargeWriterPool();
+    d->createWriters();
     d->timer.start(d->interval);
     if (toggleEnabled) {
         Q_EMIT started();
@@ -776,12 +769,12 @@ void RecorderWriterManager::onTimer()
     }
 
     RecorderImageCopyingJob *job =
-        new RecorderImageCopyingJob(d->canvas->image()->projection(), copyArea, d->freeWriterId, ++d->partIndex, rects);
+        new RecorderImageCopyingJob(d->canvas->image()->projection(), copyArea, ++d->partIndex, rects);
 
     connect(job,
-            SIGNAL(sigImageCopyingDoneWithData(int, int, QVector<QRect>, KisPaintDeviceSP)),
-            this,
-            SIGNAL(startCapturing(int, int, QVector<QRect>, KisPaintDeviceSP)));
+            SIGNAL(sigImageCopyingDoneWithData(int, QVector<QRect>, KisPaintDeviceSP)),
+            d->writerPool[d->freeWriterId].writer.data(),
+            SLOT(onCaptureImage( int, QVector<QRect>, KisPaintDeviceSP)));
 
     d->canvas->image()->addSpontaneousJob(job);
 

@@ -8,11 +8,9 @@
 
 RecorderImageCopyingJob::RecorderImageCopyingJob(KisPaintDeviceSP device,
                                                  const QRect &rect,
-                                                 int writerId,
                                                  int partIndex,
                                                  QVector<QRect> regions)
     : m_device(device)
-    , m_writerId(writerId)
     , m_partIndex(partIndex)
     , m_area(rect)
     , m_regions(regions)
@@ -28,7 +26,7 @@ void RecorderImageCopyingJob::run()
     m_outputDevice = new KisPaintDevice(m_device->colorSpace());
     m_outputDevice->makeCloneFromRough(m_device, m_area);
 
-    Q_EMIT sigImageCopyingDoneWithData(m_writerId, m_partIndex, m_regions, m_outputDevice);
+    Q_EMIT sigImageCopyingDoneWithData(m_partIndex, m_regions, m_outputDevice);
 }
 
 bool RecorderImageCopyingJob::overrides(const KisSpontaneousJob *_otherJob)

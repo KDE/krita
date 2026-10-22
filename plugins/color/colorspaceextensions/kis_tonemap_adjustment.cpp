@@ -19,32 +19,28 @@
 namespace {
 
 struct XYZLuminanceModel {
-    static ALWAYS_INLINE float luminance (const QVector<float> channels) {
-        return channels[1];
+    static ALWAYS_INLINE float luminance (const float *xyzChannels) {
+        return xyzChannels[1];
     }
 
-    static ALWAYS_INLINE QVector<float> setLuminance(const QVector<float> channels, const float luminance) {
-        QVector<float> newChannels = channels;
-        float sum = channels[0]+channels[1]+channels[2];
-        float x = channels[0]/sum;
-        float y = channels[1]/sum;
-        float Y = luminance;
-        newChannels[0] = (x*Y)/y;
-        newChannels[1] = Y;
-        newChannels[2] = ((1.0-x-y)*Y)/y;
-        return newChannels;
+    static ALWAYS_INLINE void setLuminance(float *xyzChannels, const float luminance) {
+        const float sum = xyzChannels[0] + xyzChannels[1] + xyzChannels[2];
+        const float x = xyzChannels[0] / sum;
+        const float y = xyzChannels[1] / sum;
+        const float Y = luminance;
+        xyzChannels[0] = (x*Y)/y;
+        xyzChannels[1] = Y;
+        xyzChannels[2] = ((1.0-x-y)*Y)/y;
     }
 };
 
 struct LABLuminanceModel {
-    static ALWAYS_INLINE float luminance (const QVector<float> channels) {
-        return powf(channels[0], 3.0);
+    static ALWAYS_INLINE float luminance (const float *labChannels) {
+        return powf(labChannels[0], 3.0);
     }
 
-    static ALWAYS_INLINE QVector<float> setLuminance(const QVector<float> channels, const float luminance) {
-        QVector<float> newChannels = channels;
-        newChannels[0] = cbrtf(luminance);
-        return newChannels;
+    static ALWAYS_INLINE void setLuminance(float *labChannels, const float luminance) {
+        labChannels[0] = cbrtf(luminance);
     }
 };
 
@@ -69,9 +65,9 @@ public:
 
             m_sourceSpace->normalisedChannelsValue(srcU8, originalChannels);
 
-            float Y = LuminanceModel::luminance(originalChannels);
+            float Y = LuminanceModel::luminance(originalChannels.data());
             Y = KoGamutMappingUtils::reinhardToneMapping(Y, m_maxWhite);
-            originalChannels = LuminanceModel::setLuminance(originalChannels, Y);
+            LuminanceModel::setLuminance(originalChannels.data(), Y);
 
             m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
             memcpy(dstU8, tmpOriginal.get(), m_sourceSpace->pixelSize());
@@ -136,9 +132,9 @@ public:
         while (nPixels > 0) {
             m_sourceSpace->normalisedChannelsValue(srcU8, originalChannels);
 
-            float Y = LuminanceModel::luminance(originalChannels);
+            float Y = LuminanceModel::luminance(originalChannels.data());
             Y = curve.evalCurve(Y);
-            originalChannels = LuminanceModel::setLuminance(originalChannels, Y);
+            LuminanceModel::setLuminance(originalChannels.data(), Y);
 
             m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
             memcpy(dstU8, tmpOriginal.get(), m_sourceSpace->pixelSize());

@@ -27,24 +27,23 @@ namespace
 
 
 struct xyzToOkLabModel {
-    static ALWAYS_INLINE std::array<qreal, 3> toLCH (const QVector<float> &channels) {
-        const QVector4D OkLab = KoGamutMappingUtils::XYZToOkLab(QVector4D(channels[0], channels[1], channels[2], 0.0));
+    static ALWAYS_INLINE std::array<qreal, 3> toLCH (const float* xyzChannels) {
+        const QVector4D OkLab = KoGamutMappingUtils::XYZToOkLab(QVector4D(xyzChannels[0], xyzChannels[1], xyzChannels[2], 0.0));
         std::array<qreal, 3> lch {0.0, 0.0, 0.0};
         LabToLCH(OkLab.x(), OkLab.y()+0.5, OkLab.z()+0.5, &lch[0], &lch[1], &lch[2]);
         return lch;
     }
 
-    static ALWAYS_INLINE QVector<float> fromLCH (const std::array<qreal, 3> &lch, QVector<float> channels) {
+    static ALWAYS_INLINE void fromLCH (const std::array<qreal, 3> &lch, float *xyzChannels) {
         std::array<qreal, 3> output {0.0, 0.0, 0.0};
         LCHToLab(lch[0], lch[1], lch[2], &output[0], &output[1], &output[2]);
 
         const QVector4D xyz = KoGamutMappingUtils::OkLabToXYZ(QVector4D(output[0], output[1]-0.5, output[2]-0.5, 0.0));
-        channels[0] = xyz.x();
-        channels[1] = xyz.y();
-        channels[2] = xyz.z();
+        xyzChannels[0] = xyz.x();
+        xyzChannels[1] = xyz.y();
+        xyzChannels[2] = xyz.z();
 
         //qDebug() << "lch" << lch << "col" << color << "lmsprime" << lmsPrime << "lms" << lms << "xyz" << channels;
-        return channels;
     }
 
     static ALWAYS_INLINE float cuberootLightness(float lightness) {
@@ -53,8 +52,8 @@ struct xyzToOkLabModel {
 };
 
 struct xyzToICtCpModel {
-    static ALWAYS_INLINE std::array<qreal, 3> toLCH (const QVector<float> &channels) {
-        QVector4D color (channels[0], channels[1], channels[2], 0.0);
+    static ALWAYS_INLINE std::array<qreal, 3> toLCH (const float *xyzChannels) {
+        QVector4D color (xyzChannels[0], xyzChannels[1], xyzChannels[2], 1.0);
         const QVector4D ICtCp = KoGamutMappingUtils::XYZToICtCp(color);
         std::array<qreal, 3> lch {0.0, 0.0, 0.0};
         LabToLCH(ICtCp.x(), (ICtCp.y()+0.5), (ICtCp.z()+0.5), &lch[0], &lch[1], &lch[2]);
@@ -62,18 +61,17 @@ struct xyzToICtCpModel {
         return lch;
     }
 
-    static ALWAYS_INLINE QVector<float> fromLCH (const std::array<qreal, 3> &lch, QVector<float> channels) {
+    static ALWAYS_INLINE void fromLCH (const std::array<qreal, 3> &lch, float *xyzChannels) {
         std::array<qreal, 3> output {0.0, 0.0, 0.0};
         LCHToLab(lch[0], lch[1], lch[2], &output[0], &output[1], &output[2]);
 
 
         QVector4D color (output[0], output[1]-0.5, output[2]-0.5, 0.0);
         const QVector4D xyz = KoGamutMappingUtils::ICtCpToXYZ(color);
-        channels[0] = xyz.x();
-        channels[1] = xyz.y();
-        channels[2] = xyz.z();
+        xyzChannels[0] = xyz.x();
+        xyzChannels[1] = xyz.y();
+        xyzChannels[2] = xyz.z();
 
-        return channels;
     }
 
     static ALWAYS_INLINE float cuberootLightness(float lightness) {
@@ -82,19 +80,18 @@ struct xyzToICtCpModel {
 };
 
 struct labModel {
-    static ALWAYS_INLINE std::array<qreal, 3> toLCH (const QVector<float> &channels) {
+    static ALWAYS_INLINE std::array<qreal, 3> toLCH (const float *labChannels) {
         std::array<qreal, 3> lch {0.0, 0.0, 0.0};
-        LabToLCH(channels[0], channels[1], channels[2], &lch[0], &lch[1], &lch[2]);
+        LabToLCH(labChannels[0], labChannels[1], labChannels[2], &lch[0], &lch[1], &lch[2]);
         return lch;
     }
 
-    static ALWAYS_INLINE QVector<float> fromLCH (const std::array<qreal, 3> &lch, QVector<float> channels) {
+    static ALWAYS_INLINE void fromLCH (const std::array<qreal, 3> &lch, float *labChannels) {
         std::array<qreal, 3> output {0.0, 0.0, 0.0};
         LCHToLab(lch[0], lch[1], lch[2], &output[0], &output[1], &output[2]);
-        channels[0] = output[0];
-        channels[1] = output[1];
-        channels[2] = output[2];
-        return channels;
+        labChannels[0] = output[0];
+        labChannels[1] = output[1];
+        labChannels[2] = output[2];
     }
 
     static ALWAYS_INLINE float cuberootLightness(float lightness) {
@@ -150,12 +147,12 @@ public:
             m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
 
             if (greyscale) {
-                LCH = ModelType::toLCH(originalChannels);
+                LCH = ModelType::toLCH(originalChannels.data());
                 LCH[1] = 0;
-                originalChannels = ModelType::fromLCH(LCH, originalChannels);
+                ModelType::fromLCH(LCH, originalChannels.data());
                 m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
             } else if (!m_cuspDescription.isEmpty()) {
-                LCH = ModelType::toLCH(originalChannels);
+                LCH = ModelType::toLCH(originalChannels.data());
                 QPointF cusp = KoGamutMappingUtils::cuspForHue(m_cuspDescription, LCH[2]);
 
                        /// We are treating the cusp triangle as linear inside the SDR standard range.
@@ -177,7 +174,7 @@ public:
                     const float c = qMax(0.0, cusp.x()*t);
                     LCH[1] = qMin(LCH[1], qreal(c));
                 }
-                originalChannels = ModelType::fromLCH(LCH, originalChannels);
+                ModelType::fromLCH(LCH, originalChannels.data());
                 m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
             } else {
                 m_sourceSpace->convertPixelsTo(tmpOriginal.get(), tmpTarget.get(), targetSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
@@ -186,29 +183,29 @@ public:
                 m_sourceSpace->normalisedChannelsValue(tmpClipped.get(), clippedChannels);
 
                 if (DifferenceType::difference(originalChannels, clippedChannels) > 0.02) {
-                LCH = ModelType::toLCH(originalChannels);
+                    LCH = ModelType::toLCH(originalChannels.data());
 
-                     float min = 0;
-                     float max = LCH[1];
+                    float min = 0;
+                    float max = LCH[1];
 
-                     while (max-min > 0.0001) {
+                    while (max-min > 0.0001) {
 
-                         LCH[1] = (max + min) * 0.5;
-                         originalChannels = ModelType::fromLCH(LCH, originalChannels);
+                        LCH[1] = (max + min) * 0.5;
+                        ModelType::fromLCH(LCH, originalChannels.data());
 
 
-                         m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
-                         m_sourceSpace->convertPixelsTo(tmpOriginal.get(), tmpTarget.get(), targetSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
-                         targetSpace->convertPixelsTo(tmpTarget.get(), tmpClipped.get(), m_sourceSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
-                         m_sourceSpace->normalisedChannelsValue(tmpClipped.get(), clippedChannels);
+                        m_sourceSpace->fromNormalisedChannelsValue(tmpOriginal.get(), originalChannels);
+                        m_sourceSpace->convertPixelsTo(tmpOriginal.get(), tmpTarget.get(), targetSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
+                        targetSpace->convertPixelsTo(tmpTarget.get(), tmpClipped.get(), m_sourceSpace, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
+                        m_sourceSpace->normalisedChannelsValue(tmpClipped.get(), clippedChannels);
 
-                         if (DifferenceType::difference(originalChannels, clippedChannels) < 0.02) {
-                             min = LCH[1];
-                         } else {
-                             max = LCH[1];
-                         }
-                     }
-                 }
+                        if (DifferenceType::difference(originalChannels, clippedChannels) < 0.02) {
+                            min = LCH[1];
+                        } else {
+                            max = LCH[1];
+                        }
+                    }
+                }
             }
 
             memcpy(dstU8, tmpOriginal.get(), m_sourceSpace->pixelSize());

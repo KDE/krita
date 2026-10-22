@@ -6,6 +6,8 @@
 
 #include "KoColorConversionCache.h"
 
+#include <kis_assert.h>
+
 #include <QList>
 #include <QMutex>
 #include <QMutexLocker>
@@ -95,6 +97,10 @@ KoColorConversionCache::KoColorConversionCache() : d(new Private)
 
 KoColorConversionCache::~KoColorConversionCache()
 {
+    if (d->fastStorage.hasLocalData()) {
+        d->fastStorage.localData().clear();
+    }
+
     Q_FOREACH (CachedTransformation* transfo, d->cache) {
         delete transfo;
     }
@@ -186,14 +192,34 @@ KoCachedColorConversionTransformation::KoCachedColorConversionTransformation(KoC
     m_transfo->use.ref();
 }
 
-KoCachedColorConversionTransformation::KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation& rhs)
+KoCachedColorConversionTransformation::KoCachedColorConversionTransformation(KoCachedColorConversionTransformation &&rhs)
+    : m_transfo(rhs.m_transfo)
+{
+    rhs.m_transfo = nullptr;
+}
+
+KoCachedColorConversionTransformation::KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation &rhs)
     : m_transfo(rhs.m_transfo)
 {
     m_transfo->use.ref();
 }
 
+KoCachedColorConversionTransformation& KoCachedColorConversionTransformation::operator=(const KoCachedColorConversionTransformation &rhs)
+{
+    m_transfo = rhs.m_transfo;
+    m_transfo->use.ref();
+    return *this;
+}
+KoCachedColorConversionTransformation& KoCachedColorConversionTransformation::operator=(KoCachedColorConversionTransformation &&rhs)
+{
+    std::swap(m_transfo, rhs.m_transfo);
+    return *this;
+}
+
 KoCachedColorConversionTransformation::~KoCachedColorConversionTransformation()
 {
-    Q_ASSERT(m_transfo->use > 0);
-    m_transfo->use.deref();
+    if (m_transfo) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_transfo->use > 0);
+        m_transfo->use.deref();
+    }
 }

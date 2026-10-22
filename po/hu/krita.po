@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-21 00:49+0000\n"
+"POT-Creation-Date: 2026-10-22 00:48+0000\n"
 "PO-Revision-Date: 2026-08-12 15:01+0200\n"
 "Last-Translator: Benedek Péter <benedekppeter@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -16610,7 +16610,7 @@ msgstr "Paraméter módosítása"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:315
+#: libs/flake/tools/KoPathTool.cpp:316
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Átalakítás útvonallá"
@@ -16885,7 +16885,7 @@ msgstr "Egy egyszerű útvonalalakzat"
 msgid "%1 Options"
 msgstr "%1 beállításai"
 
-#: libs/flake/KoToolManager.cpp:605
+#: libs/flake/KoToolManager.cpp:620
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Aktív eszköz: %1"
@@ -20735,41 +20735,41 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Szakasz módosítása"
 
-#: libs/flake/tools/KoPathTool.cpp:131
+#: libs/flake/tools/KoPathTool.cpp:132
 #, kde-format
 msgid "Edit Shape"
 msgstr "Alakzat szerkesztése"
 
-#: libs/flake/tools/KoPathTool.cpp:645
+#: libs/flake/tools/KoPathTool.cpp:646
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Húzza a fogantyú mozgatásához."
 
-#: libs/flake/tools/KoPathTool.cpp:699
+#: libs/flake/tools/KoPathTool.cpp:700
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "Húzza a pont mozgatásához. Shift+kattintás a ponttípus módosításához."
 
-#: libs/flake/tools/KoPathTool.cpp:701
+#: libs/flake/tools/KoPathTool.cpp:702
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Húzza a vezérlőpont mozgatásához."
 
-#: libs/flake/tools/KoPathTool.cpp:724
+#: libs/flake/tools/KoPathTool.cpp:725
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Húzza a görbe közvetlen módosításához. Dupla kattintás új útvonalpont "
 "beszúrásához."
 
-#: libs/flake/tools/KoPathTool.cpp:734
+#: libs/flake/tools/KoPathTool.cpp:735
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr ""
 "Nyomja meg a(z) %1 gombot az útvonal megszakításához a kijelölt pontnál."
 
-#: libs/flake/tools/KoPathTool.cpp:736
+#: libs/flake/tools/KoPathTool.cpp:737
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
@@ -22429,7 +22429,7 @@ msgid "Clone Layer"
 msgstr "Klónréteg"
 
 #: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:700
-#: libs/ui/kis_node_manager.cpp:1629
+#: libs/ui/kis_node_manager.cpp:1634
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -22473,7 +22473,7 @@ msgid "Transform Mask"
 msgstr "Átalakító maszk"
 
 #: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
-#: libs/ui/kis_node_manager.cpp:1391
+#: libs/ui/kis_node_manager.cpp:1396
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:599
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -24077,7 +24077,7 @@ msgstr "Ki"
 #: libs/pigment/resources/KoColorSet.cpp:1528
 #: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1170
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -24130,8 +24130,8 @@ msgstr "Helyi erőforrások"
 #: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:506
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
-#: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
-#: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1230
+#: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1321
+#: libs/ui/kis_node_manager.cpp:1384 libs/ui/KisApplication.cpp:1230
 #: libs/ui/KisApplication.cpp:1233 libs/ui/KisApplication.cpp:1249
 #: libs/ui/KisApplication.cpp:1281 libs/ui/KisApplication.cpp:1295
 #: libs/ui/KisApplication.cpp:1323 libs/ui/KisDocument.cpp:1057
@@ -24146,7 +24146,7 @@ msgstr "Helyi erőforrások"
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:686 libs/ui/KisView.cpp:1173
+#: libs/ui/KisView.cpp:689 libs/ui/KisView.cpp:1176
 #: libs/ui/KisWelcomePageWidget.cpp:728 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
@@ -25013,7 +25013,7 @@ msgid "Select All"
 msgstr "Összes kijelölése"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:167
-#: libs/ui/KisView.cpp:781
+#: libs/ui/KisView.cpp:784
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Kitöltőréteg"
@@ -25075,7 +25075,7 @@ msgid "Paste shapes"
 msgstr "Alakzatok beillesztése"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:263
-#: libs/ui/actions/KisPasteActionFactories.cpp:331 libs/ui/KisView.cpp:594
+#: libs/ui/actions/KisPasteActionFactories.cpp:331 libs/ui/KisView.cpp:597
 #, kde-format
 msgid "(pasted)"
 msgstr "(beillesztve)"
@@ -28278,7 +28278,7 @@ msgstr "Várakozás a meglévő képkocka-generálási folyamat befejezésére..
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:167
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
-#: libs/ui/input/kis_tool_invocation_action.cpp:44
+#: libs/ui/input/kis_tool_invocation_action.cpp:45
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:272
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
@@ -28754,7 +28754,7 @@ msgstr "Munkamenet átnevezése"
 msgid "New name:"
 msgstr "Új név:"
 
-#: libs/ui/flake/kis_shape_controller.cpp:235
+#: libs/ui/flake/kis_shape_controller.cpp:237
 #, kde-format
 msgid "Vector Layer %1"
 msgstr "Vektorréteg %1"
@@ -33839,7 +33839,7 @@ msgid "Edit Mouse Wheel Input"
 msgstr "Egérgörgő-bemenet szerkesztése"
 
 #: libs/ui/input/kis_abstract_input_action.cpp:39
-#: libs/ui/input/kis_tool_invocation_action.cpp:42
+#: libs/ui/input/kis_tool_invocation_action.cpp:43
 #, kde-format
 msgid "Activate"
 msgstr "Aktiválás"
@@ -34405,12 +34405,12 @@ msgstr ""
 msgid "Snapped Angle"
 msgstr "Zárószög:"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:38
+#: libs/ui/input/kis_tool_invocation_action.cpp:39
 #, kde-format
 msgid "Tool Invocation"
 msgstr "Eszközhívás"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:39
+#: libs/ui/input/kis_tool_invocation_action.cpp:40
 #, kde-format
 msgid ""
 "The <i>Tool Invocation</i> action invokes the current tool, for example, "
@@ -34419,68 +34419,68 @@ msgstr ""
 "Az <i>Eszközhívás</i> művelet meghívja az aktuális eszközt, például az ecset "
 "eszköz használatakor elkezdi a festést."
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:43
+#: libs/ui/input/kis_tool_invocation_action.cpp:44
 #, kde-format
 msgid "Confirm"
 msgstr "Megerősítés"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:45
+#: libs/ui/input/kis_tool_invocation_action.cpp:46
 #, kde-format
 msgid "Activate Line Tool"
 msgstr "Vonal eszköz aktiválása"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:46
+#: libs/ui/input/kis_tool_invocation_action.cpp:47
 #, kde-format
 msgid "Activate Ellipse Tool"
 msgstr "Ellipszis eszköz aktiválása"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:47
+#: libs/ui/input/kis_tool_invocation_action.cpp:48
 #, kde-format
 msgid "Activate Rectangle Tool"
 msgstr "Téglalap eszköz aktiválása"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:48
+#: libs/ui/input/kis_tool_invocation_action.cpp:49
 #: libs/ui/input/KisTouchGestureAction.cpp:34
 #, kde-format
 msgid "Activate Move Tool"
 msgstr "Mozgatás eszköz aktiválása"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:49
+#: libs/ui/input/kis_tool_invocation_action.cpp:50
 #, kde-format
 msgid "Activate Fill Tool"
 msgstr "Kitöltés eszköz aktiválása"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:50
+#: libs/ui/input/kis_tool_invocation_action.cpp:51
 #, kde-format
 msgid "Activate Gradient Tool"
 msgstr "Színátmenet eszköz aktiválása"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:51
+#: libs/ui/input/kis_tool_invocation_action.cpp:52
 #, kde-format
 msgid "Activate Measure Tool"
 msgstr "Mérőeszköz aktiválása"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:52
+#: libs/ui/input/kis_tool_invocation_action.cpp:53
 #, kde-format
 msgid "Activate Elliptical Selection Tool"
 msgstr "Elliptikus kijelölő eszköz aktiválása"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:53
+#: libs/ui/input/kis_tool_invocation_action.cpp:54
 #, kde-format
 msgid "Activate Rectangular Selection Tool"
 msgstr "Téglalap alakú kijelölő eszköz aktiválása"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:54
+#: libs/ui/input/kis_tool_invocation_action.cpp:55
 #, kde-format
 msgid "Activate Contiguous Selection Tool"
 msgstr "Összefüggő terület kijelölő eszköz aktiválása"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:55
+#: libs/ui/input/kis_tool_invocation_action.cpp:56
 #, kde-format
 msgid "Activate Freehand Selection Tool"
 msgstr "Szabadkézi kijelölő eszköz aktiválása"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:56
+#: libs/ui/input/kis_tool_invocation_action.cpp:57
 #, kde-format
 msgid "Activate with Other Color"
 msgstr "Aktiválás a másik színnel"
@@ -34770,7 +34770,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Fájlréteg módosítása"
 
-#: libs/ui/kis_clipboard.cc:507 libs/ui/KisView.cpp:687
+#: libs/ui/kis_clipboard.cc:507 libs/ui/KisView.cpp:690
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -35128,79 +35128,79 @@ msgstr "Nézet tükrözése a kurzor körül"
 msgid "Mirror View Around Canvas"
 msgstr "Nézet tükrözése a rajzvászon körül"
 
-#: libs/ui/kis_node_manager.cpp:486
+#: libs/ui/kis_node_manager.cpp:491
 #, kde-format
 msgid "Layer is locked"
 msgstr "A réteg zárolt"
 
-#: libs/ui/kis_node_manager.cpp:488 libs/ui/kis_node_manager.cpp:513
+#: libs/ui/kis_node_manager.cpp:493 libs/ui/kis_node_manager.cpp:518
 #, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "A(z) \"%1\" réteg zárolva"
 
-#: libs/ui/kis_node_manager.cpp:541
+#: libs/ui/kis_node_manager.cpp:546
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Csomópontok mozgatása"
 
-#: libs/ui/kis_node_manager.cpp:548
+#: libs/ui/kis_node_manager.cpp:553
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Csomópontok másolása"
 
-#: libs/ui/kis_node_manager.cpp:555
+#: libs/ui/kis_node_manager.cpp:560
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "Csomópontok hozzáadása"
 
-#: libs/ui/kis_node_manager.cpp:727
+#: libs/ui/kis_node_manager.cpp:732
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Átalakítás kijelölési maszkká"
 
-#: libs/ui/kis_node_manager.cpp:773
+#: libs/ui/kis_node_manager.cpp:778
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr "Referenciakép létrehozása az aktív rétegből sikertelen."
 
-#: libs/ui/kis_node_manager.cpp:774
+#: libs/ui/kis_node_manager.cpp:779
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Referenciakép létrehozása a látható rajzvászonból sikertelen."
 
-#: libs/ui/kis_node_manager.cpp:1029
+#: libs/ui/kis_node_manager.cpp:1034
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Az onion skin funkcióhoz átlátszó hátterű réteg szükséges."
 
-#: libs/ui/kis_node_manager.cpp:1056
+#: libs/ui/kis_node_manager.cpp:1061
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Csomópontok kettőzése"
 
-#: libs/ui/kis_node_manager.cpp:1081
+#: libs/ui/kis_node_manager.cpp:1086
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Csomópontok feljebb helyezése"
 
-#: libs/ui/kis_node_manager.cpp:1090
+#: libs/ui/kis_node_manager.cpp:1095
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Csomópontok lejjebb helyezése"
 
-#: libs/ui/kis_node_manager.cpp:1110
+#: libs/ui/kis_node_manager.cpp:1115
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Csomópontok eltávolítása"
 
-#: libs/ui/kis_node_manager.cpp:1126
+#: libs/ui/kis_node_manager.cpp:1131
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Maszk tükrözése vízszintesen"
 
-#: libs/ui/kis_node_manager.cpp:1129
+#: libs/ui/kis_node_manager.cpp:1134
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -35208,12 +35208,12 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Réteg tükrözése vízszintesen"
 msgstr[1] "%1 réteg tükrözése vízszintesen"
 
-#: libs/ui/kis_node_manager.cpp:1140
+#: libs/ui/kis_node_manager.cpp:1145
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Maszk tükrözése függőlegesen"
 
-#: libs/ui/kis_node_manager.cpp:1143
+#: libs/ui/kis_node_manager.cpp:1148
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -35221,50 +35221,50 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Réteg tükrözése függőlegesen"
 msgstr[1] "%1 réteg tükrözése függőlegesen"
 
-#: libs/ui/kis_node_manager.cpp:1151
+#: libs/ui/kis_node_manager.cpp:1156
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Összes réteg tükrözése vízszintesen"
 
-#: libs/ui/kis_node_manager.cpp:1158
+#: libs/ui/kis_node_manager.cpp:1163
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Összes réteg tükrözése függőlegesen"
 
-#: libs/ui/kis_node_manager.cpp:1290
+#: libs/ui/kis_node_manager.cpp:1295
 #, kde-format
 msgid "Export \"%1\""
 msgstr "\"%1\" exportálása"
 
-#: libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_node_manager.cpp:1322
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "A réteg mentése sikertelen. %1"
 
-#: libs/ui/kis_node_manager.cpp:1335
+#: libs/ui/kis_node_manager.cpp:1340
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "A réteg nem tartalmaz pixeladatokat"
 
-#: libs/ui/kis_node_manager.cpp:1359
+#: libs/ui/kis_node_manager.cpp:1364
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Exportálás SVG-be"
 
-#: libs/ui/kis_node_manager.cpp:1379
+#: libs/ui/kis_node_manager.cpp:1384
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Az SVG-be történő mentés sikertelen: %1"
 
-#: libs/ui/kis_node_manager.cpp:1404
+#: libs/ui/kis_node_manager.cpp:1409
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "A(z) %1 réteg nem szerkeszthető"
 
-#: libs/ui/kis_node_manager.cpp:1405
+#: libs/ui/kis_node_manager.cpp:1410
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -35273,49 +35273,49 @@ msgstr ""
 "Nem sikerült írni a(z) \"%1\" szülőréteg alfa csatornáját.\n"
 "A művelet meg lesz szakítva."
 
-#: libs/ui/kis_node_manager.cpp:1436
+#: libs/ui/kis_node_manager.cpp:1441
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Alfa írása egy rétegbe"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1581
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Csomópontok kivágása"
 
-#: libs/ui/kis_node_manager.cpp:1659
+#: libs/ui/kis_node_manager.cpp:1664
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Gyors csoportosítás"
 
-#: libs/ui/kis_node_manager.cpp:1670
+#: libs/ui/kis_node_manager.cpp:1675
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Gyors vágócsoport"
 
-#: libs/ui/kis_node_manager.cpp:1677
+#: libs/ui/kis_node_manager.cpp:1682
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Vágócsoport"
 
-#: libs/ui/kis_node_manager.cpp:1678
+#: libs/ui/kis_node_manager.cpp:1683
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Maszkréteg"
 
-#: libs/ui/kis_node_manager.cpp:1705
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Nem sikerült átmozgatni a(z) \"%1\" réteget a(z) \"%2\" új szülőbe"
 
-#: libs/ui/kis_node_manager.cpp:1708
+#: libs/ui/kis_node_manager.cpp:1713
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Nem sikerült átmozgatni a(z) \"%1\" réteget a gyökérrétegbe"
 
-#: libs/ui/kis_node_manager.cpp:1716
+#: libs/ui/kis_node_manager.cpp:1721
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Gyors csoportbontás"
@@ -35736,7 +35736,7 @@ msgctxt "<color space> <image profile>"
 msgid "%1  %2"
 msgstr "%1  %2"
 
-#: libs/ui/kis_zoom_manager.cc:256
+#: libs/ui/kis_zoom_manager.cc:254
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
@@ -37193,27 +37193,27 @@ msgstr "Nincs elérhető kép."
 msgid "Use This Template"
 msgstr "Ezen sablon használata"
 
-#: libs/ui/KisView.cpp:756
+#: libs/ui/KisView.cpp:759
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "A kiválasztott rétegtípuson nem lehet színeket húzással áthelyezni."
 
-#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool_utils.cpp:420
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:420
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "A réteg zárolt és láthatatlan."
 
-#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool_utils.cpp:422
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:422
 #, kde-format
 msgid "Layer is locked."
 msgstr "A réteg zárolt."
 
-#: libs/ui/KisView.cpp:768 libs/ui/tool/kis_tool_utils.cpp:424
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:424
 #, kde-format
 msgid "Layer is invisible."
 msgstr "A réteg láthatatlan."
 
-#: libs/ui/KisView.cpp:1174
+#: libs/ui/KisView.cpp:1177
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -37221,80 +37221,80 @@ msgid ""
 msgstr ""
 "<p>A(z) <b>'%1'</b> dokumentum megváltozott.</p><p>El szeretné menteni?</p>"
 
-#: libs/ui/KisView.cpp:1248
+#: libs/ui/KisView.cpp:1251
 #, kde-format
 msgid "Write Protected"
 msgstr "Írásvédett"
 
-#: libs/ui/KisView.cpp:1252
+#: libs/ui/KisView.cpp:1255
 #, kde-format
 msgid "Recovered"
 msgstr "Helyreállított"
 
-#: libs/ui/KisView.cpp:1354
+#: libs/ui/KisView.cpp:1357
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "A próbanyomat nem működik lebegőpontos módban."
 
-#: libs/ui/KisView.cpp:1359
+#: libs/ui/KisView.cpp:1362
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Próbanyomat bekapcsolva."
 
-#: libs/ui/KisView.cpp:1361
+#: libs/ui/KisView.cpp:1364
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Próbanyomat kikapcsolva."
 
-#: libs/ui/KisView.cpp:1373
+#: libs/ui/KisView.cpp:1376
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "A színtér figyelmeztetések nem működnek lebegőpontos módban."
 
-#: libs/ui/KisView.cpp:1379
+#: libs/ui/KisView.cpp:1382
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Gamut-figyelmeztetések bekapcsolva."
 
-#: libs/ui/KisView.cpp:1381
+#: libs/ui/KisView.cpp:1384
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "De a próbanyomat még mindig ki van kapcsolva."
 
-#: libs/ui/KisView.cpp:1384
+#: libs/ui/KisView.cpp:1387
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Gamut-figyelmeztetések kikapcsolva."
 
-#: libs/ui/KisViewManager.cpp:810
+#: libs/ui/KisViewManager.cpp:816
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Aktív szerzői profil"
 
-#: libs/ui/KisViewManager.cpp:934
+#: libs/ui/KisViewManager.cpp:945
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (másolat)"
 
-#: libs/ui/KisViewManager.cpp:1060 libs/ui/KisViewManager.cpp:1128
+#: libs/ui/KisViewManager.cpp:1071 libs/ui/KisViewManager.cpp:1139
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Az alternatív nevek elfogytak, próbálja manuálisan menteni nagyobb számmal"
 
-#: libs/ui/KisViewManager.cpp:1060
+#: libs/ui/KisViewManager.cpp:1071
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "A növekményes verzió mentése sikertelen"
 
-#: libs/ui/KisViewManager.cpp:1128
+#: libs/ui/KisViewManager.cpp:1139
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "A növekményes biztonsági mentés elmentése sikertelen"
 
-#: libs/ui/KisViewManager.cpp:1412
+#: libs/ui/KisViewManager.cpp:1423
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -37303,13 +37303,13 @@ msgstr ""
 "Váltás Csak rajzvászon módba.\n"
 "Nyomja meg a(z) %1 billentyűt a visszalépéshez."
 
-#: libs/ui/KisViewManager.cpp:1482
+#: libs/ui/KisViewManager.cpp:1493
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Erőforrásmappa megnyitása"
 
-#: libs/ui/KisViewManager.cpp:1486
+#: libs/ui/KisViewManager.cpp:1497
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -37334,19 +37334,19 @@ msgstr ""
 "<p><b>Privát alkalmazáshely</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1501
+#: libs/ui/KisViewManager.cpp:1512
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Megnyitás a &felhasználói AppData-ban"
 
-#: libs/ui/KisViewManager.cpp:1502
+#: libs/ui/KisViewManager.cpp:1513
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Megnyitás a &privát alkalmazáshelyen"
 
-#: libs/ui/KisViewManager.cpp:1650 libs/ui/KisViewManager.cpp:1668
+#: libs/ui/KisViewManager.cpp:1661 libs/ui/KisViewManager.cpp:1679
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -38548,32 +38548,32 @@ msgstr "A csoport nem szerkeszthető."
 msgid "Color sampler does not work on this layer."
 msgstr "A színmintavevő nem működik ezen a rétegen."
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:27
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:29
 #, kde-format
 msgid "Increase Brush Size"
 msgstr "Ecsetméret növelése"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:34
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:36
 #, kde-format
 msgid "Decrease Brush Size"
 msgstr "Ecsetméret csökkentése"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:43
 #, kde-format
 msgid "Rotate brush tip clockwise"
 msgstr "Ecsethegy forgatása az óramutató járásával egyezően"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:49
 #, kde-format
 msgid "Rotate brush tip clockwise (precise)"
 msgstr "Ecsethegy forgatása az óramutató járásával egyezően (precíz)"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:55
 #, kde-format
 msgid "Rotate brush tip counter-clockwise"
 msgstr "Ecsethegy forgatása az óramutató járásával ellentétesen"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:61
 #, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
 msgstr "Ecsethegy forgatása az óramutató járásával ellentétesen (precíz)"
@@ -38584,13 +38584,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "\"%1\" szűrő"
 
-#: libs/ui/toolbox/KoToolBox.cpp:360 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:362 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Alapértelmezett"
 
-#: libs/ui/toolbox/KoToolBox.cpp:367
+#: libs/ui/toolbox/KoToolBox.cpp:369
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -41299,7 +41299,7 @@ msgstr "Bal oldali behúzás"
 msgid "Right indent"
 msgstr "Jobb oldali behúzás"
 
-#: libs/widgets/KoToolDocker.cpp:148
+#: libs/widgets/KoToolDocker.cpp:149
 #, kde-format
 msgid "Tool Options"
 msgstr "Eszközbeállítások"
@@ -68712,7 +68712,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr "Minden beállított szövegtulajdonság eltávolítása a kijelölésből."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:315
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

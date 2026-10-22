@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-21 00:49+0000\n"
+"POT-Creation-Date: 2026-10-22 00:48+0000\n"
 "PO-Revision-Date: 2026-06-11 17:03+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -16581,7 +16581,7 @@ msgstr "變更參數"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:315
+#: libs/flake/tools/KoPathTool.cpp:316
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "轉成路徑"
@@ -16866,7 +16866,7 @@ msgstr "一個簡單路徑形狀"
 msgid "%1 Options"
 msgstr "%1的選項"
 
-#: libs/flake/KoToolManager.cpp:605
+#: libs/flake/KoToolManager.cpp:620
 #, kde-format
 msgid "Active tool: %1"
 msgstr "使用中工具：%1"
@@ -20911,39 +20911,39 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "變更線段"
 
-#: libs/flake/tools/KoPathTool.cpp:131
+#: libs/flake/tools/KoPathTool.cpp:132
 #, kde-format
 msgid "Edit Shape"
 msgstr "編輯形狀"
 
-#: libs/flake/tools/KoPathTool.cpp:645
+#: libs/flake/tools/KoPathTool.cpp:646
 #, kde-format
 msgid "Drag to move handle."
 msgstr "拖曳以移動控制柄。"
 
-#: libs/flake/tools/KoPathTool.cpp:699
+#: libs/flake/tools/KoPathTool.cpp:700
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "拖曳以移動點。Shift + 點一下以變更點類型。"
 
-#: libs/flake/tools/KoPathTool.cpp:701
+#: libs/flake/tools/KoPathTool.cpp:702
 #, kde-format
 msgid "Drag to move control point."
 msgstr "拖曳以移動控制點。"
 
-#: libs/flake/tools/KoPathTool.cpp:724
+#: libs/flake/tools/KoPathTool.cpp:725
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr "拖曳以直接修改曲線。點兩下插入新路徑點。"
 
-#: libs/flake/tools/KoPathTool.cpp:734
+#: libs/flake/tools/KoPathTool.cpp:735
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected point."
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr "按下 B 以在選取點斷開路徑。"
 
-#: libs/flake/tools/KoPathTool.cpp:736
+#: libs/flake/tools/KoPathTool.cpp:737
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected segments."
 msgctxt "%1 is a shortcut to be pressed"
@@ -22594,7 +22594,7 @@ msgid "Clone Layer"
 msgstr "再製圖層"
 
 #: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:700
-#: libs/ui/kis_node_manager.cpp:1629
+#: libs/ui/kis_node_manager.cpp:1634
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -22638,7 +22638,7 @@ msgid "Transform Mask"
 msgstr "變形遮罩"
 
 #: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
-#: libs/ui/kis_node_manager.cpp:1391
+#: libs/ui/kis_node_manager.cpp:1396
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:599
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -24251,7 +24251,7 @@ msgstr "輸出"
 #: libs/pigment/resources/KoColorSet.cpp:1528
 #: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1170
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -24304,8 +24304,8 @@ msgstr "本機資源"
 #: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:506
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
-#: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
-#: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1230
+#: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1321
+#: libs/ui/kis_node_manager.cpp:1384 libs/ui/KisApplication.cpp:1230
 #: libs/ui/KisApplication.cpp:1233 libs/ui/KisApplication.cpp:1249
 #: libs/ui/KisApplication.cpp:1281 libs/ui/KisApplication.cpp:1295
 #: libs/ui/KisApplication.cpp:1323 libs/ui/KisDocument.cpp:1057
@@ -24320,7 +24320,7 @@ msgstr "本機資源"
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:686 libs/ui/KisView.cpp:1173
+#: libs/ui/KisView.cpp:689 libs/ui/KisView.cpp:1176
 #: libs/ui/KisWelcomePageWidget.cpp:728 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
@@ -25192,7 +25192,7 @@ msgid "Select All"
 msgstr "全部選取"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:167
-#: libs/ui/KisView.cpp:781
+#: libs/ui/KisView.cpp:784
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "浸漫填充圖層"
@@ -25254,7 +25254,7 @@ msgid "Paste shapes"
 msgstr "貼上形狀"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:263
-#: libs/ui/actions/KisPasteActionFactories.cpp:331 libs/ui/KisView.cpp:594
+#: libs/ui/actions/KisPasteActionFactories.cpp:331 libs/ui/KisView.cpp:597
 #, kde-format
 msgid "(pasted)"
 msgstr "(已貼上)"
@@ -28457,7 +28457,7 @@ msgstr "等待完成進行中的影格生成程序……"
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:167
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
-#: libs/ui/input/kis_tool_invocation_action.cpp:44
+#: libs/ui/input/kis_tool_invocation_action.cpp:45
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:272
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
@@ -28923,7 +28923,7 @@ msgstr "重新命名工作階段"
 msgid "New name:"
 msgstr "新名稱："
 
-#: libs/ui/flake/kis_shape_controller.cpp:235
+#: libs/ui/flake/kis_shape_controller.cpp:237
 #, kde-format
 msgid "Vector Layer %1"
 msgstr "向量圖層 %1"
@@ -33914,7 +33914,7 @@ msgid "Edit Mouse Wheel Input"
 msgstr "編輯滑鼠滾輪輸入"
 
 #: libs/ui/input/kis_abstract_input_action.cpp:39
-#: libs/ui/input/kis_tool_invocation_action.cpp:42
+#: libs/ui/input/kis_tool_invocation_action.cpp:43
 #, kde-format
 msgid "Activate"
 msgstr "啟動"
@@ -34486,12 +34486,12 @@ msgstr ""
 msgid "Snapped Angle"
 msgstr "結束角度："
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:38
+#: libs/ui/input/kis_tool_invocation_action.cpp:39
 #, kde-format
 msgid "Tool Invocation"
 msgstr "切換工具"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:39
+#: libs/ui/input/kis_tool_invocation_action.cpp:40
 #, kde-format
 msgid ""
 "The <i>Tool Invocation</i> action invokes the current tool, for example, "
@@ -34500,68 +34500,68 @@ msgstr ""
 "<b>切換工具</b>操作透過長按特定按鍵暫時切換到另一個工具。例如在使用筆刷工具時"
 "按住 V 即可暫時使用直線工具，放開 V 即可還原繼續使用筆刷繪畫。"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:43
+#: libs/ui/input/kis_tool_invocation_action.cpp:44
 #, kde-format
 msgid "Confirm"
 msgstr "確認"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:45
+#: libs/ui/input/kis_tool_invocation_action.cpp:46
 #, kde-format
 msgid "Activate Line Tool"
 msgstr "啟動直線工具"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:46
+#: libs/ui/input/kis_tool_invocation_action.cpp:47
 #, kde-format
 msgid "Activate Ellipse Tool"
 msgstr "啟動橢圓工具"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:47
+#: libs/ui/input/kis_tool_invocation_action.cpp:48
 #, kde-format
 msgid "Activate Rectangle Tool"
 msgstr "啟動矩形工具"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:48
+#: libs/ui/input/kis_tool_invocation_action.cpp:49
 #: libs/ui/input/KisTouchGestureAction.cpp:34
 #, kde-format
 msgid "Activate Move Tool"
 msgstr "啟動移動工具"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:49
+#: libs/ui/input/kis_tool_invocation_action.cpp:50
 #, kde-format
 msgid "Activate Fill Tool"
 msgstr "啟動填充工具"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:50
+#: libs/ui/input/kis_tool_invocation_action.cpp:51
 #, kde-format
 msgid "Activate Gradient Tool"
 msgstr "啟動漸變工具"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:51
+#: libs/ui/input/kis_tool_invocation_action.cpp:52
 #, kde-format
 msgid "Activate Measure Tool"
 msgstr "啟動測量工具"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:52
+#: libs/ui/input/kis_tool_invocation_action.cpp:53
 #, kde-format
 msgid "Activate Elliptical Selection Tool"
 msgstr "啟動橢圓選取區域工具"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:53
+#: libs/ui/input/kis_tool_invocation_action.cpp:54
 #, kde-format
 msgid "Activate Rectangular Selection Tool"
 msgstr "啟動矩形選取區域工具"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:54
+#: libs/ui/input/kis_tool_invocation_action.cpp:55
 #, kde-format
 msgid "Activate Contiguous Selection Tool"
 msgstr "啟動相連選取區域工具"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:55
+#: libs/ui/input/kis_tool_invocation_action.cpp:56
 #, kde-format
 msgid "Activate Freehand Selection Tool"
 msgstr "啟動手繪選取區域工具"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:56
+#: libs/ui/input/kis_tool_invocation_action.cpp:57
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgid "Activate with Other Color"
@@ -34850,7 +34850,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "變更檔案圖層"
 
-#: libs/ui/kis_clipboard.cc:507 libs/ui/KisView.cpp:687
+#: libs/ui/kis_clipboard.cc:507 libs/ui/KisView.cpp:690
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -35219,143 +35219,143 @@ msgstr "以游標為中心鏡像顯示"
 msgid "Mirror View Around Canvas"
 msgstr "以畫布為中心鏡像顯示"
 
-#: libs/ui/kis_node_manager.cpp:486
+#: libs/ui/kis_node_manager.cpp:491
 #, kde-format
 msgid "Layer is locked"
 msgstr "已鎖定圖層"
 
-#: libs/ui/kis_node_manager.cpp:488 libs/ui/kis_node_manager.cpp:513
+#: libs/ui/kis_node_manager.cpp:493 libs/ui/kis_node_manager.cpp:518
 #, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "已鎖定圖層「%1」"
 
-#: libs/ui/kis_node_manager.cpp:541
+#: libs/ui/kis_node_manager.cpp:546
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "移動節點"
 
-#: libs/ui/kis_node_manager.cpp:548
+#: libs/ui/kis_node_manager.cpp:553
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "複製節點"
 
-#: libs/ui/kis_node_manager.cpp:555
+#: libs/ui/kis_node_manager.cpp:560
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "新增節點"
 
-#: libs/ui/kis_node_manager.cpp:727
+#: libs/ui/kis_node_manager.cpp:732
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "轉成選取區域遮罩"
 
-#: libs/ui/kis_node_manager.cpp:773
+#: libs/ui/kis_node_manager.cpp:778
 #, fuzzy, kde-format
 #| msgid "Could not load reference image from clipboard"
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr "無法從剪貼簿載入參考圖"
 
-#: libs/ui/kis_node_manager.cpp:774
+#: libs/ui/kis_node_manager.cpp:779
 #, fuzzy, kde-format
 #| msgid "Could not load reference image from clipboard"
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "無法從剪貼簿載入參考圖"
 
-#: libs/ui/kis_node_manager.cpp:1029
+#: libs/ui/kis_node_manager.cpp:1034
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "洋蔥皮功能需要在透明背景的圖層上使用。"
 
-#: libs/ui/kis_node_manager.cpp:1056
+#: libs/ui/kis_node_manager.cpp:1061
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "複製節點"
 
-#: libs/ui/kis_node_manager.cpp:1081
+#: libs/ui/kis_node_manager.cpp:1086
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "升高節點"
 
-#: libs/ui/kis_node_manager.cpp:1090
+#: libs/ui/kis_node_manager.cpp:1095
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "降低節點"
 
-#: libs/ui/kis_node_manager.cpp:1110
+#: libs/ui/kis_node_manager.cpp:1115
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "刪除節點"
 
-#: libs/ui/kis_node_manager.cpp:1126
+#: libs/ui/kis_node_manager.cpp:1131
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "水平翻轉遮罩"
 
-#: libs/ui/kis_node_manager.cpp:1129
+#: libs/ui/kis_node_manager.cpp:1134
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "水平翻轉 %1 個圖層"
 
-#: libs/ui/kis_node_manager.cpp:1140
+#: libs/ui/kis_node_manager.cpp:1145
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "垂直翻轉遮罩"
 
-#: libs/ui/kis_node_manager.cpp:1143
+#: libs/ui/kis_node_manager.cpp:1148
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "垂直翻轉 %1 個圖層"
 
-#: libs/ui/kis_node_manager.cpp:1151
+#: libs/ui/kis_node_manager.cpp:1156
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "水平翻轉所有圖層"
 
-#: libs/ui/kis_node_manager.cpp:1158
+#: libs/ui/kis_node_manager.cpp:1163
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "垂直翻轉所有圖層"
 
-#: libs/ui/kis_node_manager.cpp:1290
+#: libs/ui/kis_node_manager.cpp:1295
 #, kde-format
 msgid "Export \"%1\""
 msgstr "匯出「%1」"
 
-#: libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_node_manager.cpp:1322
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "無法儲存圖層。%1"
 
-#: libs/ui/kis_node_manager.cpp:1335
+#: libs/ui/kis_node_manager.cpp:1340
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "圖層沒有像素資料"
 
-#: libs/ui/kis_node_manager.cpp:1359
+#: libs/ui/kis_node_manager.cpp:1364
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "匯出為 SVG"
 
-#: libs/ui/kis_node_manager.cpp:1379
+#: libs/ui/kis_node_manager.cpp:1384
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "無法儲存為 SVG：%1"
 
-#: libs/ui/kis_node_manager.cpp:1404
+#: libs/ui/kis_node_manager.cpp:1409
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "圖層 %1 不可編輯"
 
-#: libs/ui/kis_node_manager.cpp:1405
+#: libs/ui/kis_node_manager.cpp:1410
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -35364,49 +35364,49 @@ msgstr ""
 "無法寫入父圖層「%1」的 Alpha (透明度) 通道。\n"
 "操作將被取消。"
 
-#: libs/ui/kis_node_manager.cpp:1436
+#: libs/ui/kis_node_manager.cpp:1441
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "寫入 Alpha (透明度) 到圖層"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1581
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "剪下節點"
 
-#: libs/ui/kis_node_manager.cpp:1659
+#: libs/ui/kis_node_manager.cpp:1664
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "快速建立群組"
 
-#: libs/ui/kis_node_manager.cpp:1670
+#: libs/ui/kis_node_manager.cpp:1675
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "快速建立裁剪群組"
 
-#: libs/ui/kis_node_manager.cpp:1677
+#: libs/ui/kis_node_manager.cpp:1682
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "裁剪群組"
 
-#: libs/ui/kis_node_manager.cpp:1678
+#: libs/ui/kis_node_manager.cpp:1683
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "遮罩圖層"
 
-#: libs/ui/kis_node_manager.cpp:1705
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "無法移動圖層「%1」到上級圖層「%2」之下"
 
-#: libs/ui/kis_node_manager.cpp:1708
+#: libs/ui/kis_node_manager.cpp:1713
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "無法移動圖層「%1」到根圖層之下"
 
-#: libs/ui/kis_node_manager.cpp:1716
+#: libs/ui/kis_node_manager.cpp:1721
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "快速拆散群組"
@@ -35830,7 +35830,7 @@ msgctxt "<color space> <image profile>"
 msgid "%1  %2"
 msgstr "%1  %2"
 
-#: libs/ui/kis_zoom_manager.cc:256
+#: libs/ui/kis_zoom_manager.cc:254
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
@@ -37269,106 +37269,106 @@ msgstr "無可用圖片。"
 msgid "Use This Template"
 msgstr "使用此範本"
 
-#: libs/ui/KisView.cpp:756
+#: libs/ui/KisView.cpp:759
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "不能將色塊拖放到選定的圖層類型上。"
 
-#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool_utils.cpp:420
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:420
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "圖層已鎖定且不可見。"
 
-#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool_utils.cpp:422
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:422
 #, kde-format
 msgid "Layer is locked."
 msgstr "圖層已鎖定。"
 
-#: libs/ui/KisView.cpp:768 libs/ui/tool/kis_tool_utils.cpp:424
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:424
 #, kde-format
 msgid "Layer is invisible."
 msgstr "圖層不可見。"
 
-#: libs/ui/KisView.cpp:1174
+#: libs/ui/KisView.cpp:1177
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>檔案 <b>「%1」</b> 已被修改。</p><p>要儲存它嗎？</p>"
 
-#: libs/ui/KisView.cpp:1248
+#: libs/ui/KisView.cpp:1251
 #, kde-format
 msgid "Write Protected"
 msgstr "防寫"
 
-#: libs/ui/KisView.cpp:1252
+#: libs/ui/KisView.cpp:1255
 #, kde-format
 msgid "Recovered"
 msgstr "已復原"
 
-#: libs/ui/KisView.cpp:1354
+#: libs/ui/KisView.cpp:1357
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "螢幕校樣不支援浮點位深度。"
 
-#: libs/ui/KisView.cpp:1359
+#: libs/ui/KisView.cpp:1362
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "已啟用螢幕校樣。"
 
-#: libs/ui/KisView.cpp:1361
+#: libs/ui/KisView.cpp:1364
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "已關閉螢幕校樣。"
 
-#: libs/ui/KisView.cpp:1373
+#: libs/ui/KisView.cpp:1376
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "色域警告不支援浮點色深。"
 
-#: libs/ui/KisView.cpp:1379
+#: libs/ui/KisView.cpp:1382
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "已啟用色域警告。"
 
-#: libs/ui/KisView.cpp:1381
+#: libs/ui/KisView.cpp:1384
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "但螢幕校樣仍然關閉。"
 
-#: libs/ui/KisView.cpp:1384
+#: libs/ui/KisView.cpp:1387
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "已關閉色域警告。"
 
-#: libs/ui/KisViewManager.cpp:810
+#: libs/ui/KisViewManager.cpp:816
 #, kde-format
 msgid "Active Author Profile"
 msgstr "目前作者檔案"
 
-#: libs/ui/KisViewManager.cpp:934
+#: libs/ui/KisViewManager.cpp:945
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (副本)"
 
-#: libs/ui/KisViewManager.cpp:1060 libs/ui/KisViewManager.cpp:1128
+#: libs/ui/KisViewManager.cpp:1071 libs/ui/KisViewManager.cpp:1139
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr "備用名稱數字已用盡，請手動輸入更大的數字儲存檔案"
 
-#: libs/ui/KisViewManager.cpp:1060
+#: libs/ui/KisViewManager.cpp:1071
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "無法儲存遞增版本"
 
-#: libs/ui/KisViewManager.cpp:1128
+#: libs/ui/KisViewManager.cpp:1139
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "無法儲存遞增備份"
 
-#: libs/ui/KisViewManager.cpp:1412
+#: libs/ui/KisViewManager.cpp:1423
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -37377,13 +37377,13 @@ msgstr ""
 "即將切換為畫布獨佔模式。\n"
 "按下 %1 返回。"
 
-#: libs/ui/KisViewManager.cpp:1482
+#: libs/ui/KisViewManager.cpp:1493
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "開啟資源資料夾"
 
-#: libs/ui/KisViewManager.cpp:1486
+#: libs/ui/KisViewManager.cpp:1497
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -37406,19 +37406,19 @@ msgstr ""
 "<p><b>應用程式內部資料夾</b>：<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1501
+#: libs/ui/KisViewManager.cpp:1512
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "開啟使用者 AppData (&U)"
 
-#: libs/ui/KisViewManager.cpp:1502
+#: libs/ui/KisViewManager.cpp:1513
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "開啟應用程式內部資料夾(&P)"
 
-#: libs/ui/KisViewManager.cpp:1650 libs/ui/KisViewManager.cpp:1668
+#: libs/ui/KisViewManager.cpp:1661 libs/ui/KisViewManager.cpp:1679
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -38595,32 +38595,32 @@ msgstr "群組圖層不可編輯。"
 msgid "Color sampler does not work on this layer."
 msgstr "色彩取樣器不能在此圖層上使用。"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:27
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:29
 #, kde-format
 msgid "Increase Brush Size"
 msgstr "增大筆刷尺寸"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:34
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:36
 #, kde-format
 msgid "Decrease Brush Size"
 msgstr "減小筆刷尺寸"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:43
 #, kde-format
 msgid "Rotate brush tip clockwise"
 msgstr "順時針旋轉筆尖"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:49
 #, kde-format
 msgid "Rotate brush tip clockwise (precise)"
 msgstr "順時針旋轉筆尖 (精確)"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:55
 #, kde-format
 msgid "Rotate brush tip counter-clockwise"
 msgstr "逆時針旋轉筆尖"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:61
 #, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
 msgstr "逆時針旋轉筆尖 (精確)"
@@ -38631,13 +38631,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "濾鏡「%1」"
 
-#: libs/ui/toolbox/KoToolBox.cpp:360 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:362 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "預設"
 
-#: libs/ui/toolbox/KoToolBox.cpp:367
+#: libs/ui/toolbox/KoToolBox.cpp:369
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -41273,7 +41273,7 @@ msgstr "左縮排"
 msgid "Right indent"
 msgstr "右縮排"
 
-#: libs/widgets/KoToolDocker.cpp:148
+#: libs/widgets/KoToolDocker.cpp:149
 #, kde-format
 msgid "Tool Options"
 msgstr "工具選項"
@@ -68652,7 +68652,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr "平滑化選取區域的邊緣"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:315
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

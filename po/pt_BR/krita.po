@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-21 00:49+0000\n"
+"POT-Creation-Date: 2026-10-22 00:48+0000\n"
 "PO-Revision-Date: 2026-10-13 08:53-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -16574,7 +16574,7 @@ msgstr "Alterar parâmetro"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:315
+#: libs/flake/tools/KoPathTool.cpp:316
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Converter para caminho"
@@ -16849,7 +16849,7 @@ msgstr "Uma forma simples de caminho"
 msgid "%1 Options"
 msgstr "Opções do %1"
 
-#: libs/flake/KoToolManager.cpp:605
+#: libs/flake/KoToolManager.cpp:620
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Ferramenta ativa: %1"
@@ -20682,41 +20682,41 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Alterar segmento"
 
-#: libs/flake/tools/KoPathTool.cpp:131
+#: libs/flake/tools/KoPathTool.cpp:132
 #, kde-format
 msgid "Edit Shape"
 msgstr "Editar Forma"
 
-#: libs/flake/tools/KoPathTool.cpp:645
+#: libs/flake/tools/KoPathTool.cpp:646
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Arrastar para mover a pega."
 
-#: libs/flake/tools/KoPathTool.cpp:699
+#: libs/flake/tools/KoPathTool.cpp:700
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Arrastar para mover o ponto. Clique com o Shift para mudar o tipo de ponto."
 
-#: libs/flake/tools/KoPathTool.cpp:701
+#: libs/flake/tools/KoPathTool.cpp:702
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Arrastar para mover o ponto de controle."
 
-#: libs/flake/tools/KoPathTool.cpp:724
+#: libs/flake/tools/KoPathTool.cpp:725
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Arraste para mudar diretamente a curva. Clique-duplo para inserir um novo "
 "ponto no caminho."
 
-#: libs/flake/tools/KoPathTool.cpp:734
+#: libs/flake/tools/KoPathTool.cpp:735
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr "Pressione %1 para quebrar o caminho no ponto selecionado."
 
-#: libs/flake/tools/KoPathTool.cpp:736
+#: libs/flake/tools/KoPathTool.cpp:737
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
@@ -22368,7 +22368,7 @@ msgid "Clone Layer"
 msgstr "Camada de clone"
 
 #: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:700
-#: libs/ui/kis_node_manager.cpp:1629
+#: libs/ui/kis_node_manager.cpp:1634
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -22412,7 +22412,7 @@ msgid "Transform Mask"
 msgstr "Máscara de transformação"
 
 #: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
-#: libs/ui/kis_node_manager.cpp:1391
+#: libs/ui/kis_node_manager.cpp:1396
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:599
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -24016,7 +24016,7 @@ msgstr "Saída"
 #: libs/pigment/resources/KoColorSet.cpp:1528
 #: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1170
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -24069,8 +24069,8 @@ msgstr "Recursos locais"
 #: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:506
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
-#: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
-#: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1230
+#: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1321
+#: libs/ui/kis_node_manager.cpp:1384 libs/ui/KisApplication.cpp:1230
 #: libs/ui/KisApplication.cpp:1233 libs/ui/KisApplication.cpp:1249
 #: libs/ui/KisApplication.cpp:1281 libs/ui/KisApplication.cpp:1295
 #: libs/ui/KisApplication.cpp:1323 libs/ui/KisDocument.cpp:1057
@@ -24085,7 +24085,7 @@ msgstr "Recursos locais"
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:686 libs/ui/KisView.cpp:1173
+#: libs/ui/KisView.cpp:689 libs/ui/KisView.cpp:1176
 #: libs/ui/KisWelcomePageWidget.cpp:728 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
@@ -24952,7 +24952,7 @@ msgid "Select All"
 msgstr "Selecionar tudo"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:167
-#: libs/ui/KisView.cpp:781
+#: libs/ui/KisView.cpp:784
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Preencher a camada"
@@ -25014,7 +25014,7 @@ msgid "Paste shapes"
 msgstr "Colar Formas"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:263
-#: libs/ui/actions/KisPasteActionFactories.cpp:331 libs/ui/KisView.cpp:594
+#: libs/ui/actions/KisPasteActionFactories.cpp:331 libs/ui/KisView.cpp:597
 #, kde-format
 msgid "(pasted)"
 msgstr "(colado)"
@@ -28185,7 +28185,7 @@ msgstr "Aguarde a conclusão do processo de geração de quadros existente..."
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:167
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
-#: libs/ui/input/kis_tool_invocation_action.cpp:44
+#: libs/ui/input/kis_tool_invocation_action.cpp:45
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:272
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
@@ -28659,7 +28659,7 @@ msgstr "Renomear sessão"
 msgid "New name:"
 msgstr "Novo nome:"
 
-#: libs/ui/flake/kis_shape_controller.cpp:235
+#: libs/ui/flake/kis_shape_controller.cpp:237
 #, kde-format
 msgid "Vector Layer %1"
 msgstr "Camada vetorial %1"
@@ -33744,7 +33744,7 @@ msgid "Edit Mouse Wheel Input"
 msgstr "Editar entrada da roda do mouse"
 
 #: libs/ui/input/kis_abstract_input_action.cpp:39
-#: libs/ui/input/kis_tool_invocation_action.cpp:42
+#: libs/ui/input/kis_tool_invocation_action.cpp:43
 #, kde-format
 msgid "Activate"
 msgstr "Ativar"
@@ -34310,12 +34310,12 @@ msgstr ""
 msgid "Snapped Angle"
 msgstr "Ângulo de corte"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:38
+#: libs/ui/input/kis_tool_invocation_action.cpp:39
 #, kde-format
 msgid "Tool Invocation"
 msgstr "Ferramenta de invocação"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:39
+#: libs/ui/input/kis_tool_invocation_action.cpp:40
 #, kde-format
 msgid ""
 "The <i>Tool Invocation</i> action invokes the current tool, for example, "
@@ -34324,68 +34324,68 @@ msgstr ""
 "A ação <i>Ferramenta de invocação</i> invoca a ferramenta atual. Por "
 "exemplo, ao usar a ferramenta de pincel, ela iniciará a pintura."
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:43
+#: libs/ui/input/kis_tool_invocation_action.cpp:44
 #, kde-format
 msgid "Confirm"
 msgstr "Confirmar"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:45
+#: libs/ui/input/kis_tool_invocation_action.cpp:46
 #, kde-format
 msgid "Activate Line Tool"
 msgstr "Ativar a ferramenta de linhas"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:46
+#: libs/ui/input/kis_tool_invocation_action.cpp:47
 #, kde-format
 msgid "Activate Ellipse Tool"
 msgstr "Ativar ferramenta elipse"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:47
+#: libs/ui/input/kis_tool_invocation_action.cpp:48
 #, kde-format
 msgid "Activate Rectangle Tool"
 msgstr "Ativar ferramenta retângulo"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:48
+#: libs/ui/input/kis_tool_invocation_action.cpp:49
 #: libs/ui/input/KisTouchGestureAction.cpp:34
 #, kde-format
 msgid "Activate Move Tool"
 msgstr "Ativar ferramenta de movimento"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:49
+#: libs/ui/input/kis_tool_invocation_action.cpp:50
 #, kde-format
 msgid "Activate Fill Tool"
 msgstr "Ativar ferramenta de preenchimento"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:50
+#: libs/ui/input/kis_tool_invocation_action.cpp:51
 #, kde-format
 msgid "Activate Gradient Tool"
 msgstr "Ativar ferramenta de gradiente"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:51
+#: libs/ui/input/kis_tool_invocation_action.cpp:52
 #, kde-format
 msgid "Activate Measure Tool"
 msgstr "Ativar ferramenta de medição"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:52
+#: libs/ui/input/kis_tool_invocation_action.cpp:53
 #, kde-format
 msgid "Activate Elliptical Selection Tool"
 msgstr "Ativar ferramenta de seleção elíptica"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:53
+#: libs/ui/input/kis_tool_invocation_action.cpp:54
 #, kde-format
 msgid "Activate Rectangular Selection Tool"
 msgstr "Ativar ferramenta de seleção retangular"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:54
+#: libs/ui/input/kis_tool_invocation_action.cpp:55
 #, kde-format
 msgid "Activate Contiguous Selection Tool"
 msgstr "Ativar ferramenta de seleção contígua"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:55
+#: libs/ui/input/kis_tool_invocation_action.cpp:56
 #, kde-format
 msgid "Activate Freehand Selection Tool"
 msgstr "Ativar ferramenta de seleção à mão livre"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:56
+#: libs/ui/input/kis_tool_invocation_action.cpp:57
 #, kde-format
 msgid "Activate with Other Color"
 msgstr "Ativar com outra cor"
@@ -34667,7 +34667,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Alterar arquivo de camada"
 
-#: libs/ui/kis_clipboard.cc:507 libs/ui/KisView.cpp:687
+#: libs/ui/kis_clipboard.cc:507 libs/ui/KisView.cpp:690
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -35023,44 +35023,44 @@ msgstr "Visualização espelhada ao redor do cursor"
 msgid "Mirror View Around Canvas"
 msgstr "Espelhar visualização ao redor da tela de pintura"
 
-#: libs/ui/kis_node_manager.cpp:486
+#: libs/ui/kis_node_manager.cpp:491
 #, kde-format
 msgid "Layer is locked"
 msgstr "A camada está bloqueada"
 
-#: libs/ui/kis_node_manager.cpp:488 libs/ui/kis_node_manager.cpp:513
+#: libs/ui/kis_node_manager.cpp:493 libs/ui/kis_node_manager.cpp:518
 #, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "A camada \"%1\" está bloqueada."
 
-#: libs/ui/kis_node_manager.cpp:541
+#: libs/ui/kis_node_manager.cpp:546
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Mover nós"
 
-#: libs/ui/kis_node_manager.cpp:548
+#: libs/ui/kis_node_manager.cpp:553
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Copiar nós"
 
-#: libs/ui/kis_node_manager.cpp:555
+#: libs/ui/kis_node_manager.cpp:560
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "Adicionar nós"
 
-#: libs/ui/kis_node_manager.cpp:727
+#: libs/ui/kis_node_manager.cpp:732
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Converter para uma máscara de seleção"
 
-#: libs/ui/kis_node_manager.cpp:773
+#: libs/ui/kis_node_manager.cpp:778
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr ""
 "Não foi possível criar a imagem de referência a partir da camada ativa."
 
-#: libs/ui/kis_node_manager.cpp:774
+#: libs/ui/kis_node_manager.cpp:779
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
@@ -35068,37 +35068,37 @@ msgstr ""
 "Não foi possível criar a imagem de referência a partir da tela de pintura "
 "visível."
 
-#: libs/ui/kis_node_manager.cpp:1029
+#: libs/ui/kis_node_manager.cpp:1034
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "As cascas de cebola requerem uma camada com fundo transparente."
 
-#: libs/ui/kis_node_manager.cpp:1056
+#: libs/ui/kis_node_manager.cpp:1061
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Duplicar os nós"
 
-#: libs/ui/kis_node_manager.cpp:1081
+#: libs/ui/kis_node_manager.cpp:1086
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Elevar os nós"
 
-#: libs/ui/kis_node_manager.cpp:1090
+#: libs/ui/kis_node_manager.cpp:1095
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Baixar os nós"
 
-#: libs/ui/kis_node_manager.cpp:1110
+#: libs/ui/kis_node_manager.cpp:1115
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Remover os nós"
 
-#: libs/ui/kis_node_manager.cpp:1126
+#: libs/ui/kis_node_manager.cpp:1131
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Espelhar máscara horizontalmente"
 
-#: libs/ui/kis_node_manager.cpp:1129
+#: libs/ui/kis_node_manager.cpp:1134
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -35106,12 +35106,12 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Espelhar a camada horizontalmente"
 msgstr[1] "Espelhar %1 camadas horizontalmente"
 
-#: libs/ui/kis_node_manager.cpp:1140
+#: libs/ui/kis_node_manager.cpp:1145
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Espelhar máscara verticalmente"
 
-#: libs/ui/kis_node_manager.cpp:1143
+#: libs/ui/kis_node_manager.cpp:1148
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -35119,50 +35119,50 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Espelhar a camada verticalmente"
 msgstr[1] "Espelhar %1 camadas verticalmente"
 
-#: libs/ui/kis_node_manager.cpp:1151
+#: libs/ui/kis_node_manager.cpp:1156
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Espelhar todas as camadas horizontalmente"
 
-#: libs/ui/kis_node_manager.cpp:1158
+#: libs/ui/kis_node_manager.cpp:1163
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Espelhar todas as camadas verticalmente"
 
-#: libs/ui/kis_node_manager.cpp:1290
+#: libs/ui/kis_node_manager.cpp:1295
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Exportar \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_node_manager.cpp:1322
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Não foi possível salvar a camada. %1"
 
-#: libs/ui/kis_node_manager.cpp:1335
+#: libs/ui/kis_node_manager.cpp:1340
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "A camada não tem dados de pixel"
 
-#: libs/ui/kis_node_manager.cpp:1359
+#: libs/ui/kis_node_manager.cpp:1364
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Exportar para SVG"
 
-#: libs/ui/kis_node_manager.cpp:1379
+#: libs/ui/kis_node_manager.cpp:1384
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Não foi possível salvar para SVG: %1"
 
-#: libs/ui/kis_node_manager.cpp:1404
+#: libs/ui/kis_node_manager.cpp:1409
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "A camada %1 não é editável"
 
-#: libs/ui/kis_node_manager.cpp:1405
+#: libs/ui/kis_node_manager.cpp:1410
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -35171,49 +35171,49 @@ msgstr ""
 "Não é possível gravar o canal alfa da camada mãe \"%1\".\n"
 "A operação será cancelada."
 
-#: libs/ui/kis_node_manager.cpp:1436
+#: libs/ui/kis_node_manager.cpp:1441
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Gravar alfa para uma camada"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1581
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Recortar nós"
 
-#: libs/ui/kis_node_manager.cpp:1659
+#: libs/ui/kis_node_manager.cpp:1664
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Grupo rápido"
 
-#: libs/ui/kis_node_manager.cpp:1670
+#: libs/ui/kis_node_manager.cpp:1675
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Grupo de recorte rápido"
 
-#: libs/ui/kis_node_manager.cpp:1677
+#: libs/ui/kis_node_manager.cpp:1682
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Grupo de recorte"
 
-#: libs/ui/kis_node_manager.cpp:1678
+#: libs/ui/kis_node_manager.cpp:1683
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Camada de máscara"
 
-#: libs/ui/kis_node_manager.cpp:1705
+#: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Não foi possível mover a camada \"%1\" para o novo pai \"%2\""
 
-#: libs/ui/kis_node_manager.cpp:1708
+#: libs/ui/kis_node_manager.cpp:1713
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Não foi possível mover a camada \"%1\" para a camada raiz"
 
-#: libs/ui/kis_node_manager.cpp:1716
+#: libs/ui/kis_node_manager.cpp:1721
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Desagrupamento Rápido"
@@ -35634,7 +35634,7 @@ msgctxt "<color space> <image profile>"
 msgid "%1  %2"
 msgstr "%1  %2"
 
-#: libs/ui/kis_zoom_manager.cc:256
+#: libs/ui/kis_zoom_manager.cc:254
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
@@ -37095,108 +37095,108 @@ msgstr "Figura indisponível."
 msgid "Use This Template"
 msgstr "Usar este modelo"
 
-#: libs/ui/KisView.cpp:756
+#: libs/ui/KisView.cpp:759
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Você não pode arrastar e soltar cores no tipo de camada selecionada."
 
-#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool_utils.cpp:420
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:420
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "A camada está bloqueada e invisível."
 
-#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool_utils.cpp:422
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:422
 #, kde-format
 msgid "Layer is locked."
 msgstr "A camada está bloqueada."
 
-#: libs/ui/KisView.cpp:768 libs/ui/tool/kis_tool_utils.cpp:424
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:424
 #, kde-format
 msgid "Layer is invisible."
 msgstr "A camada está invisível."
 
-#: libs/ui/KisView.cpp:1174
+#: libs/ui/KisView.cpp:1177
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>O documento <b>'%1'</b> foi modificado.</p><p>Deseja salvá-lo?</p>"
 
-#: libs/ui/KisView.cpp:1248
+#: libs/ui/KisView.cpp:1251
 #, kde-format
 msgid "Write Protected"
 msgstr "Com proteção de escrita"
 
-#: libs/ui/KisView.cpp:1252
+#: libs/ui/KisView.cpp:1255
 #, kde-format
 msgid "Recovered"
 msgstr "Recuperado"
 
-#: libs/ui/KisView.cpp:1354
+#: libs/ui/KisView.cpp:1357
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "A prova de tela (Soft Proofing) não funciona em ponto flutuante."
 
-#: libs/ui/KisView.cpp:1359
+#: libs/ui/KisView.cpp:1362
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Prova de tela (Soft Proofing) ligada."
 
-#: libs/ui/KisView.cpp:1361
+#: libs/ui/KisView.cpp:1364
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Prova de tela (Soft Proofing) desligada."
 
-#: libs/ui/KisView.cpp:1373
+#: libs/ui/KisView.cpp:1376
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Avisos de cores fora do gamute não funciona em ponto flutuante."
 
-#: libs/ui/KisView.cpp:1379
+#: libs/ui/KisView.cpp:1382
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Avisos de cores fora do gamute ligados."
 
-#: libs/ui/KisView.cpp:1381
+#: libs/ui/KisView.cpp:1384
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Mas a prova de tela continua desligada."
 
-#: libs/ui/KisView.cpp:1384
+#: libs/ui/KisView.cpp:1387
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Avisos de cores fora do gamute desligados."
 
-#: libs/ui/KisViewManager.cpp:810
+#: libs/ui/KisViewManager.cpp:816
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Perfil de autor ativo"
 
-#: libs/ui/KisViewManager.cpp:934
+#: libs/ui/KisViewManager.cpp:945
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Cópia)"
 
-#: libs/ui/KisViewManager.cpp:1060 libs/ui/KisViewManager.cpp:1128
+#: libs/ui/KisViewManager.cpp:1071 libs/ui/KisViewManager.cpp:1139
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Esgotaram-se os nomes alternativos. Tente salvar manualmente com um número "
 "superior"
 
-#: libs/ui/KisViewManager.cpp:1060
+#: libs/ui/KisViewManager.cpp:1071
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Não foi possível salvar versão incremental"
 
-#: libs/ui/KisViewManager.cpp:1128
+#: libs/ui/KisViewManager.cpp:1139
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Não foi possível salvar backup incremental"
 
-#: libs/ui/KisViewManager.cpp:1412
+#: libs/ui/KisViewManager.cpp:1423
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -37205,13 +37205,13 @@ msgstr ""
 "Indo para o modo apenas tela de pintura.\n"
 "Pressione %1 para voltar."
 
-#: libs/ui/KisViewManager.cpp:1482
+#: libs/ui/KisViewManager.cpp:1493
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Abrir pasta de recursos"
 
-#: libs/ui/KisViewManager.cpp:1486
+#: libs/ui/KisViewManager.cpp:1497
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -37236,19 +37236,19 @@ msgstr ""
 "<p><b>Aplicativo privado local</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1501
+#: libs/ui/KisViewManager.cpp:1512
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Abrir no AppData do &usuário"
 
-#: libs/ui/KisViewManager.cpp:1502
+#: libs/ui/KisViewManager.cpp:1513
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Abrir em local &privado do aplicativo"
 
-#: libs/ui/KisViewManager.cpp:1650 libs/ui/KisViewManager.cpp:1668
+#: libs/ui/KisViewManager.cpp:1661 libs/ui/KisViewManager.cpp:1679
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -38452,32 +38452,32 @@ msgstr "O grupo não está editável."
 msgid "Color sampler does not work on this layer."
 msgstr "O classificador de cores não funciona nesta camada."
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:27
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:29
 #, kde-format
 msgid "Increase Brush Size"
 msgstr "Aumentar tamanho do pincel"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:34
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:36
 #, kde-format
 msgid "Decrease Brush Size"
 msgstr "Diminuir tamanho do pincel"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:43
 #, kde-format
 msgid "Rotate brush tip clockwise"
 msgstr "Girar a ponta do pincel no sentido horário"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:49
 #, kde-format
 msgid "Rotate brush tip clockwise (precise)"
 msgstr "Girar a ponta do pincel no sentido horário (preciso)"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:55
 #, kde-format
 msgid "Rotate brush tip counter-clockwise"
 msgstr "Girar a ponta do pincel no sentido anti-horário"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:61
 #, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
 msgstr "Girar a ponta do pincel no sentido anti-horário (preciso)"
@@ -38488,13 +38488,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "Filtro \"%1\""
 
-#: libs/ui/toolbox/KoToolBox.cpp:360 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:362 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Padrão"
 
-#: libs/ui/toolbox/KoToolBox.cpp:367
+#: libs/ui/toolbox/KoToolBox.cpp:369
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -41215,7 +41215,7 @@ msgstr "Recuo esquerdo"
 msgid "Right indent"
 msgstr "Recuo direito"
 
-#: libs/widgets/KoToolDocker.cpp:148
+#: libs/widgets/KoToolDocker.cpp:149
 #, kde-format
 msgid "Tool Options"
 msgstr "Opções da ferramenta"
@@ -68644,7 +68644,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr "Remove todas as propriedades de texto definidas da seleção."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:315
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

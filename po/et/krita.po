@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-21 00:49+0000\n"
+"POT-Creation-Date: 2026-10-22 00:48+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17772,7 +17772,7 @@ msgstr "Muuda parameetrit"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:315
+#: libs/flake/tools/KoPathTool.cpp:316
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Teisenda kompleksjooneks"
@@ -18066,7 +18066,7 @@ msgstr "Lihtne kompleksjoone kujund"
 msgid "%1 Options"
 msgstr "%1 valikud"
 
-#: libs/flake/KoToolManager.cpp:605
+#: libs/flake/KoToolManager.cpp:620
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Aktiivne tööriist: %1"
@@ -22097,41 +22097,41 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Muuda lõiku"
 
-#: libs/flake/tools/KoPathTool.cpp:131
+#: libs/flake/tools/KoPathTool.cpp:132
 #, kde-format
 msgid "Edit Shape"
 msgstr "Muuda kujundit"
 
-#: libs/flake/tools/KoPathTool.cpp:645
+#: libs/flake/tools/KoPathTool.cpp:646
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Lohista pideme asukohta."
 
-#: libs/flake/tools/KoPathTool.cpp:699
+#: libs/flake/tools/KoPathTool.cpp:700
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "Lohista punkti asukohta. Shift+klõps muudab punkti tüüpi."
 
-#: libs/flake/tools/KoPathTool.cpp:701
+#: libs/flake/tools/KoPathTool.cpp:702
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Lohista kontrollpunkti asukohta."
 
-#: libs/flake/tools/KoPathTool.cpp:724
+#: libs/flake/tools/KoPathTool.cpp:725
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Lohista kõvera otseseks muutmiseks. Topeltklõpsuga saab lisada uue "
 "kompleksjoone punkti."
 
-#: libs/flake/tools/KoPathTool.cpp:734
+#: libs/flake/tools/KoPathTool.cpp:735
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected point."
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
 msgstr "Vajuta B kompleksjoone katkestamiseks valitud punktis."
 
-#: libs/flake/tools/KoPathTool.cpp:736
+#: libs/flake/tools/KoPathTool.cpp:737
 #, fuzzy, kde-format
 #| msgid "Press B to break path at selected segments."
 msgctxt "%1 is a shortcut to be pressed"
@@ -23866,7 +23866,7 @@ msgid "Clone Layer"
 msgstr "Kloonikiht"
 
 #: libs/impex/KisExportCheckRegistry.cpp:115 libs/ui/kis_layer_manager.cc:700
-#: libs/ui/kis_node_manager.cpp:1629
+#: libs/ui/kis_node_manager.cpp:1634
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Group"
@@ -23912,7 +23912,7 @@ msgid "Transform Mask"
 msgstr "Teisendamismask"
 
 #: libs/impex/KisExportCheckRegistry.cpp:131 libs/ui/kis_mask_manager.cc:217
-#: libs/ui/kis_node_manager.cpp:1391
+#: libs/ui/kis_node_manager.cpp:1396
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:599
 #: plugins/impex/tiff/kis_tiff_import.cc:565
@@ -25678,7 +25678,7 @@ msgstr "Välja"
 #: libs/pigment/resources/KoColorSet.cpp:1528
 #: libs/pigment/resources/KoColorSet.cpp:1945
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1170
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -25731,8 +25731,8 @@ msgstr "Kohalikud ressurssid"
 #: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:506
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
-#: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1316
-#: libs/ui/kis_node_manager.cpp:1379 libs/ui/KisApplication.cpp:1230
+#: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1321
+#: libs/ui/kis_node_manager.cpp:1384 libs/ui/KisApplication.cpp:1230
 #: libs/ui/KisApplication.cpp:1233 libs/ui/KisApplication.cpp:1249
 #: libs/ui/KisApplication.cpp:1281 libs/ui/KisApplication.cpp:1295
 #: libs/ui/KisApplication.cpp:1323 libs/ui/KisDocument.cpp:1057
@@ -25747,7 +25747,7 @@ msgstr "Kohalikud ressurssid"
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:686 libs/ui/KisView.cpp:1173
+#: libs/ui/KisView.cpp:689 libs/ui/KisView.cpp:1176
 #: libs/ui/KisWelcomePageWidget.cpp:728 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
@@ -26665,7 +26665,7 @@ msgid "Select All"
 msgstr "Kõige valimine"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:167
-#: libs/ui/KisView.cpp:781
+#: libs/ui/KisView.cpp:784
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Kihi ülekanduv täitmine"
@@ -26727,7 +26727,7 @@ msgid "Paste shapes"
 msgstr "Kujundite asetamine"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:263
-#: libs/ui/actions/KisPasteActionFactories.cpp:331 libs/ui/KisView.cpp:594
+#: libs/ui/actions/KisPasteActionFactories.cpp:331 libs/ui/KisView.cpp:597
 #, kde-format
 msgid "(pasted)"
 msgstr "(asetatud)"
@@ -29985,7 +29985,7 @@ msgstr "Pilditoimingu lõpetamise ootamine..."
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:167
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
-#: libs/ui/input/kis_tool_invocation_action.cpp:44
+#: libs/ui/input/kis_tool_invocation_action.cpp:45
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:272
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
@@ -30457,7 +30457,7 @@ msgstr "Seansi nime muutmine"
 msgid "New name:"
 msgstr "Uus nimi:"
 
-#: libs/ui/flake/kis_shape_controller.cpp:235
+#: libs/ui/flake/kis_shape_controller.cpp:237
 #, kde-format
 msgid "Vector Layer %1"
 msgstr "Vektorkiht %1"
@@ -35593,7 +35593,7 @@ msgid "Edit Mouse Wheel Input"
 msgstr "Hiirerattasisendi muutmine"
 
 #: libs/ui/input/kis_abstract_input_action.cpp:39
-#: libs/ui/input/kis_tool_invocation_action.cpp:42
+#: libs/ui/input/kis_tool_invocation_action.cpp:43
 #, kde-format
 msgid "Activate"
 msgstr "Aktiveeri"
@@ -36203,12 +36203,12 @@ msgstr ""
 msgid "Snapped Angle"
 msgstr "Nihkenurk X:"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:38
+#: libs/ui/input/kis_tool_invocation_action.cpp:39
 #, kde-format
 msgid "Tool Invocation"
 msgstr "Tööriista toiming"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:39
+#: libs/ui/input/kis_tool_invocation_action.cpp:40
 #, kde-format
 msgid ""
 "The <i>Tool Invocation</i> action invokes the current tool, for example, "
@@ -36217,77 +36217,77 @@ msgstr ""
 "<i>Tööriista toiming</i> käivitab aktiivse tööriista, näiteks "
 "pintslitööriista korral alustatakse joonistamist."
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:43
+#: libs/ui/input/kis_tool_invocation_action.cpp:44
 #, kde-format
 msgid "Confirm"
 msgstr "Kinnita"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:45
+#: libs/ui/input/kis_tool_invocation_action.cpp:46
 #, kde-format
 msgid "Activate Line Tool"
-msgstr "Aktiveeri joonetööriist"
-
-#: libs/ui/input/kis_tool_invocation_action.cpp:46
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
-msgid "Activate Ellipse Tool"
 msgstr "Aktiveeri joonetööriist"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:47
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
-msgid "Activate Rectangle Tool"
+msgid "Activate Ellipse Tool"
 msgstr "Aktiveeri joonetööriist"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:48
+#, fuzzy, kde-format
+#| msgid "Activate Line Tool"
+msgid "Activate Rectangle Tool"
+msgstr "Aktiveeri joonetööriist"
+
+#: libs/ui/input/kis_tool_invocation_action.cpp:49
 #: libs/ui/input/KisTouchGestureAction.cpp:34
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgid "Activate Move Tool"
 msgstr "Aktiveeri joonetööriist"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:49
+#: libs/ui/input/kis_tool_invocation_action.cpp:50
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgid "Activate Fill Tool"
 msgstr "Aktiveeri joonetööriist"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:50
+#: libs/ui/input/kis_tool_invocation_action.cpp:51
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgid "Activate Gradient Tool"
 msgstr "Aktiveeri joonetööriist"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:51
+#: libs/ui/input/kis_tool_invocation_action.cpp:52
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgid "Activate Measure Tool"
 msgstr "Aktiveeri joonetööriist"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:52
+#: libs/ui/input/kis_tool_invocation_action.cpp:53
 #, fuzzy, kde-format
 #| msgid "Elliptical Selection Tool"
 msgid "Activate Elliptical Selection Tool"
 msgstr "Elliptilise ala valiku tööriist"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:53
+#: libs/ui/input/kis_tool_invocation_action.cpp:54
 #, fuzzy, kde-format
 #| msgid "Rectangular Selection Tool"
 msgid "Activate Rectangular Selection Tool"
 msgstr "Ristkülikukujulise ala valiku tööriist"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:54
+#: libs/ui/input/kis_tool_invocation_action.cpp:55
 #, fuzzy, kde-format
 #| msgid "Contiguous Selection Tool"
 msgid "Activate Contiguous Selection Tool"
 msgstr "Külgnevate alade valiku tööriist"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:55
+#: libs/ui/input/kis_tool_invocation_action.cpp:56
 #, fuzzy, kde-format
 msgid "Activate Freehand Selection Tool"
 msgstr "Pintslivalik"
 
-#: libs/ui/input/kis_tool_invocation_action.cpp:56
+#: libs/ui/input/kis_tool_invocation_action.cpp:57
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgid "Activate with Other Color"
@@ -36601,7 +36601,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Failikihi muutmine"
 
-#: libs/ui/kis_clipboard.cc:507 libs/ui/KisView.cpp:687
+#: libs/ui/kis_clipboard.cc:507 libs/ui/KisView.cpp:690
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -36980,78 +36980,78 @@ msgstr "Peegelda vaadet"
 msgid "Mirror View Around Canvas"
 msgstr "Peegelda vaadet"
 
-#: libs/ui/kis_node_manager.cpp:486
+#: libs/ui/kis_node_manager.cpp:491
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer is locked"
 msgstr "Kiht on lukustatud."
 
-#: libs/ui/kis_node_manager.cpp:488 libs/ui/kis_node_manager.cpp:513
+#: libs/ui/kis_node_manager.cpp:493 libs/ui/kis_node_manager.cpp:518
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer \"%1\" is locked"
 msgstr "Kiht on lukustatud."
 
-#: libs/ui/kis_node_manager.cpp:541
+#: libs/ui/kis_node_manager.cpp:546
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Liiguta sõlmi"
 
-#: libs/ui/kis_node_manager.cpp:548
+#: libs/ui/kis_node_manager.cpp:553
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Kopeeri sõlmed"
 
-#: libs/ui/kis_node_manager.cpp:555
+#: libs/ui/kis_node_manager.cpp:560
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "Lisa sõlmi"
 
-#: libs/ui/kis_node_manager.cpp:727
+#: libs/ui/kis_node_manager.cpp:732
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Valikumaskiks teisendamine"
 
-#: libs/ui/kis_node_manager.cpp:773
+#: libs/ui/kis_node_manager.cpp:778
 #, fuzzy, kde-format
 #| msgid "Could not load keyframes from %1."
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr "Võtmekaadrite laadimine asukohast %1 nurjus."
 
-#: libs/ui/kis_node_manager.cpp:774
+#: libs/ui/kis_node_manager.cpp:779
 #, fuzzy, kde-format
 #| msgid "Could not load keyframes from %1."
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Võtmekaadrite laadimine asukohast %1 nurjus."
 
-#: libs/ui/kis_node_manager.cpp:1029
+#: libs/ui/kis_node_manager.cpp:1034
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Sibulakoor nõuab läbipaistva taustaga kihti."
 
-#: libs/ui/kis_node_manager.cpp:1056
+#: libs/ui/kis_node_manager.cpp:1061
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Klooni sõlmi"
 
-#: libs/ui/kis_node_manager.cpp:1081
+#: libs/ui/kis_node_manager.cpp:1086
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Sõlmede toomine ettepoole"
 
-#: libs/ui/kis_node_manager.cpp:1090
+#: libs/ui/kis_node_manager.cpp:1095
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Sõlmede viimine tahapoole"
 
-#: libs/ui/kis_node_manager.cpp:1110
+#: libs/ui/kis_node_manager.cpp:1115
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Sõlmede eemaldamine"
 
-#: libs/ui/kis_node_manager.cpp:1126
+#: libs/ui/kis_node_manager.cpp:1131
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Horizontally"
@@ -37059,7 +37059,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Peegelda rõhtsuunas"
 
-#: libs/ui/kis_node_manager.cpp:1129
+#: libs/ui/kis_node_manager.cpp:1134
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -37067,7 +37067,7 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Peegelda kihti rõhtsuunas"
 msgstr[1] "Peegelda kihti rõhtsuunas"
 
-#: libs/ui/kis_node_manager.cpp:1140
+#: libs/ui/kis_node_manager.cpp:1145
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Vertically"
@@ -37075,7 +37075,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Peegelda püstsuunas"
 
-#: libs/ui/kis_node_manager.cpp:1143
+#: libs/ui/kis_node_manager.cpp:1148
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -37083,7 +37083,7 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Peegelda kihti püstsuunas"
 msgstr[1] "Peegelda kihti püstsuunas"
 
-#: libs/ui/kis_node_manager.cpp:1151
+#: libs/ui/kis_node_manager.cpp:1156
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Horizontally"
@@ -37091,7 +37091,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Kõigi kihtide peegeldamine rõhtsuunas"
 
-#: libs/ui/kis_node_manager.cpp:1158
+#: libs/ui/kis_node_manager.cpp:1163
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Vertically"
@@ -37099,17 +37099,17 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Kõigi kihtide peegeldamine püstsuunas"
 
-#: libs/ui/kis_node_manager.cpp:1290
+#: libs/ui/kis_node_manager.cpp:1295
 #, kde-format
 msgid "Export \"%1\""
 msgstr "\"%1\" eksport"
 
-#: libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_node_manager.cpp:1322
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Kihi salvestamine nurjus. %1"
 
-#: libs/ui/kis_node_manager.cpp:1335
+#: libs/ui/kis_node_manager.cpp:1340
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Layer %1 is not editable"
@@ -37117,24 +37117,24 @@ msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Kiht %1 ei ole muudetav."
 
-#: libs/ui/kis_node_manager.cpp:1359
+#: libs/ui/kis_node_manager.cpp:1364
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Eksport SVG-sse"
 
-#: libs/ui/kis_node_manager.cpp:1379
+#: libs/ui/kis_node_manager.cpp:1384
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "SVG salvestamine nurjus: %1"
 
-#: libs/ui/kis_node_manager.cpp:1404
+#: libs/ui/kis_node_manager.cpp:1409
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Kiht %1 ei ole muudetav."
 
-#: libs/ui/kis_node_manager.cpp:1405
+#: libs/ui/kis_node_manager.cpp:1410
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -37143,51 +37143,51 @@ msgstr ""
 "Eellaskihi \"%1\" alfakanali kirjutamine nurjus.\n"
 "Toimingust loobutakse."
 
-#: libs/ui/kis_node_manager.cpp:1436
+#: libs/ui/kis_node_manager.cpp:1441
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Alfa kirjutamine kihti"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1581
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Lõika sõlmed"
 
-#: libs/ui/kis_node_manager.cpp:1659
+#: libs/ui/kis_node_manager.cpp:1664
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Kiire rühmitamine"
 
-#: libs/ui/kis_node_manager.cpp:1670
+#: libs/ui/kis_node_manager.cpp:1675
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Kiirlõikerühm"
 
-#: libs/ui/kis_node_manager.cpp:1677
+#: libs/ui/kis_node_manager.cpp:1682
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Lõikerühm"
 
-#: libs/ui/kis_node_manager.cpp:1678
+#: libs/ui/kis_node_manager.cpp:1683
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Maskikiht"
 
-#: libs/ui/kis_node_manager.cpp:1705
+#: libs/ui/kis_node_manager.cpp:1710
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Iga kihi asetamine omaette, eraldi rühmakihti"
 
-#: libs/ui/kis_node_manager.cpp:1708
+#: libs/ui/kis_node_manager.cpp:1713
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Iga kihi asetamine omaette, eraldi rühmakihti"
 
-#: libs/ui/kis_node_manager.cpp:1716
+#: libs/ui/kis_node_manager.cpp:1721
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Kiire rühma lõhkumine"
@@ -37619,7 +37619,7 @@ msgctxt "<color space> <image profile>"
 msgid "%1  %2"
 msgstr "%1  %2"
 
-#: libs/ui/kis_zoom_manager.cc:256
+#: libs/ui/kis_zoom_manager.cc:254
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
@@ -39120,28 +39120,28 @@ msgstr "Ühtki pilti pole."
 msgid "Use This Template"
 msgstr "Kasuta seda malli"
 
-#: libs/ui/KisView.cpp:756
+#: libs/ui/KisView.cpp:759
 #, fuzzy, kde-format
 #| msgid "You cannot use this tool with the selected layer type"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Seda tööriista ei saa valitud kihitüübi puhul kasutada"
 
-#: libs/ui/KisView.cpp:764 libs/ui/tool/kis_tool_utils.cpp:420
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:420
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Kiht on lukustatud ja nähtamatu."
 
-#: libs/ui/KisView.cpp:766 libs/ui/tool/kis_tool_utils.cpp:422
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:422
 #, kde-format
 msgid "Layer is locked."
 msgstr "Kiht on lukustatud."
 
-#: libs/ui/KisView.cpp:768 libs/ui/tool/kis_tool_utils.cpp:424
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:424
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Kiht on nähtamatu."
 
-#: libs/ui/KisView.cpp:1174
+#: libs/ui/KisView.cpp:1177
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -39149,80 +39149,80 @@ msgid ""
 msgstr ""
 "<p>Dokumenti <b>'%1'</b> on muudetud.</p><p>Kas soovid selle salvestada?</p>"
 
-#: libs/ui/KisView.cpp:1248
+#: libs/ui/KisView.cpp:1251
 #, kde-format
 msgid "Write Protected"
 msgstr "Kirjutuskaitstud"
 
-#: libs/ui/KisView.cpp:1252
+#: libs/ui/KisView.cpp:1255
 #, kde-format
 msgid "Recovered"
 msgstr "Taastatud"
 
-#: libs/ui/KisView.cpp:1354
+#: libs/ui/KisView.cpp:1357
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Väljundvaade ujukomaarvu puhul ei tööta."
 
-#: libs/ui/KisView.cpp:1359
+#: libs/ui/KisView.cpp:1362
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Väljundvaade on sisse lülitatud."
 
-#: libs/ui/KisView.cpp:1361
+#: libs/ui/KisView.cpp:1364
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Väljundvaade on välja lülitatud."
 
-#: libs/ui/KisView.cpp:1373
+#: libs/ui/KisView.cpp:1376
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Värviulatuse hoiatused ujukomaarvu puhul ei tööta."
 
-#: libs/ui/KisView.cpp:1379
+#: libs/ui/KisView.cpp:1382
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Värviulatuse hoiatused on sisse lülitatud."
 
-#: libs/ui/KisView.cpp:1381
+#: libs/ui/KisView.cpp:1384
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Kuid väljundvaade on endiselt välja lülitatud."
 
-#: libs/ui/KisView.cpp:1384
+#: libs/ui/KisView.cpp:1387
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Värviulatuse hoiatused on välja lülitatud."
 
-#: libs/ui/KisViewManager.cpp:810
+#: libs/ui/KisViewManager.cpp:816
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Aktiivne autoriprofiil"
 
-#: libs/ui/KisViewManager.cpp:934
+#: libs/ui/KisViewManager.cpp:945
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (koopia)"
 
-#: libs/ui/KisViewManager.cpp:1060 libs/ui/KisViewManager.cpp:1128
+#: libs/ui/KisViewManager.cpp:1071 libs/ui/KisViewManager.cpp:1139
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Alternatiivsed nimed on otsas, proovi käsitsi salvestada suurema numbriga"
 
-#: libs/ui/KisViewManager.cpp:1060
+#: libs/ui/KisViewManager.cpp:1071
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Inkrementversiooni salvestamine nurjus"
 
-#: libs/ui/KisViewManager.cpp:1128
+#: libs/ui/KisViewManager.cpp:1139
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Inkrementvarukoopia salvestamine nurjus"
 
-#: libs/ui/KisViewManager.cpp:1412
+#: libs/ui/KisViewManager.cpp:1423
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -39231,14 +39231,14 @@ msgstr ""
 "Lõuendipõhise režiimi kasutusele võtmine.\n"
 "Klõpsa %1 tagasiminemiseks."
 
-#: libs/ui/KisViewManager.cpp:1482
+#: libs/ui/KisViewManager.cpp:1493
 #, fuzzy, kde-format
 #| msgid "Open Resource Folder"
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Ava ressursikataloog"
 
-#: libs/ui/KisViewManager.cpp:1486
+#: libs/ui/KisViewManager.cpp:1497
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -39253,19 +39253,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1501
+#: libs/ui/KisViewManager.cpp:1512
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1502
+#: libs/ui/KisViewManager.cpp:1513
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1650 libs/ui/KisViewManager.cpp:1668
+#: libs/ui/KisViewManager.cpp:1661 libs/ui/KisViewManager.cpp:1679
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -40466,37 +40466,37 @@ msgstr "Rühm ei ole muudetav."
 msgid "Color sampler does not work on this layer."
 msgstr ""
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:27
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:29
 #, kde-format
 msgid "Increase Brush Size"
 msgstr "Suurenda pintsli suurust"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:34
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:36
 #, kde-format
 msgid "Decrease Brush Size"
 msgstr "Vähenda pintsli suurust"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:43
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Rotate object 90° clockwise"
 msgid "Rotate brush tip clockwise"
 msgstr "Pööra objekti 90° päripäeva"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:49
 #, fuzzy, kde-format
 #| msgid "Rotate the selection clockwise 90 degrees"
 msgid "Rotate brush tip clockwise (precise)"
 msgstr "Valiku pööramine 90 kraadi päripäeva"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:55
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Rotate object 90° counterclockwise"
 msgid "Rotate brush tip counter-clockwise"
 msgstr "Pööra objekti 90° vastupäeva"
 
-#: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
+#: libs/ui/tool/KisToolPaintFactoryBase.cpp:61
 #, fuzzy, kde-format
 #| msgid "Rotate selection counter-clockwise 90 degrees"
 msgid "Rotate brush tip counter-clockwise (precise)"
@@ -40510,13 +40510,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "Filter \"%1\""
 
-#: libs/ui/toolbox/KoToolBox.cpp:360 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:362 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Vaikimisi"
 
-#: libs/ui/toolbox/KoToolBox.cpp:367
+#: libs/ui/toolbox/KoToolBox.cpp:369
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -43395,7 +43395,7 @@ msgstr "Vasak taandus"
 msgid "Right indent"
 msgstr "Parem taandus"
 
-#: libs/widgets/KoToolDocker.cpp:148
+#: libs/widgets/KoToolDocker.cpp:149
 #, kde-format
 msgid "Tool Options"
 msgstr "Tööriista valikud"
@@ -71868,7 +71868,7 @@ msgctxt "action"
 msgid "Remove all set text properties from the selection."
 msgstr "Valiku joone laiuse määramine"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:315
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

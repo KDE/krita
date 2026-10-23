@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-22 00:48+0000\n"
+"POT-Creation-Date: 2026-10-23 00:46+0000\n"
 "PO-Revision-Date: 2026-09-14 20:10+0200\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -7273,21 +7273,17 @@ msgstr "Zarovnať vpravo"
 #. i18n: context: text @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:26
 #: krita/data/actions/InteractionTool.action:33
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup shapes"
 msgstr "Zrušiť zoskupenie tvarov"
 
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:28
-#, fuzzy, kde-format
-#| msgctxt "Group as Swatch Group in a Palette"
-#| msgid "Remove selected group"
+#, kde-format
 msgctxt "action"
 msgid "Remove the selected shape group"
-msgstr "Odstrániť vybranú skupinu"
+msgstr "Odstrániť vybranú skupinu tvarov"
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7345,21 +7341,17 @@ msgstr "Vycentrovať vertikálne"
 #. i18n: context: text @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
 #: krita/data/actions/InteractionTool.action:73
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgctxt "action"
 msgid "Group shapes"
 msgstr "Zoskupiť tvary"
 
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Create a group layer containing selected layers"
+#, kde-format
 msgctxt "action"
 msgid "Create a shape group containing selected shapes"
-msgstr "Vytvoriť skupinu vrstiev obsahujúcu vybrané vrstvy"
+msgstr "Vytvoriť skupinu tvarov obsahujúcu vybrané tvary"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
@@ -12094,9 +12086,7 @@ msgstr "Vložiť vrstvu zo schránky"
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2914 krita/krita.action:2917
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Group layers"
 msgstr "Zoskupiť vrstvy"
@@ -12113,9 +12103,7 @@ msgstr "Vytvoriť skupinu vrstiev obsahujúcu vybrané vrstvy"
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2926 krita/krita.action:2929
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Ungroup layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layers"
 msgstr "Zrušiť zoskupenie vrstiev"
@@ -13109,12 +13097,10 @@ msgstr "Nastaviť kopí&rovanie z..."
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3632
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set the source for the selected clone layer(s)."
+#, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layers"
-msgstr "Nastaviť zdroj pre vybrané klonované vrstvu(y)"
+msgstr "Nastaviť zdroj pre vybrané klonované vrstvy"
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3633
@@ -25168,14 +25154,12 @@ msgstr "Rozmery väčšie než 1920 pixelov nie sú široko podporované."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Warning"
+#, kde-format
 msgid "Warning:"
 msgid_plural "Warnings:"
-msgstr[0] "Upozornenie"
-msgstr[1] "Upozornenie"
-msgstr[2] "Upozornenie"
+msgstr[0] "Upozornenie:"
+msgstr[1] "Upozornenia:"
+msgstr[2] "Upozornenia:"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
 #, kde-format
@@ -26748,117 +26732,87 @@ msgid "About Krita"
 msgstr "O Krita"
 
 #: libs/ui/dialogs/kis_about_application.cpp:51
-#, fuzzy, kde-format
-#| msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
+#, kde-format
 msgid "<p><b>Using Krita</b></p>"
-msgstr "<p><span style=\" color:%1;\"><b>Používanie Krity</b></span></p>"
+msgstr "<p><b>Používanie Krity</b></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:58
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline;\">Support Krita's Development!</span></a></p>"
 msgstr ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Support Krita's Development!</span></a></p>"
+"underline;\">Podporte vývoj Krity!</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:59
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">Krita Website</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
 "\">Krita Website</span></a></p>"
 msgstr ""
-"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Krita Website</span></a></p>"
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline;"
+"\">Webová stránka Krity</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:63
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
 "\"><span style=\" text-decoration: underline;\">Getting Started</span></a></"
 "p>"
 msgstr ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
-"\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</"
-"span></a></p>"
+"\"><span style=\" text-decoration: underline;\">Začíname</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:64
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">Manual</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline;\">Manual</span></a></p>"
 msgstr ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
-"underline; color:%1;\">Manual</span></a></p>"
+"underline;\">Príručka</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:66
-#, fuzzy, kde-format
-#| msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
+#, kde-format
 msgid "<p><b>Coding Krita</b></p>"
-msgstr "<p><span style=\" color:%1;\"><b>Programovanie Krity</b></span></p>"
+msgstr "<p><b>Programovanie Krity</b></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:67
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-#| "underline; color:%1;\">User Community</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline;\">User Community</span></a></p>"
 msgstr ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">User Community</span></a></p>"
+"underline;\">Komunita používateľov</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Source Code</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline;;\">Source Code</span></a></p>"
 msgstr ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-"decoration: underline; color:%1;\">Source Code</span></a></p>"
+"decoration: underline;;\">Zdrojový kód</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:69
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline;\">Scripting API</span></a></p>"
 msgstr ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
-"text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+"text-decoration: underline;\">Skriptovacie API</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:70
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Scripting School</span></"
-#| "a></p>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline;;\">Scripting School</span></a></p>"
 msgstr ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
-"\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
+"\" text-decoration: underline;;\">Škola skriptovania</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:83
 #, kde-format
@@ -32619,6 +32573,7 @@ msgstr "v nástroji presunu"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgProofingOptions)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisDonationManagementWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisToneGamutMapWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgFilterFastColorOverlay)
 #. i18n: ectx: property (windowTitle), widget (QWidget, TouchDockerWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
@@ -32641,6 +32596,7 @@ msgstr "v nástroji presunu"
 #: plugins/extensions/resourcemanager/wdgside.ui:23
 #: plugins/extensions/resourcemanager/wdgtagpreview.ui:20
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:14
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:14
 #, kde-format
 msgid "Form"
 msgstr "Formulár"
@@ -34129,10 +34085,9 @@ msgid "Smart Zoom Gesture"
 msgstr "Inteligentné gesto priblíženia"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:482
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgid "Touchpad Scroll Gesture"
-msgstr "Dotykové gestá"
+msgstr "Gesto posúvania na touchpade"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:484
 #: libs/ui/input/kis_shortcut_configuration.cpp:514
@@ -34214,18 +34169,16 @@ msgid "Mouse Wheel"
 msgstr "Koliesko myši"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:531
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touch Gesture"
-msgstr "Dotykové gestá"
+msgstr "Dotykové gesto"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:534
-#, fuzzy, kde-format
-#| msgid "Touch Gestures"
+#, kde-format
 msgctxt "Shortcut type"
 msgid "Touchpad Gesture"
-msgstr "Dotykové gestá"
+msgstr "Gesto na touchpade"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:537
 #, kde-format
@@ -34243,10 +34196,9 @@ msgid "Tablet Event Logging Disabled"
 msgstr "Záznam udalostí tabletu zakázaný"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Temporary Resources"
+#, kde-format
 msgid "Temporary Straight Ruler"
-msgstr "Dočasné zdroje"
+msgstr "Dočasné rovné pravítko"
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:59
 #, kde-format
@@ -34254,13 +34206,13 @@ msgid ""
 "The <i>Temporary Straight Ruler</i> action creates a transient ruler for "
 "constrained painting."
 msgstr ""
+"Akcia <i>Dočasné rovné pravítko</i> vytvorí prechodné pravítko na obmedzené "
+"maľovanie."
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:63
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Snap single:"
+#, kde-format
 msgid "Snapped Angle"
-msgstr "Jednoduchý zlom:"
+msgstr "Prichytený uhol"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:39
 #, kde-format
@@ -34418,52 +34370,44 @@ msgid "Zoom and Rotate Canvas"
 msgstr "Priblížiť a otočiť plátno"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:58
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Rotate Mode"
-msgstr "Režim otáčania"
+msgstr "Režim posúvania, približovania a otáčania"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:59
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Zoom, Discrete Rotate Mode"
-msgstr "Diskrétny režim otáčania"
+msgstr "Režim posúvania, približovania a diskrétneho otáčania"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:60
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Rotate Mode"
-msgstr "Diskrétny režim otáčania"
+msgstr "Režim posúvania, diskrétneho približovania a otáčania"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:61
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Pan, Discrete Zoom, Discrete Rotate Mode"
-msgstr "Diskrétny režim otáčania"
+msgstr "Režim posúvania, diskrétneho približovania a diskrétneho otáčania"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:62
-#, fuzzy, kde-format
-#| msgid "Rotate Mode"
+#, kde-format
 msgid "Zoom, Rotate Mode"
-msgstr "Režim otáčania"
+msgstr "Režim približovania a otáčania"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:63
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Zoom, Discrete Rotate Mode"
-msgstr "Diskrétny režim otáčania"
+msgstr "Režim približovania a diskrétneho otáčania"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:64
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Rotate Mode"
-msgstr "Diskrétny režim otáčania"
+msgstr "Režim diskrétneho približovania a otáčania"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:65
-#, fuzzy, kde-format
-#| msgid "Discrete Rotate Mode"
+#, kde-format
 msgid "Discrete Zoom, Discrete Rotate Mode"
-msgstr "Diskrétny režim otáčania"
+msgstr "Režim diskrétneho približovania a diskrétneho otáčania"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:17
 #, kde-format
@@ -40059,7 +40003,7 @@ msgctxt "@info:tooltip"
 msgid "Symmetric Difference (%1)"
 msgstr "Symetrický rozdiel (%1)"
 
-#: libs/ui/widgets/kis_tone_curve_widget.cpp:317
+#: libs/ui/widgets/kis_tone_curve_widget.cpp:334
 #, kde-format
 msgid "No tone curve available..."
 msgstr "Nie je dostupná žiadna tónová krivka..."
@@ -44637,16 +44581,14 @@ msgid "Tablet Handling"
 msgstr "Manipulácia s tabletom"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:303
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Filtering"
-msgstr "Spracovanie vstupu"
+msgstr "Filtrovanie vstupu"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:307
-#, fuzzy, kde-format
-#| msgid "Input handling"
+#, kde-format
 msgid "Input Matching"
-msgstr "Spracovanie vstupu"
+msgstr "Párovanie vstupu"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:311
 #, kde-format
@@ -45073,14 +45015,13 @@ msgid "px"
 msgstr "px"
 
 #: plugins/dockers/recorder/recorder_export.cpp:560
-#, fuzzy, kde-format
-#| msgid "frame"
+#, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame"
 msgid_plural "frames"
 msgstr[0] "snímka"
-msgstr[1] "snímka"
-msgstr[2] "snímka"
+msgstr[1] "snímky"
+msgstr[2] "snímok"
 
 #: plugins/dockers/recorder/recorder_export.cpp:620
 #, kde-format
@@ -50708,16 +50649,13 @@ msgstr ""
 "span></a>!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "EXIF: exposure - exposure mode"
-#| msgid "Manual"
+#, kde-format
 msgctxt "@title:tab plugin manual"
 msgid "Manual"
 msgstr "Ručne"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:53
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:tab plugin status"
 msgid "Status"
 msgstr "Stav"
@@ -50728,68 +50666,56 @@ msgid "Python Plugin Manager"
 msgstr "Správca zásuvných modulov Python"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:114
-#, fuzzy, kde-format
-#| msgid "Location:"
+#, kde-format
 msgctxt "%1 plugin file path"
 msgid "Location: %1"
-msgstr "Umiestnenie:"
+msgstr "Umiestnenie: %1"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgid "Enabled: false"
-msgstr "Povolené"
+msgstr "Povolené: nie"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgid "Enabled: true"
-msgstr "Povolené"
+msgstr "Povolené: áno"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:117
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "%1 plugin status text"
 msgid "Status: %1"
-msgstr "Stav"
+msgstr "Stav: %1"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:119
-#, fuzzy, kde-format
-#| msgid "Error: "
+#, kde-format
 msgctxt "%1 plugin error message"
 msgid "Error: %1"
-msgstr "Chyba:"
+msgstr "Chyba: %1"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Broken"
-msgstr "Ťah"
+msgstr "Poškodený"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:83
-#, fuzzy, kde-format
-#| msgctxt "Enable Shrink To Fit"
-#| msgid "Enable"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Unstable"
-msgstr "Povoliť"
+msgstr "Nestabilný"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "Load Image as Thumbnail button"
-#| msgid "Load Image"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Loaded"
-msgstr "Načítať obrázok"
+msgstr "Načítaný"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:87
-#, fuzzy, kde-format
-#| msgid "Not Saved"
+#, kde-format
 msgctxt "@item:intable plugin status"
 msgid "Not loaded"
-msgstr "Neuložené"
+msgstr "Nenačítaný"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:150
 #, kde-format
@@ -50857,12 +50783,10 @@ msgid "Internal engine failure"
 msgstr "Interné zlyhanie jadra aplikácie"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:386
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Module not loaded:<br/>%1"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/><code>%1</code>"
-msgstr "Modul nie je načítaný:<br/>%1"
+msgstr "Modul nie je načítaný:<br/><code>%1</code>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:53
 #, kde-format
@@ -50877,8 +50801,7 @@ msgid "Comment"
 msgstr "Komentár"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:57
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt "@title:column"
 msgid "Status"
 msgstr "Stav"
@@ -53936,6 +53859,196 @@ msgstr "Prah:..."
 msgid "Threshold &level:"
 msgstr "Prahová úroveň"
 
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:56
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "New Gamut Mask..."
+msgid "Tone/Gamut Map..."
+msgstr "Nová masky škály..."
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:155
+#, fuzzy, kde-format
+msgid "LAB"
+msgstr "LAS,"
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:156
+#, kde-format
+msgid "XYZ (ICtCp)"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:157
+#, kde-format
+msgid "XYZ (OkLAB)"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:159
+#, kde-format
+msgid "Reinhard"
+msgstr "Reinhard"
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:160
+#, kde-format
+msgid "Piecewise Filmic"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:162
+#, fuzzy, kde-format
+#| msgctxt "Lightness Map blend mode for brush texture"
+#| msgid "Lightness Map"
+msgid "Use Chroma-Lightness Cusp Map"
+msgstr "Mapa svetlosti"
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:163
+#, fuzzy, kde-format
+#| msgid "Minimum Quality"
+msgid "Minimum Delta E"
+msgstr "Minimálna kvalita"
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:165
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Use a chroma-lightness cusp map for a faster, if more inaccurate gamut "
+"mapping. Only works for RGB and CMYK profiles, will fall back on Minimum "
+"Delta E."
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:168
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Will use the Minimum Delta E method, where colors are brought into gamut "
+"until they minimally different from the transformed color. Slow but accurate."
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:289
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:306
+#, kde-format
+msgid "Current Maximum White: %1"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.h:28
+#, fuzzy, kde-format
+#| msgid "Gamut Masks"
+msgid "Tone/Gamut Map"
+msgstr "Masky škály"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:22
+#, fuzzy, kde-format
+#| msgctxt "Color model"
+#| msgid "Model:"
+msgid "Model:"
+msgstr "Model:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, chkToneMap)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:41
+#, fuzzy, kde-format
+#| msgctxt "Layer name for translation of template"
+#| msgid "Tones"
+msgid "Tone Map"
+msgstr "Tóny"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:57
+#, fuzzy, kde-format
+#| msgid "White:"
+msgid "Max White:"
+msgstr "Biela:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:80
+#, fuzzy, kde-format
+#| msgid "Strength:"
+msgid "Toe Strength:"
+msgstr "Sila:"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeStrength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:87
+#, kde-format
+msgid ""
+"The sharpness of the toe fall-off. 0.0 makes it linear, while 1.0 produces a "
+"sharp angle."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:103
+#, fuzzy, kde-format
+#| msgid "Length:"
+msgid "Toe Length:"
+msgstr "Dĺžka:"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeLength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:110
+#, kde-format
+msgid ""
+"How much of the dynamic range is in the toe. 0.0 means none, while 1.0 is "
+"half the curve."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:126
+#, fuzzy, kde-format
+#| msgid "Anc&hor Strength:"
+msgid "Shoulder Strength:"
+msgstr "Sila ukotvenia:"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderStrength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:133
+#, kde-format
+msgid "Curvature of the shoulder. 1.0 is linear."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:149
+#, fuzzy, kde-format
+#| msgid "Smudge Length"
+msgid "Shoulder Length:"
+msgstr "Dĺžka rozmazania"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderLength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:156
+#, kde-format
+msgid "Determines the maximum white in stops."
+msgstr ""
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnShoulderLength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:159
+#, fuzzy, kde-format
+#| msgctxt "Button to edit the selected stop color in the stop gradient editor"
+#| msgid "Edit stop"
+msgid " stops"
+msgstr "Upraviť zarážku"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:172
+#, fuzzy, kde-format
+#| msgid "Shear angle X:"
+msgid "Shoulder Angle:"
+msgstr "Uhol skosenia X:"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderAngle)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:179
+#, kde-format
+msgid ""
+"Angle of the shoulder, determines the smoothness of the shift to full white."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, chkGamutMap)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:210
+#, fuzzy, kde-format
+#| msgid "Gamut Masks"
+msgid "Gamut Map"
+msgstr "Masky škály"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:219
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Target:"
+msgid "Target Gamut:"
+msgstr "Cieľ:"
+
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format
 msgid "&Unsharp Mask..."
@@ -55029,9 +55142,7 @@ msgid "Brush selection information for animated brushes"
 msgstr "Informácie o výbere štetcov pre animované štetce"
 
 #: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "video importer: video file statistics"
-#| msgid "Frames: %1"
+#, kde-format
 msgctxt "@label %1 number of animation frames"
 msgid "Frames: %1"
 msgstr "Snímky: %1"
@@ -61017,12 +61128,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#, fuzzy, kde-format
-#| msgctxt "In bundle manager; press button to create a new bundle"
-#| msgid "Create"
+#, kde-format
 msgctxt "@action:button create new brushtip"
 msgid "Create New"
-msgstr "Vytvoriť"
+msgstr "Vytvoriť nový"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:119
@@ -61287,61 +61396,51 @@ msgid "Text"
 msgstr "Text"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:80
-#, fuzzy, kde-format
-#| msgid "Source:"
+#, kde-format
 msgctxt "@label:listbox image source"
 msgid "Source:"
 msgstr "Zdroj:"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Image"
 msgstr "Obrázok"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:85
-#, fuzzy, kde-format
-#| msgid "Clipboard"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Clipboard"
 msgstr "Schránka"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:button reload image"
 msgid "Reload"
 msgstr "Znovu načítať"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:251
-#, fuzzy, kde-format
-#| msgctxt "Empty locale"
-#| msgid "Empty"
+#, kde-format
 msgctxt "@info empty image"
 msgid "Empty"
 msgstr "Prázdne."
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:278
-#, fuzzy, kde-format
-#| msgid "Overwrite"
+#, kde-format
 msgctxt "@action:button"
 msgid "Overwrite"
 msgstr "Prepísať"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:280
-#, fuzzy, kde-format
-#| msgid "Save"
+#, kde-format
 msgctxt "@action:button"
 msgid "Save"
 msgstr "Uložiť"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
-#, fuzzy, kde-format
-#| msgid "Creates a brush tip from the image in the clipboard."
+#, kde-format
 msgid "Creates a brush tip from the current image, selection, or clipboard."
-msgstr "Vytvorí špičku štetca z obrázka v schránke."
+msgstr "Vytvorí špičku štetca z aktuálneho obrázka, výberu alebo schránky."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
@@ -61387,9 +61486,9 @@ msgstr ""
 " Kontrast: 0%"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create New Brushtip"
-msgstr "Vytvoriť balík"
+msgstr "Vytvoriť novú špičku štetca"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
@@ -66322,48 +66421,44 @@ msgid "Gradient"
 msgstr "Prechod"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:267
-#, fuzzy, kde-format
-#| msgid "&Dither:"
+#, kde-format
 msgid "Dither:"
-msgstr "Rozptýliť:"
+msgstr "Rozptyl:"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:270
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "The gradient will not be dithered"
 msgid "None"
 msgstr "Žiadne"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:271
-#, fuzzy, kde-format
-#| msgid "Simplex Noise"
+#, kde-format
 msgctxt "The gradient will be dithered with Blue Noise"
 msgid "Blue Noise"
-msgstr "Simplex šum"
+msgstr "Modrý šum"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:272
 #, kde-format
 msgctxt "The gradient will be dithered with Bayer Matrix 2x2"
 msgid "Bayer Matrix 2x2"
-msgstr ""
+msgstr "Bayerova matica 2x2"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:273
 #, kde-format
 msgctxt "The gradient will be dithered with Bayer Matrix 4x4"
 msgid "Bayer Matrix 4x4"
-msgstr ""
+msgstr "Bayerova matica 4x4"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:274
 #, kde-format
 msgctxt "The gradient will be dithered with Bayer Matrix 8x8"
 msgid "Bayer Matrix 8x8"
-msgstr ""
+msgstr "Bayerova matica 8x8"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:278
-#, fuzzy, kde-format
-#| msgid "&Dither:"
+#, kde-format
 msgid "Dither steps:"
-msgstr "Rozptýliť:"
+msgstr "Kroky rozptylu:"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:293
 #, kde-format
@@ -72666,10 +72761,6 @@ msgstr ""
 #~ msgctxt "New layer style"
 #~ msgid "&New..."
 #~ msgstr "&Nový..."
-
-#~ msgctxt "@title:window"
-#~ msgid "New Gamut Mask..."
-#~ msgstr "Nová masky škály..."
 
 #~ msgctxt "@title:window"
 #~ msgid "Invalid Name"
@@ -93010,10 +93101,6 @@ msgstr ""
 #~ msgid "Change the filling pattern"
 #~ msgstr "Zmeniť vzor výplne"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Target:"
-#~ msgstr "Cieľ:"
-
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Type:"
@@ -101806,10 +101893,6 @@ msgstr ""
 #~ msgid "Lars Lawrenz"
 #~ msgstr "Lars Lawrenz"
 
-#, fuzzy
-#~ msgid "LAS"
-#~ msgstr "LAS,"
-
 #~ msgid "Laurent"
 #~ msgstr "Laurent"
 
@@ -102085,9 +102168,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "RayoGlauco"
 #~ msgstr "RayoGlauco,"
-
-#~ msgid "Reinhard"
-#~ msgstr "Reinhard"
 
 #~ msgid "Rhakios"
 #~ msgstr "Rhakios"

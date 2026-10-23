@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-22 00:48+0000\n"
+"POT-Creation-Date: 2026-10-23 00:46+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -32448,6 +32448,7 @@ msgstr "Công cụ &di chuyển"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgProofingOptions)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisDonationManagementWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisToneGamutMapWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgFilterFastColorOverlay)
 #. i18n: ectx: property (windowTitle), widget (QWidget, TouchDockerWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
@@ -32470,6 +32471,7 @@ msgstr "Công cụ &di chuyển"
 #: plugins/extensions/resourcemanager/wdgside.ui:23
 #: plugins/extensions/resourcemanager/wdgtagpreview.ui:20
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:14
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:14
 #, fuzzy, kde-format
 msgid "Form"
 msgstr "&Trắng"
@@ -39587,7 +39589,7 @@ msgctxt "@info:tooltip"
 msgid "Symmetric Difference (%1)"
 msgstr ""
 
-#: libs/ui/widgets/kis_tone_curve_widget.cpp:317
+#: libs/ui/widgets/kis_tone_curve_widget.cpp:334
 #, fuzzy, kde-format
 msgid "No tone curve available..."
 msgstr "Không có ảnh nào."
@@ -53393,6 +53395,178 @@ msgstr "Ngưỡng vẽ :"
 #| msgid "Threshold:"
 msgid "Threshold &level:"
 msgstr "Ngưỡng:"
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:56
+#, fuzzy, kde-format
+msgid "Tone/Gamut Map..."
+msgstr "Xoay ảnh"
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:155
+#, kde-format
+msgid "LAB"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:156
+#, kde-format
+msgid "XYZ (ICtCp)"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:157
+#, kde-format
+msgid "XYZ (OkLAB)"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:159
+#, kde-format
+msgid "Reinhard"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:160
+#, kde-format
+msgid "Piecewise Filmic"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:162
+#, fuzzy, kde-format
+msgid "Use Chroma-Lightness Cusp Map"
+msgstr "Chỉ làm sáng"
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:163
+#, fuzzy, kde-format
+msgid "Minimum Delta E"
+msgstr "Độ đậm đặc:"
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:165
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Use a chroma-lightness cusp map for a faster, if more inaccurate gamut "
+"mapping. Only works for RGB and CMYK profiles, will fall back on Minimum "
+"Delta E."
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:168
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Will use the Minimum Delta E method, where colors are brought into gamut "
+"until they minimally different from the transformed color. Slow but accurate."
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:289
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:306
+#, kde-format
+msgid "Current Maximum White: %1"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.h:28
+#, fuzzy, kde-format
+msgid "Tone/Gamut Map"
+msgstr "Xoay ảnh"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:22
+#, fuzzy, kde-format
+#| msgid "Model:"
+msgid "Model:"
+msgstr "Mô hình:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, chkToneMap)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:41
+#, fuzzy, kde-format
+msgid "Tone Map"
+msgstr "Đá"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:57
+#, fuzzy, kde-format
+msgid "Max White:"
+msgstr "Cân bằng trắng:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:80
+#, fuzzy, kde-format
+msgid "Toe Strength:"
+msgstr "Cho layer hiện tại lên trên"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeStrength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:87
+#, kde-format
+msgid ""
+"The sharpness of the toe fall-off. 0.0 makes it linear, while 1.0 produces a "
+"sharp angle."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:103
+#, fuzzy, kde-format
+#| msgid "Length:"
+msgid "Toe Length:"
+msgstr "Chiều dài:"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeLength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:110
+#, kde-format
+msgid ""
+"How much of the dynamic range is in the toe. 0.0 means none, while 1.0 is "
+"half the curve."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:126
+#, fuzzy, kde-format
+msgid "Shoulder Strength:"
+msgstr "Cho layer hiện tại lên trên"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderStrength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:133
+#, kde-format
+msgid "Curvature of the shoulder. 1.0 is linear."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:149
+#, fuzzy, kde-format
+msgid "Shoulder Length:"
+msgstr "Chổi nhoè"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderLength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:156
+#, kde-format
+msgid "Determines the maximum white in stops."
+msgstr ""
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnShoulderLength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:159
+#, fuzzy, kde-format
+msgid " stops"
+msgstr "sửa định sẵn"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:172
+#, fuzzy, kde-format
+#| msgid "Shear angle X:"
+msgid "Shoulder Angle:"
+msgstr "Góc méo X:"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderAngle)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:179
+#, kde-format
+msgid ""
+"Angle of the shoulder, determines the smoothness of the shift to full white."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, chkGamutMap)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:210
+#, fuzzy, kde-format
+msgid "Gamut Map"
+msgstr "Xoay ảnh"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:219
+#, fuzzy, kde-format
+msgid "Target Gamut:"
+msgstr "Phóng Phần chọn"
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, fuzzy, kde-format
@@ -71604,11 +71778,6 @@ msgstr ""
 #~ msgctxt "New layer style"
 #~ msgid "&New..."
 #~ msgstr "Làm to lên"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "New Gamut Mask..."
-#~ msgstr "Xoay ảnh"
 
 #, fuzzy
 #~ msgctxt "@title:window"

@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-22 00:48+0000\n"
+"POT-Creation-Date: 2026-10-23 00:46+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -33155,6 +33155,7 @@ msgstr "Den &Maler sien Warktüüchkist"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgProofingOptions)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisDonationManagementWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisToneGamutMapWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgFilterFastColorOverlay)
 #. i18n: ectx: property (windowTitle), widget (QWidget, TouchDockerWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
@@ -33177,6 +33178,7 @@ msgstr "Den &Maler sien Warktüüchkist"
 #: plugins/extensions/resourcemanager/wdgside.ui:23
 #: plugins/extensions/resourcemanager/wdgtagpreview.ui:20
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:14
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:14
 #, fuzzy, kde-format
 msgid "Form"
 msgstr "Form"
@@ -40405,7 +40407,7 @@ msgctxt "@info:tooltip"
 msgid "Symmetric Difference (%1)"
 msgstr ""
 
-#: libs/ui/widgets/kis_tone_curve_widget.cpp:317
+#: libs/ui/widgets/kis_tone_curve_widget.cpp:334
 #, fuzzy, kde-format
 msgid "No tone curve available..."
 msgstr "Keen Bild verföögbor."
@@ -54635,6 +54637,186 @@ msgstr "Grenzweert"
 #| msgid "Threshold:"
 msgid "Threshold &level:"
 msgstr "Grenzweert:"
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:56
+#, fuzzy, kde-format
+#| msgid "Raise Mask"
+msgid "Tone/Gamut Map..."
+msgstr "Mask na vörn"
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:155
+#, kde-format
+msgid "LAB"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:156
+#, kde-format
+msgid "XYZ (ICtCp)"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:157
+#, kde-format
+msgid "XYZ (OkLAB)"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:159
+#, fuzzy, kde-format
+#| msgid "Reinhard 02"
+msgid "Reinhard"
+msgstr "Reinhard 02"
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:160
+#, kde-format
+msgid "Piecewise Filmic"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:162
+#, fuzzy, kde-format
+msgid "Use Chroma-Lightness Cusp Map"
+msgstr "Helligkeit"
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:163
+#, fuzzy, kde-format
+msgid "Minimum Delta E"
+msgstr "Gööd:"
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:165
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Use a chroma-lightness cusp map for a faster, if more inaccurate gamut "
+"mapping. Only works for RGB and CMYK profiles, will fall back on Minimum "
+"Delta E."
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:168
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Will use the Minimum Delta E method, where colors are brought into gamut "
+"until they minimally different from the transformed color. Slow but accurate."
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:289
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:306
+#, kde-format
+msgid "Current Maximum White: %1"
+msgstr ""
+
+#: plugins/filters/tonegamutmap/KisToneGamutMapFilter.h:28
+#, fuzzy, kde-format
+#| msgid "Raise Mask"
+msgid "Tone/Gamut Map"
+msgstr "Mask na vörn"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:22
+#, fuzzy, kde-format
+#| msgid "Model:"
+msgid "Model:"
+msgstr "Modell:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, chkToneMap)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:41
+#, fuzzy, kde-format
+#| msgid "Midtones"
+msgid "Tone Map"
+msgstr "Middeltöön"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:57
+#, fuzzy, kde-format
+msgid "Max White:"
+msgstr "Wittbalangs:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:80
+#, fuzzy, kde-format
+#| msgid "Strength:"
+msgid "Toe Strength:"
+msgstr "Stärk:"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeStrength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:87
+#, kde-format
+msgid ""
+"The sharpness of the toe fall-off. 0.0 makes it linear, while 1.0 produces a "
+"sharp angle."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:103
+#, fuzzy, kde-format
+#| msgid "Length:"
+msgid "Toe Length:"
+msgstr "Duer:"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeLength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:110
+#, kde-format
+msgid ""
+"How much of the dynamic range is in the toe. 0.0 means none, while 1.0 is "
+"half the curve."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:126
+#, fuzzy, kde-format
+msgid "Shoulder Strength:"
+msgstr "Stärk:"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderStrength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:133
+#, kde-format
+msgid "Curvature of the shoulder. 1.0 is linear."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:149
+#, fuzzy, kde-format
+msgid "Shoulder Length:"
+msgstr "Verwischenduer"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderLength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:156
+#, kde-format
+msgid "Determines the maximum white in stops."
+msgstr ""
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnShoulderLength)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:159
+#, fuzzy, kde-format
+#| msgid "Edit presets"
+msgid " stops"
+msgstr "Vörinstellen bewerken"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:172
+#, fuzzy, kde-format
+#| msgid "Shear angle X:"
+msgid "Shoulder Angle:"
+msgstr "Scheerwinkel X:"
+
+#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderAngle)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:179
+#, kde-format
+msgid ""
+"Angle of the shoulder, determines the smoothness of the shift to full white."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, chkGamutMap)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:210
+#, fuzzy, kde-format
+#| msgid "Raise Mask"
+msgid "Gamut Map"
+msgstr "Mask na vörn"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:219
+#, fuzzy, kde-format
+#| msgid "Target:"
+msgid "Target Gamut:"
+msgstr "Teel:"
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format
@@ -73558,12 +73740,6 @@ msgstr ""
 #~ msgctxt "New layer style"
 #~ msgid "&New..."
 #~ msgstr "Utdehnen..."
-
-#, fuzzy
-#~| msgid "Raise Mask"
-#~ msgctxt "@title:window"
-#~ msgid "New Gamut Mask..."
-#~ msgstr "Mask na vörn"
 
 #, fuzzy
 #~ msgctxt "@title:window"
@@ -94749,12 +94925,6 @@ msgstr ""
 #~ msgstr "Hööftsiet ännern"
 
 #, fuzzy
-#~| msgid "Target:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Target:"
-#~ msgstr "Teel:"
-
-#, fuzzy
 #~| msgid "Type:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Type:"
@@ -102601,11 +102771,6 @@ msgstr ""
 #~| msgid "A-4 Fairy Dust"
 #~ msgid "Pierre Dumot"
 #~ msgstr "A-4 Elvenstoff"
-
-#, fuzzy
-#~| msgid "Reinhard 02"
-#~ msgid "Reinhard"
-#~ msgstr "Reinhard 02"
 
 #, fuzzy
 #~| msgid "Sven Langkamp"

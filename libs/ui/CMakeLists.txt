@@ -334,6 +334,7 @@ set(kritaui_LIB_SRCS
     dialogs/KisDlgPaletteEditor.cpp
 
     widgets/KisNewsWidget.cpp
+    widgets/KisNewsItem.cpp
     widgets/KisGamutMaskToolbar.cpp
 	widgets/KisColorSamplerPreviewPreview.cpp
 
@@ -635,6 +636,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/KisWelcomePage.ui
     forms/WdgDlgPaletteEditor.ui
     forms/KisNewsPage.ui
+    forms/KisNewsItem.ui
     forms/wdgGamutMaskToolbar.ui
     forms/wdgchangeclonesource.ui
     forms/koDocumentInfoAboutWidget.ui

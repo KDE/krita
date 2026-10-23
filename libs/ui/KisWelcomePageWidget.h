@@ -61,6 +61,8 @@ private Q_SLOTS:
     void slotOpenFileClicked();
     void slotPaste();
 
+    void newsStateChanged(bool hasNews);
+
     void recentDocumentClicked(QModelIndex index);
     void slotRecentDocContextMenuRequest(const QPoint &pos);
 

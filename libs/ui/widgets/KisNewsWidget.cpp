@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2026 Arkady Flury <arkady.flury@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -14,65 +15,11 @@
 #include <QAbstractTextDocumentLayout>
 #include <QRegularExpression>
 #include <QScrollBar>
+#include <KisNewsItem.h>
 
 #include "kis_config.h"
 #include "KisMultiFeedRSSModel.h"
 #include <KisKineticScroller.h>
-
-KisNewsDelegate::KisNewsDelegate(QObject *parent)
-    : QStyledItemDelegate(parent)
-{
-}
-
-void KisNewsDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    painter->save();
-
-    QStyleOptionViewItem optionCopy = option;
-    initStyleOption(&optionCopy, index);
-
-    QStyle *style = optionCopy.widget? optionCopy.widget->style() : QApplication::style();
-
-    QTextDocument doc;
-    doc.setDocumentMargin(6);
-    doc.setHtml(optionCopy.text);
-    doc.setTextWidth(optionCopy.rect.width());
-
-    /// Painting item without text
-    optionCopy.text = QString();
-    style->drawControl(QStyle::CE_ItemViewItem, &optionCopy, painter);
-
-    QAbstractTextDocumentLayout::PaintContext ctx;
-
-    // Highlighting text if item is selected
-    QColor textColor;
-    if (optionCopy.state & QStyle::State_Selected) {
-        textColor = optionCopy.palette.color(QPalette::Active, QPalette::HighlightedText);
-    } else {
-        textColor = optionCopy.palette.color(QPalette::Text);
-    }
-    ctx.palette.setColor(QPalette::Text, textColor);
-
-    painter->translate(optionCopy.rect.left(), optionCopy.rect.top());
-    QRect clip(0, 0, optionCopy.rect.width(), optionCopy.rect.height());
-    ctx.clip = clip;
-    doc.setPageSize(clip.size());
-    doc.documentLayout()->draw(painter, ctx);
-
-    painter->restore();
-}
-
-QSize KisNewsDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyleOptionViewItem optionCopy = option;
-    initStyleOption(&optionCopy, index);
-
-    QTextDocument doc;
-    doc.setDocumentMargin(6);
-    doc.setHtml(optionCopy.text);
-    doc.setTextWidth(optionCopy.rect.width());
-    return QSize(doc.idealWidth(), doc.size().height());
-}
 
 KisNewsWidget::KisNewsWidget(QWidget *parent)
     : QWidget(parent)
@@ -80,37 +27,28 @@ KisNewsWidget::KisNewsWidget(QWidget *parent)
     , m_rssModel(0)
 {
     setupUi(this);
-    listNews->viewport()->setAutoFillBackground(false);
-    listNews->installEventFilter(this);
-    listNews->setVerticalScrollMode(QListView::ScrollPerPixel);
-    listNews->verticalScrollBar()->setSingleStep(50);
-    {
-        QScroller* scroller = KisKineticScroller::createPreconfiguredScroller(listNews);
-        if (scroller) {
-            connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
-        }
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(scrollArea);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
     }
+
 
     m_rssModel = new MultiFeedRssModel(this);
     connect(m_rssModel, SIGNAL(feedDataChanged()), this, SLOT(rssDataChanged()), Qt::UniqueConnection);
-
-    listNews->setModel(m_rssModel);
-    listNews->setItemDelegate(new KisNewsDelegate(listNews));
-    connect(listNews, SIGNAL(clicked(QModelIndex)), this, SLOT(itemSelected(QModelIndex)));
 }
 
-void KisNewsWidget::setAnalyticsTracking(QString text)
-{
-    m_analyticsTrackingParameters = text;
-}
 
-bool KisNewsWidget::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == listNews && event->type() == QEvent::Leave) {
-        listNews->clearSelection();
-        listNews->setCurrentIndex(QModelIndex());
+bool KisNewsWidget::event(QEvent *event) {
+    if (event->type() == QEvent::StyleChange) {
+        QList<QWidget*> allChildren = scrollAreaWidgetContents->findChildren<QWidget*>();
+
+        for (QWidget* child : allChildren) {
+            child->setStyleSheet(this->styleSheet());
+        }
     }
-    return QWidget::eventFilter(watched, event);
+    return QWidget::event(event);
 }
 
 void KisNewsWidget::toggleNewsLanguage(QString langCode, bool enabled)
@@ -155,32 +93,86 @@ void KisNewsWidget::toggleNews(bool toggle)
     }
 }
 
-void KisNewsWidget::itemSelected(const QModelIndex &idx)
-{
-    if (idx.isValid()) {
-        QString link = idx.data(KisRssReader::RssRoles::LinkRole).toString();
-
-        // append query string for analytics tracking if we set it
-        if (m_analyticsTrackingParameters != "") {
-
-            // use title in analytics query string
-            QString linkTitle = idx.data(KisRssReader::RssRoles::TitleRole).toString();
-            linkTitle = linkTitle.simplified(); // trims and makes 1 white space
-            linkTitle = linkTitle.replace(" ", "");
-
-            m_analyticsTrackingParameters = m_analyticsTrackingParameters.append(linkTitle);
-            QDesktopServices::openUrl(QUrl(link.append(m_analyticsTrackingParameters)));
-
-        } else {
-            QDesktopServices::openUrl(QUrl(link));
-        }
-
-
-    }
-}
 
 void KisNewsWidget::rssDataChanged()
 {
+    QLayout *layout = scrollAreaWidgetContents->layout();
+    if (layout) {
+        QLayoutItem *item;
+        while ((item = layout->takeAt(0)) != nullptr) {
+            delete item->widget();
+            delete item;
+        }
+    }
+
+    KConfigGroup newsGroup = KSharedConfig::openConfig()->group("DismissedNews");
+
+    for (int i = 0;i<m_rssModel->rowCount();i++){
+        QModelIndex index = m_rssModel->index(i);
+
+        QString link = index.data(KisRssReader::RssRoles::LinkRole).toString();
+
+        KisNewsItem *newsItem = new KisNewsItem(index.data(KisRssReader::RssRoles::TitleRole).toString(),
+                                                index.data(KisRssReader::RssRoles::PubDateRole).toString(),
+                                                index.data(KisRssReader::RssRoles::DescriptionRole).toString().remove(QRegularExpression("<[^>]*>")).split( "\n" ).at(1),
+                                                //gets first paragraph of description (all descriptions start with a "\n")
+                                                link,
+                                                i==0,//if top of list remove devider
+                                                this);
+        scrollAreaWidgetContents->layout()->addWidget(newsItem);
+
+        connect(newsItem, SIGNAL(updateNewsState()), this, SLOT(updateNewsState()));
+        connect(newsItem, SIGNAL(writeToConfig(QString)), this, SLOT(writeToConfig(QString)));
+        connect(this, SIGNAL(setAnalyticsTracking(QString)), newsItem, SLOT(setAnalyticsTracking(QString)));
+
+        if (newsGroup.readEntry<bool>(link,false)){
+            newsItem->dismiss(false);
+        }
+    }
+
+    scrollAreaWidgetContents->updateGeometry();
+
+    updateNewsState();
     Q_EMIT newsDataChanged();
 }
 
+void KisNewsWidget::dismissAll()
+{
+    QList<QWidget*> allChildren = scrollAreaWidgetContents->findChildren<QWidget*>();
+
+    for (QWidget* child : allChildren) {
+        if (KisNewsItem* newsItem = qobject_cast<KisNewsItem*>(child)) {
+            newsItem->dismiss();
+        }
+    }
+
+    Q_EMIT newsStateChanged(false);
+
+    scrollAreaWidgetContents->updateGeometry();
+}
+
+void KisNewsWidget::updateNewsState()
+{
+    bool hasNews = false;
+
+    KConfigGroup newsGroup = KSharedConfig::openConfig()->group("DismissedNews");
+
+    for (int i = 0;i<m_rssModel->rowCount();i++){
+        QModelIndex index = m_rssModel->index(i);
+
+        QString link = index.data(KisRssReader::RssRoles::LinkRole).toString();
+
+        if (!newsGroup.readEntry<bool>(link,false)){
+            hasNews = true;
+            break;
+        }
+    }
+
+    Q_EMIT newsStateChanged(hasNews);
+}
+
+void KisNewsWidget::writeToConfig(QString link)
+{
+    KConfigGroup newsGroup = KSharedConfig::openConfig()->group("DismissedNews");
+    newsGroup.writeEntry<bool>(link, true);
+}

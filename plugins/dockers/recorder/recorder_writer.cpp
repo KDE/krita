@@ -31,6 +31,7 @@
 #include <atomic>
 #include <QtMath>
 #include <qobjectdefs.h>
+#include <qscopedvaluerollback.h>
 
 namespace
 {
@@ -147,7 +148,6 @@ public:
     QImage frame;
     int frameResolution = -1;
     int partIndex = 0;                                     // Consecutive file number
-    bool isActive = false;
     const RecorderWriterSettings* settings;
     const QDir* outputDir;
 
@@ -326,15 +326,8 @@ bool RecorderWriter::onCaptureImageImpl(int index, QRect region, KisPaintDevice 
     return d->writeFrame();
 }
 
-bool RecorderWriter::isActive()
-{
-    return d->isActive;
-}
-
 void RecorderWriter::onCaptureImage(int index, QVector<QRect> regions, KisPaintDeviceSP device)
 {
-    d->isActive = true;
-
     // Sanity check
     KIS_ASSERT(!regions.isEmpty());
 
@@ -344,8 +337,6 @@ void RecorderWriter::onCaptureImage(int index, QVector<QRect> regions, KisPaintD
         framesWrittens &= onCaptureImageImpl(index, region, device.data());
         index++;
     }
-
-    d->isActive = false;
 
     Q_EMIT capturingDone(id, framesWrittens);
 }
@@ -398,6 +389,7 @@ public:
     QDir outputDir;
     bool captureTail = false;
     QRect oldRegion = QRect(-1, -1, -1, -1);
+    bool destroyingWriters = false;
 
     int findLastIndex(const QString &directory)
     {
@@ -427,24 +419,16 @@ public:
 
     bool clearWriterPool()
     {
+        QScopedValueRollback rollback(destroyingWriters, true);
         bool result = true;
         bool alreadyWarn = false;
         bool alreadyErr = false;
 
-        for (int i = 0; i < writerPool.count(); i++) {
-            if (writerPool[i].inUse && !writerPool[i].writer->isActive()) {
-                // There's a pending job, but the writer didn't recieve the signal yet
+        // Wait until all the jobs processes
+        canvas->image()->waitForDone();
 
-                // Wait until all the jobs processes
-                canvas->image()->waitForDone();
-
-                // Make sure the signals are delivered
-                QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-
-                //Iterate over and over to make 100% sure that everything is processed
-                i = 0;
-            }
-        }
+        // Make sure the signals are delivered
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
         for (auto &el : writerPool) {
             el.thread->quit();
@@ -468,6 +452,8 @@ public:
                     result = false;
                 }
             }
+
+            QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
         }
 
         writerPool.clear();
@@ -664,7 +650,7 @@ void RecorderWriterManager::setEnabled(bool enabled = false)
 
 void RecorderWriterManager::onTimer()
 {
-    if ((!d->enabled && !d->captureTail) || !d->canvas) {
+    if ((!d->enabled && !d->captureTail) || !d->canvas || d->destroyingWriters) {
         return;
     }
 
@@ -789,7 +775,7 @@ void RecorderWriterManager::onTimer()
 
 void RecorderWriterManager::onCapturingDone(int workerId, bool success)
 {
-    if (workerId >= d->writerPool.size())
+    if (workerId >= d->writerPool.size() || d->destroyingWriters)
         return;
     d->writerPool[workerId].inUse = false;
     d->writerPool[workerId].thread->setPriority(QThread::IdlePriority);

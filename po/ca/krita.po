@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-23 00:46+0000\n"
-"PO-Revision-Date: 2026-10-06 09:36+0200\n"
+"POT-Creation-Date: 2026-10-24 00:47+0000\n"
+"PO-Revision-Date: 2026-10-23 11:50+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -24170,7 +24170,7 @@ msgstr "Recursos locals"
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:689 libs/ui/KisView.cpp:1176
-#: libs/ui/KisWelcomePageWidget.cpp:728 libs/ui/KisWindowLayoutResource.cpp:390
+#: libs/ui/KisWelcomePageWidget.cpp:734 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
 #: libs/ui/widgets/kis_custom_image_widget.cc:456
@@ -28793,6 +28793,45 @@ msgstr "Usa sempre aquesta plantilla a l'inici de l'aplicació"
 msgid "Always use this template"
 msgstr "Usa sempre aquesta plantilla"
 
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisNewsItem)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgProofingOptions)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisDonationManagementWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisToneGamutMapWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgFilterFastColorOverlay)
+#. i18n: ectx: property (windowTitle), widget (QWidget, TouchDockerWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WGConfigWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgResourcePreview)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgSide)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisSupporterBundleWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgTagPreview)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisResourceItemViewer)
+#: libs/ui/forms/KisNewsItem.ui:26 libs/ui/forms/WdgPopupPaletteSettings.ui:14
+#: libs/ui/forms/wdgproofingoptions.ui:14
+#: libs/ui/widgets/KisAutoLevelsWidget.ui:14
+#: libs/ui/widgets/KisDonationManagementWidget.ui:14
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:14
+#: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:14
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:14
+#: plugins/extensions/resourcemanager/kisresourceitemviewer.ui:16
+#: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:14
+#: plugins/extensions/resourcemanager/wdgresourcepreview.ui:26
+#: plugins/extensions/resourcemanager/wdgside.ui:23
+#: plugins/extensions/resourcemanager/wdgtagpreview.ui:20
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:14
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:14
+#, kde-format
+msgid "Form"
+msgstr "Formulari"
+
+#. i18n: ectx: property (text), widget (QToolButton, btnDismiss)
+#: libs/ui/forms/KisNewsItem.ui:158
+#, kde-format
+msgid "Mark as Read"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:97
 #, kde-format
@@ -28800,7 +28839,7 @@ msgid "Start"
 msgstr "Inici"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:600
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:606
 #, kde-format
 msgid "DEV BUILD"
 msgstr "CONSTRUCCIÓ DEV"
@@ -28840,45 +28879,45 @@ msgid "Community"
 msgstr "Comunitat"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:357
+#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:363
 #, kde-format
 msgid "User Manual"
 msgstr "Manual d'usuari"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
 #. i18n: ectx: property (text), widget (QPushButton, m_btnSupport)
-#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:360
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:366
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:173
 #, kde-format
 msgid "Support Krita"
 msgstr "Contribució al Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:369
+#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:375
 #, kde-format
 msgid "Powered by KDE"
 msgstr "Desenvolupat per al KDE"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:366
+#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:372
 #, kde-format
 msgid "Source Code"
 msgstr "Codi font"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:354
+#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:360
 #, kde-format
 msgid "Getting Started"
 msgstr "Com començar"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:351
+#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:357
 #, kde-format
 msgid "User Community"
 msgstr "Comunitat d'usuaris"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:363
+#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:369
 #, kde-format
 msgid "Krita Website"
 msgstr "Lloc web del Krita"
@@ -28907,38 +28946,44 @@ msgstr ""
 "recentment cap document"
 
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1247
+#: libs/ui/forms/KisWelcomePage.ui:1277
 #, kde-format
 msgid "News"
 msgstr "Notícies"
 
+#. i18n: ectx: property (text), widget (QToolButton, btnDismisAll)
+#: libs/ui/forms/KisWelcomePage.ui:1311
+#, kde-format
+msgid "Mark all as read"
+msgstr ""
+
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:1270
+#: libs/ui/forms/KisWelcomePage.ui:1337
 #, kde-format
 msgid "News options"
 msgstr "Opcions de les notícies"
 
 # skip-rule: t-mot_rep
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1377
+#: libs/ui/forms/KisWelcomePage.ui:1453
 #, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "Hi ha disponible la versió X.X.X del Krita"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:1428
+#: libs/ui/forms/KisWelcomePage.ui:1504
 #, kde-format
 msgid "Update now!"
 msgstr "Actualitza ara!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:1435
+#: libs/ui/forms/KisWelcomePage.ui:1511
 #, kde-format
 msgid "Show details"
 msgstr "Mostra els detalls"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:371
+#: libs/ui/forms/KisWelcomePage.ui:1563 libs/ui/KisWelcomePageWidget.cpp:377
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -28950,7 +28995,7 @@ msgstr ""
 "el menú de dalt"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1627
+#: libs/ui/forms/KisWelcomePage.ui:1703
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -28983,20 +29028,20 @@ msgstr ""
 "desenvolupament</a>.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAndroidSupporter)
-#: libs/ui/forms/KisWelcomePage.ui:1659
+#: libs/ui/forms/KisWelcomePage.ui:1735
 #, kde-format
 msgid "Krita is made possible thanks to ongoing support from people like you!"
 msgstr ""
 "El Krita s'ha fet possible gràcies al suport recurrent de persones com vós!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupporterManage)
-#: libs/ui/forms/KisWelcomePage.ui:1672
+#: libs/ui/forms/KisWelcomePage.ui:1748
 #, kde-format
 msgid "Manage Supporter Benefits"
 msgstr "Gestió dels avantatges dels seguidors"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
-#: libs/ui/forms/KisWelcomePage.ui:1717 libs/ui/KisWelcomePageWidget.cpp:842
+#: libs/ui/forms/KisWelcomePage.ui:1793 libs/ui/KisWelcomePageWidget.cpp:848
 #, kde-format
 msgid "Support Krita!"
 msgstr "Ajudeu el Krita!"
@@ -32769,38 +32814,6 @@ msgstr ""
 #, kde-format
 msgid "in Move Tool"
 msgstr "a l'eina de moure"
-
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgProofingOptions)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisDonationManagementWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisToneGamutMapWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgFilterFastColorOverlay)
-#. i18n: ectx: property (windowTitle), widget (QWidget, TouchDockerWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WGConfigWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgResourcePreview)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgSide)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisSupporterBundleWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgTagPreview)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisResourceItemViewer)
-#: libs/ui/forms/WdgPopupPaletteSettings.ui:14
-#: libs/ui/forms/wdgproofingoptions.ui:14
-#: libs/ui/widgets/KisAutoLevelsWidget.ui:14
-#: libs/ui/widgets/KisDonationManagementWidget.ui:14
-#: plugins/dockers/touchdocker/TouchDockerWidget.ui:14
-#: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:14
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:14
-#: plugins/extensions/resourcemanager/kisresourceitemviewer.ui:16
-#: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:14
-#: plugins/extensions/resourcemanager/wdgresourcepreview.ui:26
-#: plugins/extensions/resourcemanager/wdgside.ui:23
-#: plugins/extensions/resourcemanager/wdgtagpreview.ui:20
-#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:14
-#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:14
-#, kde-format
-msgid "Form"
-msgstr "Formulari"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:32
@@ -37393,38 +37406,38 @@ msgstr "Idioma"
 msgid "English news is always up to date."
 msgstr "Les notícies en anglès sempre estan actualitzades."
 
-#: libs/ui/KisWelcomePageWidget.cpp:640
+#: libs/ui/KisWelcomePageWidget.cpp:646
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Oblida «%1»"
 
-#: libs/ui/KisWelcomePageWidget.cpp:747
+#: libs/ui/KisWelcomePageWidget.cpp:753
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Hi ha disponible una versió nova del Krita."
 
-#: libs/ui/KisWelcomePageWidget.cpp:776
+#: libs/ui/KisWelcomePageWidget.cpp:782
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "S'ha produït un error durant l'actualització"
 
-#: libs/ui/KisWelcomePageWidget.cpp:782
+#: libs/ui/KisWelcomePageWidget.cpp:788
 #, kde-format
 msgid "Restart is required."
 msgstr "Cal reiniciar."
 
-#: libs/ui/KisWelcomePageWidget.cpp:841
+#: libs/ui/KisWelcomePageWidget.cpp:847
 #, kde-format
 msgid "Become a Supporter!"
 msgstr "Convertiu-vos en seguidor!"
 
-#: libs/ui/KisWelcomePageWidget.cpp:845
+#: libs/ui/KisWelcomePageWidget.cpp:851
 #, kde-format
 msgid "Supporters get brush packs and more."
 msgstr "El seguidors obtenen paquets de pinzells i altres."
 
-#: libs/ui/KisWelcomePageWidget.cpp:846
+#: libs/ui/KisWelcomePageWidget.cpp:852
 #, kde-format
 msgid "Contributions keep development going."
 msgstr "Les contribucions mantenen el desenvolupament en marxa."
@@ -40576,6 +40589,16 @@ msgstr "Gestió de la subscripció"
 #, kde-format
 msgid "Mask is disabled"
 msgstr "La màscara està desactivada"
+
+#: libs/ui/widgets/KisNewsItem.cpp:27
+#, kde-format
+msgid "("
+msgstr ""
+
+#: libs/ui/widgets/KisNewsItem.cpp:27
+#, kde-format
+msgid ")"
+msgstr ""
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format
@@ -54166,48 +54189,44 @@ msgid "Threshold &level:"
 msgstr "Nive&ll del llindar:"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:56
-#, fuzzy, kde-format
-#| msgid "&Gradient Map..."
+#, kde-format
 msgid "Tone/Gamut Map..."
-msgstr "Mapa de de&gradats..."
+msgstr "Mapa de tons/gamma..."
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:155
 #, kde-format
 msgid "LAB"
-msgstr ""
+msgstr "LAB"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:156
 #, kde-format
 msgid "XYZ (ICtCp)"
-msgstr ""
+msgstr "XYZ (ICtCp)"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:157
 #, kde-format
 msgid "XYZ (OkLAB)"
-msgstr ""
+msgstr "XYZ (OkLAB)"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:159
 #, kde-format
 msgid "Reinhard"
-msgstr ""
+msgstr "Reinhard"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:160
 #, kde-format
 msgid "Piecewise Filmic"
-msgstr ""
+msgstr "Filmació a trossos"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:162
-#, fuzzy, kde-format
-#| msgctxt "Lightness Map blend mode for brush texture"
-#| msgid "Lightness Map"
+#, kde-format
 msgid "Use Chroma-Lightness Cusp Map"
-msgstr "Mapa de claredat"
+msgstr "Usa un mapa Cusp de croma-claredat"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:163
-#, fuzzy, kde-format
-#| msgid "Minimum Quality"
+#, kde-format
 msgid "Minimum Delta E"
-msgstr "Qualitat mínima"
+msgstr "Delta E mínima"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:165
 #, kde-format
@@ -54217,6 +54236,9 @@ msgid ""
 "mapping. Only works for RGB and CMYK profiles, will fall back on Minimum "
 "Delta E."
 msgstr ""
+"Utilitza un mapa «cusp» de croma-claredat per a un mapatge de gamma més "
+"ràpid, si és més inexacte. Només funciona per a perfils RGB i CMYK, com a "
+"reserva s'aplicarà la Delta E mínima."
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:168
 #, kde-format
@@ -54225,48 +54247,43 @@ msgid ""
 "Will use the Minimum Delta E method, where colors are brought into gamut "
 "until they minimally different from the transformed color. Slow but accurate."
 msgstr ""
+"S'utilitzarà el mètode delta mínima E, on els colors es porten a gamma fins "
+"que siguin mínimament diferents del color transformat. Lent però precís."
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:289
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:306
 #, kde-format
 msgid "Current Maximum White: %1"
-msgstr ""
+msgstr "Blanc màxim actual: %1"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.h:28
-#, fuzzy, kde-format
-#| msgid "Gamut Masks"
+#, kde-format
 msgid "Tone/Gamut Map"
-msgstr "Màscares de gamma"
+msgstr "Mapa de tons/gamma"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:22
-#, fuzzy, kde-format
-#| msgctxt "Color model"
-#| msgid "Model:"
+#, kde-format
 msgid "Model:"
 msgstr "Model:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkToneMap)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:41
-#, fuzzy, kde-format
-#| msgctxt "Layer name for translation of template"
-#| msgid "Tones"
+#, kde-format
 msgid "Tone Map"
-msgstr "Tons"
+msgstr "Mapa de tons"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:57
-#, fuzzy, kde-format
-#| msgid "White:"
+#, kde-format
 msgid "Max White:"
-msgstr "Blanc:"
+msgstr "Blanc màx.:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:80
-#, fuzzy, kde-format
-#| msgid "Strength:"
+#, kde-format
 msgid "Toe Strength:"
-msgstr "Intensitat:"
+msgstr "Intensitat de la puntera:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeStrength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:87
@@ -54275,13 +54292,14 @@ msgid ""
 "The sharpness of the toe fall-off. 0.0 makes it linear, while 1.0 produces a "
 "sharp angle."
 msgstr ""
+"La nitidesa de la puntera. 0,0 el fa lineal, mentre que 1,0 produeix un "
+"angle agut."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:103
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Toe Length:"
-msgstr "Longitud:"
+msgstr "Longitud de la puntera:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:110
@@ -54290,47 +54308,44 @@ msgid ""
 "How much of the dynamic range is in the toe. 0.0 means none, while 1.0 is "
 "half the curve."
 msgstr ""
+"Quanta part del marge dinàmic està en la puntera. 0,0 significa res, mentre "
+"que 1,0 és la meitat de la corba."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:126
-#, fuzzy, kde-format
-#| msgid "Anc&hor Strength:"
+#, kde-format
 msgid "Shoulder Strength:"
-msgstr "Intensitat de l'àn&cora:"
+msgstr "Intensitat de l'espatlla:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderStrength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:133
 #, kde-format
 msgid "Curvature of the shoulder. 1.0 is linear."
-msgstr ""
+msgstr "Curvatura de l'espatlla. 1,0 és lineal."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:149
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Shoulder Length:"
-msgstr "Durada de l'esborronat"
+msgstr "Longitud de l'espatlla:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:156
 #, kde-format
 msgid "Determines the maximum white in stops."
-msgstr ""
+msgstr "Determina el blanc màxim a les aturades."
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnShoulderLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:159
-#, fuzzy, kde-format
-#| msgctxt "Button to edit the selected stop color in the stop gradient editor"
-#| msgid "Edit stop"
+#, kde-format
 msgid " stops"
-msgstr "Edita l'aturada"
+msgstr " aturades"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:172
-#, fuzzy, kde-format
-#| msgid "Shear angle X:"
+#, kde-format
 msgid "Shoulder Angle:"
-msgstr "Angle d'inclinació X:"
+msgstr "Angle de l'espatlla:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderAngle)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:179
@@ -54338,21 +54353,19 @@ msgstr "Angle d'inclinació X:"
 msgid ""
 "Angle of the shoulder, determines the smoothness of the shift to full white."
 msgstr ""
+"Angle de l'espatlla, determina el suavitzat del desplaçament a un full blanc."
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkGamutMap)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:210
-#, fuzzy, kde-format
-#| msgid "Gamut Masks"
+#, kde-format
 msgid "Gamut Map"
-msgstr "Màscares de gamma"
+msgstr "Mapa de gamma"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:219
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Workspace"
-#| msgid "Wide Gamut"
+#, kde-format
 msgid "Target Gamut:"
-msgstr "Gamma àmplia"
+msgstr "Gamma de destinació:"
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format

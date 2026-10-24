@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-23 00:46+0000\n"
-"PO-Revision-Date: 2026-10-06 08:51+0300\n"
+"POT-Creation-Date: 2026-10-24 00:47+0000\n"
+"PO-Revision-Date: 2026-10-23 19:31+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -24328,7 +24328,7 @@ msgstr "Локальні ресурси"
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:689 libs/ui/KisView.cpp:1176
-#: libs/ui/KisWelcomePageWidget.cpp:728 libs/ui/KisWindowLayoutResource.cpp:390
+#: libs/ui/KisWelcomePageWidget.cpp:734 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
 #: libs/ui/widgets/kis_custom_image_widget.cc:456
@@ -28995,6 +28995,45 @@ msgstr "Завжди використовувати з цей шаблон пі�
 msgid "Always use this template"
 msgstr "Завжди використовувати цей шаблон"
 
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisNewsItem)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgProofingOptions)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisDonationManagementWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisToneGamutMapWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgFilterFastColorOverlay)
+#. i18n: ectx: property (windowTitle), widget (QWidget, TouchDockerWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WGConfigWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgResourcePreview)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgSide)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisSupporterBundleWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgTagPreview)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisResourceItemViewer)
+#: libs/ui/forms/KisNewsItem.ui:26 libs/ui/forms/WdgPopupPaletteSettings.ui:14
+#: libs/ui/forms/wdgproofingoptions.ui:14
+#: libs/ui/widgets/KisAutoLevelsWidget.ui:14
+#: libs/ui/widgets/KisDonationManagementWidget.ui:14
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:14
+#: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:14
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:14
+#: plugins/extensions/resourcemanager/kisresourceitemviewer.ui:16
+#: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:14
+#: plugins/extensions/resourcemanager/wdgresourcepreview.ui:26
+#: plugins/extensions/resourcemanager/wdgside.ui:23
+#: plugins/extensions/resourcemanager/wdgtagpreview.ui:20
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:14
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:14
+#, kde-format
+msgid "Form"
+msgstr "Форма"
+
+#. i18n: ectx: property (text), widget (QToolButton, btnDismiss)
+#: libs/ui/forms/KisNewsItem.ui:158
+#, kde-format
+msgid "Mark as Read"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:97
 #, kde-format
@@ -29002,7 +29041,7 @@ msgid "Start"
 msgstr "Початок"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:600
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:606
 #, kde-format
 msgid "DEV BUILD"
 msgstr "ЗБІРКА У РОЗРОБЦІ"
@@ -29042,45 +29081,45 @@ msgid "Community"
 msgstr "Спільнота"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:357
+#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:363
 #, kde-format
 msgid "User Manual"
 msgstr "Підручник користувача"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
 #. i18n: ectx: property (text), widget (QPushButton, m_btnSupport)
-#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:360
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:366
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:173
 #, kde-format
 msgid "Support Krita"
 msgstr "Підтримка Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:369
+#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:375
 #, kde-format
 msgid "Powered by KDE"
 msgstr "На основі технологій KDE"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:366
+#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:372
 #, kde-format
 msgid "Source Code"
 msgstr "Початковий код"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:354
+#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:360
 #, kde-format
 msgid "Getting Started"
 msgstr "Початкові зауваження"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:351
+#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:357
 #, kde-format
 msgid "User Community"
 msgstr "Спільнота користувачів"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:363
+#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:369
 #, kde-format
 msgid "Krita Website"
 msgstr "Сайт Krita"
@@ -29109,37 +29148,43 @@ msgstr ""
 "жодного документа"
 
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1247
+#: libs/ui/forms/KisWelcomePage.ui:1277
 #, kde-format
 msgid "News"
 msgstr "Новини"
 
+#. i18n: ectx: property (text), widget (QToolButton, btnDismisAll)
+#: libs/ui/forms/KisWelcomePage.ui:1311
+#, kde-format
+msgid "Mark all as read"
+msgstr ""
+
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:1270
+#: libs/ui/forms/KisWelcomePage.ui:1337
 #, kde-format
 msgid "News options"
 msgstr "Параметри новин"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1377
+#: libs/ui/forms/KisWelcomePage.ui:1453
 #, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "Доступна версія Krita X.X.X"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:1428
+#: libs/ui/forms/KisWelcomePage.ui:1504
 #, kde-format
 msgid "Update now!"
 msgstr "Оновити зараз!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:1435
+#: libs/ui/forms/KisWelcomePage.ui:1511
 #, kde-format
 msgid "Show details"
 msgstr "Показати подробиці"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:371
+#: libs/ui/forms/KisWelcomePage.ui:1563 libs/ui/KisWelcomePageWidget.cpp:377
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -29151,7 +29196,7 @@ msgstr ""
 "мовами за допомогою меню вище"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1627
+#: libs/ui/forms/KisWelcomePage.ui:1703
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -29184,7 +29229,7 @@ msgstr ""
 "org/\">фонду розробки</a>.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAndroidSupporter)
-#: libs/ui/forms/KisWelcomePage.ui:1659
+#: libs/ui/forms/KisWelcomePage.ui:1735
 #, kde-format
 msgid "Krita is made possible thanks to ongoing support from people like you!"
 msgstr ""
@@ -29192,13 +29237,13 @@ msgstr ""
 "людей!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupporterManage)
-#: libs/ui/forms/KisWelcomePage.ui:1672
+#: libs/ui/forms/KisWelcomePage.ui:1748
 #, kde-format
 msgid "Manage Supporter Benefits"
 msgstr "Керування перевагами для спонсорів"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
-#: libs/ui/forms/KisWelcomePage.ui:1717 libs/ui/KisWelcomePageWidget.cpp:842
+#: libs/ui/forms/KisWelcomePage.ui:1793 libs/ui/KisWelcomePageWidget.cpp:848
 #, kde-format
 msgid "Support Krita!"
 msgstr "Підтримати Krita!"
@@ -32972,38 +33017,6 @@ msgstr ""
 #, kde-format
 msgid "in Move Tool"
 msgstr "в інструменті «Пересування»"
-
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgProofingOptions)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisDonationManagementWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisToneGamutMapWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgFilterFastColorOverlay)
-#. i18n: ectx: property (windowTitle), widget (QWidget, TouchDockerWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WGConfigWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgResourcePreview)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgSide)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisSupporterBundleWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgTagPreview)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisResourceItemViewer)
-#: libs/ui/forms/WdgPopupPaletteSettings.ui:14
-#: libs/ui/forms/wdgproofingoptions.ui:14
-#: libs/ui/widgets/KisAutoLevelsWidget.ui:14
-#: libs/ui/widgets/KisDonationManagementWidget.ui:14
-#: plugins/dockers/touchdocker/TouchDockerWidget.ui:14
-#: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:14
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:14
-#: plugins/extensions/resourcemanager/kisresourceitemviewer.ui:16
-#: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:14
-#: plugins/extensions/resourcemanager/wdgresourcepreview.ui:26
-#: plugins/extensions/resourcemanager/wdgside.ui:23
-#: plugins/extensions/resourcemanager/wdgtagpreview.ui:20
-#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:14
-#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:14
-#, kde-format
-msgid "Form"
-msgstr "Форма"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:32
@@ -37699,38 +37712,38 @@ msgstr "Мова"
 msgid "English news is always up to date."
 msgstr "Новини англійською є завжди актуальними."
 
-#: libs/ui/KisWelcomePageWidget.cpp:640
+#: libs/ui/KisWelcomePageWidget.cpp:646
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Забути «%1»"
 
-#: libs/ui/KisWelcomePageWidget.cpp:747
+#: libs/ui/KisWelcomePageWidget.cpp:753
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Доступна нова версія Krita."
 
-#: libs/ui/KisWelcomePageWidget.cpp:776
+#: libs/ui/KisWelcomePageWidget.cpp:782
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Під час спроби оновити програму сталася помилка"
 
-#: libs/ui/KisWelcomePageWidget.cpp:782
+#: libs/ui/KisWelcomePageWidget.cpp:788
 #, kde-format
 msgid "Restart is required."
 msgstr "Потрібне перезавантаження."
 
-#: libs/ui/KisWelcomePageWidget.cpp:841
+#: libs/ui/KisWelcomePageWidget.cpp:847
 #, kde-format
 msgid "Become a Supporter!"
 msgstr "Ставайте спонсором!"
 
-#: libs/ui/KisWelcomePageWidget.cpp:845
+#: libs/ui/KisWelcomePageWidget.cpp:851
 #, kde-format
 msgid "Supporters get brush packs and more."
 msgstr "Спонсори отримують пакунки пензлів та інші переваги."
 
-#: libs/ui/KisWelcomePageWidget.cpp:846
+#: libs/ui/KisWelcomePageWidget.cpp:852
 #, kde-format
 msgid "Contributions keep development going."
 msgstr "Учасники розробки уможливлюють поступ розробки."
@@ -40912,6 +40925,16 @@ msgstr "Керування передплатою"
 #, kde-format
 msgid "Mask is disabled"
 msgstr "Маску вимкнено"
+
+#: libs/ui/widgets/KisNewsItem.cpp:27
+#, kde-format
+msgid "("
+msgstr ""
+
+#: libs/ui/widgets/KisNewsItem.cpp:27
+#, kde-format
+msgid ")"
+msgstr ""
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format
@@ -54672,49 +54695,44 @@ msgid "Threshold &level:"
 msgstr "Пороговий &рівень:"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "New Gamut Mask..."
+#, kde-format
 msgid "Tone/Gamut Map..."
-msgstr "Нова маска діапазону кольорів…"
+msgstr "Прив'язка відтінків/палітри…"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:155
 #, kde-format
 msgid "LAB"
-msgstr ""
+msgstr "LAB"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:156
 #, kde-format
 msgid "XYZ (ICtCp)"
-msgstr ""
+msgstr "XYZ (ICtCp)"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:157
 #, kde-format
 msgid "XYZ (OkLAB)"
-msgstr ""
+msgstr "XYZ (OkLAB)"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:159
 #, kde-format
 msgid "Reinhard"
-msgstr ""
+msgstr "Райнгарда"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:160
 #, kde-format
 msgid "Piecewise Filmic"
-msgstr ""
+msgstr "Кусково-кінематографічний"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:162
-#, fuzzy, kde-format
-#| msgctxt "Lightness Map blend mode for brush texture"
-#| msgid "Lightness Map"
+#, kde-format
 msgid "Use Chroma-Lightness Cusp Map"
-msgstr "Карта освітленості"
+msgstr "Використовувати карту вершин насиченості-освітленості"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:163
-#, fuzzy, kde-format
-#| msgid "Minimum Quality"
+#, kde-format
 msgid "Minimum Delta E"
-msgstr "Мінімальна якість"
+msgstr "Мінімальний приріст E"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:165
 #, kde-format
@@ -54724,6 +54742,10 @@ msgid ""
 "mapping. Only works for RGB and CMYK profiles, will fall back on Minimum "
 "Delta E."
 msgstr ""
+"Використати карту вершин насиченості та освітленості для швидшого, хоча і "
+"менш точного відтворення охоплення кольорами. Працює лише для профілів RGB "
+"та CMYK; у протилежному випадку застосовується метод мінімального значення "
+"приросту E."
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:168
 #, kde-format
@@ -54732,48 +54754,44 @@ msgid ""
 "Will use the Minimum Delta E method, where colors are brought into gamut "
 "until they minimally different from the transformed color. Slow but accurate."
 msgstr ""
+"Буде використано метод мінімального приросту E, за якого кольори приводяться "
+"до межі охоплення так, щоб їхня відмінність від перетвореного кольору була "
+"мінімальною. Це повільний, але точний метод."
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:289
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:306
 #, kde-format
 msgid "Current Maximum White: %1"
-msgstr ""
+msgstr "Поточний максимальний білий: %1"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.h:28
-#, fuzzy, kde-format
-#| msgid "Gamut Masks"
+#, kde-format
 msgid "Tone/Gamut Map"
-msgstr "Маски діапазонів кольорів"
+msgstr "Прив'язка відтінків/палітри"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:22
-#, fuzzy, kde-format
-#| msgctxt "Color model"
-#| msgid "Model:"
+#, kde-format
 msgid "Model:"
 msgstr "Модель:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkToneMap)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:41
-#, fuzzy, kde-format
-#| msgctxt "Layer name for translation of template"
-#| msgid "Tones"
+#, kde-format
 msgid "Tone Map"
-msgstr "Тони"
+msgstr "Прив'язка відтінку"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:57
-#, fuzzy, kde-format
-#| msgid "White:"
+#, kde-format
 msgid "Max White:"
-msgstr "Білий:"
+msgstr "Макс. білий:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:80
-#, fuzzy, kde-format
-#| msgid "Strength:"
+#, kde-format
 msgid "Toe Strength:"
-msgstr "Сила:"
+msgstr "Потужність початкової ділянки:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeStrength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:87
@@ -54782,13 +54800,14 @@ msgid ""
 "The sharpness of the toe fall-off. 0.0 makes it linear, while 1.0 produces a "
 "sharp angle."
 msgstr ""
+"Крутизна спаду в початковій ділянці. Значення 0.0 робить його лінійним, тоді "
+"як 1.0 створює гострий кут."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:103
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Toe Length:"
-msgstr "Довжина:"
+msgstr "Довжина початкової ділянки:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:110
@@ -54797,47 +54816,44 @@ msgid ""
 "How much of the dynamic range is in the toe. 0.0 means none, while 1.0 is "
 "half the curve."
 msgstr ""
+"Яка частина динамічного діапазону припадає на початкову ділянку кривої? 0,0 "
+"означає «такої ділянки немає», тоді як 1,0 відповідає половині кривої."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:126
-#, fuzzy, kde-format
-#| msgid "Anc&hor Strength:"
+#, kde-format
 msgid "Shoulder Strength:"
-msgstr "Си&ла прив’язки:"
+msgstr "Потужність плеча:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderStrength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:133
 #, kde-format
 msgid "Curvature of the shoulder. 1.0 is linear."
-msgstr ""
+msgstr "Кривина плеча. 1,0 — лінійне."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:149
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Shoulder Length:"
-msgstr "Ширина розмазування"
+msgstr "Довжина плеча:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:156
 #, kde-format
 msgid "Determines the maximum white in stops."
-msgstr ""
+msgstr "Визначає максимальний білий в опорних точках."
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnShoulderLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:159
-#, fuzzy, kde-format
-#| msgctxt "Button to edit the selected stop color in the stop gradient editor"
-#| msgid "Edit stop"
+#, kde-format
 msgid " stops"
-msgstr "Змінити точку"
+msgstr " опорні точки"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:172
-#, fuzzy, kde-format
-#| msgid "Shear angle X:"
+#, kde-format
 msgid "Shoulder Angle:"
-msgstr "Кут перекошення по X:"
+msgstr "Кут плеча:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderAngle)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:179
@@ -54845,21 +54861,19 @@ msgstr "Кут перекошення по X:"
 msgid ""
 "Angle of the shoulder, determines the smoothness of the shift to full white."
 msgstr ""
+"Кут нахилу плеча, визначає плавність переходу до чистого білого кольору."
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkGamutMap)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:210
-#, fuzzy, kde-format
-#| msgid "Gamut Masks"
+#, kde-format
 msgid "Gamut Map"
-msgstr "Маски діапазонів кольорів"
+msgstr "Прив'язка палітри"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:219
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Workspace"
-#| msgid "Wide Gamut"
+#, kde-format
 msgid "Target Gamut:"
-msgstr "Wide Gamut"
+msgstr "Цільова палітра:"
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format

@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-23 00:46+0000\n"
+"POT-Creation-Date: 2026-10-24 00:47+0000\n"
 "PO-Revision-Date: 2025-06-21 12:08+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -24299,7 +24299,7 @@ msgstr "Recursos locais"
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:689 libs/ui/KisView.cpp:1176
-#: libs/ui/KisWelcomePageWidget.cpp:728 libs/ui/KisWindowLayoutResource.cpp:390
+#: libs/ui/KisWelcomePageWidget.cpp:734 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
 #: libs/ui/widgets/kis_custom_image_widget.cc:456
@@ -28976,6 +28976,45 @@ msgstr "Usar sempre este modelo ao iniciar a aplicación"
 msgid "Always use this template"
 msgstr "Usar sempre este modelo"
 
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisNewsItem)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgProofingOptions)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisDonationManagementWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisToneGamutMapWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgFilterFastColorOverlay)
+#. i18n: ectx: property (windowTitle), widget (QWidget, TouchDockerWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WGConfigWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgResourcePreview)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgSide)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisSupporterBundleWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgTagPreview)
+#. i18n: ectx: property (windowTitle), widget (QWidget, KisResourceItemViewer)
+#: libs/ui/forms/KisNewsItem.ui:26 libs/ui/forms/WdgPopupPaletteSettings.ui:14
+#: libs/ui/forms/wdgproofingoptions.ui:14
+#: libs/ui/widgets/KisAutoLevelsWidget.ui:14
+#: libs/ui/widgets/KisDonationManagementWidget.ui:14
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:14
+#: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:14
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:14
+#: plugins/extensions/resourcemanager/kisresourceitemviewer.ui:16
+#: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:14
+#: plugins/extensions/resourcemanager/wdgresourcepreview.ui:26
+#: plugins/extensions/resourcemanager/wdgside.ui:23
+#: plugins/extensions/resourcemanager/wdgtagpreview.ui:20
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:14
+#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:14
+#, kde-format
+msgid "Form"
+msgstr "Formulario"
+
+#. i18n: ectx: property (text), widget (QToolButton, btnDismiss)
+#: libs/ui/forms/KisNewsItem.ui:158
+#, kde-format
+msgid "Mark as Read"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:97
 #, kde-format
@@ -28983,7 +29022,7 @@ msgid "Start"
 msgstr "Comezar"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:600
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:606
 #, kde-format
 msgid "DEV BUILD"
 msgstr "CONSTRUCIÓN DE DESENVOLVEMENTO"
@@ -29023,45 +29062,45 @@ msgid "Community"
 msgstr "Comunidade"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:357
+#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:363
 #, kde-format
 msgid "User Manual"
 msgstr "Manual de usuario"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
 #. i18n: ectx: property (text), widget (QPushButton, m_btnSupport)
-#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:360
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:366
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:173
 #, kde-format
 msgid "Support Krita"
 msgstr "Apoiar Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:369
+#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:375
 #, kde-format
 msgid "Powered by KDE"
 msgstr "Feito con KDE"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:366
+#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:372
 #, kde-format
 msgid "Source Code"
 msgstr "Código fonte"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:354
+#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:360
 #, kde-format
 msgid "Getting Started"
 msgstr "Primeiros pasos"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:351
+#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:357
 #, kde-format
 msgid "User Community"
 msgstr "Comunidade de usuarios"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:363
+#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:369
 #, kde-format
 msgid "Krita Website"
 msgstr "Sitio web de Krita"
@@ -29090,37 +29129,43 @@ msgstr ""
 "documento aberto recentemente"
 
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1247
+#: libs/ui/forms/KisWelcomePage.ui:1277
 #, kde-format
 msgid "News"
 msgstr "Novas"
 
+#. i18n: ectx: property (text), widget (QToolButton, btnDismisAll)
+#: libs/ui/forms/KisWelcomePage.ui:1311
+#, kde-format
+msgid "Mark all as read"
+msgstr ""
+
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:1270
+#: libs/ui/forms/KisWelcomePage.ui:1337
 #, kde-format
 msgid "News options"
 msgstr "Opcións de novas"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1377
+#: libs/ui/forms/KisWelcomePage.ui:1453
 #, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "A versión X.X.X de Krita está dispoñíbel"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:1428
+#: libs/ui/forms/KisWelcomePage.ui:1504
 #, kde-format
 msgid "Update now!"
 msgstr "Actualizar agora!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:1435
+#: libs/ui/forms/KisWelcomePage.ui:1511
 #, kde-format
 msgid "Show details"
 msgstr "Amosar os detalles"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:371
+#: libs/ui/forms/KisWelcomePage.ui:1563 libs/ui/KisWelcomePageWidget.cpp:377
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -29132,7 +29177,7 @@ msgstr ""
 "enriba"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1627
+#: libs/ui/forms/KisWelcomePage.ui:1703
 #, fuzzy, kde-format
 #| msgid ""
 #| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -29178,20 +29223,20 @@ msgstr ""
 "org/\">fondo de desenvolvemento</a>.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAndroidSupporter)
-#: libs/ui/forms/KisWelcomePage.ui:1659
+#: libs/ui/forms/KisWelcomePage.ui:1735
 #, kde-format
 msgid "Krita is made possible thanks to ongoing support from people like you!"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupporterManage)
-#: libs/ui/forms/KisWelcomePage.ui:1672
+#: libs/ui/forms/KisWelcomePage.ui:1748
 #, fuzzy, kde-format
 #| msgid "Manage Resource Bundles"
 msgid "Manage Supporter Benefits"
 msgstr "Xestionar os paquetes de recursos"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
-#: libs/ui/forms/KisWelcomePage.ui:1717 libs/ui/KisWelcomePageWidget.cpp:842
+#: libs/ui/forms/KisWelcomePage.ui:1793 libs/ui/KisWelcomePageWidget.cpp:848
 #, kde-format
 msgid "Support Krita!"
 msgstr "Apoiar a Krita!"
@@ -32939,38 +32984,6 @@ msgstr ""
 #, kde-format
 msgid "in Move Tool"
 msgstr "na ferramenta de mover"
-
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgProofingOptions)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisDonationManagementWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisToneGamutMapWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgFilterFastColorOverlay)
-#. i18n: ectx: property (windowTitle), widget (QWidget, TouchDockerWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WGConfigWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgResourcePreview)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgSide)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisSupporterBundleWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgTagPreview)
-#. i18n: ectx: property (windowTitle), widget (QWidget, KisResourceItemViewer)
-#: libs/ui/forms/WdgPopupPaletteSettings.ui:14
-#: libs/ui/forms/wdgproofingoptions.ui:14
-#: libs/ui/widgets/KisAutoLevelsWidget.ui:14
-#: libs/ui/widgets/KisDonationManagementWidget.ui:14
-#: plugins/dockers/touchdocker/TouchDockerWidget.ui:14
-#: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:14
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:14
-#: plugins/extensions/resourcemanager/kisresourceitemviewer.ui:16
-#: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:14
-#: plugins/extensions/resourcemanager/wdgresourcepreview.ui:26
-#: plugins/extensions/resourcemanager/wdgside.ui:23
-#: plugins/extensions/resourcemanager/wdgtagpreview.ui:20
-#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:14
-#: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:14
-#, kde-format
-msgid "Form"
-msgstr "Formulario"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:32
@@ -37588,38 +37601,38 @@ msgstr "Idioma"
 msgid "English news is always up to date."
 msgstr "As novas en inglés están sempre ao día."
 
-#: libs/ui/KisWelcomePageWidget.cpp:640
+#: libs/ui/KisWelcomePageWidget.cpp:646
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Esquecer «%1»"
 
-#: libs/ui/KisWelcomePageWidget.cpp:747
+#: libs/ui/KisWelcomePageWidget.cpp:753
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Hai unha nova versión de Krita dispoñíbel!"
 
-#: libs/ui/KisWelcomePageWidget.cpp:776
+#: libs/ui/KisWelcomePageWidget.cpp:782
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Produciuse un erro durante a actualización"
 
-#: libs/ui/KisWelcomePageWidget.cpp:782
+#: libs/ui/KisWelcomePageWidget.cpp:788
 #, kde-format
 msgid "Restart is required."
 msgstr "É necesario reiniciar."
 
-#: libs/ui/KisWelcomePageWidget.cpp:841
+#: libs/ui/KisWelcomePageWidget.cpp:847
 #, kde-format
 msgid "Become a Supporter!"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:845
+#: libs/ui/KisWelcomePageWidget.cpp:851
 #, kde-format
 msgid "Supporters get brush packs and more."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:846
+#: libs/ui/KisWelcomePageWidget.cpp:852
 #, kde-format
 msgid "Contributions keep development going."
 msgstr ""
@@ -40779,6 +40792,16 @@ msgstr "Descrición"
 #, kde-format
 msgid "Mask is disabled"
 msgstr "A máscara está desactivada"
+
+#: libs/ui/widgets/KisNewsItem.cpp:27
+#, kde-format
+msgid "("
+msgstr ""
+
+#: libs/ui/widgets/KisNewsItem.cpp:27
+#, kde-format
+msgid ")"
+msgstr ""
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format

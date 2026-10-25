@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-24 00:47+0000\n"
-"PO-Revision-Date: 2026-10-23 19:52+0300\n"
+"PO-Revision-Date: 2026-10-24 21:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -28687,7 +28687,7 @@ msgstr "Biçim"
 #: libs/ui/forms/KisNewsItem.ui:158
 #, kde-format
 msgid "Mark as Read"
-msgstr ""
+msgstr "Tümünü Okundu Olarak İmle"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:97
@@ -28812,7 +28812,7 @@ msgstr "Haberler"
 #: libs/ui/forms/KisWelcomePage.ui:1311
 #, kde-format
 msgid "Mark all as read"
-msgstr ""
+msgstr "Tümünü Okundu Olarak İmle"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
 #: libs/ui/forms/KisWelcomePage.ui:1337
@@ -40372,12 +40372,12 @@ msgstr "Maske devre dışı bırakıldı"
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid "("
-msgstr ""
+msgstr "("
 
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid ")"
-msgstr ""
+msgstr ")"
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format

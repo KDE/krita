@@ -83,7 +83,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-24 00:47+0000\n"
-"PO-Revision-Date: 2026-10-23 07:48+0200\n"
+"PO-Revision-Date: 2026-10-24 07:46+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -29142,10 +29142,9 @@ msgstr "Форма"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnDismiss)
 #: libs/ui/forms/KisNewsItem.ui:158
-#, fuzzy, kde-format
-#| msgid "Markus Germann"
+#, kde-format
 msgid "Mark as Read"
-msgstr "Markus Germann"
+msgstr "Отметить как прочитанное"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:97
@@ -29270,7 +29269,7 @@ msgstr "Новости"
 #: libs/ui/forms/KisWelcomePage.ui:1311
 #, kde-format
 msgid "Mark all as read"
-msgstr ""
+msgstr "Отметить все как прочитанные"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
 #: libs/ui/forms/KisWelcomePage.ui:1337
@@ -41010,12 +41009,12 @@ msgstr "Маска отключена"
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid "("
-msgstr ""
+msgstr "("
 
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid ")"
-msgstr ""
+msgstr ")"
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format

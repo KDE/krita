@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-24 00:47+0000\n"
-"PO-Revision-Date: 2026-10-23 11:50+0200\n"
+"PO-Revision-Date: 2026-10-24 23:24+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -28830,7 +28830,7 @@ msgstr "Formulari"
 #: libs/ui/forms/KisNewsItem.ui:158
 #, kde-format
 msgid "Mark as Read"
-msgstr ""
+msgstr "Marca com a llegit"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:97
@@ -28955,7 +28955,7 @@ msgstr "Notícies"
 #: libs/ui/forms/KisWelcomePage.ui:1311
 #, kde-format
 msgid "Mark all as read"
-msgstr ""
+msgstr "Marca-ho tot com a llegit"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
 #: libs/ui/forms/KisWelcomePage.ui:1337
@@ -40590,15 +40590,16 @@ msgstr "Gestió de la subscripció"
 msgid "Mask is disabled"
 msgstr "La màscara està desactivada"
 
+# skip-rule: t-par_obe_tan
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid "("
-msgstr ""
+msgstr "("
 
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid ")"
-msgstr ""
+msgstr ")"
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format

@@ -54620,8 +54620,7 @@ msgid "XYZ (OkLAB)"
 msgstr ""
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:159
-#, fuzzy, kde-format
-#| msgid "Reinhard"
+#, kde-format
 msgid "Reinhard"
 msgstr "Reinhard"
 

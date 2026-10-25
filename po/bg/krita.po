@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-24 00:47+0000\n"
-"PO-Revision-Date: 2026-10-23 08:59+0200\n"
+"PO-Revision-Date: 2026-10-24 08:33+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -28725,7 +28725,7 @@ msgstr "Формуляр"
 #: libs/ui/forms/KisNewsItem.ui:158
 #, kde-format
 msgid "Mark as Read"
-msgstr ""
+msgstr "Отбелязване като прочетено"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:97
@@ -28850,7 +28850,7 @@ msgstr "Новини"
 #: libs/ui/forms/KisWelcomePage.ui:1311
 #, kde-format
 msgid "Mark all as read"
-msgstr ""
+msgstr "Отбелязване на всички като прочетени"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
 #: libs/ui/forms/KisWelcomePage.ui:1337
@@ -40495,12 +40495,12 @@ msgstr "Маската е деактивирана"
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid "("
-msgstr ""
+msgstr "("
 
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid ")"
-msgstr ""
+msgstr ")"
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format

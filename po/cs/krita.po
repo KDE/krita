@@ -28413,7 +28413,7 @@ msgstr "Formulář"
 #: libs/ui/forms/KisNewsItem.ui:158
 #, kde-format
 msgid "Mark as Read"
-msgstr ""
+msgstr "Označit jako přečtené"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:97
@@ -39665,7 +39665,7 @@ msgstr ""
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid ")"
-msgstr ""
+msgstr ")"
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format

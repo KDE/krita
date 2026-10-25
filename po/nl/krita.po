@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-24 00:47+0000\n"
-"PO-Revision-Date: 2026-10-23 14:36+0200\n"
+"PO-Revision-Date: 2026-10-24 15:23+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -28817,10 +28817,9 @@ msgstr "Formulier"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnDismiss)
 #: libs/ui/forms/KisNewsItem.ui:158
-#, fuzzy, kde-format
-#| msgid "Markus Germann"
+#, kde-format
 msgid "Mark as Read"
-msgstr "Markus Germann"
+msgstr "Als gelezen markeren"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:97
@@ -28945,7 +28944,7 @@ msgstr "Nieuws"
 #: libs/ui/forms/KisWelcomePage.ui:1311
 #, kde-format
 msgid "Mark all as read"
-msgstr ""
+msgstr "Alles markeren als gelezen"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
 #: libs/ui/forms/KisWelcomePage.ui:1337
@@ -40598,12 +40597,12 @@ msgstr "Masker is uitgeschakeld"
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid "("
-msgstr ""
+msgstr "("
 
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid ")"
-msgstr ""
+msgstr ")"
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format

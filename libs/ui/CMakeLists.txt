@@ -500,6 +500,7 @@ set(kritaui_LIB_SRCS
 if (KSeExpr_FOUND)
     set(kritaui_LIB_SRCS ${kritaui_LIB_SRCS}
         widgets/kis_seexpr_script_chooser.cpp
+        ${CMAKE_SOURCE_DIR}/libs/flake/tools/KoZoomToolWidget.cpp
     )
 endif()
 
@@ -681,6 +682,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     imagesize/wdg_imagesize.ui
     imagesize/wdg_layersize.ui
     imagesize/wdg_canvassize.ui
+    ${CMAKE_SOURCE_DIR}/libs/flake/tools/KoZoomToolWidget.ui
 )
 
 if(WIN32)

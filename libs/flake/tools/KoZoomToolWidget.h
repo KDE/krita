@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2008 Martin Pfeiffer <hubipete@gmx.net>
+ * SPDX-FileCopyrightText: 2026 Arkady Flury <arkady.flury@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -18,9 +19,6 @@ class KoZoomToolWidget : public QWidget, Ui::ZoomToolWidget
 public:
     explicit KoZoomToolWidget(KoZoomTool* tool, QWidget *parent = 0);
     ~KoZoomToolWidget() override;
-
-private Q_SLOTS:
-    void changeZoomMode();
 private:
     KoZoomTool *m_tool;
 };

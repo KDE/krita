@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Krita">
   <Actions category="Krita">
-     <text>S-Pen Actions</text>
+     <text>S-Pen Pro Air Actions</text>
 
      <Action name="spen_click">
        <icon></icon>
-       <text>S-Pen Button Click</text>
+       <text>S-Pen Pro Air Button Click</text>
        <whatsThis></whatsThis>
        <toolTip></toolTip>
        <iconText></iconText>
@@ -18,7 +18,7 @@
 
     <Action name="spen_double_click">
        <icon></icon>
-       <text>S-Pen Button Double Click</text>
+       <text>S-Pen Pro Air Button Double Click</text>
        <whatsThis></whatsThis>
        <toolTip></toolTip>
        <iconText></iconText>
@@ -31,7 +31,7 @@
 
     <Action name="spen_swipe_up">
         <icon></icon>
-        <text>S-Pen Gesture Swipe Up</text>
+        <text>S-Pen Pro Air Gesture Swipe Up</text>
         <whatsThis></whatsThis>
         <toolTip></toolTip>
         <iconText></iconText>
@@ -44,7 +44,7 @@
 
     <Action name="spen_swipe_down">
           <icon></icon>
-          <text>S-Pen Gesture Swipe Down</text>
+          <text>S-Pen Pro AirGesture Swipe Down</text>
           <whatsThis></whatsThis>
           <toolTip></toolTip>
           <iconText></iconText>
@@ -57,7 +57,7 @@
 
 <Action name="spen_swipe_left">
     <icon></icon>
-    <text>S-Pen Gesture Swipe Left</text>
+    <text>S-Pen Pro Air Gesture Swipe Left</text>
     <whatsThis></whatsThis>
     <toolTip></toolTip>
     <iconText></iconText>
@@ -70,7 +70,7 @@
 
 <Action name="spen_swipe_right">
     <icon></icon>
-    <text>S-Pen Gesture Swipe Right</text>
+    <text>S-Pen Pro Air Gesture Swipe Right</text>
     <whatsThis></whatsThis>
     <toolTip></toolTip>
     <iconText></iconText>
@@ -83,7 +83,7 @@
 
 <Action name="spen_circle_cw">
     <icon></icon>
-    <text>S-Pen Gesture Circle Clockwise</text>
+    <text>S-Pen Pro Air Gesture Circle Clockwise</text>
     <whatsThis></whatsThis>
     <toolTip></toolTip>
     <iconText></iconText>
@@ -96,7 +96,7 @@
 
     <Action name="spen_circle_ccw">
         <icon></icon>
-        <text>S-Pen Gesture Circle Counter-Clockwise</text>
+        <text>S-Pen Pro Air Gesture Circle Counter-Clockwise</text>
         <whatsThis></whatsThis>
         <toolTip></toolTip>
         <iconText></iconText>

@@ -84,7 +84,7 @@ QString KisSPenSettings::name()
 
 QString KisSPenSettings::header()
 {
-    return QString(i18n("S-Pen Actions"));
+    return QString(i18n("S-Pen Pro Air Actions"));
 }
 
 QIcon KisSPenSettings::icon()

@@ -28,7 +28,7 @@ class KisPopupButtonFrame : public QFrame
 
 public:
     KisPopupButtonFrame(QWidget *parent, bool detach, bool popupIsMenu)
-        : QFrame(parent)
+        : QFrame(parent, Qt::Window)
     {
         setObjectName("KisPopupButtonFrame");
         setProperty("_kis_excludeFromLayoutThumbnail", true);

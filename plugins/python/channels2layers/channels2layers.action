@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Scripts">
+  <Actions category="Scripts">
+    <text>Channels to layers</text>
+
+    <Action name="pykrita_channels2layers">
+      <icon/>
+      <text>Channels to layers</text>
+      <whatsThis/>
+      <toolTip/>
+      <iconText/>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+  </Actions>
+</ActionCollection>

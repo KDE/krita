@@ -2331,7 +2331,7 @@
       <statusTip/>
     </Action>
     <Action name="add_scalar_keyframes">
-      <icon></icon>
+      <icon>keyframe-add</icon>
       <text>Add scalar keyframes</text>
       <whatsThis></whatsThis>
       <toolTip>Adds keyframe to control scalar property</toolTip>
@@ -2343,7 +2343,7 @@
       <statusTip/>
     </Action>
     <Action name="remove_scalar_keyframe">
-      <icon></icon>
+      <icon>keyframe-remove</icon>
       <text>Remove scalar keyframe</text>
       <whatsThis></whatsThis>
       <toolTip>Removes the selected scalar keyframe</toolTip>
@@ -2515,6 +2515,90 @@
       <text>Update Playback Range</text>
       <whatsThis/>
       <toolTip/>
+      <iconText/>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="interpolation_constant">
+      <icon>interpolation_constant</icon>
+      <text>Interpolate Constant</text>
+      <whatsThis/>
+      <toolTip>Hold constant value. No interpolation.</toolTip>
+      <iconText/>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="interpolation_linear">
+      <icon>interpolation_linear</icon>
+      <text>Interpolate Linear</text>
+      <whatsThis/>
+      <toolTip>Linear interpolation.</toolTip>
+      <iconText/>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="interpolation_bezier">
+      <icon>interpolation_bezier</icon>
+      <text>Interpolate Bezier</text>
+      <whatsThis/>
+      <toolTip>Bezier curve interpolation.</toolTip>
+      <iconText/>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="tangents_sharp">
+      <icon>interpolation_sharp</icon>
+      <text>Interpolate Sharp</text>
+      <whatsThis/>
+      <toolTip>Sharp interpolation tangents.</toolTip>
+      <iconText/>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="tangents_smooth">
+      <icon>interpolation_smooth</icon>
+      <text>Interpolate Smooth</text>
+      <whatsThis/>
+      <toolTip>Smooth interpolation tangents.</toolTip>
+      <iconText/>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="zoom_to_fit_range">
+      <icon>zoom-fit</icon>
+      <text>Zoom to Fit Range</text>
+      <whatsThis/>
+      <toolTip>Zoom view to fit channel range.</toolTip>
+      <iconText/>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="zoom_to_fit_curve">
+      <icon>zoom-fit-curve</icon>
+      <text>Zoom to Fit Curve</text>
+      <whatsThis/>
+      <toolTip>Zoom view to fit curve.</toolTip>
       <iconText/>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>

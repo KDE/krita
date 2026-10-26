@@ -474,64 +474,48 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
     KisActionManager* actionManager = view->actionManager();
 
     KisAction* action = actionManager->createAction("add_scalar_keyframes");
-    action->setIcon(KisIconUtils::loadIcon("keyframe-add"));
     connect(action, SIGNAL(triggered(bool)),
             this, SLOT(slotAddAllEnabledKeys()));
     m_d->titlebar->btnAddKey->setDefaultAction(action);
     m_d->titlebar->btnAddKey->setIconSize(QSize(22, 22));
 
     action = actionManager->createAction("remove_scalar_keyframe");
-    action->setIcon(KisIconUtils::loadIcon("keyframe-remove"));
     connect(action, SIGNAL(triggered(bool)),
             this, SLOT(slotRemoveSelectedKeys()));
     m_d->titlebar->btnRemoveKey->setDefaultAction(action);
     m_d->titlebar->btnRemoveKey->setIconSize(QSize(22, 22));
 
     action = actionManager->createAction("interpolation_constant");
-    action->setIcon(KisIconUtils::loadIcon("interpolation_constant"));
-    action->setToolTip(i18n("Hold constant value. No interpolation."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applyConstantMode);
     m_d->titlebar->btnGroupInterpolation->addAction(action);
 
     action = actionManager->createAction("interpolation_linear");
-    action->setIcon(KisIconUtils::loadIcon("interpolation_linear"));
-    action->setToolTip(i18n("Linear interpolation."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applyLinearMode);
     m_d->titlebar->btnGroupInterpolation->addAction(action);
 
     action = actionManager->createAction("interpolation_bezier");
-    action->setIcon(KisIconUtils::loadIcon("interpolation_bezier"));
-    action->setToolTip(i18n("Bezier curve interpolation."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applyBezierMode);
     m_d->titlebar->btnGroupInterpolation->addAction(action);
 
     action = actionManager->createAction("tangents_sharp");
-    action->setIcon(KisIconUtils::loadIcon("interpolation_sharp"));
-    action->setToolTip(i18n("Sharp interpolation tangents."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applySharpMode);
     m_d->titlebar->btnGroupTangents->addAction(action);
 
     action = actionManager->createAction("tangents_smooth");
-    action->setIcon(KisIconUtils::loadIcon("interpolation_smooth"));
-    action->setToolTip(i18n("Smooth interpolation tangents."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::applySmoothMode);
     m_d->titlebar->btnGroupTangents->addAction(action);
 
     action = actionManager->createAction("zoom_to_fit_range");
-    action->setIcon(KisIconUtils::loadIcon("zoom-fit"));
-    action->setToolTip(i18n("Zoom view to fit channel range."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::zoomToFitChannel);
     m_d->titlebar->btnGroupZoomFit->addAction(action);
 
     action = actionManager->createAction("zoom_to_fit_curve");
-    action->setIcon(KisIconUtils::loadIcon("zoom-fit-curve"));
-    action->setToolTip(i18n("Zoom view to fit curve."));
     connect(action, &KisAction::triggered,
             m_d->curvesView, &KisAnimCurvesView::zoomToFitCurve);
     m_d->titlebar->btnGroupZoomFit->addAction(action);

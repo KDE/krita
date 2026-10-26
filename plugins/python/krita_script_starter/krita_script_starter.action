@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Scripts">
+  <Actions category="Scripts">
+    <text>Krita Script Starter</text>
+
+    <Action name="Krita Script Starter">
+      <icon/>
+      <text>Krita Script Starter</text>
+      <whatsThis/>
+      <toolTip/>
+      <iconText/>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+  </Actions>
+</ActionCollection>

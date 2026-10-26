@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-24 00:47+0000\n"
-"PO-Revision-Date: 2026-10-23 06:33+0200\n"
+"PO-Revision-Date: 2026-10-25 05:34+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -28560,7 +28560,7 @@ msgstr "ფორმა"
 #: libs/ui/forms/KisNewsItem.ui:158
 #, kde-format
 msgid "Mark as Read"
-msgstr ""
+msgstr "წაკითხულად მონიშვნა"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:97
@@ -28685,7 +28685,7 @@ msgstr "სიახლეები"
 #: libs/ui/forms/KisWelcomePage.ui:1311
 #, kde-format
 msgid "Mark all as read"
-msgstr ""
+msgstr "ყველას წაკითხულად მონიშვნა"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
 #: libs/ui/forms/KisWelcomePage.ui:1337
@@ -39833,12 +39833,12 @@ msgstr "ნიღაბი გათიშულია"
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid "("
-msgstr ""
+msgstr "("
 
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid ")"
-msgstr ""
+msgstr ")"
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format
@@ -65786,6 +65786,8 @@ msgid ""
 "Move the layer that you have currently selected in the layerbox with its "
 "masks. Shortcut: ctrl-click."
 msgstr ""
+"ფენების ყუთში ამჟამად მონიშნული ფენის გადატანა მისი ნიღბების ჩათვლით. "
+"მალსახმობი: Ctrl+წკაპი."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSelectedLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:51
@@ -65813,6 +65815,8 @@ msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-click."
 msgstr ""
+"გადატანა ჯგუფის, რომელიც შეიცავს პირველ ფენას, რომელიც ხილულ შემცველობას "
+"შეიცავს. მალსახმობი: Ctrl+წკაპი."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77
@@ -68247,6 +68251,8 @@ msgid ""
 "This tool only works on vector layers. You probably want to create a vector "
 "layer and a starting shape first."
 msgstr ""
+"ეს ხელსაწყო, მხოლოდ, ვექტორულ ფენებთან მუშაობთ. ალბათ გნებავთ, ჯერ შექმნათ "
+"ვექტორული ფენა და საწყისი მოხაზულობა."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
 #, kde-format
@@ -68260,6 +68266,8 @@ msgctxt ""
 "through shapes"
 msgid "Cutting mode: Cuts through shapes to create gutters of specified width."
 msgstr ""
+"ამოჭრის რეჟიმი: ამოჭრის მოხაზულობებს შორის, რომ შექმნას მითითებული სიგანის "
+"მქონე ღარები."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:300
 #, kde-format
@@ -68267,7 +68275,7 @@ msgctxt ""
 "Tooltip for the button in the Knife Tool for the mode to remove gutters/"
 "merge shapes"
 msgid "Merging mode: Removes the gutter between shapes."
-msgstr ""
+msgstr "შერწყმის რეჟიმი: აშორებს ღარებს მოხაზულობებს შორის."
 
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.cpp:307
 #, kde-format

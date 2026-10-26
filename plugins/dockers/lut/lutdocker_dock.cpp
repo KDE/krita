@@ -171,6 +171,8 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
         m_canvas = canvas;
         if (m_canvas) {
             if (!m_canvas->displayFilter()) {
+                // we need to 'unset' the filter here so that updateDisplaySettings will create a new filter for the canvas.
+                m_displayFilter = m_canvas->displayFilter();
                 resetOcioConfiguration();
                 updateDisplaySettings();
             }

@@ -17,21 +17,46 @@
 
 void TestKoColorSet::testLoadGPL()
 {
-    KoColorSet set(QString(FILES_DATA_DIR)+ "/gimp.gpl");
-    QVERIFY(set.load(KisGlobalResourcesInterface::instance()));
-    QCOMPARE(set.paletteType(), KoColorSet::GPL);
+    KoColorSet set_v1(QString(FILES_DATA_DIR) + "/gimp_v1.gpl");
+    QVERIFY(set_v1.load(KisGlobalResourcesInterface::instance()));
+    QCOMPARE(set_v1.paletteType(), KoColorSet::GPL);
+    QCOMPARE(set_v1.colorCount(), 240);
+    QCOMPARE(set_v1.columnCount(), 16);
+    QCOMPARE(set_v1.name(), "gimp_v1");
 
-    QCOMPARE(set.colorCount(), 17);
+    KoColorSet set_v2(QString(FILES_DATA_DIR) + "/gimp_v2.gpl");
+    QVERIFY(set_v2.load(KisGlobalResourcesInterface::instance()));
+    QCOMPARE(set_v2.paletteType(), KoColorSet::GPL);
+    QCOMPARE(set_v2.colorCount(), 240);
+    QCOMPARE(set_v2.columnCount(), 32);
+    QCOMPARE(set_v2.name(), "Ega");
 
-    set.setFilename("test.gpl");
-    QVERIFY(set.save());
-    QVERIFY(set.filename() == "test.gpl");
-    QCOMPARE(set.paletteType(), KoColorSet::GPL);
+    KoColorSet set_fuzz(QString(FILES_DATA_DIR) + "/gimp_fuzz.gpl");
+    QVERIFY(set_fuzz.load(KisGlobalResourcesInterface::instance()));
+    QCOMPARE(set_fuzz.paletteType(), KoColorSet::GPL);
+    QCOMPARE(set_fuzz.colorCount(), 7);
+    QCOMPARE(set_fuzz.columnCount(), 16);
+    QCOMPARE(set_fuzz.name(), "テスト Test");
+    KisSwatch fuzz_red = set_fuzz.getColorGlobal(0, 0);
+    KisSwatch fuzz_black = set_fuzz.getColorGlobal(5, 0);
+    KisSwatch fuzz_invalid = set_fuzz.getColorGlobal(6, 0);
+    QVERIFY(fuzz_red.name() == "赤 Red");
+    QVERIFY(fuzz_black.name() == "Black");
+    QVERIFY(fuzz_invalid.name() == "Invalid");
+    QVERIFY(fuzz_red.color() == red());
+    QVERIFY(fuzz_invalid.color() == fuzz_black.color());
 
-    KoColorSet set2("test.gpl");
-    QVERIFY(set2.load(KisGlobalResourcesInterface::instance()));
-    QCOMPARE(set2.paletteType(), KoColorSet::GPL);
+    set_v2.setFilename("test.gpl");
+    QVERIFY(set_v2.save());
+    QVERIFY(set_v2.filename() == "test.gpl");
+    QCOMPARE(set_v2.paletteType(), KoColorSet::GPL);
 
+    KoColorSet set_v2_roundtrip("test.gpl");
+    QVERIFY(set_v2_roundtrip.load(KisGlobalResourcesInterface::instance()));
+    QCOMPARE(set_v2_roundtrip.paletteType(), KoColorSet::GPL);
+    QCOMPARE(set_v2_roundtrip.colorCount(), set_v2.colorCount());
+    QCOMPARE(set_v2_roundtrip.columnCount(), set_v2.columnCount());
+    QCOMPARE(set_v2_roundtrip.name(), set_v2.name());
 }
 void TestKoColorSet::testLoadRIFF()
 {

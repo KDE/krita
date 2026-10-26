@@ -1402,7 +1402,7 @@ bool KoColorSet::Private::loadGpl()
         index += 1;
     }
     else {
-        colorSet->setName(colorSet->filename().split("/").last().split(".")[0]);
+        colorSet->setName(QFileInfo(colorSet->filename()).baseName());
     }
 
     // If the palette isn't version 1, load and set the column count if it's defined

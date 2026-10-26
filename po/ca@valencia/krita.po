@@ -14435,7 +14435,7 @@ msgstr "Vista en espill al voltant del llenç"
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "&Zoom al 100%"
+msgstr "&Zoom al 100 %"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
@@ -14445,7 +14445,7 @@ msgstr "&Zoom al 100%"
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr "Zoom al 100%"
+msgstr "Zoom al 100 %"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
@@ -21749,7 +21749,7 @@ msgstr "Gir (Z)"
 #: libs/image/kis_layer.cc:275 libs/widgets/KoZoomActionState.cpp:20
 #, kde-format
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #. i18n: ectx: property (toolTip), widget (KisCompositeOpComboBox, cmbComposite)
 #: libs/image/kis_layer.cc:280 libs/ui/widgets/kis_cmb_composite.cc:76
@@ -25714,7 +25714,7 @@ msgstr ""
 "transparència habilitada i que la versió de FFmpeg siga almenys 4.2+. Si la "
 "vostra eixida GIF mostra signes d'esquinçament de la pantalla, es recomana "
 "fermament la versió 4.4+ de FFmpeg.</span></p><p><span style=\"font-style:"
-"italic;\">Nota 2: El format GIF només admet el 100% o el 0% de "
+"italic;\">Nota 2: El format GIF només admet el 100 % o el 0 % de "
 "transparència. </span><span style=\"font-style:italic; text-decoration:"
 "underline;\">No</span><span style=\"font-style:italic;\"> admet la "
 "transparència parcial. Si necessiteu transparència parcial, considereu "
@@ -32159,7 +32159,7 @@ msgstr ""
 "<html><head/><body><p>En renderitzar els fotogrames de l'animació (en els "
 "fitxers o durant la regeneració de la memòria cau d'animació), Krita crearà "
 "el nombre especificat de còpies de la imatge i les treballarà en paral·lel. "
-"Cada còpia requerirà més RAM per al seu emmagatzematge (quasi el 20% de la "
+"Cada còpia requerirà més RAM per al seu emmagatzematge (quasi el 20 % de la "
 "mida de la imatge), per tant, augmenteu este límit només si hi ha suficient "
 "RAM instal·lada.</p><p><br/></p><p><span style=\" font-weight:600;\">Valor "
 "recomanat:</span> fixeu el límit de clons al nombre de nuclis <span style=\" "
@@ -32403,7 +32403,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Afig una àrea extra a la regió d'interés a cada banda "
 "del llenç.</p><p><span style=\" font-weight:600;\">Valor recomanat:</span> "
-"25%. La regió d'interés s'ampliarà en un 25% a cada banda.</p></body></html>"
+"25 %. La regió d'interés s'ampliarà en un 25 % a cada banda.</p></body></"
+"html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:529
@@ -34239,7 +34240,7 @@ msgstr "Allunya del cursor"
 #: libs/ui/input/kis_zoom_action.cpp:80 libs/ui/kis_popup_palette.cpp:214
 #, kde-format
 msgid "Zoom to 100%"
-msgstr "Zoom al 100%"
+msgstr "Zoom al 100 %"
 
 #: libs/ui/input/kis_zoom_action.cpp:81
 #, kde-format
@@ -34971,7 +34972,7 @@ msgstr "Desactivat: no es permet clonar grups «Pas a través»!"
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #: libs/ui/kis_node_model.cpp:605
 #, kde-format
@@ -35139,7 +35140,7 @@ msgstr "Només el llenç"
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
 #, kde-format
 msgid "100%"
-msgstr "100%"
+msgstr "100 %"
 
 #: libs/ui/kis_popup_palette.cpp:220
 #, kde-format
@@ -43237,19 +43238,20 @@ msgstr "To: "
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1116
 #, kde-format
 msgid "YUV Redder/Greener/Bluer/Yellower hotkey steps"
-msgstr "Passos de la drecera de teclat del roig/verd/blau/groc del YUV"
+msgstr ""
+"Passos de la drecera de teclat de més roig/més verd/més blau/més groc del YUV"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1122
 #, kde-format
 msgid "Redder/Greener: "
-msgstr "Roig/verd: "
+msgstr "Més roig/Més verd: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1136
 #, kde-format
 msgid "Bluer/Yellower: "
-msgstr "Blau/groc: "
+msgstr "Més blau/Més groc: "
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
 #, kde-format
@@ -57901,7 +57903,7 @@ msgstr ""
 "Per a evitar la renderització d'imatges fosques en l'editor, es recomana "
 "utilitzar la gestió del color en este mode.</p><p>Si està marcada, tots els "
 "fitxers RAW es descodificaran amb una profunditat de color de 8 bits "
-"utilitzant una corba amb interval BT.709 i un 99% de punt blanc. Este mode "
+"utilitzant una corba amb interval BT.709 i un 99 % de punt blanc. Este mode "
 "és més ràpid que la descodificació amb 16 bits.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:283
@@ -59795,7 +59797,7 @@ msgstr "Línia de connexió"
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
 #, kde-format
 msgid "0%"
-msgstr "0%"
+msgstr "0 %"
 
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:55
 #, kde-format
@@ -61178,7 +61180,7 @@ msgid ""
 msgstr ""
 "Nivell de precisió 1 (el més ràpid)\n"
 "Precisió del subpíxel: desactivada\n"
-"Precisió de la mida del pinzell: 5%\n"
+"Precisió de la mida del pinzell: 5 %\n"
 "\n"
 "Òptima per a pinzells molt grans"
 
@@ -61193,7 +61195,7 @@ msgid ""
 msgstr ""
 "Nivell de precisió 2\n"
 "Precisió del subpíxel: desactivada\n"
-"Precisió de la mida del pinzell: 1%\n"
+"Precisió de la mida del pinzell: 1 %\n"
 "\n"
 "Òptima per a pinzells grans"
 
@@ -61218,10 +61220,10 @@ msgid ""
 "Gives up to 50% better performance in comparison to Level 5"
 msgstr ""
 "Nivell de precisió 4 (òptima)\n"
-"Precisió del subpíxel: 50%\n"
+"Precisió del subpíxel: 50 %\n"
 "Precisió de la mida del pinzell: Exacta\n"
 "\n"
-"Millora el rendiment fins a un 50% en comparació al nivell 5"
+"Millora el rendiment fins a un 50 % en comparació al nivell 5"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:77
 #, kde-format
@@ -61320,8 +61322,8 @@ msgid ""
 msgstr ""
 "Reinicia totes les opcions de configuració als valors predeterminats:\n"
 " Punt neutre: 127\n"
-" Brillantor: 0%\n"
-" Contrast: 0%"
+" Brillantor: 0 %\n"
+" Contrast: 0 %"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
@@ -61832,7 +61834,7 @@ msgstr "To en sentit horari"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
 #, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "(0% és el color actiu)"
+msgstr "(0 % és el color actiu)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118
@@ -61840,7 +61842,7 @@ msgstr "(0% és el color actiu)"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:141
 #, kde-format
 msgid "+100%"
-msgstr "+100%"
+msgstr "+100 %"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:107
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:119
@@ -61848,7 +61850,7 @@ msgstr "+100%"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:142
 #, kde-format
 msgid "-100%"
-msgstr "-100%"
+msgstr "-100 %"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:109
 #, kde-format
@@ -69233,7 +69235,7 @@ msgid ""
 "the closed contours. 0% - no effect, 100% - max effect"
 msgstr ""
 "La màscara intentarà eliminar parts dels traços clau que estan situats fora "
-"dels contorns tancats. 0%: sense efecte, 100%: efecte màx"
+"dels contorns tancats. 0 %: sense efecte, 100 %: efecte màx"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdates)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:23

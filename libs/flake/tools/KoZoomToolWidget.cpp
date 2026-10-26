@@ -29,9 +29,9 @@ KoZoomToolWidget::KoZoomToolWidget(KoZoomTool* tool, QWidget* parent)
     setupUi(this);
     KisOptionButtonStrip *zoomModeButtonStripAction = new KisOptionButtonStrip;
     zoomModeButtonStripAction->addButton(
-        KisIconUtils::loadIcon("zoom-in"));
+        KisIconUtils::loadIcon("list-add"));
     zoomModeButtonStripAction->addButton(
-        KisIconUtils::loadIcon("zoom-out"));
+        KisIconUtils::loadIcon("minus"));
 
     zoomModeButtonStripAction->button(0)->setChecked(true);
 

@@ -692,5 +692,7 @@
         <file>light_rotate-brush-CCW-precise.svg</file>
         <file>light_rotate-brush-CCW.svg</file>
         <file>light_rotate-brush-CW.svg</file>
+        <file>dark_minus.svg</file>
+        <file>light_minus.svg</file>
     </qresource>
 </RCC>

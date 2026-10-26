@@ -88,10 +88,19 @@ install_pykrita_plugin(workflow_buttons)
 # endif()
 
 install( FILES
+    assignprofiledialog/assignprofiledialog.action
+    channels2layers/channels2layers.action
+    colorspace/colorspace.action
+    documenttools/documenttools.action
+    exportlayers/exportlayers.action
+    filtermanager/filtermanager.action
+    # highpass/highpass.action
+    krita_script_starter/krita_script_starter.action
+    mutator/mutator.action
+    plugin_importer/plugin_importer.action
+    scripter/scripter.action
     tenbrushes/tenbrushes.action
     tenscripts/tenscripts.action
-    plugin_importer/plugin_importer.action
-    mutator/mutator.action
 DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions)
 
 install(

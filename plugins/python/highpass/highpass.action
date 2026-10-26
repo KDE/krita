@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Scripts">
+  <Actions category="Scripts">
+    <text>High Pass</text>
+
+    <Action name="high_pass_filter">
+      <icon/>
+      <text>High Pass</text>
+      <whatsThis/>
+      <toolTip/>
+      <iconText/>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+  </Actions>
+</ActionCollection>

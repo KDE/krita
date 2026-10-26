@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Scripts">
+  <Actions category="Scripts">
+    <text>Assign Profile to Image</text>
+
+    <Action name="assign_profile_to_image">
+      <icon/>
+      <text>Assign Profile to Image</text>
+      <whatsThis/>
+      <toolTip/>
+      <iconText/>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+  </Actions>
+</ActionCollection>

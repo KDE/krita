@@ -55,6 +55,6 @@ class AssignProfileDialog(Extension):
         pass
 
     def createActions(self, window):
-        action = window.createAction("assing_profile_to_image",
+        action = window.createAction("assign_profile_to_image",
                                      i18n("Assign Profile to Image"))
         action.triggered.connect(self.assignProfile)

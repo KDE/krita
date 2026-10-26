@@ -146,7 +146,7 @@ struct FontFamilyNode {
     static FontFamilyNode createWWSFamilyNode(const FontFamilyNode &child, const FontFamilyNode &typographic, QStringList existingWWSNames) {
         FontFamilyNode wwsFamily;
         if (child.type != KoSvgText::OpenTypeFontType) {
-            if (child.fontStyle.toLower() == "regular") {
+            if (child.fontStyle.compare("regular", Qt::CaseInsensitive) == 0) {
                 wwsFamily.fontFamily = child.fontFamily;
             } else {
                 wwsFamily.fontFamily = child.fontFamily + " " + child.fontStyle;
@@ -763,7 +763,7 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                         // Like, it is technically correct, because it allows us to select fonts with CSS
                         // that would otherwise be unselectable, but this does mean that other applications
                         // would need to have our exact idea of a CSS family name.
-                        if (wws->fontStyle.toLower() != "regular"
+                        if (wws->fontStyle.compare("regular", Qt::CaseInsensitive) != 0
                                 && !font->fontStyle.contains(wws->fontStyle)) {
                             continue;
                         }

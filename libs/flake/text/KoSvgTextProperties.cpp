@@ -306,10 +306,10 @@ QVariantMap parseFeatureSettingsStringList(const QStringList features) {
         } else {
             bool ok = false;
             int featureVal = tag.second.toInt(&ok);
-            if (tag.second.toLower() == "on") {
+            if (tag.second.compare("on", Qt::CaseInsensitive) == 0) {
                 featureVal = 1;
                 ok = true;
-            } else if (tag.second.toLower() == "off") {
+            } else if (tag.second.compare("off", Qt::CaseInsensitive) == 0) {
                 featureVal = 0;
                 ok = true;
             }
@@ -335,7 +335,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                              << "0deg"
                              << "90"
                              << "90deg";
-        if (acceptedOrientations.contains(value.toLower())) {
+        if (acceptedOrientations.contains(value, Qt::CaseInsensitive)) {
             if (!autoValue.isAuto) {
                 autoValue.customValue = kisRadiansToDegrees(roundToStraightAngle(autoValue.customValue));
             }

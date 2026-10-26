@@ -456,9 +456,9 @@ KoColor KoColor::fromXML(const QString &xml)
     QString channelDepthID = root.attribute("channeldepth", Integer16BitsColorDepthID.id());
 
     bool ok;
-    if (child.hasAttribute("space") || child.tagName().toLower() == "srgb") {
+    if (child.hasAttribute("space") || child.tagName().compare("srgb", Qt::CaseInsensitive) == 0) {
         c = KoColor::fromXML(child, channelDepthID, &ok);
-    } else if (root.hasAttribute("space") || root.tagName().toLower() == "srgb"){
+    } else if (root.hasAttribute("space") || root.tagName().compare("srgb", Qt::CaseInsensitive) == 0){
         c = KoColor::fromXML(root, channelDepthID, &ok);
     } else {
         qWarning() << "Cannot parse color from xml" << xml;
@@ -532,7 +532,7 @@ KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProf
     KoColor parsed(KoColorSpaceRegistry::instance()->rgb16(KoColorSpaceRegistry::instance()->p709SRGBProfile()));
     parsed.setOpacity(1.0);
 
-    if (value.toLower() == "none") {
+    if (value.compare("none", Qt::CaseInsensitive) == 0) {
         return parsed;
     }
 
@@ -559,7 +559,7 @@ KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProf
     dbgPigment << "Color definitions found during svg11parsing" << colorDefinitions;
 
     for (QString def : colorDefinitions) {
-        if (def.toLower() == "currentcolor") {
+        if (def.compare("currentcolor", Qt::CaseInsensitive) == 0) {
             parsed = current;
 #if QT_VERSION < QT_VERSION_CHECK(6, 6, 0)
         } else if (QColor::isValidColor(def)) {
@@ -567,7 +567,7 @@ KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProf
         } else if (QColor::isValidColorName(def)) {
 #endif
             parsed.fromQColor(QColor(def));
-        } else if (def.toLower().startsWith("rgb")) {
+        } else if (def.startsWith("rgb", Qt::CaseInsensitive)) {
             QString parse = def.trimmed();
             QStringList colors = parse.split(',');
             QString r = colors[0].right((colors[0].length() - 4)).trimmed();
@@ -590,7 +590,7 @@ KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProf
             }
             parsed.fromQColor(QColor(r.toInt(), g.toInt(), b.toInt()));
 
-        } else if (def.toLower().startsWith("icc-color")) {
+        } else if (def.startsWith("icc-color", Qt::CaseInsensitive)) {
             QStringList values = def.split(",");
             QString iccprofilename = values.first().split("(").last();
             values.removeFirst();

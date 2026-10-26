@@ -157,8 +157,8 @@ KoSvgTextProperties adjustPropertiesForFontSizeWorkaround(const KoSvgTextPropert
 
 }
 
-const QString TEXT_STYLE_TYPE = "krita:style-type";
-const QString TEXT_STYLE_RES = "krita:style-resolution";
+const QLatin1String TEXT_STYLE_TYPE("krita:style-type");
+const QLatin1String TEXT_STYLE_RES("krita:style-resolution");
 
 bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &context, bool rootNode)
 {
@@ -232,11 +232,11 @@ bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &c
         }
     }
 
-    if (e.hasAttribute(TEXT_STYLE_TYPE.toLatin1().data())) {
-        properties.setProperty(KoSvgTextProperties::KraTextStyleType, e.attribute(TEXT_STYLE_TYPE.toLatin1().data()));
-        if (e.hasAttribute(TEXT_STYLE_RES.toLatin1().data())) {
-            QString resolution = e.attribute(TEXT_STYLE_RES.toLatin1().data()).toLower();
-            if (resolution.endsWith("dpi")) {
+    if (e.hasAttribute(TEXT_STYLE_TYPE)) {
+        properties.setProperty(KoSvgTextProperties::KraTextStyleType, e.attribute(TEXT_STYLE_TYPE));
+        if (e.hasAttribute(TEXT_STYLE_RES)) {
+            QString resolution = e.attribute(TEXT_STYLE_RES);
+            if (resolution.endsWith("dpi", Qt::CaseInsensitive)) {
                 resolution.chop(3);
             }
             properties.setProperty(KoSvgTextProperties::KraTextStyleResolution, KisDomUtils::toInt(resolution));
@@ -367,9 +367,9 @@ bool KoSvgTextContentElement::saveSvg(SvgSavingContext &context,
     }
 
     if (properties.hasProperty(KoSvgTextProperties::KraTextStyleType)) {
-        context.shapeWriter().addAttribute(TEXT_STYLE_TYPE.toLatin1().data(), properties.property(KoSvgTextProperties::KraTextStyleType).toString());
+        context.shapeWriter().addAttribute(TEXT_STYLE_TYPE.data(), properties.property(KoSvgTextProperties::KraTextStyleType).toString());
         if (properties.hasProperty(KoSvgTextProperties::KraTextStyleResolution)) {
-            context.shapeWriter().addAttribute(TEXT_STYLE_RES.toLatin1().data(), QString::number(properties.property(KoSvgTextProperties::KraTextStyleResolution).toInt())+"dpi");
+            context.shapeWriter().addAttribute(TEXT_STYLE_RES.data(), QString::number(properties.property(KoSvgTextProperties::KraTextStyleResolution).toInt())+"dpi");
         }
     }
 

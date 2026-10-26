@@ -1113,7 +1113,7 @@ bool KisResourceModel::lessThan(const QModelIndex &source_left, const QModelInde
     QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAbstractResourceModel::Name).toString();
     QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAbstractResourceModel::Name).toString();
 
-    return nameLeft.toLower() < nameRight.toLower();
+    return nameLeft.compare(nameRight, Qt::CaseInsensitive) < 0;
 }
 
 QVector<KoResourceSP> KisResourceModel::filterByColumn(const QString filter, KisAbstractResourceModel::Columns column) const

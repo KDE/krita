@@ -270,6 +270,8 @@ void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
         }
         hide();
     }
+
+    m_colorUpdateSelf = false;
 }
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 void KisColorSelectorBase::enterEvent(QEvent *e)
@@ -320,6 +322,7 @@ void KisColorSelectorBase::leaveEvent(QEvent *e)
 {
     tryHideAllPopups();
     QWidget::leaveEvent(e);
+    m_colorUpdateSelf = false;
 }
 
 void KisColorSelectorBase::keyPressEvent(QKeyEvent *)

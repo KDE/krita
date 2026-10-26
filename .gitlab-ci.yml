@@ -24,9 +24,9 @@ variables:
   DEPS_QT6_REPO_BRANCH_NAME_LINUX: 'transition.now/qt6'
   DEPS_QT6_REPO_BRANCH_NAME_MACOS: 'transition.now/qt6'
 
-  VM_IMAGE_NAME_WINDOWS: 'ci-vm-images.s3.kde.org/krita-windows-clang21-twinpy'
-  VM_IMAGE_NAME_LINUX: 'ci-vm-images.s3.kde.org/krita-appimage-2204'
-  VM_IMAGE_NAME_ANDROID: 'ci-vm-images.s3.kde.org/krita-android-sdk36-2204'
+  VM_IMAGE_NAME_WINDOWS: 's3.kde.org/ci-vm-images/krita-windows-clang21-twinpy'
+  VM_IMAGE_NAME_LINUX: 's3.kde.org/ci-vm-images/krita-appimage-2204'
+  VM_IMAGE_NAME_ANDROID: 's3.kde.org/ci-vm-images/krita-android-sdk36-2204'
 
   # The name of python executable that will be used for initializing
   # the initial virtual envioronment. After venv is initialized, the chosen

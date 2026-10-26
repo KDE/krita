@@ -311,9 +311,12 @@ KisMetaData::Value cfaPatternExifToKMD(const Exiv2::Value::UniquePtr value, Exiv
 KisMetaData::Value cfaPatternExifToKMD(const Exiv2::Value::AutoPtr value, Exiv2::ByteOrder order)
 #endif
 {
-    QMap<QString, KisMetaData::Value> cfaPatternStructure;
     const Exiv2::DataValue *dvalue = dynamic_cast<const Exiv2::DataValue *>(&*value);
-    Q_ASSERT(dvalue);
+    if (!dvalue) {
+        warnMetaData << "Invalid CFA pattern type" << value->typeId();
+        return KisMetaData::Value();
+    }
+    QMap<QString, KisMetaData::Value> cfaPatternStructure;
     QByteArray array(dvalue->count(), 0);
     dvalue->copy((Exiv2::byte *)array.data());
 #if EXIV2_TEST_VERSION(0,28,0)

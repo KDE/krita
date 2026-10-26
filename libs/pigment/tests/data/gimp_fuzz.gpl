@@ -1,0 +1,14 @@
+GIMP Palette0
+Name: テスト Test
+Columns 2
+255 0 0 赤 Red
+0 255 0 Green
+0
+0 0
+
+#Comment
+0 0 255 Blue
+255 255 255 White
+128 128 128
+0 0 0 Black
+A B C Invalid

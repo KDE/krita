@@ -181,6 +181,16 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
                 OcioDisplayFilter *displayFilter = qobject_cast<OcioDisplayFilter*>(m_displayFilter.data());
                 Q_ASSERT(displayFilter);
                 m_ocioConfig = displayFilter->config;
+
+                KisSignalsBlocker inputCSBlocker(m_cmbInputColorSpace);
+                m_cmbInputColorSpace->setCurrent(QString::fromUtf8(displayFilter->inputColorSpaceName));
+                KisSignalsBlocker displayDeviceLocker(m_cmbDisplayDevice);
+                m_cmbDisplayDevice->setCurrent(QString::fromUtf8(displayFilter->displayDevice));
+                KisSignalsBlocker viewComboLocker(m_cmbView);
+                m_cmbView->setCurrent(QString::fromUtf8(displayFilter->view));
+                KisSignalsBlocker LookComboLocker(m_cmbLook);
+                m_cmbLook->setCurrent(QString::fromUtf8(displayFilter->look));
+
                 KisSignalsBlocker exposureBlocker(m_exposureDoubleWidget);
                 m_exposureDoubleWidget->setValue(displayFilter->exposure);
                 KisSignalsBlocker gammaBlocker(m_gammaDoubleWidget);

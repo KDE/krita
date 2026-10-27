@@ -48,6 +48,11 @@
 
 #include "black_white_point_chooser.h"
 
+#include <KisPart.h>
+#include <KisDocument.h>
+#include <kis_paint_layer.h>
+#include <kis_group_layer.h>
+#include <kis_painter.h>
 
 OCIO::ConstConfigRcPtr defaultRawProfile()
 {
@@ -149,6 +154,8 @@ LutDockerDock::LutDockerDock()
     connect(m_cmbView, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbLook, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbComponents, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
+
+    connect(m_bakeConfigBtn, SIGNAL(clicked()), this, SLOT(slotBakeCurrentConfigIntoNewImage()));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetOcioConfiguration()));
 
@@ -625,6 +632,58 @@ void LutDockerDock::refillViewCombobox()
     KisConfig cfg(true);
     KisOcioConfiguration ocioOptions = cfg.ocioConfiguration();
     m_cmbView->setCurrent(ocioOptions.displayView);
+}
+
+
+void LutDockerDock::slotBakeCurrentConfigIntoNewImage()
+{
+    if (!m_canvas) return;
+    if (!m_displayFilter) return;
+
+    KisImageSP img = m_canvas->image().toStrongRef();
+    if (!img) return;
+    const KoColorSpace *originalCs = img->colorSpace();
+    if (originalCs->colorModelId() != RGBAColorModelID) return;
+
+    KisPaintDeviceSP projection = new KisPaintDevice(originalCs);
+    KisPainter::copyAreaOptimized(QPoint(), img->projection(), projection, img->bounds());
+
+    // process the projection with the filter.
+    {
+        const KoColorSpace *ocioCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), originalCs->profile());
+        projection->convertTo(ocioCs);
+        const QRect bounds = projection->exactBounds();
+        const int numPixels = bounds.width()* bounds.height();
+
+        std::unique_ptr<quint8[]> originalBytes(
+            new quint8[projection->colorSpace()->pixelSize() * numPixels]);
+
+        projection->readBytes(originalBytes.get(), bounds);
+
+        OcioDisplayFilter *displayFilter = qobject_cast<OcioDisplayFilter*>(m_displayFilter.data());
+        displayFilter->bakingTransformation(originalBytes.get(), numPixels);
+        projection->writeBytes(originalBytes.get(), bounds);
+        projection->convertTo(originalCs);
+    }
+
+    KisDocument *doc = KisPart::instance()->createDocument();
+    KisImageSP image = new KisImage(doc->createUndoStore(),
+                                    img->width(),
+                                    img->height(),
+                                    projection->colorSpace(),
+                                    i18n("Untitled"));
+    KisPaintLayerSP layer =
+        new KisPaintLayer(image.data(), image->nextLayerName(),
+                          OPACITY_OPAQUE_U8, projection->colorSpace());
+    KisPainter::copyAreaOptimized(QPoint(), projection, layer->paintDevice(), img->bounds());
+
+    image->addNode(layer.data(), image->rootLayer());
+    doc->setCurrentImage(image);
+    KisPart::instance()->addDocument(doc);
+
+    KisMainWindow *win = m_canvas->viewManager()->mainWindow();
+    win->addViewAndNotifyLoadingCompleted(doc);
+
 }
 
 void LutDockerDock::selectLut()

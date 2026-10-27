@@ -79,6 +79,8 @@ private Q_SLOTS:
 
     void slotUpdateIcons();
 
+    void slotBakeCurrentConfigIntoNewImage();
+
 private:
     void enableControls();
     void refillControls();

@@ -63,6 +63,13 @@ public:
     void filter(quint8 *pixels, quint32 numPixels) override;
     void approximateInverseTransformation(quint8 *pixels, quint32 numPixels) override;
     void approximateForwardTransformation(quint8 *pixels, quint32 numPixels) override;
+    /**
+     * @brief bakingTransformation
+     * Transforms pixels according to a 'baking transform', which is a
+     * transform that resembles the filter() transform, except it transforms
+     * back to the input color space.
+     */
+    void bakingTransformation(quint8 *pixels, quint32 numPixels);
     bool useInternalColorManagement() const override;
     bool lockCurrentColorVisualRepresentation() const override;
     void setLockCurrentColorVisualRepresentation(bool value);
@@ -97,10 +104,12 @@ private:
     OCIO::ConstProcessorRcPtr m_processor;
     OCIO::ConstProcessorRcPtr m_reverseApproximationProcessor;
     OCIO::ConstProcessorRcPtr m_forwardApproximationProcessor;
+    OCIO::ConstProcessorRcPtr m_bakingProcessor;
 
     OCIO::ConstCPUProcessorRcPtr m_processorCPU;
     OCIO::ConstCPUProcessorRcPtr m_reverseApproximationProcessorCPU;
     OCIO::ConstCPUProcessorRcPtr m_forwardApproximationProcessorCPU;
+    OCIO::ConstCPUProcessorRcPtr m_bakingProcessorCPU;
 
     KisExposureGammaCorrectionInterface *m_interface;
 

@@ -538,17 +538,22 @@ void LutDockerDock::refillControls()
 
     { // Input Color Space
         QStringList itemsList;
+        QStringList descriptionList;
         int numOcioColorSpaces = m_ocioConfig->getNumColorSpaces();
         for(int i = 0; i < numOcioColorSpaces; ++i) {
             const char *cs = m_ocioConfig->getColorSpaceNameByIndex(i);
             OCIO::ConstColorSpaceRcPtr colorSpace = m_ocioConfig->getColorSpace(cs);
             itemsList << QString::fromUtf8(colorSpace->getName());
+            descriptionList << QString::fromUtf8(colorSpace->getDescription());
         }
 
         KisSignalsBlocker inputCSBlocker(m_cmbInputColorSpace);
 
         if (itemsList != m_cmbInputColorSpace->originalTexts()) {
             m_cmbInputColorSpace->resetOriginalTexts(itemsList);
+            for(int i = 0; i < numOcioColorSpaces; ++i) {
+                m_cmbInputColorSpace->setItemData(i, descriptionList.value(i), Qt::ToolTipRole);
+            }
         }
 
         m_cmbInputColorSpace->setCurrent(ocioOptions.inputColorSpace);
@@ -579,9 +584,13 @@ void LutDockerDock::refillControls()
 
     {
         QStringList itemsList;
-        int numLooks = m_ocioConfig->getNumLooks();
+        QStringList descriptionList;
+        const int numLooks = m_ocioConfig->getNumLooks();
         for (int k = 0; k < numLooks; k++) {
-           itemsList << QString::fromUtf8(m_ocioConfig->getLookNameByIndex(k));
+            const char *lookName = m_ocioConfig->getLookNameByIndex(k);
+            OCIO::ConstLookRcPtr look = m_ocioConfig->getLook(lookName);
+            itemsList << QString::fromUtf8(look->getName());
+            descriptionList << QString::fromUtf8(look->getDescription());
         }
         itemsList << i18nc("Item to indicate no look transform being selected","None");
 
@@ -589,6 +598,9 @@ void LutDockerDock::refillControls()
 
         if (itemsList != m_cmbLook->originalTexts()) {
             m_cmbLook->resetOriginalTexts(itemsList);
+            for(int i = 0; i < numLooks; ++i) {
+                m_cmbLook->setItemData(i, descriptionList.value(i), Qt::ToolTipRole);
+            }
         }
 
         m_cmbLook->setCurrent(ocioOptions.look);

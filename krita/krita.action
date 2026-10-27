@@ -213,7 +213,7 @@
       <statusTip/>
     </Action>
     <Action name="command_bar_open">
-      <icon/>
+      <icon>search-actions</icon>
       <text>Search Actions</text>
       <whatsThis/>
       <toolTip>Open the command bar to search through actions.</toolTip>

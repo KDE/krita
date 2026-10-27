@@ -67,6 +67,10 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->titleLabel->setTextElideMode(Qt::ElideRight);
     d->titleLabel->setText(dockWidget->windowTitle());
 
+    QSizePolicy sizePolicy =  d->titleLabel->sizePolicy();
+    sizePolicy.setVerticalPolicy(QSizePolicy::Ignored);
+    d->titleLabel->setSizePolicy(sizePolicy);
+
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(2, 0, 2, 0);
     layout->setSpacing(SPACING);
@@ -231,15 +235,26 @@ void KoDockWidgetTitleBar::Private::updateButtonSizes()
     QSize buttonSize = closeRect.size();
     if (buttonSize.width() < 16) {
         // To improve the look with Fusion which has weird 13x15 button sizes
-        buttonSize = QSize(16, 16);
+        buttonSize = QSize(16, 16 * int(thePublic->isVisible()));
     } else if (buttonSize.width() != buttonSize.height()) {
         // Just make sure the button is square...
-        buttonSize.setHeight(buttonSize.width());
+        buttonSize.setHeight(buttonSize.width()* int(thePublic->isVisible()));
     }
 
     floatButton->setFixedSize(buttonSize);
     closeButton->setFixedSize(buttonSize);
     lockButton->setFixedSize(buttonSize);
+}
+
+void KoDockWidgetTitleBar::hideEvent(QHideEvent *event){
+    Q_UNUSED(event);
+    d->updateButtonSizes();
+}
+
+void KoDockWidgetTitleBar::showEvent(QShowEvent *event){
+    Q_UNUSED(event);
+    d->updateButtonSizes();
+    d->closeButton->setVisible(true);
 }
 
 //have to include this because of Q_PRIVATE_SLOT

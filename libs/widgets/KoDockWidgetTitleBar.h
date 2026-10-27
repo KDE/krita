@@ -31,6 +31,8 @@ public Q_SLOTS:
 protected:
     void paintEvent(QPaintEvent* event) override; ///< reimplemented from QWidget
     void resizeEvent(QResizeEvent* event) override; ///< reimplemented from QWidget
+    void hideEvent(QHideEvent *event) override;
+    void showEvent(QShowEvent *event) override;
 private:
     Q_PRIVATE_SLOT(d, void toggleFloating())
     Q_PRIVATE_SLOT(d, void topLevelChanged(bool topLevel))

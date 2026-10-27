@@ -2491,17 +2491,12 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         }
 
         if (dockWidget->titleBarWidget() && !dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
-            dockWidget->titleBarWidget()->setVisible(KisConfig(true).showDockerTitleBars());
+            dockWidget->titleBarWidget()->setVisible(showTitlebars);
         }
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
-        if (!showTitlebars) {
-            if (dockWidget->titleBarWidget() && !dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
-                dockWidget->titleBarWidget()->setVisible(false);
-            }
-            dockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
-        }
+
         if (dockWidget->widget() && dockWidget->widget()->layout())
             dockWidget->widget()->layout()->setContentsMargins(1, 1, 1, 1);
 

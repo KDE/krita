@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-24 00:47+0000\n"
-"PO-Revision-Date: 2026-10-06 20:19+0200\n"
+"POT-Creation-Date: 2026-10-27 00:58+0000\n"
+"PO-Revision-Date: 2026-10-26 22:17+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -24078,9 +24078,9 @@ msgid "Out"
 msgstr "Fuori"
 
 #: libs/pigment/resources/KoColorSet.cpp:1100
-#: libs/pigment/resources/KoColorSet.cpp:1447
-#: libs/pigment/resources/KoColorSet.cpp:1528
-#: libs/pigment/resources/KoColorSet.cpp:1945
+#: libs/pigment/resources/KoColorSet.cpp:1440
+#: libs/pigment/resources/KoColorSet.cpp:1521
+#: libs/pigment/resources/KoColorSet.cpp:1938
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -24400,7 +24400,7 @@ msgstr "Sporco"
 #: libs/ui/animation/VideoImportDialog.ui:149
 #: plugins/dockers/logdocker/LogDockerDock.cpp:315
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1019
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:964
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
 #, kde-format
 msgid "Metadata"
@@ -24597,9 +24597,9 @@ msgstr "Miniatura"
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:606
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:805
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:860
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:974
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:919
 #, kde-format
 msgid "All"
 msgstr "Tutto"
@@ -26400,7 +26400,7 @@ msgstr "Durata:"
 #. i18n: ectx: attribute (title), widget (QWidget, advanced)
 #: libs/ui/animation/VideoImportDialog.ui:512
 #: libs/ui/forms/wdgperformancesettings.ui:250
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:406
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:351
 #: plugins/impex/webp/kis_wdg_options_webp.ui:174
 #, kde-format
 msgid "Advanced"
@@ -27135,99 +27135,6 @@ msgctxt "@title:window"
 msgid "Filter: %1"
 msgstr "Filtro: %1"
 
-#. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgInternalColorSelector)
-#. i18n: ectx: property (windowTitle), widget (QWidget, DlgHeifImport)
-#. i18n: ectx: property (windowTitle), widget (QDialog, FilterDialog)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImportImageSequence)
-#. i18n: ectx: property (windowTitle), widget (QDialog, KisSupporterBundlesDialog)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:14 libs/ui/forms/wdgfilterdialog.ui:30
-#: libs/ui/forms/wdgimportimagesequence.ui:18
-#: libs/widgets/WdgDlgInternalColorSelector.ui:18
-#: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:14
-#, kde-format
-msgid "Dialog"
-msgstr "Finestra di dialogo"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:20
-#, kde-format
-msgid ""
-"<html><head/><body><p>This is an Hybrid Log Gamma image. Krita does not "
-"support sending HLG to the monitor, so for import it is recommended to "
-"convert from scene linear to display linear.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Questa è un'immagine Hybrid Log Gamma. Krita non "
-"supporta l'invio di HLG al monitor, per importarla si consiglia di "
-"convertirla da lineare di scena a lineare di visualizzazione.</p></body></"
-"html>"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkApplyOOTF)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:30
-#, kde-format
-msgid "Apply HLG OOTF"
-msgstr "Applica HLG OOTF"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, m_lblGamma)
-#. i18n: ectx: property (text), widget (QLabel, gamma_label)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:37
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:176
-#: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:225
-#: plugins/dockers/lut/wdglut.ui:270 plugins/impex/heif/WdgHeifExport.ui:89
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:346
-#, kde-format
-msgid "Gamma:"
-msgstr "Gamma:"
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnGamma)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:44
-#, kde-format
-msgid ""
-"<html><head/><body><p>Display gamma. By default this is 1.2 for converting "
-"from scene to display linear.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Gamma del visore. Per impostazione predefinita è 1,2 "
-"per la conversione da lineare di scena a lineare di visualizzazione.</p></"
-"body></html>"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#. i18n: ectx: property (text), widget (QLabel, labelBrightness)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:57
-#: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
-#: plugins/impex/heif/WdgHeifExport.ui:106
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:363
-#, kde-format
-msgid "Brightness:"
-msgstr "Luminosità:"
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnNits)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:64
-#, kde-format
-msgid ""
-"<html><head/><body><p>The display brightness in nits. By default this is set "
-"to 1000 for converting to display linear.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>La luminosità di visualizzazione in nit. Per "
-"impostazione predefinita è impostata a 1000 per la conversione a lineare di "
-"visualizzazione.</p></body></html>"
-
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxCll)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxFall)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxLuminance)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMinLuminance)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:67
-#: libs/ui/forms/wdgimageproperties.ui:369
-#: libs/ui/forms/wdgimageproperties.ui:385
-#: libs/ui/forms/wdgimageproperties.ui:573
-#: libs/ui/forms/wdgimageproperties.ui:596
-#, kde-format
-msgid "cd/m²"
-msgstr "cd/m²"
-
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:67
 #, kde-format
 msgid "Image Properties"
@@ -27310,9 +27217,9 @@ msgstr "Proprietà del livello"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:53
 #: plugins/impex/jpeg/kis_jpeg_export.cc:216
 #: plugins/impex/jpeg/kis_jpeg_export.cc:218
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:272
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:274
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:276
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:258
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:260
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:262
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:76
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:86
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:88
@@ -28810,10 +28717,9 @@ msgstr "Formato"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnDismiss)
 #: libs/ui/forms/KisNewsItem.ui:158
-#, fuzzy, kde-format
-#| msgid "Markus Germann"
+#, kde-format
 msgid "Mark as Read"
-msgstr "Markus Germann"
+msgstr "Segna come letto"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:97
@@ -28938,7 +28844,7 @@ msgstr "Novità"
 #: libs/ui/forms/KisWelcomePage.ui:1311
 #, kde-format
 msgid "Mark all as read"
-msgstr ""
+msgstr "Segna tutto come letto"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
 #: libs/ui/forms/KisWelcomePage.ui:1337
@@ -30063,9 +29969,9 @@ msgstr "Inizia a mostrare da:"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
 #: plugins/generators/pattern/wdgpatternoptions.ui:79
 #: plugins/generators/pattern/wdgpatternoptions.ui:101
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:724
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:779
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:834
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:996
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:941
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:277
 #: plugins/impex/webp/kis_wdg_options_webp.ui:82
 #: plugins/impex/webp/kis_wdg_options_webp.ui:332
@@ -30259,6 +30165,18 @@ msgstr "Gruppo campioni:"
 msgctxt "Label of ICC Color Profile in PNG import dialogue"
 msgid "Profile:"
 msgstr "Profilo:"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgInternalColorSelector)
+#. i18n: ectx: property (windowTitle), widget (QDialog, FilterDialog)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImportImageSequence)
+#. i18n: ectx: property (windowTitle), widget (QDialog, KisSupporterBundlesDialog)
+#: libs/ui/forms/wdgfilterdialog.ui:30
+#: libs/ui/forms/wdgimportimagesequence.ui:18
+#: libs/widgets/WdgDlgInternalColorSelector.ui:18
+#: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:14
+#, kde-format
+msgid "Dialog"
+msgstr "Finestra di dialogo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -31529,6 +31447,18 @@ msgstr ""
 #, kde-format
 msgid "Calculate"
 msgstr "Calcola"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxCll)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxFall)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxLuminance)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMinLuminance)
+#: libs/ui/forms/wdgimageproperties.ui:369
+#: libs/ui/forms/wdgimageproperties.ui:385
+#: libs/ui/forms/wdgimageproperties.ui:573
+#: libs/ui/forms/wdgimageproperties.ui:596
+#, kde-format
+msgid "cd/m²"
+msgstr "cd/m²"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxColorVolume)
 #: libs/ui/forms/wdgimageproperties.ui:404
@@ -40605,12 +40535,12 @@ msgstr "La maschera è disabilitata"
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid "("
-msgstr ""
+msgstr "("
 
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid ")"
-msgstr ""
+msgstr ")"
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format
@@ -43233,6 +43163,15 @@ msgstr "Verde':"
 #, kde-format
 msgid "Blue':"
 msgstr "Blu':"
+
+#. i18n: ectx: property (text), widget (QLabel, m_lblGamma)
+#. i18n: ectx: property (text), widget (QLabel, gamma_label)
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:176
+#: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:225
+#: plugins/dockers/lut/wdglut.ui:270
+#, kde-format
+msgid "Gamma:"
+msgstr "Gamma:"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spLumaGamma)
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, SP_Gamma)
@@ -50523,7 +50462,7 @@ msgstr "Dublin Core"
 #. i18n: ectx: property (text), widget (QCheckBox, exif)
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:162
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:274
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1042
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:987
 #: plugins/impex/webp/kis_wdg_options_webp.ui:839
 #: plugins/metadata/exif/kis_exif_io.h:28
 #, kde-format
@@ -52125,71 +52064,89 @@ msgid "Do nothing"
 msgstr "Non fare nulla"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
-#, kde-format
-msgid "S-Pen Actions"
+#, fuzzy, kde-format
+#| msgid "S-Pen Actions"
+msgid "S-Pen Pro Air Actions"
 msgstr "S-Pen - Azioni"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "S-Pen Actions"
 msgctxt "action"
-msgid "S-Pen Actions"
+msgid "S-Pen Pro Air Actions"
 msgstr "S-Pen - Azioni"
 
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Button Click"
 msgctxt "action"
-msgid "S-Pen Button Click"
+msgid "S-Pen Pro Air Button Click"
 msgstr "S-Pen - Clic sul pulsante"
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Button Double Click"
 msgctxt "action"
-msgid "S-Pen Button Double Click"
+msgid "S-Pen Pro Air Button Double Click"
 msgstr "S-Pen - Doppio clic sul pulsante"
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Up"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Up"
+msgid "S-Pen Pro Air Gesture Swipe Up"
 msgstr "S-Pen - Scorri in alto"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Down"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Down"
+msgid "S-Pen Pro AirGesture Swipe Down"
 msgstr "S-Pen - Scorri in basso"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Left"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Left"
+msgid "S-Pen Pro Air Gesture Swipe Left"
 msgstr "S-Pen - Scorri a sinistra"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Right"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Right"
+msgid "S-Pen Pro Air Gesture Swipe Right"
 msgstr "S-Pen - Scorri a destra"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Circle Clockwise"
 msgctxt "action"
-msgid "S-Pen Gesture Circle Clockwise"
+msgid "S-Pen Pro Air Gesture Circle Clockwise"
 msgstr "S-Pen - Cerchio in senso orario"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Circle Counter-Clockwise"
 msgctxt "action"
-msgid "S-Pen Gesture Circle Counter-Clockwise"
+msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
 msgstr "S-Pen - Cerchio in senso antiorario"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
@@ -52203,11 +52160,10 @@ msgstr "Commuta la tavolozza a comparsa con S-Pen"
 #: plugins/extensions/spensettings/wdg_spensettings.ui:27
 #, kde-format
 msgid ""
-"Make sure the actions are corresponding to the correct gesture on the system "
-"level. These can be configured under S Pen Settings > Air actions."
+"You must enable Air Actions for Krita in your system settings for them to "
+"work. Note that only the S-Pen Pro supports Air Actions, the regular S-Pen "
+"does not. Not all devices support gestures."
 msgstr ""
-"Accertati che le azioni corrispondano al gesto corretto a livello di "
-"sistema. Esse posso essere configurate in Impostazioni S Pen > Azioni Air."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -52227,66 +52183,47 @@ msgstr "Pressione"
 msgid "Double Press"
 msgstr "Doppia pressione"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:74
-#, kde-format
-msgid ""
-"The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
-"S9 devices."
-msgstr ""
-"Sono supportati i pulsanti seguenti nei dispositivi Note 9, Note 10, Tab S6 "
-"e Tab S9."
-
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:93
+#: plugins/extensions/spensettings/wdg_spensettings.ui:78
 #, kde-format
 msgid "Gestures"
 msgstr "Gesti"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:99
+#: plugins/extensions/spensettings/wdg_spensettings.ui:84
 #, kde-format
 msgid "Swipe Up"
 msgstr "Scorri in alto"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:109
+#: plugins/extensions/spensettings/wdg_spensettings.ui:94
 #, kde-format
 msgid "Swipe Down"
 msgstr "Scorri in basso"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:116
-#, kde-format
-msgid "Swipe Right"
-msgstr "Scorri a destra"
-
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:123
+#: plugins/extensions/spensettings/wdg_spensettings.ui:104
 #, kde-format
 msgid "Swipe Left"
 msgstr "Scorri a sinistra"
 
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:114
+#, kde-format
+msgid "Swipe Right"
+msgstr "Scorri a destra"
+
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:130
+#: plugins/extensions/spensettings/wdg_spensettings.ui:124
 #, kde-format
 msgid "Circle Clockwise"
 msgstr "Cerchio in senso orario"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:137
+#: plugins/extensions/spensettings/wdg_spensettings.ui:134
 #, kde-format
 msgid "Circle Counter-Clockwise"
 msgstr "Cerchio in senso antiorario"
-
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:164
-#, kde-format
-msgid ""
-"The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
-"devices."
-msgstr ""
-"Sono supportati i gesti seguenti nei dispositivi Note 10, Tab S6 e Tab S9."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
@@ -54214,27 +54151,24 @@ msgid "Threshold &level:"
 msgstr "&Livello soglia:"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "New Gamut Mask..."
+#, kde-format
 msgid "Tone/Gamut Map..."
-msgstr "Nuova maschera del gamut..."
+msgstr "Mappa toni/gamut..."
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:155
-#, fuzzy, kde-format
-#| msgid "LAS,"
+#, kde-format
 msgid "LAB"
-msgstr "LAS,"
+msgstr "LAB"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:156
 #, kde-format
 msgid "XYZ (ICtCp)"
-msgstr ""
+msgstr "XYZ (ICtCp)"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:157
 #, kde-format
 msgid "XYZ (OkLAB)"
-msgstr ""
+msgstr "XYZ (OkLAB)"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:159
 #, kde-format
@@ -54244,20 +54178,17 @@ msgstr "Reinhard"
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:160
 #, kde-format
 msgid "Piecewise Filmic"
-msgstr ""
+msgstr "Cinematografico a segmenti"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:162
-#, fuzzy, kde-format
-#| msgctxt "Lightness Map blend mode for brush texture"
-#| msgid "Lightness Map"
+#, kde-format
 msgid "Use Chroma-Lightness Cusp Map"
-msgstr "Mappa chiarezza"
+msgstr "Usa mappa dei cuspidi di cromaticità e luminosità"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:163
-#, fuzzy, kde-format
-#| msgid "Minimum Quality"
+#, kde-format
 msgid "Minimum Delta E"
-msgstr "Qualità minima"
+msgstr "Delta E minimo"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:165
 #, kde-format
@@ -54267,6 +54198,9 @@ msgid ""
 "mapping. Only works for RGB and CMYK profiles, will fall back on Minimum "
 "Delta E."
 msgstr ""
+"Usa una mappa dei cuspidi di cromaticità e luminosità per una mappatura del "
+"gamut più veloce, seppure meno accurata. Funziona solo per i profili RGB e "
+"CMYK, ripiega sul Delta E minimo."
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:168
 #, kde-format
@@ -54275,48 +54209,44 @@ msgid ""
 "Will use the Minimum Delta E method, where colors are brought into gamut "
 "until they minimally different from the transformed color. Slow but accurate."
 msgstr ""
+"Utilizzerà il metodo Delta E minimo, dove i colori sono trasferiti "
+"all'interno del gamut fino a che non differiscono in modo minimo dal colore "
+"trasformato. Lento ma accurato."
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:289
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:306
 #, kde-format
 msgid "Current Maximum White: %1"
-msgstr ""
+msgstr "Bianco massimo attuale: %1"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.h:28
-#, fuzzy, kde-format
-#| msgid "Gamut Masks"
+#, kde-format
 msgid "Tone/Gamut Map"
-msgstr "Maschere del gamut"
+msgstr "Mappa toni/gamut"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:22
-#, fuzzy, kde-format
-#| msgctxt "Color model"
-#| msgid "Model:"
+#, kde-format
 msgid "Model:"
 msgstr "Modello:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkToneMap)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:41
-#, fuzzy, kde-format
-#| msgctxt "Layer name for translation of template"
-#| msgid "Tones"
+#, kde-format
 msgid "Tone Map"
-msgstr "Toni"
+msgstr "Mappa dei toni"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:57
-#, fuzzy, kde-format
-#| msgid "White:"
+#, kde-format
 msgid "Max White:"
-msgstr "Bianco:"
+msgstr "Bianco max:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:80
-#, fuzzy, kde-format
-#| msgid "Strength:"
+#, kde-format
 msgid "Toe Strength:"
-msgstr "Intensità:"
+msgstr "Intensità compressione delle ombre:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeStrength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:87
@@ -54325,13 +54255,14 @@ msgid ""
 "The sharpness of the toe fall-off. 0.0 makes it linear, while 1.0 produces a "
 "sharp angle."
 msgstr ""
+"La nitidezza della transizione della compressione delle ombre. Il valore 0,0 "
+"la rende lineare, 1,0 produce un angolo netto."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:103
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Toe Length:"
-msgstr "Lunghezza:"
+msgstr "Estensione della compressione delle ombre:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:110
@@ -54340,47 +54271,44 @@ msgid ""
 "How much of the dynamic range is in the toe. 0.0 means none, while 1.0 is "
 "half the curve."
 msgstr ""
+"Quanta parte della gamma dinamica si trova nella compressione delle ombre. "
+"0,0 significa nessuna, 1,0 significa metà della curva."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:126
-#, fuzzy, kde-format
-#| msgid "Anc&hor Strength:"
+#, kde-format
 msgid "Shoulder Strength:"
-msgstr "Forza dell'anc&oraggio:"
+msgstr "Intensità della compressione dei toni chiari:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderStrength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:133
 #, kde-format
 msgid "Curvature of the shoulder. 1.0 is linear."
-msgstr ""
+msgstr "Curvatura della compressione dei toni chiari. 1,0 è lineare."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:149
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Shoulder Length:"
-msgstr "Lunghezza dello sfumino"
+msgstr "Estensione della compressione dei toni chiari:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:156
 #, kde-format
 msgid "Determines the maximum white in stops."
-msgstr ""
+msgstr "Determina il bianco massimo in stop."
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnShoulderLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:159
-#, fuzzy, kde-format
-#| msgctxt "Button to edit the selected stop color in the stop gradient editor"
-#| msgid "Edit stop"
+#, kde-format
 msgid " stops"
-msgstr "Modifica interruzione"
+msgstr " stop"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:172
-#, fuzzy, kde-format
-#| msgid "Shear angle X:"
+#, kde-format
 msgid "Shoulder Angle:"
-msgstr "Angolo di deformazione X:"
+msgstr "Angolo della compressione dei toni chiari:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderAngle)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:179
@@ -54388,20 +54316,20 @@ msgstr "Angolo di deformazione X:"
 msgid ""
 "Angle of the shoulder, determines the smoothness of the shift to full white."
 msgstr ""
+"Angolo della compressione dei toni chiari, determina la fluidità della "
+"transizione verso il bianco puro."
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkGamutMap)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:210
-#, fuzzy, kde-format
-#| msgid "Gamut Masks"
+#, kde-format
 msgid "Gamut Map"
-msgstr "Maschere del gamut"
+msgstr "Mappa del gamut"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:219
-#, fuzzy, kde-format
-#| msgid "Target:"
+#, kde-format
 msgid "Target Gamut:"
-msgstr "Destinazione:"
+msgstr "Gamut di destinazione:"
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format
@@ -55257,6 +55185,12 @@ msgctxt "Swapping FG and BG color in the screentone pattern"
 msgid "Invert:"
 msgstr "Inverti:"
 
+#. i18n: ectx: property (text), widget (QLabel, labelBrightness)
+#: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
+#, kde-format
+msgid "Brightness:"
+msgstr "Luminosità:"
+
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:787
 #, kde-format
@@ -55648,7 +55582,7 @@ msgstr ""
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFlatten)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLossless)
 #: plugins/impex/exr/exr_export_widget.ui:27
-#: plugins/impex/heif/WdgHeifExport.ui:148
+#: plugins/impex/heif/WdgHeifExport.ui:98
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:144
 #, kde-format
 msgid ""
@@ -55686,7 +55620,7 @@ msgstr "Nel documento non è stato trovato il profilo del colore."
 msgid "Unknown error: %1"
 msgstr "Errore sconosciuto: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:540
+#: plugins/impex/heif/HeifExport.cpp:536
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -55696,7 +55630,7 @@ msgstr ""
 "La luminosità dell'immagine sarà a risoluzione intera, mentre la colorazione "
 "sarà dimezzata in entrambe le dimensioni."
 
-#: plugins/impex/heif/HeifExport.cpp:541
+#: plugins/impex/heif/HeifExport.cpp:537
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -55706,31 +55640,31 @@ msgstr ""
 "La luminosità dell'immagine sarà a risoluzione intera, mentre la colorazione "
 "sarà dimezzata orizzontalmente."
 
-#: plugins/impex/heif/HeifExport.cpp:542
+#: plugins/impex/heif/HeifExport.cpp:538
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr "Luminosità e colorazione dell'immagine saranno a risoluzione intera."
 
-#: plugins/impex/heif/HeifExport.cpp:556
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
+#: plugins/impex/heif/HeifExport.cpp:552
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #: plugins/impex/png/kis_png_export.cc:167
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:556
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
+#: plugins/impex/heif/HeifExport.cpp:552
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:186
 #: plugins/impex/png/kis_png_export.cc:167
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:557
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
+#: plugins/impex/heif/HeifExport.cpp:553
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:188
 #: plugins/impex/png/kis_png_export.cc:168
 #, kde-format
 msgctxt "@tooltip"
@@ -55743,8 +55677,8 @@ msgstr ""
 "curva quantizzata percettiva (detta anche curva SMPTE 2048). Raccomandata "
 "per immagini HDR in cui è importante la luminosità assoluta."
 
-#: plugins/impex/heif/HeifExport.cpp:559
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
+#: plugins/impex/heif/HeifExport.cpp:555
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
 #: plugins/impex/png/kis_png_export.cc:170
 #, kde-format
 msgctxt "@tooltip"
@@ -55757,16 +55691,16 @@ msgstr ""
 "curva Hybrid Log Gamma. Raccomandata per immagini HDR in cui il visore "
 "potrebbe non interpretare l'HDR."
 
-#: plugins/impex/heif/HeifExport.cpp:565
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:213
+#: plugins/impex/heif/HeifExport.cpp:561
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:202
 #: plugins/impex/png/kis_png_export.cc:176
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Mantieni coloranti, codifica PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:566
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:215
+#: plugins/impex/heif/HeifExport.cpp:562
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #: plugins/impex/png/kis_png_export.cc:177
 #, kde-format
 msgctxt "@tooltip"
@@ -55779,16 +55713,16 @@ msgstr ""
 "percettiva (detta anche curva SMPTE 2048). Raccomandata per immagini in cui "
 "è importante la luminosità assoluta."
 
-#: plugins/impex/heif/HeifExport.cpp:570
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:221
+#: plugins/impex/heif/HeifExport.cpp:566
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:210
 #: plugins/impex/png/kis_png_export.cc:181
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Mantieni coloranti, codifica HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:571
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:223
+#: plugins/impex/heif/HeifExport.cpp:567
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:212
 #: plugins/impex/png/kis_png_export.cc:182
 #, kde-format
 msgctxt "@tooltip"
@@ -55800,16 +55734,16 @@ msgstr ""
 "Gamma. Raccomandata per immagini destinate a schermi che non sono in grado "
 "di interpretare PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:575
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:228
+#: plugins/impex/heif/HeifExport.cpp:571
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:217
 #: plugins/impex/png/kis_png_export.cc:186
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Mantieni coloranti, codifica SMPTE ST 428"
 
-#: plugins/impex/heif/HeifExport.cpp:576
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:230
+#: plugins/impex/heif/HeifExport.cpp:572
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:219
 #: plugins/impex/png/kis_png_export.cc:187
 #, kde-format
 msgctxt "@tooltip"
@@ -55822,14 +55756,14 @@ msgstr ""
 "apre sempre le immagini come queste come punto a virgola mobile lineare, "
 "questa opzione produce il suo inverso"
 
-#: plugins/impex/heif/HeifExport.cpp:581
+#: plugins/impex/heif/HeifExport.cpp:577
 #: plugins/impex/png/kis_png_export.cc:192
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Nessuna modifica, taglio"
 
-#: plugins/impex/heif/HeifExport.cpp:582
+#: plugins/impex/heif/HeifExport.cpp:578
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -55886,70 +55820,14 @@ msgstr ""
 msgid "Space:"
 msgstr "Spazio:"
 
-# VM: Gamma del visore o Visualizza la gamma?
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnGamma)
-#: plugins/impex/heif/WdgHeifExport.ui:96
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:353
-#, kde-format
-msgid ""
-"<html><head/><body><p>Display gamma. By default this is 1.2 for converting "
-"from PQ.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Gamma del visore. Per impostazione predefinita è 1,2 "
-"per la conversione da PQ.</p></body></html>"
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnNits)
-#: plugins/impex/heif/WdgHeifExport.ui:113
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:370
-#, kde-format
-msgid ""
-"<html><head/><body><p>The display brightness in nits. By default this is set "
-"to 1000 for converting from PQ.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>La luminosità di visualizzazione in nit. Per "
-"impostazione predefinita è impostata a 1000 per la conversione da PQ.</p></"
-"body></html>"
-
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
-#: plugins/impex/heif/WdgHeifExport.ui:116
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:373
-#, kde-format
-msgid " cd/m²"
-msgstr " cd/m²"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkHLGOOTF)
-#. i18n: ectx: property (toolTip), widget (QGroupBox, chkHLGOOTF)
-#: plugins/impex/heif/WdgHeifExport.ui:129
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:334
-#, kde-format
-msgid ""
-"<html><head/><body><p>Hybrid Log Gamma needs an extra conversion step in "
-"between, as Krita currently cannot send HLG data directly to the display. "
-"Therefore we apply the HLG opto-optical curve to convert from display to "
-"scene linear.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Hybrid Log Gamma richiede un ulteriore passaggio di "
-"conversione interno, in quanto Krita non è attualmente in grado di inviare "
-"dati HLG direttamente al visore. Si applicherà dunque la curva opto-ottica "
-"HLG per convertire da lineare di visualizzazione a lineare di scena.</p></"
-"body></html>"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkHLGOOTF)
-#. i18n: ectx: property (title), widget (QGroupBox, chkHLGOOTF)
-#: plugins/impex/heif/WdgHeifExport.ui:132
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:337
-#, kde-format
-msgid "Apply reverse Hybrid Log Gamma OOTF"
-msgstr "Applica OOTF Hybrid Log Gamma inverso"
-
 #. i18n: ectx: property (text), widget (QCheckBox, chkLossless)
-#: plugins/impex/heif/WdgHeifExport.ui:151
+#: plugins/impex/heif/WdgHeifExport.ui:101
 #, kde-format
 msgid "&Lossless"
 msgstr "&Senza perdita"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMonochromesRGB)
-#: plugins/impex/heif/WdgHeifExport.ui:161
+#: plugins/impex/heif/WdgHeifExport.ui:111
 #, kde-format
 msgid ""
 "<html><head/><body><p>Not all encoders for AV1 and by extension avif support "
@@ -55965,7 +55843,7 @@ msgstr ""
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMonochromesRGB)
-#: plugins/impex/heif/WdgHeifExport.ui:164
+#: plugins/impex/heif/WdgHeifExport.ui:114
 #, kde-format
 msgid "Convert to sRGB for extra compatibility"
 msgstr "Converti in sRGB per maggiore compatibilità"
@@ -56249,7 +56127,7 @@ msgstr "Ottimizza"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:268
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1036
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:981
 #: plugins/impex/webp/kis_wdg_options_webp.ui:833
 #, kde-format
 msgid "Formats:"
@@ -56257,14 +56135,14 @@ msgstr "Formati:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, iptc)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:284
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1049
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:994
 #, kde-format
 msgid "IPTC"
 msgstr "IPTC"
 
 #. i18n: ectx: property (text), widget (QCheckBox, xmp)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:294
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1056
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1001
 #: plugins/impex/webp/kis_wdg_options_webp.ui:846
 #: plugins/metadata/xmp/kis_xmp_io.h:26
 #, kde-format
@@ -56285,7 +56163,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, chkMetadata)
 #. i18n: ectx: property (text), widget (QCheckBox, chkMetaData)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:336
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1025
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:970
 #: plugins/impex/webp/kis_wdg_options_webp.ui:824
 #, kde-format
 msgid "Store Document Metadata"
@@ -56311,12 +56189,12 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuthor)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:358
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1080
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1025
 #, kde-format
 msgid "Sign with Author Profile Data"
 msgstr "Firma con i dati del profilo dell'autore"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:378
+#: plugins/impex/jxl/JPEGXLImport.cpp:376
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -56325,22 +56203,22 @@ msgstr ""
 "Rilevata immagine JPEG-XL con canali di colori a tinta piatta, verrà "
 "importata l'immagine appiattita."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:682
-#: plugins/impex/jxl/JPEGXLImport.cpp:694
-#: plugins/impex/jxl/JPEGXLImport.cpp:710
-#: plugins/impex/jxl/JPEGXLImport.cpp:722
+#: plugins/impex/jxl/JPEGXLImport.cpp:673
+#: plugins/impex/jxl/JPEGXLImport.cpp:685
+#: plugins/impex/jxl/JPEGXLImport.cpp:701
+#: plugins/impex/jxl/JPEGXLImport.cpp:713
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "Non è possibile leggere il profilo dell'immagine."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:865
+#: plugins/impex/jxl/JPEGXLImport.cpp:856
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr "Lunghezza del nome del livello JPEG-XL non valido"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:931
+#: plugins/impex/jxl/JPEGXLImport.cpp:922
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
@@ -56432,9 +56310,9 @@ msgstr "Sottocampionamento 8x8"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:111
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:119
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:139
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:743
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:798
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:853
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:984
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:929
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (encoder chooses)"
@@ -56625,13 +56503,13 @@ msgctxt "JPEG-XL encoder options"
 msgid "Use all predictors"
 msgstr "Usa tutti i predittori"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:192
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:181
 #, kde-format
 msgctxt "Color space option"
 msgid "Save as is"
 msgstr "Salva com'è"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:194
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:183
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -56908,27 +56786,27 @@ msgstr ""
 "conversione del profilo ICC."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:412
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:357
 #, kde-format
 msgid "Hover this text for info tooltip"
 msgstr "Passa il mouse sopra questo testo per un'informativa"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
 #. i18n: ectx: property (toolTip), widget (QTabWidget, advancedParameters)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:419
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1809
 #, kde-format
 msgid "<html><head/><body><p><br/></p></body></html>"
 msgstr "<html><head/><body><p><br/></p></body></html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:426
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:371
 #, kde-format
 msgid "Encoder parameters"
 msgstr "Parametri del codificatore"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:432
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:377
 #, kde-format
 msgid ""
 "<html><head/><body><p>Reduces color resolution to achieve smaller files. "
@@ -56941,14 +56819,14 @@ msgstr ""
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:435
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:380
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Color channel resampling"
 msgstr "Ricampionamento dei canali di colore"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, resampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:442
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:387
 #, kde-format
 msgid ""
 "Sets resampling option. If enabled, the image's color channels are "
@@ -56960,7 +56838,7 @@ msgstr ""
 "sovracampionati alla dimensione originale nel decodificatore."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:449
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:394
 #, kde-format
 msgid ""
 "<html><head/><body><p>Reduces transparency channel resolution for smaller "
@@ -56972,13 +56850,13 @@ msgstr ""
 "quando i bordi con trasparenza precisi non sono critici.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:452
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:397
 #, kde-format
 msgid "Alpha channel resampling"
 msgstr "Ricampionamento canale alfa"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, extraChannelResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:459
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:404
 #, kde-format
 msgid ""
 "Sets resampling option. If enabled, the image's alpha channel is downsampled "
@@ -56989,7 +56867,7 @@ msgstr ""
 "sovracampionato alla dimensione originale nel decodificatore."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPhotonNoise)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:466
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:411
 #, kde-format
 msgid ""
 "<html><head/><body><p>Separates camera sensor noise patterns for better "
@@ -57002,14 +56880,14 @@ msgstr ""
 "fotografie con ISO alto.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:469
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:414
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Photon noise"
 msgstr "Rumore dei fotoni"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, photonNoise)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:484
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:429
 #, kde-format
 msgid ""
 "Adds noise to the image emulating photographic film noise, the higher the "
@@ -57025,7 +56903,7 @@ msgstr ""
 "Il valore predefinito è 0."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblDots)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:494
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:439
 #, kde-format
 msgid ""
 "<html><head/><body><p>Identifies and efficiently encodes repeating dot "
@@ -57037,20 +56915,20 @@ msgstr ""
 "trame.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:497
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:442
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Generate dots"
 msgstr "Genera punti"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, dots)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:504
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:449
 #, kde-format
 msgid "Enables or disables dots generation."
 msgstr "Abilita o disabilita la generazione di punti."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:511
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:456
 #, kde-format
 msgid ""
 "<html><head/><body><p>Identifies repeated elements (like text characters or "
@@ -57063,20 +56941,20 @@ msgstr ""
 "html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:459
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Generate patches"
 msgstr "Genera pezze"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patches)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:521
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:466
 #, kde-format
 msgid "Enables or disables patches generation."
 msgstr "Abilita o disabilita la generazione di pezze."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblEpf)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:528
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:473
 #, kde-format
 msgid ""
 "<html><head/><body><p>Smooths areas while preserving sharp edges, improving "
@@ -57088,13 +56966,13 @@ msgstr ""
 "Valori più alti applicano un filtro più forte.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:531
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:476
 #, kde-format
 msgid "Edge preserving filter strength"
 msgstr "Intensità del filtro di preservazione bordo"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMax)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:555
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:500
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:110
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:46
 #, kde-format
@@ -57102,21 +56980,21 @@ msgid "Strong"
 msgstr "Forte"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNone1)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:565
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:510
 #, kde-format
 msgid "<html><head/><body><p>Default (encoder chooses)</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Predefinito (sceglie il codificatore)</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:568
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:513
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Auto"
 msgstr "Automatiche"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:575
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:520
 #, kde-format
 msgid ""
 "Edge preserving filter level, -1 to 3. Use -1 for the default (encoder "
@@ -57127,13 +57005,13 @@ msgstr ""
 "un'intensità."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:596
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:541
 #, kde-format
 msgid "Enables or disables the gaborish filter."
 msgstr "Abilita o disabilita il filtro di Gabor."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblGaborishFilter)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:603
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:548
 #, kde-format
 msgid ""
 "<html><head/><body><p>Advanced texture analysis filter that improves "
@@ -57145,14 +57023,14 @@ msgstr ""
 "visiva.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:606
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:551
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
 msgstr "Filtro di Gabor"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lbModularEncoding)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:613
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:558
 #, kde-format
 msgid ""
 "<html><head/><body><p>Uses the Modular compression system which excels at "
@@ -57164,26 +57042,26 @@ msgstr ""
 "essere con perdita di dati o senza perdita di dati.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:616
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:561
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular encoding"
 msgstr "Codifica modulare"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modular)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:623
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:568
 #, kde-format
 msgid "Enables modular encoding."
 msgstr "Abilita la codifica modulare."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, keepInvisible)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:630
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:575
 #, kde-format
 msgid "Enables or disables preserving color of invisible pixels."
 msgstr "Abilita o disabilita la preservazione del colore dei pixel invisibili."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, groupOrder)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:637
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:582
 #, kde-format
 msgid ""
 "Determines the order in which 256x256 regions are stored in the codestream "
@@ -57193,7 +57071,7 @@ msgstr ""
 "del flusso di codice per la resa progressiva."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblKeepInvisible)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:647
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:592
 #, kde-format
 msgid ""
 "<html><head/><body><p>Preserves color information in fully transparent "
@@ -57205,13 +57083,13 @@ msgstr ""
 "quando non sono necessari i colori sotto la trasparenza.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:650
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:595
 #, kde-format
 msgid "Keep color of invisible pixels"
 msgstr "Mantieni colore dei pixel invisibili"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblGroupOrder)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:657
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:602
 #, kde-format
 msgid ""
 "<html><head/><body><p>Determines the order in which image tiles are encoded. "
@@ -57223,14 +57101,14 @@ msgstr ""
 "il caricamento progressivo, utile per i contenuti web.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:660
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:605
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group order"
 msgstr "Ordine dei gruppi"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblJPEGReconCFL)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:670
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:615
 #, kde-format
 msgid ""
 "<html><head/><body><p>Predicts color from brightness information, reducing "
@@ -57243,20 +57121,20 @@ msgstr ""
 "html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:673
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:618
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Chroma-from-luma"
 msgstr "Crominanza-da-luma"
 
 #. i18n: ectx: attribute (title), widget (QWidget, varDCTParameters)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:681
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:626
 #, kde-format
 msgid "VarDCT parameters"
 msgstr "Parametri VarDCT"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:632
 #, kde-format
 msgid ""
 "<html><head/><body><p>Enables progressive loading using advanced color "
@@ -57270,15 +57148,15 @@ msgstr ""
 "fornisce risultati migliori.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:635
 #, kde-format
 msgid "Spectral progression"
 msgstr "Progressione spettrale"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveAC)
 #. i18n: ectx: property (toolTip), widget (QComboBox, qProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:697
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:714
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:642
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:659
 #, kde-format
 msgid ""
 "Set the progressive mode for the AC coefficients of VarDCT, using spectral "
@@ -57288,7 +57166,7 @@ msgstr ""
 "utilizzando la progressione spettrale dai coefficienti DCT."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:704
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:649
 #, kde-format
 msgid ""
 "<html><head/><body><p>Enables progressive loading using quantization to "
@@ -57300,13 +57178,13 @@ msgstr ""
 "piccole ma richiede un maggior tempo di codifica.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:652
 #, kde-format
 msgid "Quantization"
 msgstr "Quantizzazione"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblProgressiveDC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:721
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:666
 #, kde-format
 msgid ""
 "<html><head/><body><p>Creates a better coarse preview image for progressive "
@@ -57319,13 +57197,13 @@ msgstr ""
 "html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:724
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:669
 #, kde-format
 msgid "Low resolution DC"
 msgstr "DC a bassa risoluzione"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveDC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:731
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
 #, kde-format
 msgid "Set the progressive mode using lower-resolution DC images for VarDCT."
 msgstr ""
@@ -57333,13 +57211,13 @@ msgstr ""
 "per VarDCT."
 
 #. i18n: ectx: attribute (title), widget (QWidget, modularEncodingParameters)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:739
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:684
 #, kde-format
 msgid "Modular parameters"
 msgstr "Parametri modulari"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblResponsive)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:745
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
 #, kde-format
 msgid ""
 "<html><head/><body><p>Enables the 'Squeeze' transform that allows images to "
@@ -57351,19 +57229,19 @@ msgstr ""
 "dati.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:748
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:693
 #, kde-format
 msgid "Progressive encoding"
 msgstr "Codifica progressiva"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, responsive)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:755
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:700
 #, kde-format
 msgid "Enables or disables progressive encoding for modular mode."
 msgstr "Abilita o disabilita la codifica progressiva per la modalità modulare."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblChannelColorsGlobalPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:762
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
 #, kde-format
 msgid ""
 "<html><head/><body><p>Controls how color values are mapped across the entire "
@@ -57376,13 +57254,13 @@ msgstr ""
 "intervalli di colore limitati.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGlobalPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:765
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:710
 #, kde-format
 msgid "Global channel palette range"
 msgstr "Intervallo tavolozza globale dei canali"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGlobalPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:776
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:721
 #, kde-format
 msgid ""
 "Use Global channel palette if the amount of colors is smaller than this "
@@ -57397,7 +57275,7 @@ msgstr ""
 "Utilizzata per la codifica modulare."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblChannelColorsGroupPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:817
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:762
 #, kde-format
 msgid ""
 "<html><head/><body><p>Controls color mapping within local 256×256 pixel "
@@ -57409,13 +57287,13 @@ msgstr ""
 "varietà di colori limitata.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:820
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:765
 #, kde-format
 msgid "Local channel palette range"
 msgstr "Intervallo tavolozza locale dei canali"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:831
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:776
 #, kde-format
 msgid ""
 "Use Local (per-group) channel palette if the amount of colors is smaller "
@@ -57430,7 +57308,7 @@ msgstr ""
 "Utilizzata per la codifica modulare."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPaletteColors)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:872
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:817
 #, kde-format
 msgid ""
 "<html><head/><body><p>Activates palette-based compression when the image "
@@ -57442,13 +57320,13 @@ msgstr ""
 "decidere al codificatore.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:875
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:820
 #, kde-format
 msgid "Use color palette for ... colors or less"
 msgstr "Usa tavolozza dei colori per ... colori o meno"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, paletteColors)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:889
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:834
 #, kde-format
 msgid ""
 "Use color palette if amount of colors is smaller than or equal to this "
@@ -57460,7 +57338,7 @@ msgstr ""
 "Utilizzata per la codifica modulare."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblLossyPalette)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:911
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:856
 #, kde-format
 msgid ""
 "<html><head/><body><p>Enables relative color encoding that stores "
@@ -57473,21 +57351,21 @@ msgstr ""
 "artefatti a banda.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:914
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:859
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Delta palette"
 msgstr "Tavolozza delta"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, lossyPalette)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:921
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:866
 #, kde-format
 msgid "Enables or disables delta palette. Used in modular mode."
 msgstr ""
 "Abilita o disabilita la tavolozza delta. Utilizzata nella modalità modulare."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularGroupSize)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:928
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:873
 #, kde-format
 msgid ""
 "<html><head/><body><p>Sets the tile size for compression. Larger groups may "
@@ -57498,26 +57376,26 @@ msgstr ""
 "questo richiede più memoria.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:931
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:876
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group size"
 msgstr "Dimensione gruppo"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modularGroupSize)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:938
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:883
 #, kde-format
 msgid "Group size for modular encoding."
 msgstr "Dimensione del gruppo per la codifica modulare."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modularPredictor)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:945
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:890
 #, kde-format
 msgid "Predictor for modular encoding."
 msgstr "Predittore per la codifica modulare."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularPredictor)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:952
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:897
 #, kde-format
 msgid ""
 "<html><head/><body><p>Selects the algorithm used to predict pixel values "
@@ -57529,14 +57407,14 @@ msgstr ""
 "funzionano meglio per tipi di immagini differenti.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:955
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:900
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Predictor"
 msgstr "Predittore"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularMATreeLearningPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:962
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:907
 #, kde-format
 msgid ""
 "<html><head/><body><p>Controls how many pixels are analyzed to build the "
@@ -57550,13 +57428,13 @@ msgstr ""
 "hanno tempi di elaborazione più lunghi.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularMATreeLearningPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:965
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:910
 #, kde-format
 msgid "Pixels for MA tree learning"
 msgstr "Pixel per apprendimento ad albero MA"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, modularMATreeLearningPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:993
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:938
 #, kde-format
 msgid ""
 "Fraction of pixels used to learn MA trees as a percentage.\n"
@@ -57570,7 +57448,7 @@ msgstr ""
 "I valori più alti utilizzano più memoria del codificatore."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1066
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1011
 #, kde-format
 msgctxt "JPEG-XL metadata options"
 msgid "Filters:"
@@ -71222,6 +71100,93 @@ msgstr ""
 "Alterna tra intervallo intero e subintervallo.\n"
 "Intervallo intero: [%1, %2]\n"
 "Subintervallo: [%3, %4]"
+
+#~ msgid ""
+#~ "<html><head/><body><p>This is an Hybrid Log Gamma image. Krita does not "
+#~ "support sending HLG to the monitor, so for import it is recommended to "
+#~ "convert from scene linear to display linear.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Questa è un'immagine Hybrid Log Gamma. Krita non "
+#~ "supporta l'invio di HLG al monitor, per importarla si consiglia di "
+#~ "convertirla da lineare di scena a lineare di visualizzazione.</p></body></"
+#~ "html>"
+
+#~ msgid "Apply HLG OOTF"
+#~ msgstr "Applica HLG OOTF"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Display gamma. By default this is 1.2 for "
+#~ "converting from scene to display linear.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Gamma del visore. Per impostazione predefinita è "
+#~ "1,2 per la conversione da lineare di scena a lineare di visualizzazione.</"
+#~ "p></body></html>"
+
+#~ msgid ""
+#~ "<html><head/><body><p>The display brightness in nits. By default this is "
+#~ "set to 1000 for converting to display linear.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>La luminosità di visualizzazione in nit. Per "
+#~ "impostazione predefinita è impostata a 1000 per la conversione a lineare "
+#~ "di visualizzazione.</p></body></html>"
+
+#~ msgctxt "action"
+#~ msgid "S-Pen Actions"
+#~ msgstr "S-Pen - Azioni"
+
+#~ msgid ""
+#~ "Make sure the actions are corresponding to the correct gesture on the "
+#~ "system level. These can be configured under S Pen Settings > Air actions."
+#~ msgstr ""
+#~ "Accertati che le azioni corrispondano al gesto corretto a livello di "
+#~ "sistema. Esse posso essere configurate in Impostazioni S Pen > Azioni Air."
+
+#~ msgid ""
+#~ "The following buttons are supported on the Note 9, Note 10, Tab S6 and "
+#~ "Tab S9 devices."
+#~ msgstr ""
+#~ "Sono supportati i pulsanti seguenti nei dispositivi Note 9, Note 10, Tab "
+#~ "S6 e Tab S9."
+
+#~ msgid ""
+#~ "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
+#~ "devices."
+#~ msgstr ""
+#~ "Sono supportati i gesti seguenti nei dispositivi Note 10, Tab S6 e Tab S9."
+
+# VM: Gamma del visore o Visualizza la gamma?
+#~ msgid ""
+#~ "<html><head/><body><p>Display gamma. By default this is 1.2 for "
+#~ "converting from PQ.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Gamma del visore. Per impostazione predefinita è "
+#~ "1,2 per la conversione da PQ.</p></body></html>"
+
+#~ msgid ""
+#~ "<html><head/><body><p>The display brightness in nits. By default this is "
+#~ "set to 1000 for converting from PQ.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>La luminosità di visualizzazione in nit. Per "
+#~ "impostazione predefinita è impostata a 1000 per la conversione da PQ.</"
+#~ "p></body></html>"
+
+#~ msgid " cd/m²"
+#~ msgstr " cd/m²"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Hybrid Log Gamma needs an extra conversion step in "
+#~ "between, as Krita currently cannot send HLG data directly to the display. "
+#~ "Therefore we apply the HLG opto-optical curve to convert from display to "
+#~ "scene linear.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Hybrid Log Gamma richiede un ulteriore passaggio di "
+#~ "conversione interno, in quanto Krita non è attualmente in grado di "
+#~ "inviare dati HLG direttamente al visore. Si applicherà dunque la curva "
+#~ "opto-ottica HLG per convertire da lineare di visualizzazione a lineare di "
+#~ "scena.</p></body></html>"
+
+#~ msgid "Apply reverse Hybrid Log Gamma OOTF"
+#~ msgstr "Applica OOTF Hybrid Log Gamma inverso"
 
 #~ msgctxt "the gradient will be dithered"
 #~ msgid "Dither"

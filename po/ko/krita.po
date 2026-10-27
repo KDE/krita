@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-24 00:47+0000\n"
+"POT-Creation-Date: 2026-10-27 00:58+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -25272,9 +25272,9 @@ msgid "Out"
 msgstr "종점"
 
 #: libs/pigment/resources/KoColorSet.cpp:1100
-#: libs/pigment/resources/KoColorSet.cpp:1447
-#: libs/pigment/resources/KoColorSet.cpp:1528
-#: libs/pigment/resources/KoColorSet.cpp:1945
+#: libs/pigment/resources/KoColorSet.cpp:1440
+#: libs/pigment/resources/KoColorSet.cpp:1521
+#: libs/pigment/resources/KoColorSet.cpp:1938
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -25598,7 +25598,7 @@ msgstr ""
 #: libs/ui/animation/VideoImportDialog.ui:149
 #: plugins/dockers/logdocker/LogDockerDock.cpp:315
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1019
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:964
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
 #, kde-format
 msgid "Metadata"
@@ -25799,9 +25799,9 @@ msgstr "섬네일"
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:606
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:805
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:860
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:974
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:919
 #, kde-format
 msgid "All"
 msgstr "모두"
@@ -27690,7 +27690,7 @@ msgstr "시간:"
 #. i18n: ectx: attribute (title), widget (QWidget, advanced)
 #: libs/ui/animation/VideoImportDialog.ui:512
 #: libs/ui/forms/wdgperformancesettings.ui:250
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:406
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:351
 #: plugins/impex/webp/kis_wdg_options_webp.ui:174
 #, kde-format
 msgid "Advanced"
@@ -28485,96 +28485,6 @@ msgctxt "@title:window"
 msgid "Filter: %1"
 msgstr "필터: %1"
 
-#. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgInternalColorSelector)
-#. i18n: ectx: property (windowTitle), widget (QWidget, DlgHeifImport)
-#. i18n: ectx: property (windowTitle), widget (QDialog, FilterDialog)
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImportImageSequence)
-#. i18n: ectx: property (windowTitle), widget (QDialog, KisSupporterBundlesDialog)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:14 libs/ui/forms/wdgfilterdialog.ui:30
-#: libs/ui/forms/wdgimportimagesequence.ui:18
-#: libs/widgets/WdgDlgInternalColorSelector.ui:18
-#: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:14
-#, kde-format
-msgid "Dialog"
-msgstr "대화 상자"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:20
-#, kde-format
-msgid ""
-"<html><head/><body><p>This is an Hybrid Log Gamma image. Krita does not "
-"support sending HLG to the monitor, so for import it is recommended to "
-"convert from scene linear to display linear.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>하이브리드 로그 감마(HLG) 이미지입니다. Krita에서는 HLG"
-"를 모니터로 전송할 수 없으므로 가져올 때 장면 선형을 디스플레이 선형으로 변환"
-"하는 것을 추천합니다.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkApplyOOTF)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:30
-#, kde-format
-msgid "Apply HLG OOTF"
-msgstr "HLG OOTF 적용"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, m_lblGamma)
-#. i18n: ectx: property (text), widget (QLabel, gamma_label)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:37
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:176
-#: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:225
-#: plugins/dockers/lut/wdglut.ui:270 plugins/impex/heif/WdgHeifExport.ui:89
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:346
-#, kde-format
-msgid "Gamma:"
-msgstr "감마:"
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnGamma)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:44
-#, kde-format
-msgid ""
-"<html><head/><body><p>Display gamma. By default this is 1.2 for converting "
-"from scene to display linear.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>디스플레이 감마입니다. 장면에서 디스플레이 선형으로 변"
-"환할 때의 기본값은 1.2입니다.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#. i18n: ectx: property (text), widget (QLabel, labelBrightness)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:57
-#: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
-#: plugins/impex/heif/WdgHeifExport.ui:106
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:363
-#, kde-format
-msgid "Brightness:"
-msgstr "명도:"
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnNits)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:64
-#, kde-format
-msgid ""
-"<html><head/><body><p>The display brightness in nits. By default this is set "
-"to 1000 for converting to display linear.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>nit 단위의 디스플레이 밝기입니다. 디스플레이 선형으로 "
-"변환할 때 기본값은 1000입니다.</p></body></html>"
-
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxCll)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxFall)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxLuminance)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMinLuminance)
-#: libs/ui/dialogs/kis_dlg_hlg_import.ui:67
-#: libs/ui/forms/wdgimageproperties.ui:369
-#: libs/ui/forms/wdgimageproperties.ui:385
-#: libs/ui/forms/wdgimageproperties.ui:573
-#: libs/ui/forms/wdgimageproperties.ui:596
-#, kde-format
-msgid "cd/m²"
-msgstr "cd/m²"
-
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:67
 #, kde-format
 msgid "Image Properties"
@@ -28658,9 +28568,9 @@ msgstr "레이어 속성"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:53
 #: plugins/impex/jpeg/kis_jpeg_export.cc:216
 #: plugins/impex/jpeg/kis_jpeg_export.cc:218
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:272
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:274
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:276
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:258
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:260
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:262
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:76
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:86
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:88
@@ -31429,9 +31339,9 @@ msgstr "다음부터 표시:"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
 #: plugins/generators/pattern/wdgpatternoptions.ui:79
 #: plugins/generators/pattern/wdgpatternoptions.ui:101
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:724
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:779
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:834
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:996
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:941
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:277
 #: plugins/impex/webp/kis_wdg_options_webp.ui:82
 #: plugins/impex/webp/kis_wdg_options_webp.ui:332
@@ -31631,6 +31541,18 @@ msgstr "견본 그룹 이름"
 msgctxt "Label of ICC Color Profile in PNG import dialogue"
 msgid "Profile:"
 msgstr "프로필:"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgInternalColorSelector)
+#. i18n: ectx: property (windowTitle), widget (QDialog, FilterDialog)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgImportImageSequence)
+#. i18n: ectx: property (windowTitle), widget (QDialog, KisSupporterBundlesDialog)
+#: libs/ui/forms/wdgfilterdialog.ui:30
+#: libs/ui/forms/wdgimportimagesequence.ui:18
+#: libs/widgets/WdgDlgInternalColorSelector.ui:18
+#: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:14
+#, kde-format
+msgid "Dialog"
+msgstr "대화 상자"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -32903,6 +32825,18 @@ msgstr "<html><head/><body><p><br/></p></body></html>"
 #, kde-format
 msgid "Calculate"
 msgstr ""
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxCll)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxFall)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMaxLuminance)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnMinLuminance)
+#: libs/ui/forms/wdgimageproperties.ui:369
+#: libs/ui/forms/wdgimageproperties.ui:385
+#: libs/ui/forms/wdgimageproperties.ui:573
+#: libs/ui/forms/wdgimageproperties.ui:596
+#, kde-format
+msgid "cd/m²"
+msgstr "cd/m²"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxColorVolume)
 #: libs/ui/forms/wdgimageproperties.ui:404
@@ -44700,6 +44634,15 @@ msgstr "녹색':"
 msgid "Blue':"
 msgstr "파랑':"
 
+#. i18n: ectx: property (text), widget (QLabel, m_lblGamma)
+#. i18n: ectx: property (text), widget (QLabel, gamma_label)
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:176
+#: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:225
+#: plugins/dockers/lut/wdglut.ui:270
+#, kde-format
+msgid "Gamma:"
+msgstr "감마:"
+
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spLumaGamma)
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, SP_Gamma)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:183
@@ -52226,7 +52169,7 @@ msgstr "더블린 코어"
 #. i18n: ectx: property (text), widget (QCheckBox, exif)
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:162
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:274
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1042
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:987
 #: plugins/impex/webp/kis_wdg_options_webp.ui:839
 #: plugins/metadata/exif/kis_exif_io.h:28
 #, kde-format
@@ -53876,71 +53819,89 @@ msgid "Do nothing"
 msgstr "아무것도 안 함"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
-#, kde-format
-msgid "S-Pen Actions"
+#, fuzzy, kde-format
+#| msgid "S-Pen Actions"
+msgid "S-Pen Pro Air Actions"
 msgstr "S펜 작업"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "S-Pen Actions"
 msgctxt "action"
-msgid "S-Pen Actions"
+msgid "S-Pen Pro Air Actions"
 msgstr "S펜 작업"
 
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Button Click"
 msgctxt "action"
-msgid "S-Pen Button Click"
+msgid "S-Pen Pro Air Button Click"
 msgstr "S펜 단추 클릭"
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Button Double Click"
 msgctxt "action"
-msgid "S-Pen Button Double Click"
+msgid "S-Pen Pro Air Button Double Click"
 msgstr "S펜 단추 두 번 클릭"
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Up"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Up"
+msgid "S-Pen Pro Air Gesture Swipe Up"
 msgstr "S펜 제스처 위로 밀기"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Down"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Down"
+msgid "S-Pen Pro AirGesture Swipe Down"
 msgstr "S펜 제스처 아래로 밀기"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Left"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Left"
+msgid "S-Pen Pro Air Gesture Swipe Left"
 msgstr "S펜 제스처 왼쪽으로 밀기"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Right"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Right"
+msgid "S-Pen Pro Air Gesture Swipe Right"
 msgstr "S펜 제스처 오른쪽으로 밀기"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Circle Clockwise"
 msgctxt "action"
-msgid "S-Pen Gesture Circle Clockwise"
+msgid "S-Pen Pro Air Gesture Circle Clockwise"
 msgstr "S펜 제스처 시계 방향 회전"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Circle Counter-Clockwise"
 msgctxt "action"
-msgid "S-Pen Gesture Circle Counter-Clockwise"
+msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
 msgstr "S펜 제스처 반시계 방향 회전"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
@@ -53954,8 +53915,9 @@ msgstr "S펜으로 팝업 팔레트 전환"
 #: plugins/extensions/spensettings/wdg_spensettings.ui:27
 #, kde-format
 msgid ""
-"Make sure the actions are corresponding to the correct gesture on the system "
-"level. These can be configured under S Pen Settings > Air actions."
+"You must enable Air Actions for Krita in your system settings for them to "
+"work. Note that only the S-Pen Pro supports Air Actions, the regular S-Pen "
+"does not. Not all devices support gestures."
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
@@ -53983,68 +53945,48 @@ msgstr "사전 설정"
 msgid "Double Press"
 msgstr "키 누름"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Following button actions are supported on the Note 9, Note 10 and Tab S6 "
-#| "devices."
-msgid ""
-"The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
-"S9 devices."
-msgstr "노트 9, 노트 10, 탭 S6 장치에서는 다음 단추 동작이 지원됩니다."
-
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:93
+#: plugins/extensions/spensettings/wdg_spensettings.ui:78
 #, kde-format
 msgid "Gestures"
 msgstr "제스처"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:99
+#: plugins/extensions/spensettings/wdg_spensettings.ui:84
 #, kde-format
 msgid "Swipe Up"
 msgstr "위로 밀기"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:109
+#: plugins/extensions/spensettings/wdg_spensettings.ui:94
 #, kde-format
 msgid "Swipe Down"
 msgstr "아래로 밀기"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:116
-#, kde-format
-msgid "Swipe Right"
-msgstr "오른쪽으로 밀기"
-
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:123
+#: plugins/extensions/spensettings/wdg_spensettings.ui:104
 #, kde-format
 msgid "Swipe Left"
 msgstr "왼쪽으로 밀기"
 
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:114
+#, kde-format
+msgid "Swipe Right"
+msgstr "오른쪽으로 밀기"
+
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:130
+#: plugins/extensions/spensettings/wdg_spensettings.ui:124
 #, kde-format
 msgid "Circle Clockwise"
 msgstr "시계 방향 회전"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:137
+#: plugins/extensions/spensettings/wdg_spensettings.ui:134
 #, fuzzy, kde-format
 #| msgid "Circle Counterclockwise"
 msgid "Circle Counter-Clockwise"
 msgstr "반시계 방향 회전"
-
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:164
-#, fuzzy, kde-format
-#| msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
-msgid ""
-"The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
-"devices."
-msgstr "노트 10 및 탭 S6 장치에서는 다음 제스처가 지원됩니다."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
@@ -57077,6 +57019,12 @@ msgctxt "Swapping FG and BG color in the screentone pattern"
 msgid "Invert:"
 msgstr "반전:"
 
+#. i18n: ectx: property (text), widget (QLabel, labelBrightness)
+#: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
+#, kde-format
+msgid "Brightness:"
+msgstr "명도:"
+
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:787
 #, kde-format
@@ -57469,7 +57417,7 @@ msgstr ""
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFlatten)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLossless)
 #: plugins/impex/exr/exr_export_widget.ui:27
-#: plugins/impex/heif/WdgHeifExport.ui:148
+#: plugins/impex/heif/WdgHeifExport.ui:98
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:144
 #, kde-format
 msgid ""
@@ -57507,7 +57455,7 @@ msgstr "문서에서 색 프로필을 찾을 수 없습니다."
 msgid "Unknown error: %1"
 msgstr "알 수 없는 오류: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:540
+#: plugins/impex/heif/HeifExport.cpp:536
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -57517,7 +57465,7 @@ msgstr ""
 "이미지의 명도는 최대 해상도로 유지되고, 채도는 두 차원에서 절반으로 줄어듭니"
 "다."
 
-#: plugins/impex/heif/HeifExport.cpp:541
+#: plugins/impex/heif/HeifExport.cpp:537
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -57526,31 +57474,31 @@ msgid ""
 msgstr ""
 "이미지의 명도는 최대 해상도가 되고, 채도는 수평으로 절반으로 줄어듭니다."
 
-#: plugins/impex/heif/HeifExport.cpp:542
+#: plugins/impex/heif/HeifExport.cpp:538
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr "이미지의 명도와 채도는 모두 최대 해상도입니다."
 
-#: plugins/impex/heif/HeifExport.cpp:556
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
+#: plugins/impex/heif/HeifExport.cpp:552
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #: plugins/impex/png/kis_png_export.cc:167
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:556
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
+#: plugins/impex/heif/HeifExport.cpp:552
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:186
 #: plugins/impex/png/kis_png_export.cc:167
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:557
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
+#: plugins/impex/heif/HeifExport.cpp:553
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:188
 #: plugins/impex/png/kis_png_export.cc:168
 #, kde-format
 msgctxt "@tooltip"
@@ -57562,8 +57510,8 @@ msgstr ""
 "이미지는 먼저 Rec 2020 선형으로 변환된 다음, 지각 양자화 곡선(SMPTE 2048 곡선"
 "이라고도 함)으로 인코딩됩니다. 절대 명도가 중요한 HDR 영상에 권장됩니다."
 
-#: plugins/impex/heif/HeifExport.cpp:559
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
+#: plugins/impex/heif/HeifExport.cpp:555
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
 #: plugins/impex/png/kis_png_export.cc:170
 #, kde-format
 msgctxt "@tooltip"
@@ -57576,8 +57524,8 @@ msgstr ""
 "코딩됩니다. HDR을 처리하지 못할 수 있는 디스플레이에서 표시될 수 있는 HDR 이"
 "미지에 권장됩니다."
 
-#: plugins/impex/heif/HeifExport.cpp:565
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:213
+#: plugins/impex/heif/HeifExport.cpp:561
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:202
 #: plugins/impex/png/kis_png_export.cc:176
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -57586,8 +57534,8 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "색소 유지, PQ 인코딩"
 
-#: plugins/impex/heif/HeifExport.cpp:566
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:215
+#: plugins/impex/heif/HeifExport.cpp:562
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #: plugins/impex/png/kis_png_export.cc:177
 #, kde-format
 msgctxt "@tooltip"
@@ -57599,8 +57547,8 @@ msgstr ""
 "이미지는 먼저 선형화된 다음 지각 양자화 곡선 (SMPTE 2048 곡선이라고도 함)으"
 "로 인코딩됩니다. 절대 명도가 중요한 이미지에 권장됩니다."
 
-#: plugins/impex/heif/HeifExport.cpp:570
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:221
+#: plugins/impex/heif/HeifExport.cpp:566
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:210
 #: plugins/impex/png/kis_png_export.cc:181
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -57609,8 +57557,8 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "색소 유지, HLG 인코딩"
 
-#: plugins/impex/heif/HeifExport.cpp:571
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:223
+#: plugins/impex/heif/HeifExport.cpp:567
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:212
 #: plugins/impex/png/kis_png_export.cc:182
 #, kde-format
 msgctxt "@tooltip"
@@ -57622,8 +57570,8 @@ msgstr ""
 "처리하지 못할 수 있는 디스플레이에서 표시될 수 있는 화면용 이미지에 권장됩니"
 "다"
 
-#: plugins/impex/heif/HeifExport.cpp:575
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:228
+#: plugins/impex/heif/HeifExport.cpp:571
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:217
 #: plugins/impex/png/kis_png_export.cc:186
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -57632,8 +57580,8 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "색소 유지, SMPTE ST 428 인코딩"
 
-#: plugins/impex/heif/HeifExport.cpp:576
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:230
+#: plugins/impex/heif/HeifExport.cpp:572
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:219
 #: plugins/impex/png/kis_png_export.cc:187
 #, kde-format
 msgctxt "@tooltip"
@@ -57645,7 +57593,7 @@ msgstr ""
 "이미지는 먼저 선형화된 다음 SMPTEST 428로 인코딩됩니다. Krita는 항상 이러한 "
 "이미지를 선형 부동 소수점으로 엽니다. 이 옵션은 과정을 뒤집습니다"
 
-#: plugins/impex/heif/HeifExport.cpp:581
+#: plugins/impex/heif/HeifExport.cpp:577
 #: plugins/impex/png/kis_png_export.cc:192
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option"
@@ -57654,7 +57602,7 @@ msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "변경 사항 없음, 클립"
 
-#: plugins/impex/heif/HeifExport.cpp:582
+#: plugins/impex/heif/HeifExport.cpp:578
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -57711,66 +57659,14 @@ msgstr ""
 msgid "Space:"
 msgstr "색 공간:"
 
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnGamma)
-#: plugins/impex/heif/WdgHeifExport.ui:96
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:353
-#, kde-format
-msgid ""
-"<html><head/><body><p>Display gamma. By default this is 1.2 for converting "
-"from PQ.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>디스플레이 감마입니다. PQ에서 변환할 때의 기본값은 1.2"
-"입니다.</p></body></html>"
-
-#. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnNits)
-#: plugins/impex/heif/WdgHeifExport.ui:113
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:370
-#, kde-format
-msgid ""
-"<html><head/><body><p>The display brightness in nits. By default this is set "
-"to 1000 for converting from PQ.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>nit 단위의 디스플레이 명도입니다. PQ에서 변환할 때 기본"
-"값은 1000입니다.</p></body></html>"
-
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
-#: plugins/impex/heif/WdgHeifExport.ui:116
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:373
-#, kde-format
-msgid " cd/m²"
-msgstr " cd/m²"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkHLGOOTF)
-#. i18n: ectx: property (toolTip), widget (QGroupBox, chkHLGOOTF)
-#: plugins/impex/heif/WdgHeifExport.ui:129
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:334
-#, kde-format
-msgid ""
-"<html><head/><body><p>Hybrid Log Gamma needs an extra conversion step in "
-"between, as Krita currently cannot send HLG data directly to the display. "
-"Therefore we apply the HLG opto-optical curve to convert from display to "
-"scene linear.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>Krita에서는 하이브리드 로그 감마(HLG) 데이터를 디스플레"
-"이로 직접 전송할 수 없기 때문에 HLG를 변환해야 합니다. 디스플레이에서 장면 선"
-"형으로 변환할 때 HLG 옵토옵티컬 곡선을 적용합니다.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkHLGOOTF)
-#. i18n: ectx: property (title), widget (QGroupBox, chkHLGOOTF)
-#: plugins/impex/heif/WdgHeifExport.ui:132
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:337
-#, kde-format
-msgid "Apply reverse Hybrid Log Gamma OOTF"
-msgstr "역 하이브리드 로그 감마 OOTF 적용"
-
 #. i18n: ectx: property (text), widget (QCheckBox, chkLossless)
-#: plugins/impex/heif/WdgHeifExport.ui:151
+#: plugins/impex/heif/WdgHeifExport.ui:101
 #, kde-format
 msgid "&Lossless"
 msgstr "무손실(&L)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMonochromesRGB)
-#: plugins/impex/heif/WdgHeifExport.ui:161
+#: plugins/impex/heif/WdgHeifExport.ui:111
 #, kde-format
 msgid ""
 "<html><head/><body><p>Not all encoders for AV1 and by extension avif support "
@@ -57785,7 +57681,7 @@ msgstr ""
 "다.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMonochromesRGB)
-#: plugins/impex/heif/WdgHeifExport.ui:164
+#: plugins/impex/heif/WdgHeifExport.ui:114
 #, kde-format
 msgid "Convert to sRGB for extra compatibility"
 msgstr "추가 호환성을 위해서 sRGB로 변환"
@@ -58067,7 +57963,7 @@ msgstr "최적화"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:268
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1036
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:981
 #: plugins/impex/webp/kis_wdg_options_webp.ui:833
 #, kde-format
 msgid "Formats:"
@@ -58075,14 +57971,14 @@ msgstr "형식:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, iptc)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:284
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1049
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:994
 #, kde-format
 msgid "IPTC"
 msgstr "IPTC"
 
 #. i18n: ectx: property (text), widget (QCheckBox, xmp)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:294
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1056
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1001
 #: plugins/impex/webp/kis_wdg_options_webp.ui:846
 #: plugins/metadata/xmp/kis_xmp_io.h:26
 #, kde-format
@@ -58102,7 +57998,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, chkMetadata)
 #. i18n: ectx: property (text), widget (QCheckBox, chkMetaData)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:336
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1025
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:970
 #: plugins/impex/webp/kis_wdg_options_webp.ui:824
 #, kde-format
 msgid "Store Document Metadata"
@@ -58127,22 +58023,22 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuthor)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:358
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1080
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1025
 #, kde-format
 msgid "Sign with Author Profile Data"
 msgstr "작성자 프로필 데이터로 서명"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:378
+#: plugins/impex/jxl/JPEGXLImport.cpp:376
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:682
-#: plugins/impex/jxl/JPEGXLImport.cpp:694
-#: plugins/impex/jxl/JPEGXLImport.cpp:710
-#: plugins/impex/jxl/JPEGXLImport.cpp:722
+#: plugins/impex/jxl/JPEGXLImport.cpp:673
+#: plugins/impex/jxl/JPEGXLImport.cpp:685
+#: plugins/impex/jxl/JPEGXLImport.cpp:701
+#: plugins/impex/jxl/JPEGXLImport.cpp:713
 #, fuzzy, kde-format
 #| msgctxt "Saving .kra file error message"
 #| msgid "Could not save image profile."
@@ -58150,13 +58046,13 @@ msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "이미지 프로필을 저장할 수 없습니다."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:865
+#: plugins/impex/jxl/JPEGXLImport.cpp:856
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:931
+#: plugins/impex/jxl/JPEGXLImport.cpp:922
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
@@ -58250,9 +58146,9 @@ msgstr "크기 조절 사용 안 함"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:111
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:119
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:139
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:743
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:798
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:853
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:984
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:929
 #, fuzzy, kde-format
 #| msgid "Default printer color model:"
 msgctxt "JPEG-XL encoder options"
@@ -58459,14 +58355,14 @@ msgctxt "JPEG-XL encoder options"
 msgid "Use all predictors"
 msgstr "모든 방향으로 이스케이프"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:192
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:181
 #, fuzzy, kde-format
 #| msgid "Save as %1"
 msgctxt "Color space option"
 msgid "Save as is"
 msgstr "%1(으)로 저장"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:194
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:183
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -58709,21 +58605,21 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:412
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:357
 #, kde-format
 msgid "Hover this text for info tooltip"
 msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
 #. i18n: ectx: property (toolTip), widget (QTabWidget, advancedParameters)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:419
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1809
 #, kde-format
 msgid "<html><head/><body><p><br/></p></body></html>"
 msgstr "<html><head/><body><p><br/></p></body></html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:426
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:371
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change parameter"
@@ -58731,7 +58627,7 @@ msgid "Encoder parameters"
 msgstr "인자 변경"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:432
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:377
 #, kde-format
 msgid ""
 "<html><head/><body><p>Reduces color resolution to achieve smaller files. "
@@ -58740,7 +58636,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:435
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:380
 #, fuzzy, kde-format
 #| msgid "Color channels in color"
 msgctxt "JPEG-XL encoder options"
@@ -58748,7 +58644,7 @@ msgid "Color channel resampling"
 msgstr "색상 채널을 색으로 표시"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, resampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:442
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:387
 #, kde-format
 msgid ""
 "Sets resampling option. If enabled, the image's color channels are "
@@ -58757,7 +58653,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:449
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:394
 #, kde-format
 msgid ""
 "<html><head/><body><p>Reduces transparency channel resolution for smaller "
@@ -58766,14 +58662,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:452
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:397
 #, fuzzy, kde-format
 #| msgid "Kra File Compression"
 msgid "Alpha channel resampling"
 msgstr "Kra 파일 압축"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, extraChannelResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:459
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:404
 #, kde-format
 msgid ""
 "Sets resampling option. If enabled, the image's alpha channel is downsampled "
@@ -58781,7 +58677,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPhotonNoise)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:466
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:411
 #, kde-format
 msgid ""
 "<html><head/><body><p>Separates camera sensor noise patterns for better "
@@ -58790,14 +58686,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:469
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:414
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Photon noise"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, photonNoise)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:484
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:429
 #, kde-format
 msgid ""
 "Adds noise to the image emulating photographic film noise, the higher the "
@@ -58808,7 +58704,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblDots)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:494
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:439
 #, kde-format
 msgid ""
 "<html><head/><body><p>Identifies and efficiently encodes repeating dot "
@@ -58817,7 +58713,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:497
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:442
 #, fuzzy, kde-format
 #| msgid "Generate"
 msgctxt "JPEG-XL encoder options"
@@ -58825,14 +58721,14 @@ msgid "Generate dots"
 msgstr "자동 생성"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, dots)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:504
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:449
 #, fuzzy, kde-format
 #| msgid "Enable background cache generation"
 msgid "Enables or disables dots generation."
 msgstr "백그라운드 캐시 생성 활성화"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:511
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:456
 #, kde-format
 msgid ""
 "<html><head/><body><p>Identifies repeated elements (like text characters or "
@@ -58841,7 +58737,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:459
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Reverse paths"
@@ -58850,14 +58746,14 @@ msgid "Generate patches"
 msgstr "경로 반전"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patches)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:521
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:466
 #, fuzzy, kde-format
 #| msgid "Enable background cache generation"
 msgid "Enables or disables patches generation."
 msgstr "백그라운드 캐시 생성 활성화"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblEpf)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:528
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:473
 #, kde-format
 msgid ""
 "<html><head/><body><p>Smooths areas while preserving sharp edges, improving "
@@ -58866,14 +58762,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:531
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:476
 #, fuzzy, kde-format
 #| msgid "Processing layer"
 msgid "Edge preserving filter strength"
 msgstr "처리 레이어"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMax)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:555
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:500
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:110
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:46
 #, kde-format
@@ -58881,14 +58777,14 @@ msgid "Strong"
 msgstr "강하게"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNone1)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:565
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:510
 #, fuzzy, kde-format
 #| msgid "<html><head/><body><p>Action Description</p></body></html>"
 msgid "<html><head/><body><p>Default (encoder chooses)</p></body></html>"
 msgstr "<html><head/><body><p>동작 설명</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:568
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:513
 #, fuzzy, kde-format
 #| msgid "Auto"
 msgctxt "JPEG-XL encoder options"
@@ -58896,7 +58792,7 @@ msgid "Auto"
 msgstr "자동"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:575
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:520
 #, kde-format
 msgid ""
 "Edge preserving filter level, -1 to 3. Use -1 for the default (encoder "
@@ -58904,13 +58800,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:596
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:541
 #, kde-format
 msgid "Enables or disables the gaborish filter."
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblGaborishFilter)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:603
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:548
 #, kde-format
 msgid ""
 "<html><head/><body><p>Advanced texture analysis filter that improves "
@@ -58919,14 +58815,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:606
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:551
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lbModularEncoding)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:613
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:558
 #, kde-format
 msgid ""
 "<html><head/><body><p>Uses the Modular compression system which excels at "
@@ -58935,7 +58831,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:616
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:561
 #, fuzzy, kde-format
 #| msgid "Start Recording"
 msgctxt "JPEG-XL encoder options"
@@ -58943,20 +58839,20 @@ msgid "Modular encoding"
 msgstr "녹화 시작"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modular)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:623
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:568
 #, fuzzy, kde-format
 #| msgid "Enable Touch Painting"
 msgid "Enables modular encoding."
 msgstr "터치 페인팅 활성화"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, keepInvisible)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:630
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:575
 #, kde-format
 msgid "Enables or disables preserving color of invisible pixels."
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, groupOrder)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:637
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:582
 #, kde-format
 msgid ""
 "Determines the order in which 256x256 regions are stored in the codestream "
@@ -58964,7 +58860,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblKeepInvisible)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:647
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:592
 #, kde-format
 msgid ""
 "<html><head/><body><p>Preserves color information in fully transparent "
@@ -58973,13 +58869,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:650
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:595
 #, kde-format
 msgid "Keep color of invisible pixels"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblGroupOrder)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:657
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:602
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>Add the author nickname and the first contact of "
@@ -58994,7 +58890,7 @@ msgstr ""
 "다. 익명화 도구를 사용할 경우 지워집니다.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:660
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:605
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Group Layer"
@@ -59003,7 +58899,7 @@ msgid "Group order"
 msgstr "레이어 그룹"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblJPEGReconCFL)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:670
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:615
 #, kde-format
 msgid ""
 "<html><head/><body><p>Predicts color from brightness information, reducing "
@@ -59012,14 +58908,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:673
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:618
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Chroma-from-luma"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, varDCTParameters)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:681
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:626
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change parameter"
@@ -59027,7 +58923,7 @@ msgid "VarDCT parameters"
 msgstr "인자 변경"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:632
 #, kde-format
 msgid ""
 "<html><head/><body><p>Enables progressive loading using advanced color "
@@ -59037,7 +58933,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:635
 #, fuzzy, kde-format
 #| msgid "Subpixel precision"
 msgid "Spectral progression"
@@ -59045,8 +58941,8 @@ msgstr "서브픽셀 정밀도"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveAC)
 #. i18n: ectx: property (toolTip), widget (QComboBox, qProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:697
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:714
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:642
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:659
 #, kde-format
 msgid ""
 "Set the progressive mode for the AC coefficients of VarDCT, using spectral "
@@ -59054,7 +58950,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:704
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:649
 #, kde-format
 msgid ""
 "<html><head/><body><p>Enables progressive loading using quantization to "
@@ -59063,7 +58959,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:652
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "h264 tune option name, check simplescreenrecorder for standard "
@@ -59073,7 +58969,7 @@ msgid "Quantization"
 msgstr "애니메이션"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblProgressiveDC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:721
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:666
 #, kde-format
 msgid ""
 "<html><head/><body><p>Creates a better coarse preview image for progressive "
@@ -59082,20 +58978,20 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:724
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:669
 #, fuzzy, kde-format
 #| msgid "X resolution:"
 msgid "Low resolution DC"
 msgstr "X 해상도:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveDC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:731
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
 #, kde-format
 msgid "Set the progressive mode using lower-resolution DC images for VarDCT."
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, modularEncodingParameters)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:739
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:684
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change parameter"
@@ -59103,7 +58999,7 @@ msgid "Modular parameters"
 msgstr "인자 변경"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblResponsive)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:745
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
 #, kde-format
 msgid ""
 "<html><head/><body><p>Enables the 'Squeeze' transform that allows images to "
@@ -59112,7 +59008,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:748
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:693
 #, fuzzy, kde-format
 #| msgctxt "A progressive jpeg file can be displayed while loading."
 #| msgid "Progressive"
@@ -59120,13 +59016,13 @@ msgid "Progressive encoding"
 msgstr "프로그레시브"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, responsive)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:755
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:700
 #, kde-format
 msgid "Enables or disables progressive encoding for modular mode."
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblChannelColorsGlobalPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:762
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
 #, kde-format
 msgid ""
 "<html><head/><body><p>Controls how color values are mapped across the entire "
@@ -59135,14 +59031,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGlobalPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:765
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:710
 #, fuzzy, kde-format
 #| msgid "Global Pattern"
 msgid "Global channel palette range"
 msgstr "전역 패턴"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGlobalPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:776
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:721
 #, kde-format
 msgid ""
 "Use Global channel palette if the amount of colors is smaller than this "
@@ -59152,7 +59048,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblChannelColorsGroupPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:817
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:762
 #, kde-format
 msgid ""
 "<html><head/><body><p>Controls color mapping within local 256×256 pixel "
@@ -59161,14 +59057,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:820
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:765
 #, fuzzy, kde-format
 #| msgid "Add a new palette"
 msgid "Local channel palette range"
 msgstr "새 팔레트 추가"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:831
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:776
 #, kde-format
 msgid ""
 "Use Local (per-group) channel palette if the amount of colors is smaller "
@@ -59178,7 +59074,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPaletteColors)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:872
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:817
 #, kde-format
 msgid ""
 "<html><head/><body><p>Activates palette-based compression when the image "
@@ -59187,13 +59083,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:875
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:820
 #, kde-format
 msgid "Use color palette for ... colors or less"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, paletteColors)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:889
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:834
 #, kde-format
 msgid ""
 "Use color palette if amount of colors is smaller than or equal to this "
@@ -59202,7 +59098,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblLossyPalette)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:911
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:856
 #, kde-format
 msgid ""
 "<html><head/><body><p>Enables relative color encoding that stores "
@@ -59211,7 +59107,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:914
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:859
 #, fuzzy, kde-format
 #| msgid "Open palette"
 msgctxt "JPEG-XL encoder options"
@@ -59219,14 +59115,14 @@ msgid "Delta palette"
 msgstr "팔레트 열기"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, lossyPalette)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:921
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:866
 #, fuzzy, kde-format
 #| msgid "Enable background cache generation"
 msgid "Enables or disables delta palette. Used in modular mode."
 msgstr "백그라운드 캐시 생성 활성화"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularGroupSize)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:928
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:873
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
@@ -59239,7 +59135,7 @@ msgstr ""
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:931
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:876
 #, fuzzy, kde-format
 #| msgid "Drop size"
 msgctxt "JPEG-XL encoder options"
@@ -59247,20 +59143,20 @@ msgid "Group size"
 msgstr "물방울 크기"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modularGroupSize)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:938
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:883
 #, kde-format
 msgid "Group size for modular encoding."
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modularPredictor)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:945
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:890
 #, fuzzy, kde-format
 #| msgid "No editor for current action."
 msgid "Predictor for modular encoding."
 msgstr "현재 동작에 대한 편집기가 없습니다."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularPredictor)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:952
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:897
 #, kde-format
 msgid ""
 "<html><head/><body><p>Selects the algorithm used to predict pixel values "
@@ -59269,7 +59165,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:955
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:900
 #, fuzzy, kde-format
 #| msgid "Predictor:"
 msgctxt "JPEG-XL encoder options"
@@ -59277,7 +59173,7 @@ msgid "Predictor"
 msgstr "예측 인자:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularMATreeLearningPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:962
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:907
 #, kde-format
 msgid ""
 "<html><head/><body><p>Controls how many pixels are analyzed to build the "
@@ -59287,13 +59183,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularMATreeLearningPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:965
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:910
 #, kde-format
 msgid "Pixels for MA tree learning"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, modularMATreeLearningPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:993
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:938
 #, kde-format
 msgid ""
 "Fraction of pixels used to learn MA trees as a percentage.\n"
@@ -59302,7 +59198,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1066
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:1011
 #, kde-format
 msgctxt "JPEG-XL metadata options"
 msgid "Filters:"
@@ -73231,6 +73127,83 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#~ msgid ""
+#~ "<html><head/><body><p>This is an Hybrid Log Gamma image. Krita does not "
+#~ "support sending HLG to the monitor, so for import it is recommended to "
+#~ "convert from scene linear to display linear.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>하이브리드 로그 감마(HLG) 이미지입니다. Krita에서는 "
+#~ "HLG를 모니터로 전송할 수 없으므로 가져올 때 장면 선형을 디스플레이 선형으"
+#~ "로 변환하는 것을 추천합니다.</p></body></html>"
+
+#~ msgid "Apply HLG OOTF"
+#~ msgstr "HLG OOTF 적용"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Display gamma. By default this is 1.2 for "
+#~ "converting from scene to display linear.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>디스플레이 감마입니다. 장면에서 디스플레이 선형으로 "
+#~ "변환할 때의 기본값은 1.2입니다.</p></body></html>"
+
+#~ msgid ""
+#~ "<html><head/><body><p>The display brightness in nits. By default this is "
+#~ "set to 1000 for converting to display linear.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>nit 단위의 디스플레이 밝기입니다. 디스플레이 선형으"
+#~ "로 변환할 때 기본값은 1000입니다.</p></body></html>"
+
+#~ msgctxt "action"
+#~ msgid "S-Pen Actions"
+#~ msgstr "S펜 작업"
+
+#, fuzzy
+#~| msgid ""
+#~| "Following button actions are supported on the Note 9, Note 10 and Tab S6 "
+#~| "devices."
+#~ msgid ""
+#~ "The following buttons are supported on the Note 9, Note 10, Tab S6 and "
+#~ "Tab S9 devices."
+#~ msgstr "노트 9, 노트 10, 탭 S6 장치에서는 다음 단추 동작이 지원됩니다."
+
+#, fuzzy
+#~| msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
+#~ msgid ""
+#~ "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
+#~ "devices."
+#~ msgstr "노트 10 및 탭 S6 장치에서는 다음 제스처가 지원됩니다."
+
+#~ msgid ""
+#~ "<html><head/><body><p>Display gamma. By default this is 1.2 for "
+#~ "converting from PQ.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>디스플레이 감마입니다. PQ에서 변환할 때의 기본값은 "
+#~ "1.2입니다.</p></body></html>"
+
+#~ msgid ""
+#~ "<html><head/><body><p>The display brightness in nits. By default this is "
+#~ "set to 1000 for converting from PQ.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>nit 단위의 디스플레이 명도입니다. PQ에서 변환할 때 "
+#~ "기본값은 1000입니다.</p></body></html>"
+
+#~ msgid " cd/m²"
+#~ msgstr " cd/m²"
+
+#~ msgid ""
+#~ "<html><head/><body><p>Hybrid Log Gamma needs an extra conversion step in "
+#~ "between, as Krita currently cannot send HLG data directly to the display. "
+#~ "Therefore we apply the HLG opto-optical curve to convert from display to "
+#~ "scene linear.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Krita에서는 하이브리드 로그 감마(HLG) 데이터를 디스"
+#~ "플레이로 직접 전송할 수 없기 때문에 HLG를 변환해야 합니다. 디스플레이에서 "
+#~ "장면 선형으로 변환할 때 HLG 옵토옵티컬 곡선을 적용합니다.</p></body></"
+#~ "html>"
+
+#~ msgid "Apply reverse Hybrid Log Gamma OOTF"
+#~ msgstr "역 하이브리드 로그 감마 OOTF 적용"
 
 #~ msgctxt "the gradient will be dithered"
 #~ msgid "Dither"

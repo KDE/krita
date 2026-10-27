@@ -706,5 +706,7 @@
         <file>light_save-layers.svg</file>
         <file>light_save-version.svg</file>
         <file>light_save-back-up.svg</file>
+        <file>dark_search-actions.svg</file>
+        <file>light_search-actions.svg</file>
     </qresource>
 </RCC>

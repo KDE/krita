@@ -118,21 +118,6 @@ void OcioDisplayFilter::approximateForwardTransformation(quint8 *pixels, quint32
     }
 }
 
-void OcioDisplayFilter::bakingTransformation(quint8 *pixels, quint32 numPixels)
-{
-    if (m_bakingProcessor) {
-        if (numPixels > 16) {
-            OCIO::PackedImageDesc img(reinterpret_cast<float *>(pixels), numPixels, 1, 4);
-            m_bakingProcessorCPU->apply(img);
-        } else {
-            for (quint32 i = 0; i < numPixels; i++) {
-                m_bakingProcessorCPU->applyRGBA(reinterpret_cast<float*>(pixels));
-                pixels+=4;
-            }
-        }
-    }
-}
-
 bool OcioDisplayFilter::useInternalColorManagement() const
 {
     return forceInternalColorManagement;
@@ -209,7 +194,6 @@ void OcioDisplayFilter::updateProcessor()
     }
 
     OCIO::GroupTransformRcPtr approximateTransform = OCIO::GroupTransform::Create();
-    OCIO::GroupTransformRcPtr bakingTransform = OCIO::GroupTransform::Create();
 
     const char *currentColorSpaceName = inputColorSpaceName;
 
@@ -218,7 +202,6 @@ void OcioDisplayFilter::updateProcessor()
     csToLinear->setSrc(inputColorSpaceName);
     csToLinear->setDst(OCIO::ROLE_SCENE_LINEAR);
     currentColorSpaceName = OCIO::ROLE_SCENE_LINEAR;
-    bakingTransform->appendTransform(csToLinear);
 
 
     // fstop exposure control -- not sure how that translates to our exposure
@@ -246,7 +229,6 @@ void OcioDisplayFilter::updateProcessor()
 
         // approximation (no color correction);
         approximateTransform->appendTransform(mtx);
-        bakingTransform->appendTransform(mtx);
     }
 
     if (look) {
@@ -254,14 +236,11 @@ void OcioDisplayFilter::updateProcessor()
         lookTransform->setSrc(currentColorSpaceName);
         lookTransform->setLooks(look);
         lookTransform->setDst(inputColorSpaceName);
-
-        bakingTransform->appendTransform(lookTransform);
     } else {
         OCIO::ColorSpaceTransformRcPtr linearToCs = OCIO::ColorSpaceTransform::Create();
         linearToCs->setSrc(currentColorSpaceName);
         linearToCs->setDst(inputColorSpaceName);
         currentColorSpaceName = inputColorSpaceName;
-        bakingTransform->appendTransform(linearToCs);
     }
 
     // channel swizzle
@@ -314,7 +293,6 @@ void OcioDisplayFilter::updateProcessor()
         swizzleTransform->setMatrix(m44);
         swizzleTransform->setOffset(offset);
         vpt->setChannelView(swizzleTransform);
-        bakingTransform->appendTransform(swizzleTransform);
     }
 
     // Post-display transform gamma
@@ -327,7 +305,6 @@ void OcioDisplayFilter::updateProcessor()
 
         // approximation (no color correction);
         approximateTransform->appendTransform(expTransform);
-        bakingTransform->appendTransform(expTransform);
     }
 
     try {
@@ -343,9 +320,6 @@ void OcioDisplayFilter::updateProcessor()
 
     m_forwardApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_FORWARD);
     m_forwardApproximationProcessorCPU = m_forwardApproximationProcessor->getDefaultCPUProcessor();
-
-    m_bakingProcessor = config->getProcessor(bakingTransform, OCIO::TRANSFORM_DIR_FORWARD);
-    m_bakingProcessorCPU = m_bakingProcessor->getDefaultCPUProcessor();
 
     try {
         m_reverseApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_INVERSE);

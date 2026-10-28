@@ -71,6 +71,12 @@ public:
     void applyDisplayFilteringF32(KisFixedPaintDeviceSP device, const KoColorSpace *dstColorSpace) const;
 
     /**
+     * @brief applyDisplayFilteringF32
+     * Same as applyDisplayFilteringF32, but then for a regular kispaintdevice.
+     */
+    void applyDisplayFilteringF32(KisPaintDeviceSP device, const KoColorSpace *dstColorSpace) const;
+
+    /**
      * @brief convertColorToDisplayColorSpace
      * This applies displayfiltering to the given KoColor, and then funnels the resulting
      * data into a QColor for display. This function is used to draw canvas decorations into

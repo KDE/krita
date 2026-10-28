@@ -53,6 +53,7 @@
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_painter.h>
+#include <kis_display_color_converter.h>
 
 OCIO::ConstConfigRcPtr defaultRawProfile()
 {
@@ -652,18 +653,8 @@ void LutDockerDock::slotBakeCurrentConfigIntoNewImage()
     {
         const KoColorSpace *ocioCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), originalCs->profile());
         projection->convertTo(ocioCs);
-        const QRect bounds = projection->exactBounds();
-        const int numPixels = bounds.width()* bounds.height();
 
-        std::unique_ptr<quint8[]> originalBytes(
-            new quint8[projection->colorSpace()->pixelSize() * numPixels]);
-
-        projection->readBytes(originalBytes.get(), bounds);
-
-        OcioDisplayFilter *displayFilter = qobject_cast<OcioDisplayFilter*>(m_displayFilter.data());
-        displayFilter->bakingTransformation(originalBytes.get(), numPixels);
-        projection->writeBytes(originalBytes.get(), bounds);
-        projection->convertTo(originalCs);
+        m_canvas->displayColorConverter()->applyDisplayFilteringF32(projection, originalCs);
     }
 
     KisDocument *doc = KisPart::instance()->createDocument();

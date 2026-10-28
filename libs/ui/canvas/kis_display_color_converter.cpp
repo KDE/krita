@@ -705,6 +705,30 @@ void KisDisplayColorConverter::applyDisplayFilteringF32(KisFixedPaintDeviceSP de
     device->convertTo(dstColorSpace);
 }
 
+void KisDisplayColorConverter::applyDisplayFilteringF32(KisPaintDeviceSP device, const KoColorSpace *dstColorSpace) const
+{
+    const QRect s = device->exactBounds();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(device->colorSpace()->colorDepthId() == Float32BitsColorDepthID);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(device->colorSpace()->colorModelId() == RGBAColorModelID);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(s.isValid());
+
+    if (m_d->useOcio()) {
+        KIS_ASSERT_RECOVER_RETURN(m_d->ocioInputColorSpace()->pixelSize() == 16);
+
+        device->convertTo(m_d->ocioInputColorSpace());
+        KisSequentialIterator it(device, s);
+        int numConseqPixels = it.nConseqPixels();
+        while (it.nextPixels(numConseqPixels)) {
+            numConseqPixels = it.nConseqPixels();
+            m_d->displayFilter->filter(it.rawData(), numConseqPixels);
+        }
+        device->setProfile(m_d->ocioOutputProfile(), nullptr);
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(dstColorSpace);
+    device->convertTo(dstColorSpace);
+}
+
 QColor KisDisplayColorConverter::convertColorToDisplayColorSpace(const KoColor color, bool applyOcio) const
 {
     KoColor newColor;

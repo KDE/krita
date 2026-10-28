@@ -48,6 +48,7 @@ namespace
 const QString keyActionRecordToggle = "recorder_record_toggle";
 const QString keyActionExport = "recorder_export";
 
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
 QString activeColorPositive;
 QString activeColorNeutral;
 QString activeColorNegative;
@@ -60,6 +61,20 @@ QColor textColorNeutral;
 QColor buttonColorNeutral;
 QColor textColorNegative;
 QColor buttonColorNegative;
+#else
+const QString activeColorPositive("#5cab25");
+const QString activeColorNeutral("#ca8f14");
+const QString activeColorNegative("#da4453");
+const QString colorNormal("#3e3e3e");
+const QString inactiveColorPositive("#b4e196");
+const QString inactiveColorNeutral("#ffe5af");
+const QString inactiveColorNegative("#f2c4c9");
+
+const QColor textColorNeutral(0xff, 0xe5, 0xaf);
+const QColor buttonColorNeutral(0xca, 0x8f, 0x14);
+const QColor textColorNegative(0xf2, 0xc4, 0xc9);
+const QColor buttonColorNegative(0xda, 0x44, 0x53);
+#endif
 
 }
 
@@ -581,12 +596,15 @@ void RecorderDockerDock::onMainWindowIsBeingCreated(KisMainWindow *window)
     actionCollection->addAction(keyActionRecordToggle, d->recordToggleAction);
     actionCollection->addAction(keyActionExport, d->exportAction);
 
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
     connect(window, SIGNAL(themeChanged()), this, SLOT(onThemeChanged()));
     onThemeChanged();
+#endif
 }
 
 void RecorderDockerDock::onThemeChanged()
 {
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
     KColorScheme activeScheme(QPalette::Active, KColorScheme::Window);
     activeColorPositive = activeScheme.foreground(KColorScheme::PositiveText).color().name();
     activeColorNeutral = activeScheme.foreground(KColorScheme::NeutralText).color().name();
@@ -605,6 +623,7 @@ void RecorderDockerDock::onThemeChanged()
 
     d->updateThreadUi();
     d->updateRecIndicator();
+#endif
 }
 
 bool RecorderDockerDock::onRecordButtonToggled(bool checked)

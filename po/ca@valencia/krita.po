@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-27 00:58+0000\n"
-"PO-Revision-Date: 2026-10-24 23:24+0200\n"
+"PO-Revision-Date: 2026-10-27 10:36+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 26.08.2\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -46663,7 +46663,7 @@ msgstr "Alinea al centre del quadro em ideogràfic."
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Hanging"
-msgstr "Amb sagnat francés"
+msgstr "Suspensió"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:91
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:89
@@ -47303,7 +47303,7 @@ msgstr "Final de línia:"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Hanging"
-msgstr "Sense sagnat francés"
+msgstr "Sense suspensió"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:133
 #, kde-format
@@ -52058,90 +52058,72 @@ msgid "Do nothing"
 msgstr "No faces res"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgid "S-Pen Pro Air Actions"
-msgstr "Accions S-Pen"
+msgstr "Accions Air de S-Pen Pro"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Actions"
-msgstr "Accions S-Pen"
+msgstr "Accions Air de S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Click"
-msgstr "Clic del botó S-Pen"
+msgstr "Clic de botó Air de S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Double Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Double Click"
-msgstr "Doble clic del botó S-Pen"
+msgstr "Doble clic de botó Air de S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Up"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Up"
-msgstr "Gest llisca cap amunt S-Pen"
+msgstr "Gest Air de lliscar cap amunt de S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Down"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro AirGesture Swipe Down"
-msgstr "Gest llisca cap avall S-Pen"
+msgstr "Gest Air de lliscar cap avall de S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Left"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Left"
-msgstr "Gest llisca cap a l'esquerre S-Pen"
+msgstr "Gest Air de lliscar cap a l'esquerre de S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Right"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Right"
-msgstr "Gest llisca cap a la dreta S-Pen"
+msgstr "Gest Air de lliscar cap a la dreta de S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Clockwise"
-msgstr "Gest de cercle en sentit horari S-Pen"
+msgstr "Gest Air de cercle en sentit horari de S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Counter-Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
-msgstr "Gest de cercle en sentit antihorari S-Pen"
+msgstr "Gest Air de cercle en sentit antihorari de S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:112
@@ -52158,6 +52140,10 @@ msgid ""
 "work. Note that only the S-Pen Pro supports Air Actions, the regular S-Pen "
 "does not. Not all devices support gestures."
 msgstr ""
+"Cal habilitar les accions Air de S-Pen Pro a la Configuració del sistema "
+"perquè funcionen a Krita. Cal tindre en compte que només S-Pen Pro permet "
+"les Accions Air, S-Pen normal no ho fa. No tots els dispositius admeten "
+"gestos."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -68411,7 +68397,7 @@ msgstr "Ideogràfic"
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
-msgstr "Amb sagnat francés"
+msgstr "Suspensió"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:490
 #, kde-format
@@ -71071,90 +71057,3 @@ msgstr ""
 "Canvia entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
-
-#~ msgid ""
-#~ "<html><head/><body><p>This is an Hybrid Log Gamma image. Krita does not "
-#~ "support sending HLG to the monitor, so for import it is recommended to "
-#~ "convert from scene linear to display linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Esta és una imatge Hybrid Log Gamma. Krita no admet "
-#~ "l'enviament d'HLG al monitor, de manera que per a la importació es "
-#~ "recomana convertir des d'escena lineal a mostrar lineal.</p></body></html>"
-
-#~ msgid "Apply HLG OOTF"
-#~ msgstr "Aplica HLG OOTF"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Display gamma. By default this is 1.2 for "
-#~ "converting from scene to display linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Gamma de mostrar. De manera predeterminada és 1,2 "
-#~ "per a convertir des de l'escena a mostrar lineal.</p></body></html>"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The display brightness in nits. By default this is "
-#~ "set to 1000 for converting to display linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>La brillantor de la pantalla en nits. De manera "
-#~ "predeterminada està establida a 10002 per a convertir a mostrar lineal.</"
-#~ "p></body></html>"
-
-#~ msgctxt "action"
-#~ msgid "S-Pen Actions"
-#~ msgstr "Accions S-Pen"
-
-#~ msgid ""
-#~ "Make sure the actions are corresponding to the correct gesture on the "
-#~ "system level. These can be configured under S Pen Settings > Air actions."
-#~ msgstr ""
-#~ "Assegureu-vos que les accions corresponen al gest correcte a nivell del "
-#~ "sistema. Estos es poden configurar a Paràmetres de S-Pen → Accions aire."
-
-# skip-rule: kct-tab
-#~ msgid ""
-#~ "The following buttons are supported on the Note 9, Note 10, Tab S6 and "
-#~ "Tab S9 devices."
-#~ msgstr ""
-#~ "Els botons següents estan admesos pels dispositius Note 9, Note 10, Tab "
-#~ "S6 i «Tab» S9."
-
-# skip-rule: kct-tab
-#~ msgid ""
-#~ "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
-#~ "devices."
-#~ msgstr ""
-#~ "Els gestos següents estan admesos pels dispositius Note 10, Tab S6 i "
-#~ "«Tab» S9."
-
-#~ msgid ""
-#~ "<html><head/><body><p>Display gamma. By default this is 1.2 for "
-#~ "converting from PQ.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Gamma de mostrar. De manera predeterminada és 1,2 "
-#~ "per a convertir des de PQ.</p></body></html>"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The display brightness in nits. By default this is "
-#~ "set to 1000 for converting from PQ.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>La brillantor de la pantalla en nits. De manera "
-#~ "predeterminada està establida a 1000 per a convertir des de PQ.</p></"
-#~ "body></html>"
-
-#~ msgid " cd/m²"
-#~ msgstr " cd/m²"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Hybrid Log Gamma needs an extra conversion step in "
-#~ "between, as Krita currently cannot send HLG data directly to the display. "
-#~ "Therefore we apply the HLG opto-optical curve to convert from display to "
-#~ "scene linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Hybrid Log Gamma necessita un pas de conversió "
-#~ "intermedi, ja que Krita actualment no pot enviar dades HLG directament a "
-#~ "la pantalla. Per tant, apliquem la corba opto-òptica d'HLG per a "
-#~ "convertir des de lineal de la pantalla a lineal de l'escena.</p></body></"
-#~ "html>"
-
-#~ msgid "Apply reverse Hybrid Log Gamma OOTF"
-#~ msgstr "Aplica a la inversa Hybrid Log Gamma OOTF"

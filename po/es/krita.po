@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-27 00:58+0000\n"
-"PO-Revision-Date: 2026-10-27 00:36+0100\n"
+"PO-Revision-Date: 2026-10-27 23:03+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -52000,90 +52000,72 @@ msgid "Do nothing"
 msgstr "No hacer nada"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgid "S-Pen Pro Air Actions"
-msgstr "Acciones de S-Pen"
+msgstr "Acciones de S-Pen Pro Air"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Actions"
-msgstr "Acciones de S-Pen"
+msgstr "Acciones de S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Click"
-msgstr "Clic de botón de S-Pen"
+msgstr "Clic de botón de S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Double Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Double Click"
-msgstr "Doble clic de botón de S-Pen"
+msgstr "Doble clic de botón de S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Up"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Up"
-msgstr "Gesto de deslizar hacia arriba de S-Pen"
+msgstr "Gesto de deslizar hacia arriba de S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Down"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro AirGesture Swipe Down"
-msgstr "Gesto de deslizar hacia abajo de S-Pen"
+msgstr "Gesto de deslizar hacia abajo de S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Left"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Left"
-msgstr "Gesto de deslizar hacia la izquierda de S-Pen"
+msgstr "Gesto de deslizar hacia la izquierda de S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Right"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Right"
-msgstr "Gesto de deslizar hacia la derecha de S-Pen"
+msgstr "Gesto de deslizar hacia la derecha de S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Clockwise"
-msgstr "Gesto de círculo en sentido horario de S-Pen"
+msgstr "Gesto de círculo en sentido horario de S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Counter-Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
-msgstr "Gesto de círculo en sentido antihorario de S-Pen"
+msgstr "Gesto de círculo en sentido antihorario de S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:112
@@ -52100,6 +52082,10 @@ msgid ""
 "work. Note that only the S-Pen Pro supports Air Actions, the regular S-Pen "
 "does not. Not all devices support gestures."
 msgstr ""
+"Debe activar las acciones de Air para Krita en la configuración del sistema "
+"para que funcionen. Tenga en cuenta que solo el S-Pen Pro es compatible con "
+"las acciones de Air; el S-Pen estándar no lo es. No todos los dispositivos "
+"admiten gestos."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -71027,88 +71013,3 @@ msgstr ""
 "Cambiar entre intervalo completo y subintervalo.\n"
 "Intervalo completo: [%1, %2]\n"
 "Subintervalo: [%3, %4]"
-
-#~ msgid ""
-#~ "<html><head/><body><p>This is an Hybrid Log Gamma image. Krita does not "
-#~ "support sending HLG to the monitor, so for import it is recommended to "
-#~ "convert from scene linear to display linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Esta es una imagen «Hybrid Log Gamma». Krita no "
-#~ "permite enviar HLG al monitor, por lo que para importarla se recomienda "
-#~ "convertirla de escena lineal a pantalla lineal.</p></body></html>"
-
-#~ msgid "Apply HLG OOTF"
-#~ msgstr "Aplicar OOTF HLG"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Display gamma. By default this is 1.2 for "
-#~ "converting from scene to display linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Gamma de la pantalla. Se define a 1,2 de forma "
-#~ "predeterminada para convertir de escena a pantalla lineal.</p></body></"
-#~ "html>"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The display brightness in nits. By default this is "
-#~ "set to 1000 for converting to display linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>El brillo de la pantalla en nits. Se define a 1000 "
-#~ "de forma predeterminada para convertir a pantalla lineal.</p></body></"
-#~ "html>"
-
-#~ msgctxt "action"
-#~ msgid "S-Pen Actions"
-#~ msgstr "Acciones de S-Pen"
-
-#~ msgid ""
-#~ "Make sure the actions are corresponding to the correct gesture on the "
-#~ "system level. These can be configured under S Pen Settings > Air actions."
-#~ msgstr ""
-#~ "Asegúrese de que las acciones se corresponden con los gestos correctos a "
-#~ "nivel del sistema. Esto se puede configurar en «Preferencias del lápiz S "
-#~ "> Acciones de Air»."
-
-#~ msgid ""
-#~ "The following buttons are supported on the Note 9, Note 10, Tab S6 and "
-#~ "Tab S9 devices."
-#~ msgstr ""
-#~ "Los siguientes botones están permitidas en los dispositivos Note 9, Note "
-#~ "10, Tab S6 y Tab S9."
-
-#~ msgid ""
-#~ "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
-#~ "devices."
-#~ msgstr ""
-#~ "Los siguientes gestos están permitidos en los dispositivos Note 10, Tab "
-#~ "S6 y Tab S9."
-
-#~ msgid ""
-#~ "<html><head/><body><p>Display gamma. By default this is 1.2 for "
-#~ "converting from PQ.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Gamma de la pantalla. Es 1,2 de forma "
-#~ "predeterminada para convertir de PQ..</p></body></html>"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The display brightness in nits. By default this is "
-#~ "set to 1000 for converting from PQ.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>El brillo de la pantalla en nits. Se define a 1000 "
-#~ "de forma predeterminada para convertir de PQ.</p></body></html>"
-
-#~ msgid " cd/m²"
-#~ msgstr " cd/m²"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Hybrid Log Gamma needs an extra conversion step in "
-#~ "between, as Krita currently cannot send HLG data directly to the display. "
-#~ "Therefore we apply the HLG opto-optical curve to convert from display to "
-#~ "scene linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>«Hybrid Log Gamma» necesita un paso intermedio de "
-#~ "conversión adicional, ya que Krita no puede enviar datos HLG directamente "
-#~ "a la pantalla en la actualidad. Por ello, se aplica una curva opto-óptica "
-#~ "HLG para convertir de pantalla a escena lineal.</p></body></html>"
-
-#~ msgid "Apply reverse Hybrid Log Gamma OOTF"
-#~ msgstr "Aplicar inverso de la OOTF «Hybrid Log Gamma»"

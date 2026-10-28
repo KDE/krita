@@ -195,15 +195,6 @@ void OcioDisplayFilter::updateProcessor()
 
     OCIO::GroupTransformRcPtr approximateTransform = OCIO::GroupTransform::Create();
 
-    const char *currentColorSpaceName = inputColorSpaceName;
-
-    // baking: convert in-space to role_linear for the exposure control.
-    OCIO::ColorSpaceTransformRcPtr csToLinear = OCIO::ColorSpaceTransform::Create();
-    csToLinear->setSrc(inputColorSpaceName);
-    csToLinear->setDst(OCIO::ROLE_SCENE_LINEAR);
-    currentColorSpaceName = OCIO::ROLE_SCENE_LINEAR;
-
-
     // fstop exposure control -- not sure how that translates to our exposure
     {
         const double exposureGain = pow(2.0, exposure);
@@ -229,18 +220,6 @@ void OcioDisplayFilter::updateProcessor()
 
         // approximation (no color correction);
         approximateTransform->appendTransform(mtx);
-    }
-
-    if (look) {
-        OCIO::LookTransformRcPtr lookTransform = OCIO::LookTransform::Create();
-        lookTransform->setSrc(currentColorSpaceName);
-        lookTransform->setLooks(look);
-        lookTransform->setDst(inputColorSpaceName);
-    } else {
-        OCIO::ColorSpaceTransformRcPtr linearToCs = OCIO::ColorSpaceTransform::Create();
-        linearToCs->setSrc(currentColorSpaceName);
-        linearToCs->setDst(inputColorSpaceName);
-        currentColorSpaceName = inputColorSpaceName;
     }
 
     // channel swizzle

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-10 03:17+0000\n"
+"POT-Creation-Date: 2026-10-28 03:14+0000\n"
 "PO-Revision-Date: 2026-10-13 04:26+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -50822,71 +50822,89 @@ msgid "Do nothing"
 msgstr "არაფრის გაკეთება"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
-#, kde-format
-msgid "S-Pen Actions"
+#, fuzzy, kde-format
+#| msgid "S-Pen Actions"
+msgid "S-Pen Pro Air Actions"
 msgstr "S-Pen კალმის ქმედებები"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "S-Pen Actions"
 msgctxt "action"
-msgid "S-Pen Actions"
+msgid "S-Pen Pro Air Actions"
 msgstr "S-Pen კალმის ქმედებები"
 
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Button Click"
 msgctxt "action"
-msgid "S-Pen Button Click"
+msgid "S-Pen Pro Air Button Click"
 msgstr "S-Pen-ის ღილაკის წკაპი"
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Button Double Click"
 msgctxt "action"
-msgid "S-Pen Button Double Click"
+msgid "S-Pen Pro Air Button Double Click"
 msgstr "S-Pen-ის ღილაკის ორმაგი წკაპი"
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Up"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Up"
+msgid "S-Pen Pro Air Gesture Swipe Up"
 msgstr "S-Pen-ის ჟესტი ასმა"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Down"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Down"
+msgid "S-Pen Pro AirGesture Swipe Down"
 msgstr "S-Pen-ის ჟესტი ჩამოსმა"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Left"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Left"
+msgid "S-Pen Pro Air Gesture Swipe Left"
 msgstr "S-Pen-ის ჟესტი მარცხნივ გასმა"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Right"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Right"
+msgid "S-Pen Pro Air Gesture Swipe Right"
 msgstr "S-Pen-ის ჟესტი მარჯვნივ გასმა"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Circle Clockwise"
 msgctxt "action"
-msgid "S-Pen Gesture Circle Clockwise"
+msgid "S-Pen Pro Air Gesture Circle Clockwise"
 msgstr "S-Pen-ის ჟესტი წრე საათის მიმართულებით"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Circle Counter-Clockwise"
 msgctxt "action"
-msgid "S-Pen Gesture Circle Counter-Clockwise"
+msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
 msgstr "S-Pen-ის ჟესტი წრე საათის საწინააღმდეგო იმართულებით"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
@@ -50900,11 +50918,10 @@ msgstr "მხტუნარა პალიტრის გადართვ�
 #: plugins/extensions/spensettings/wdg_spensettings.ui:27
 #, kde-format
 msgid ""
-"Make sure the actions are corresponding to the correct gesture on the system "
-"level. These can be configured under S Pen Settings > Air actions."
+"You must enable Air Actions for Krita in your system settings for them to "
+"work. Note that only the S-Pen Pro supports Air Actions, the regular S-Pen "
+"does not. Not all devices support gestures."
 msgstr ""
-"დარწმუნდით, რომ ქმედებები სისტემის დონეზე სწორ ჟესტს შეესაბამება. ამების "
-"მორგება შეგიძლიათ მენიუდან S-Pen-ის მორგება -> ქმედებები Air."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -50924,66 +50941,47 @@ msgstr "დააჭირე"
 msgid "Double Press"
 msgstr "ორმაგი დაწოლა"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:74
-#, kde-format
-msgid ""
-"The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
-"S9 devices."
-msgstr ""
-"მოწყობილობებზე Note 9, Note 10, Tab S6 და Tab S9 მხარდაჭერილია შემდეგი "
-"ღილაკები."
-
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:93
+#: plugins/extensions/spensettings/wdg_spensettings.ui:78
 #, kde-format
 msgid "Gestures"
 msgstr "ჟესტები"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:99
+#: plugins/extensions/spensettings/wdg_spensettings.ui:84
 #, kde-format
 msgid "Swipe Up"
 msgstr "ზემოთ აუსვით"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:109
+#: plugins/extensions/spensettings/wdg_spensettings.ui:94
 #, kde-format
 msgid "Swipe Down"
 msgstr "ქვემოთ ჩამოუსვით"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:116
-#, kde-format
-msgid "Swipe Right"
-msgstr "მარჯვნივ გაუსვით"
-
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:123
+#: plugins/extensions/spensettings/wdg_spensettings.ui:104
 #, kde-format
 msgid "Swipe Left"
 msgstr "მარცხნვ გაუსვით"
 
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:114
+#, kde-format
+msgid "Swipe Right"
+msgstr "მარჯვნივ გაუსვით"
+
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:130
+#: plugins/extensions/spensettings/wdg_spensettings.ui:124
 #, kde-format
 msgid "Circle Clockwise"
 msgstr "წრე საათის ისრის მიმართულებით"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:137
+#: plugins/extensions/spensettings/wdg_spensettings.ui:134
 #, kde-format
 msgid "Circle Counter-Clockwise"
 msgstr "წრე საათის ისრის საწინააღმდეგოდ"
-
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:164
-#, kde-format
-msgid ""
-"The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
-"devices."
-msgstr ""
-"მოწყობილობებზე Note 10, Tab S6 და Tab S9 მხარდაჭერილია შემდეგი ჟესტები."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
@@ -68919,6 +68917,30 @@ msgstr ""
 "გადართვა სრულ შუალედსა და ქვეშუალედს შორის.\n"
 "სრული შუალედი: [%1, %2]\n"
 "ქვეშუალედი: [%3, %4]"
+
+#~ msgctxt "action"
+#~ msgid "S-Pen Actions"
+#~ msgstr "S-Pen კალმის ქმედებები"
+
+#~ msgid ""
+#~ "Make sure the actions are corresponding to the correct gesture on the "
+#~ "system level. These can be configured under S Pen Settings > Air actions."
+#~ msgstr ""
+#~ "დარწმუნდით, რომ ქმედებები სისტემის დონეზე სწორ ჟესტს შეესაბამება. ამების "
+#~ "მორგება შეგიძლიათ მენიუდან S-Pen-ის მორგება -> ქმედებები Air."
+
+#~ msgid ""
+#~ "The following buttons are supported on the Note 9, Note 10, Tab S6 and "
+#~ "Tab S9 devices."
+#~ msgstr ""
+#~ "მოწყობილობებზე Note 9, Note 10, Tab S6 და Tab S9 მხარდაჭერილია შემდეგი "
+#~ "ღილაკები."
+
+#~ msgid ""
+#~ "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
+#~ "devices."
+#~ msgstr ""
+#~ "მოწყობილობებზე Note 10, Tab S6 და Tab S9 მხარდაჭერილია შემდეგი ჟესტები."
 
 #~ msgid "Use system monitor profile"
 #~ msgstr "სისტემური მონიტორის პროფილის გამოყენება"

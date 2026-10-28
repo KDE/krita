@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-10 03:17+0000\n"
+"POT-Creation-Date: 2026-10-28 03:14+0000\n"
 "PO-Revision-Date: 2026-09-30 08:47+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -50445,71 +50445,72 @@ msgstr "לא לעשות כלום"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, fuzzy, kde-format
-msgid "S-Pen Actions"
+msgid "S-Pen Pro Air Actions"
 msgstr "בחירה"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "S-Pen Actions"
+msgid "S-Pen Pro Air Actions"
 msgstr "בחירה"
 
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
 #, kde-format
 msgctxt "action"
-msgid "S-Pen Button Click"
+msgid "S-Pen Pro Air Button Click"
 msgstr ""
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
 #, kde-format
 msgctxt "action"
-msgid "S-Pen Button Double Click"
+msgid "S-Pen Pro Air Button Double Click"
 msgstr ""
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Up"
-msgstr ""
+msgid "S-Pen Pro Air Gesture Swipe Up"
+msgstr "גובה:"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Down"
-msgstr ""
+msgid "S-Pen Pro AirGesture Swipe Down"
+msgstr "גובה:"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Left"
-msgstr ""
+msgid "S-Pen Pro Air Gesture Swipe Left"
+msgstr "גובה:"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
 #, fuzzy, kde-format
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Right"
+msgid "S-Pen Pro Air Gesture Swipe Right"
 msgstr "גובה:"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
 #, kde-format
 msgctxt "action"
-msgid "S-Pen Gesture Circle Clockwise"
+msgid "S-Pen Pro Air Gesture Circle Clockwise"
 msgstr ""
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Circle Counter-Clockwise"
 msgctxt "action"
-msgid "S-Pen Gesture Circle Counter-Clockwise"
-msgstr ""
+msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
+msgstr "עיגול נגד כיוון השעון"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:112
@@ -50522,8 +50523,9 @@ msgstr ""
 #: plugins/extensions/spensettings/wdg_spensettings.ui:27
 #, kde-format
 msgid ""
-"Make sure the actions are corresponding to the correct gesture on the system "
-"level. These can be configured under S Pen Settings > Air actions."
+"You must enable Air Actions for Krita in your system settings for them to "
+"work. Note that only the S-Pen Pro supports Air Actions, the regular S-Pen "
+"does not. Not all devices support gestures."
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
@@ -50544,63 +50546,47 @@ msgstr "לחיצה"
 msgid "Double Press"
 msgstr "לחיצה כפולה"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:74
-#, kde-format
-msgid ""
-"The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
-"S9 devices."
-msgstr ""
-
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:93
+#: plugins/extensions/spensettings/wdg_spensettings.ui:78
 #, kde-format
 msgid "Gestures"
 msgstr "מחוות"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:99
+#: plugins/extensions/spensettings/wdg_spensettings.ui:84
 #, kde-format
 msgid "Swipe Up"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:109
+#: plugins/extensions/spensettings/wdg_spensettings.ui:94
 #, kde-format
 msgid "Swipe Down"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:116
-#, kde-format
-msgid "Swipe Right"
-msgstr "החלקה ימינה"
-
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:123
+#: plugins/extensions/spensettings/wdg_spensettings.ui:104
 #, kde-format
 msgid "Swipe Left"
 msgstr "החלקה שמאלה"
 
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:114
+#, kde-format
+msgid "Swipe Right"
+msgstr "החלקה ימינה"
+
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:130
+#: plugins/extensions/spensettings/wdg_spensettings.ui:124
 #, kde-format
 msgid "Circle Clockwise"
 msgstr "עיגול עם כיוון השעון"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:137
+#: plugins/extensions/spensettings/wdg_spensettings.ui:134
 #, kde-format
 msgid "Circle Counter-Clockwise"
 msgstr "עיגול נגד כיוון השעון"
-
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:164
-#, kde-format
-msgid ""
-"The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
-"devices."
-msgstr ""
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, fuzzy, kde-format
@@ -68209,6 +68195,11 @@ msgstr ""
 "החלפה בין טווח מלא לטווח משנה.\n"
 "טווח מלא: [%1, %2]\n"
 "טווח משנה: [%3, %4]"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "S-Pen Actions"
+#~ msgstr "בחירה"
 
 #~ msgid "Use system monitor profile"
 #~ msgstr "להשתמש בפרופיל צג מערכת"

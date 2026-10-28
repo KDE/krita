@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-10 03:17+0000\n"
+"POT-Creation-Date: 2026-10-28 03:14+0000\n"
 "PO-Revision-Date: 2026-10-02 19:43+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -51745,71 +51745,89 @@ msgid "Do nothing"
 msgstr "Non fare nulla"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
-#, kde-format
-msgid "S-Pen Actions"
+#, fuzzy, kde-format
+#| msgid "S-Pen Actions"
+msgid "S-Pen Pro Air Actions"
 msgstr "S-Pen - Azioni"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "S-Pen Actions"
 msgctxt "action"
-msgid "S-Pen Actions"
+msgid "S-Pen Pro Air Actions"
 msgstr "S-Pen - Azioni"
 
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Button Click"
 msgctxt "action"
-msgid "S-Pen Button Click"
+msgid "S-Pen Pro Air Button Click"
 msgstr "S-Pen - Clic sul pulsante"
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Button Double Click"
 msgctxt "action"
-msgid "S-Pen Button Double Click"
+msgid "S-Pen Pro Air Button Double Click"
 msgstr "S-Pen - Doppio clic sul pulsante"
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Up"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Up"
+msgid "S-Pen Pro Air Gesture Swipe Up"
 msgstr "S-Pen - Scorri in alto"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Down"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Down"
+msgid "S-Pen Pro AirGesture Swipe Down"
 msgstr "S-Pen - Scorri in basso"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Left"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Left"
+msgid "S-Pen Pro Air Gesture Swipe Left"
 msgstr "S-Pen - Scorri a sinistra"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Swipe Right"
 msgctxt "action"
-msgid "S-Pen Gesture Swipe Right"
+msgid "S-Pen Pro Air Gesture Swipe Right"
 msgstr "S-Pen - Scorri a destra"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Circle Clockwise"
 msgctxt "action"
-msgid "S-Pen Gesture Circle Clockwise"
+msgid "S-Pen Pro Air Gesture Circle Clockwise"
 msgstr "S-Pen - Cerchio in senso orario"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "S-Pen Gesture Circle Counter-Clockwise"
 msgctxt "action"
-msgid "S-Pen Gesture Circle Counter-Clockwise"
+msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
 msgstr "S-Pen - Cerchio in senso antiorario"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
@@ -51823,11 +51841,10 @@ msgstr "Commuta la tavolozza a comparsa con S-Pen"
 #: plugins/extensions/spensettings/wdg_spensettings.ui:27
 #, kde-format
 msgid ""
-"Make sure the actions are corresponding to the correct gesture on the system "
-"level. These can be configured under S Pen Settings > Air actions."
+"You must enable Air Actions for Krita in your system settings for them to "
+"work. Note that only the S-Pen Pro supports Air Actions, the regular S-Pen "
+"does not. Not all devices support gestures."
 msgstr ""
-"Accertati che le azioni corrispondano al gesto corretto a livello di "
-"sistema. Esse posso essere configurate in Impostazioni S Pen > Azioni Air."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -51847,66 +51864,47 @@ msgstr "Pressione"
 msgid "Double Press"
 msgstr "Doppia pressione"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:74
-#, kde-format
-msgid ""
-"The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
-"S9 devices."
-msgstr ""
-"Sono supportati i pulsanti seguenti nei dispositivi Note 9, Note 10, Tab S6 "
-"e Tab S9."
-
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:93
+#: plugins/extensions/spensettings/wdg_spensettings.ui:78
 #, kde-format
 msgid "Gestures"
 msgstr "Gesti"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:99
+#: plugins/extensions/spensettings/wdg_spensettings.ui:84
 #, kde-format
 msgid "Swipe Up"
 msgstr "Scorri in alto"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:109
+#: plugins/extensions/spensettings/wdg_spensettings.ui:94
 #, kde-format
 msgid "Swipe Down"
 msgstr "Scorri in basso"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:116
-#, kde-format
-msgid "Swipe Right"
-msgstr "Scorri a destra"
-
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:123
+#: plugins/extensions/spensettings/wdg_spensettings.ui:104
 #, kde-format
 msgid "Swipe Left"
 msgstr "Scorri a sinistra"
 
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:114
+#, kde-format
+msgid "Swipe Right"
+msgstr "Scorri a destra"
+
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:130
+#: plugins/extensions/spensettings/wdg_spensettings.ui:124
 #, kde-format
 msgid "Circle Clockwise"
 msgstr "Cerchio in senso orario"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:137
+#: plugins/extensions/spensettings/wdg_spensettings.ui:134
 #, kde-format
 msgid "Circle Counter-Clockwise"
 msgstr "Cerchio in senso antiorario"
-
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:164
-#, kde-format
-msgid ""
-"The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
-"devices."
-msgstr ""
-"Sono supportati i gesti seguenti nei dispositivi Note 10, Tab S6 e Tab S9."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
@@ -70435,6 +70433,30 @@ msgstr ""
 "Alterna tra intervallo intero e subintervallo.\n"
 "Intervallo intero: [%1, %2]\n"
 "Subintervallo: [%3, %4]"
+
+#~ msgctxt "action"
+#~ msgid "S-Pen Actions"
+#~ msgstr "S-Pen - Azioni"
+
+#~ msgid ""
+#~ "Make sure the actions are corresponding to the correct gesture on the "
+#~ "system level. These can be configured under S Pen Settings > Air actions."
+#~ msgstr ""
+#~ "Accertati che le azioni corrispondano al gesto corretto a livello di "
+#~ "sistema. Esse posso essere configurate in Impostazioni S Pen > Azioni Air."
+
+#~ msgid ""
+#~ "The following buttons are supported on the Note 9, Note 10, Tab S6 and "
+#~ "Tab S9 devices."
+#~ msgstr ""
+#~ "Sono supportati i pulsanti seguenti nei dispositivi Note 9, Note 10, Tab "
+#~ "S6 e Tab S9."
+
+#~ msgid ""
+#~ "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
+#~ "devices."
+#~ msgstr ""
+#~ "Sono supportati i gesti seguenti nei dispositivi Note 10, Tab S6 e Tab S9."
 
 #~ msgid "Use system monitor profile"
 #~ msgstr "Usa profilo del monitor di sistema"

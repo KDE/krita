@@ -249,12 +249,42 @@ void KoDockWidgetTitleBar::Private::updateButtonSizes()
 void KoDockWidgetTitleBar::hideEvent(QHideEvent *event){
     Q_UNUSED(event);
     d->updateButtonSizes();
+
+    /**
+     * On Qt6 QDockWidget will read the size hint of the titlebar
+     * before it is actually made visible, so we should force
+     * it to recalcualate, when visibility (and hence size-hint)
+     * is changed
+     */
+    if (parentWidget() && parentWidget()->layout()) {
+        parentWidget()->layout()->update();
+    }
 }
 
 void KoDockWidgetTitleBar::showEvent(QShowEvent *event){
     Q_UNUSED(event);
     d->updateButtonSizes();
     d->closeButton->setVisible(true);
+
+    /**
+     * On Qt6 QDockWidget will read the size hint of the titlebar
+     * before it is actually made visible, so we should force
+     * it to recalcualate, when visibility (and hence size-hint)
+     * is changed
+     */
+    if (parentWidget() && parentWidget()->layout()) {
+        parentWidget()->layout()->update();
+    }
+}
+
+QSize KoDockWidgetTitleBar::sizeHint() const
+{
+    /**
+     * On Qt6 QDockWidget reserves space for the titlebar
+     * purely on its size hint, ignoring its visiblity, so
+     * we should account for that in the size hint itself
+     */
+    return isVisible() ? QWidget::sizeHint() : QSize();
 }
 
 //have to include this because of Q_PRIVATE_SLOT

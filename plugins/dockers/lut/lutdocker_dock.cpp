@@ -180,7 +180,9 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
         if (m_canvas) {
             if (!m_canvas->displayFilter()) {
                 // we need to 'unset' the filter here so that updateDisplaySettings will create a new filter for the canvas.
-                m_displayFilter = m_canvas->displayFilter();
+                m_displayFilter = nullptr;
+                m_canvas->viewManager()->canvasResourceProvider()->setHDRExposure(0.0);
+                m_canvas->viewManager()->canvasResourceProvider()->setHDRGamma(1.0);
                 resetOcioConfiguration();
                 updateDisplaySettings();
             }
@@ -208,6 +210,9 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
                 KisSignalsBlocker bwBlocker(m_bwPointChooser);
                 m_bwPointChooser->setBlackPoint(displayFilter->blackPoint);
                 m_bwPointChooser->setWhitePoint(displayFilter->whitePoint);
+
+                m_canvas->viewManager()->canvasResourceProvider()->setHDRExposure(displayFilter->exposure);
+                m_canvas->viewManager()->canvasResourceProvider()->setHDRGamma(displayFilter->gamma);
             }
 
             connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);

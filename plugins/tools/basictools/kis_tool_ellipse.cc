@@ -18,6 +18,7 @@
 
 #include <QBrush>
 #include <QFormLayout>
+#include <QHBoxLayout>
 #include <QIcon>
 #include <QLineF>
 #include <QPen>
@@ -34,6 +35,7 @@
 #include "kis_figure_painting_tool_helper.h"
 #include <brushengine/kis_paintop_preset.h>
 #include <ksharedconfig.h>
+#include <kis_rectangle_constraint_widget.h>
 
 #include <cmath>
 
@@ -63,12 +65,14 @@ KisToolEllipse::~KisToolEllipse()
 {
 }
 
-QWidget *KisToolEllipse::createOptionWidget()
+QList<QPointer<QWidget>> KisToolEllipse::createOptionWidgets()
 {
-    QWidget *widget = KisToolEllipseBase::createOptionWidget();
+    QList<QPointer<QWidget>> widgets = KisToolEllipseBase::createOptionWidgets();
 
-    KisOptionButtonStrip *placementStrip = new KisOptionButtonStrip;
-    placementStrip->setObjectName("placementModeStrip");
+    QWidget *widget = new QWidget();
+    widget->setObjectName("PlacementModeWidget");
+
+    KisOptionButtonStrip *placementStrip = new KisOptionButtonStrip(widget);
     KoGroupButton *boundingBoxButton = placementStrip->addButton(i18nc("Ellipse tool placement mode", "Bounding Box"));
     KoGroupButton *threePointButton = placementStrip->addButton(i18nc("Ellipse tool placement mode", "3-Point"));
     boundingBoxButton->setToolTip(i18n("Place the ellipse inside a bounding box"));
@@ -83,14 +87,31 @@ QWidget *KisToolEllipse::createOptionWidget()
 
     connect(placementStrip, SIGNAL(buttonToggled(int,bool)), SLOT(slotPlacementModeChanged(int,bool)));
 
-    QFormLayout *formLayout = widget ? dynamic_cast<QFormLayout *>(widget->layout()) : nullptr;
-    if (formLayout) {
-        formLayout->insertRow(0, i18nc("Ellipse tool placement mode option label", "Placement:"), placementStrip);
-    } else if (widget && widget->layout()) {
-        widget->layout()->addWidget(placementStrip);
+    /**
+     * Disable geometry contraints widget in 3-point mode. It is used in
+     * the bounding box mode only
+     */
+    Q_FOREACH (QPointer<QWidget> other, widgets) {
+        if (qobject_cast<KisRectangleConstraintWidget*>(other)) {
+            connect(placementStrip,
+                    qOverload<int, bool>(&KisOptionButtonStrip::buttonToggled),
+                    other,
+                    [other](int mode, bool checked) {
+                        if (!checked)
+                            return;
+                        other->setEnabled(static_cast<PlacementMode>(mode) == BoundingBoxPlacement);
+                    });
+            other->setEnabled(m_placementMode == BoundingBoxPlacement);
+            break;
+        }
     }
 
-    return widget;
+    QHBoxLayout *hLayout = new QHBoxLayout(widget);
+    hLayout->addWidget(new QLabel(i18nc("Ellipse tool placement mode option label", "Placement:")), 0, Qt::AlignLeft);
+    hLayout->addWidget(placementStrip, 1, Qt::AlignRight);
+    widgets.prepend(widget);
+
+    return widgets;
 }
 
 void KisToolEllipse::slotPlacementModeChanged(int mode, bool checked)

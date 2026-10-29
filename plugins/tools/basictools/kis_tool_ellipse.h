@@ -44,7 +44,7 @@ protected:
         ThreePointPlacement
     };
 
-    QWidget *createOptionWidget() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;

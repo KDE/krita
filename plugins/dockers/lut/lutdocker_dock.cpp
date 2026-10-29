@@ -32,6 +32,7 @@
 
 #include "kis_icon_utils.h"
 #include <KisViewManager.h>
+#include <KisDisplayConfig.h>
 #include <KisDocument.h>
 #include <kis_config.h>
 #include <kis_canvas2.h>
@@ -217,7 +218,8 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 
             connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);
             connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()), Qt::UniqueConnection);
-
+            connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()), this, SLOT(slotUpdateBakingSpaceToolTip()), Qt::UniqueConnection);
+            slotUpdateBakingSpaceToolTip();
         }
     }
 }
@@ -236,6 +238,21 @@ void LutDockerDock::slotUpdateIcons()
     m_lblOcioVersion->setText(QString("OCIO: %1 | %2").arg(OCIO_VERSION_FULL_STR, KisOpenGL::currentDriver()));
     m_lblOcioVersion->setWordWrap(true);
     m_lblOcioVersion->setEnabled(false);
+}
+
+void LutDockerDock::slotUpdateBakingSpaceToolTip()
+{
+    if (m_canvas) {
+        const KoColorProfile *displayProfile = m_canvas->displayColorConverter()->multiSurfaceDisplayConfig().canvasProfile;
+        if (!displayProfile) {
+            displayProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+        }
+
+        m_bakeConfigBtn->setToolTip(
+            i18nc("@info:tooltip", "Will use \"%1\" ICC profile as display space", displayProfile->name()));
+    } else {
+        m_bakeConfigBtn->setToolTip("");
+    }
 }
 
 void LutDockerDock::slotShowBWConfiguration()

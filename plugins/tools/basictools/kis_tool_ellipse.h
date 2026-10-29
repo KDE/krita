@@ -53,6 +53,7 @@ protected:
     KisPopupWidgetInterface* popupWidget() override;
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
+    void deactivate() override;
 
     void finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY) override;
 

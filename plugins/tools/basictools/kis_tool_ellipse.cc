@@ -388,6 +388,15 @@ void KisToolEllipse::requestStrokeCancellation()
     cancelThreePointEllipse();
 }
 
+void KisToolEllipse::deactivate()
+{
+    if (isThreePointPlacement()) {
+        cancelThreePointEllipse();
+    }
+
+    KisToolEllipseBase::deactivate();
+}
+
 void KisToolEllipse::updateThreePointPreview(const QPointF &pos)
 {
     const QRectF oldRect = threePointUpdateRect();

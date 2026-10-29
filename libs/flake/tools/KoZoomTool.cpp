@@ -14,13 +14,12 @@
 #include <QWidget>
 
 #include "KoZoomStrategy.h"
+#include "KoZoomToolWidget.h"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
 
 #include <FlakeDebug.h>
-
-KoZoomTool::WidgetFactoryCallback KoZoomTool::s_widgetFactory = nullptr;
 
 KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
         : KoInteractionTool(canvas)
@@ -91,12 +90,7 @@ KoInteractionStrategy *KoZoomTool::createStrategy(KoPointerEvent *event)
 
 QWidget *KoZoomTool::createOptionWidget()
 {
-    //the option widget is not avalable from this script
-    //so here is a hacky work around
-    if (s_widgetFactory) {
-        return s_widgetFactory(this);
-    }
-    return nullptr;
+    return new KoZoomToolWidget(this);
 }
 
 void KoZoomTool::setZoomInMode(bool zoomIn)

@@ -8,14 +8,12 @@
 #include "KoZoomToolWidget.h"
 #include <QPainter>
 #include <QMouseEvent>
+#include "KoCanvasBase.h"
+#include <KoCanvasController.h>
 #include <KoIcon.h>
 #include "KoZoomTool.h"
-#include <kis_action.h>
-#include "kis_canvas2.h"
-#include <kis_action_manager.h>
-#include "KisViewManager.h"
-#include "KoCanvasBase.h"
-#include "KisView.h"
+
+#include <kactioncollection.h>
 
 #include "KisOptionButtonStrip.h"
 #include "KoGroupButton.h"
@@ -57,28 +55,18 @@ KoZoomToolWidget::KoZoomToolWidget(KoZoomTool* tool, QWidget* parent)
                 }
             });
 
-    KisActionManager *actionManager = dynamic_cast<KisCanvas2*>(m_tool->canvas())->viewManager()->actionManager();
+    KisKActionCollection *actionCollection = m_tool->canvas()->canvasController()->actionCollection();
 
-    KisAction *action = actionManager->actionByName("zoom_to_fit");
+    QAction *action = actionCollection->action("zoom_to_fit");
     btnZoomToFit->setDefaultAction(action);
 
-    action = actionManager->actionByName("zoom_to_fit_width");
+    action = actionCollection->action("zoom_to_fit_width");
     btnZoomToFitH->setDefaultAction(action);
 
-    action = actionManager->actionByName("zoom_to_fit_height");
+    action = actionCollection->action("zoom_to_fit_height");
     btnZoomToFitV->setDefaultAction(action);
 }
 
 KoZoomToolWidget::~KoZoomToolWidget()
 {
 }
-
-struct KoZoomToolWidgetRegistrar {
-    KoZoomToolWidgetRegistrar() {
-        KoZoomTool::s_widgetFactory = [](KoZoomTool* tool) -> QWidget* {
-            return new KoZoomToolWidget(tool);
-        };
-    }
-};
-
-static KoZoomToolWidgetRegistrar global_zoom_widget_registrar;

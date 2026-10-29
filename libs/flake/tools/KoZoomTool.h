@@ -10,16 +10,14 @@
 #define KOZOOMTOOL_H
 
 #include "KoInteractionTool.h"
-#include "kritaflake_export.h"
 
 #include <QCursor>
-#include <functional>
 
 class KoCanvasBase;
 class KoCanvasController;
 
 /// \internal
-class KRITAFLAKE_EXPORT  KoZoomTool : public KoInteractionTool
+class KoZoomTool : public KoInteractionTool
 {
 public:
     /**
@@ -37,8 +35,6 @@ public:
     void setCanvasController(KoCanvasController *controller) {
         m_controller = controller;
     }
-    using WidgetFactoryCallback = std::function<QWidget*(KoZoomTool*)>;
-    static KRITAFLAKE_EXPORT WidgetFactoryCallback s_widgetFactory;
 
     void setZoomInMode(bool zoomIn);
 

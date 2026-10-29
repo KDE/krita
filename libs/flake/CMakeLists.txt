@@ -178,6 +178,7 @@ set(kritaflake_SRCS
     tools/KoParameterChangeStrategy.cpp
     tools/KoZoomTool.cpp
     tools/KoZoomToolFactory.cpp
+    tools/KoZoomToolWidget.cpp
     tools/KoZoomStrategy.cpp
     tools/KoInteractionTool.cpp
     tools/KoInteractionStrategy.cpp
@@ -257,6 +258,7 @@ endif()
 
 ki18n_wrap_ui(kritaflake_SRCS
     tools/PathToolOptionWidgetBase.ui
+    tools/KoZoomToolWidget.ui
 )
 
 kis_add_library(kritaflake SHARED ${kritaflake_SRCS})

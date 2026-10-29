@@ -154,6 +154,10 @@ KoColor KisColorSelectorTriangle::colorAt(float x, float y) const
     if(x<horizontalLineStart || x>horizontalLineEnd || y>triangleHeight)
         return KoColor::createTransparent(colorSpace());
 
+    // if horizontalLineLength is 0, then saturation is improperly calculated
+    if(horizontalLineLength == 0) 
+        return m_parent->converter()->fromHsvF(m_hue, 0.0, 0.0);
+
     qreal relativeX = x-horizontalLineStart;
 
     qreal value = (y)/qreal(triangleHeight);

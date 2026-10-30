@@ -76,7 +76,7 @@
     </Action>
 
     <Action name="file_import_file">
-      <icon>document-import</icon>
+      <icon>document-import-16</icon>
       <text>Open ex&amp;isting Document as Untitled Document...</text>
       <whatsThis></whatsThis>
       <toolTip>Open existing Document as Untitled Document</toolTip>
@@ -88,7 +88,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="file_export_file">
-      <icon>document-export</icon>
+      <icon>document-export-16</icon>
       <text>E&amp;xport...</text>
       <whatsThis></whatsThis>
       <toolTip>Export</toolTip>
@@ -100,7 +100,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="file_export_advanced">
-      <icon>document-export</icon>
+      <icon>export-advanced</icon>
       <text>Export Advanced...</text>
       <whatsThis></whatsThis>
       <toolTip>Advanced Export</toolTip>
@@ -113,7 +113,7 @@
     </Action>
 
     <Action name="file_import_animation">
-      <icon></icon>
+      <icon>import-frame</icon>
       <text>Import animation frames...</text>
       <whatsThis></whatsThis>
       <toolTip>Import animation frames</toolTip>
@@ -125,7 +125,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="file_import_video_animation">
-      <icon></icon>
+      <icon>import-video</icon>
       <text>Import video animation...</text>
       <whatsThis></whatsThis>
       <toolTip>Import video animation</toolTip>

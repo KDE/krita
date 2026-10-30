@@ -456,8 +456,6 @@ void LutDockerDock::writeControls()
     ocioOptions.lutPath = m_txtLut->text();
     ocioOptions.inputColorSpace = m_cmbInputColorSpace->currentUnsqueezedText();
     ocioOptions.displayDevice = m_cmbDisplayDevice->currentUnsqueezedText();
-    ocioOptions.displayView = m_cmbView->currentUnsqueezedText();
-    ocioOptions.look = m_cmbLook->currentUnsqueezedText();
 
     KisConfig cfg(false);
     cfg.setUseOcio(m_chkUseOcio->isChecked());
@@ -623,7 +621,8 @@ void LutDockerDock::refillControls()
             itemsList << QString::fromUtf8(look->getName());
             descriptionList << QString::fromUtf8(look->getDescription());
         }
-        itemsList << i18nc("Item to indicate no look transform being selected","None");
+        QString none = i18nc("Item to indicate no look transform being selected","None");
+        itemsList << none;
 
         KisSignalsBlocker LookComboLocker(m_cmbLook);
 
@@ -634,7 +633,7 @@ void LutDockerDock::refillControls()
             }
         }
 
-        m_cmbLook->setCurrent(ocioOptions.look);
+        m_cmbLook->setCurrent(none);
     }
     updateDisplaySettings();
 }
@@ -655,7 +654,7 @@ void LutDockerDock::refillViewCombobox()
 
     KisConfig cfg(true);
     KisOcioConfiguration ocioOptions = cfg.ocioConfiguration();
-    m_cmbView->setCurrent(ocioOptions.displayView);
+    m_cmbView->setCurrentIndex(0);
 }
 
 

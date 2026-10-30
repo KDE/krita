@@ -2032,8 +2032,6 @@ KisOcioConfiguration KisConfig::ocioConfiguration(bool defaultValue) const
         cfg.lutPath = m_cfg.readEntry("Krita/Ocio/OcioLutPath", QString());
         cfg.inputColorSpace = m_cfg.readEntry("Krita/Ocio/InputColorSpace", QString());
         cfg.displayDevice = m_cfg.readEntry("Krita/Ocio/DisplayDevice", QString());
-        cfg.displayView = m_cfg.readEntry("Krita/Ocio/DisplayView", QString());
-        cfg.look = m_cfg.readEntry("Krita/Ocio/DisplayLook", QString());
     }
 
     return cfg;
@@ -2046,8 +2044,6 @@ void KisConfig::setOcioConfiguration(const KisOcioConfiguration &cfg)
     m_cfg.writeEntry("Krita/Ocio/OcioLutPath", cfg.lutPath);
     m_cfg.writeEntry("Krita/Ocio/InputColorSpace", cfg.inputColorSpace);
     m_cfg.writeEntry("Krita/Ocio/DisplayDevice", cfg.displayDevice);
-    m_cfg.writeEntry("Krita/Ocio/DisplayView", cfg.displayView);
-    m_cfg.writeEntry("Krita/Ocio/DisplayLook", cfg.look);
 }
 
 KisConfig::OcioColorManagementMode

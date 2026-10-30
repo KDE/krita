@@ -772,5 +772,17 @@
         <file>dark_paste-into-active-layer.svg</file>
         <file>light_create-copy-from-current.svg</file>
         <file>dark_create-copy-from-current.svg</file>
+        <file>dark_more-red.svg</file>
+        <file>dark_more-yellow.svg</file>
+        <file>dark_more-green.svg</file>
+        <file>dark_more-blue.svg</file>
+        <file>dark_hue-shift-CCW.svg</file>
+        <file>dark_hue-shift-CW.svg</file>
+        <file>light_more-yellow.svg</file>
+        <file>light_more-green.svg</file>
+        <file>light_more-red.svg</file>
+        <file>light_more-blue.svg</file>
+        <file>light_hue-shift-CCW.svg</file>
+        <file>light_hue-shift-CW.svg</file>
     </qresource>
 </RCC>

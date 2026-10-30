@@ -647,5 +647,17 @@
         <file>light_save-back-up.svg</file>
         <file>dark_search-actions.svg</file>
         <file>light_search-actions.svg</file>
+        <file>light_export-layers.svg</file>
+        <file>light_export-advanced.svg</file>
+        <file>light_export-timelapse.svg</file>
+        <file>dark_export-timelapse.svg</file>
+        <file>dark_export-advanced.svg</file>
+        <file>dark_export-layers.svg</file>
+        <file>dark_import-frame.svg</file>
+        <file>dark_import-video.svg</file>
+        <file>light_import-video.svg</file>
+        <file>light_import-frame.svg</file>
+        <file>dark_import-layer.svg</file>
+        <file>light_import-layer.svg</file>
     </qresource>
 </RCC>

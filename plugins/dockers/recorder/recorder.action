@@ -17,7 +17,7 @@
       <toolTip>Export Timelapse...</toolTip>
       <text>Export Timelapse...</text>
       <shortcut/>
-      <icon>document-export</icon>
+      <icon>export-timelapse</icon>
       <whatsThis/>
       <statusTip/>
       <isCheckable>false</isCheckable>

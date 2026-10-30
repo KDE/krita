@@ -3162,7 +3162,7 @@
       <statusTip/>
     </Action>
     <Action name="import_layer_from_file">
-      <icon/>
+      <icon>import-layer</icon>
       <text>I&amp;mport Layer...</text>
       <whatsThis/>
       <toolTip>Import Layer</toolTip>

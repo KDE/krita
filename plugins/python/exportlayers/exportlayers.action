@@ -4,7 +4,7 @@
     <text>Export Layers</text>
 
     <Action name="export_layers">
-      <icon/>
+      <icon>export-layers</icon>
       <text>Export Layers</text>
       <whatsThis/>
       <toolTip/>

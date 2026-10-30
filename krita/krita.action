@@ -793,7 +793,7 @@
       <statusTip/>
     </Action>
     <Action name="selection_tool_mode_add">
-      <icon/>
+      <icon>selection_add</icon>
       <text>Selection Mode: Add</text>
       <whatsThis/>
       <toolTip>Selection Mode: Add</toolTip>
@@ -803,7 +803,7 @@
       <statusTip/>
     </Action>
     <Action name="selection_tool_mode_subtract">
-      <icon/>
+      <icon>selection_subtract</icon>
       <text>Selection Mode: Subtract</text>
       <whatsThis/>
       <toolTip>Selection Mode: Subtract</toolTip>
@@ -813,7 +813,7 @@
       <statusTip/>
     </Action>
     <Action name="selection_tool_mode_intersect">
-      <icon/>
+      <icon>selection_intersect</icon>
       <text>Selection Mode: Intersect</text>
       <whatsThis/>
       <toolTip>Selection Mode: Intersect</toolTip>
@@ -823,7 +823,7 @@
       <statusTip/>
     </Action>
     <Action name="selection_tool_mode_replace">
-      <icon/>
+      <icon>selection_replace</icon>
       <text>Selection Mode: Replace</text>
       <whatsThis/>
       <toolTip>Selection Mode: Replace</toolTip>

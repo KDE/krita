@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-29 00:51+0000\n"
+"POT-Creation-Date: 2026-10-30 00:51+0000\n"
 "PO-Revision-Date: 2026-05-09 16:03+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
@@ -21221,17 +21221,35 @@ msgstr "Narzędzie edycji kształtów"
 msgid "Zoom"
 msgstr "Powiększenie"
 
-#. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
-#: libs/flake/tools/KoZoomToolWidget.ui:24
-#, kde-format
-msgid "&Zoom In"
-msgstr "Powięks&z"
+#: libs/flake/tools/KoZoomToolWidget.cpp:38
+#, fuzzy, kde-format
+#| msgid "Zoom In"
+msgid "Zoom in"
+msgstr "Powiększenie"
 
-#. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
-#: libs/flake/tools/KoZoomToolWidget.ui:47
+#: libs/flake/tools/KoZoomToolWidget.cpp:40
+#, fuzzy, kde-format
+#| msgid "Zoom Out"
+msgid "Zoom out"
+msgstr "Pomniejszenie"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
+#. i18n: ectx: property (text), widget (QToolButton, btnArrange)
+#: libs/flake/tools/KoZoomToolWidget.cpp:44
+#: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
+#: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
+#: plugins/python/channels2layers/channels2layers.py:1102
 #, kde-format
-msgid "Zoo&m Out"
-msgstr "Po&mniejsz"
+msgid "Mode"
+msgstr "Tryb"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/flake/tools/KoZoomToolWidget.ui:34
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Zoom to fit"
+msgid "Zoom to fit:"
+msgstr "Powiększ tak, aby dopasować"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -38969,6 +38987,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
+#: plugins/tools/basictools/kis_tool_ellipse.cc:167
 #: plugins/tools/basictools/kis_tool_line.cc:212
 #: plugins/tools/basictools/kis_tool_path.cc:91
 #: plugins/tools/basictools/kis_tool_pencil.cc:64
@@ -38981,6 +39000,7 @@ msgstr "Silnik pędzli MyPaint jest niedostępny dla tej przestrzeni barw"
 #: libs/ui/tool/kis_tool_polyline_base.cpp:116
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:163
+#: plugins/tools/basictools/kis_tool_ellipse.cc:160
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:69
 #, kde-format
 msgid ""
@@ -46960,15 +46980,6 @@ msgstr "Rozmiar czcionki:"
 #, kde-format
 msgid "Comments"
 msgstr "Komentarze"
-
-#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
-#. i18n: ectx: property (text), widget (QToolButton, btnArrange)
-#: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
-#: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
-#: plugins/python/channels2layers/channels2layers.py:1102
-#, kde-format
-msgid "Mode"
-msgstr "Tryb"
 
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:171
 #, kde-format
@@ -66742,7 +66753,7 @@ msgid "Rectangle Tool"
 msgstr "Narzędzie prostokąta"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
-#: plugins/tools/basictools/kis_tool_ellipse.h:47
+#: plugins/tools/basictools/kis_tool_ellipse.h:94
 #, kde-format
 msgid "Ellipse Tool"
 msgstr "Narzędzie elipsy"
@@ -67324,7 +67335,57 @@ msgstr "Włącz przyciąganie w trakcie używania gumki"
 msgid "Color Sampler Tool"
 msgstr "Narzędzie próbnika barw"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:64
+#: plugins/tools/basictools/kis_tool_ellipse.cc:76
+#, fuzzy, kde-format
+#| msgid "Bounding Box"
+msgctxt "Ellipse tool placement mode"
+msgid "Bounding Box"
+msgstr "Obrysy"
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:77
+#, kde-format
+msgctxt "Ellipse tool placement mode"
+msgid "3-Point"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:78
+#, kde-format
+msgid "Place the ellipse inside a bounding box"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:79
+#, kde-format
+msgid "Place the ellipse by setting the major axis and width"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:110
+#, fuzzy, kde-format
+#| msgid "Placement"
+msgctxt "Ellipse tool placement mode option label"
+msgid "Placement:"
+msgstr "Rozmieszczenie"
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:343
+#, kde-format
+msgid "Click to place the other end of the ellipse axis."
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:345
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Click to select text shape."
+msgid "Click to set the ellipse width."
+msgstr "Kliknij, aby wybrać kształt tekstu."
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:347
+#, kde-format
+msgid ""
+"Drag handles to adjust the ellipse. Press Enter to apply or Esc to cancel."
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:584
+#: plugins/tools/basictools/kis_tool_ellipse.cc:606
+#: plugins/tools/basictools/kis_tool_ellipse.cc:623
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Narysuj elipsę"
@@ -72052,6 +72113,12 @@ msgstr ""
 "Przełącz pomiędzy pełnym zakresem, a podzakresem.\n"
 "Pełny zakres: [%1, %2]\n"
 "Podzakres: [%3, %4]"
+
+#~ msgid "&Zoom In"
+#~ msgstr "Powięks&z"
+
+#~ msgid "Zoo&m Out"
+#~ msgstr "Po&mniejsz"
 
 #~ msgid ""
 #~ "<html><head/><body><p>This is an Hybrid Log Gamma image. Krita does not "
@@ -84024,10 +84091,6 @@ msgstr ""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Zoom values"
 #~ msgstr "Powiększ wartości"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Zoom to fit"
-#~ msgstr "Powiększ tak, aby dopasować"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Add new keyframe"
@@ -98475,10 +98538,6 @@ msgstr ""
 #~ msgstr "Kliknij, aby zmienić położenie wskaźnika."
 
 #~ msgctxt "(qtundo-format)"
-#~ msgid "Click to select text shape."
-#~ msgstr "Kliknij, aby wybrać kształt tekstu."
-
-#~ msgctxt "(qtundo-format)"
 #~ msgid "Double click to put text on path."
 #~ msgstr "Kliknij podwójnie, aby umieścić tekst na ścieżce."
 
@@ -103083,9 +103142,6 @@ msgstr ""
 
 #~ msgid "Layer style configuration (*.asl)"
 #~ msgstr "Ustawienia stylu warstwy (*.asl)"
-
-#~ msgid "Placement"
-#~ msgstr "Rozmieszczenie"
 
 #~ msgid "Horizontal spacing:"
 #~ msgstr "Odstęp w poziomie:"

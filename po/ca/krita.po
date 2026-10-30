@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-29 00:51+0000\n"
-"PO-Revision-Date: 2026-10-27 10:36+0100\n"
+"POT-Creation-Date: 2026-10-30 00:51+0000\n"
+"PO-Revision-Date: 2026-10-29 11:41+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -11498,117 +11498,98 @@ msgstr "Actualitza l'interval de reproducció"
 
 #. i18n: context: text @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2527
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Constant"
-msgstr "Interpolació"
+msgstr "Interpolació constant"
 
 #. i18n: context: toolTip @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2529
-#, fuzzy, kde-format
-#| msgid "Hold constant value. No interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Hold constant value. No interpolation."
 msgstr "Manté un valor constant. Sense interpolació."
 
 #. i18n: context: text @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2539
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Linear"
-msgstr "Interpolació"
+msgstr "Interpolació lineal"
 
 #. i18n: context: toolTip @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2541
-#, fuzzy, kde-format
-#| msgid "Linear interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Linear interpolation."
 msgstr "Interpolació lineal."
 
 #. i18n: context: text @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2551
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Bezier"
-msgstr "Interpolació"
+msgstr "Interpolació de Bézier"
 
 #. i18n: context: toolTip @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2553
-#, fuzzy, kde-format
-#| msgid "Bezier curve interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Bezier curve interpolation."
 msgstr "Interpolació de la corba de Bézier."
 
 #. i18n: context: text @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2563
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Sharp"
-msgstr "Interpolació"
+msgstr "Interpolació nítida"
 
 #. i18n: context: toolTip @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2565
-#, fuzzy, kde-format
-#| msgid "Sharp interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Sharp interpolation tangents."
 msgstr "Tangents d'interpolació més definides."
 
 #. i18n: context: text @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2575
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Smooth"
-msgstr "Interpolació"
+msgstr "Interpolació suau"
 
 #. i18n: context: toolTip @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2577
-#, fuzzy, kde-format
-#| msgid "Smooth interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Smooth interpolation tangents."
 msgstr "Tangents d'interpolació més suaus."
 
 #. i18n: context: text @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2587
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Range"
-msgstr "Vista de zoom per a ajustar l'interval del canal."
+msgstr "Zoom per a ajustar l'interval"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2589
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit channel range."
 msgstr "Vista de zoom per a ajustar l'interval del canal."
 
 #. i18n: context: text @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2599
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Curve"
-msgstr "Vista de zoom per a ajustar la corba."
+msgstr "Zoom per a ajustar la corba"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2601
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit curve."
 msgstr "Vista de zoom per a ajustar la corba."
@@ -20932,17 +20913,35 @@ msgstr "Eina d'edició de formes"
 msgid "Zoom"
 msgstr "Zoom"
 
-#. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
-#: libs/flake/tools/KoZoomToolWidget.ui:24
-#, kde-format
-msgid "&Zoom In"
-msgstr "&Amplia"
+#: libs/flake/tools/KoZoomToolWidget.cpp:38
+#, fuzzy, kde-format
+#| msgid "Zoom In"
+msgid "Zoom in"
+msgstr "Apropa"
 
-#. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
-#: libs/flake/tools/KoZoomToolWidget.ui:47
+#: libs/flake/tools/KoZoomToolWidget.cpp:40
+#, fuzzy, kde-format
+#| msgid "Zoom Out"
+msgid "Zoom out"
+msgstr "Allunya"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
+#. i18n: ectx: property (text), widget (QToolButton, btnArrange)
+#: libs/flake/tools/KoZoomToolWidget.cpp:44
+#: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
+#: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
+#: plugins/python/channels2layers/channels2layers.py:1102
 #, kde-format
-msgid "Zoo&m Out"
-msgstr "Red&ueix"
+msgid "Mode"
+msgstr "Mode"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/flake/tools/KoZoomToolWidget.ui:34
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Zoom to Fit Range"
+msgid "Zoom to fit:"
+msgstr "Zoom per a ajustar l'interval"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -38561,6 +38560,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
+#: plugins/tools/basictools/kis_tool_ellipse.cc:167
 #: plugins/tools/basictools/kis_tool_line.cc:212
 #: plugins/tools/basictools/kis_tool_path.cc:91
 #: plugins/tools/basictools/kis_tool_pencil.cc:64
@@ -38575,6 +38575,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:116
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:163
+#: plugins/tools/basictools/kis_tool_ellipse.cc:160
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:69
 #, kde-format
 msgid ""
@@ -45721,10 +45722,9 @@ msgid "0 B"
 msgstr "0 B"
 
 #: plugins/dockers/recorder/recorder_writer.cpp:631
-#, fuzzy, kde-format
-#| msgid "Start Recording"
+#, kde-format
 msgid "Stopping recording"
-msgstr "Inicia l'enregistrament"
+msgstr "Atura l'enregistrament"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDirectory)
 #: plugins/dockers/recorder/recorderdocker.ui:95
@@ -45861,22 +45861,19 @@ msgstr "Enregistra automàticament"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxFocusedRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:374
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Record only the visible area of the canvas.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Useu la inclinació de la tauleta per a determinar les "
-"normals.</p></body></html>"
+"<html><head/><body><p>Enregistra només l'àrea visible del llenç.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxFocusedRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:377
 #, kde-format
 msgid "Record focused area"
-msgstr ""
+msgstr "Enregistra l'àrea amb el focus"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRecordToggle)
 #: plugins/dockers/recorder/recorderdocker.ui:396
@@ -46516,15 +46513,6 @@ msgstr "Mida de la lletra:"
 #, kde-format
 msgid "Comments"
 msgstr "Comentaris"
-
-#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
-#. i18n: ectx: property (text), widget (QToolButton, btnArrange)
-#: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
-#: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
-#: plugins/python/channels2layers/channels2layers.py:1102
-#, kde-format
-msgid "Mode"
-msgstr "Mode"
 
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:171
 #, kde-format
@@ -63533,8 +63521,7 @@ msgstr "Valor de la direcció/inclinació de la mescla"
 #. i18n: context: text @ Action (assign_profile_to_image), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
-#, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
+#, kde-format
 msgctxt "action"
 msgid "Assign Profile to Image"
 msgstr "Assigna un perfil a la imatge"
@@ -63557,8 +63544,7 @@ msgstr "Assigna un perfil a la imatge"
 #. i18n: context: text @ Action (pykrita_channels2layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
-#, fuzzy, kde-format
-#| msgid "Channels to layers"
+#, kde-format
 msgctxt "action"
 msgid "Channels to layers"
 msgstr "Canals a capes"
@@ -63644,8 +63630,7 @@ msgstr "<i>Negre</i>"
 #. i18n: context: text @ Action (color_space), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Space"
 msgstr "Espai de color"
@@ -65094,8 +65079,7 @@ msgstr "Escriptor del contingut textual complementari"
 #. i18n: context: text @ Action (document_tools), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
-#, fuzzy, kde-format
-#| msgid "Document Tools"
+#, kde-format
 msgctxt "action"
 msgid "Document Tools"
 msgstr "Eines de document"
@@ -65144,11 +65128,10 @@ msgstr "S'han modificat els documents seleccionats."
 #. i18n: context: text @ Action (export_layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
-#, fuzzy, kde-format
-#| msgid "Export Layers"
+#, kde-format
 msgctxt "action"
 msgid "Export Layers"
-msgstr "Exportació de capes"
+msgstr "Exporta capes"
 
 #: plugins/python/exportlayers/exportlayers.py:17
 #: plugins/python/exportlayers/uiexportlayers.py:122
@@ -65233,8 +65216,7 @@ msgstr "Seleccioneu una carpeta"
 #. i18n: context: text @ Action (filter_manager), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
-#, fuzzy, kde-format
-#| msgid "Filter Manager"
+#, kde-format
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Gestor de filtres"
@@ -65263,8 +65245,7 @@ msgstr "Filtres:"
 #. i18n: context: text @ Action (high_pass_filter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
-#, fuzzy, kde-format
-#| msgid "High Pass"
+#, kde-format
 msgctxt "action"
 msgid "High Pass"
 msgstr "Passaalt"
@@ -65400,11 +65381,10 @@ msgstr "Crea un script"
 #. i18n: context: text @ Action (Krita Script Starter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/krita_script_starter/krita_script_starter.action:4
 #: plugins/python/krita_script_starter/krita_script_starter.action:8
-#, fuzzy, kde-format
-#| msgid "BBD's Krita Script Starter"
+#, kde-format
 msgctxt "action"
 msgid "Krita Script Starter"
-msgstr "Iniciador de scripts del Krita de BBD"
+msgstr "Iniciador de scripts del Krita"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
@@ -65748,8 +65728,7 @@ msgstr "Depurador"
 #. i18n: context: text @ Action (python_scripter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
-#, fuzzy, kde-format
-#| msgid "Scripter"
+#, kde-format
 msgctxt "action"
 msgid "Scripter"
 msgstr "Scripter"
@@ -66158,7 +66137,7 @@ msgid "Rectangle Tool"
 msgstr "Eina de rectangles"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
-#: plugins/tools/basictools/kis_tool_ellipse.h:47
+#: plugins/tools/basictools/kis_tool_ellipse.h:94
 #, kde-format
 msgid "Ellipse Tool"
 msgstr "Eina d'el·lipses"
@@ -66651,7 +66630,55 @@ msgstr "Activa l'ajust quan s'usen esborradors"
 msgid "Color Sampler Tool"
 msgstr "Eina de mostreig de color"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:64
+#: plugins/tools/basictools/kis_tool_ellipse.cc:76
+#, fuzzy, kde-format
+#| msgid "Bounding Box"
+msgctxt "Ellipse tool placement mode"
+msgid "Bounding Box"
+msgstr "Quadre contenidor"
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:77
+#, kde-format
+msgctxt "Ellipse tool placement mode"
+msgid "3-Point"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:78
+#, kde-format
+msgid "Place the ellipse inside a bounding box"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:79
+#, kde-format
+msgid "Place the ellipse by setting the major axis and width"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:110
+#, fuzzy, kde-format
+#| msgid "Element"
+msgctxt "Ellipse tool placement mode option label"
+msgid "Placement:"
+msgstr "Element"
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:343
+#, kde-format
+msgid "Click to place the other end of the ellipse axis."
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:345
+#, kde-format
+msgid "Click to set the ellipse width."
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:347
+#, kde-format
+msgid ""
+"Drag handles to adjust the ellipse. Press Enter to apply or Esc to cancel."
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:584
+#: plugins/tools/basictools/kis_tool_ellipse.cc:606
+#: plugins/tools/basictools/kis_tool_ellipse.cc:623
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Dibuixa una el·lipse"
@@ -71251,6 +71278,12 @@ msgstr ""
 "Commuta entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
+
+#~ msgid "&Zoom In"
+#~ msgstr "&Amplia"
+
+#~ msgid "Zoo&m Out"
+#~ msgstr "Red&ueix"
 
 #~ msgid ""
 #~ "<html><head/><body><p>This is an Hybrid Log Gamma image. Krita does not "

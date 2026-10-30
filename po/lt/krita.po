@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-29 00:51+0000\n"
+"POT-Creation-Date: 2026-10-30 00:51+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -21220,19 +21220,34 @@ msgstr "Elipsė"
 msgid "Zoom"
 msgstr "Mastelis"
 
-#. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
-#: libs/flake/tools/KoZoomToolWidget.ui:24
+#: libs/flake/tools/KoZoomToolWidget.cpp:38
 #, fuzzy, kde-format
 #| msgid "Zoom In"
-msgid "&Zoom In"
+msgid "Zoom in"
 msgstr "Padidinti"
 
-#. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
-#: libs/flake/tools/KoZoomToolWidget.ui:47
+#: libs/flake/tools/KoZoomToolWidget.cpp:40
 #, fuzzy, kde-format
 #| msgid "Zoom Out"
-msgid "Zoo&m Out"
+msgid "Zoom out"
 msgstr "Sumažinti"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
+#. i18n: ectx: property (text), widget (QToolButton, btnArrange)
+#: libs/flake/tools/KoZoomToolWidget.cpp:44
+#: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
+#: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
+#: plugins/python/channels2layers/channels2layers.py:1102
+#, kde-format
+msgid "Mode"
+msgstr "Režimas"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/flake/tools/KoZoomToolWidget.ui:34
+#, fuzzy, kde-format
+#| msgid "zoom to size"
+msgid "Zoom to fit:"
+msgstr "mastelis iki dydžio"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -38823,6 +38838,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
+#: plugins/tools/basictools/kis_tool_ellipse.cc:167
 #: plugins/tools/basictools/kis_tool_line.cc:212
 #: plugins/tools/basictools/kis_tool_path.cc:91
 #: plugins/tools/basictools/kis_tool_pencil.cc:64
@@ -38835,6 +38851,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:116
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:163
+#: plugins/tools/basictools/kis_tool_ellipse.cc:160
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:69
 #, kde-format
 msgid ""
@@ -46663,15 +46680,6 @@ msgstr "Šrifto dydis"
 #, fuzzy, kde-format
 msgid "Comments"
 msgstr "Turinys"
-
-#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
-#. i18n: ectx: property (text), widget (QToolButton, btnArrange)
-#: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
-#: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
-#: plugins/python/channels2layers/channels2layers.py:1102
-#, kde-format
-msgid "Mode"
-msgstr "Režimas"
 
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:171
 #, fuzzy, kde-format
@@ -66473,7 +66481,7 @@ msgid "Rectangle Tool"
 msgstr "Stačiakampis"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
-#: plugins/tools/basictools/kis_tool_ellipse.h:47
+#: plugins/tools/basictools/kis_tool_ellipse.h:94
 #, fuzzy, kde-format
 msgid "Ellipse Tool"
 msgstr "Elipsė"
@@ -67046,7 +67054,53 @@ msgstr ""
 msgid "Color Sampler Tool"
 msgstr "Spalvos selektorius"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:64
+#: plugins/tools/basictools/kis_tool_ellipse.cc:76
+#, fuzzy, kde-format
+msgctxt "Ellipse tool placement mode"
+msgid "Bounding Box"
+msgstr "Pažymėjimas"
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:77
+#, kde-format
+msgctxt "Ellipse tool placement mode"
+msgid "3-Point"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:78
+#, kde-format
+msgid "Place the ellipse inside a bounding box"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:79
+#, kde-format
+msgid "Place the ellipse by setting the major axis and width"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:110
+#, fuzzy, kde-format
+msgctxt "Ellipse tool placement mode option label"
+msgid "Placement:"
+msgstr "Išdėstymas"
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:343
+#, kde-format
+msgid "Click to place the other end of the ellipse axis."
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:345
+#, kde-format
+msgid "Click to set the ellipse width."
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:347
+#, kde-format
+msgid ""
+"Drag handles to adjust the ellipse. Press Enter to apply or Esc to cancel."
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:584
+#: plugins/tools/basictools/kis_tool_ellipse.cc:606
+#: plugins/tools/basictools/kis_tool_ellipse.cc:623
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
@@ -71727,6 +71781,16 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Zoom In"
+#~ msgid "&Zoom In"
+#~ msgstr "Padidinti"
+
+#, fuzzy
+#~| msgid "Zoom Out"
+#~ msgid "Zoo&m Out"
+#~ msgstr "Sumažinti"
 
 #, fuzzy
 #~| msgid "<html><head/><body><p><br/></p></body></html>"
@@ -76940,11 +77004,6 @@ msgstr ""
 
 #~ msgid "Zoom to Selection"
 #~ msgstr "Priartinti pažymėtą sritį"
-
-#, fuzzy
-#~| msgid "zoom to size"
-#~ msgid "Zoom to All"
-#~ msgstr "mastelis iki dydžio"
 
 #, fuzzy
 #~| msgid "Insert name"

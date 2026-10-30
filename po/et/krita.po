@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-29 00:51+0000\n"
+"POT-Creation-Date: 2026-10-30 00:51+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -22263,17 +22263,34 @@ msgstr "Kujundi muutmise tööriist"
 msgid "Zoom"
 msgstr "Suurendus"
 
-#. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
-#: libs/flake/tools/KoZoomToolWidget.ui:24
-#, kde-format
-msgid "&Zoom In"
-msgstr "&Suurenda"
+#: libs/flake/tools/KoZoomToolWidget.cpp:38
+#, fuzzy, kde-format
+#| msgid "Zoom In"
+msgid "Zoom in"
+msgstr "Suurenda"
 
-#. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
-#: libs/flake/tools/KoZoomToolWidget.ui:47
+#: libs/flake/tools/KoZoomToolWidget.cpp:40
+#, fuzzy, kde-format
+#| msgid "Zoom Out"
+msgid "Zoom out"
+msgstr "Vähenda"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
+#. i18n: ectx: property (text), widget (QToolButton, btnArrange)
+#: libs/flake/tools/KoZoomToolWidget.cpp:44
+#: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
+#: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
+#: plugins/python/channels2layers/channels2layers.py:1102
 #, kde-format
-msgid "Zoo&m Out"
-msgstr "&Vähenda"
+msgid "Mode"
+msgstr "Režiim"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: libs/flake/tools/KoZoomToolWidget.ui:34
+#, fuzzy, kde-format
+#| msgid "Zoom to All"
+msgid "Zoom to fit:"
+msgstr "Suurenda kõike"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -40458,6 +40475,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
+#: plugins/tools/basictools/kis_tool_ellipse.cc:167
 #: plugins/tools/basictools/kis_tool_line.cc:212
 #: plugins/tools/basictools/kis_tool_path.cc:91
 #: plugins/tools/basictools/kis_tool_pencil.cc:64
@@ -40470,6 +40488,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:116
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:163
+#: plugins/tools/basictools/kis_tool_ellipse.cc:160
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:69
 #, kde-format
 msgid ""
@@ -48753,15 +48772,6 @@ msgstr "Fondi suurus"
 #, kde-format
 msgid "Comments"
 msgstr "Kommentaarid"
-
-#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
-#. i18n: ectx: property (text), widget (QToolButton, btnArrange)
-#: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
-#: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
-#: plugins/python/channels2layers/channels2layers.py:1102
-#, kde-format
-msgid "Mode"
-msgstr "Režiim"
 
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:171
 #, fuzzy, kde-format
@@ -68982,7 +68992,7 @@ msgid "Rectangle Tool"
 msgstr "Ristkülikutööriist"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
-#: plugins/tools/basictools/kis_tool_ellipse.h:47
+#: plugins/tools/basictools/kis_tool_ellipse.h:94
 #, kde-format
 msgid "Ellipse Tool"
 msgstr "Ellipsitööriist"
@@ -69586,7 +69596,56 @@ msgstr ""
 msgid "Color Sampler Tool"
 msgstr "Värvivalija tööriist"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:64
+#: plugins/tools/basictools/kis_tool_ellipse.cc:76
+#, fuzzy, kde-format
+#| msgid "Bounding Box"
+msgctxt "Ellipse tool placement mode"
+msgid "Bounding Box"
+msgstr "Ümbritsev kast"
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:77
+#, kde-format
+msgctxt "Ellipse tool placement mode"
+msgid "3-Point"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:78
+#, kde-format
+msgid "Place the ellipse inside a bounding box"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:79
+#, kde-format
+msgid "Place the ellipse by setting the major axis and width"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:110
+#, fuzzy, kde-format
+#| msgid "Placement"
+msgctxt "Ellipse tool placement mode option label"
+msgid "Placement:"
+msgstr "Asetus"
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:343
+#, kde-format
+msgid "Click to place the other end of the ellipse axis."
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:345
+#, fuzzy, kde-format
+#| msgid "Click to select text shape."
+msgid "Click to set the ellipse width."
+msgstr "Klõpsa tekstikujundi valimiseks."
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:347
+#, kde-format
+msgid ""
+"Drag handles to adjust the ellipse. Press Enter to apply or Esc to cancel."
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:584
+#: plugins/tools/basictools/kis_tool_ellipse.cc:606
+#: plugins/tools/basictools/kis_tool_ellipse.cc:623
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Ellipsi joonistamine"
@@ -74407,6 +74466,12 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#~ msgid "&Zoom In"
+#~ msgstr "&Suurenda"
+
+#~ msgid "Zoo&m Out"
+#~ msgstr "&Vähenda"
 
 #, fuzzy
 #~| msgid ""
@@ -88013,12 +88078,6 @@ msgstr ""
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Zoom values"
 #~ msgstr "värvi väärtus"
-
-#, fuzzy
-#~| msgid "Zoom to All"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Zoom to fit"
-#~ msgstr "Suurenda kõike"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
@@ -106367,12 +106426,6 @@ msgstr ""
 #~ msgstr "Klõpsa kursori asukoha muutmiseks."
 
 #, fuzzy
-#~| msgid "Click to select text shape."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Click to select text shape."
-#~ msgstr "Klõpsa tekstikujundi valimiseks."
-
-#, fuzzy
 #~| msgid "Double click to put text on path."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Double click to put text on path."
@@ -111842,9 +111895,6 @@ msgstr ""
 
 #~ msgid "Layer style configuration (*.asl)"
 #~ msgstr "Kihistiili seadistus (*.asl)"
-
-#~ msgid "Placement"
-#~ msgstr "Asetus"
 
 #~ msgid "Horizontal spacing:"
 #~ msgstr "Rõhtne vahe:"

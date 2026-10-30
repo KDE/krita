@@ -659,5 +659,55 @@
         <file>light_import-frame.svg</file>
         <file>dark_import-layer.svg</file>
         <file>light_import-layer.svg</file>
+        <file>dark_copy-columns.svg</file>
+        <file>dark_copy-keyframes.svg</file>
+        <file>dark_copy-layers.svg</file>
+        <file>dark_copy-layer-style.svg</file>
+        <file>dark_copy-sharp.svg</file>
+        <file>dark_copy-merged.svg</file>
+        <file>dark_copy-to-new-layer.svg</file>
+        <file>dark_cut-columns.svg</file>
+        <file>dark_cut-keyframes.svg</file>
+        <file>dark_cut-layers.svg</file>
+        <file>dark_cut-sharp.svg</file>
+        <file>dark_paste-at-cursor.svg</file>
+        <file>dark_cut-to-new-layer.svg</file>
+        <file>dark_paste-columns.svg</file>
+        <file>dark_paste-into-new-image.svg</file>
+        <file>dark_paste-keyframes.svg</file>
+        <file>dark_paste-layers.svg</file>
+        <file>dark_paste-layer-style.svg</file>
+        <file>dark_paste-rich-text.svg</file>
+        <file>dark_paste-reference.svg</file>
+        <file>dark_paste-shape-style.svg</file>
+        <file>dark_paste-text.svg</file>
+        <file>dark_set-copy-from.svg</file>
+        <file>light_copy-columns.svg</file>
+        <file>light_copy-layers.svg</file>
+        <file>light_copy-keyframes.svg</file>
+        <file>light_copy-merged.svg</file>
+        <file>light_copy-sharp.svg</file>
+        <file>light_copy-to-new-layer.svg</file>
+        <file>light_cut-columns.svg</file>
+        <file>light_cut-keyframes.svg</file>
+        <file>light_cut-layers.svg</file>
+        <file>light_cut-sharp.svg</file>
+        <file>light_cut-to-new-layer.svg</file>
+        <file>light_paste-at-cursor.svg</file>
+        <file>light_paste-columns.svg</file>
+        <file>light_paste-into-new-image.svg</file>
+        <file>light_paste-keyframes.svg</file>
+        <file>light_paste-layers.svg</file>
+        <file>light_paste-reference.svg</file>
+        <file>light_paste-layer-style.svg</file>
+        <file>light_paste-rich-text.svg</file>
+        <file>light_paste-shape-style.svg</file>
+        <file>light_paste-text.svg</file>
+        <file>light_set-copy-from.svg</file>
+        <file>light_copy-layer-style.svg</file>
+        <file>light_paste-into-active-layer.svg</file>
+        <file>dark_paste-into-active-layer.svg</file>
+        <file>light_create-copy-from-current.svg</file>
+        <file>dark_create-copy-from-current.svg</file>
     </qresource>
 </RCC>

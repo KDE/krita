@@ -2391,7 +2391,7 @@
         <statusTip/>
     </Action>
     <Action name="copy_frames">
-      <icon/>
+      <icon>copy-keyframes</icon>
       <text>Copy Keyframes</text>
       <whatsThis/>
       <toolTip>Copy frames to clipboard</toolTip>
@@ -2427,7 +2427,7 @@
       <statusTip/>
     </Action>
     <Action name="cut_frames">
-      <icon/>
+      <icon>cut-keyframes</icon>
       <text>Cut Keyframes</text>
       <whatsThis/>
       <toolTip>Cut frames to clipboard</toolTip>
@@ -2439,7 +2439,7 @@
       <statusTip/>
     </Action>
     <Action name="paste_frames">
-      <icon/>
+      <icon>paste-keyframes</icon>
       <text>Paste Keyframes</text>
       <whatsThis/>
       <toolTip>Paste frames from clipboard</toolTip>
@@ -2451,7 +2451,7 @@
       <statusTip/>
     </Action>
     <Action name="copy_columns_to_clipboard">
-      <icon/>
+      <icon>copy-columns</icon>
       <text>Copy Columns</text>
       <whatsThis/>
       <toolTip>Copy columns to clipboard</toolTip>
@@ -2463,7 +2463,7 @@
       <statusTip/>
     </Action>
     <Action name="cut_columns_to_clipboard">
-      <icon/>
+      <icon>cut-columns</icon>
       <text>Cut Columns</text>
       <whatsThis/>
       <toolTip>Cut columns to clipboard</toolTip>
@@ -2475,7 +2475,7 @@
       <statusTip/>
     </Action>
     <Action name="paste_columns_from_clipboard">
-      <icon/>
+      <icon>paste-columns</icon>
       <text>Paste Columns</text>
       <whatsThis/>
       <toolTip>Paste columns from clipboard</toolTip>
@@ -2934,7 +2934,7 @@
       <statusTip/>
     </Action>
     <Action name="cut_selection_to_new_layer">
-      <icon/>
+      <icon>cut-to-new-layer</icon>
       <text>&amp;Cut Selection to New Layer</text>
       <whatsThis/>
       <toolTip>Cut Selection to New Layer</toolTip>
@@ -2946,7 +2946,7 @@
       <statusTip/>
     </Action>
     <Action name="copy_selection_to_new_layer">
-      <icon/>
+      <icon>copy-to-new-layer</icon>
       <text>Copy &amp;Selection to New Layer</text>
       <whatsThis/>
       <toolTip>Copy Selection to New Layer</toolTip>
@@ -2958,7 +2958,7 @@
       <statusTip/>
     </Action>
     <Action name="copy_layer_clipboard">
-      <icon/>
+      <icon>copy-layers</icon>
       <text>Copy Layer</text>
       <whatsThis/>
       <toolTip>Copy layer to clipboard</toolTip>
@@ -2970,7 +2970,7 @@
       <statusTip/>
     </Action>
     <Action name="cut_layer_clipboard">
-      <icon/>
+      <icon>cut-layers</icon>
       <text>Cut Layer</text>
       <whatsThis/>
       <toolTip>Cut layer to clipboard</toolTip>
@@ -2982,7 +2982,7 @@
       <statusTip/>
     </Action>
     <Action name="paste_layer_from_clipboard">
-      <icon/>
+      <icon>paste-layers</icon>
       <text>Paste Layer</text>
       <whatsThis/>
       <toolTip>Paste layer from clipboard</toolTip>
@@ -3722,7 +3722,7 @@
       <statusTip/>
     </Action>
     <Action name="set-copy-from">
-      <icon/>
+      <icon>set-copy-from</icon>
       <text>Set Copy F&amp;rom...</text>
       <whatsThis/>
       <toolTip>Set the source for the selected clone layer(s).</toolTip>

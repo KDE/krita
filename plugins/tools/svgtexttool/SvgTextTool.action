@@ -206,22 +206,22 @@
       <iconText>Paste Rich Text</iconText>
       <shortcut></shortcut>
       <toolTip>Try to paste styled text if possible.</toolTip>
-      <icon>edit-paste</icon>
+      <icon>paste-rich-text</icon>
       <whatsThis/>
       <statusTip/>
       <isCheckable>false</isCheckable>
       <text>Paste Rich Text</text>
-      </Action>
-      <Action name="svg_paste_plain_text">
+    </Action>
+    <Action name="svg_paste_plain_text">
       <iconText>Paste Plain Text</iconText>
       <shortcut></shortcut>
       <toolTip>Paste text without styling.</toolTip>
-      <icon>edit-paste</icon>
+      <icon>paste-text</icon>
       <whatsThis/>
       <statusTip/>
       <isCheckable>false</isCheckable>
       <text>Paste Plain Text</text>
-      </Action>
+    </Action>
 
       <Action name="svg_type_setting_move_selection_start_down_1_px">
       <iconText>Move Text Selection Down</iconText>

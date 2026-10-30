@@ -9,6 +9,7 @@
 #include <QGlobalStatic>
 #include <QPointer>
 #include <QPalette>
+#include <QProgressDialog>
 
 #include <KoColor.h>
 #include <KoColorDisplayRendererInterface.h>
@@ -705,12 +706,18 @@ void KisDisplayColorConverter::applyDisplayFilteringF32(KisFixedPaintDeviceSP de
     device->convertTo(dstColorSpace);
 }
 
-void KisDisplayColorConverter::applyDisplayFilteringF32(KisPaintDeviceSP device, const KoColorSpace *dstColorSpace) const
+void KisDisplayColorConverter::applyDisplayFilteringF32(KisPaintDeviceSP device, const KoColorSpace *dstColorSpace, QProgressDialog *progress) const
 {
     const QRect s = device->exactBounds();
     KIS_SAFE_ASSERT_RECOVER_RETURN(device->colorSpace()->colorDepthId() == Float32BitsColorDepthID);
     KIS_SAFE_ASSERT_RECOVER_RETURN(device->colorSpace()->colorModelId() == RGBAColorModelID);
     KIS_SAFE_ASSERT_RECOVER_RETURN(s.isValid());
+
+    quint32 progressCurrent = 0;
+    quint32 progressMax = s.width()*s.height();
+    if (progress) {
+        progress->setValue(0);
+    }
 
     if (m_d->useOcio()) {
         KIS_ASSERT_RECOVER_RETURN(m_d->ocioInputColorSpace()->pixelSize() == 16);
@@ -719,14 +726,20 @@ void KisDisplayColorConverter::applyDisplayFilteringF32(KisPaintDeviceSP device,
         KisSequentialIterator it(device, s);
         int numConseqPixels = it.nConseqPixels();
         while (it.nextPixels(numConseqPixels)) {
+
             numConseqPixels = it.nConseqPixels();
             m_d->displayFilter->filter(it.rawData(), numConseqPixels);
+            if (progress) {
+                progressCurrent += numConseqPixels;
+                progress->setValue(float(progressCurrent)/float(progressMax)*100);
+            }
         }
         device->setProfile(m_d->ocioOutputProfile(), nullptr);
     }
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN(dstColorSpace);
-    device->convertTo(dstColorSpace);
+    if (dstColorSpace) {
+        device->convertTo(dstColorSpace);
+    }
 }
 
 QColor KisDisplayColorConverter::convertColorToDisplayColorSpace(const KoColor color, bool applyOcio) const

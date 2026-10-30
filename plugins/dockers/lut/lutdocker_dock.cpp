@@ -18,7 +18,8 @@
 #include <QApplication>
 #include <QScreen>
 #include <QDir>
-
+#include <QMessageBox>
+#include <QProgressDialog>
 
 #include <klocalizedstring.h>
 
@@ -663,6 +664,20 @@ void LutDockerDock::slotBakeCurrentConfigIntoNewImage()
     if (!m_canvas) return;
     if (!m_displayFilter) return;
 
+    KisMainWindow *win = m_canvas->viewManager()->mainWindow();
+
+    const KoColorProfile *displayProfile = m_canvas->displayColorConverter()->multiSurfaceDisplayConfig().canvasProfile;
+    if (!displayProfile) {
+        displayProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+    }
+
+    // ask whether to convert.
+    bool convertToSourceColorspace =
+        QMessageBox::question(win->canvasWindow(), i18nc("@title:window", "Convert to image colorspace?"),
+                              i18nc("Question in a dialog/messagebox", "The resulting image will be assigned the profile \"%1\"."
+                                    "Convert it from there to the current image colorspace?").arg(displayProfile->name()),
+                              QMessageBox::Yes, QMessageBox::No) != QMessageBox::No;
+
     KisImageSP img = m_canvas->image().toStrongRef();
     if (!img) return;
     const KoColorSpace *originalCs = img->colorSpace();
@@ -671,13 +686,27 @@ void LutDockerDock::slotBakeCurrentConfigIntoNewImage()
     KisPaintDeviceSP projection = new KisPaintDevice(originalCs);
     KisPainter::copyAreaOptimized(QPoint(), img->projection(), projection, img->bounds());
 
+
+
     // process the projection with the filter.
     {
         const KoColorSpace *ocioCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), originalCs->profile());
         projection->convertTo(ocioCs);
 
-        m_canvas->displayColorConverter()->applyDisplayFilteringF32(projection, originalCs);
+        QProgressDialog progress(win->canvasWindow());
+        progress.setWindowTitle(i18nc("@title:window", "Krita"));
+        progress.setLabelText(i18nc("Message for ocio baking progress bar.", "Baking configuration into image..."));
+        progress.setWindowModality(Qt::ApplicationModal);
+        progress.setWindowFlag(Qt::WindowCloseButtonHint, false);
+        progress.setMinimumDuration(1000);
+
+        m_canvas->displayColorConverter()->applyDisplayFilteringF32(projection,
+                                                                    convertToSourceColorspace? originalCs: nullptr,
+                                                                    &progress);
+
+        progress.setValue(progress.maximum());
     }
+
 
     KisDocument *doc = KisPart::instance()->createDocument();
     KisImageSP image = new KisImage(doc->createUndoStore(),
@@ -694,7 +723,6 @@ void LutDockerDock::slotBakeCurrentConfigIntoNewImage()
     doc->setCurrentImage(image);
     KisPart::instance()->addDocument(doc);
 
-    KisMainWindow *win = m_canvas->viewManager()->mainWindow();
     win->addViewAndNotifyLoadingCompleted(doc);
 
 }

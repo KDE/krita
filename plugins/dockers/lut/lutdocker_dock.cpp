@@ -250,7 +250,7 @@ void LutDockerDock::slotUpdateBakingSpaceToolTip()
         }
 
         m_bakeConfigBtn->setToolTip(
-            i18nc("@info:tooltip", "Will use \"%1\" ICC profile as display space", displayProfile->name()));
+            i18nc("@info:tooltip", "Bakes the current settings into the current projection, and opens it as a new image. Will use \"%1\" ICC profile as display space.", displayProfile->name()));
     } else {
         m_bakeConfigBtn->setToolTip("");
     }

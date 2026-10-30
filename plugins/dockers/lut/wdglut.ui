@@ -409,7 +409,7 @@
         <item>
          <widget class="QPushButton" name="m_bakeConfigBtn">
           <property name="text">
-           <string>Bake Config</string>
+           <string>Bake...</string>
           </property>
          </widget>
         </item>

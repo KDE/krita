@@ -366,7 +366,7 @@
       <statusTip/>
     </Action>
     <Action name="make_brush_color_saturated">
-      <icon/>
+      <icon>saturation-increase</icon>
       <text>Make brush color more saturated</text>
       <whatsThis/>
       <toolTip>Make brush color more saturated</toolTip>
@@ -376,7 +376,7 @@
       <statusTip/>
     </Action>
     <Action name="make_brush_color_desaturated">
-      <icon/>
+      <icon>saturation-decrease</icon>
       <text>Make brush color more desaturated</text>
       <whatsThis/>
       <toolTip>Make brush color more desaturated</toolTip>
@@ -386,7 +386,7 @@
       <statusTip/>
     </Action>
     <Action name="shift_brush_color_clockwise">
-      <icon/>
+      <icon>hue-shift-CW</icon>
       <text>Shift brush color hue clockwise</text>
       <whatsThis/>
       <toolTip>Shift brush color hue clockwise</toolTip>
@@ -396,7 +396,7 @@
       <statusTip/>
     </Action>
     <Action name="shift_brush_color_counter_clockwise">
-      <icon/>
+      <icon>hue-shift-CCW</icon>
       <text>Shift brush color hue counter-clockwise</text>
       <whatsThis/>
       <toolTip>Shift brush color hue counter-clockwise</toolTip>
@@ -406,7 +406,7 @@
       <statusTip/>
     </Action>
     <Action name="make_brush_color_redder">
-      <icon/>
+      <icon>more-red</icon>
       <text>Make brush color more red</text>
       <whatsThis/>
       <toolTip>Make brush color more red</toolTip>
@@ -416,7 +416,7 @@
       <statusTip/>
     </Action>
     <Action name="make_brush_color_greener">
-      <icon/>
+      <icon>more-green</icon>
       <text>Make brush color more green</text>
       <whatsThis/>
       <toolTip>Make brush color more green</toolTip>
@@ -426,7 +426,7 @@
       <statusTip/>
     </Action>
     <Action name="make_brush_color_bluer">
-      <icon/>
+      <icon>more-blue</icon>
       <text>Make brush color more blue</text>
       <whatsThis/>
       <toolTip>Make brush color more blue</toolTip>
@@ -436,7 +436,7 @@
       <statusTip/>
     </Action>
     <Action name="make_brush_color_yellower">
-      <icon/>
+      <icon>more-yellow</icon>
       <text>Make brush color more yellow</text>
       <whatsThis/>
       <toolTip>Make brush color more yellow</toolTip>

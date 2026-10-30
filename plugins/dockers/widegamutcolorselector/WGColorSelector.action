@@ -43,7 +43,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="wgcs_lighten_color">
-      <icon></icon>
+      <icon>lightness-increase</icon>
       <text>Make color lighter</text>
       <whatsThis></whatsThis>
       <toolTip>Increase value, lightness, intensity or luma of the selected color, depending on selected color model</toolTip>
@@ -53,7 +53,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="wgcs_darken_color">
-      <icon></icon>
+      <icon>lightness-decrease</icon>
       <text>Make color darker</text>
       <whatsThis></whatsThis>
       <toolTip>Decreases value, lightness, intensity or luma of the selected color, depending on selected color model</toolTip>
@@ -83,7 +83,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="wgcs_shift_hue_clockwise">
-      <icon></icon>
+      <icon>hue-shift-CW</icon>
       <text>Shift hue clockwise</text>
       <whatsThis></whatsThis>
       <toolTip>Shift hue of the selected color clockwise</toolTip>
@@ -93,7 +93,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="wgcs_shift_hue_counterclockwise">
-      <icon></icon>
+      <icon>hue-shift-CCW</icon>
       <text>Shift hue counter-clockwise</text>
       <whatsThis></whatsThis>
       <toolTip>Shift hue of the selected color counter-clockwise</toolTip>

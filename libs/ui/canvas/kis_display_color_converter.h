@@ -23,6 +23,7 @@ class KisDisplayConfig;
 class KisMultiSurfaceDisplayConfig;
 class KoID;
 class QPalette;
+class QProgressDialog;
 
 /**
  * Special helper class that provides primitives for converting colors when
@@ -69,6 +70,12 @@ public:
      * necessary
      */
     void applyDisplayFilteringF32(KisFixedPaintDeviceSP device, const KoColorSpace *dstColorSpace) const;
+
+    /**
+     * @brief applyDisplayFilteringF32
+     * Same as applyDisplayFilteringF32, but then for a regular kispaintdevice.
+     */
+    void applyDisplayFilteringF32(KisPaintDeviceSP device, const KoColorSpace *dstColorSpace, QProgressDialog *progress = nullptr) const;
 
     /**
      * @brief convertColorToDisplayColorSpace

@@ -57,7 +57,7 @@
       <item>
        <layout class="QFormLayout" name="gridLayout">
         <property name="labelAlignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
         <property name="horizontalSpacing">
          <number>1</number>
@@ -93,7 +93,7 @@
            <string>Display Device:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="buddy">
            <cstring>m_cmbDisplayDevice</cstring>
@@ -106,7 +106,7 @@
            <string>Components:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="buddy">
            <cstring>m_cmbComponents</cstring>
@@ -139,7 +139,7 @@
            <string>Exposure:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="buddy">
            <cstring>m_exposureDoubleWidget</cstring>
@@ -152,7 +152,7 @@
            <string>Input ColorSpace:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="buddy">
            <cstring>m_cmbInputColorSpace</cstring>
@@ -160,7 +160,7 @@
          </widget>
         </item>
         <item row="8" column="1">
-         <widget class="KisDoubleSliderSpinBox" name="m_exposureDoubleWidget" native="true">
+         <widget class="KisDoubleSliderSpinBox" name="m_exposureDoubleWidget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -175,7 +175,7 @@
            <string>Configuration:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="buddy">
            <cstring>m_bnSelectConfigurationFile</cstring>
@@ -209,7 +209,7 @@
            <string>LUT file:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="buddy">
            <cstring>m_bnSelectLut</cstring>
@@ -255,7 +255,7 @@
          </widget>
         </item>
         <item row="9" column="1">
-         <widget class="KisDoubleSliderSpinBox" name="m_gammaDoubleWidget" native="true">
+         <widget class="KisDoubleSliderSpinBox" name="m_gammaDoubleWidget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -270,7 +270,7 @@
            <string>Gamma:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="buddy">
            <cstring>m_gammaDoubleWidget</cstring>
@@ -283,7 +283,7 @@
            <string>View:</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="buddy">
            <cstring>m_cmbView</cstring>
@@ -342,7 +342,7 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0">
         <property name="spacing">
          <number>2</number>
         </property>
@@ -406,6 +406,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QPushButton" name="m_bakeConfigBtn">
+          <property name="text">
+           <string>Bake...</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
@@ -414,7 +421,7 @@
    <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>

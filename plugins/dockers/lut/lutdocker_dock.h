@@ -78,6 +78,9 @@ private Q_SLOTS:
     void slotShowBWConfiguration();
 
     void slotUpdateIcons();
+    void slotUpdateBakingSpaceToolTip();
+
+    void slotBakeCurrentConfigIntoNewImage();
 
 private:
     void enableControls();

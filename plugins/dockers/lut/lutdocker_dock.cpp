@@ -18,7 +18,8 @@
 #include <QApplication>
 #include <QScreen>
 #include <QDir>
-
+#include <QMessageBox>
+#include <QProgressDialog>
 
 #include <klocalizedstring.h>
 
@@ -32,6 +33,7 @@
 
 #include "kis_icon_utils.h"
 #include <KisViewManager.h>
+#include <KisDisplayConfig.h>
 #include <KisDocument.h>
 #include <kis_config.h>
 #include <kis_canvas2.h>
@@ -48,6 +50,12 @@
 
 #include "black_white_point_chooser.h"
 
+#include <KisPart.h>
+#include <KisDocument.h>
+#include <kis_paint_layer.h>
+#include <kis_group_layer.h>
+#include <kis_painter.h>
+#include <kis_display_color_converter.h>
 
 OCIO::ConstConfigRcPtr defaultRawProfile()
 {
@@ -150,6 +158,8 @@ LutDockerDock::LutDockerDock()
     connect(m_cmbLook, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbComponents, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
 
+    connect(m_bakeConfigBtn, SIGNAL(clicked()), this, SLOT(slotBakeCurrentConfigIntoNewImage()));
+
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetOcioConfiguration()));
 
     resetOcioConfiguration();
@@ -171,6 +181,10 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
         m_canvas = canvas;
         if (m_canvas) {
             if (!m_canvas->displayFilter()) {
+                // we need to 'unset' the filter here so that updateDisplaySettings will create a new filter for the canvas.
+                m_displayFilter = nullptr;
+                m_canvas->viewManager()->canvasResourceProvider()->setHDRExposure(0.0);
+                m_canvas->viewManager()->canvasResourceProvider()->setHDRGamma(1.0);
                 resetOcioConfiguration();
                 updateDisplaySettings();
             }
@@ -179,6 +193,16 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
                 OcioDisplayFilter *displayFilter = qobject_cast<OcioDisplayFilter*>(m_displayFilter.data());
                 Q_ASSERT(displayFilter);
                 m_ocioConfig = displayFilter->config;
+
+                KisSignalsBlocker inputCSBlocker(m_cmbInputColorSpace);
+                m_cmbInputColorSpace->setCurrent(QString::fromUtf8(displayFilter->inputColorSpaceName));
+                KisSignalsBlocker displayDeviceLocker(m_cmbDisplayDevice);
+                m_cmbDisplayDevice->setCurrent(QString::fromUtf8(displayFilter->displayDevice));
+                KisSignalsBlocker viewComboLocker(m_cmbView);
+                m_cmbView->setCurrent(QString::fromUtf8(displayFilter->view));
+                KisSignalsBlocker LookComboLocker(m_cmbLook);
+                m_cmbLook->setCurrent(QString::fromUtf8(displayFilter->look));
+
                 KisSignalsBlocker exposureBlocker(m_exposureDoubleWidget);
                 m_exposureDoubleWidget->setValue(displayFilter->exposure);
                 KisSignalsBlocker gammaBlocker(m_gammaDoubleWidget);
@@ -188,11 +212,15 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
                 KisSignalsBlocker bwBlocker(m_bwPointChooser);
                 m_bwPointChooser->setBlackPoint(displayFilter->blackPoint);
                 m_bwPointChooser->setWhitePoint(displayFilter->whitePoint);
+
+                m_canvas->viewManager()->canvasResourceProvider()->setHDRExposure(displayFilter->exposure);
+                m_canvas->viewManager()->canvasResourceProvider()->setHDRGamma(displayFilter->gamma);
             }
 
             connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);
             connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()), Qt::UniqueConnection);
-
+            connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()), this, SLOT(slotUpdateBakingSpaceToolTip()), Qt::UniqueConnection);
+            slotUpdateBakingSpaceToolTip();
         }
     }
 }
@@ -211,6 +239,21 @@ void LutDockerDock::slotUpdateIcons()
     m_lblOcioVersion->setText(QString("OCIO: %1 | %2").arg(OCIO_VERSION_FULL_STR, KisOpenGL::currentDriver()));
     m_lblOcioVersion->setWordWrap(true);
     m_lblOcioVersion->setEnabled(false);
+}
+
+void LutDockerDock::slotUpdateBakingSpaceToolTip()
+{
+    if (m_canvas) {
+        const KoColorProfile *displayProfile = m_canvas->displayColorConverter()->multiSurfaceDisplayConfig().canvasProfile;
+        if (!displayProfile) {
+            displayProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+        }
+
+        m_bakeConfigBtn->setToolTip(
+            i18nc("@info:tooltip", "Bakes the current settings into the current projection, and opens it as a new image. Will use \"%1\" ICC profile as display space.", displayProfile->name()));
+    } else {
+        m_bakeConfigBtn->setToolTip("");
+    }
 }
 
 void LutDockerDock::slotShowBWConfiguration()
@@ -413,8 +456,6 @@ void LutDockerDock::writeControls()
     ocioOptions.lutPath = m_txtLut->text();
     ocioOptions.inputColorSpace = m_cmbInputColorSpace->currentUnsqueezedText();
     ocioOptions.displayDevice = m_cmbDisplayDevice->currentUnsqueezedText();
-    ocioOptions.displayView = m_cmbView->currentUnsqueezedText();
-    ocioOptions.look = m_cmbLook->currentUnsqueezedText();
 
     KisConfig cfg(false);
     cfg.setUseOcio(m_chkUseOcio->isChecked());
@@ -526,17 +567,22 @@ void LutDockerDock::refillControls()
 
     { // Input Color Space
         QStringList itemsList;
+        QStringList descriptionList;
         int numOcioColorSpaces = m_ocioConfig->getNumColorSpaces();
         for(int i = 0; i < numOcioColorSpaces; ++i) {
             const char *cs = m_ocioConfig->getColorSpaceNameByIndex(i);
             OCIO::ConstColorSpaceRcPtr colorSpace = m_ocioConfig->getColorSpace(cs);
             itemsList << QString::fromUtf8(colorSpace->getName());
+            descriptionList << QString::fromUtf8(colorSpace->getDescription());
         }
 
         KisSignalsBlocker inputCSBlocker(m_cmbInputColorSpace);
 
         if (itemsList != m_cmbInputColorSpace->originalTexts()) {
             m_cmbInputColorSpace->resetOriginalTexts(itemsList);
+            for(int i = 0; i < numOcioColorSpaces; ++i) {
+                m_cmbInputColorSpace->setItemData(i, descriptionList.value(i), Qt::ToolTipRole);
+            }
         }
 
         m_cmbInputColorSpace->setCurrent(ocioOptions.inputColorSpace);
@@ -567,19 +613,27 @@ void LutDockerDock::refillControls()
 
     {
         QStringList itemsList;
-        int numLooks = m_ocioConfig->getNumLooks();
+        QStringList descriptionList;
+        const int numLooks = m_ocioConfig->getNumLooks();
         for (int k = 0; k < numLooks; k++) {
-           itemsList << QString::fromUtf8(m_ocioConfig->getLookNameByIndex(k));
+            const char *lookName = m_ocioConfig->getLookNameByIndex(k);
+            OCIO::ConstLookRcPtr look = m_ocioConfig->getLook(lookName);
+            itemsList << QString::fromUtf8(look->getName());
+            descriptionList << QString::fromUtf8(look->getDescription());
         }
-        itemsList << i18nc("Item to indicate no look transform being selected","None");
+        QString none = i18nc("Item to indicate no look transform being selected","None");
+        itemsList << none;
 
         KisSignalsBlocker LookComboLocker(m_cmbLook);
 
         if (itemsList != m_cmbLook->originalTexts()) {
             m_cmbLook->resetOriginalTexts(itemsList);
+            for(int i = 0; i < numLooks; ++i) {
+                m_cmbLook->setItemData(i, descriptionList.value(i), Qt::ToolTipRole);
+            }
         }
 
-        m_cmbLook->setCurrent(ocioOptions.look);
+        m_cmbLook->setCurrent(none);
     }
     updateDisplaySettings();
 }
@@ -600,7 +654,76 @@ void LutDockerDock::refillViewCombobox()
 
     KisConfig cfg(true);
     KisOcioConfiguration ocioOptions = cfg.ocioConfiguration();
-    m_cmbView->setCurrent(ocioOptions.displayView);
+    m_cmbView->setCurrentIndex(0);
+}
+
+
+void LutDockerDock::slotBakeCurrentConfigIntoNewImage()
+{
+    if (!m_canvas) return;
+    if (!m_displayFilter) return;
+
+    KisMainWindow *win = m_canvas->viewManager()->mainWindow();
+
+    const KoColorProfile *displayProfile = m_canvas->displayColorConverter()->multiSurfaceDisplayConfig().canvasProfile;
+    if (!displayProfile) {
+        displayProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+    }
+
+    // ask whether to convert.
+    bool convertToSourceColorspace =
+        QMessageBox::question(win->canvasWindow(), i18nc("@title:window", "Convert to image colorspace?"),
+                              i18nc("Question in a dialog/messagebox", "The resulting image will be assigned the profile \"%1\"."
+                                    "Convert it from there to the current image colorspace?").arg(displayProfile->name()),
+                              QMessageBox::Yes, QMessageBox::No) != QMessageBox::No;
+
+    KisImageSP img = m_canvas->image().toStrongRef();
+    if (!img) return;
+    const KoColorSpace *originalCs = img->colorSpace();
+    if (originalCs->colorModelId() != RGBAColorModelID) return;
+
+    KisPaintDeviceSP projection = new KisPaintDevice(originalCs);
+    KisPainter::copyAreaOptimized(QPoint(), img->projection(), projection, img->bounds());
+
+
+
+    // process the projection with the filter.
+    {
+        const KoColorSpace *ocioCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), originalCs->profile());
+        projection->convertTo(ocioCs);
+
+        QProgressDialog progress(win->canvasWindow());
+        progress.setWindowTitle(i18nc("@title:window", "Krita"));
+        progress.setLabelText(i18nc("Message for ocio baking progress bar.", "Baking configuration into image..."));
+        progress.setWindowModality(Qt::ApplicationModal);
+        progress.setWindowFlag(Qt::WindowCloseButtonHint, false);
+        progress.setMinimumDuration(1000);
+
+        m_canvas->displayColorConverter()->applyDisplayFilteringF32(projection,
+                                                                    convertToSourceColorspace? originalCs: nullptr,
+                                                                    &progress);
+
+        progress.setValue(progress.maximum());
+    }
+
+
+    KisDocument *doc = KisPart::instance()->createDocument();
+    KisImageSP image = new KisImage(doc->createUndoStore(),
+                                    img->width(),
+                                    img->height(),
+                                    projection->colorSpace(),
+                                    i18n("Untitled"));
+    KisPaintLayerSP layer =
+        new KisPaintLayer(image.data(), image->nextLayerName(),
+                          OPACITY_OPAQUE_U8, projection->colorSpace());
+    KisPainter::copyAreaOptimized(QPoint(), projection, layer->paintDevice(), img->bounds());
+
+    image->addNode(layer.data(), image->rootLayer());
+    doc->setCurrentImage(image);
+    KisPart::instance()->addDocument(doc);
+
+    win->addViewAndNotifyLoadingCompleted(doc);
+
 }
 
 void LutDockerDock::selectLut()

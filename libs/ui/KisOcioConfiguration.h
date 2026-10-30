@@ -24,8 +24,6 @@ public:
     QString lutPath;
     QString inputColorSpace;
     QString displayDevice;
-    QString displayView;
-    QString look;
 };
 
 #endif // KISOCIOCONFIGURATION_H

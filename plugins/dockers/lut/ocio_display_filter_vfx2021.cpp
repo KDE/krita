@@ -78,7 +78,7 @@ void OcioDisplayFilter::filter(quint8 *pixels, quint32 numPixels)
         } else {
             for (quint32 i = 0; i < numPixels; i++) {
                 m_processorCPU->applyRGBA(reinterpret_cast<float*>(pixels));
-                pixels+=4;
+                pixels += sizeof(float) * 4;
             }
         }
     }

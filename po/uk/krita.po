@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-29 03:06+0000\n"
-"PO-Revision-Date: 2026-09-09 18:47+0300\n"
+"PO-Revision-Date: 2026-10-29 16:22+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -11474,113 +11474,98 @@ msgstr "Оновити діапазон відтворення"
 
 #. i18n: context: text @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2527
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Constant"
-msgstr "Інтерполяція"
+msgstr "Інтерполяція сталою"
 
 #. i18n: context: toolTip @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2529
-#, fuzzy, kde-format
-#| msgid "Hold constant value. No interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Hold constant value. No interpolation."
 msgstr "Зберігати стале значення. Без інтерполяції."
 
 #. i18n: context: text @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2539
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Linear"
-msgstr "Інтерполяція"
+msgstr "Лінійна інтерполяція"
 
 #. i18n: context: toolTip @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2541
-#, fuzzy, kde-format
-#| msgid "Linear interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Linear interpolation."
-msgstr "Лінійна інтерполяція"
+msgstr "Лінійна інтерполяція."
 
 #. i18n: context: text @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2551
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Bezier"
-msgstr "Інтерполяція"
+msgstr "Інтерполяція Безьє"
 
 #. i18n: context: toolTip @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2553
-#, fuzzy, kde-format
-#| msgid "Bezier curve interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Bezier curve interpolation."
 msgstr "Інтерполяція кривими Безьє."
 
 #. i18n: context: text @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2563
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Sharp"
-msgstr "Інтерполяція"
+msgstr "Незгладжена інтерполяція"
 
 #. i18n: context: toolTip @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2565
-#, fuzzy, kde-format
-#| msgid "Sharp interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Sharp interpolation tangents."
 msgstr "Незгладжена інтерполяція дотичними."
 
 #. i18n: context: text @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2575
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Smooth"
-msgstr "Інтерполяція"
+msgstr "Гладка інтерполяція"
 
 #. i18n: context: toolTip @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2577
-#, fuzzy, kde-format
-#| msgid "Smooth interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Smooth interpolation tangents."
 msgstr "Згладжена інтерполяція дотичними."
 
 #. i18n: context: text @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2587
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Zoom Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Range"
-msgstr "Підібрати масштаб за сторінкою"
+msgstr "Підібрати масштаб за діапазоном"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2589
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit channel range."
 msgstr "Масштабувати область перегляду за діапазоном каналів."
 
 #. i18n: context: text @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2599
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Curve"
-msgstr "Масштабувати перегляд за кривою."
+msgstr "Масштабувати перегляд за кривою"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2601
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit curve."
 msgstr "Масштабувати перегляд за кривою."
@@ -52307,90 +52292,72 @@ msgid "Do nothing"
 msgstr "Нічого не робити"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgid "S-Pen Pro Air Actions"
-msgstr "Дії з S-пером"
+msgstr "Дії з S-Pen Pro Air"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Actions"
-msgstr "Дії з S-пером"
+msgstr "Дії з S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Click"
-msgstr "Клацання кнопкою S-пера"
+msgstr "Клацання кнопкою S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Double Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Double Click"
-msgstr "Подвійне клацання кнопкою S-пера"
+msgstr "Подвійне клацання кнопкою S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Up"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Up"
-msgstr "Жест проведення вгору S-пером"
+msgstr "Жест проведення вгору S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Down"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro AirGesture Swipe Down"
-msgstr "Жест проведення вниз S-пером"
+msgstr "Жест проведення вниз S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Left"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Left"
-msgstr "Жест проведення ліворуч S-пером"
+msgstr "Жест проведення ліворуч S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Right"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Right"
-msgstr "Жест проведення праворуч S-пером"
+msgstr "Жест проведення праворуч S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Clockwise"
-msgstr "Жест за колом за годинниковою стрілкою S-пером"
+msgstr "Жест за колом за годинниковою стрілкою S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Counter-Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
-msgstr "Жест за колом проти годинникової стрілки S-пером"
+msgstr "Жест за колом проти годинникової стрілки S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:112
@@ -52407,6 +52374,10 @@ msgid ""
 "work. Note that only the S-Pen Pro supports Air Actions, the regular S-Pen "
 "does not. Not all devices support gestures."
 msgstr ""
+"Щоб можливість Air Actions працювала в Krita, її слід увімкнути у параметрах "
+"системи. Зауважте, що підтримку Air Actions передбачено лише для S-Pen Pro; "
+"для звичайного S-Pen цієї можливості не передбачено. Підтримку жестів "
+"передбачено не для усіх пристроїв."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -63545,8 +63516,7 @@ msgstr "Значення змішування напрямку і нахилу"
 #. i18n: context: text @ Action (assign_profile_to_image), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
-#, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
+#, kde-format
 msgctxt "action"
 msgid "Assign Profile to Image"
 msgstr "Призначити профіль до зображення"
@@ -63569,8 +63539,7 @@ msgstr "Призначити профіль до зображення"
 #. i18n: context: text @ Action (pykrita_channels2layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
-#, fuzzy, kde-format
-#| msgid "Channels to layers"
+#, kde-format
 msgctxt "action"
 msgid "Channels to layers"
 msgstr "Канали у шари"
@@ -63656,8 +63625,7 @@ msgstr "<i>Чорний</i>"
 #. i18n: context: text @ Action (color_space), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Space"
 msgstr "Простір кольорів"
@@ -65108,8 +65076,7 @@ msgstr "Автор додаткового текстового матеріал�
 #. i18n: context: text @ Action (document_tools), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
-#, fuzzy, kde-format
-#| msgid "Document Tools"
+#, kde-format
 msgctxt "action"
 msgid "Document Tools"
 msgstr "Засоби документа"
@@ -65157,8 +65124,7 @@ msgstr "Позначені документи було змінено."
 #. i18n: context: text @ Action (export_layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
-#, fuzzy, kde-format
-#| msgid "Export Layers"
+#, kde-format
 msgctxt "action"
 msgid "Export Layers"
 msgstr "Експортувати шари"
@@ -65246,8 +65212,7 @@ msgstr "Виберіть теку призначення"
 #. i18n: context: text @ Action (filter_manager), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
-#, fuzzy, kde-format
-#| msgid "Filter Manager"
+#, kde-format
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Керування фільтрами"
@@ -65276,8 +65241,7 @@ msgstr "Фільтри:"
 #. i18n: context: text @ Action (high_pass_filter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
-#, fuzzy, kde-format
-#| msgid "High Pass"
+#, kde-format
 msgctxt "action"
 msgid "High Pass"
 msgstr "Високі частоти"
@@ -65414,11 +65378,10 @@ msgstr "Створити скрипт"
 #. i18n: context: text @ Action (Krita Script Starter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/krita_script_starter/krita_script_starter.action:4
 #: plugins/python/krita_script_starter/krita_script_starter.action:8
-#, fuzzy, kde-format
-#| msgid "BBD's Krita Script Starter"
+#, kde-format
 msgctxt "action"
 msgid "Krita Script Starter"
-msgstr "Створення скрипту Krita BBD"
+msgstr "Створення скрипту Krita"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
@@ -65760,8 +65723,7 @@ msgstr "Засіб діагностики"
 #. i18n: context: text @ Action (python_scripter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
-#, fuzzy, kde-format
-#| msgid "Scripter"
+#, kde-format
 msgctxt "action"
 msgid "Scripter"
 msgstr "Скриптер"

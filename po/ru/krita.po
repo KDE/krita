@@ -83,7 +83,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-29 03:06+0000\n"
-"PO-Revision-Date: 2026-10-28 07:44+0200\n"
+"PO-Revision-Date: 2026-10-29 07:46+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -11548,95 +11548,84 @@ msgstr "Обновить диапазон воспроизведения"
 
 #. i18n: context: text @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2527
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Constant"
-msgstr "Интерполяция"
+msgstr "Интерполяция: постоянная"
 
 #. i18n: context: toolTip @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2529
-#, fuzzy, kde-format
-#| msgid "Hold constant value. No interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Hold constant value. No interpolation."
 msgstr "Держать постоянное значение без интерполяции."
 
 #. i18n: context: text @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2539
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Linear"
-msgstr "Интерполяция"
+msgstr "Интерполяция: линейная"
 
 #. i18n: context: toolTip @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2541
-#, fuzzy, kde-format
-#| msgid "Linear interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Linear interpolation."
 msgstr "Линейная интерполяция."
 
 #. i18n: context: text @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2551
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Bezier"
-msgstr "Интерполяция"
+msgstr "Интерполяция: кривая Безье"
 
 #. i18n: context: toolTip @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2553
-#, fuzzy, kde-format
-#| msgid "Bezier curve interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Bezier curve interpolation."
 msgstr "Интерполяция кривой Безье."
 
 #. i18n: context: text @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2563
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Sharp"
-msgstr "Интерполяция"
+msgstr "Интерполяция: острые касательные"
 
 #. i18n: context: toolTip @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2565
-#, fuzzy, kde-format
-#| msgid "Sharp interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Sharp interpolation tangents."
 msgstr "Острая интерполяция касательной."
 
 #. i18n: context: text @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2575
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Smooth"
-msgstr "Интерполяция"
+msgstr "Интерполяция: гладкие касательные"
 
 #. i18n: context: toolTip @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2577
-#, fuzzy, kde-format
-#| msgid "Smooth interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Smooth interpolation tangents."
 msgstr "Мягкая интерполяция касательной."
 
 #. i18n: context: text @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2587
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Range"
-msgstr "По размеру страницы"
+msgstr "Масштаб по диапазону"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2589
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit channel range."
 msgstr ""
@@ -11644,16 +11633,14 @@ msgstr ""
 
 #. i18n: context: text @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2599
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Curve"
-msgstr "Увеличить масштаб изображения, чтобы оно соответствовало кривой."
+msgstr "Масштаб по кривой"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2601
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit curve."
 msgstr "Увеличить масштаб изображения, чтобы оно соответствовало кривой."
@@ -63606,8 +63593,7 @@ msgstr "Значение смешивания наклона и направле
 #. i18n: context: text @ Action (assign_profile_to_image), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
-#, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
+#, kde-format
 msgctxt "action"
 msgid "Assign Profile to Image"
 msgstr "Указать профиль для изображения"
@@ -63630,8 +63616,7 @@ msgstr "Указать профиль для изображения"
 #. i18n: context: text @ Action (pykrita_channels2layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
-#, fuzzy, kde-format
-#| msgid "Channels to layers"
+#, kde-format
 msgctxt "action"
 msgid "Channels to layers"
 msgstr "Каналы в слои"
@@ -63717,8 +63702,7 @@ msgstr "<i>Чёрный</i>"
 #. i18n: context: text @ Action (color_space), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Space"
 msgstr "Цветовое пространство"
@@ -65173,8 +65157,7 @@ msgstr "Автор дополнительного текстового соде�
 #. i18n: context: text @ Action (document_tools), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
-#, fuzzy, kde-format
-#| msgid "Document Tools"
+#, kde-format
 msgctxt "action"
 msgid "Document Tools"
 msgstr "Управление документами"
@@ -65222,8 +65205,7 @@ msgstr "Выделенные документы были изменены."
 #. i18n: context: text @ Action (export_layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
-#, fuzzy, kde-format
-#| msgid "Export Layers"
+#, kde-format
 msgctxt "action"
 msgid "Export Layers"
 msgstr "Экспорт слоёв"
@@ -65311,8 +65293,7 @@ msgstr "Выбрать папку"
 #. i18n: context: text @ Action (filter_manager), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
-#, fuzzy, kde-format
-#| msgid "Filter Manager"
+#, kde-format
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Управление фильтрами"
@@ -65341,8 +65322,7 @@ msgstr "Фильтры:"
 #. i18n: context: text @ Action (high_pass_filter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
-#, fuzzy, kde-format
-#| msgid "High Pass"
+#, kde-format
 msgctxt "action"
 msgid "High Pass"
 msgstr "Высокая частота"
@@ -65478,11 +65458,10 @@ msgstr "Создать сценарий"
 #. i18n: context: text @ Action (Krita Script Starter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/krita_script_starter/krita_script_starter.action:4
 #: plugins/python/krita_script_starter/krita_script_starter.action:8
-#, fuzzy, kde-format
-#| msgid "BBD's Krita Script Starter"
+#, kde-format
 msgctxt "action"
 msgid "Krita Script Starter"
-msgstr "Создание сценариев Krita BBD"
+msgstr "Создание сценариев Krita"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
@@ -65820,8 +65799,7 @@ msgstr "Отладчик"
 #. i18n: context: text @ Action (python_scripter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
-#, fuzzy, kde-format
-#| msgid "Scripter"
+#, kde-format
 msgctxt "action"
 msgid "Scripter"
 msgstr "Скриптер"

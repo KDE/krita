@@ -197,7 +197,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="create_copy">
-      <icon></icon>
+      <icon>create-copy-from-current</icon>
       <text>Create Copy &amp;From Current Image</text>
       <whatsThis></whatsThis>
       <toolTip>Create Copy From Current Image</toolTip>
@@ -309,7 +309,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="copy_sharp">
-      <icon></icon>
+      <icon>copy-sharp</icon>
       <text>C&amp;opy (sharp)</text>
       <whatsThis></whatsThis>
       <toolTip>Copy (sharp)</toolTip>
@@ -321,7 +321,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="cut_sharp">
-      <icon></icon>
+      <icon>cut-sharp</icon>
       <text>Cut (&amp;sharp)</text>
       <whatsThis></whatsThis>
       <toolTip>Cut (sharp)</toolTip>
@@ -333,7 +333,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="copy_merged">
-      <icon></icon>
+      <icon>copy-merged</icon>
       <text>Copy &amp;merged</text>
       <whatsThis></whatsThis>
       <toolTip>Copy merged</toolTip>
@@ -345,7 +345,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="copy_layer_style">
-      <icon></icon>
+      <icon>copy-layer-style</icon>
       <text>Copy Layer Style</text>
       <whatsThis></whatsThis>
       <toolTip>Copy Layer Style from the Current Node</toolTip>
@@ -369,7 +369,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="paste_at">
-      <icon></icon>
+      <icon>paste-at-cursor</icon>
       <text>Paste at Cursor</text>
       <whatsThis></whatsThis>
       <toolTip>Paste at cursor</toolTip>
@@ -381,7 +381,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="paste_into">
-      <icon></icon>
+      <icon>paste-into-active-layer</icon>
       <text>Paste into Active Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Paste into Active Layer</toolTip>
@@ -393,7 +393,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="paste_new">
-      <icon></icon>
+      <icon>paste-into-new-image</icon>
       <text>Paste into &amp;New Image</text>
       <whatsThis></whatsThis>
       <toolTip>Paste into New Image</toolTip>
@@ -405,7 +405,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="paste_shape_style">
-      <icon></icon>
+      <icon>paste-shape-style</icon>
       <text>Paste Shape Style</text>
       <whatsThis></whatsThis>
       <toolTip>Paste Shape Style</toolTip>
@@ -417,7 +417,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="paste_as_reference">
-      <icon></icon>
+      <icon>paste-reference</icon>
       <text>Paste as R&amp;eference Image</text>
       <whatsThis></whatsThis>
       <toolTip>Paste as Reference Image</toolTip>
@@ -429,7 +429,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="paste_layer_style">
-      <icon></icon>
+      <icon>paste-layer-style</icon>
       <text>Paste Layer Style</text>
       <whatsThis></whatsThis>
       <toolTip>Paste Layer Style into the Current Node</toolTip>

@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-30 00:51+0000\n"
+"POT-Creation-Date: 2026-10-31 00:49+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -24750,6 +24750,7 @@ msgstr "आउटपुट"
 #: libs/pigment/resources/KoColorSet.cpp:1938
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
+#: plugins/dockers/lut/lutdocker_dock.cpp:715
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -24828,6 +24829,7 @@ msgstr "संसाधन फाईल्स साफ करा"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/logdocker/LogDockerDock.cpp:226
+#: plugins/dockers/lut/lutdocker_dock.cpp:696
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:197
@@ -45283,28 +45285,28 @@ msgstr "संयोजीत करा"
 msgid "Black:"
 msgstr "काळा"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:82
+#: plugins/dockers/lut/lutdocker_dock.cpp:90
 #, kde-format
 msgid "LUT Management"
 msgstr "लुट व्यवस्थापन"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:100
+#: plugins/dockers/lut/lutdocker_dock.cpp:108
 #, kde-format
 msgid "Select custom configuration file."
 msgstr "ऐच्छिक संयोजना फाईल निवडा"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:107
-#: plugins/dockers/lut/lutdocker_dock.cpp:611
+#: plugins/dockers/lut/lutdocker_dock.cpp:115
+#: plugins/dockers/lut/lutdocker_dock.cpp:734
 #, kde-format
 msgid "Select LUT file"
 msgstr "लुट फाईल निवडा"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:120
+#: plugins/dockers/lut/lutdocker_dock.cpp:128
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr "एचडीआर प्रतिमांसाठी एक्सपोजर (स्टॉप) निवडा"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:130
+#: plugins/dockers/lut/lutdocker_dock.cpp:138
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
@@ -45313,19 +45315,27 @@ msgstr ""
 "प्रदर्शनासाठी गॅमा बदलाचे प्रमाण निवडा. यामुळे तुमच्या प्रतिमेच्या पिक्सेलवर परिणाम होत "
 "नाही"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:258
+#: plugins/dockers/lut/lutdocker_dock.cpp:253
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Bakes the current settings into the current projection, and opens it as a "
+"new image. Will use \"%1\" ICC profile as display space."
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:301
 #, fuzzy, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "एक्सपोजरः"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:277
+#: plugins/dockers/lut/lutdocker_dock.cpp:320
 #, fuzzy, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "गॅमाः"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:347
+#: plugins/dockers/lut/lutdocker_dock.cpp:390
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -45333,27 +45343,48 @@ msgid ""
 "mode to use them"
 msgstr ""
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:437
+#: plugins/dockers/lut/lutdocker_dock.cpp:478
 #, fuzzy, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "OpenColorIO संयोजना मार्ग :"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:514
+#: plugins/dockers/lut/lutdocker_dock.cpp:555
 #, kde-format
 msgid "Luminance"
 msgstr "तेजस्विता"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:515
+#: plugins/dockers/lut/lutdocker_dock.cpp:556
 #, kde-format
 msgid "All Channels"
 msgstr "सर्व माध्यमे"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:574
+#: plugins/dockers/lut/lutdocker_dock.cpp:624
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"
 msgstr "काही नाही"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:675
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Convert to image colorspace?"
+msgstr "प्रतिमेच्या रंगाची जागा बदला"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:676
+#, kde-format
+msgctxt "Question in a dialog/messagebox"
+msgid ""
+"The resulting image will be assigned the profile \"%1\".Convert it from "
+"there to the current image colorspace?"
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:697
+#, fuzzy, kde-format
+#| msgid "No configuration option."
+msgctxt "Message for ocio baking progress bar."
+msgid "Baking configuration into image..."
+msgstr "संयोजना पर्याय नाही."
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -45448,6 +45479,13 @@ msgstr ""
 #, kde-format
 msgid "Configure black and white points of the view"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
+#: plugins/dockers/lut/wdglut.ui:412
+#, fuzzy, kde-format
+#| msgid "Save..."
+msgid "Bake..."
+msgstr "साठवा..."
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, fuzzy, kde-format
@@ -77676,9 +77714,6 @@ msgstr ""
 #~ msgid "Apply Filter"
 #~ msgstr "गाळणी पुन्हा लागू करा"
 
-#~ msgid "No configuration option."
-#~ msgstr "संयोजना पर्याय नाही."
-
 #~ msgid "Save macro"
 #~ msgstr "मॅक्रो साठवा"
 
@@ -77746,9 +77781,6 @@ msgstr ""
 
 #~ msgid "Open..."
 #~ msgstr "उघडा..."
-
-#~ msgid "Save..."
-#~ msgstr "साठवा..."
 
 #, fuzzy
 #~ msgid "Only print and exit"

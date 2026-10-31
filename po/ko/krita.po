@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-30 00:51+0000\n"
+"POT-Creation-Date: 2026-10-31 00:49+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -25406,6 +25406,7 @@ msgstr "종점"
 #: libs/pigment/resources/KoColorSet.cpp:1938
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
+#: plugins/dockers/lut/lutdocker_dock.cpp:715
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -25483,6 +25484,7 @@ msgstr "로컬 리소스"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/logdocker/LogDockerDock.cpp:226
+#: plugins/dockers/lut/lutdocker_dock.cpp:696
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:197
@@ -46447,28 +46449,28 @@ msgstr "로그 설정"
 msgid "Black:"
 msgstr "검은색:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:82
+#: plugins/dockers/lut/lutdocker_dock.cpp:90
 #, kde-format
 msgid "LUT Management"
 msgstr "LUT 관리"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:100
+#: plugins/dockers/lut/lutdocker_dock.cpp:108
 #, kde-format
 msgid "Select custom configuration file."
 msgstr "사용자 정의 설정 파일을 선택합니다."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:107
-#: plugins/dockers/lut/lutdocker_dock.cpp:611
+#: plugins/dockers/lut/lutdocker_dock.cpp:115
+#: plugins/dockers/lut/lutdocker_dock.cpp:734
 #, kde-format
 msgid "Select LUT file"
 msgstr "LUT 파일 선택"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:120
+#: plugins/dockers/lut/lutdocker_dock.cpp:128
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr "HDR 이미지의 노출(단계)을 선택합니다."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:130
+#: plugins/dockers/lut/lutdocker_dock.cpp:138
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
@@ -46476,19 +46478,27 @@ msgid ""
 msgstr ""
 "디스플레이 감마 변경량을 선택합니다. 이미지의 픽셀에는 영향을 주지 않습니다."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:258
+#: plugins/dockers/lut/lutdocker_dock.cpp:253
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Bakes the current settings into the current projection, and opens it as a "
+"new image. Will use \"%1\" ICC profile as display space."
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:301
 #, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "노출: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:277
+#: plugins/dockers/lut/lutdocker_dock.cpp:320
 #, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "감마: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:347
+#: plugins/dockers/lut/lutdocker_dock.cpp:390
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -46498,26 +46508,49 @@ msgstr ""
 "노출과 감마 보정이 내부 모드에서는 비활성화됩니다. 사용하려면 OCIO 모드로 전"
 "환하십시오"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:437
+#: plugins/dockers/lut/lutdocker_dock.cpp:478
 #, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "OpenColorIO 설정 선택"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:514
+#: plugins/dockers/lut/lutdocker_dock.cpp:555
 #, kde-format
 msgid "Luminance"
 msgstr "휘도"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:515
+#: plugins/dockers/lut/lutdocker_dock.cpp:556
 #, kde-format
 msgid "All Channels"
 msgstr "모든 채널"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:574
+#: plugins/dockers/lut/lutdocker_dock.cpp:624
 #, kde-format
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"
 msgstr "없음"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:675
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Image Color Space"
+msgctxt "@title:window"
+msgid "Convert to image colorspace?"
+msgstr "이미지 색 공간 변환"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:676
+#, kde-format
+msgctxt "Question in a dialog/messagebox"
+msgid ""
+"The resulting image will be assigned the profile \"%1\".Convert it from "
+"there to the current image colorspace?"
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:697
+#, fuzzy, kde-format
+#| msgid "Store Softproofing configuration in the image"
+msgctxt "Message for ocio baking progress bar."
+msgid "Baking configuration into image..."
+msgstr "이미지에 소프트 프루핑 설정 저장"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -46612,6 +46645,13 @@ msgstr "OCIO 설정을 변경할 때 동일한 시각적 표현을 갖도록 현
 #, kde-format
 msgid "Configure black and white points of the view"
 msgstr "보기의 검은색 및 흰색 점 설정"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
+#: plugins/dockers/lut/wdglut.ui:412
+#, fuzzy, kde-format
+#| msgid "Save..."
+msgid "Bake..."
+msgstr "저장..."
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, fuzzy, kde-format
@@ -79399,9 +79439,6 @@ msgstr ""
 
 #~ msgid "Open..."
 #~ msgstr "열기..."
-
-#~ msgid "Save..."
-#~ msgstr "저장..."
 
 #~ msgid "Only print and exit"
 #~ msgstr "인쇄하고 끝내기"

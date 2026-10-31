@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-30 00:51+0000\n"
+"POT-Creation-Date: 2026-10-31 00:49+0000\n"
 "PO-Revision-Date: 2026-08-17 11:24+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -24462,6 +24462,7 @@ msgstr "Urrundu"
 #: libs/pigment/resources/KoColorSet.cpp:1938
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
+#: plugins/dockers/lut/lutdocker_dock.cpp:715
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -24539,6 +24540,7 @@ msgstr "Baliabide lokalak"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/logdocker/LogDockerDock.cpp:226
+#: plugins/dockers/lut/lutdocker_dock.cpp:696
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:197
@@ -45144,28 +45146,28 @@ msgstr "Konfiguratu egunkarian erregistratzea"
 msgid "Black:"
 msgstr "Beltza:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:82
+#: plugins/dockers/lut/lutdocker_dock.cpp:90
 #, kde-format
 msgid "LUT Management"
 msgstr "LUTen kudeaketa"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:100
+#: plugins/dockers/lut/lutdocker_dock.cpp:108
 #, kde-format
 msgid "Select custom configuration file."
 msgstr "Hautatu konfigurazio-fitxategi pertsonalizatua"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:107
-#: plugins/dockers/lut/lutdocker_dock.cpp:611
+#: plugins/dockers/lut/lutdocker_dock.cpp:115
+#: plugins/dockers/lut/lutdocker_dock.cpp:734
 #, kde-format
 msgid "Select LUT file"
 msgstr "Hautatu LUT fitxategia"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:120
+#: plugins/dockers/lut/lutdocker_dock.cpp:128
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr "Hautatu HDR irudien esposizioa (geldilekuak)."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:130
+#: plugins/dockers/lut/lutdocker_dock.cpp:138
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
@@ -45174,19 +45176,27 @@ msgstr ""
 "Hautatu zenbat gamma-aldaketa egin behar diren bistaratzeko. Horrek ez die "
 "irudiaren pixelei eragiten. "
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:258
+#: plugins/dockers/lut/lutdocker_dock.cpp:253
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Bakes the current settings into the current projection, and opens it as a "
+"new image. Will use \"%1\" ICC profile as display space."
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:301
 #, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "Esposizioa: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:277
+#: plugins/dockers/lut/lutdocker_dock.cpp:320
 #, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "Gamma: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:347
+#: plugins/dockers/lut/lutdocker_dock.cpp:390
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -45196,26 +45206,49 @@ msgstr ""
 "Esposizioa eta gamma zuzenketak ezgaituta daude barneko moduan. Aldatu OCIO "
 "modura haiek erabiltzeko"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:437
+#: plugins/dockers/lut/lutdocker_dock.cpp:478
 #, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "Hautatu «OpenColorIO»ren konfigurazioa"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:514
+#: plugins/dockers/lut/lutdocker_dock.cpp:555
 #, kde-format
 msgid "Luminance"
 msgstr "Luminantzia"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:515
+#: plugins/dockers/lut/lutdocker_dock.cpp:556
 #, kde-format
 msgid "All Channels"
 msgstr "Kanal guztiak"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:574
+#: plugins/dockers/lut/lutdocker_dock.cpp:624
 #, kde-format
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"
 msgstr "Bat ere ez"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:675
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Image Color Space"
+msgctxt "@title:window"
+msgid "Convert to image colorspace?"
+msgstr "Bihurtu irudiaren kolore-eremua"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:676
+#, kde-format
+msgctxt "Question in a dialog/messagebox"
+msgid ""
+"The resulting image will be assigned the profile \"%1\".Convert it from "
+"there to the current image colorspace?"
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:697
+#, fuzzy, kde-format
+#| msgid "Store Softproofing configuration in the image"
+msgctxt "Message for ocio baking progress bar."
+msgid "Baking configuration into image..."
+msgstr "Gorde software bidezko probetako konfigurazioa irudian"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -45312,6 +45345,13 @@ msgstr ""
 #, kde-format
 msgid "Configure black and white points of the view"
 msgstr "Konfiguratu ikuspegiko puntu zuria eta beltza"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
+#: plugins/dockers/lut/wdglut.ui:412
+#, fuzzy, kde-format
+#| msgid "Save..."
+msgid "Bake..."
+msgstr "Gorde..."
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, fuzzy, kde-format
@@ -77465,9 +77505,6 @@ msgstr ""
 
 #~ msgid "Open..."
 #~ msgstr "Ireki..."
-
-#~ msgid "Save..."
-#~ msgstr "Gorde..."
 
 #, fuzzy
 #~ msgid "Only print and exit"

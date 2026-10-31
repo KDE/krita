@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-30 00:51+0000\n"
-"PO-Revision-Date: 2026-10-29 03:49+0100\n"
+"POT-Creation-Date: 2026-10-31 00:49+0000\n"
+"PO-Revision-Date: 2026-10-30 04:30+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -14505,7 +14505,7 @@ msgstr "გადიდება"
 #, kde-format
 msgctxt "action"
 msgid "Zoom In"
-msgstr "შემცირება"
+msgstr "გადიდება"
 
 #. i18n: context: text @ Action (view_zoom_out), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:786
@@ -20761,14 +20761,12 @@ msgid "Zoom"
 msgstr "გადიდება"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:38
-#, fuzzy, kde-format
-#| msgid "Zoom In"
+#, kde-format
 msgid "Zoom in"
-msgstr "შემცირება"
+msgstr "გადიდება"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:40
-#, fuzzy, kde-format
-#| msgid "Zoom Out"
+#, kde-format
 msgid "Zoom out"
 msgstr "დაპატარავება"
 
@@ -20784,11 +20782,9 @@ msgstr "რეჟიმი"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/flake/tools/KoZoomToolWidget.ui:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Zoom to Fit Range"
+#, kde-format
 msgid "Zoom to fit:"
-msgstr "გადიდება შუალედის ჩასატევად"
+msgstr "გადიდება ჩასატევამდე:"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -24047,6 +24043,7 @@ msgstr "გარე"
 #: libs/pigment/resources/KoColorSet.cpp:1938
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
+#: plugins/dockers/lut/lutdocker_dock.cpp:715
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -24124,6 +24121,7 @@ msgstr "ლოკალური რესურსები"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/logdocker/LogDockerDock.cpp:226
+#: plugins/dockers/lut/lutdocker_dock.cpp:696
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:197
@@ -26797,7 +26795,7 @@ msgstr "კვეთა"
 #: libs/ui/canvas/kis_guides_manager.cpp:785
 #, kde-format
 msgid "Bounding Box"
-msgstr "შემზღუდავი ოთხკუთხედი"
+msgstr "შემზღუდავი ჩარჩო"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:786
 #, kde-format
@@ -34138,7 +34136,7 @@ msgstr "ფარდობითი დისკრეტული გადი�
 #: libs/ui/input/kis_zoom_action.cpp:57
 #, kde-format
 msgid "Zoom In"
-msgstr "შემცირება"
+msgstr "გადიდება"
 
 #: libs/ui/input/kis_zoom_action.cpp:58
 #, kde-format
@@ -44112,28 +44110,28 @@ msgstr "ჟურნალის მორგება"
 msgid "Black:"
 msgstr "შავი:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:82
+#: plugins/dockers/lut/lutdocker_dock.cpp:90
 #, kde-format
 msgid "LUT Management"
 msgstr "LUT-ის მართვა"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:100
+#: plugins/dockers/lut/lutdocker_dock.cpp:108
 #, kde-format
 msgid "Select custom configuration file."
 msgstr "მომხმარებლის კონფიგურაციის ფაილის არჩევა."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:107
-#: plugins/dockers/lut/lutdocker_dock.cpp:611
+#: plugins/dockers/lut/lutdocker_dock.cpp:115
+#: plugins/dockers/lut/lutdocker_dock.cpp:734
 #, kde-format
 msgid "Select LUT file"
 msgstr "LUT ფაილის არჩევა"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:120
+#: plugins/dockers/lut/lutdocker_dock.cpp:128
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr "აირჩიეთ ექსპოზიცია (გაჩერებები) HDR გამოსახულებებისთვის."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:130
+#: plugins/dockers/lut/lutdocker_dock.cpp:138
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
@@ -44142,19 +44140,27 @@ msgstr ""
 "აირჩიეთ გამას ცვლილებების რაოდენობა საჩვენებლად. ეს გამოსახულებაში პიქსელებს "
 "არ ეხება."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:258
+#: plugins/dockers/lut/lutdocker_dock.cpp:253
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Bakes the current settings into the current projection, and opens it as a "
+"new image. Will use \"%1\" ICC profile as display space."
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:301
 #, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "ექსპოზიცია: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:277
+#: plugins/dockers/lut/lutdocker_dock.cpp:320
 #, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "გამა: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:347
+#: plugins/dockers/lut/lutdocker_dock.cpp:390
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -44164,26 +44170,49 @@ msgstr ""
 "ექსპოზიციის და გამის კორექცია გამორთულია შიდა რეჟიმში. მათ გამოსაყენებლად "
 "გადაერთეთ რეჟიმზე OCIO"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:437
+#: plugins/dockers/lut/lutdocker_dock.cpp:478
 #, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "აირჩიეთ OpenColorIO-ის კონფიგურაცია"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:514
+#: plugins/dockers/lut/lutdocker_dock.cpp:555
 #, kde-format
 msgid "Luminance"
 msgstr "განათებულობა"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:515
+#: plugins/dockers/lut/lutdocker_dock.cpp:556
 #, kde-format
 msgid "All Channels"
 msgstr "ყველა არხი"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:574
+#: plugins/dockers/lut/lutdocker_dock.cpp:624
 #, kde-format
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"
 msgstr "არცერთი"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:675
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Image Color Space"
+msgctxt "@title:window"
+msgid "Convert to image colorspace?"
+msgstr "გამოსახულების ფერის სივრცის გარდაქმნა"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:676
+#, kde-format
+msgctxt "Question in a dialog/messagebox"
+msgid ""
+"The resulting image will be assigned the profile \"%1\".Convert it from "
+"there to the current image colorspace?"
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:697
+#, fuzzy, kde-format
+#| msgid "Store Softproofing configuration in the image"
+msgctxt "Message for ocio baking progress bar."
+msgid "Baking configuration into image..."
+msgstr "ფერის პროგრამული შემოწმების კონფიგურაციის გამოსახულებაში დამახსოვრება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -44280,6 +44309,13 @@ msgstr ""
 #, kde-format
 msgid "Configure black and white points of the view"
 msgstr "ხედის შავი და თეთრი წერტილების მორგება"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
+#: plugins/dockers/lut/wdglut.ui:412
+#, fuzzy, kde-format
+#| msgid "&Wave..."
+msgid "Bake..."
+msgstr "&ტალღა..."
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
@@ -65229,50 +65265,50 @@ msgid "Color Sampler Tool"
 msgstr "ხელსაწყო ფერების მიქსერი"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:76
-#, fuzzy, kde-format
-#| msgid "Bounding Box"
+#, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "Bounding Box"
-msgstr "შემზღუდავი ოთხკუთხედი"
+msgstr "შემზღუდავი ჩარჩო"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:77
 #, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "3-Point"
-msgstr ""
+msgstr "წამწერტილიანი"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:78
 #, kde-format
 msgid "Place the ellipse inside a bounding box"
-msgstr ""
+msgstr "ოვალის მოთავსება შემომსაზღვრელ ჩარჩოში"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:79
 #, kde-format
 msgid "Place the ellipse by setting the major axis and width"
-msgstr ""
+msgstr "ოვალის მოთავსება ძირითადი ღერძისა და სიგანის მითითებით"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:110
-#, fuzzy, kde-format
-#| msgid "Element"
+#, kde-format
 msgctxt "Ellipse tool placement mode option label"
 msgid "Placement:"
-msgstr "ელემენტი"
+msgstr "განლაგება:"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:343
 #, kde-format
 msgid "Click to place the other end of the ellipse axis."
-msgstr ""
+msgstr "დააწკაპუნეთ ოვალის ღერძის მეორე ბოლოს მოსათავსებლად."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:345
 #, kde-format
 msgid "Click to set the ellipse width."
-msgstr ""
+msgstr "დააწკაპუნეთ ოვალის სიგანის დასაყენებლად."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:347
 #, kde-format
 msgid ""
 "Drag handles to adjust the ellipse. Press Enter to apply or Esc to cancel."
 msgstr ""
+"გადაათრიეთ სახელურები ოვალის მოსარგებად. ღილაკი 'Enter' ზომების "
+"გამოსაყენებლად და 'Esc' გასაუქმებლად."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:584
 #: plugins/tools/basictools/kis_tool_ellipse.cc:606

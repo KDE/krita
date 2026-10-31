@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-30 00:51+0000\n"
+"POT-Creation-Date: 2026-10-31 00:49+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -24997,6 +24997,7 @@ msgstr "Izlaz"
 #: libs/pigment/resources/KoColorSet.cpp:1938
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
+#: plugins/dockers/lut/lutdocker_dock.cpp:715
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -25074,6 +25075,7 @@ msgstr "Upravljane Resurs Bundlima"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/logdocker/LogDockerDock.cpp:226
+#: plugins/dockers/lut/lutdocker_dock.cpp:696
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:197
@@ -46097,28 +46099,28 @@ msgstr "Konfiguriši postavke"
 msgid "Black:"
 msgstr "Crna:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:82
+#: plugins/dockers/lut/lutdocker_dock.cpp:90
 #, kde-format
 msgid "LUT Management"
 msgstr "Upravljanje LUT bojama"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:100
+#: plugins/dockers/lut/lutdocker_dock.cpp:108
 #, kde-format
 msgid "Select custom configuration file."
 msgstr "Odaberite konfiguracijsku datoteku"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:107
-#: plugins/dockers/lut/lutdocker_dock.cpp:611
+#: plugins/dockers/lut/lutdocker_dock.cpp:115
+#: plugins/dockers/lut/lutdocker_dock.cpp:734
 #, kde-format
 msgid "Select LUT file"
 msgstr "Odaberi LUT datoteku"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:120
+#: plugins/dockers/lut/lutdocker_dock.cpp:128
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr "Izaberite ekspoziciju (stanice) za HDR slike"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:130
+#: plugins/dockers/lut/lutdocker_dock.cpp:138
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
@@ -46127,19 +46129,27 @@ msgstr ""
 "Odaberite iznos gama modifikacije za prikaz. To ne utiče na piksele vaše "
 "slike-"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:258
+#: plugins/dockers/lut/lutdocker_dock.cpp:253
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Bakes the current settings into the current projection, and opens it as a "
+"new image. Will use \"%1\" ICC profile as display space."
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:301
 #, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "Ekspozicija: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:277
+#: plugins/dockers/lut/lutdocker_dock.cpp:320
 #, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "Gamma: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:347
+#: plugins/dockers/lut/lutdocker_dock.cpp:390
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -46147,27 +46157,48 @@ msgid ""
 "mode to use them"
 msgstr ""
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:437
+#: plugins/dockers/lut/lutdocker_dock.cpp:478
 #, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "Odaberi konfiguraciju za OpenColorIO:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:514
+#: plugins/dockers/lut/lutdocker_dock.cpp:555
 #, kde-format
 msgid "Luminance"
 msgstr "Osvjetljenost"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:515
+#: plugins/dockers/lut/lutdocker_dock.cpp:556
 #, kde-format
 msgid "All Channels"
 msgstr "Svi Kanali"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:574
+#: plugins/dockers/lut/lutdocker_dock.cpp:624
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"
 msgstr "Ništa"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:675
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Convert to image colorspace?"
+msgstr "Konvertuj prostor boja slike"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:676
+#, kde-format
+msgctxt "Question in a dialog/messagebox"
+msgid ""
+"The resulting image will be assigned the profile \"%1\".Convert it from "
+"there to the current image colorspace?"
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:697
+#, fuzzy, kde-format
+#| msgid "No configuration option."
+msgctxt "Message for ocio baking progress bar."
+msgid "Baking configuration into image..."
+msgstr "Nema konfiguracijske opcije"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -46264,6 +46295,13 @@ msgstr ""
 #, kde-format
 msgid "Configure black and white points of the view"
 msgstr "Podešavanje crne i bijele točke pogleda"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
+#: plugins/dockers/lut/wdglut.ui:412
+#, fuzzy, kde-format
+#| msgid "Save..."
+msgid "Bake..."
+msgstr "Snimi..."
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, fuzzy, kde-format
@@ -79553,9 +79591,6 @@ msgstr ""
 #~ msgid "Apply Filter"
 #~ msgstr "Primijeni filter"
 
-#~ msgid "No configuration option."
-#~ msgstr "Nema konfiguracijske opcije"
-
 #~ msgid "Save macro"
 #~ msgstr "Snimi makro"
 
@@ -79625,9 +79660,6 @@ msgstr ""
 
 #~ msgid "Open..."
 #~ msgstr "Otvori..."
-
-#~ msgid "Save..."
-#~ msgstr "Snimi..."
 
 #~ msgid "Only print and exit"
 #~ msgstr "Samo odštampaj i izađi"

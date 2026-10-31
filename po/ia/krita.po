@@ -54,8 +54,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-30 00:51+0000\n"
-"PO-Revision-Date: 2026-07-17 12:04+0200\n"
+"POT-Creation-Date: 2026-10-31 00:49+0000\n"
+"PO-Revision-Date: 2026-10-30 11:56+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -7697,7 +7697,7 @@ msgstr "Distribue Apertura (Gap) Horizontal"
 #, kde-format
 msgctxt "action"
 msgid "Make horizontal gaps between objects equal"
-msgstr ""
+msgstr "Face aperturas horizontal inter objectos equal"
 
 #. i18n: context: text @ Action (object_distribute_vertical_top), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:164
@@ -7753,7 +7753,7 @@ msgstr "Distribue Apertura (Gap) Vertical"
 #, kde-format
 msgctxt "action"
 msgid "Make vertical gaps between objects equal"
-msgstr ""
+msgstr "Face aperturas vertical inter objectos equal"
 
 #. i18n: context: text @ Action (object_transform_rotate_90_cw), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:201
@@ -24614,6 +24614,7 @@ msgstr "Fora"
 #: libs/pigment/resources/KoColorSet.cpp:1938
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
+#: plugins/dockers/lut/lutdocker_dock.cpp:715
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -24691,6 +24692,7 @@ msgstr "Crea insimul de Ressources"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/logdocker/LogDockerDock.cpp:226
+#: plugins/dockers/lut/lutdocker_dock.cpp:696
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:197
@@ -45173,48 +45175,56 @@ msgstr "Configura sectiones"
 msgid "Black:"
 msgstr "Nigre:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:82
+#: plugins/dockers/lut/lutdocker_dock.cpp:90
 #, fuzzy, kde-format
 #| msgid "Color Management"
 msgid "LUT Management"
 msgstr "Gerente de color"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:100
+#: plugins/dockers/lut/lutdocker_dock.cpp:108
 #, fuzzy, kde-format
 msgid "Select custom configuration file."
 msgstr "Optiones per scalar"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:107
-#: plugins/dockers/lut/lutdocker_dock.cpp:611
+#: plugins/dockers/lut/lutdocker_dock.cpp:115
+#: plugins/dockers/lut/lutdocker_dock.cpp:734
 #, fuzzy, kde-format
 msgid "Select LUT file"
 msgstr "Selige un filtro..."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:120
+#: plugins/dockers/lut/lutdocker_dock.cpp:128
 #, fuzzy, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr "Modo de Scala:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:130
+#: plugins/dockers/lut/lutdocker_dock.cpp:138
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
 "the pixels of your image."
 msgstr ""
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:258
+#: plugins/dockers/lut/lutdocker_dock.cpp:253
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Bakes the current settings into the current projection, and opens it as a "
+"new image. Will use \"%1\" ICC profile as display space."
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:301
 #, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "Exposition: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:277
+#: plugins/dockers/lut/lutdocker_dock.cpp:320
 #, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "Gamma: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:347
+#: plugins/dockers/lut/lutdocker_dock.cpp:390
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -45222,27 +45232,47 @@ msgid ""
 "mode to use them"
 msgstr ""
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:437
+#: plugins/dockers/lut/lutdocker_dock.cpp:478
 #, fuzzy, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "Configuration:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:514
+#: plugins/dockers/lut/lutdocker_dock.cpp:555
 #, kde-format
 msgid "Luminance"
 msgstr "Luminantia"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:515
+#: plugins/dockers/lut/lutdocker_dock.cpp:556
 #, fuzzy, kde-format
 #| msgid "Channels"
 msgid "All Channels"
 msgstr "Canales"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:574
+#: plugins/dockers/lut/lutdocker_dock.cpp:624
 #, kde-format
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"
 msgstr "Necun"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:675
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Convert to image colorspace?"
+msgstr "Converte typo de strato (layer)"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:676
+#, kde-format
+msgctxt "Question in a dialog/messagebox"
+msgid ""
+"The resulting image will be assigned the profile \"%1\".Convert it from "
+"there to the current image colorspace?"
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:697
+#, fuzzy, kde-format
+msgctxt "Message for ocio baking progress bar."
+msgid "Baking configuration into image..."
+msgstr "Optiones per scalar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -45337,6 +45367,13 @@ msgstr ""
 #, kde-format
 msgid "Configure black and white points of the view"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
+#: plugins/dockers/lut/wdglut.ui:412
+#, fuzzy, kde-format
+#| msgid "Save..."
+msgid "Bake..."
+msgstr "Salveguarda..."
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
@@ -67123,21 +67160,18 @@ msgid "Threshold: "
 msgstr "Limine: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:577
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
 "percent sign"
 msgid "Spread: {n}%"
-msgstr "Propagation:"
+msgstr "Propagation: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Claude"
+msgstr "Claude apertura:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:587
 #, fuzzy, kde-format
@@ -68589,14 +68623,12 @@ msgid "Threshold: "
 msgstr "Limine: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Propagation:"
+msgstr "Propagation: {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
 #, fuzzy, kde-format
@@ -68642,11 +68674,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:412
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Claude"
+msgstr "Claude apertura:"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
 #, fuzzy, kde-format
@@ -68874,7 +68905,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Gap between 2 anchors in interactive mode"
-msgstr ""
+msgstr "Apertura inter 2 anchoras in modo interactive"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:785
 #, fuzzy, kde-format
@@ -69720,11 +69751,10 @@ msgid "Edit the currently selected text as SVG XML."
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:221
-#, fuzzy, kde-format
-#| msgid "Palette"
+#, kde-format
 msgctxt "@label:button"
 msgid "Glyph Palette"
-msgstr "Paletta de Glypho..."
+msgstr "Paletta de Glypho"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:229
 #, kde-format
@@ -70101,21 +70131,18 @@ msgid "Threshold: "
 msgstr "Limine: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:497
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Propagation:"
+msgstr "Propagation: {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "Claude"
+msgstr "Claude apertura:"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:506
 #, fuzzy, kde-format
@@ -70345,58 +70372,51 @@ msgstr "Files recente"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:37
-#, fuzzy, kde-format
-#| msgid "Initial width:"
+#, kde-format
 msgid "Unit of width:"
-msgstr "Largessa Initial:"
+msgstr "Unitate de largessa:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, thickGapWidthRadioButton)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#, fuzzy, kde-format
-#| msgid "Thickness:"
+#, kde-format
 msgid "Thick gap width"
-msgstr "Spissor:"
+msgstr "Largessa de apertura spisse"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50
-#, fuzzy, kde-format
-#| msgid "Thickness:"
+#, kde-format
 msgid "Thick gap:"
-msgstr "Spissor:"
+msgstr "Apertura spisse:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, thinGapWidthRadioButton)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thinGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Enable Pen Settings"
+#, kde-format
 msgid "Thin gap width"
-msgstr "Habilita Preferentias de pluma"
+msgstr "Largessa de apertura tenue"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thinGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:94
-#, fuzzy, kde-format
-#| msgid "Enable Pen Settings"
+#, kde-format
 msgid "Thin gap:"
-msgstr "Habilita Preferentias de pluma"
+msgstr "Apertura tenue:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, specialGapWidthRadioButton)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, customGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
-#, fuzzy, kde-format
-#| msgid "Fill Special"
+#, kde-format
 msgid "Special gap width"
-msgstr "Reimple special"
+msgstr "Largessa de apertura special"
 
 #. i18n: ectx: property (text), widget (QRadioButton, specialGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:135
-#, fuzzy, kde-format
-#| msgid "Fill Special"
+#, kde-format
 msgid "Special gap:"
-msgstr "Reimple special"
+msgstr "Apertura special"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, automaticGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:173
@@ -70414,28 +70434,25 @@ msgstr "Automatic"
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticHorizontalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
-#, fuzzy, kde-format
-#| msgid "Horizontal Wave"
+#, kde-format
 msgid "Horizontal gaps type:"
-msgstr "Unda Horizontal"
+msgstr "Typo de aperturas Horizontal:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, verticalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticVerticalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
-#, fuzzy, kde-format
-#| msgid "Vertical Scale"
+#, kde-format
 msgid "Vertical gaps type:"
-msgstr "Scala Vertical"
+msgstr "Typo de aperturas Vertical"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, diagonalLabel)
 #. i18n: ectx: property (toolTip), widget (QComboBox, automaticDiagonalCombobox)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:223
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:233
-#, fuzzy, kde-format
-#| msgid "Diagonal:"
+#, kde-format
 msgid "Diagonal gaps type:"
-msgstr "Diagonal:"
+msgstr "Typo de aperturas Diagonal:"
 
 #. i18n: ectx: property (text), widget (QLabel, diagonalLabel)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:226
@@ -76835,10 +76852,6 @@ msgstr ""
 #~ msgid "Apply Filter"
 #~ msgstr "Applica Filtro"
 
-#, fuzzy
-#~ msgid "No configuration option."
-#~ msgstr "Optiones per scalar"
-
 #~ msgid "Save macro"
 #~ msgstr "Salveguarda Macro"
 
@@ -76927,9 +76940,6 @@ msgstr ""
 
 #~ msgid "Open..."
 #~ msgstr "Aperir..."
-
-#~ msgid "Save..."
-#~ msgstr "Salveguarda..."
 
 #, fuzzy
 #~ msgid "Add reference image..."

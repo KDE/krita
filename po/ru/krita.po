@@ -82,8 +82,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-30 00:51+0000\n"
-"PO-Revision-Date: 2026-10-29 07:46+0200\n"
+"POT-Creation-Date: 2026-10-31 00:49+0000\n"
+"PO-Revision-Date: 2026-10-30 07:45+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -21030,14 +21030,12 @@ msgid "Zoom"
 msgstr "Масштаб"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:38
-#, fuzzy, kde-format
-#| msgid "Zoom In"
+#, kde-format
 msgid "Zoom in"
 msgstr "Увеличить масштаб"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:40
-#, fuzzy, kde-format
-#| msgid "Zoom Out"
+#, kde-format
 msgid "Zoom out"
 msgstr "Уменьшить масштаб"
 
@@ -21053,9 +21051,9 @@ msgstr "Режим"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/flake/tools/KoZoomToolWidget.ui:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zoom to fit:"
-msgstr "Масштаб"
+msgstr "Вписать:"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -24494,6 +24492,7 @@ msgstr "Выходной"
 #: libs/pigment/resources/KoColorSet.cpp:1938
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
+#: plugins/dockers/lut/lutdocker_dock.cpp:715
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -24571,6 +24570,7 @@ msgstr "Локальные источники"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/logdocker/LogDockerDock.cpp:226
+#: plugins/dockers/lut/lutdocker_dock.cpp:696
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:197
@@ -45466,28 +45466,28 @@ msgstr "Параметры журналирования"
 msgid "Black:"
 msgstr "Чёрный:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:82
+#: plugins/dockers/lut/lutdocker_dock.cpp:90
 #, kde-format
 msgid "LUT Management"
 msgstr "Управление данными LUT"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:100
+#: plugins/dockers/lut/lutdocker_dock.cpp:108
 #, kde-format
 msgid "Select custom configuration file."
 msgstr "Выбрать свой файл конфигурации."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:107
-#: plugins/dockers/lut/lutdocker_dock.cpp:611
+#: plugins/dockers/lut/lutdocker_dock.cpp:115
+#: plugins/dockers/lut/lutdocker_dock.cpp:734
 #, kde-format
 msgid "Select LUT file"
 msgstr "Выбрать файл LUT"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:120
+#: plugins/dockers/lut/lutdocker_dock.cpp:128
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr "Выберите уровень экспозиции для HDR-изображений"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:130
+#: plugins/dockers/lut/lutdocker_dock.cpp:138
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
@@ -45496,19 +45496,27 @@ msgstr ""
 "Укажите значение гамма-коррекции для устройства вывода. Это не затронет "
 "точки изображения."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:258
+#: plugins/dockers/lut/lutdocker_dock.cpp:253
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Bakes the current settings into the current projection, and opens it as a "
+"new image. Will use \"%1\" ICC profile as display space."
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:301
 #, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "Экспозиция: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:277
+#: plugins/dockers/lut/lutdocker_dock.cpp:320
 #, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "Гамма: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:347
+#: plugins/dockers/lut/lutdocker_dock.cpp:390
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -45518,26 +45526,49 @@ msgstr ""
 "Во внутреннем режиме возможность коррекции экспозиции и гаммы отключена. "
 "Чтобы воспользоваться этой возможностью, переключитесь в режим OCIO."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:437
+#: plugins/dockers/lut/lutdocker_dock.cpp:478
 #, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "Выбор параметров OpenColorIO"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:514
+#: plugins/dockers/lut/lutdocker_dock.cpp:555
 #, kde-format
 msgid "Luminance"
 msgstr "Светлота"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:515
+#: plugins/dockers/lut/lutdocker_dock.cpp:556
 #, kde-format
 msgid "All Channels"
 msgstr "Все каналы"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:574
+#: plugins/dockers/lut/lutdocker_dock.cpp:624
 #, kde-format
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"
 msgstr "Нет"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:675
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Image Color Space"
+msgctxt "@title:window"
+msgid "Convert to image colorspace?"
+msgstr "Преобразовать цветовое пространство изображения"
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:676
+#, kde-format
+msgctxt "Question in a dialog/messagebox"
+msgid ""
+"The resulting image will be assigned the profile \"%1\".Convert it from "
+"there to the current image colorspace?"
+msgstr ""
+
+#: plugins/dockers/lut/lutdocker_dock.cpp:697
+#, fuzzy, kde-format
+#| msgid "Store Softproofing configuration in the image"
+msgctxt "Message for ocio baking progress bar."
+msgid "Baking configuration into image..."
+msgstr "Сохранить параметры мягкой цветопробы в изображении"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -45636,6 +45667,13 @@ msgid "Configure black and white points of the view"
 msgstr ""
 "Настроить значения, соответствующие чёрному и\n"
 "белому цвету в области редактирования"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
+#: plugins/dockers/lut/wdglut.ui:412
+#, fuzzy, kde-format
+#| msgid "Save..."
+msgid "Bake..."
+msgstr "Сохранить..."
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
@@ -67217,8 +67255,7 @@ msgid "Color Sampler Tool"
 msgstr "Инструмент «Пипетка»"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:76
-#, fuzzy, kde-format
-#| msgid "Bounding Box"
+#, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "Bounding Box"
 msgstr "Ограничительная рамка"
@@ -67227,40 +67264,41 @@ msgstr "Ограничительная рамка"
 #, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "3-Point"
-msgstr ""
+msgstr "По трём точкам"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:78
 #, kde-format
 msgid "Place the ellipse inside a bounding box"
-msgstr ""
+msgstr "Вписать эллипс в ограничительную рамку"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:79
 #, kde-format
 msgid "Place the ellipse by setting the major axis and width"
-msgstr ""
+msgstr "Задать эллипс большой осью и шириной"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:110
-#, fuzzy, kde-format
-#| msgid "Placement"
+#, kde-format
 msgctxt "Ellipse tool placement mode option label"
 msgid "Placement:"
-msgstr "Шаг сетки"
+msgstr "Построение:"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:343
 #, kde-format
 msgid "Click to place the other end of the ellipse axis."
-msgstr ""
+msgstr "Щёлкните, чтобы задать второй конец оси эллипса."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:345
-#, fuzzy, kde-format
+#, kde-format
 msgid "Click to set the ellipse width."
-msgstr "Щёлкните мышью, чтобы выбрать объект текста"
+msgstr "Щёлкните, чтобы задать ширину эллипса."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:347
 #, kde-format
 msgid ""
 "Drag handles to adjust the ellipse. Press Enter to apply or Esc to cancel."
 msgstr ""
+"Перетаскивайте маркеры, чтобы изменить эллипс. Нажмите Enter, чтобы "
+"применить, или Esc, чтобы отменить."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:584
 #: plugins/tools/basictools/kis_tool_ellipse.cc:606
@@ -77883,9 +77921,6 @@ msgstr ""
 
 #~ msgid "Open..."
 #~ msgstr "Открыть..."
-
-#~ msgid "Save..."
-#~ msgstr "Сохранить..."
 
 #~ msgid "Only print and exit"
 #~ msgstr "Только напечатать и выйти"

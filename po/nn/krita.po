@@ -69802,7 +69802,3 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
-
-#~ msgctxt "action"
-#~ msgid "S-Pen Actions"
-#~ msgstr "S-penn-handlingar"

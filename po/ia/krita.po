@@ -55,7 +55,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-29 03:06+0000\n"
-"PO-Revision-Date: 2026-09-01 16:45+0200\n"
+"PO-Revision-Date: 2026-10-30 11:27+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -7689,7 +7689,7 @@ msgstr "Distribue Apertura (Gap) Horizontal"
 #, kde-format
 msgctxt "action"
 msgid "Make horizontal gaps between objects equal"
-msgstr ""
+msgstr "Face aperturas horizontal inter objectos equal"
 
 #. i18n: context: text @ Action (object_distribute_vertical_top), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:164
@@ -7745,7 +7745,7 @@ msgstr "Distribue Apertura (Gap) Vertical"
 #, kde-format
 msgctxt "action"
 msgid "Make vertical gaps between objects equal"
-msgstr ""
+msgstr "Face aperturas vertical inter objectos equal"
 
 #. i18n: context: text @ Action (object_transform_rotate_90_cw), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:201
@@ -39039,7 +39039,7 @@ msgstr "Color de linea"
 msgctxt ""
 "Text that indicates the selected segment in the segment gradient editor"
 msgid "Segment #%1"
-msgstr "Fixa color de texto"
+msgstr "Segmento %1"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:255
 #, kde-format
@@ -63324,8 +63324,7 @@ msgstr "<i>Nigre</i>"
 #. i18n: context: text @ Action (color_space), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Space"
 msgstr "Spatio de color"
@@ -64813,8 +64812,7 @@ msgstr ""
 #. i18n: context: text @ Action (document_tools), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
-#, fuzzy, kde-format
-#| msgid "Document Tools"
+#, kde-format
 msgctxt "action"
 msgid "Document Tools"
 msgstr "Instrumentos de Documento"
@@ -64862,8 +64860,7 @@ msgstr ""
 #. i18n: context: text @ Action (export_layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
-#, fuzzy, kde-format
-#| msgid "Export Layers"
+#, kde-format
 msgctxt "action"
 msgid "Export Layers"
 msgstr "Exporta stratos (layers)"
@@ -64959,8 +64956,7 @@ msgstr "Selige un dossier"
 #. i18n: context: text @ Action (filter_manager), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
-#, fuzzy, kde-format
-#| msgid "Filter Manager"
+#, kde-format
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Gerente de Filtro"
@@ -64991,8 +64987,7 @@ msgstr "Filtros:"
 #. i18n: context: text @ Action (high_pass_filter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
-#, fuzzy, kde-format
-#| msgid "High Pass"
+#, kde-format
 msgctxt "action"
 msgid "High Pass"
 msgstr "Passa alto"
@@ -65482,8 +65477,7 @@ msgstr "Cribrator (Debugger)"
 #. i18n: context: text @ Action (python_scripter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
-#, fuzzy, kde-format
-#| msgid "Scripter"
+#, kde-format
 msgctxt "action"
 msgid "Scripter"
 msgstr "Scripter"
@@ -66233,11 +66227,10 @@ msgid "Spread: {n}%"
 msgstr "Propagation:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Claude"
+msgstr "Claude apertura:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:587
 #, fuzzy, kde-format
@@ -67707,14 +67700,12 @@ msgid "Threshold: "
 msgstr "Limine: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Propagation:"
+msgstr "Propagation: {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
 #, fuzzy, kde-format
@@ -67760,19 +67751,17 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:412
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Claude"
+msgstr "Claude apertura:"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
-msgstr "Intento de rendition"
+msgstr "Extension de selection"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
 #, kde-format
@@ -67780,10 +67769,9 @@ msgid "Contiguous Selection Tool"
 msgstr "Instrumento de selection contigue"
 
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:37
-#, fuzzy, kde-format
-#| msgid "Elliptical Selection Tool"
+#, kde-format
 msgid "Elliptical Selection"
-msgstr "Instrumento de Selection elliptic"
+msgstr "Selection elliptic"
 
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:48
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:68
@@ -67797,19 +67785,15 @@ msgid "Elliptical Selection Tool"
 msgstr "Instrumento de Selection elliptic"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:51
-#, fuzzy, kde-format
-#| msgid "Feather Selection"
+#, kde-format
 msgid "Freehand Selection"
-msgstr "Selection de pluma"
+msgstr "Selection a mano libere"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:63
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:86
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Feather Selection"
 msgctxt "(qtundo-format)"
 msgid "Freehand Selection"
-msgstr "Selection de pluma"
+msgstr "Selection a mano libere"
 
 #: plugins/tools/selectiontools/kis_tool_select_path.cc:28
 #, kde-format
@@ -67818,21 +67802,19 @@ msgstr "Selige percurso"
 
 #: plugins/tools/selectiontools/kis_tool_select_path.cc:157
 #: plugins/tools/selectiontools/kis_tool_select_path.cc:170
-#, fuzzy
-#| msgid "Reset Brush"
 msgctxt "(qtundo-format)"
 msgid "Select by Bezier Curve"
-msgstr "Re-fixa pincel"
+msgstr "Selige per Curva de Bezier"
 
 #: plugins/tools/selectiontools/kis_tool_select_path.h:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bezier Curve Selection Tool"
-msgstr "Selectiones de recolta"
+msgstr "Instrumento de Selection de Curva de Bezier"
 
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Polygonal Selection"
-msgstr "Scala selection"
+msgstr "Selection Polygonal"
 
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:54
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:70
@@ -67846,9 +67828,9 @@ msgid "Polygonal Selection Tool"
 msgstr "Scala selection"
 
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.cc:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rectangular Selection"
-msgstr "Scala selection"
+msgstr "Selection rectangular"
 
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.cc:47
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.cc:72
@@ -67879,22 +67861,19 @@ msgid "Threshold: "
 msgstr "Limine: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:245
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Propagation:"
+msgstr "Propagation: {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr "Intento de rendition"
+msgstr "Extension de selection"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:59
 #, kde-format
@@ -68022,7 +68001,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Gap between 2 anchors in interactive mode"
-msgstr ""
+msgstr "Apertura inter 2 anchoras in modo interactive"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:783
 #, fuzzy, kde-format
@@ -68041,10 +68020,10 @@ msgid "Discard Selection"
 msgstr "Monstra selection"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:792
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
-msgstr "Optiones de texto"
+msgstr "Optiones de percurso"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
 #, fuzzy, kde-format
@@ -68148,11 +68127,10 @@ msgid "No glyph alternates available."
 msgstr "Disponibile"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
-#, fuzzy, kde-format
-#| msgid "Palette"
+#, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
-msgstr "Paletta de Glypho..."
+msgstr "Paletta de Glypho"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteProxyModel.cpp:43
 #, fuzzy, kde-format
@@ -69286,11 +69264,10 @@ msgid "Spread: {n}%"
 msgstr "Propagation:"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "Claude"
+msgstr "Claude apertura:"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:506
 #, fuzzy, kde-format
@@ -69526,19 +69503,17 @@ msgstr "Files recente"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:37
-#, fuzzy, kde-format
-#| msgid "Initial width:"
+#, kde-format
 msgid "Unit of width:"
-msgstr "Largessa Initial:"
+msgstr "Unitate de largessa:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, thickGapWidthRadioButton)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, thickGapWidth)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
-#, fuzzy, kde-format
-#| msgid "Thickness:"
+#, kde-format
 msgid "Thick gap width"
-msgstr "Spissor:"
+msgstr "Largessa de apertura de spissor"
 
 #. i18n: ectx: property (text), widget (QRadioButton, thickGapWidthRadioButton)
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:50

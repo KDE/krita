@@ -6,14 +6,14 @@
 # Youssef Chahibi <chahibi@gmail.com>, 2007, 2008.
 # Abdelrahman <abd_elrahman_em@yahoo.com>, 2007, 2008.
 # Safa Alfulaij <safa1996alfulaij@gmail.com>, 2018.
-# SPDX-FileCopyrightText: 2021, 2022, 2024, 2025, 2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2021-2022, 2024-2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-31 00:49+0000\n"
-"PO-Revision-Date: 2026-09-30 19:23+0400\n"
+"PO-Revision-Date: 2026-10-31 20:01+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -11456,115 +11456,101 @@ msgstr "حدّث نطاق التشغيل"
 
 #. i18n: context: text @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2527
-#, fuzzy, kde-format
-#| msgid "Insertions"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Constant"
-msgstr "الإدراجات"
+msgstr "استيفاء ثابت"
 
 #. i18n: context: toolTip @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2529
-#, fuzzy, kde-format
-#| msgid "Hold constant value. No interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Hold constant value. No interpolation."
-msgstr "احتفظ بقيمة ثابتة. لا يوجد استيفاء."
+msgstr "احتفظ بقيمة ثابتة. بلا استيفاء."
 
 #. i18n: context: text @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2539
-#, fuzzy, kde-format
-#| msgid "Insertions"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Linear"
-msgstr "الإدراجات"
+msgstr "استيفاء خطي"
 
 #. i18n: context: toolTip @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2541
-#, fuzzy, kde-format
-#| msgid "Linear interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Linear interpolation."
 msgstr "استيفاء خطي."
 
 #. i18n: context: text @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2551
-#, fuzzy, kde-format
-#| msgid "Insertions"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Bezier"
-msgstr "الإدراجات"
+msgstr "استيفاء بيزييه"
 
 #. i18n: context: toolTip @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2553
-#, fuzzy, kde-format
-#| msgid "Bezier curve interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Bezier curve interpolation."
-msgstr "استيفاء منحنى بيزيه."
+msgstr "استيفاء منحنى بيزييه."
 
 #. i18n: context: text @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2563
-#, fuzzy, kde-format
-#| msgid "Insertions"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Sharp"
-msgstr "الإدراجات"
+msgstr "استيفاء حاد"
 
 #. i18n: context: toolTip @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2565
-#, fuzzy, kde-format
-#| msgid "Sharp interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Sharp interpolation tangents."
 msgstr "مماسات استيفاء حادة."
 
 #. i18n: context: text @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2575
-#, fuzzy, kde-format
-#| msgid "Insertions"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Smooth"
-msgstr "الإدراجات"
+msgstr "استيفاء ناعم"
 
 #. i18n: context: toolTip @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2577
-#, fuzzy, kde-format
-#| msgid "Smooth interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Smooth interpolation tangents."
 msgstr "مماسات استيفاء ناعمة."
 
 #. i18n: context: text @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2587
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Range"
-msgstr "لائم إلى الصّفحة"
+msgstr "كبّر لملاءمة النطاق"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2589
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit channel range."
-msgstr "كبّر العرض ليناسب نطاق القناة."
+msgstr "كبّر العرض لملاءمة نطاق القناة."
 
 #. i18n: context: text @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2599
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Curve"
-msgstr "كبّر العرض ليناسب المنحنى."
+msgstr "كبّر لملاءمة المنحنى"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2601
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit curve."
-msgstr "كبّر العرض ليناسب المنحنى."
+msgstr "كبّر العرض لملاءمة المنحنى."
 
 #. i18n: context: text @ Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2611
@@ -12165,12 +12151,10 @@ msgstr "ألصق الطّبقة من الحافظة"
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2998 krita/krita.action:3001
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Group layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Group layers"
-msgstr "جمّع الطبقات"
+msgstr "اجمع الطبقات"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3000
@@ -12184,12 +12168,10 @@ msgstr "أنشئ طبقة تجمع الطّبقات المحدّدة"
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3010 krita/krita.action:3013
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Ungroup layer(s)"
+#, kde-format
 msgctxt "action"
 msgid "Ungroup layers"
-msgstr "فك تجميع الطبقات"
+msgstr "افصل الطبقات"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3012
@@ -13176,12 +13158,10 @@ msgstr "عيّن مص&در النسخ..."
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3716
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set the source for the selected clone layer(s)."
+#, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layers"
-msgstr "عيّن مصدر الطبقة (الطبقات) المستنسخة المختارة."
+msgstr "اضبط المصدر لطبقات الاستنساخ المحددة"
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3717
@@ -20712,16 +20692,14 @@ msgid "Zoom"
 msgstr "التقريب"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:38
-#, fuzzy, kde-format
-#| msgid "Zoom In"
+#, kde-format
 msgid "Zoom in"
-msgstr "قرب"
+msgstr "تكبير"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:40
-#, fuzzy, kde-format
-#| msgid "Zoom Out"
+#, kde-format
 msgid "Zoom out"
-msgstr "بعّد"
+msgstr "تصغير"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
 #. i18n: ectx: property (text), widget (QToolButton, btnArrange)
@@ -20735,10 +20713,9 @@ msgstr "الوضع"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/flake/tools/KoZoomToolWidget.ui:34
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgid "Zoom to fit:"
-msgstr "لائم إلى الصّفحة"
+msgstr "تكبير للملاءمة:"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -25202,17 +25179,15 @@ msgstr "الأبعاد الأكبر من 1920 بكسل غير مدعومة عل�
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2421
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Warning"
+#, kde-format
 msgid "Warning:"
 msgid_plural "Warnings:"
-msgstr[0] "تنبيه"
-msgstr[1] "تنبيه"
-msgstr[2] "تنبيه"
-msgstr[3] "تنبيه"
-msgstr[4] "تنبيه"
-msgstr[5] "تنبيه"
+msgstr[0] "التحذير:"
+msgstr[1] "التحذير:"
+msgstr[2] "التحذيرات:"
+msgstr[3] "التحذيرات:"
+msgstr[4] "التحذيرات:"
+msgstr[5] "التحذيرات:"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
 #, kde-format
@@ -28619,7 +28594,7 @@ msgstr "استمارة"
 #: libs/ui/forms/KisNewsItem.ui:158
 #, kde-format
 msgid "Mark as Read"
-msgstr ""
+msgstr "علّم كمقروء"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:97
@@ -28744,7 +28719,7 @@ msgstr "الأخبار"
 #: libs/ui/forms/KisWelcomePage.ui:1311
 #, kde-format
 msgid "Mark all as read"
-msgstr ""
+msgstr "علّم الكل كمقروء"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
 #: libs/ui/forms/KisWelcomePage.ui:1337
@@ -40237,12 +40212,12 @@ msgstr "القناع معطّل"
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid "("
-msgstr ""
+msgstr "("
 
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid ")"
-msgstr ""
+msgstr ")"
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format
@@ -44936,15 +44911,14 @@ msgid "px"
 msgstr "بكسل"
 
 #: plugins/dockers/recorder/recorder_export.cpp:560
-#, fuzzy, kde-format
-#| msgid "frame"
+#, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame"
 msgid_plural "frames"
 msgstr[0] "إطار"
 msgstr[1] "إطار"
 msgstr[2] "إطار"
-msgstr[3] "إطار"
+msgstr[3] "إطارات"
 msgstr[4] "إطار"
 msgstr[5] "إطار"
 
@@ -45337,11 +45311,9 @@ msgid "0 B"
 msgstr "0 بايت"
 
 #: plugins/dockers/recorder/recorder_writer.cpp:631
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Start recording macro"
+#, kde-format
 msgid "Stopping recording"
-msgstr "ابدأ تسجيل ماكرو"
+msgstr "إيقاف التسجيل"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDirectory)
 #: plugins/dockers/recorder/recorderdocker.ui:95
@@ -45473,22 +45445,18 @@ msgstr "سجّل آليًا"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxFocusedRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:374
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Record only the visible area of the canvas.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>استخدم إمالة اللوح لتحديد المستويات العادية.</p></"
-"body></html>"
+"<html><head/><body><p>سجّل المنطقة المرئية فقط من اللوحة.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxFocusedRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:377
 #, kde-format
 msgid "Record focused area"
-msgstr ""
+msgstr "سجّل المنطقة المركزة"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRecordToggle)
 #: plugins/dockers/recorder/recorderdocker.ui:396
@@ -51687,90 +51655,72 @@ msgid "Do nothing"
 msgstr "لا تفعل شيئًا"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgid "S-Pen Pro Air Actions"
-msgstr "إجراءات قلم S"
+msgstr "إجراءات الهواء في S-Pen Pro"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Actions"
-msgstr "إجراءات قلم S"
+msgstr "إجراءات الهواء في S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Click"
-msgstr "نقرة زر قلم S"
+msgstr "نقرة زر الهواء في S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Double Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Double Click"
-msgstr "نقرة مزدوجة لزر قلم S"
+msgstr "نقرة مزدوجة لزر الهواء في S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Up"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Up"
-msgstr "إيماءة قلم S مسح للأعلى"
+msgstr "إيماءة السحب لأعلى في الهواء في S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Down"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro AirGesture Swipe Down"
-msgstr "إيماءة قلم S مسح للأسفل"
+msgstr "إيماءة السحب لأسفل في الهواء في S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Left"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Left"
-msgstr "إيماءة قلم S مسح لليسار"
+msgstr "إيماءة السحب لليسار في الهواء في S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Right"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Right"
-msgstr "إيماءة قلم S مسح لليمين"
+msgstr "إيماءة السحب لليمين في الهواء في S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Clockwise"
-msgstr "إيماءة قلم S دائرة في اتجاه عقارب الساعة"
+msgstr "إيماءة الدائرة باتجاه عقارب الساعة في الهواء في S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Counter-Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
-msgstr "إيماءة قلم S دائرة عكس اتجاه عقارب الساعة"
+msgstr "إيماءة الدائرة عكس اتجاه عقارب الساعة في الهواء في S-Pen Pro"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:112
@@ -51787,6 +51737,9 @@ msgid ""
 "work. Note that only the S-Pen Pro supports Air Actions, the regular S-Pen "
 "does not. Not all devices support gestures."
 msgstr ""
+"يجب تمكين إجراءات الهواء لكريتا في إعدادات نظامك لتعمل. لاحظ أن S-Pen Pro "
+"فقط يدعم إجراءات الهواء، أما S-Pen العادي فلا. ليست كل الأجهزة تدعم "
+"الإيماءات."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -53761,49 +53714,44 @@ msgid "Threshold &level:"
 msgstr "م&ستوى العتبة:"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Mask"
+#, kde-format
 msgid "Tone/Gamut Map..."
-msgstr "تدوير القناع"
+msgstr "خريطة الدرجة/النطاق اللوني..."
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:155
 #, kde-format
 msgid "LAB"
-msgstr ""
+msgstr "LAB"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:156
 #, kde-format
 msgid "XYZ (ICtCp)"
-msgstr ""
+msgstr "XYZ (ICtCp)"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:157
 #, kde-format
 msgid "XYZ (OkLAB)"
-msgstr ""
+msgstr "XYZ (OkLAB)"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:159
 #, kde-format
 msgid "Reinhard"
-msgstr ""
+msgstr "Reinhard"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:160
 #, kde-format
 msgid "Piecewise Filmic"
-msgstr ""
+msgstr "فيلمي متعدد القطع"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:162
-#, fuzzy, kde-format
-#| msgctxt "Lightness Map blend mode for brush texture"
-#| msgid "Lightness Map"
+#, kde-format
 msgid "Use Chroma-Lightness Cusp Map"
-msgstr "خريطة الإضاءة"
+msgstr "استخدم خريطة درجات سطوع اللون"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:163
-#, fuzzy, kde-format
-#| msgid "Minimum Quality"
+#, kde-format
 msgid "Minimum Delta E"
-msgstr "أدنى جودة"
+msgstr "أدنى دلتا E"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:165
 #, kde-format
@@ -53813,6 +53761,8 @@ msgid ""
 "mapping. Only works for RGB and CMYK profiles, will fall back on Minimum "
 "Delta E."
 msgstr ""
+"استخدم خريطة حدبة اللون-الإضاءة لتعيين نطاق أسرع وإن كان أقل دقة. تعمل فقط "
+"مع تشكيلات RGB وCMYK، وستعود إلى أدنى دلتا E."
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:168
 #, kde-format
@@ -53821,48 +53771,43 @@ msgid ""
 "Will use the Minimum Delta E method, where colors are brought into gamut "
 "until they minimally different from the transformed color. Slow but accurate."
 msgstr ""
+"سيستخدم طريقة أدنى دلتا E، حيث تُجلب الألوان إلى النطاق حتى تختلف اختلافًا "
+"أدنى عن اللون المحوَّل. بطيئة لكنها دقيقة."
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:289
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:306
 #, kde-format
 msgid "Current Maximum White: %1"
-msgstr ""
+msgstr "أقصى بياض حالي: %1"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.h:28
-#, fuzzy, kde-format
-#| msgid "Gamut Masks"
+#, kde-format
 msgid "Tone/Gamut Map"
-msgstr "أقنعة السلسلة اللونية"
+msgstr "خريطة الدرجة/النطاق"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:22
-#, fuzzy, kde-format
-#| msgctxt "Color model"
-#| msgid "Model:"
+#, kde-format
 msgid "Model:"
-msgstr "الطّراز:"
+msgstr "الطُراز:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkToneMap)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:41
-#, fuzzy, kde-format
-#| msgctxt "Layer name for translation of template"
-#| msgid "Tones"
+#, kde-format
 msgid "Tone Map"
-msgstr "درجات"
+msgstr "خريطة الدرجة"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:57
-#, fuzzy, kde-format
-#| msgid "White:"
+#, kde-format
 msgid "Max White:"
-msgstr "الأبيض:"
+msgstr "أقصى بياض:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:80
-#, fuzzy, kde-format
-#| msgid "Strength:"
+#, kde-format
 msgid "Toe Strength:"
-msgstr "القوّة:"
+msgstr "قوة المقدمة:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeStrength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:87
@@ -53870,14 +53815,13 @@ msgstr "القوّة:"
 msgid ""
 "The sharpness of the toe fall-off. 0.0 makes it linear, while 1.0 produces a "
 "sharp angle."
-msgstr ""
+msgstr "حدة انحدار المقدمة. 0.0 يجعلها خطية، بينما 1.0 ينتج زاوية حادة."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:103
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Toe Length:"
-msgstr "الطّول:"
+msgstr "طول المقدمة:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:110
@@ -53886,69 +53830,62 @@ msgid ""
 "How much of the dynamic range is in the toe. 0.0 means none, while 1.0 is "
 "half the curve."
 msgstr ""
+"مقدار المدى الديناميكي في المقدمة. 0.0 يعني لا شيء، بينما 1.0 هو نصف المنحنى."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:126
-#, fuzzy, kde-format
-#| msgid "Anc&hor Strength:"
+#, kde-format
 msgid "Shoulder Strength:"
-msgstr "قوّة المرب&ط:"
+msgstr "قوة الكتف:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderStrength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:133
 #, kde-format
 msgid "Curvature of the shoulder. 1.0 is linear."
-msgstr ""
+msgstr "انحناء الكتف. 1.0 خطي."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:149
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Shoulder Length:"
-msgstr "طول التلطيخ"
+msgstr "طول الكتف:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:156
 #, kde-format
 msgid "Determines the maximum white in stops."
-msgstr ""
+msgstr "يحدد أقصى بياض بالوقفات."
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnShoulderLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:159
-#, fuzzy, kde-format
-#| msgctxt "Button to edit the selected stop color in the stop gradient editor"
-#| msgid "Edit stop"
+#, kde-format
 msgid " stops"
-msgstr "حرّر التوقف"
+msgstr " وقفات"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:172
-#, fuzzy, kde-format
-#| msgid "Shear angle X:"
+#, kde-format
 msgid "Shoulder Angle:"
-msgstr "زاوية الإمالة س:"
+msgstr "زاوية الكتف:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderAngle)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:179
 #, kde-format
 msgid ""
 "Angle of the shoulder, determines the smoothness of the shift to full white."
-msgstr ""
+msgstr "زاوية الكتف، تحدد سلاسة الانتقال إلى البياض الكامل."
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkGamutMap)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:210
-#, fuzzy, kde-format
-#| msgid "Gamut Masks"
+#, kde-format
 msgid "Gamut Map"
-msgstr "أقنعة السلسلة اللونية"
+msgstr "خريطة النطاق"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:219
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Workspace"
-#| msgid "Wide Gamut"
+#, kde-format
 msgid "Target Gamut:"
-msgstr "نطاق واسع"
+msgstr "النطاق الهدف:"
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format
@@ -55062,9 +54999,7 @@ msgid "Brush selection information for animated brushes"
 msgstr "معلومات اختيار الفرشاة للفرش المتحركة"
 
 #: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "video importer: video file statistics"
-#| msgid "Frames: %1"
+#, kde-format
 msgctxt "@label %1 number of animation frames"
 msgid "Frames: %1"
 msgstr "الإطارات: %1"
@@ -60895,11 +60830,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#, fuzzy, kde-format
-#| msgid "&Create"
+#, kde-format
 msgctxt "@action:button create new brushtip"
 msgid "Create New"
-msgstr "أ&نشئ"
+msgstr "أنشئ جديدًا"
 
 #. i18n: ectx: property (text), widget (KSqueezedTextLabel, brushTipNameLabel)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:119
@@ -61162,61 +61096,51 @@ msgid "Text"
 msgstr "النص"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:80
-#, fuzzy, kde-format
-#| msgid "Source:"
+#, kde-format
 msgctxt "@label:listbox image source"
 msgid "Source:"
 msgstr "المصدر:"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Image"
-msgstr "الصورة"
+msgstr "صورة"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:85
-#, fuzzy, kde-format
-#| msgid "Clipboard"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Clipboard"
-msgstr "الحافظة"
+msgstr "حافظة"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Reload"
+#, kde-format
 msgctxt "@action:button reload image"
 msgid "Reload"
 msgstr "أعد التحميل"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:251
-#, fuzzy, kde-format
-#| msgctxt "Empty locale"
-#| msgid "Empty"
+#, kde-format
 msgctxt "@info empty image"
 msgid "Empty"
 msgstr "فارغ"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:278
-#, fuzzy, kde-format
-#| msgid "Overwrite"
+#, kde-format
 msgctxt "@action:button"
 msgid "Overwrite"
 msgstr "استبدل"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:280
-#, fuzzy, kde-format
-#| msgid "Save"
+#, kde-format
 msgctxt "@action:button"
 msgid "Save"
 msgstr "احفظ"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
-#, fuzzy, kde-format
-#| msgid "Creates a brush tip from the image in the clipboard."
+#, kde-format
 msgid "Creates a brush tip from the current image, selection, or clipboard."
-msgstr "يُنشِئ رأس فرشاة من الصورة في الحافظة."
+msgstr "ينشئ رأس فرشاة من الصورة الحالية أو التحديد أو الحافظة."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
@@ -61262,10 +61186,9 @@ msgstr ""
 " التباين: 0%"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
-#, fuzzy, kde-format
-#| msgid "Current Brush Tip"
+#, kde-format
 msgid "Create New Brushtip"
-msgstr "رأس الفرشاة الحالي"
+msgstr "أنشئ رأس فرشاة جديدًا"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
@@ -62893,11 +62816,10 @@ msgstr "قيمة مزج الاتجاه/الإمالة"
 #. i18n: context: text @ Action (assign_profile_to_image), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
-#, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
+#, kde-format
 msgctxt "action"
 msgid "Assign Profile to Image"
-msgstr "إسناد التشكيلات إلى الصور"
+msgstr "أسنِد تشكيلة إلى الصورة"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:25
 msgid "Assign Profile"
@@ -62917,11 +62839,10 @@ msgstr "إسناد التشكيلات إلى الصور"
 #. i18n: context: text @ Action (pykrita_channels2layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
-#, fuzzy, kde-format
-#| msgid "Channels to layers"
+#, kde-format
 msgctxt "action"
 msgid "Channels to layers"
-msgstr "القنوات إلى طبقات"
+msgstr "القنوات إلى الطبقات"
 
 #: plugins/python/channels2layers/channels2layers.py:84
 #: plugins/python/channels2layers/channels2layers.py:85
@@ -63007,11 +62928,10 @@ msgstr "<i>الأسود</i>"
 #. i18n: context: text @ Action (color_space), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Space"
-msgstr "النّطاق اللونيّ"
+msgstr "فضاء اللون"
 
 #: plugins/python/colorspace/colorspace.py:19
 msgid "Plugin to change color space of selected documents."
@@ -64435,11 +64355,10 @@ msgstr "كاتب محتوى نصي تكميلي"
 #. i18n: context: text @ Action (document_tools), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
-#, fuzzy, kde-format
-#| msgid "Document Tools"
+#, kde-format
 msgctxt "action"
 msgid "Document Tools"
-msgstr "أدوات المستندات"
+msgstr "أدوات المستند"
 
 #: plugins/python/documenttools/documenttools.py:17
 #: plugins/python/documenttools/uidocumenttools.py:62
@@ -64484,11 +64403,10 @@ msgstr "غير المستندات المحددة."
 #. i18n: context: text @ Action (export_layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
-#, fuzzy, kde-format
-#| msgid "Export Layers"
+#, kde-format
 msgctxt "action"
 msgid "Export Layers"
-msgstr "تصدير الطبقات"
+msgstr "صدّر الطبقات"
 
 #: plugins/python/exportlayers/exportlayers.py:17
 #: plugins/python/exportlayers/uiexportlayers.py:122
@@ -64573,11 +64491,10 @@ msgstr "اختر مجلدًا"
 #. i18n: context: text @ Action (filter_manager), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
-#, fuzzy, kde-format
-#| msgid "Filter Manager"
+#, kde-format
 msgctxt "action"
 msgid "Filter Manager"
-msgstr "مدير المرشّحات"
+msgstr "مدير المرشحات"
 
 #: plugins/python/filtermanager/filtermanager.py:17
 #: plugins/python/filtermanager/uifiltermanager.py:60
@@ -64603,11 +64520,10 @@ msgstr "المرشّحات:"
 #. i18n: context: text @ Action (high_pass_filter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
-#, fuzzy, kde-format
-#| msgid "High Pass"
+#, kde-format
 msgctxt "action"
 msgid "High Pass"
-msgstr "عالي التردد"
+msgstr "تمرير عالٍ"
 
 #: plugins/python/highpass/highpass.py:40
 msgid "High Pass"
@@ -64736,11 +64652,10 @@ msgstr "أنشئ سكربتًا"
 #. i18n: context: text @ Action (Krita Script Starter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/krita_script_starter/krita_script_starter.action:4
 #: plugins/python/krita_script_starter/krita_script_starter.action:8
-#, fuzzy, kde-format
-#| msgid "BBD's Krita Script Starter"
+#, kde-format
 msgctxt "action"
 msgid "Krita Script Starter"
-msgstr "بادئ كريتا السكربتات من BBD"
+msgstr "بادئ سكربت كريتا"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
@@ -65072,11 +64987,10 @@ msgstr "المنقّح"
 #. i18n: context: text @ Action (python_scripter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
-#, fuzzy, kde-format
-#| msgid "Scripter"
+#, kde-format
 msgctxt "action"
 msgid "Scripter"
-msgstr "بريمجات"
+msgstr "مُسكربِت"
 
 #: plugins/python/scripter/scripter.py:24
 #: plugins/python/scripter/uicontroller.py:97
@@ -65973,50 +65887,48 @@ msgid "Color Sampler Tool"
 msgstr "أداة عينات الألوان"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:76
-#, fuzzy, kde-format
-#| msgid "Bounding Box"
+#, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "Bounding Box"
-msgstr "المربّع المحيطيّ"
+msgstr "مربع الإحاطة"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:77
 #, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "3-Point"
-msgstr ""
+msgstr "ثلاثي النقاط"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:78
 #, kde-format
 msgid "Place the ellipse inside a bounding box"
-msgstr ""
+msgstr "ضع القطع الناقص داخل مربع إحاطة"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:79
 #, kde-format
 msgid "Place the ellipse by setting the major axis and width"
-msgstr ""
+msgstr "ضع القطع الناقص بتعيين المحور الرئيس والعرض"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:110
-#, fuzzy, kde-format
-#| msgid "Element"
+#, kde-format
 msgctxt "Ellipse tool placement mode option label"
 msgid "Placement:"
-msgstr "عنصر"
+msgstr "الموضع:"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:343
 #, kde-format
 msgid "Click to place the other end of the ellipse axis."
-msgstr ""
+msgstr "انقر لوضع الطرف الآخر من محور القطع الناقص."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:345
 #, kde-format
 msgid "Click to set the ellipse width."
-msgstr ""
+msgstr "انقر لتعيين عرض القطع الناقص."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:347
 #, kde-format
 msgid ""
 "Drag handles to adjust the ellipse. Press Enter to apply or Esc to cancel."
-msgstr ""
+msgstr "اسحب المقابض لضبط القطع الناقص. اضغط Enter للتطبيق أو Esc للإلغاء."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:584
 #: plugins/tools/basictools/kis_tool_ellipse.cc:606
@@ -66309,48 +66221,44 @@ msgid "Gradient"
 msgstr "التّدرّج"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:267
-#, fuzzy, kde-format
-#| msgid "&Dither:"
+#, kde-format
 msgid "Dither:"
-msgstr "ال&محاكاة:"
+msgstr "التنقيط:"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:270
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "The gradient will not be dithered"
 msgid "None"
-msgstr "بلا"
+msgstr "لا شيء"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:271
-#, fuzzy, kde-format
-#| msgid "Simplex Noise"
+#, kde-format
 msgctxt "The gradient will be dithered with Blue Noise"
 msgid "Blue Noise"
-msgstr "ضوضاء سيمبلكس"
+msgstr "ضجيج أزرق"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:272
 #, kde-format
 msgctxt "The gradient will be dithered with Bayer Matrix 2x2"
 msgid "Bayer Matrix 2x2"
-msgstr ""
+msgstr "مصفوفة باير 2x2"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:273
 #, kde-format
 msgctxt "The gradient will be dithered with Bayer Matrix 4x4"
 msgid "Bayer Matrix 4x4"
-msgstr ""
+msgstr "مصفوفة باير 4x4"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:274
 #, kde-format
 msgctxt "The gradient will be dithered with Bayer Matrix 8x8"
 msgid "Bayer Matrix 8x8"
-msgstr ""
+msgstr "مصفوفة باير 8x8"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:278
-#, fuzzy, kde-format
-#| msgid "&Dither:"
+#, kde-format
 msgid "Dither steps:"
-msgstr "ال&محاكاة:"
+msgstr "خطوات التنقيط:"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:293
 #, kde-format

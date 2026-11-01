@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-31 00:49+0000\n"
-"PO-Revision-Date: 2026-10-30 07:21-0300\n"
+"PO-Revision-Date: 2026-10-31 07:24-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -44848,6 +44848,8 @@ msgid ""
 "Bakes the current settings into the current projection, and opens it as a "
 "new image. Will use \"%1\" ICC profile as display space."
 msgstr ""
+"Processa as configurações atuais na projeção atual e a abre como uma nova "
+"imagem. Utilizará o perfil ICC \"%1\" como espaço de exibição."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:301
 #, kde-format
@@ -44893,12 +44895,10 @@ msgid "None"
 msgstr "Nenhum "
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:675
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgctxt "@title:window"
 msgid "Convert to image colorspace?"
-msgstr "Converter o espaço de cor da imagem"
+msgstr "Converter para o espaço de cor da imagem?"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:676
 #, kde-format
@@ -44907,13 +44907,14 @@ msgid ""
 "The resulting image will be assigned the profile \"%1\".Convert it from "
 "there to the current image colorspace?"
 msgstr ""
+"À imagem resultante será atribuído o perfil \"%1\". Deseja convertê-la, a "
+"partir daí, para o espaço de cor da imagem atual?"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:697
-#, fuzzy, kde-format
-#| msgid "Store Softproofing configuration in the image"
+#, kde-format
 msgctxt "Message for ocio baking progress bar."
 msgid "Baking configuration into image..."
-msgstr "Salvar configuração de prova de tela na imagem"
+msgstr "Processando a configuração para a imagem..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -45013,10 +45014,9 @@ msgstr "Configura os pontos preto e branco da exibição"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
 #: plugins/dockers/lut/wdglut.ui:412
-#, fuzzy, kde-format
-#| msgid "Save..."
+#, kde-format
 msgid "Bake..."
-msgstr "Salvar..."
+msgstr "Processar..."
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format

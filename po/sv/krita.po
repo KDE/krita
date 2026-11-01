@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-29 03:06+0000\n"
-"PO-Revision-Date: 2026-09-09 17:10+0200\n"
+"PO-Revision-Date: 2026-10-31 15:46+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -11510,113 +11510,98 @@ msgstr "Uppdatera uppspelningsintervall"
 
 #. i18n: context: text @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2527
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Constant"
-msgstr "Interpolation"
+msgstr "Interpolera konstant"
 
 #. i18n: context: toolTip @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2529
-#, fuzzy, kde-format
-#| msgid "Hold constant value. No interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Hold constant value. No interpolation."
 msgstr "Behåll konstant värde. Ingen interpolation."
 
 #. i18n: context: text @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2539
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Linear"
-msgstr "Interpolation"
+msgstr "Interpolera linjär"
 
 #. i18n: context: toolTip @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2541
-#, fuzzy, kde-format
-#| msgid "Linear interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Linear interpolation."
 msgstr "Linjär interpolation."
 
 #. i18n: context: text @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2551
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Bezier"
-msgstr "Interpolation"
+msgstr "Interpolera Bezier"
 
 #. i18n: context: toolTip @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2553
-#, fuzzy, kde-format
-#| msgid "Bezier curve interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Bezier curve interpolation."
 msgstr "Bezier-kurvinterpolation."
 
 #. i18n: context: text @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2563
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Sharp"
-msgstr "Interpolation"
+msgstr "Interpolera skarpt"
 
 #. i18n: context: toolTip @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2565
-#, fuzzy, kde-format
-#| msgid "Sharp interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Sharp interpolation tangents."
-msgstr "Skarp interpolationstangent."
+msgstr "Skarpa interpolationstangenter."
 
 #. i18n: context: text @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2575
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Smooth"
-msgstr "Interpolation"
+msgstr "Interpolera jämnt"
 
 #. i18n: context: toolTip @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2577
-#, fuzzy, kde-format
-#| msgid "Smooth interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Smooth interpolation tangents."
-msgstr "Jämn interpolationstangent."
+msgstr "Jämna interpolationstangenter."
 
 #. i18n: context: text @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2587
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Zoom to fit"
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Range"
-msgstr "Zooma till allt"
+msgstr "Zooma till passa intervall"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2589
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit channel range."
 msgstr "Zooma vy för att passa kanalintervall."
 
 #. i18n: context: text @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2599
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Curve"
-msgstr "Zooma vy för att passa kurva."
+msgstr "Zooma till passa kurva"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2601
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit curve."
 msgstr "Zooma vy för att passa kurva."
@@ -51541,97 +51526,79 @@ msgid "Do nothing"
 msgstr "Gör ingenting"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgid "S-Pen Pro Air Actions"
-msgstr "Åtgärder med S-penna"
+msgstr "S Pen Pro luftåtgärder"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Actions"
-msgstr "Åtgärder med S-penna"
+msgstr "S Pen Pro luftåtgärder"
 
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Click"
-msgstr "Knappklick med S-penna"
+msgstr "S Pen Pro klick med luftknapp"
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Double Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Double Click"
-msgstr "Knappdubbelklick med S-penna"
+msgstr "S Pen Pro dubbelklick med luftknapp"
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Up"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Up"
-msgstr "Svepgest uppåt med S-penna"
+msgstr "S Pen Pro svep uppåt luftgest"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Down"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro AirGesture Swipe Down"
-msgstr "Svepgest neråt med S-penna"
+msgstr "S Pen Pro svep neråt luftgest"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Left"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Left"
-msgstr "Svepgest åt vänster med S-penna"
+msgstr "S Pen Pro svep åt vänster luftgest"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Right"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Right"
-msgstr "Svepgest åt höger med S-penna"
+msgstr "S Pen Pro svep åt höger luftgest"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Clockwise"
-msgstr "Medurs cirkelgest med S-penna"
+msgstr "S Pen Pro cirkel medurs luftgest"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Counter-Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
-msgstr "Moturs cirkelgest med S-penna"
+msgstr "S Pen Pro cirkel moturs luftgest"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:112
 #, kde-format
 msgctxt "action"
 msgid "Toggle popup palette with S-Pen"
-msgstr "Växla palettruta med S-penna"
+msgstr "Växla palettruta med S Pen"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:27
@@ -51641,6 +51608,9 @@ msgid ""
 "work. Note that only the S-Pen Pro supports Air Actions, the regular S-Pen "
 "does not. Not all devices support gestures."
 msgstr ""
+"Luftåtgärder för Krita måste aktiveras i systeminställningarna för att de "
+"ska fungera. Observera att endast S Pen Pro stöder luftåtgärder, den vanliga "
+"S Pen gör det inte. Alla enheter stöder inte gester."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -62694,8 +62664,7 @@ msgstr "Blandningsvärde för riktning/lutning"
 #. i18n: context: text @ Action (assign_profile_to_image), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
-#, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
+#, kde-format
 msgctxt "action"
 msgid "Assign Profile to Image"
 msgstr "Tilldela profil till bild"
@@ -62718,8 +62687,7 @@ msgstr "Tilldela profil till bild"
 #. i18n: context: text @ Action (pykrita_channels2layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
-#, fuzzy, kde-format
-#| msgid "Channels to layers"
+#, kde-format
 msgctxt "action"
 msgid "Channels to layers"
 msgstr "Kanaler till lager"
@@ -62805,8 +62773,7 @@ msgstr "<i>Svart</i>"
 #. i18n: context: text @ Action (color_space), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Space"
 msgstr "Färgrymd"
@@ -64248,8 +64215,7 @@ msgstr "Författare av kompletterande textinnehåll"
 #. i18n: context: text @ Action (document_tools), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
-#, fuzzy, kde-format
-#| msgid "Document Tools"
+#, kde-format
 msgctxt "action"
 msgid "Document Tools"
 msgstr "Dokumentverktyg"
@@ -64297,8 +64263,7 @@ msgstr "De markerade dokumenten har ändrats."
 #. i18n: context: text @ Action (export_layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
-#, fuzzy, kde-format
-#| msgid "Export Layers"
+#, kde-format
 msgctxt "action"
 msgid "Export Layers"
 msgstr "Exportera lager"
@@ -64386,8 +64351,7 @@ msgstr "Välj en katalog"
 #. i18n: context: text @ Action (filter_manager), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
-#, fuzzy, kde-format
-#| msgid "Filter Manager"
+#, kde-format
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Filterhantering"
@@ -64416,8 +64380,7 @@ msgstr "Filter:"
 #. i18n: context: text @ Action (high_pass_filter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
-#, fuzzy, kde-format
-#| msgid "High Pass"
+#, kde-format
 msgctxt "action"
 msgid "High Pass"
 msgstr "Högpass"
@@ -64552,11 +64515,10 @@ msgstr "Skapa skript"
 #. i18n: context: text @ Action (Krita Script Starter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/krita_script_starter/krita_script_starter.action:4
 #: plugins/python/krita_script_starter/krita_script_starter.action:8
-#, fuzzy, kde-format
-#| msgid "BBD's Krita Script Starter"
+#, kde-format
 msgctxt "action"
 msgid "Krita Script Starter"
-msgstr "BBD:s Krita skriptstart"
+msgstr "Krita skriptstart"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
@@ -64889,8 +64851,7 @@ msgstr "Avlusare"
 #. i18n: context: text @ Action (python_scripter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
-#, fuzzy, kde-format
-#| msgid "Scripter"
+#, kde-format
 msgctxt "action"
 msgid "Scripter"
 msgstr "Skriptgenerering"

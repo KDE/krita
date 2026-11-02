@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-31 00:49+0000\n"
-"PO-Revision-Date: 2026-10-30 04:30+0100\n"
+"PO-Revision-Date: 2026-11-01 05:00+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -44192,12 +44192,10 @@ msgid "None"
 msgstr "არცერთი"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:675
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgctxt "@title:window"
 msgid "Convert to image colorspace?"
-msgstr "გამოსახულების ფერის სივრცის გარდაქმნა"
+msgstr "გნებავთ გადაყვანა გამოსახულების ფერთა სივრცეში?"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:676
 #, kde-format
@@ -44208,11 +44206,10 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:697
-#, fuzzy, kde-format
-#| msgid "Store Softproofing configuration in the image"
+#, kde-format
 msgctxt "Message for ocio baking progress bar."
 msgid "Baking configuration into image..."
-msgstr "ფერის პროგრამული შემოწმების კონფიგურაციის გამოსახულებაში დამახსოვრება"
+msgstr "კონფიგურაციის გამოცხობა გამოსახულებაში..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -44312,10 +44309,9 @@ msgstr "ხედის შავი და თეთრი წერტილ�
 
 #. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
 #: plugins/dockers/lut/wdglut.ui:412
-#, fuzzy, kde-format
-#| msgid "&Wave..."
+#, kde-format
 msgid "Bake..."
-msgstr "&ტალღა..."
+msgstr "ცხობა..."
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format

@@ -183,8 +183,8 @@ void KisSelectionToolConfigWidgetHelper::slotReferenceLayersChanged(
     case KisSelectionOptions::AllLayers:
         sampleModeString = "sampleAllLayers";
         break;
-    case KisSelectionOptions::ParentLayer:
-        sampleModeString = "sampleParentLayer";
+    case KisSelectionOptions::CurrentGroup:
+        sampleModeString = "sampleCurrentGroup";
         break;
     case KisSelectionOptions::ColorLabeledLayers:
         sampleModeString = "sampleColorLabeledLayers";
@@ -290,8 +290,8 @@ void KisSelectionToolConfigWidgetHelper::reloadExactToolConfig()
 
     if (referenceLayersStr == "sampleAllLayers") {
         referenceLayers = KisSelectionOptions::AllLayers;
-    } else if (referenceLayersStr == "sampleParentLayer") {
-        referenceLayers = KisSelectionOptions::ParentLayer;
+    } else if (referenceLayersStr == "sampleCurrentGroup") {
+        referenceLayers = KisSelectionOptions::CurrentGroup;
     } else if (referenceLayersStr == "sampleCurrentLayer") {
         referenceLayers = KisSelectionOptions::CurrentLayer;
     } else if (referenceLayersStr == "sampleColorLabeledLayers") {

@@ -92,7 +92,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     // Construct the reference device
     if (sampleLayersMode() == SampleCurrentLayer) {
         m_referencePaintDevice = currentNode()->projection();
-    } else if (sampleLayersMode() == SampleParentLayer) {
+    } else if (sampleLayersMode() == SampleCurrentGroup) {
         m_referencePaintDevice = currentNode()->parent()->projection();
     } else if (sampleLayersMode() == SampleAllLayers) {
         m_referencePaintDevice = currentImage()->projection();

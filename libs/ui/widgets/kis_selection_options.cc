@@ -87,7 +87,7 @@ public:
         switch (action) {
         case CurrentLayer:
             return 0;
-        case ParentLayer:
+        case CurrentGroup:
             return 1;
         case AllLayers:
             return 2;
@@ -104,7 +104,7 @@ public:
         case 0:
             return CurrentLayer;
         case 1:
-            return ParentLayer;
+            return CurrentGroup;
         case 2:
             return AllLayers;
         case 3:
@@ -218,7 +218,7 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     m_d->optionButtonStripReference->addButton(
         KisIconUtils::loadIcon("current-layer"));
     m_d->optionButtonStripReference->addButton(
-        KisIconUtils::loadIcon("parent-layer"));
+        KisIconUtils::loadIcon("current-group"));
     m_d->optionButtonStripReference->addButton(
         KisIconUtils::loadIcon("all-layers"));
     m_d->optionButtonStripReference->addButton(KisIconUtils::loadIcon("tag"));
@@ -258,7 +258,7 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     m_d->optionButtonStripReference->button(0)->setToolTip(
         i18n("Select regions found from the active layer"));
     m_d->optionButtonStripReference->button(1)->setToolTip(
-        i18n("Select regions found from the parent layer of the active layer"));
+        i18n("Select regions found from the active group"));
     m_d->optionButtonStripReference->button(2)->setToolTip(
         i18n("Select regions found from the merging of all layers"));
     m_d->optionButtonStripReference->button(3)->setToolTip(

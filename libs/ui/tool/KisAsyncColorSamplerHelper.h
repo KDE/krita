@@ -12,7 +12,7 @@
 #include <QScopedPointer>
 #include <QObject>
 
-#include "kis_types.h"
+#include <kis_tool_utils.h>
 
 class QPainter;
 class QPainterPath;
@@ -30,7 +30,7 @@ public:
 
     bool isActive() const;
 
-    void activate(int sampleSource, bool pickFgColor);
+    void activate(KisToolUtils::ColorSamplerSource sampleSource, bool pickFgColor);
     void deactivate();
 
     void startAction(const QPointF &docPoint, int radius, int blend);
@@ -40,7 +40,7 @@ public:
     QRectF colorPreviewDocRect(const QPointF &docPoint);
     void paint(QPainter &gc, const KoViewConverter &converter);
 
-    void updateCursor(int sampleSource, bool pickFgColor);
+    void updateCursor(KisToolUtils::ColorSamplerSource sampleSource, bool pickFgColor);
 
     void setUpdateGlobalColor(bool value);
     bool updateGlobalColor() const;

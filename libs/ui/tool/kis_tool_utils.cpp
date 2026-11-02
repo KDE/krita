@@ -268,7 +268,7 @@ namespace KisToolUtils {
         , updateColor(true)
         , addColorToCurrentPalette(false)
         , normaliseValues(false)
-        , sampleSource(0)
+        , sampleSource(SampleSourceImage)
         , radius(1)
         , blend(100)
     {
@@ -301,7 +301,7 @@ namespace KisToolUtils {
         updateColor = props.getBool("updateColor", true);
         addColorToCurrentPalette = props.getBool("addPalette", false);
         normaliseValues = props.getBool("normaliseValues", false);
-        sampleSource = props.getInt("sampleSource", 0);
+        sampleSource = static_cast<ColorSamplerSource>(props.getInt("sampleSource", static_cast<int>(SampleSourceImage)));
         radius = props.getInt("radius", 1);
         blend = props.getInt("blend", 100);
     }

@@ -351,7 +351,7 @@ void KisToolColorSampler::updateOptionWidget()
 
     m_optionsWidget->cbNormaliseValues->setChecked(m_config->normaliseValues);
     m_optionsWidget->cbUpdateCurrentColor->setChecked(m_config->updateColor);
-    m_optionsWidget->cmbSources->setCurrentIndex(m_config->sampleSource);
+    m_optionsWidget->cmbSources->setCurrentIndex(static_cast<int>(m_config->sampleSource));
     m_optionsWidget->cbPalette->setChecked(m_config->addColorToCurrentPalette);
     m_optionsWidget->radius->setValue(m_config->radius);
     m_optionsWidget->blend->setValue(m_config->blend);
@@ -387,7 +387,7 @@ void KisToolColorSampler::slotChangeBlend(int value)
 
 void KisToolColorSampler::slotSetColorSource(int value)
 {
-    m_config->sampleSource = value;
+    m_config->sampleSource = static_cast<KisToolUtils::ColorSamplerSource>(value);
 }
 
 void KisToolColorSampler::slotChangePalette(int)

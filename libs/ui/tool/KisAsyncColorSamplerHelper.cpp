@@ -52,7 +52,7 @@ struct KisAsyncColorSamplerHelper::Private
     KisCanvas2 *canvas;
 
     int sampleResourceId {0};
-    int sampleSource {0};
+    KisToolUtils::ColorSamplerSource sampleSource {KisToolUtils::SampleSourceImage};
     bool updateGlobalColor {true};
 
     bool isActive {false};
@@ -301,7 +301,7 @@ bool KisAsyncColorSamplerHelper::isActive() const
     return m_d->isActive;
 }
 
-void KisAsyncColorSamplerHelper::activate(int sampleSource, bool pickFgColor)
+void KisAsyncColorSamplerHelper::activate(KisToolUtils::ColorSamplerSource sampleSource, bool pickFgColor)
 {
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->isActive);
@@ -358,7 +358,7 @@ void KisAsyncColorSamplerHelper::activatePreview()
     updateCursor(m_d->sampleSource, m_d->sampleResourceId == KoCanvasResource::ForegroundColor);
 }
 
-void KisAsyncColorSamplerHelper::updateCursor(int sampleSource, bool pickFgColor)
+void KisAsyncColorSamplerHelper::updateCursor(KisToolUtils::ColorSamplerSource sampleSource, bool pickFgColor)
 {
     const int sampleResourceId =
             pickFgColor ?
@@ -368,21 +368,21 @@ void KisAsyncColorSamplerHelper::updateCursor(int sampleSource, bool pickFgColor
     QCursor cursor;
 
     switch (sampleSource) {
-    case 1:
+    case KisToolUtils::SampleSourceGroup:
         if (sampleResourceId == KoCanvasResource::ForegroundColor) {
             cursor = KisCursor::samplerGroupForegroundCursor();
         } else {
             cursor = KisCursor::samplerGroupBackgroundCursor();
         }
         break;
-    case 2:
+    case KisToolUtils::SampleSourceNode:
         if (sampleResourceId == KoCanvasResource::ForegroundColor) {
             cursor = KisCursor::samplerLayerForegroundCursor();
         } else {
             cursor = KisCursor::samplerLayerBackgroundCursor();
         }
         break;
-    case 0:
+    case KisToolUtils::SampleSourceImage:
     default:
         if (sampleResourceId == KoCanvasResource::ForegroundColor) {
             cursor = KisCursor::samplerImageForegroundCursor();
@@ -861,7 +861,7 @@ void KisAsyncColorSamplerHelper::slotAddSamplingJob(const QPointF &docPoint)
     KisImageSP image = m_d->canvas->image();
     const QPoint imagePoint = image->documentToImagePixelFloored(docPoint);
 
-    if (m_d->sampleSource == 0) {
+    if (m_d->sampleSource == KisToolUtils::SampleSourceImage) {
         KisSharedPtr<KisReferenceImagesLayer> referencesLayer = m_d->canvas->imageView()->document()->referenceImagesLayer();
         if (referencesLayer && m_d->canvas->referenceImagesDecoration()->visible()) {
             KoColor color = referencesLayer->getPixelForDocPoint(docPoint);
@@ -875,13 +875,13 @@ void KisAsyncColorSamplerHelper::slotAddSamplingJob(const QPointF &docPoint)
     KisPaintDeviceSP device;
 
     switch (m_d->sampleSource) {
-    case 1:
+    case KisToolUtils::SampleSourceGroup:
          device = m_d->canvas->imageView()->currentNode()->parent()->colorSampleSourceDevice();
         break;
-    case 2:
+    case KisToolUtils::SampleSourceNode:
         device = m_d->canvas->imageView()->currentNode()->colorSampleSourceDevice();
         break;
-    case 0:
+    case KisToolUtils::SampleSourceImage:
     default:
         device = image->projection();
         break;

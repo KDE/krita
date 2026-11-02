@@ -18,6 +18,12 @@ class QPainterPath;
 
 namespace KisToolUtils {
 
+enum ColorSamplerSource {
+    SampleSourceImage = 0,
+    SampleSourceGroup,
+    SampleSourceNode,
+};
+
 struct KRITAUI_EXPORT ColorSamplerConfig {
     ColorSamplerConfig();
 
@@ -25,7 +31,7 @@ struct KRITAUI_EXPORT ColorSamplerConfig {
     bool updateColor;
     bool addColorToCurrentPalette;
     bool normaliseValues;
-    int sampleSource;
+    ColorSamplerSource sampleSource;
     int radius;
     int blend;
 

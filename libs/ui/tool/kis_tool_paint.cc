@@ -288,21 +288,21 @@ void KisToolPaint::activateAlternateAction(AlternateAction action)
         return;
     }
 
-    int sampleSource;
+    KisToolUtils::ColorSamplerSource sampleSource;
 
     switch (action) {
     case SampleFgGroup:
     case SampleBgGroup:
-        sampleSource = 1;
+        sampleSource = KisToolUtils::SampleSourceGroup;
         break;
     case SampleFgNode:
     case SampleBgNode:
-        sampleSource = 2;
+        sampleSource = KisToolUtils::SampleSourceNode;
         break;
     case SampleFgImage:
     case SampleBgImage:
     default:
-        sampleSource = 0;
+        sampleSource = KisToolUtils::SampleSourceImage;
         break;
     }
 

@@ -43,22 +43,6 @@ public:
     ~KisToolColorSampler() override;
 
 public:
-    struct Configuration {
-        Configuration();
-
-        bool toForegroundColor;
-        bool updateColor;
-        bool addPalette;
-        bool normaliseValues;
-        int sampleSource {0};
-        int radius;
-        int blend;
-
-        void save() const;
-        void load();
-    };
-
-public:
     QWidget* createOptionWidget() override;
 
     void beginPrimaryAction(KoPointerEvent *event) override;

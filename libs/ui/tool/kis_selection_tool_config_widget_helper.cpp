@@ -176,15 +176,25 @@ void KisSelectionToolConfigWidgetHelper::slotReferenceLayersChanged(
     KisSelectionOptions::ReferenceLayers referenceLayers)
 {
     KConfigGroup cfg = KSharedConfig::openConfig()->group(m_configGroupForTool);
-    cfg.writeEntry(
-        "sampleLayersMode",
-        referenceLayers == KisSelectionOptions::AllLayers
-            ? "sampleAllLayers"
-            : (referenceLayers == KisSelectionOptions::ParentLayer
-                   ? "sampleParentLayer"
-                   : (referenceLayers == KisSelectionOptions::CurrentLayer
-                          ? "sampleCurrentLayer"
-                          : "sampleColorLabeledLayers")));
+
+    QString sampleModeString = "sampleCurrentLayer";
+
+    switch (referenceLayers) {
+    case KisSelectionOptions::AllLayers:
+        sampleModeString = "sampleAllLayers";
+        break;
+    case KisSelectionOptions::ParentLayer:
+        sampleModeString = "sampleParentLayer";
+        break;
+    case KisSelectionOptions::ColorLabeledLayers:
+        sampleModeString = "sampleColorLabeledLayers";
+        break;
+    case KisSelectionOptions::CurrentLayer:
+        // noop, initialized above
+        break;
+    }
+
+    cfg.writeEntry("sampleLayersMode", sampleModeString);
 }
 
 void KisSelectionToolConfigWidgetHelper::slotSelectedColorLabelsChanged()
@@ -276,14 +286,20 @@ void KisSelectionToolConfigWidgetHelper::reloadExactToolConfig()
         cfgToolSpecific.readEntry<QString>("colorLabels", "")
             .split(',', Qt::SkipEmptyParts);
 
-    const KisSelectionOptions::ReferenceLayers referenceLayers =
-        referenceLayersStr == "sampleAllLayers"
-        ? KisSelectionOptions::AllLayers
-        : (referenceLayersStr == "sampleParentLayer"
-               ? KisSelectionOptions::ParentLayer
-                   : (referenceLayersStr == "sampleCurrentLayer"
-                          ? KisSelectionOptions::CurrentLayer
-                          : KisSelectionOptions::ColorLabeledLayers));
+    KisSelectionOptions::ReferenceLayers referenceLayers = KisSelectionOptions::CurrentLayer;
+
+    if (referenceLayersStr == "sampleAllLayers") {
+        referenceLayers = KisSelectionOptions::AllLayers;
+    } else if (referenceLayersStr == "sampleParentLayer") {
+        referenceLayers = KisSelectionOptions::ParentLayer;
+    } else if (referenceLayersStr == "sampleCurrentLayer") {
+        referenceLayers = KisSelectionOptions::CurrentLayer;
+    } else if (referenceLayersStr == "sampleColorLabeledLayers") {
+        referenceLayers = KisSelectionOptions::ColorLabeledLayers;
+    } else {
+        qWarning() << "KisSelectionToolConfigWidgetHelper::reloadExactToolConfig(): unknown reference layer mode string" << referenceLayersStr;
+        referenceLayers = KisSelectionOptions::CurrentLayer;
+    }
 
     QList<int> colorLabels;
     for (const QString &colorLabelStr : colorLabelsStr) {

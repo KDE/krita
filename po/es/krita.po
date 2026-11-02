@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-29 03:06+0000\n"
-"PO-Revision-Date: 2026-10-29 20:13+0100\n"
+"POT-Creation-Date: 2026-11-02 03:00+0000\n"
+"PO-Revision-Date: 2026-11-02 00:02+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -14535,14 +14535,14 @@ msgstr "Ampliar al 100 %"
 #, kde-format
 msgctxt "action"
 msgid "Zoom &In"
-msgstr "Ampl&iar"
+msgstr "Ac&ercar"
 
 #. i18n: context: toolTip @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:776
 #, kde-format
 msgctxt "action"
 msgid "Zoom In"
-msgstr "Ampliar"
+msgstr "Acercar"
 
 #. i18n: context: text @ Action (view_zoom_out), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:786
@@ -24036,9 +24036,9 @@ msgid "Out"
 msgstr "Fuera"
 
 #: libs/pigment/resources/KoColorSet.cpp:1100
-#: libs/pigment/resources/KoColorSet.cpp:1447
-#: libs/pigment/resources/KoColorSet.cpp:1527
-#: libs/pigment/resources/KoColorSet.cpp:1945
+#: libs/pigment/resources/KoColorSet.cpp:1440
+#: libs/pigment/resources/KoColorSet.cpp:1521
+#: libs/pigment/resources/KoColorSet.cpp:1939
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:717 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -26947,7 +26947,7 @@ msgstr "Intersección"
 #: libs/ui/canvas/kis_guides_manager.cpp:785
 #, kde-format
 msgid "Bounding Box"
-msgstr "Cuadro delimitador"
+msgstr "Cuadro de contorno"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:786
 #, kde-format
@@ -34267,7 +34267,7 @@ msgstr "Acercar"
 #: libs/ui/input/kis_zoom_action.cpp:77
 #, kde-format
 msgid "Zoom Out"
-msgstr "Alejar"
+msgstr "Reducir"
 
 #: libs/ui/input/kis_zoom_action.cpp:78
 #, kde-format

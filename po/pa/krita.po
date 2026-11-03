@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-31 00:49+0000\n"
+"POT-Creation-Date: 2026-11-03 00:53+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -22583,8 +22583,8 @@ msgstr "ਸਾਈਜ਼"
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:72
-#: libs/ui/widgets/kis_selection_options.cc:196
-#: libs/ui/widgets/kis_selection_options.cc:211
+#: libs/ui/widgets/kis_selection_options.cc:200
+#: libs/ui/widgets/kis_selection_options.cc:215
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:540
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:652
@@ -22639,8 +22639,8 @@ msgstr "ਸਾਈਜ਼"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:481
 #: plugins/tools/basictools/kis_tool_multihand.cpp:492
 #: plugins/tools/basictools/kis_tool_multihand.cpp:494
-#: plugins/tools/basictools/wdgcolorsampler.ui:192
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
+#: plugins/tools/basictools/wdgcolorsampler.ui:197
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:416
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:145
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:256
@@ -29209,7 +29209,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ ਬਦਲੋ"
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:61
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:315
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:309
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:145
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:146
 #, kde-format
@@ -32977,7 +32977,7 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1232
-#: libs/ui/widgets/kis_selection_options.cc:177
+#: libs/ui/widgets/kis_selection_options.cc:181
 #, kde-format
 msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
@@ -32986,7 +32986,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1235
-#: libs/ui/widgets/kis_selection_options.cc:175
+#: libs/ui/widgets/kis_selection_options.cc:179
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgid "Enable Selection Actions Bar"
@@ -35953,28 +35953,40 @@ msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 msgid "Tertiary Mode"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:37
+#: libs/ui/input/kis_alternate_invocation_action.cpp:36
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Sample Foreground Color from Current Layer"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:38
+#: libs/ui/input/kis_alternate_invocation_action.cpp:37
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Sample Background Color from Current Layer"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:40
+#: libs/ui/input/kis_alternate_invocation_action.cpp:39
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Sample Foreground Color from Merged Image"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:41
+#: libs/ui/input/kis_alternate_invocation_action.cpp:40
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Sample Background Color from Merged Image"
+msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
+
+#: libs/ui/input/kis_alternate_invocation_action.cpp:42
+#, fuzzy, kde-format
+#| msgid "Background Color"
+msgid "Sample Foreground Color from Current Group"
+msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
+
+#: libs/ui/input/kis_alternate_invocation_action.cpp:43
+#, fuzzy, kde-format
+#| msgid "Background Color"
+msgid "Sample Background Color from Current Group"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
 #: libs/ui/input/kis_change_frame_action.cpp:27
@@ -41131,7 +41143,7 @@ msgstr ""
 msgid "Group not editable."
 msgstr "ਪਰਤ"
 
-#: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:877
+#: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:898
 #, kde-format
 msgid "Color sampler does not work on this layer."
 msgstr ""
@@ -42523,7 +42535,7 @@ msgstr "ਡੌਕੂਮੈਂਟ"
 msgid "No Preview for this engine"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:188
+#: libs/ui/widgets/kis_selection_options.cc:192
 #: plugins/tools/basictools/kis_tool_fill.cc:591
 #, fuzzy, kde-format
 #| msgid "Create shape"
@@ -42531,97 +42543,97 @@ msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: libs/ui/widgets/kis_selection_options.cc:193
+#: libs/ui/widgets/kis_selection_options.cc:197
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in selection tools options"
 msgid "Grow: "
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:208
+#: libs/ui/widgets/kis_selection_options.cc:212
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "The 'feather' spinbox prefix in selection tools options"
 msgid "Feather: "
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
-#: libs/ui/widgets/kis_selection_options.cc:228
+#: libs/ui/widgets/kis_selection_options.cc:234
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "@info:tooltip"
 msgid "Pixel Selection"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/widgets/kis_selection_options.cc:230
+#: libs/ui/widgets/kis_selection_options.cc:236
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "@info:tooltip"
 msgid "Vector Selection"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/widgets/kis_selection_options.cc:233
-#: libs/ui/widgets/kis_selection_options.cc:477
+#: libs/ui/widgets/kis_selection_options.cc:239
+#: libs/ui/widgets/kis_selection_options.cc:485
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgctxt "@info:tooltip"
 msgid "Replace"
 msgstr "ਤਬਦੀਲ"
 
-#: libs/ui/widgets/kis_selection_options.cc:235
-#: libs/ui/widgets/kis_selection_options.cc:492
+#: libs/ui/widgets/kis_selection_options.cc:241
+#: libs/ui/widgets/kis_selection_options.cc:500
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "@info:tooltip"
 msgid "Intersect"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/widgets/kis_selection_options.cc:237
-#: libs/ui/widgets/kis_selection_options.cc:482
+#: libs/ui/widgets/kis_selection_options.cc:243
+#: libs/ui/widgets/kis_selection_options.cc:490
 #, fuzzy, kde-format
 #| msgid "Add"
 msgctxt "@info:tooltip"
 msgid "Add"
 msgstr "ਸ਼ਾਮਲ"
 
-#: libs/ui/widgets/kis_selection_options.cc:239
-#: libs/ui/widgets/kis_selection_options.cc:487
+#: libs/ui/widgets/kis_selection_options.cc:245
+#: libs/ui/widgets/kis_selection_options.cc:495
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgctxt "@info:tooltip"
 msgid "Subtract"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: libs/ui/widgets/kis_selection_options.cc:241
-#: libs/ui/widgets/kis_selection_options.cc:497
+#: libs/ui/widgets/kis_selection_options.cc:247
+#: libs/ui/widgets/kis_selection_options.cc:505
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference"
 msgstr "ਟੂਲ ਚੋਣਾਂ"
 
-#: libs/ui/widgets/kis_selection_options.cc:244
+#: libs/ui/widgets/kis_selection_options.cc:250
 #, kde-format
 msgid "Smooths the edges of the selection"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:246
+#: libs/ui/widgets/kis_selection_options.cc:252
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Grow or shrink the selection by the set amount"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/widgets/kis_selection_options.cc:248
+#: libs/ui/widgets/kis_selection_options.cc:254
 #: plugins/tools/basictools/kis_tool_fill.cc:663
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:572
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:250
+#: libs/ui/widgets/kis_selection_options.cc:256
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:253
+#: libs/ui/widgets/kis_selection_options.cc:259
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -42631,7 +42643,17 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/ui/widgets/kis_selection_options.cc:255
+#: libs/ui/widgets/kis_selection_options.cc:261
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not import\n"
+#| "%1"
+msgid "Select regions found from the active group"
+msgstr ""
+"%1\n"
+"ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
+
+#: libs/ui/widgets/kis_selection_options.cc:263
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -42641,68 +42663,68 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/ui/widgets/kis_selection_options.cc:257
+#: libs/ui/widgets/kis_selection_options.cc:265
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:265
+#: libs/ui/widgets/kis_selection_options.cc:273
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgctxt "The 'mode' section label in selection tools options"
 msgid "Mode"
 msgstr "ਜ਼ੂਮ"
 
-#: libs/ui/widgets/kis_selection_options.cc:272
+#: libs/ui/widgets/kis_selection_options.cc:280
 #, fuzzy, kde-format
 #| msgid "Collection"
 msgctxt "The 'action' section label in selection tools options"
 msgid "Action"
 msgstr "ਭੰਡਾਰ"
 
-#: libs/ui/widgets/kis_selection_options.cc:279
+#: libs/ui/widgets/kis_selection_options.cc:287
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "ਸੰਰਚਨਾ"
 
-#: libs/ui/widgets/kis_selection_options.cc:290
+#: libs/ui/widgets/kis_selection_options.cc:298
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "The 'adjustments' section label in selection tools options"
 msgid "Adjustments"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: libs/ui/widgets/kis_selection_options.cc:478
+#: libs/ui/widgets/kis_selection_options.cc:486
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgctxt "@info:tooltip"
 msgid "Replace (%1)"
 msgstr "ਤਬਦੀਲ"
 
-#: libs/ui/widgets/kis_selection_options.cc:483
+#: libs/ui/widgets/kis_selection_options.cc:491
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add (%1)"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:488
+#: libs/ui/widgets/kis_selection_options.cc:496
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgctxt "@info:tooltip"
 msgid "Subtract (%1)"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: libs/ui/widgets/kis_selection_options.cc:493
+#: libs/ui/widgets/kis_selection_options.cc:501
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "@info:tooltip"
 msgid "Intersect (%1)"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/widgets/kis_selection_options.cc:499
+#: libs/ui/widgets/kis_selection_options.cc:507
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference (%1)"
@@ -51971,7 +51993,7 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 #. i18n: ectx: property (text), widget (QLabel, lblPreviewStyle)
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#: plugins/tools/basictools/wdgcolorsampler.ui:265
+#: plugins/tools/basictools/wdgcolorsampler.ui:270
 #, fuzzy, kde-format
 #| msgid "View mode"
 msgid "Preview:"
@@ -71070,7 +71092,7 @@ msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_colorsampler.h:124
+#: plugins/tools/basictools/kis_tool_colorsampler.h:108
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgid "Color Sampler Tool"
@@ -71303,7 +71325,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:655
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Boundary color"
@@ -71751,18 +71773,25 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #: plugins/tools/basictools/wdgcolorsampler.ui:145
 #, fuzzy, kde-format
 #| msgid "Create Layer"
+msgid "Sample Current Group"
+msgstr "ਲੇਅਰ ਬਣਾਓ"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
+#: plugins/tools/basictools/wdgcolorsampler.ui:150
+#, fuzzy, kde-format
+#| msgid "Create Layer"
 msgid "Sample Current Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
-#: plugins/tools/basictools/wdgcolorsampler.ui:170
+#: plugins/tools/basictools/wdgcolorsampler.ui:175
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgid "Radius: "
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, radius)
-#: plugins/tools/basictools/wdgcolorsampler.ui:189
+#: plugins/tools/basictools/wdgcolorsampler.ui:194
 #, kde-format
 msgid ""
 "<nobr>Radius controls the color sampler's sampling area.</nobr> Pixel colors "
@@ -71770,28 +71799,28 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbNormaliseValues)
-#: plugins/tools/basictools/wdgcolorsampler.ui:207
+#: plugins/tools/basictools/wdgcolorsampler.ui:212
 #, kde-format
 msgid ""
 "Displays per-channel color information below as percentages instead of bytes."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbNormaliseValues)
-#: plugins/tools/basictools/wdgcolorsampler.ui:210
+#: plugins/tools/basictools/wdgcolorsampler.ui:215
 #, fuzzy, kde-format
 #| msgid "Show Master Pages"
 msgid "Show colors as percentages"
 msgstr "ਮਾਸਟਰ ਸਫ਼ੇ ਵੇਖੋ"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, listViewChannels)
-#: plugins/tools/basictools/wdgcolorsampler.ui:233
+#: plugins/tools/basictools/wdgcolorsampler.ui:238
 #, fuzzy, kde-format
 #| msgid "Line Style"
 msgid "Channel"
 msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, listViewChannels)
-#: plugins/tools/basictools/wdgcolorsampler.ui:238
+#: plugins/tools/basictools/wdgcolorsampler.ui:243
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "The value number each channel of sampled color listed in a table"
@@ -71799,7 +71828,7 @@ msgid "Value"
 msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUpdateCurrentColor)
-#: plugins/tools/basictools/wdgcolorsampler.ui:248
+#: plugins/tools/basictools/wdgcolorsampler.ui:253
 #, kde-format
 msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
@@ -71807,7 +71836,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
-#: plugins/tools/basictools/wdgcolorsampler.ui:251
+#: plugins/tools/basictools/wdgcolorsampler.ui:256
 #, fuzzy, kde-format
 #| msgid "Delete the current page"
 msgid "Update color"
@@ -71815,8 +71844,8 @@ msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ ਹਟਾਓ"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPreviewStyle)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbPreviewStyle)
-#: plugins/tools/basictools/wdgcolorsampler.ui:262
-#: plugins/tools/basictools/wdgcolorsampler.ui:281
+#: plugins/tools/basictools/wdgcolorsampler.ui:267
+#: plugins/tools/basictools/wdgcolorsampler.ui:286
 #, kde-format
 msgid "Style for the on-canvas popup to comparing sampled colors"
 msgstr ""
@@ -72746,21 +72775,21 @@ msgid "Contiguous Area Selection"
 msgstr "...ਸੰਰਚਨਾ"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:110
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:235
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:237
 #, fuzzy
 #| msgid "Configure..."
 msgctxt "(qtundo-format)"
 msgid "Select Contiguous Area"
 msgstr "...ਸੰਰਚਨਾ"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:380
 #, fuzzy, kde-format
 #| msgid "Change parameter"
 msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
 msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgctxt ""
@@ -72769,7 +72798,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:392
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt ""
@@ -72778,49 +72807,49 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:398
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:398
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:400
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Select all regions until a specific boundary color"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:403
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:239
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:251
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:406
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:254
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:409
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:412
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:423
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt ""
@@ -72905,21 +72934,21 @@ msgid "Similar Color Selection"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:198
 #, fuzzy
 #| msgid "Background Color"
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:235
 #, fuzzy, kde-format
 #| msgid "Change parameter"
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:245
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:247
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgctxt ""
@@ -72928,7 +72957,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:262
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt ""

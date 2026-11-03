@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-31 00:49+0000\n"
+"POT-Creation-Date: 2026-11-03 00:53+0000\n"
 "PO-Revision-Date: 2026-09-11 15:32+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
@@ -21369,8 +21369,8 @@ msgstr "Taille"
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:72
-#: libs/ui/widgets/kis_selection_options.cc:196
-#: libs/ui/widgets/kis_selection_options.cc:211
+#: libs/ui/widgets/kis_selection_options.cc:200
+#: libs/ui/widgets/kis_selection_options.cc:215
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:540
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:652
@@ -21425,8 +21425,8 @@ msgstr "Taille"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:481
 #: plugins/tools/basictools/kis_tool_multihand.cpp:492
 #: plugins/tools/basictools/kis_tool_multihand.cpp:494
-#: plugins/tools/basictools/wdgcolorsampler.ui:192
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
+#: plugins/tools/basictools/wdgcolorsampler.ui:197
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:416
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:145
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:256
@@ -27563,7 +27563,7 @@ msgstr "Propriétés du calque"
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:61
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:315
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:309
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:145
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:146
 #, kde-format
@@ -31255,7 +31255,7 @@ msgstr "Utiliser l'axe horizontal pour l'action de zoom sur le canevas"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1232
-#: libs/ui/widgets/kis_selection_options.cc:177
+#: libs/ui/widgets/kis_selection_options.cc:181
 #, kde-format
 msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
@@ -31266,7 +31266,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1235
-#: libs/ui/widgets/kis_selection_options.cc:175
+#: libs/ui/widgets/kis_selection_options.cc:179
 #, kde-format
 msgid "Enable Selection Actions Bar"
 msgstr "Activer la barre d'actions de sélection"
@@ -34207,26 +34207,38 @@ msgstr "Mode secondaire"
 msgid "Tertiary Mode"
 msgstr "Mode tertiaire"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:37
+#: libs/ui/input/kis_alternate_invocation_action.cpp:36
 #, kde-format
 msgid "Sample Foreground Color from Current Layer"
 msgstr "Échantillonner la couleur d'avant-plan à partir du calque actif"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:38
+#: libs/ui/input/kis_alternate_invocation_action.cpp:37
 #, kde-format
 msgid "Sample Background Color from Current Layer"
 msgstr "Échantillonner la couleur d'arrière-plan à partir du calque actif"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:40
+#: libs/ui/input/kis_alternate_invocation_action.cpp:39
 #, kde-format
 msgid "Sample Foreground Color from Merged Image"
 msgstr "Échantillonner la couleur d'avant-plan à partir des images fusionnées"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:41
+#: libs/ui/input/kis_alternate_invocation_action.cpp:40
 #, kde-format
 msgid "Sample Background Color from Merged Image"
 msgstr ""
 "Échantillonner la couleur d'arrière-plan à partir des images fusionnées"
+
+#: libs/ui/input/kis_alternate_invocation_action.cpp:42
+#, fuzzy, kde-format
+#| msgid "Sample Foreground Color from Current Layer"
+msgid "Sample Foreground Color from Current Group"
+msgstr "Échantillonner la couleur d'avant-plan à partir du calque actif"
+
+#: libs/ui/input/kis_alternate_invocation_action.cpp:43
+#, fuzzy, kde-format
+#| msgid "Sample Background Color from Current Layer"
+msgid "Sample Background Color from Current Group"
+msgstr "Échantillonner la couleur d'arrière-plan à partir du calque actif"
 
 #: libs/ui/input/kis_change_frame_action.cpp:27
 #, kde-format
@@ -38932,7 +38944,7 @@ msgstr "Le calque peut être dessiné uniquement en mode de lavis."
 msgid "Group not editable."
 msgstr "Groupe non modifiable."
 
-#: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:877
+#: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:898
 #, kde-format
 msgid "Color sampler does not work on this layer."
 msgstr "La pipette ne fonctionne pas sur ce calque."
@@ -40494,106 +40506,112 @@ msgstr "Moteur %1"
 msgid "No Preview for this engine"
 msgstr "Pas d'aperçu pour ce moteur"
 
-#: libs/ui/widgets/kis_selection_options.cc:188
+#: libs/ui/widgets/kis_selection_options.cc:192
 #: plugins/tools/basictools/kis_tool_fill.cc:591
 #, kde-format
 msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
 msgstr "Lissage"
 
-#: libs/ui/widgets/kis_selection_options.cc:193
+#: libs/ui/widgets/kis_selection_options.cc:197
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in selection tools options"
 msgid "Grow: "
 msgstr "Agrandir :"
 
-#: libs/ui/widgets/kis_selection_options.cc:208
+#: libs/ui/widgets/kis_selection_options.cc:212
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in selection tools options"
 msgid "Feather: "
 msgstr "Adoucir :"
 
-#: libs/ui/widgets/kis_selection_options.cc:228
+#: libs/ui/widgets/kis_selection_options.cc:234
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pixel Selection"
 msgstr "Sélection de pixels"
 
-#: libs/ui/widgets/kis_selection_options.cc:230
+#: libs/ui/widgets/kis_selection_options.cc:236
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Vector Selection"
 msgstr "Sélection de vecteurs"
 
-#: libs/ui/widgets/kis_selection_options.cc:233
-#: libs/ui/widgets/kis_selection_options.cc:477
+#: libs/ui/widgets/kis_selection_options.cc:239
+#: libs/ui/widgets/kis_selection_options.cc:485
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace"
 msgstr "Remplacer"
 
-#: libs/ui/widgets/kis_selection_options.cc:235
-#: libs/ui/widgets/kis_selection_options.cc:492
+#: libs/ui/widgets/kis_selection_options.cc:241
+#: libs/ui/widgets/kis_selection_options.cc:500
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Intersect"
 msgstr "Intersection"
 
-#: libs/ui/widgets/kis_selection_options.cc:237
-#: libs/ui/widgets/kis_selection_options.cc:482
+#: libs/ui/widgets/kis_selection_options.cc:243
+#: libs/ui/widgets/kis_selection_options.cc:490
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add"
 msgstr "Ajouter"
 
-#: libs/ui/widgets/kis_selection_options.cc:239
-#: libs/ui/widgets/kis_selection_options.cc:487
+#: libs/ui/widgets/kis_selection_options.cc:245
+#: libs/ui/widgets/kis_selection_options.cc:495
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract"
 msgstr "Soustraire"
 
-#: libs/ui/widgets/kis_selection_options.cc:241
-#: libs/ui/widgets/kis_selection_options.cc:497
+#: libs/ui/widgets/kis_selection_options.cc:247
+#: libs/ui/widgets/kis_selection_options.cc:505
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference"
 msgstr "Différence symétrique"
 
-#: libs/ui/widgets/kis_selection_options.cc:244
+#: libs/ui/widgets/kis_selection_options.cc:250
 #, kde-format
 msgid "Smooths the edges of the selection"
 msgstr "Lisse les bords de la sélection"
 
-#: libs/ui/widgets/kis_selection_options.cc:246
+#: libs/ui/widgets/kis_selection_options.cc:252
 #, kde-format
 msgid "Grow or shrink the selection by the set amount"
 msgstr "Agrandir ou réduire la sélection de la quantité définie"
 
-#: libs/ui/widgets/kis_selection_options.cc:248
+#: libs/ui/widgets/kis_selection_options.cc:254
 #: plugins/tools/basictools/kis_tool_fill.cc:663
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:572
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr "Arrêter l'agrandissement au pixel le plus sombre et/ou le plus opaque"
 
-#: libs/ui/widgets/kis_selection_options.cc:250
+#: libs/ui/widgets/kis_selection_options.cc:256
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr "Flouter la sélection avec la quantité donnée"
 
-#: libs/ui/widgets/kis_selection_options.cc:253
+#: libs/ui/widgets/kis_selection_options.cc:259
 #, kde-format
 msgid "Select regions found from the active layer"
 msgstr "Sélectionnez les régions trouvées dans le calque actif"
 
-#: libs/ui/widgets/kis_selection_options.cc:255
+#: libs/ui/widgets/kis_selection_options.cc:261
+#, fuzzy, kde-format
+#| msgid "Select regions found from the active layer"
+msgid "Select regions found from the active group"
+msgstr "Sélectionnez les régions trouvées dans le calque actif"
+
+#: libs/ui/widgets/kis_selection_options.cc:263
 #, kde-format
 msgid "Select regions found from the merging of all layers"
 msgstr ""
 "Sélectionner des régions trouvées à partir des fusions de tous les calques"
 
-#: libs/ui/widgets/kis_selection_options.cc:257
+#: libs/ui/widgets/kis_selection_options.cc:265
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
@@ -40601,55 +40619,55 @@ msgstr ""
 "Sélectionnez les régions trouvées à partir de la fusion des calques avec des "
 "étiquettes spécifiques de couleur"
 
-#: libs/ui/widgets/kis_selection_options.cc:265
+#: libs/ui/widgets/kis_selection_options.cc:273
 #, kde-format
 msgctxt "The 'mode' section label in selection tools options"
 msgid "Mode"
 msgstr "Mode"
 
-#: libs/ui/widgets/kis_selection_options.cc:272
+#: libs/ui/widgets/kis_selection_options.cc:280
 #, kde-format
 msgctxt "The 'action' section label in selection tools options"
 msgid "Action"
 msgstr "Action"
 
-#: libs/ui/widgets/kis_selection_options.cc:279
+#: libs/ui/widgets/kis_selection_options.cc:287
 #, kde-format
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "Référence"
 
-#: libs/ui/widgets/kis_selection_options.cc:290
+#: libs/ui/widgets/kis_selection_options.cc:298
 #, kde-format
 msgctxt "The 'adjustments' section label in selection tools options"
 msgid "Adjustments"
 msgstr "Ajustements"
 
-#: libs/ui/widgets/kis_selection_options.cc:478
+#: libs/ui/widgets/kis_selection_options.cc:486
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace (%1)"
 msgstr "Remplacer (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:483
+#: libs/ui/widgets/kis_selection_options.cc:491
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add (%1)"
 msgstr "Ajouter (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:488
+#: libs/ui/widgets/kis_selection_options.cc:496
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract (%1)"
 msgstr "Soustraire (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:493
+#: libs/ui/widgets/kis_selection_options.cc:501
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Intersect (%1)"
 msgstr "Intersection (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:499
+#: libs/ui/widgets/kis_selection_options.cc:507
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference (%1)"
@@ -49368,7 +49386,7 @@ msgstr "&Tâches de couleur"
 #. i18n: ectx: property (text), widget (QLabel, lblPreviewStyle)
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#: plugins/tools/basictools/wdgcolorsampler.ui:265
+#: plugins/tools/basictools/wdgcolorsampler.ui:270
 #, kde-format
 msgid "Preview:"
 msgstr "Aperçu :"
@@ -67227,7 +67245,7 @@ msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr "Activer le magnétisme lors de l'utilisation des gommes"
 
-#: plugins/tools/basictools/kis_tool_colorsampler.h:124
+#: plugins/tools/basictools/kis_tool_colorsampler.h:108
 #, kde-format
 msgid "Color Sampler Tool"
 msgstr "Pipette"
@@ -67422,7 +67440,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "Remplir toutes les zones jusqu'à une couleur de bordure spécifique."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:655
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
 #, kde-format
 msgid "Boundary color"
 msgstr "Couleur de bordure"
@@ -67856,18 +67874,25 @@ msgstr "Tous les calques visibles"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:145
+#, fuzzy, kde-format
+#| msgid "Sample Current Layer"
+msgid "Sample Current Group"
+msgstr "Uniquement le calque courant"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
+#: plugins/tools/basictools/wdgcolorsampler.ui:150
 #, kde-format
 msgid "Sample Current Layer"
 msgstr "Uniquement le calque courant"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
-#: plugins/tools/basictools/wdgcolorsampler.ui:170
+#: plugins/tools/basictools/wdgcolorsampler.ui:175
 #, kde-format
 msgid "Radius: "
 msgstr "Rayon :"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, radius)
-#: plugins/tools/basictools/wdgcolorsampler.ui:189
+#: plugins/tools/basictools/wdgcolorsampler.ui:194
 #, kde-format
 msgid ""
 "<nobr>Radius controls the color sampler's sampling area.</nobr> Pixel colors "
@@ -67877,7 +67902,7 @@ msgstr ""
 "rayon les couleurs des pixels sont mélangées toutes ensemble."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbNormaliseValues)
-#: plugins/tools/basictools/wdgcolorsampler.ui:207
+#: plugins/tools/basictools/wdgcolorsampler.ui:212
 #, kde-format
 msgid ""
 "Displays per-channel color information below as percentages instead of bytes."
@@ -67886,26 +67911,26 @@ msgstr ""
 "pourcentages au lieu d'octets."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbNormaliseValues)
-#: plugins/tools/basictools/wdgcolorsampler.ui:210
+#: plugins/tools/basictools/wdgcolorsampler.ui:215
 #, kde-format
 msgid "Show colors as percentages"
 msgstr "Afficher les couleurs en pourcentages"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, listViewChannels)
-#: plugins/tools/basictools/wdgcolorsampler.ui:233
+#: plugins/tools/basictools/wdgcolorsampler.ui:238
 #, kde-format
 msgid "Channel"
 msgstr "Canal"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, listViewChannels)
-#: plugins/tools/basictools/wdgcolorsampler.ui:238
+#: plugins/tools/basictools/wdgcolorsampler.ui:243
 #, kde-format
 msgctxt "The value number each channel of sampled color listed in a table"
 msgid "Value"
 msgstr "Valeur"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUpdateCurrentColor)
-#: plugins/tools/basictools/wdgcolorsampler.ui:248
+#: plugins/tools/basictools/wdgcolorsampler.ui:253
 #, kde-format
 msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
@@ -67915,15 +67940,15 @@ msgstr ""
 "nobr>courant ou non."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
-#: plugins/tools/basictools/wdgcolorsampler.ui:251
+#: plugins/tools/basictools/wdgcolorsampler.ui:256
 #, kde-format
 msgid "Update color"
 msgstr "Mettre à jour la couleur"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPreviewStyle)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbPreviewStyle)
-#: plugins/tools/basictools/wdgcolorsampler.ui:262
-#: plugins/tools/basictools/wdgcolorsampler.ui:281
+#: plugins/tools/basictools/wdgcolorsampler.ui:267
+#: plugins/tools/basictools/wdgcolorsampler.ui:286
 #, kde-format
 msgid "Style for the on-canvas popup to comparing sampled colors"
 msgstr ""
@@ -68760,18 +68785,18 @@ msgid "Contiguous Area Selection"
 msgstr "Sélection d'une zone de couleur contiguë"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:110
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:235
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:237
 msgctxt "(qtundo-format)"
 msgid "Select Contiguous Area"
 msgstr "Sélection d'une zone de couleur contiguë"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:380
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
 msgstr "Seuil : "
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, kde-format
 msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
@@ -68779,7 +68804,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Étendue : {n} %"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:392
 #, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in contiguous selection tool to use "
@@ -68787,22 +68812,22 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Utiliser la sélection comme limite"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:398
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
 "Sélectionnez des régions de couleur similaire à la région sélectionnée par "
 "clic"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:398
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:400
 #, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr ""
 "Sélectionnez toutes les régions jusqu'à une couleur de bordure spécifique."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:403
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:239
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:251
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
@@ -68812,8 +68837,8 @@ msgstr ""
 "L'augmentation du seuil augmente la plage de couleurs similaires à "
 "sélectionner."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:406
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:254
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
@@ -68823,7 +68848,7 @@ msgstr ""
 "diminue l'opacité des zones de sélection en fonction de la similarité des "
 "couleurs."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:409
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -68832,13 +68857,13 @@ msgstr ""
 "Définir si le contour de la sélection active doit être traitée comme une "
 "limite lors de la réalisation d'une nouvelle sélection"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:412
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
 msgstr "Combler l'écart :"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:423
 #, kde-format
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
@@ -68906,18 +68931,18 @@ msgid "Similar Color Selection"
 msgstr "Sélection par la couleur"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:198
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
 msgstr "Sélectionner par la couleur"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:235
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "Seuil : "
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:245
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:247
 #, kde-format
 msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
@@ -68925,7 +68950,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Étendue : {n} %"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:262
 #, kde-format
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"

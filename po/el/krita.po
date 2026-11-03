@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-31 00:49+0000\n"
+"POT-Creation-Date: 2026-11-03 00:53+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -21712,8 +21712,8 @@ msgstr "Μέγεθος"
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:72
-#: libs/ui/widgets/kis_selection_options.cc:196
-#: libs/ui/widgets/kis_selection_options.cc:211
+#: libs/ui/widgets/kis_selection_options.cc:200
+#: libs/ui/widgets/kis_selection_options.cc:215
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:540
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:652
@@ -21768,8 +21768,8 @@ msgstr "Μέγεθος"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:481
 #: plugins/tools/basictools/kis_tool_multihand.cpp:492
 #: plugins/tools/basictools/kis_tool_multihand.cpp:494
-#: plugins/tools/basictools/wdgcolorsampler.ui:192
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
+#: plugins/tools/basictools/wdgcolorsampler.ui:197
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:416
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:145
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:256
@@ -28065,7 +28065,7 @@ msgstr "Ιδιότητες στρώματος"
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:61
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:315
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:309
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:145
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:146
 #, kde-format
@@ -31747,7 +31747,7 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1232
-#: libs/ui/widgets/kis_selection_options.cc:177
+#: libs/ui/widgets/kis_selection_options.cc:181
 #, kde-format
 msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
@@ -31756,7 +31756,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1235
-#: libs/ui/widgets/kis_selection_options.cc:175
+#: libs/ui/widgets/kis_selection_options.cc:179
 #, fuzzy, kde-format
 #| msgid "Selection decoration"
 msgid "Enable Selection Actions Bar"
@@ -34609,24 +34609,34 @@ msgstr "Εναλλαγή λειτουργίας κλίσης"
 msgid "Tertiary Mode"
 msgstr "Εναλλαγή λειτουργίας κλίσης"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:37
+#: libs/ui/input/kis_alternate_invocation_action.cpp:36
 #, fuzzy, kde-format
 msgid "Sample Foreground Color from Current Layer"
 msgstr "Συμπλήρωση παλέτας από τρέχον στρώμα"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:38
+#: libs/ui/input/kis_alternate_invocation_action.cpp:37
 #, fuzzy, kde-format
 msgid "Sample Background Color from Current Layer"
 msgstr "Συμπλήρωση παλέτας από τρέχον στρώμα"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:40
+#: libs/ui/input/kis_alternate_invocation_action.cpp:39
 #, fuzzy, kde-format
 msgid "Sample Foreground Color from Merged Image"
 msgstr "Συμπλήρωση παλέτας από τρέχον στρώμα"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:41
+#: libs/ui/input/kis_alternate_invocation_action.cpp:40
 #, fuzzy, kde-format
 msgid "Sample Background Color from Merged Image"
+msgstr "Συμπλήρωση παλέτας από τρέχον στρώμα"
+
+#: libs/ui/input/kis_alternate_invocation_action.cpp:42
+#, fuzzy, kde-format
+msgid "Sample Foreground Color from Current Group"
+msgstr "Συμπλήρωση παλέτας από τρέχον στρώμα"
+
+#: libs/ui/input/kis_alternate_invocation_action.cpp:43
+#, fuzzy, kde-format
+msgid "Sample Background Color from Current Group"
 msgstr "Συμπλήρωση παλέτας από τρέχον στρώμα"
 
 #: libs/ui/input/kis_change_frame_action.cpp:27
@@ -39281,7 +39291,7 @@ msgstr ""
 msgid "Group not editable."
 msgstr "Η ομάδα δεν είναι επεξεργάσιμη."
 
-#: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:877
+#: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:898
 #, kde-format
 msgid "Color sampler does not work on this layer."
 msgstr ""
@@ -40633,7 +40643,7 @@ msgstr "Μηχανή KS%1"
 msgid "No Preview for this engine"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:188
+#: libs/ui/widgets/kis_selection_options.cc:192
 #: plugins/tools/basictools/kis_tool_fill.cc:591
 #, fuzzy, kde-format
 #| msgid "Anti-aliasing"
@@ -40641,165 +40651,171 @@ msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
 msgstr "Εξομάλυνση"
 
-#: libs/ui/widgets/kis_selection_options.cc:193
+#: libs/ui/widgets/kis_selection_options.cc:197
 #, fuzzy, kde-format
 #| msgid "Grow"
 msgctxt "The 'grow/shrink' spinbox prefix in selection tools options"
 msgid "Grow: "
 msgstr "Μεγέθυνση"
 
-#: libs/ui/widgets/kis_selection_options.cc:208
+#: libs/ui/widgets/kis_selection_options.cc:212
 #, fuzzy, kde-format
 #| msgid "Feather..."
 msgctxt "The 'feather' spinbox prefix in selection tools options"
 msgid "Feather: "
 msgstr "Φτερό..."
 
-#: libs/ui/widgets/kis_selection_options.cc:228
+#: libs/ui/widgets/kis_selection_options.cc:234
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Pixel Selection"
 msgstr "Απόκρυψη επιλογής"
 
-#: libs/ui/widgets/kis_selection_options.cc:230
+#: libs/ui/widgets/kis_selection_options.cc:236
 #, fuzzy, kde-format
 #| msgid "Vector Selection"
 msgctxt "@info:tooltip"
 msgid "Vector Selection"
 msgstr "Επιλογή διανύσματος"
 
-#: libs/ui/widgets/kis_selection_options.cc:233
-#: libs/ui/widgets/kis_selection_options.cc:477
+#: libs/ui/widgets/kis_selection_options.cc:239
+#: libs/ui/widgets/kis_selection_options.cc:485
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace"
 msgstr "Αντικατάσταση"
 
-#: libs/ui/widgets/kis_selection_options.cc:235
-#: libs/ui/widgets/kis_selection_options.cc:492
+#: libs/ui/widgets/kis_selection_options.cc:241
+#: libs/ui/widgets/kis_selection_options.cc:500
 #, fuzzy, kde-format
 #| msgid "Intersect"
 msgctxt "@info:tooltip"
 msgid "Intersect"
 msgstr "Τομή"
 
-#: libs/ui/widgets/kis_selection_options.cc:237
-#: libs/ui/widgets/kis_selection_options.cc:482
+#: libs/ui/widgets/kis_selection_options.cc:243
+#: libs/ui/widgets/kis_selection_options.cc:490
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Add"
 msgstr "Προσθήκη"
 
-#: libs/ui/widgets/kis_selection_options.cc:239
-#: libs/ui/widgets/kis_selection_options.cc:487
+#: libs/ui/widgets/kis_selection_options.cc:245
+#: libs/ui/widgets/kis_selection_options.cc:495
 #, fuzzy, kde-format
 #| msgid "Subtract"
 msgctxt "@info:tooltip"
 msgid "Subtract"
 msgstr "Αφαίρεση"
 
-#: libs/ui/widgets/kis_selection_options.cc:241
-#: libs/ui/widgets/kis_selection_options.cc:497
+#: libs/ui/widgets/kis_selection_options.cc:247
+#: libs/ui/widgets/kis_selection_options.cc:505
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference"
 msgstr "Συμμετρία"
 
-#: libs/ui/widgets/kis_selection_options.cc:244
+#: libs/ui/widgets/kis_selection_options.cc:250
 #, fuzzy, kde-format
 #| msgid "Set line width of actual selection"
 msgid "Smooths the edges of the selection"
 msgstr "Ορισμός πλάτους γραμμής πραγματιστικής επιλογής"
 
-#: libs/ui/widgets/kis_selection_options.cc:246
+#: libs/ui/widgets/kis_selection_options.cc:252
 #, fuzzy, kde-format
 #| msgid "Grow/shrink selection: "
 msgid "Grow or shrink the selection by the set amount"
 msgstr "Αύξηση/μείωση επιλογής: "
 
-#: libs/ui/widgets/kis_selection_options.cc:248
+#: libs/ui/widgets/kis_selection_options.cc:254
 #: plugins/tools/basictools/kis_tool_fill.cc:663
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:572
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:250
+#: libs/ui/widgets/kis_selection_options.cc:256
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:253
+#: libs/ui/widgets/kis_selection_options.cc:259
 #, fuzzy, kde-format
 #| msgid "Select the blending mode for the layer."
 msgid "Select regions found from the active layer"
 msgstr "Επιλέξτε τη λειτουργία ανάμειξης για το στρώμα."
 
-#: libs/ui/widgets/kis_selection_options.cc:255
+#: libs/ui/widgets/kis_selection_options.cc:261
+#, fuzzy, kde-format
+#| msgid "Select the blending mode for the layer."
+msgid "Select regions found from the active group"
+msgstr "Επιλέξτε τη λειτουργία ανάμειξης για το στρώμα."
+
+#: libs/ui/widgets/kis_selection_options.cc:263
 #, fuzzy, kde-format
 msgid "Select regions found from the merging of all layers"
 msgstr "Επιλογή ενός χρώματος από την εικόνα ή το τρέχον στρώμα"
 
-#: libs/ui/widgets/kis_selection_options.cc:257
+#: libs/ui/widgets/kis_selection_options.cc:265
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:265
+#: libs/ui/widgets/kis_selection_options.cc:273
 #, fuzzy, kde-format
 #| msgid "Mode"
 msgctxt "The 'mode' section label in selection tools options"
 msgid "Mode"
 msgstr "Λειτουργία"
 
-#: libs/ui/widgets/kis_selection_options.cc:272
+#: libs/ui/widgets/kis_selection_options.cc:280
 #, fuzzy, kde-format
 msgctxt "The 'action' section label in selection tools options"
 msgid "Action"
 msgstr "Ενέργεια:"
 
-#: libs/ui/widgets/kis_selection_options.cc:279
+#: libs/ui/widgets/kis_selection_options.cc:287
 #, fuzzy, kde-format
 #| msgid "References"
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "Παραπομπές"
 
-#: libs/ui/widgets/kis_selection_options.cc:290
+#: libs/ui/widgets/kis_selection_options.cc:298
 #, fuzzy, kde-format
 msgctxt "The 'adjustments' section label in selection tools options"
 msgid "Adjustments"
 msgstr "Προσα&ρμογή HSV..."
 
-#: libs/ui/widgets/kis_selection_options.cc:478
+#: libs/ui/widgets/kis_selection_options.cc:486
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace (%1)"
 msgstr "Αντικατάσταση"
 
-#: libs/ui/widgets/kis_selection_options.cc:483
+#: libs/ui/widgets/kis_selection_options.cc:491
 #, fuzzy, kde-format
 #| msgid "Auto"
 msgctxt "@info:tooltip"
 msgid "Add (%1)"
 msgstr "Αυτόματο"
 
-#: libs/ui/widgets/kis_selection_options.cc:488
+#: libs/ui/widgets/kis_selection_options.cc:496
 #, fuzzy, kde-format
 #| msgid "Subtract"
 msgctxt "@info:tooltip"
 msgid "Subtract (%1)"
 msgstr "Αφαίρεση"
 
-#: libs/ui/widgets/kis_selection_options.cc:493
+#: libs/ui/widgets/kis_selection_options.cc:501
 #, fuzzy, kde-format
 #| msgid "Intersect"
 msgctxt "@info:tooltip"
 msgid "Intersect (%1)"
 msgstr "Τομή"
 
-#: libs/ui/widgets/kis_selection_options.cc:499
+#: libs/ui/widgets/kis_selection_options.cc:507
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference (%1)"
@@ -49618,7 +49634,7 @@ msgstr "Διορθώσεις χρωμάτων"
 #. i18n: ectx: property (text), widget (QLabel, lblPreviewStyle)
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#: plugins/tools/basictools/wdgcolorsampler.ui:265
+#: plugins/tools/basictools/wdgcolorsampler.ui:270
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgid "Preview:"
@@ -67758,7 +67774,7 @@ msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_colorsampler.h:124
+#: plugins/tools/basictools/kis_tool_colorsampler.h:108
 #, fuzzy, kde-format
 msgid "Color Sampler Tool"
 msgstr "Επιλογέας χρωμάτων"
@@ -67960,7 +67976,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "Γέμισμα με χρώμα φόντου"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:655
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
 #, fuzzy, kde-format
 #| msgid "Background color"
 msgid "Boundary color"
@@ -68387,18 +68403,25 @@ msgstr "Δείγμα όλων των ορατών στρωμάτων"
 #: plugins/tools/basictools/wdgcolorsampler.ui:145
 #, fuzzy, kde-format
 #| msgid "Current Layer"
+msgid "Sample Current Group"
+msgstr "Τρέχον στρώμα"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
+#: plugins/tools/basictools/wdgcolorsampler.ui:150
+#, fuzzy, kde-format
+#| msgid "Current Layer"
 msgid "Sample Current Layer"
 msgstr "Τρέχον στρώμα"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
-#: plugins/tools/basictools/wdgcolorsampler.ui:170
+#: plugins/tools/basictools/wdgcolorsampler.ui:175
 #, fuzzy, kde-format
 #| msgid "Radius:"
 msgid "Radius: "
 msgstr "Ακτίνα:"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, radius)
-#: plugins/tools/basictools/wdgcolorsampler.ui:189
+#: plugins/tools/basictools/wdgcolorsampler.ui:194
 #, kde-format
 msgid ""
 "<nobr>Radius controls the color sampler's sampling area.</nobr> Pixel colors "
@@ -68406,26 +68429,26 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbNormaliseValues)
-#: plugins/tools/basictools/wdgcolorsampler.ui:207
+#: plugins/tools/basictools/wdgcolorsampler.ui:212
 #, kde-format
 msgid ""
 "Displays per-channel color information below as percentages instead of bytes."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbNormaliseValues)
-#: plugins/tools/basictools/wdgcolorsampler.ui:210
+#: plugins/tools/basictools/wdgcolorsampler.ui:215
 #, kde-format
 msgid "Show colors as percentages"
 msgstr "Εμφάνιση χρωμάτων ως ποσοστά"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, listViewChannels)
-#: plugins/tools/basictools/wdgcolorsampler.ui:233
+#: plugins/tools/basictools/wdgcolorsampler.ui:238
 #, kde-format
 msgid "Channel"
 msgstr "Κανάλι"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, listViewChannels)
-#: plugins/tools/basictools/wdgcolorsampler.ui:238
+#: plugins/tools/basictools/wdgcolorsampler.ui:243
 #, fuzzy, kde-format
 #| msgid "Value"
 msgctxt "The value number each channel of sampled color listed in a table"
@@ -68433,7 +68456,7 @@ msgid "Value"
 msgstr "Τιμή"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUpdateCurrentColor)
-#: plugins/tools/basictools/wdgcolorsampler.ui:248
+#: plugins/tools/basictools/wdgcolorsampler.ui:253
 #, kde-format
 msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
@@ -68441,7 +68464,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
-#: plugins/tools/basictools/wdgcolorsampler.ui:251
+#: plugins/tools/basictools/wdgcolorsampler.ui:256
 #, fuzzy, kde-format
 #| msgid "Update current color"
 msgid "Update color"
@@ -68449,8 +68472,8 @@ msgstr "Ενημέρωση τρέχοντος χρώματος"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPreviewStyle)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbPreviewStyle)
-#: plugins/tools/basictools/wdgcolorsampler.ui:262
-#: plugins/tools/basictools/wdgcolorsampler.ui:281
+#: plugins/tools/basictools/wdgcolorsampler.ui:267
+#: plugins/tools/basictools/wdgcolorsampler.ui:286
 #, kde-format
 msgid "Style for the on-canvas popup to comparing sampled colors"
 msgstr ""
@@ -69322,20 +69345,20 @@ msgid "Contiguous Area Selection"
 msgstr "Παράπλευρη επιλογή περιοχής"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:110
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:235
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:237
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Contiguous Area"
 msgstr "Επιλέξτε παράπλευρη περιοχή"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:380
 #, fuzzy, kde-format
 #| msgid "Threshold: "
 msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
 msgstr "Κατώφλι: "
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, fuzzy, kde-format
 #| msgid "Opacity: "
 msgctxt ""
@@ -69344,7 +69367,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Αδιαφάνεια: "
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:392
 #, fuzzy, kde-format
 #| msgid "Border selection by"
 msgctxt ""
@@ -69353,48 +69376,48 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Περίγραμμα επιλογής κατά"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:398
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:398
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:400
 #, fuzzy, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr "Γέμισμα με χρώμα φόντου"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:403
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:239
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:251
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:406
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:254
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:409
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:412
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #, fuzzy, kde-format
 #| msgid "Close"
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
 msgstr "Κλείσιμο"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:423
 #, fuzzy, kde-format
 #| msgid "Rendering Intent"
 msgctxt ""
@@ -69468,20 +69491,20 @@ msgid "Similar Color Selection"
 msgstr "Επιλογή παρόμοιου"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:198
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
 msgstr "Επιλογή παρόμοιων χρωμάτων"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:235
 #, fuzzy, kde-format
 #| msgid "Threshold: "
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "Κατώφλι: "
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:245
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:247
 #, fuzzy, kde-format
 #| msgid "Opacity: "
 msgctxt ""
@@ -69490,7 +69513,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Αδιαφάνεια: "
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:262
 #, fuzzy, kde-format
 #| msgid "Rendering Intent"
 msgctxt ""

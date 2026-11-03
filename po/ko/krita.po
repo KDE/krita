@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-31 00:49+0000\n"
+"POT-Creation-Date: 2026-11-03 00:53+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -22391,8 +22391,8 @@ msgstr "크기"
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:72
-#: libs/ui/widgets/kis_selection_options.cc:196
-#: libs/ui/widgets/kis_selection_options.cc:211
+#: libs/ui/widgets/kis_selection_options.cc:200
+#: libs/ui/widgets/kis_selection_options.cc:215
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:540
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:652
@@ -22447,8 +22447,8 @@ msgstr "크기"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:481
 #: plugins/tools/basictools/kis_tool_multihand.cpp:492
 #: plugins/tools/basictools/kis_tool_multihand.cpp:494
-#: plugins/tools/basictools/wdgcolorsampler.ui:192
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
+#: plugins/tools/basictools/wdgcolorsampler.ui:197
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:416
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:145
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:256
@@ -28724,7 +28724,7 @@ msgstr "레이어 속성"
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:61
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:315
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:309
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:145
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:146
 #, kde-format
@@ -32405,7 +32405,7 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1232
-#: libs/ui/widgets/kis_selection_options.cc:177
+#: libs/ui/widgets/kis_selection_options.cc:181
 #, kde-format
 msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
@@ -32414,7 +32414,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1235
-#: libs/ui/widgets/kis_selection_options.cc:175
+#: libs/ui/widgets/kis_selection_options.cc:179
 #, fuzzy, kde-format
 #| msgid "Selection Actions"
 msgid "Enable Selection Actions Bar"
@@ -35320,25 +35320,37 @@ msgstr "보조 모드"
 msgid "Tertiary Mode"
 msgstr "삼차 모드"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:37
+#: libs/ui/input/kis_alternate_invocation_action.cpp:36
 #, kde-format
 msgid "Sample Foreground Color from Current Layer"
 msgstr "현재 레이어에서 전경색 표본 추출"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:38
+#: libs/ui/input/kis_alternate_invocation_action.cpp:37
 #, kde-format
 msgid "Sample Background Color from Current Layer"
 msgstr "현재 레이어에서 배경색 표본 추출"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:40
+#: libs/ui/input/kis_alternate_invocation_action.cpp:39
 #, kde-format
 msgid "Sample Foreground Color from Merged Image"
 msgstr "병합된 이미지에서 전경색 표본 추출"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:41
+#: libs/ui/input/kis_alternate_invocation_action.cpp:40
 #, kde-format
 msgid "Sample Background Color from Merged Image"
 msgstr "병합된 이미지에서 배경색 표본 추출"
+
+#: libs/ui/input/kis_alternate_invocation_action.cpp:42
+#, fuzzy, kde-format
+#| msgid "Sample Foreground Color from Current Layer"
+msgid "Sample Foreground Color from Current Group"
+msgstr "현재 레이어에서 전경색 표본 추출"
+
+#: libs/ui/input/kis_alternate_invocation_action.cpp:43
+#, fuzzy, kde-format
+#| msgid "Sample Background Color from Current Layer"
+msgid "Sample Background Color from Current Group"
+msgstr "현재 레이어에서 배경색 표본 추출"
 
 #: libs/ui/input/kis_change_frame_action.cpp:27
 #, kde-format
@@ -40097,7 +40109,7 @@ msgstr "레이어는 워시 모드에서만 그릴 수 있습니다."
 msgid "Group not editable."
 msgstr "그룹을 편집할 수 없습니다."
 
-#: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:877
+#: libs/ui/tool/KisAsyncColorSamplerHelper.cpp:898
 #, kde-format
 msgid "Color sampler does not work on this layer."
 msgstr "이 레이어에서 색상 표본 추출기를 사용할 수 없습니다."
@@ -41621,14 +41633,14 @@ msgstr "%1 엔진"
 msgid "No Preview for this engine"
 msgstr "이 엔진의 미리 보기 없음"
 
-#: libs/ui/widgets/kis_selection_options.cc:188
+#: libs/ui/widgets/kis_selection_options.cc:192
 #: plugins/tools/basictools/kis_tool_fill.cc:591
 #, kde-format
 msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
 msgstr "앤티에일리어싱"
 
-#: libs/ui/widgets/kis_selection_options.cc:193
+#: libs/ui/widgets/kis_selection_options.cc:197
 #, fuzzy, kde-format
 #| msgctxt "Grow as in deform brush engine"
 #| msgid "Grow"
@@ -41636,120 +41648,126 @@ msgctxt "The 'grow/shrink' spinbox prefix in selection tools options"
 msgid "Grow: "
 msgstr "확장"
 
-#: libs/ui/widgets/kis_selection_options.cc:208
+#: libs/ui/widgets/kis_selection_options.cc:212
 #, fuzzy, kde-format
 #| msgid "Feather radius:"
 msgctxt "The 'feather' spinbox prefix in selection tools options"
 msgid "Feather: "
 msgstr "페더 반지름:"
 
-#: libs/ui/widgets/kis_selection_options.cc:228
+#: libs/ui/widgets/kis_selection_options.cc:234
 #, fuzzy, kde-format
 #| msgid "Pixel Selection"
 msgctxt "@info:tooltip"
 msgid "Pixel Selection"
 msgstr "픽셀 선택"
 
-#: libs/ui/widgets/kis_selection_options.cc:230
+#: libs/ui/widgets/kis_selection_options.cc:236
 #, fuzzy, kde-format
 #| msgid "Vector Selection"
 msgctxt "@info:tooltip"
 msgid "Vector Selection"
 msgstr "벡터 선택"
 
-#: libs/ui/widgets/kis_selection_options.cc:233
-#: libs/ui/widgets/kis_selection_options.cc:477
+#: libs/ui/widgets/kis_selection_options.cc:239
+#: libs/ui/widgets/kis_selection_options.cc:485
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace"
 msgstr "바꾸기"
 
-#: libs/ui/widgets/kis_selection_options.cc:235
-#: libs/ui/widgets/kis_selection_options.cc:492
+#: libs/ui/widgets/kis_selection_options.cc:241
+#: libs/ui/widgets/kis_selection_options.cc:500
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Intersect"
 msgstr "교차"
 
-#: libs/ui/widgets/kis_selection_options.cc:237
-#: libs/ui/widgets/kis_selection_options.cc:482
+#: libs/ui/widgets/kis_selection_options.cc:243
+#: libs/ui/widgets/kis_selection_options.cc:490
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add"
 msgstr "추가"
 
-#: libs/ui/widgets/kis_selection_options.cc:239
-#: libs/ui/widgets/kis_selection_options.cc:487
+#: libs/ui/widgets/kis_selection_options.cc:245
+#: libs/ui/widgets/kis_selection_options.cc:495
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract"
 msgstr "빼기"
 
-#: libs/ui/widgets/kis_selection_options.cc:241
-#: libs/ui/widgets/kis_selection_options.cc:497
+#: libs/ui/widgets/kis_selection_options.cc:247
+#: libs/ui/widgets/kis_selection_options.cc:505
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference"
 msgstr "대칭 차이"
 
-#: libs/ui/widgets/kis_selection_options.cc:244
+#: libs/ui/widgets/kis_selection_options.cc:250
 #, fuzzy, kde-format
 #| msgid "Set line width of actual selection"
 msgid "Smooths the edges of the selection"
 msgstr "실제 선택의 선 굵기 설정"
 
-#: libs/ui/widgets/kis_selection_options.cc:246
+#: libs/ui/widgets/kis_selection_options.cc:252
 #, fuzzy, kde-format
 #| msgid "Grow/shrink selection: "
 msgid "Grow or shrink the selection by the set amount"
 msgstr "선택 확장/수축: "
 
-#: libs/ui/widgets/kis_selection_options.cc:248
+#: libs/ui/widgets/kis_selection_options.cc:254
 #: plugins/tools/basictools/kis_tool_fill.cc:663
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:572
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:250
+#: libs/ui/widgets/kis_selection_options.cc:256
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:253
+#: libs/ui/widgets/kis_selection_options.cc:259
 #, fuzzy, kde-format
 #| msgid "Select the blending mode for the layer."
 msgid "Select regions found from the active layer"
 msgstr "레이어의 혼합 모드를 선택합니다."
 
-#: libs/ui/widgets/kis_selection_options.cc:255
+#: libs/ui/widgets/kis_selection_options.cc:261
+#, fuzzy, kde-format
+#| msgid "Select the blending mode for the layer."
+msgid "Select regions found from the active group"
+msgstr "레이어의 혼합 모드를 선택합니다."
+
+#: libs/ui/widgets/kis_selection_options.cc:263
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Select a color from the image or current layer"
 msgid "Select regions found from the merging of all layers"
 msgstr "그림이나 현재 레이어에서 색상을 선택합니다."
 
-#: libs/ui/widgets/kis_selection_options.cc:257
+#: libs/ui/widgets/kis_selection_options.cc:265
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:265
+#: libs/ui/widgets/kis_selection_options.cc:273
 #, fuzzy, kde-format
 #| msgid "Mode"
 msgctxt "The 'mode' section label in selection tools options"
 msgid "Mode"
 msgstr "모드"
 
-#: libs/ui/widgets/kis_selection_options.cc:272
+#: libs/ui/widgets/kis_selection_options.cc:280
 #, fuzzy, kde-format
 #| msgid "Action"
 msgctxt "The 'action' section label in selection tools options"
 msgid "Action"
 msgstr "동작"
 
-#: libs/ui/widgets/kis_selection_options.cc:279
+#: libs/ui/widgets/kis_selection_options.cc:287
 #, fuzzy, kde-format
 #| msgctxt "The 'reference' section label in fill tool options"
 #| msgid "Reference"
@@ -41757,7 +41775,7 @@ msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "참조"
 
-#: libs/ui/widgets/kis_selection_options.cc:290
+#: libs/ui/widgets/kis_selection_options.cc:298
 #, fuzzy, kde-format
 #| msgctxt "The 'adjustments' section label in fill tool options"
 #| msgid "Adjustments"
@@ -41765,31 +41783,31 @@ msgctxt "The 'adjustments' section label in selection tools options"
 msgid "Adjustments"
 msgstr "조정"
 
-#: libs/ui/widgets/kis_selection_options.cc:478
+#: libs/ui/widgets/kis_selection_options.cc:486
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace (%1)"
 msgstr "바꾸기(%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:483
+#: libs/ui/widgets/kis_selection_options.cc:491
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add (%1)"
 msgstr "더하기(%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:488
+#: libs/ui/widgets/kis_selection_options.cc:496
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract (%1)"
 msgstr "빼기(%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:493
+#: libs/ui/widgets/kis_selection_options.cc:501
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Intersect (%1)"
 msgstr "교차(%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:499
+#: libs/ui/widgets/kis_selection_options.cc:507
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference (%1)"
@@ -50685,7 +50703,7 @@ msgstr "색상 패치(&R)"
 #. i18n: ectx: property (text), widget (QLabel, lblPreviewStyle)
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#: plugins/tools/basictools/wdgcolorsampler.ui:265
+#: plugins/tools/basictools/wdgcolorsampler.ui:270
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgid "Preview:"
@@ -68559,7 +68577,7 @@ msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_colorsampler.h:124
+#: plugins/tools/basictools/kis_tool_colorsampler.h:108
 #, kde-format
 msgid "Color Sampler Tool"
 msgstr "색상 표본 추출기 도구"
@@ -68773,7 +68791,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "영역을 배경색으로 채우기"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:655
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
 #, fuzzy, kde-format
 #| msgid "Background color"
 msgid "Boundary color"
@@ -69210,18 +69228,25 @@ msgstr "보이는 모든 레이어 샘플"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:145
+#, fuzzy, kde-format
+#| msgid "Sample Current Layer"
+msgid "Sample Current Group"
+msgstr "현재 레이어 샘플"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
+#: plugins/tools/basictools/wdgcolorsampler.ui:150
 #, kde-format
 msgid "Sample Current Layer"
 msgstr "현재 레이어 샘플"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
-#: plugins/tools/basictools/wdgcolorsampler.ui:170
+#: plugins/tools/basictools/wdgcolorsampler.ui:175
 #, kde-format
 msgid "Radius: "
 msgstr "반지름: "
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, radius)
-#: plugins/tools/basictools/wdgcolorsampler.ui:189
+#: plugins/tools/basictools/wdgcolorsampler.ui:194
 #, kde-format
 msgid ""
 "<nobr>Radius controls the color sampler's sampling area.</nobr> Pixel colors "
@@ -69231,33 +69256,33 @@ msgstr ""
 "의 픽셀 색상은 서로 섞입니다."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbNormaliseValues)
-#: plugins/tools/basictools/wdgcolorsampler.ui:207
+#: plugins/tools/basictools/wdgcolorsampler.ui:212
 #, kde-format
 msgid ""
 "Displays per-channel color information below as percentages instead of bytes."
 msgstr "아래 채널별 색상 정보를 바이트 대신 백분율로 표시합니다."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbNormaliseValues)
-#: plugins/tools/basictools/wdgcolorsampler.ui:210
+#: plugins/tools/basictools/wdgcolorsampler.ui:215
 #, kde-format
 msgid "Show colors as percentages"
 msgstr "백분율로 색상 표시"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, listViewChannels)
-#: plugins/tools/basictools/wdgcolorsampler.ui:233
+#: plugins/tools/basictools/wdgcolorsampler.ui:238
 #, kde-format
 msgid "Channel"
 msgstr "채널"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, listViewChannels)
-#: plugins/tools/basictools/wdgcolorsampler.ui:238
+#: plugins/tools/basictools/wdgcolorsampler.ui:243
 #, kde-format
 msgctxt "The value number each channel of sampled color listed in a table"
 msgid "Value"
 msgstr "명도"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUpdateCurrentColor)
-#: plugins/tools/basictools/wdgcolorsampler.ui:248
+#: plugins/tools/basictools/wdgcolorsampler.ui:253
 #, kde-format
 msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
@@ -69266,15 +69291,15 @@ msgstr ""
 "<nobr>색상 표본 추출기에서 현재 전경색 업데이트</nobr> 여부를 제어합니다."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
-#: plugins/tools/basictools/wdgcolorsampler.ui:251
+#: plugins/tools/basictools/wdgcolorsampler.ui:256
 #, kde-format
 msgid "Update color"
 msgstr "색상 업데이트"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPreviewStyle)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbPreviewStyle)
-#: plugins/tools/basictools/wdgcolorsampler.ui:262
-#: plugins/tools/basictools/wdgcolorsampler.ui:281
+#: plugins/tools/basictools/wdgcolorsampler.ui:267
+#: plugins/tools/basictools/wdgcolorsampler.ui:286
 #, kde-format
 msgid "Style for the on-canvas popup to comparing sampled colors"
 msgstr ""
@@ -70142,12 +70167,12 @@ msgid "Contiguous Area Selection"
 msgstr "인접 영역 선택"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:110
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:235
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:237
 msgctxt "(qtundo-format)"
 msgid "Select Contiguous Area"
 msgstr "인접 영역 선택"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:380
 #, fuzzy, kde-format
 #| msgctxt "The 'threshold' spinbox prefix in fill tool options"
 #| msgid "Threshold: "
@@ -70155,7 +70180,7 @@ msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
 msgstr "임곗값: "
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, fuzzy, kde-format
 #| msgid "Spread:"
 msgctxt ""
@@ -70164,7 +70189,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "퍼짐:"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:392
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "Description for a checkbox in a Fill Tool to use selection borders as "
@@ -70176,49 +70201,49 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "선택 영역을 경계선으로 사용:"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:398
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:398
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:400
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Select all regions until a specific boundary color"
 msgstr "영역을 배경색으로 채우기"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:403
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:239
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:251
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:406
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:254
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:409
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:412
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #, fuzzy, kde-format
 #| msgid "Close"
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
 msgstr "닫기"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:423
 #, fuzzy, kde-format
 #| msgid "Rendering Intent"
 msgctxt ""
@@ -70287,12 +70312,12 @@ msgid "Similar Color Selection"
 msgstr "비슷한 색상 선택"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:198
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
 msgstr "비슷한 색상 선택"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:235
 #, fuzzy, kde-format
 #| msgctxt "The 'threshold' spinbox prefix in fill tool options"
 #| msgid "Threshold: "
@@ -70300,7 +70325,7 @@ msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "임곗값: "
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:245
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:247
 #, fuzzy, kde-format
 #| msgid "Spread:"
 msgctxt ""
@@ -70309,7 +70334,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "퍼짐:"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:262
 #, fuzzy, kde-format
 #| msgid "Rendering Intent"
 msgctxt ""

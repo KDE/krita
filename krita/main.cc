@@ -549,7 +549,7 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
         // And override Qt's locale, too
         QLocale locale(firstLanguage);
         QLocale::setDefault(locale);
-#ifdef Q_OS_MAC
+#if defined(Q_OS_MAC) || defined(Q_OS_LINUX)
         // prevents python >=3.7 nl_langinfo(CODESET) fail bug 417312.
         qputenv("LANG", (locale.name() + ".UTF-8").toLocal8Bit());
 #else
@@ -630,7 +630,12 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
                 } else {
                     KLocalizedString::setLanguages(QStringList() << uiLanguages);
                 }
+
+#ifdef Q_OS_LINUX
+                qputenv("LANG", (envLanguage + ".UTF-8").toLocal8Bit());
+#else
                 qputenv("LANG", envLanguage.toLocal8Bit());
+#endif
                 qputenv("LANGUAGE", envLanguage.toLocal8Bit());
 #endif
             }

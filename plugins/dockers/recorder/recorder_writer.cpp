@@ -699,13 +699,14 @@ void RecorderWriterManager::onTimer()
     int totalFrames = 1;
     // Change in the region, let's generate some frames
     if (interpolate) {
-        float diffX = abs(region.x() - d->oldRegion.x()) / (float)fullSize.width();
-        float diffY = abs(region.y() - d->oldRegion.y()) / (float)fullSize.height();
-        float diffW = abs(region.width() - d->oldRegion.width()) / (float)fullSize.width();
-        float diffH = abs(region.height() - d->oldRegion.height()) / (float)fullSize.height();
+        // Prevent a divide by zero..
+        float diffX = abs(region.x() - d->oldRegion.x()) / std::max(1.0f, (float)d->oldRegion.width());
+        float diffY = abs(region.y() - d->oldRegion.y()) / std::max(1.0f, (float)d->oldRegion.height());
+        float diffW = abs(region.width() - d->oldRegion.width()) / std::max(1.0f, (float)d->oldRegion.width());
+        float diffH = abs(region.height() - d->oldRegion.height()) / std::max(1.0f, (float)d->oldRegion.height());
 
         // Find the highest diff
-        float maxDiff = std::max({diffX, diffY, diffW, diffH});
+        float maxDiff = std::min(std::max({diffX, diffY, diffW, diffH}), 1.0f);
 
         // Maximum amount of interpolation frames to generate
         const int maxFrames = 10;

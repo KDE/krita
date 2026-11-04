@@ -130,6 +130,7 @@ struct KisPaintingAssistant::Private {
         QString id;
         QString name;
         bool isSnappingActive {true};
+        int brushPriority {0};
         bool outlineVisible {true};
         bool isLocal {false};
         bool isLocked {false};
@@ -289,6 +290,16 @@ bool KisPaintingAssistant::isSnappingActive() const
 void KisPaintingAssistant::setSnappingActive(bool set)
 {
     d->s->isSnappingActive = set;
+}
+
+int KisPaintingAssistant::brushPriority() const
+{
+    return d->s->brushPriority;
+}
+
+void KisPaintingAssistant::setBrushPriority(int priority)
+{
+    d->s->brushPriority = priority;
 }
 
 void KisPaintingAssistant::endStroke()
@@ -581,6 +592,7 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
     xml.writeStartElement("assistant");
     xml.writeAttribute("type",d->s->id);
     xml.writeAttribute("active", QString::number(d->s->isSnappingActive));
+    xml.writeAttribute("brushPriority", QString::number(d->s->brushPriority));
     xml.writeAttribute("useCustomColor", QString::number(d->s->useCustomColor));
     xml.writeAttribute("customColor",  KisDomUtils::qColorToQString(d->s->assistantCustomColor));
     xml.writeAttribute("locked", QString::number(d->s->isLocked));
@@ -645,6 +657,10 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
 
                 auto active = xml.attributes().value("active");
                 setSnappingActive( (active != "0")  );
+
+                if (xml.attributes().hasAttribute("brushPriority")) {
+                    setBrushPriority(xml.attributes().value("brushPriority").toInt());
+                }
 
                 // load custom shared assistant properties
                 if ( xml.attributes().hasAttribute("useCustomColor")) {
@@ -1165,4 +1181,3 @@ KisPaintingAssistantFactoryRegistry* KisPaintingAssistantFactoryRegistry::instan
 {
     return s_instance;
 }
-

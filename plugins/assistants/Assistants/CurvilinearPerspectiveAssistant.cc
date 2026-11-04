@@ -26,12 +26,14 @@
 #include <limits>
 
 CurvilinearPerspectiveAssistant::CurvilinearPerspectiveAssistant()
-    : KisPaintingAssistant("curvilinear-perspective", i18n("Curvilinear Perspective assistant"))
+    : KisAbstractPerspectiveGrid()
+    , KisPaintingAssistant("curvilinear-perspective", i18n("Curvilinear Perspective assistant"))
 {
 }
 
 CurvilinearPerspectiveAssistant::CurvilinearPerspectiveAssistant(const CurvilinearPerspectiveAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
-    : KisPaintingAssistant(rhs, handleMap)
+    : KisAbstractPerspectiveGrid(rhs.parent())
+    , KisPaintingAssistant(rhs, handleMap)
 {
 }
 
@@ -244,6 +246,62 @@ QPointF CurvilinearPerspectiveAssistant::getDefaultEditorPosition() const
 bool CurvilinearPerspectiveAssistant::isAssistantComplete() const
 {
     return handles().size() >= 2;
+}
+
+bool CurvilinearPerspectiveAssistant::perspectiveData(const QPointF &point, qreal *signedDepth) const
+{
+    if (!isAssistantComplete()) {
+        return false;
+    }
+
+    const QPointF p1 = *handles()[0];
+    const QPointF p2 = *handles()[1];
+    const QPointF delta = p2 - p1;
+    const qreal handleDistance = KisAlgebra2D::norm(delta);
+    const qreal halfHandleDist = handleDistance / 2.0;
+
+    if (!std::isfinite(halfHandleDist) || halfHandleDist <= 0.0) {
+        return false;
+    }
+
+    const QPointF midpoint = (p1 + p2) * 0.5;
+    const QPointF normal(-delta.y() / handleDistance, delta.x() / handleDistance);
+    const qreal depth = QPointF::dotProduct(point - midpoint, normal) / halfHandleDist;
+
+    if (!std::isfinite(depth)) {
+        return false;
+    }
+
+    if (signedDepth) {
+        *signedDepth = depth;
+    }
+
+    return true;
+}
+
+bool CurvilinearPerspectiveAssistant::contains(const QPointF &point) const
+{
+    qreal signedDepth = 0.0;
+    return perspectiveData(point, &signedDepth);
+}
+
+qreal CurvilinearPerspectiveAssistant::distance(const QPointF &point) const
+{
+    qreal signedDepth = 0.0;
+
+    if (!perspectiveData(point, &signedDepth)) {
+        return 0.0;
+    }
+
+    const qreal normalizedDepth = qAbs(signedDepth);
+    // The handle line is the "infinite distance" horizon. Moving away from it
+    // increases closeness monotonically, while remaining bounded in [0, 1).
+    return normalizedDepth / (1.0 + normalizedDepth);
+}
+
+bool CurvilinearPerspectiveAssistant::isActive() const
+{
+    return isSnappingActive();
 }
 
 

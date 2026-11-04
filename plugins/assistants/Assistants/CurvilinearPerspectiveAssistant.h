@@ -10,13 +10,15 @@
 #ifndef _CURVILINEARPERSPECTIVE_ASSISTANT_H_
 #define _CURVILINEARPERSPECTIVE_ASSISTANT_H_
 
+#include "kis_abstract_perspective_grid.h"
 #include "kis_painting_assistant.h"
 #include <QObject>
 #include <QLineF>
 //class CurvilinearPerspective;
 
-class CurvilinearPerspectiveAssistant : public KisPaintingAssistant
+class CurvilinearPerspectiveAssistant : public KisAbstractPerspectiveGrid, public KisPaintingAssistant
 {
+    Q_OBJECT
 public:
     CurvilinearPerspectiveAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
@@ -28,11 +30,15 @@ public:
     int numHandles() const override { return 2; }
 
     bool isAssistantComplete() const override;
+    bool contains(const QPointF &point) const override;
+    qreal distance(const QPointF &point) const override;
+    bool isActive() const override;
 
 protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, const KoColorDisplayRendererInterface *displayRenderInterface, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter, const KoColorDisplayRendererInterface *displayRenderInterface,  bool assistantVisible=true) override;
 private:
+    bool perspectiveData(const QPointF &point, qreal *signedDepth) const;
     QLineF identifyCircle(const QPointF thirdPoint);
     explicit CurvilinearPerspectiveAssistant(const CurvilinearPerspectiveAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 };

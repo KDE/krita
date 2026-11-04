@@ -19,6 +19,11 @@ class TestPerspectiveBasedAssistantHelper : public QObject
 private Q_SLOTS:
 
     void testDistanceInGrid();
+    void testTwoPointAssistantLocalTransform_data();
+    void testTwoPointAssistantLocalTransform();
+    void testTwoPointAssistantPerspectiveGrid_data();
+    void testTwoPointAssistantPerspectiveGrid();
+    void testCurvilinearPerspectiveGrid();
 
 private:
     QList<KisPaintingAssistantHandleSP> getHandles(QList<QPointF> points);

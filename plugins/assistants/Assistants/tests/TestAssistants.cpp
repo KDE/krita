@@ -16,6 +16,7 @@
 #include <kis_global.h>
 
 #include <ConcentricEllipseAssistant.h>
+#include <PerspectiveAssistant.h>
 
 void TestAssistants::testConcentricEllipseAdjustLine()
 {
@@ -62,6 +63,20 @@ void TestAssistants::testConcentricEllipseAdjustLine()
 
 
 
+}
+
+void TestAssistants::testBrushPriorityProperty()
+{
+    PerspectiveAssistantFactory factory;
+    KisPaintingAssistantSP assistant = KisPaintingAssistantSP(factory.createPaintingAssistant());
+
+    QCOMPARE(assistant->brushPriority(), 0);
+
+    assistant->setBrushPriority(7);
+    QCOMPARE(assistant->brushPriority(), 7);
+
+    assistant->setBrushPriority(-3);
+    QCOMPARE(assistant->brushPriority(), -3);
 }
 
 

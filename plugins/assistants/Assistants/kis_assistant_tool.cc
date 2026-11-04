@@ -817,17 +817,17 @@ void KisAssistantTool::addAssistant()
         QTransform inv = t.inverted();
 
         if (t.map(p1).x() * t.map(p2).x() > 0) {
-            // Put third handle between first and second if user
-            // placed it outside of them, then re-define the transform
+            // Put the third handle between the VPs without changing its
+            // perpendicular offset from the horizon, then redefine the transform.
             const QLineF horizon = QLineF(t.map(p1),t.map(p2));
-            const QPointF origin = QPointF(horizon.center().x(),0);
-            *handles[2] = inv.map(origin);
+            const QPointF correctedCenter(horizon.center().x(), t.map(p3).y());
+            *handles[2] = inv.map(correctedCenter);
             t = assis->localTransform(p1,p2,*handles[2],&size);
             inv = t.inverted();
         }
 
-        const QPointF above = inv.map(QPointF(0,t.map(p1).y()+size));
-        const QPointF below = inv.map(QPointF(0,t.map(p1).y()-size));
+        const QPointF above = inv.map(QPointF(0, size));
+        const QPointF below = inv.map(QPointF(0, -size));
 
         Q_FOREACH (QPointF side, QList<QPointF>({above,below})) {
             Q_FOREACH (QPointF vp, QList<QPointF>({p1, p2})) {
@@ -1002,11 +1002,15 @@ void KisAssistantTool::updateToolOptionsUI()
          bool isRulerAssistant = m_selectedAssistant->id() == "ruler"
                               || m_selectedAssistant->id() == "infinite ruler";
          bool isPerspectiveAssistant = m_selectedAssistant->id() == "perspective";
+         bool isPerspectiveGridAssistant = dynamic_cast<KisAbstractPerspectiveGrid*>(m_selectedAssistant.data()) != nullptr;
 
          m_options.vanishingPointAngleSpinbox->setVisible(isVanishingPointAssistant);
          m_options.twoPointDensitySpinbox->setVisible(isTwoPointAssistant);
          m_options.twoPointUseVerticalCheckbox->setVisible(isTwoPointAssistant);
          m_options.subdivisionsSpinbox->setVisible(isRulerAssistant || isPerspectiveAssistant);
+         m_options.brushPriorityLabel->setVisible(isPerspectiveGridAssistant);
+         m_options.brushPrioritySpinbox->setVisible(isPerspectiveGridAssistant);
+         m_options.brushPriorityHelpButton->setVisible(isPerspectiveGridAssistant);
          m_options.minorSubdivisionsSpinbox->setVisible(isRulerAssistant);
          m_options.fixedLengthCheckbox->setVisible(isRulerAssistant);
          // show checkboxes for controlling which control widget buttons are visible
@@ -1054,6 +1058,10 @@ void KisAssistantTool::updateToolOptionsUI()
              QSharedPointer <PerspectiveAssistant> assis = qSharedPointerCast<PerspectiveAssistant>(m_selectedAssistant);
              m_options.subdivisionsSpinbox->setValue(assis->subdivisions());
          }
+
+         if (isPerspectiveGridAssistant) {
+             m_options.brushPrioritySpinbox->setValue(m_selectedAssistant->brushPriority());
+         }
          
          // load custom color settings from assistant (this happens when changing assistant
          m_options.useCustomAssistantColor->setChecked(m_selectedAssistant->useCustomColor());
@@ -1072,6 +1080,9 @@ void KisAssistantTool::updateToolOptionsUI()
          m_options.twoPointDensitySpinbox->setVisible(false);
          m_options.twoPointUseVerticalCheckbox->setVisible(false);
          m_options.subdivisionsSpinbox->setVisible(false);
+         m_options.brushPriorityLabel->setVisible(false);
+         m_options.brushPrioritySpinbox->setVisible(false);
+         m_options.brushPriorityHelpButton->setVisible(false);
          m_options.minorSubdivisionsSpinbox->setVisible(false);
          m_options.fixedLengthCheckbox->setVisible(false);
          m_options.fixedLengthSpinbox->setVisible(false);
@@ -1181,6 +1192,20 @@ void KisAssistantTool::slotChangeSubdivisions(int value) {
         }
     }
     
+    m_canvas->updateCanvasDecorations();
+}
+
+void KisAssistantTool::slotChangeBrushPriority(int value)
+{
+    if (m_canvas->paintingAssistantsDecoration()->assistants().length() == 0) {
+        return;
+    }
+
+    KisPaintingAssistantSP m_selectedAssistant = m_canvas->paintingAssistantsDecoration()->selectedAssistant();
+    if (m_selectedAssistant && dynamic_cast<KisAbstractPerspectiveGrid*>(m_selectedAssistant.data())) {
+        m_selectedAssistant->setBrushPriority(value);
+    }
+
     m_canvas->updateCanvasDecorations();
 }
 
@@ -1688,6 +1713,7 @@ QWidget *KisAssistantTool::createOptionWidget()
     if (!m_optionsWidget) {
         m_optionsWidget = new QWidget;
         m_options.setupUi(m_optionsWidget);
+        const QString brushPriorityHelpText = i18n("When a brush is over perspective helpers, and needs to decide on the one to follow (eg for the \"Perspective\" brush sensor), this will be used. Priority is like counting, lower number comes first.");
 
         KConfigGroup cfg = KSharedConfig::openConfig()->group(toolId());
 
@@ -1740,6 +1766,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.twoPointUseVerticalCheckbox, SIGNAL(stateChanged(int)), this, SLOT(slotChangeTwoPointUseVertical(int)));
         
         connect(m_options.subdivisionsSpinbox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeSubdivisions(int)));
+        connect(m_options.brushPrioritySpinbox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeBrushPriority(int)));
         connect(m_options.minorSubdivisionsSpinbox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeMinorSubdivisions(int)));
         connect(m_options.fixedLengthCheckbox, SIGNAL(stateChanged(int)), this, SLOT(slotEnableFixedLength(int)));
         connect(m_options.fixedLengthSpinbox, SIGNAL(valueChangedPt(double)), this, SLOT(slotChangeFixedLength(double)));
@@ -1792,6 +1819,13 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_options.subdivisionsSpinbox->setPrefix(i18n("Subdivisions: "));
         m_options.subdivisionsSpinbox->setRange(0, 100);
         m_options.subdivisionsSpinbox->setSoftRange(0, 20);
+
+        m_options.brushPrioritySpinbox->setRange(-100, 100);
+        m_options.brushPriorityLabel->setToolTip(brushPriorityHelpText);
+        m_options.brushPrioritySpinbox->setToolTip(brushPriorityHelpText);
+        m_options.brushPriorityHelpButton->setIcon(KisIconUtils::loadIcon("help-contents"));
+        m_options.brushPriorityHelpButton->setToolTip(brushPriorityHelpText);
+        m_options.brushPriorityHelpButton->setWhatsThis(brushPriorityHelpText);
         
         m_options.minorSubdivisionsSpinbox->setPrefix(i18n("Minor Subdivisions: "));
         m_options.minorSubdivisionsSpinbox->setRange(1, 5);
@@ -1808,6 +1842,9 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_options.vanishingPointAngleSpinbox->setVisible(false);
         m_options.twoPointDensitySpinbox->setVisible(false);
         m_options.subdivisionsSpinbox->setVisible(false);
+        m_options.brushPriorityLabel->setVisible(false);
+        m_options.brushPrioritySpinbox->setVisible(false);
+        m_options.brushPriorityHelpButton->setVisible(false);
         m_options.minorSubdivisionsSpinbox->setVisible(false);
         m_options.fixedLengthCheckbox->setVisible(false);
         m_options.fixedLengthSpinbox->setVisible(false);
@@ -2023,8 +2060,8 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
             // Exact alignment matters here, so fudge horizon line
             // to be perfectly horizontal instead of trusting the
             // QTransform calculation to do it
-            const QLineF horizon = QLineF(t.map(prevPoint), QPointF(t.map(*handleOpp).x(),t.map(prevPoint).y()));
-            const QPointF sp = QPointF(0,horizon.p1().y()+size);
+            const QLineF horizon(QPointF(t.map(prevPoint).x(), 0), QPointF(t.map(*handleOpp).x(), 0));
+            const QPointF sp = QPointF(0, size);
 
             const bool preserve_distortion_snap = event->modifiers() == Qt::ControlModifier;
             const bool preserve_left_right_ratio_snap = event->modifiers() == (Qt::ControlModifier|Qt::ShiftModifier);
@@ -2046,8 +2083,8 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
                 sp_to_opp_vp = new_sp_to_vp.normalVector().translated(new_sp-new_sp_to_vp.p1());
                 new_sp_to_vp.intersects(horizon,&snap_point);
             } else if (preserve_horizon_snap) {
-                snap_point = QPointF(t.map(*m_handleDrag).x(),horizon.p1().y());
-                sp_to_opp_vp = QLineF(sp,QPointF(t.map(prevPoint).x(),horizon.p1().y())).normalVector();
+                snap_point = QPointF(t.map(*m_handleDrag).x(), 0);
+                sp_to_opp_vp = QLineF(sp,QPointF(t.map(prevPoint).x(), 0)).normalVector();
             }
 
             // The snapping modes must be robust against falling into
@@ -2060,8 +2097,7 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
                 (snap_point.x() < 0 && opp_snap_point.x() > 0) ||
                 (snap_point.x() > 0 && opp_snap_point.x() < 0);
             const bool null_opp_point =
-                qFuzzyIsNull(opp_snap_point.x()) ||
-                qFuzzyIsNull(opp_snap_point.y());
+                qFuzzyIsNull(opp_snap_point.x());
             const bool overlapping_snap_points =
                 qFuzzyCompare(opp_snap_point.x(),snap_point.x());
 
@@ -2081,7 +2117,7 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
                     const QLineF new_horizon = QLineF(p1,p2);
                     const qreal new_size = sqrt(pow(new_horizon.length()/2.0,2) -
                                                 pow(abs(new_horizon.center().x()),2));
-                    const QPointF new_sp = QPointF(0,horizon.p1().y()+new_size);
+                    const QPointF new_sp = QPointF(0, new_size);
                     sp_to_opp_vp = QLineF(new_sp, t.map(m_dragStart)).normalVector();
                 }
                 sp_to_opp_vp.intersects(horizon, &oppStart);

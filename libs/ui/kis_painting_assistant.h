@@ -98,6 +98,8 @@ public:
     const QString& name() const;
     bool isSnappingActive() const;
     void setSnappingActive(bool set);
+    int brushPriority() const;
+    void setBrushPriority(int priority);
     //copy SharedData from an assistant to this
     void copySharedData(KisPaintingAssistantSP assistant);
 

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-03 00:53+0000\n"
+"POT-Creation-Date: 2026-11-04 01:00+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -9692,7 +9692,7 @@ msgstr "Không có phần chọn"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:267
+#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:268
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -21125,7 +21125,7 @@ msgstr "mặc định"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:18
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:60
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:66
 #, kde-format
 msgid "Size"
 msgstr "Cỡ"
@@ -21263,14 +21263,14 @@ msgstr " px"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:61
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:67
 #, fuzzy, kde-format
 msgid "Opacity"
 msgstr "Độ đậm đặc:"
 
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:20
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:28
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:62
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:68
 #, fuzzy, kde-format
 msgid "Flow"
 msgstr "&Hiện"
@@ -24279,7 +24279,7 @@ msgstr "Gỡ bỏ Layer"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1581
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
-#: plugins/dockers/logdocker/LogDockerDock.cpp:226
+#: plugins/dockers/logdocker/LogDockerDock.cpp:227
 #: plugins/dockers/lut/lutdocker_dock.cpp:696
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
@@ -24524,7 +24524,7 @@ msgstr ""
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisTagResourceModel.cpp:653
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:315
+#: plugins/dockers/logdocker/LogDockerDock.cpp:316
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:964
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
@@ -26368,7 +26368,7 @@ msgstr "Định hướng"
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:243
+#: plugins/dockers/logdocker/LogDockerDock.cpp:244
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:34
@@ -28047,7 +28047,7 @@ msgid "Display"
 msgstr "Hiển thị"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2729
-#: plugins/dockers/logdocker/LogDockerDock.cpp:323
+#: plugins/dockers/logdocker/LogDockerDock.cpp:324
 #, kde-format
 msgid "Color Management"
 msgstr "Quản lí màu"
@@ -28061,7 +28061,7 @@ msgstr "Màu"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2739
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2741
-#: plugins/dockers/logdocker/LogDockerDock.cpp:319
+#: plugins/dockers/logdocker/LogDockerDock.cpp:320
 #, fuzzy, kde-format
 msgid "Performance"
 msgstr "Tốc độ"
@@ -29469,10 +29469,10 @@ msgstr "Không gian màu"
 #, kde-format
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-"\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
-"\">Color Spaces</span></a>  determine how colors are encoded in your files. "
-"Different color spaces have different properties and are used for different "
-"purposes.</p></body></html>"
+"\"><span style=\" font-weight:600; text-decoration: underline; \">Color "
+"Spaces</span></a>  determine how colors are encoded in your files. Different "
+"color spaces have different properties and are used for different purposes.</"
+"p></body></html>"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -30730,7 +30730,7 @@ msgstr "Trình chọn màu nhỏ"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:1094
-#: plugins/dockers/logdocker/LogDockerDock.cpp:259
+#: plugins/dockers/logdocker/LogDockerDock.cpp:260
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "&Công cụ"
@@ -39307,7 +39307,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:457
-#: plugins/dockers/logdocker/LogDockerDock.cpp:227
+#: plugins/dockers/logdocker/LogDockerDock.cpp:228
 #, fuzzy, kde-format
 msgid ""
 "Could not save %1.\n"
@@ -44116,92 +44116,92 @@ msgstr "Xem hoặc thay đổi thuộc tính của lớp"
 msgid "Delete the layer or mask"
 msgstr "Công cụ &trình lọc"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:162
+#: plugins/dockers/logdocker/LogDockerDock.cpp:163
 #, kde-format
 msgid "Log Viewer"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:236
+#: plugins/dockers/logdocker/LogDockerDock.cpp:237
 #, fuzzy, kde-format
 msgid "Log Settings"
 msgstr "Thiết lập Màu"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:247
+#: plugins/dockers/logdocker/LogDockerDock.cpp:248
 #, fuzzy, kde-format
 #| msgid "&Resources"
 msgid "Resource Management"
 msgstr "&Tài nguyên"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:251
+#: plugins/dockers/logdocker/LogDockerDock.cpp:252
 #, fuzzy, kde-format
 msgid "Image Core"
 msgstr "Chuyển đổi loại ảnh"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:255
+#: plugins/dockers/logdocker/LogDockerDock.cpp:256
 #, fuzzy, kde-format
 msgid "Registries"
 msgstr "Ngôi sao"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:263
+#: plugins/dockers/logdocker/LogDockerDock.cpp:264
 #, fuzzy, kde-format
 msgid "Tile Engine"
 msgstr "Khoảng màu"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:271
+#: plugins/dockers/logdocker/LogDockerDock.cpp:272
 #, fuzzy, kde-format
 #| msgid "Color Management"
 msgid "Plugin Management"
 msgstr "Quản lí màu"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:275
+#: plugins/dockers/logdocker/LogDockerDock.cpp:276
 #, fuzzy, kde-format
 msgid "User Interface"
 msgstr "Gần tâm:"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:279
+#: plugins/dockers/logdocker/LogDockerDock.cpp:280
 #, fuzzy, kde-format
 msgid "File loading and saving"
 msgstr "Thiết lập Màu"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:283
+#: plugins/dockers/logdocker/LogDockerDock.cpp:284
 #, fuzzy, kde-format
 #| msgid "&Mathematical Precision"
 msgid "Mathematics and calculations"
 msgstr "Độ chính xác &Toán học"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:287
+#: plugins/dockers/logdocker/LogDockerDock.cpp:288
 #, fuzzy, kde-format
 msgid "Image Rendering"
 msgstr "Tâm:"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:291
+#: plugins/dockers/logdocker/LogDockerDock.cpp:292
 #, fuzzy, kde-format
 msgid "Scripting"
 msgstr "Công cụ &bút vẽ"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:295
+#: plugins/dockers/logdocker/LogDockerDock.cpp:296
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, fuzzy, kde-format
 msgid "Actions"
 msgstr "Hành động:"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:299
+#: plugins/dockers/logdocker/LogDockerDock.cpp:300
 #, fuzzy, kde-format
 msgid "Tablet Handling"
 msgstr "Thiết lập Màu"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:303
+#: plugins/dockers/logdocker/LogDockerDock.cpp:304
 #, fuzzy, kde-format
 msgid "Input Filtering"
 msgstr "Thiết lập Màu"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:307
+#: plugins/dockers/logdocker/LogDockerDock.cpp:308
 #, fuzzy, kde-format
 msgid "Input Matching"
 msgstr "Thiết lập Màu"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:311
+#: plugins/dockers/logdocker/LogDockerDock.cpp:312
 #, fuzzy, kde-format
 msgid "GPU Canvas"
 msgstr "Tải lại Canvas"
@@ -45204,13 +45204,13 @@ msgstr "Trung bình"
 msgid "Export..."
 msgstr "Xuất"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:174
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:191
 #, fuzzy, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "Độ đậm đặc:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:175
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:192
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45219,13 +45219,13 @@ msgid ""
 "Values lower than 50 are not recommended due to high artifacts."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:183
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:200
 #, fuzzy, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Tính chất:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:184
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:201
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45235,25 +45235,25 @@ msgid ""
 "Values above 3 are not recommended due to high performance impact."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:212
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:229
 #, fuzzy, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "Chương trình hành động"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:221
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:238
 #, fuzzy, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "Áp lực"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:263
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:280
 #, fuzzy, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "Chéo góc"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:264
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:281
 #, fuzzy, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -45261,7 +45261,7 @@ msgctxt ""
 msgid "Half"
 msgstr "Chọn"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:265
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:282
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -45269,41 +45269,41 @@ msgctxt ""
 msgid "Quarter"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:290
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:307
 #, fuzzy, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "kết nối"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:291
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:308
 #, fuzzy, kde-format
 #| msgid "Average"
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "Trung bình"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:298
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:315
 #, kde-format
 msgid "Image too large to be recorded"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:345
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:356
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:348
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:359
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:348
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:359
 #, fuzzy, kde-format
 msgid "Recorder is paused"
 msgstr "Sắp xếp lại các đường"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:372
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:383
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45312,7 +45312,7 @@ msgid ""
 "performance boost."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:383
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:394
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45322,51 +45322,51 @@ msgid ""
 "overall system performance."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:388
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:399
 #, fuzzy, kde-format
 msgid "Set the number of threads to be used for recording."
 msgstr "Chọn một khu vực của ảnh với các đường cong"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:414
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:425
 #, fuzzy, kde-format
 #| msgid "Average"
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Trung bình"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:496
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:507
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:690
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:730
 #, fuzzy, kde-format
 #| msgid "Select similar colors"
 msgid "Select a Directory for Recordings"
 msgstr "Chọn các màu tương tự"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:818
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:824
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:858
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:864
 #, fuzzy, kde-format
 #| msgid "Average"
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Trung bình"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:819
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:859
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
 "check free disk space and start the recorder again."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:825
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:865
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:830
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:870
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45375,7 +45375,7 @@ msgid ""
 "filtering in the canvas acceleration settings."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:832
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:872
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -50289,8 +50289,8 @@ msgstr ""
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
 "out the <a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-"style=\" text-decoration: underline; color:#2980b9;\">Krita Scripting "
-"School</span></a>!</p></body></html>"
+"style=\" text-decoration: underline;\">Krita Scripting School</span></a>!</"
+"p></body></html>"
 msgstr ""
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
@@ -64663,9 +64663,40 @@ msgstr "Nhập ảnh"
 msgid "Zip Archives"
 msgstr ""
 
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:36
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:42
 msgid "Quick Settings Docker"
 msgstr ""
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:145
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:335
+#, fuzzy
+msgid "Add Preset"
+msgstr "sửa định sẵn"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:149
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:397
+#, fuzzy
+msgid "Delete Preset"
+msgstr "Xoá"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:313
+msgid "Enter brush size (px):"
+msgstr ""
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:319
+#, fuzzy
+msgid "Enter opacity (%):"
+msgstr "Phần chọn"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:325
+msgid "Enter flow (%):"
+msgstr ""
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:398
+#, fuzzy
+#| msgid "Do you really want to overwrite the existing '%1' template?"
+msgid "Are you sure you want to delete this preset?"
+msgstr "Bạn có muốn ghi đè mẫu '%1' đã tồn tại?"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 #, fuzzy

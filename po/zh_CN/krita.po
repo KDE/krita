@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-03 00:53+0000\n"
+"POT-Creation-Date: 2026-11-04 01:00+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -9607,7 +9607,7 @@ msgstr "显示全局选区蒙版"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:267
+#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:268
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -20967,7 +20967,7 @@ msgstr "默认"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:18
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:60
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:66
 #, kde-format
 msgid "Size"
 msgstr "大小"
@@ -21105,14 +21105,14 @@ msgstr " 像素"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:61
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:67
 #, kde-format
 msgid "Opacity"
 msgstr "不透明度"
 
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:20
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:28
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:62
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:68
 #, kde-format
 msgid "Flow"
 msgstr "流量"
@@ -24028,7 +24028,7 @@ msgstr "本地资源"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1581
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
-#: plugins/dockers/logdocker/LogDockerDock.cpp:226
+#: plugins/dockers/logdocker/LogDockerDock.cpp:227
 #: plugins/dockers/lut/lutdocker_dock.cpp:696
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
@@ -24264,7 +24264,7 @@ msgstr "有未保存修改"
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisTagResourceModel.cpp:653
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:315
+#: plugins/dockers/logdocker/LogDockerDock.cpp:316
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:964
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
@@ -26104,7 +26104,7 @@ msgstr "视频动画导入"
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:243
+#: plugins/dockers/logdocker/LogDockerDock.cpp:244
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:34
@@ -27871,7 +27871,7 @@ msgid "Display"
 msgstr "显示"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2729
-#: plugins/dockers/logdocker/LogDockerDock.cpp:323
+#: plugins/dockers/logdocker/LogDockerDock.cpp:324
 #, kde-format
 msgid "Color Management"
 msgstr "色彩管理"
@@ -27884,7 +27884,7 @@ msgstr "色彩管理"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2739
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2741
-#: plugins/dockers/logdocker/LogDockerDock.cpp:319
+#: plugins/dockers/logdocker/LogDockerDock.cpp:320
 #, kde-format
 msgid "Performance"
 msgstr "性能"
@@ -29293,13 +29293,19 @@ msgstr "色彩空间选择向导"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
+#| "\"><span style=\" font-weight:600; text-decoration: underline; color:"
+#| "#006e28;\">Color Spaces</span></a>  determine how colors are encoded in "
+#| "your files. Different color spaces have different properties and are used "
+#| "for different purposes.</p></body></html>"
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-"\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
-"\">Color Spaces</span></a>  determine how colors are encoded in your files. "
-"Different color spaces have different properties and are used for different "
-"purposes.</p></body></html>"
+"\"><span style=\" font-weight:600; text-decoration: underline; \">Color "
+"Spaces</span></a>  determine how colors are encoded in your files. Different "
+"color spaces have different properties and are used for different purposes.</"
+"p></body></html>"
 msgstr ""
 "<html><head/><body><p><a href=\"https://baike.baidu.com/item/ICC色彩特性文"
 "件/9883150\"><span style=\" font-weight:600; text-decoration: underline; "
@@ -30550,7 +30556,7 @@ msgstr "拾色器位置："
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:1094
-#: plugins/dockers/logdocker/LogDockerDock.cpp:259
+#: plugins/dockers/logdocker/LogDockerDock.cpp:260
 #, kde-format
 msgid "Tools"
 msgstr "工具"
@@ -39320,7 +39326,7 @@ msgstr ""
 "点击“确定”创建 8 位整数线性 RGB 色彩空间，或者点击“取消”回到设定对话框。"
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:457
-#: plugins/dockers/logdocker/LogDockerDock.cpp:227
+#: plugins/dockers/logdocker/LogDockerDock.cpp:228
 #, kde-format
 msgid ""
 "Could not save %1.\n"
@@ -44119,91 +44125,91 @@ msgstr "查看或更改图层属性"
 msgid "Delete the layer or mask"
 msgstr "删除图层/蒙版"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:162
+#: plugins/dockers/logdocker/LogDockerDock.cpp:163
 #, kde-format
 msgid "Log Viewer"
 msgstr "日志查看器"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:236
+#: plugins/dockers/logdocker/LogDockerDock.cpp:237
 #, kde-format
 msgid "Log Settings"
 msgstr "日志设置"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:247
+#: plugins/dockers/logdocker/LogDockerDock.cpp:248
 #, kde-format
 msgid "Resource Management"
 msgstr "资源管理"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:251
+#: plugins/dockers/logdocker/LogDockerDock.cpp:252
 #, kde-format
 msgid "Image Core"
 msgstr "图像核心"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:255
+#: plugins/dockers/logdocker/LogDockerDock.cpp:256
 #, kde-format
 msgid "Registries"
 msgstr "注册项"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:263
+#: plugins/dockers/logdocker/LogDockerDock.cpp:264
 #, kde-format
 msgid "Tile Engine"
 msgstr "图块引擎"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:271
+#: plugins/dockers/logdocker/LogDockerDock.cpp:272
 #, kde-format
 msgid "Plugin Management"
 msgstr "插件管理"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:275
+#: plugins/dockers/logdocker/LogDockerDock.cpp:276
 #, kde-format
 msgid "User Interface"
 msgstr "用户界面"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:279
+#: plugins/dockers/logdocker/LogDockerDock.cpp:280
 #, kde-format
 msgid "File loading and saving"
 msgstr "文件加载和保存"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:283
+#: plugins/dockers/logdocker/LogDockerDock.cpp:284
 #, kde-format
 msgid "Mathematics and calculations"
 msgstr "数学运算"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:287
+#: plugins/dockers/logdocker/LogDockerDock.cpp:288
 #, kde-format
 msgid "Image Rendering"
 msgstr "图像渲染"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:291
+#: plugins/dockers/logdocker/LogDockerDock.cpp:292
 #, kde-format
 msgid "Scripting"
 msgstr "脚本编程"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:295
+#: plugins/dockers/logdocker/LogDockerDock.cpp:296
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, kde-format
 msgid "Actions"
 msgstr "操作"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:299
+#: plugins/dockers/logdocker/LogDockerDock.cpp:300
 #, kde-format
 msgid "Tablet Handling"
 msgstr "数位板处理"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:303
+#: plugins/dockers/logdocker/LogDockerDock.cpp:304
 #, fuzzy, kde-format
 #| msgid "Input handling"
 msgid "Input Filtering"
 msgstr "输入处理"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:307
+#: plugins/dockers/logdocker/LogDockerDock.cpp:308
 #, fuzzy, kde-format
 #| msgid "Input handling"
 msgid "Input Matching"
 msgstr "输入处理"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:311
+#: plugins/dockers/logdocker/LogDockerDock.cpp:312
 #, kde-format
 msgid "GPU Canvas"
 msgstr "GPU 画布"
@@ -45217,13 +45223,13 @@ msgstr "开始录制"
 msgid "Export..."
 msgstr "导出视频..."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:174
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:191
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "画质："
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:175
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:192
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45234,13 +45240,13 @@ msgstr ""
 "数值越高，品质越好，文件越大。不影响 CPU 使用率。\n"
 "不建议设为 50 以下，否则画质将明显劣化。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:183
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:200
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "压缩："
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:184
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:201
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45253,25 +45259,25 @@ msgstr ""
 "不建议设为 0，否则将占用大量存储空间。\n"
 "不建议高于 3，否则将严重影响程序性能。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:212
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:229
 #, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "视频每秒帧数："
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:221
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:238
 #, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "截图间隔时间："
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:263
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:280
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "原始"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:264
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:281
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -45279,7 +45285,7 @@ msgctxt ""
 msgid "Half"
 msgstr "减半"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:265
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:282
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -45287,40 +45293,40 @@ msgctxt ""
 msgid "Quarter"
 msgstr "四分之一"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:290
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:307
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "停止录制"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:291
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:308
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "开始录制"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:298
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:315
 #, kde-format
 msgid "Image too large to be recorded"
 msgstr "图像太大，无法录像"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:345
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:356
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "正在录像"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:348
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:359
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
 msgstr "活动录像进程正在使用 %1 条线程，总可用线程 %2 条"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:348
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:359
 #, kde-format
 msgid "Recorder is paused"
 msgstr "录像工具正在待机"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:372
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:383
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45332,7 +45338,7 @@ msgstr ""
 "线程数应超过您硬件设计的理想最大值。\n"
 "提示：线程数大于 %1 时可能不会带来任何性能提升。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:383
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:394
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45345,35 +45351,35 @@ msgstr ""
 "根据本机的硬件设计，建议录制线程不要超过 %1 条。\n"
 "您可以尝试在这个基础上增加一两条线程，但需关注整体系统性能是否下降。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:388
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:399
 #, kde-format
 msgid "Set the number of threads to be used for recording."
 msgstr "设置录制时使用的线程数。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:414
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:425
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "录像工具"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:496
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:507
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr "本机性能不足，无法使用此功能"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:690
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:730
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "选择录像数据保存位置"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:818
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:824
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:858
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:864
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "录像工具"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:819
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:859
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -45382,13 +45388,13 @@ msgstr ""
 "由于无法写入帧，录像工具已停止录制。请检查并确保存储设备有足够的可用空间，然"
 "后重新开始录制。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:825
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:865
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr "Krita 无法停止录像。请尝试重启 Krita。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:830
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:870
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45399,7 +45405,7 @@ msgstr ""
 "低性能警告。录像程序无法在实时截图模式下及时写入所有帧。\n"
 "请尝试降低 FFmpeg 导出的输出帧速率，或者降低画布加速设置中的缩放算法。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:832
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:872
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -50301,12 +50307,17 @@ msgstr "错误：Python 引擎无法初始化"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:72
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
+#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
+#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
+#| "Scripting School</span></a>!</p></body></html>"
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
 "out the <a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-"style=\" text-decoration: underline; color:#2980b9;\">Krita Scripting "
-"School</span></a>!</p></body></html>"
+"style=\" text-decoration: underline;\">Krita Scripting School</span></a>!</"
+"p></body></html>"
 msgstr ""
 "<html><head/><body><p>如果您想要学习如何编写 Krita 脚本程序，请访问 <a href="
 "\"https://scripting.krita.org/lessons/introduction\"><span style=\" text-"
@@ -64672,9 +64683,45 @@ msgstr "导入插件"
 msgid "Zip Archives"
 msgstr "Zip 压缩文件"
 
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:36
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:42
 msgid "Quick Settings Docker"
 msgstr "笔刷常用数值一键切换面板"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:145
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:335
+#, fuzzy
+#| msgctxt "@label:button"
+#| msgid "Add Style Preset"
+msgid "Add Preset"
+msgstr "创建文本样式预设"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:149
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:397
+#, fuzzy
+#| msgctxt "@info:tooltip"
+#| msgid "Delete resource"
+msgid "Delete Preset"
+msgstr "删除资源"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:313
+msgid "Enter brush size (px):"
+msgstr ""
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:319
+#, fuzzy
+#| msgid "Outline opacity:"
+msgid "Enter opacity (%):"
+msgstr "轮廓不透明度："
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:325
+msgid "Enter flow (%):"
+msgstr ""
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:398
+#, fuzzy
+#| msgid "Are you sure you want to delete mask <b>'%1'</b>?"
+msgid "Are you sure you want to delete this preset?"
+msgstr "您确定要删除蒙版<b>“%1”</b>吗？"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"

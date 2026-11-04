@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-03 00:53+0000\n"
+"POT-Creation-Date: 2026-11-04 01:00+0000\n"
 "PO-Revision-Date: 2026-10-08 08:25+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -9629,7 +9629,7 @@ msgstr "Pokaži globalno masko izbora"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:267
+#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:268
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -21082,7 +21082,7 @@ msgstr "privzeto"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:18
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:60
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:66
 #, kde-format
 msgid "Size"
 msgstr "Velikost"
@@ -21220,14 +21220,14 @@ msgstr " sl. točk"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:61
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:67
 #, kde-format
 msgid "Opacity"
 msgstr "Prekrivnost"
 
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:20
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:28
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:62
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:68
 #, kde-format
 msgid "Flow"
 msgstr "Potek"
@@ -24177,7 +24177,7 @@ msgstr "Krajevni viri"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1581
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
-#: plugins/dockers/logdocker/LogDockerDock.cpp:226
+#: plugins/dockers/logdocker/LogDockerDock.cpp:227
 #: plugins/dockers/lut/lutdocker_dock.cpp:696
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
@@ -24414,7 +24414,7 @@ msgstr "Umazano"
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisTagResourceModel.cpp:653
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:315
+#: plugins/dockers/logdocker/LogDockerDock.cpp:316
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:964
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
@@ -26281,7 +26281,7 @@ msgstr "Uvoz video animacije"
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:243
+#: plugins/dockers/logdocker/LogDockerDock.cpp:244
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:34
@@ -28038,7 +28038,7 @@ msgid "Display"
 msgstr "Zaslon"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2729
-#: plugins/dockers/logdocker/LogDockerDock.cpp:323
+#: plugins/dockers/logdocker/LogDockerDock.cpp:324
 #, kde-format
 msgid "Color Management"
 msgstr "Upravljanje z barvami"
@@ -28051,7 +28051,7 @@ msgstr "Barva"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2739
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2741
-#: plugins/dockers/logdocker/LogDockerDock.cpp:319
+#: plugins/dockers/logdocker/LogDockerDock.cpp:320
 #, kde-format
 msgid "Performance"
 msgstr "Hitrost delovanja"
@@ -29489,13 +29489,19 @@ msgstr "Brskalnik barvnih prostorov"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
+#| "\"><span style=\" font-weight:600; text-decoration: underline; color:"
+#| "#006e28;\">Color Spaces</span></a>  determine how colors are encoded in "
+#| "your files. Different color spaces have different properties and are used "
+#| "for different purposes.</p></body></html>"
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-"\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
-"\">Color Spaces</span></a>  determine how colors are encoded in your files. "
-"Different color spaces have different properties and are used for different "
-"purposes.</p></body></html>"
+"\"><span style=\" font-weight:600; text-decoration: underline; \">Color "
+"Spaces</span></a>  determine how colors are encoded in your files. Different "
+"color spaces have different properties and are used for different purposes.</"
+"p></body></html>"
 msgstr ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
 "\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
@@ -30778,7 +30784,7 @@ msgstr "Položaj vzorčevalnika barv:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:1094
-#: plugins/dockers/logdocker/LogDockerDock.cpp:259
+#: plugins/dockers/logdocker/LogDockerDock.cpp:260
 #, kde-format
 msgid "Tools"
 msgstr "Orodja"
@@ -39767,7 +39773,7 @@ msgstr ""
 "nastavitvami."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:457
-#: plugins/dockers/logdocker/LogDockerDock.cpp:227
+#: plugins/dockers/logdocker/LogDockerDock.cpp:228
 #, kde-format
 msgid ""
 "Could not save %1.\n"
@@ -44650,89 +44656,89 @@ msgstr "Poglej ali spremeni lastnosti plasti"
 msgid "Delete the layer or mask"
 msgstr "Izbriši plast ali masko"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:162
+#: plugins/dockers/logdocker/LogDockerDock.cpp:163
 #, kde-format
 msgid "Log Viewer"
 msgstr "Pregledovalnik zapisnikov"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:236
+#: plugins/dockers/logdocker/LogDockerDock.cpp:237
 #, kde-format
 msgid "Log Settings"
 msgstr "Nastavitve beleženja"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:247
+#: plugins/dockers/logdocker/LogDockerDock.cpp:248
 #, kde-format
 msgid "Resource Management"
 msgstr "Upravljanje virov"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:251
+#: plugins/dockers/logdocker/LogDockerDock.cpp:252
 #, kde-format
 msgid "Image Core"
 msgstr "Jedro slike"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:255
+#: plugins/dockers/logdocker/LogDockerDock.cpp:256
 #, kde-format
 msgid "Registries"
 msgstr "Registri"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:263
+#: plugins/dockers/logdocker/LogDockerDock.cpp:264
 #, kde-format
 msgid "Tile Engine"
 msgstr "Pogon tlakovanja"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:271
+#: plugins/dockers/logdocker/LogDockerDock.cpp:272
 #, kde-format
 msgid "Plugin Management"
 msgstr "Upravljanje z vstavki"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:275
+#: plugins/dockers/logdocker/LogDockerDock.cpp:276
 #, kde-format
 msgid "User Interface"
 msgstr "Uporabniški vmesnik"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:279
+#: plugins/dockers/logdocker/LogDockerDock.cpp:280
 #, kde-format
 msgid "File loading and saving"
 msgstr "Nalaganje in shranjevanje datotek"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:283
+#: plugins/dockers/logdocker/LogDockerDock.cpp:284
 #, kde-format
 msgid "Mathematics and calculations"
 msgstr "Matematika in izračuni"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:287
+#: plugins/dockers/logdocker/LogDockerDock.cpp:288
 #, kde-format
 msgid "Image Rendering"
 msgstr "Upodabljanje slik"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:291
+#: plugins/dockers/logdocker/LogDockerDock.cpp:292
 #, kde-format
 msgid "Scripting"
 msgstr "Skriptanje"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:295
+#: plugins/dockers/logdocker/LogDockerDock.cpp:296
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, kde-format
 msgid "Actions"
 msgstr "Dejanja"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:299
+#: plugins/dockers/logdocker/LogDockerDock.cpp:300
 #, kde-format
 msgid "Tablet Handling"
 msgstr "Ravnanje s tablicami"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:303
+#: plugins/dockers/logdocker/LogDockerDock.cpp:304
 #, kde-format
 msgid "Input Filtering"
 msgstr "Filtriranje vnosa"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:307
+#: plugins/dockers/logdocker/LogDockerDock.cpp:308
 #, kde-format
 msgid "Input Matching"
 msgstr "Ujemanje vnosa"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:311
+#: plugins/dockers/logdocker/LogDockerDock.cpp:312
 #, kde-format
 msgid "GPU Canvas"
 msgstr "Platno GPE"
@@ -45766,13 +45772,13 @@ msgstr "Snemaj"
 msgid "Export..."
 msgstr "Izvozi ..."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:174
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:191
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "Kakovost:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:175
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:192
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45785,13 +45791,13 @@ msgstr ""
 "Vrednosti, nižje od 50, niso priporočljive zaradi visoke prisotnosti "
 "artefaktov."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:183
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:200
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Stiskanje:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:184
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:201
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45807,25 +45813,25 @@ msgstr ""
 "Vrednosti nad 3 ne priporočamo zaradi visokega vpliva na hitrost delovanja "
 "(upočasnitev)."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:212
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:229
 #, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "Hitrost videa (sl/s):"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:221
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:238
 #, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "Interval zajemanja:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:263
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:280
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "Izvirnik"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:264
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:281
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -45833,7 +45839,7 @@ msgctxt ""
 msgid "Half"
 msgstr "Polovično"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:265
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:282
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -45841,40 +45847,40 @@ msgctxt ""
 msgid "Quarter"
 msgstr "Četrtinsko"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:290
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:307
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "Ustavi"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:291
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:308
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "Snemaj"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:298
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:315
 #, kde-format
 msgid "Image too large to be recorded"
 msgstr "Slika je prevelika za snemanje"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:345
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:356
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "SNE"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:348
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:359
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
 msgstr "Dejavno snemanje z %1 od %2 razpoložljivih niti"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:348
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:359
 #, kde-format
 msgid "Recorder is paused"
 msgstr "Snemalnik je ustavljen"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:372
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:383
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45887,7 +45893,7 @@ msgstr ""
 "Zavedajte se, da število, večje od %1, verjetno ne bo povečalo zmogljivosti/"
 "hitrosti."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:383
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:394
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45901,35 +45907,35 @@ msgstr ""
 "Lahko poskusite z eno ali dvema nitma več, vendar pazite na splošno "
 "zmogljivost/hitrost sistema."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:388
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:399
 #, kde-format
 msgid "Set the number of threads to be used for recording."
 msgstr "Določite število niti, ki jih želite uporabljati za snemanje."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:414
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:425
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Snemalnik"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:496
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:507
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr "Vaš sistem ni dovolj učinkovit za to funkcionalnost"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:690
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:730
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Izberite mapo za snemanje"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:818
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:824
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:858
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:864
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Snemalnik"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:819
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:859
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -45938,14 +45944,14 @@ msgstr ""
 "Snemalnik se je ustavil zaradi okvare med zapisovanjem sličice. Preverite "
 "nezaseden prostor na disku in znova zaženite snemalnik."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:825
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:865
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 "Krita verjetno ne more zaustaviti snemalnika. Poskusite znova zagnati Krito."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:830
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:870
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -45958,7 +45964,7 @@ msgstr ""
 "Poskusite zmanjšati hitrost zajema v sličicah za izvoz ffmpeg ali zmanjšati "
 "filtriranje spremembe velikosti v nastavitvah pospeševanja platna."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:832
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:872
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -50854,12 +50860,17 @@ msgstr "Napaka: pogona Python ni bilo mogoče inicializirati"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:72
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
+#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
+#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
+#| "Scripting School</span></a>!</p></body></html>"
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
 "out the <a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-"style=\" text-decoration: underline; color:#2980b9;\">Krita Scripting "
-"School</span></a>!</p></body></html>"
+"style=\" text-decoration: underline;\">Krita Scripting School</span></a>!</"
+"p></body></html>"
 msgstr ""
 "<html><head/><body><p>Če se želite naučiti pisati skripte Krita, si oglejte "
 "<a href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" "
@@ -65497,9 +65508,45 @@ msgstr "Uvozi vstavek"
 msgid "Zip Archives"
 msgstr "Arhivi zip"
 
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:36
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:42
 msgid "Quick Settings Docker"
 msgstr "Hitre nastavitve"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:145
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:335
+#, fuzzy
+#| msgctxt "@label:button"
+#| msgid "Add Style Preset"
+msgid "Add Preset"
+msgstr "Dodaj prednastavitev sloga"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:149
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:397
+#, fuzzy
+#| msgctxt "@info:tooltip"
+#| msgid "Delete resource"
+msgid "Delete Preset"
+msgstr "Izbriši vir"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:313
+msgid "Enter brush size (px):"
+msgstr ""
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:319
+#, fuzzy
+#| msgid "Outline opacity:"
+msgid "Enter opacity (%):"
+msgstr "Prekrivnost orisa:"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:325
+msgid "Enter flow (%):"
+msgstr ""
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:398
+#, fuzzy
+#| msgid "Are you sure you want to delete mask <b>'%1'</b>?"
+msgid "Are you sure you want to delete this preset?"
+msgstr "Ali ste prepričani, da želite izbrisati masko <b>»%1«</b>?"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"

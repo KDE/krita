@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-03 00:53+0000\n"
+"POT-Creation-Date: 2026-11-04 01:00+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -10021,7 +10021,7 @@ msgstr "Μάσκα επιλογής..."
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:267
+#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:268
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -21658,7 +21658,7 @@ msgstr "προκαθορισμένο"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:18
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:60
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:66
 #, kde-format
 msgid "Size"
 msgstr "Μέγεθος"
@@ -21796,14 +21796,14 @@ msgstr " px"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:61
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:67
 #, kde-format
 msgid "Opacity"
 msgstr "Αδιαφάνεια"
 
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:20
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:28
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:62
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:68
 #, kde-format
 msgid "Flow"
 msgstr "Ροή"
@@ -24952,7 +24952,7 @@ msgstr "Αρχεία πηγής:"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1581
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
-#: plugins/dockers/logdocker/LogDockerDock.cpp:226
+#: plugins/dockers/logdocker/LogDockerDock.cpp:227
 #: plugins/dockers/lut/lutdocker_dock.cpp:696
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
@@ -25201,7 +25201,7 @@ msgstr ""
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisTagResourceModel.cpp:653
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:315
+#: plugins/dockers/logdocker/LogDockerDock.cpp:316
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:964
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
@@ -27140,7 +27140,7 @@ msgstr "Αφαίρεση στρώματος"
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:243
+#: plugins/dockers/logdocker/LogDockerDock.cpp:244
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:34
@@ -28860,7 +28860,7 @@ msgid "Display"
 msgstr "Προβολή"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2729
-#: plugins/dockers/logdocker/LogDockerDock.cpp:323
+#: plugins/dockers/logdocker/LogDockerDock.cpp:324
 #, kde-format
 msgid "Color Management"
 msgstr "Διαχείριση χρωμάτων"
@@ -28874,7 +28874,7 @@ msgstr "Χρώμα"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2739
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2741
-#: plugins/dockers/logdocker/LogDockerDock.cpp:319
+#: plugins/dockers/logdocker/LogDockerDock.cpp:320
 #, kde-format
 msgid "Performance"
 msgstr "Επιδόσεις"
@@ -30326,10 +30326,10 @@ msgstr "Χρωματικός χώρος"
 #, kde-format
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-"\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
-"\">Color Spaces</span></a>  determine how colors are encoded in your files. "
-"Different color spaces have different properties and are used for different "
-"purposes.</p></body></html>"
+"\"><span style=\" font-weight:600; text-decoration: underline; \">Color "
+"Spaces</span></a>  determine how colors are encoded in your files. Different "
+"color spaces have different properties and are used for different purposes.</"
+"p></body></html>"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -31639,7 +31639,7 @@ msgstr "Επιλογέας χρωμάτων"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:1094
-#: plugins/dockers/logdocker/LogDockerDock.cpp:259
+#: plugins/dockers/logdocker/LogDockerDock.cpp:260
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Ερ&γαλεία"
@@ -40435,7 +40435,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:457
-#: plugins/dockers/logdocker/LogDockerDock.cpp:227
+#: plugins/dockers/logdocker/LogDockerDock.cpp:228
 #, fuzzy, kde-format
 msgid ""
 "Could not save %1.\n"
@@ -45390,96 +45390,96 @@ msgstr "Προβολή ή τροποποίηση των ιδιοτήτων το�
 msgid "Delete the layer or mask"
 msgstr "Διαγραφή στρώματος ή μάσκας"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:162
+#: plugins/dockers/logdocker/LogDockerDock.cpp:163
 #, kde-format
 msgid "Log Viewer"
 msgstr ""
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:236
+#: plugins/dockers/logdocker/LogDockerDock.cpp:237
 #, fuzzy, kde-format
 msgid "Log Settings"
 msgstr "Ρυθμίσεις χρώματος"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:247
+#: plugins/dockers/logdocker/LogDockerDock.cpp:248
 #, fuzzy, kde-format
 #| msgid "Color Management"
 msgid "Resource Management"
 msgstr "Διαχείριση χρωμάτων"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:251
+#: plugins/dockers/logdocker/LogDockerDock.cpp:252
 #, fuzzy, kde-format
 msgid "Image Core"
 msgstr "Μετατροπή χρωματικού χώρου εικόνας"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:255
+#: plugins/dockers/logdocker/LogDockerDock.cpp:256
 #, fuzzy, kde-format
 msgid "Registries"
 msgstr "Αστέρι"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:263
+#: plugins/dockers/logdocker/LogDockerDock.cpp:264
 #, fuzzy, kde-format
 #| msgid "KS%1 Engine"
 msgid "Tile Engine"
 msgstr "Μηχανή KS%1"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:271
+#: plugins/dockers/logdocker/LogDockerDock.cpp:272
 #, fuzzy, kde-format
 #| msgid "Color Management"
 msgid "Plugin Management"
 msgstr "Διαχείριση χρωμάτων"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:275
+#: plugins/dockers/logdocker/LogDockerDock.cpp:276
 #, fuzzy, kde-format
 #| msgid "Use counter"
 msgid "User Interface"
 msgstr "Χρήση μετρητή"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:279
+#: plugins/dockers/logdocker/LogDockerDock.cpp:280
 #, fuzzy, kde-format
 msgid "File loading and saving"
 msgstr "Ρυθμίσεις φίλτρου"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:283
+#: plugins/dockers/logdocker/LogDockerDock.cpp:284
 #, fuzzy, kde-format
 #| msgid "&Mathematical Precision"
 msgid "Mathematics and calculations"
 msgstr "&Μαθηματική ακρίβεια"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:287
+#: plugins/dockers/logdocker/LogDockerDock.cpp:288
 #, fuzzy, kde-format
 msgid "Image Rendering"
 msgstr "Κέντρο:"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:291
+#: plugins/dockers/logdocker/LogDockerDock.cpp:292
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "Scripting"
 msgstr "Δείκτης"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:295
+#: plugins/dockers/logdocker/LogDockerDock.cpp:296
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, fuzzy, kde-format
 #| msgid "Actions:"
 msgid "Actions"
 msgstr "Ενέργειες:"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:299
+#: plugins/dockers/logdocker/LogDockerDock.cpp:300
 #, fuzzy, kde-format
 msgid "Tablet Handling"
 msgstr "Ρυθμίσεις φίλτρου"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:303
+#: plugins/dockers/logdocker/LogDockerDock.cpp:304
 #, fuzzy, kde-format
 msgid "Input Filtering"
 msgstr "Ρυθμίσεις φίλτρου"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:307
+#: plugins/dockers/logdocker/LogDockerDock.cpp:308
 #, fuzzy, kde-format
 msgid "Input Matching"
 msgstr "Ρυθμίσεις φίλτρου"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:311
+#: plugins/dockers/logdocker/LogDockerDock.cpp:312
 #, fuzzy, kde-format
 #| msgid "Pan Canvas"
 msgid "GPU Canvas"
@@ -46523,14 +46523,14 @@ msgstr "Εγγραφή"
 msgid "Export..."
 msgstr "Εξαγωγή"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:174
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:191
 #, fuzzy, kde-format
 #| msgid "Quality:"
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "Ποιότητα:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:175
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:192
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46539,13 +46539,13 @@ msgid ""
 "Values lower than 50 are not recommended due to high artifacts."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:183
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:200
 #, fuzzy, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Συμπίεση:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:184
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:201
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46555,26 +46555,26 @@ msgid ""
 "Values above 3 are not recommended due to high performance impact."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:212
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:229
 #, fuzzy, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "Πρόγραμμα δράσης"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:221
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:238
 #, fuzzy, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "Διάστημα παλμού"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:263
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:280
 #, fuzzy, kde-format
 #| msgid "Original"
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "Αρχικό"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:264
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:281
 #, fuzzy, kde-format
 #| msgid "CD Half"
 msgctxt ""
@@ -46583,7 +46583,7 @@ msgctxt ""
 msgid "Half"
 msgstr "Μισό CD"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:265
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:282
 #, fuzzy, kde-format
 #| msgid "Print Width:"
 msgctxt ""
@@ -46592,7 +46592,7 @@ msgctxt ""
 msgid "Quarter"
 msgstr "Πλάτος εκτύπωσης:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:290
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:307
 #, fuzzy, kde-format
 #| msgctxt "Tab follows the bullet or number"
 #| msgid "Tab Stop"
@@ -46600,37 +46600,37 @@ msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "Τέλος στηλοθέτη"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:291
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:308
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "Εγγραφή"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:298
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:315
 #, kde-format
 msgid "Image too large to be recorded"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:345
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:356
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:348
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:359
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:348
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:359
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Reorder shapes"
 msgid "Recorder is paused"
 msgstr "Αναταξινόμηση σχημάτων"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:372
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:383
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -46639,7 +46639,7 @@ msgid ""
 "performance boost."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:383
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:394
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -46649,50 +46649,50 @@ msgid ""
 "overall system performance."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:388
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:399
 #, fuzzy, kde-format
 msgid "Set the number of threads to be used for recording."
 msgstr "Επιλογή μιας περιοχής της εικόνας με καμπύλες."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:414
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:425
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Εγγραφή"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:496
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:507
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:690
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:730
 #, fuzzy, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Επιλογή αδιαφανούς"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:818
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:824
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:858
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:864
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Εγγραφή"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:819
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:859
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
 "check free disk space and start the recorder again."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:825
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:865
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:830
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:870
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -46701,7 +46701,7 @@ msgid ""
 "filtering in the canvas acceleration settings."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:832
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:872
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -51821,8 +51821,8 @@ msgstr ""
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
 "out the <a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-"style=\" text-decoration: underline; color:#2980b9;\">Krita Scripting "
-"School</span></a>!</p></body></html>"
+"style=\" text-decoration: underline;\">Krita Scripting School</span></a>!</"
+"p></body></html>"
 msgstr ""
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
@@ -66712,9 +66712,43 @@ msgstr "Εισαγωγή εικόνας"
 msgid "Zip Archives"
 msgstr ""
 
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:36
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:42
 msgid "Quick Settings Docker"
 msgstr ""
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:145
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:335
+#, fuzzy
+#| msgid "Edit Presets"
+msgid "Add Preset"
+msgstr "Προεπιλογές επεξεργασίας"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:149
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:397
+#, fuzzy
+#| msgctxt "@info:tooltip"
+#| msgid "Delete resource"
+msgid "Delete Preset"
+msgstr "Διαγραφή πόρου"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:313
+msgid "Enter brush size (px):"
+msgstr ""
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:319
+#, fuzzy
+msgid "Enter opacity (%):"
+msgstr "Επιλογή "
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:325
+msgid "Enter flow (%):"
+msgstr ""
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:398
+#, fuzzy
+#| msgid "Do you really want to overwrite the existing '%1' template?"
+msgid "Are you sure you want to delete this preset?"
+msgstr "Επιθυμείτε πραγματικά την αντικατάσταση στο υπάρχον πρότυπο '%1';"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 #, fuzzy

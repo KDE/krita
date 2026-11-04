@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-03 00:53+0000\n"
+"POT-Creation-Date: 2026-11-04 01:00+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -9659,7 +9659,7 @@ msgstr "वैश्विक चयन मास्क दिखाएँ (&S)"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:267
+#: krita/krita.action:1039 plugins/dockers/logdocker/LogDockerDock.cpp:268
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -21448,7 +21448,7 @@ msgstr "डिफ़ॉल्ट"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:18
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:60
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:66
 #, kde-format
 msgid "Size"
 msgstr "आकार"
@@ -21586,14 +21586,14 @@ msgstr " px"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:61
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:67
 #, kde-format
 msgid "Opacity"
 msgstr "अपार्दरशिता"
 
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:20
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:28
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:62
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:68
 #, kde-format
 msgid "Flow"
 msgstr "फ़्लो"
@@ -24571,7 +24571,7 @@ msgstr "स्थानीय संसाधन"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1581
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
-#: plugins/dockers/logdocker/LogDockerDock.cpp:226
+#: plugins/dockers/logdocker/LogDockerDock.cpp:227
 #: plugins/dockers/lut/lutdocker_dock.cpp:696
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:185
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:188
@@ -24810,7 +24810,7 @@ msgstr ""
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisTagResourceModel.cpp:653
 #: libs/ui/animation/VideoImportDialog.ui:149
-#: plugins/dockers/logdocker/LogDockerDock.cpp:315
+#: plugins/dockers/logdocker/LogDockerDock.cpp:316
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:964
 #: plugins/impex/webp/kis_wdg_options_webp.ui:818
@@ -26716,7 +26716,7 @@ msgstr "परत मिटाएं"
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
-#: plugins/dockers/logdocker/LogDockerDock.cpp:243
+#: plugins/dockers/logdocker/LogDockerDock.cpp:244
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:34
@@ -28442,7 +28442,7 @@ msgid "Display"
 msgstr "प्रदर्शन"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2729
-#: plugins/dockers/logdocker/LogDockerDock.cpp:323
+#: plugins/dockers/logdocker/LogDockerDock.cpp:324
 #, kde-format
 msgid "Color Management"
 msgstr "रंग प्रबंधन"
@@ -28455,7 +28455,7 @@ msgstr "रंग"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2739
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2741
-#: plugins/dockers/logdocker/LogDockerDock.cpp:319
+#: plugins/dockers/logdocker/LogDockerDock.cpp:320
 #, kde-format
 msgid "Performance"
 msgstr "निष्पादन"
@@ -29874,10 +29874,10 @@ msgstr "कलरस्पेस ब्राउज़र"
 #, kde-format
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-"\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
-"\">Color Spaces</span></a>  determine how colors are encoded in your files. "
-"Different color spaces have different properties and are used for different "
-"purposes.</p></body></html>"
+"\"><span style=\" font-weight:600; text-decoration: underline; \">Color "
+"Spaces</span></a>  determine how colors are encoded in your files. Different "
+"color spaces have different properties and are used for different purposes.</"
+"p></body></html>"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -31125,7 +31125,7 @@ msgstr "रंग चयन साधन"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:1094
-#: plugins/dockers/logdocker/LogDockerDock.cpp:259
+#: plugins/dockers/logdocker/LogDockerDock.cpp:260
 #, kde-format
 msgid "Tools"
 msgstr "औज़ार"
@@ -39838,7 +39838,7 @@ msgstr ""
 "पर लौटने के लिए \"रद्द करें\" बटन दबाएँ।"
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:457
-#: plugins/dockers/logdocker/LogDockerDock.cpp:227
+#: plugins/dockers/logdocker/LogDockerDock.cpp:228
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save %1.\n"
@@ -44753,95 +44753,95 @@ msgstr "परत के गुणों को बदलें या खिस
 msgid "Delete the layer or mask"
 msgstr "परत या मास्क को मिटाएँ"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:162
+#: plugins/dockers/logdocker/LogDockerDock.cpp:163
 #, kde-format
 msgid "Log Viewer"
 msgstr "लॉग प्रदर्शक"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:236
+#: plugins/dockers/logdocker/LogDockerDock.cpp:237
 #, kde-format
 msgid "Log Settings"
 msgstr "लॉग विन्यास"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:247
+#: plugins/dockers/logdocker/LogDockerDock.cpp:248
 #, fuzzy, kde-format
 #| msgid "Color Management"
 msgid "Resource Management"
 msgstr "रंग प्रबंधन"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:251
+#: plugins/dockers/logdocker/LogDockerDock.cpp:252
 #, kde-format
 msgid "Image Core"
 msgstr "चित्र का कोर"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:255
+#: plugins/dockers/logdocker/LogDockerDock.cpp:256
 #, kde-format
 msgid "Registries"
 msgstr "लेखागार"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:263
+#: plugins/dockers/logdocker/LogDockerDock.cpp:264
 #, kde-format
 msgid "Tile Engine"
 msgstr "टाइल इंजन"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:271
+#: plugins/dockers/logdocker/LogDockerDock.cpp:272
 #, fuzzy, kde-format
 #| msgid "Color Management"
 msgid "Plugin Management"
 msgstr "रंग प्रबंधन"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:275
+#: plugins/dockers/logdocker/LogDockerDock.cpp:276
 #, kde-format
 msgid "User Interface"
 msgstr "यूज़र इंटरफेस"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:279
+#: plugins/dockers/logdocker/LogDockerDock.cpp:280
 #, fuzzy, kde-format
 #| msgid "File Handling"
 msgid "File loading and saving"
 msgstr "फ़ाइल रखरखाव"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:283
+#: plugins/dockers/logdocker/LogDockerDock.cpp:284
 #, fuzzy, kde-format
 #| msgid "&Mathematical Precision"
 msgid "Mathematics and calculations"
 msgstr "गणितीय परिशुद्धता (&M)"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:287
+#: plugins/dockers/logdocker/LogDockerDock.cpp:288
 #, fuzzy, kde-format
 msgid "Image Rendering"
 msgstr "मध्यः"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:291
+#: plugins/dockers/logdocker/LogDockerDock.cpp:292
 #, kde-format
 msgid "Scripting"
 msgstr "स्क्रिप्टिंग"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
-#: plugins/dockers/logdocker/LogDockerDock.cpp:295
+#: plugins/dockers/logdocker/LogDockerDock.cpp:296
 #: plugins/extensions/pykrita/plugin/info.ui:17
 #, kde-format
 msgid "Actions"
 msgstr "क्रिया"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:299
+#: plugins/dockers/logdocker/LogDockerDock.cpp:300
 #, kde-format
 msgid "Tablet Handling"
 msgstr "टेबलेट हैंडलिंग"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:303
+#: plugins/dockers/logdocker/LogDockerDock.cpp:304
 #, fuzzy, kde-format
 #| msgid "Input handling"
 msgid "Input Filtering"
 msgstr "इनपुट हैंडलिंग"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:307
+#: plugins/dockers/logdocker/LogDockerDock.cpp:308
 #, fuzzy, kde-format
 #| msgid "Input handling"
 msgid "Input Matching"
 msgstr "इनपुट हैंडलिंग"
 
-#: plugins/dockers/logdocker/LogDockerDock.cpp:311
+#: plugins/dockers/logdocker/LogDockerDock.cpp:312
 #, kde-format
 msgid "GPU Canvas"
 msgstr "जिपियू कैनवास"
@@ -45873,13 +45873,13 @@ msgstr "रिकॉर्ड"
 msgid "Export..."
 msgstr "निर्यात..."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:174
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:191
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "गुणवत्ता :"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:175
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:192
 #, fuzzy, kde-format
 #| msgctxt "@tooltip"
 #| msgid ""
@@ -45896,13 +45896,13 @@ msgstr ""
 "करता।\n"
 "उच्च विरूपण के कारण ५० से कम मूल्य की अनुशंसा नहीं की जाती है"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:183
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:200
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "संपीडन:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:184
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:201
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45916,27 +45916,27 @@ msgstr ""
 "भारी डिस्क स्थान खपत के कारण संपीड़न को ० पर सेट करने की अनुशंसा नहीं की जाती है।\n"
 "उच्च प्रदर्शन प्रभाव के कारण ३ से ऊपर के मूल्यों की अनुशंसा नहीं की जाती है। "
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:212
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:229
 #, fuzzy, kde-format
 #| msgid "Video FPS:"
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "विडियो एफपीएस :"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:221
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:238
 #, fuzzy, kde-format
 #| msgid "Capture interval:"
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "कैप्चर अंतराल"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:263
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:280
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "असली"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:264
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:281
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -45944,7 +45944,7 @@ msgctxt ""
 msgid "Half"
 msgstr "आधा"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:265
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:282
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -45952,40 +45952,40 @@ msgctxt ""
 msgid "Quarter"
 msgstr "चतुर्थांश"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:290
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:307
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "रोकें"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:291
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:308
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "रिकॉर्ड"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:298
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:315
 #, kde-format
 msgid "Image too large to be recorded"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:345
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:356
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "रिकॉर्ड"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:348
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:359
 #, kde-format
 msgid "Active recording with %1 of %2 available threads"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:348
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:359
 #, kde-format
 msgid "Recorder is paused"
 msgstr "रिकॉर्डर रुका हुआ है"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:372
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:383
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -45994,7 +45994,7 @@ msgid ""
 "performance boost."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:383
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:394
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
@@ -46004,36 +46004,36 @@ msgid ""
 "overall system performance."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:388
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:399
 #, fuzzy, kde-format
 #| msgid "Set the angle of the light source"
 msgid "Set the number of threads to be used for recording."
 msgstr "प्रकाश स्रोत के कोण को सेट करें"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:414
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:425
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "रिकॉर्डर"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:496
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:507
 #, kde-format
 msgid "Your system is not efficient enough for this feature"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:690
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:730
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "रिकॉर्डिंग के लिए एक डिरेक्ट्री का चयन करें"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:818
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:824
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:858
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:864
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "रिकॉर्डर"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:819
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:859
 #, fuzzy, kde-format
 #| msgid ""
 #| "The recorder have been stopped due to failure while writing a frame. "
@@ -46045,13 +46045,13 @@ msgstr ""
 "फ्रेम लिखते समय विफलता के कारण रिकॉर्डर को रोक दिया गया है। कृपया खाली जगह के लिए "
 "डिस्क की जांच करें और रिकॉर्डर को फिर से शुरू करें।"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:825
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:865
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:830
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:870
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -46060,7 +46060,7 @@ msgid ""
 "filtering in the canvas acceleration settings."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:832
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:872
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -51155,8 +51155,8 @@ msgstr ""
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
 "out the <a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-"style=\" text-decoration: underline; color:#2980b9;\">Krita Scripting "
-"School</span></a>!</p></body></html>"
+"style=\" text-decoration: underline;\">Krita Scripting School</span></a>!</"
+"p></body></html>"
 msgstr ""
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
@@ -65616,9 +65616,44 @@ msgstr "प्लगइन आयात करें"
 msgid "Zip Archives"
 msgstr "जिप आर्खाइव"
 
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:36
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:42
 msgid "Quick Settings Docker"
 msgstr "त्वरित सेटिंग्स डॉकर"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:145
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:335
+#, fuzzy
+#| msgid "Edit Presets"
+msgid "Add Preset"
+msgstr "प्रीसेट संपादित करें"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:149
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:397
+#, fuzzy
+#| msgctxt "@info:tooltip"
+#| msgid "Delete resource"
+msgid "Delete Preset"
+msgstr "संसाधन मिटाएँ"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:313
+msgid "Enter brush size (px):"
+msgstr ""
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:319
+#, fuzzy
+#| msgid "Selection Overlay:"
+msgid "Enter opacity (%):"
+msgstr "चयन ओवरले :"
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:325
+msgid "Enter flow (%):"
+msgstr ""
+
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:398
+#, fuzzy
+#| msgid "Do you want to clear the settings file?"
+msgid "Are you sure you want to delete this preset?"
+msgstr "क्या आप सेटिंग फ़ाइल को साफ़ करना चाहते हैं?"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
  * SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
+ * SPDX-FileCopyrightText: 2025 Ricky Ringler <ricky.ringler@proton.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -18,6 +19,7 @@
 #include "kis_selection_manager.h"
 #include "kis_selection_modifier_mapper.h"
 #include "strokes/move_stroke_strategy.h"
+#include "strokes/move_selection_stroke_strategy.h"
 #include "kis_image.h"
 #include "kis_cursor.h"
 #include "kis_action_manager.h"
@@ -29,6 +31,17 @@
 
 /**
  * This is a basic template to create selection tools from basic path based drawing tools.
+ *
+ * The temmplate implements two principal modes of interaction: the "move selection" interaction and the "move content"
+ * interaction.
+ *
+ * The move selection interaction is a series of actions. The user can create a selection region and move the region, as
+ * well as apply manipulations to the region, like inversion.
+ *
+ * The move content interaction is a single series of actions, infinitely looping until the user explicitly terminates
+ * the interaction by pressing a key or switching tools. This allows for rapidly selecting and moving pixels across the
+ * canvas, but avoids creating numerous transactions each time the user finishes clicking on the canvas.
+ *
  * The template overrides the ability to execute alternate actions correctly.
  * The default behavior for the modifier keys is as follows:
  *
@@ -54,7 +67,7 @@
  * 3) Once the user finishes selecting, the selection method is updated to reflect
  *    the current modifier combination
  * 
- * 4) If the user is moving the selection, then changing the modifiers 
+ * 4) If the user is moving the selection, then changes the modifiers
  */
 
 template <class BaseClass>
@@ -86,6 +99,14 @@ public:
     {
         KisSelectionModifierMapper::instance();
     }
+
+    enum CursorHit
+    {
+        CursorHit_None,
+        CursorHit_Border,
+        CursorHit_Inside,
+        CursorHit_Outside
+    };
 
     enum SampleLayersMode
     {
@@ -148,6 +169,7 @@ public:
 
     void deactivate() override
     {
+        commitMoveSelectionStroke();
         BaseClass::deactivate();
         m_modeConnections.clear();
     }
@@ -189,6 +211,11 @@ public:
             return m_widgetHelper.selectionAction();
         }
         return alternateSelectionAction();
+    }
+
+    bool moveSelectedContent() const
+    {
+        return m_widgetHelper.moveSelectedContent();
     }
 
     bool antiAliasSelection() const
@@ -281,6 +308,44 @@ public:
         endPrimaryAction(event);
     }
 
+    void explicitUserStrokeEndRequest() override
+    {
+        commitMoveSelectionStroke();
+    }
+
+    void requestStrokeCancellation() override
+    {
+        cancelMoveSelectionStroke();
+    }
+
+    void requestStrokeEnd() override
+    {
+        commitMoveSelectionStroke();
+    }
+
+    void cancelMoveSelectionStroke() {
+        commitMoveSelectionStrokeImpl(true);
+    }
+
+    void commitMoveSelectionStroke() {
+        commitMoveSelectionStrokeImpl(false);
+    }
+
+    void commitMoveSelectionStrokeImpl(bool cancel) {
+        if (m_moveStrokeId && isMovingContent()) {
+            if (!cancel) {
+                this->image()->endStroke(m_moveStrokeId);
+            } else {
+                this->image()->cancelStroke(m_moveStrokeId);
+            }
+            m_moveStrokeId.clear();
+            m_accumulatedOffset = QPoint();
+            m_dragStartOffset = QPoint();
+            this->endMoveContentInteraction();
+            return;
+        }
+    }
+
     KisNodeSP locateSelectionMaskUnderCursor(const QPointF &pos, Qt::KeyboardModifiers modifiers) {
         if (modifiers != Qt::NoModifier) return 0;
 
@@ -310,6 +375,12 @@ public:
 
     void keyPressEvent(QKeyEvent *event) override
     {
+        /* Moving content is one, continuous stroke. Attempting to manipulate
+         * anything mid-stroke wouldn't make sense. */
+        if (isMovingContent()) {
+            return;
+        }
+
         const Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(event);
         // Assume all the modifiers were unpressed...
         m_currentModifiers = Qt::NoModifier;
@@ -323,18 +394,15 @@ public:
         if (key == Qt::Key_Alt || event->modifiers().testFlag(Qt::AltModifier)) {
             m_currentModifiers.setFlag(Qt::AltModifier);
         }
-        
-        // Avoid changing the selection mode and cursor if the user is interacting
+
+        // Avoid changing the cursor if the user is interacting
         if (isSelecting()) {
             BaseClass::keyPressEvent(event);
             return;
         }
-        if (isMovingSelection()) {
-            return;
-        }
 
         setAlternateSelectionAction(KisSelectionModifierMapper::map(m_currentModifiers));
-        this->resetCursorStyle();
+        updateCursor();
     }
 
     void keyReleaseEvent(QKeyEvent *event) override
@@ -364,13 +432,9 @@ public:
 
         setAlternateSelectionAction(KisSelectionModifierMapper::map(m_currentModifiers));
         if (m_currentModifiers == Qt::NoModifier) {
-            KisNodeSP selectionMask = locateSelectionMaskUnderCursor(m_currentPos, m_currentModifiers);
-            if (selectionMask) {
-                this->useCursor(KisCursor::moveSelectionCursor());
-            } else {
-                this->resetCursorStyle();
-            }
-        } else {
+            updateCursor();
+        }
+        else {
             this->resetCursorStyle();
         }
     }
@@ -378,45 +442,115 @@ public:
     void mouseMoveEvent(KoPointerEvent *event) override
     {
         m_currentPos = this->convertToPixelCoord(event->point);
+        m_currentModifiers = event->modifiers();
 
+        if (disabledMoveContentWhileMovingContent()) {
+            /* User disabled option while actively moving content? Commit and end */
+            commitMoveSelectionStroke();
+        }
+
+        updateCursor();
+        BaseClass::mouseMoveEvent(event);
+    }
+
+    CursorHit checkCursorHit(const QPointF &pos, Qt::KeyboardModifiers modifiers) const
+    {
+        /* User still drawing selection? Then there's really nothing to "hit" per se */
         if (isSelecting()) {
-            BaseClass::mouseMoveEvent(event);
-            return;
-        }
-        if (isMovingSelection()) {
-            return;
+            return CursorHit_None;
         }
 
-        KisNodeSP selectionMask = locateSelectionMaskUnderCursor(m_currentPos, event->modifiers());
-        if (selectionMask) {
-            this->useCursor(KisCursor::moveSelectionCursor());
-        } else {
-            setAlternateSelectionAction(KisSelectionModifierMapper::map(m_currentModifiers));
-            this->resetCursorStyle();
+        KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(canvas, CursorHit_Outside);
+        KisSelectionSP selection = canvas->viewManager()->selection();
+
+        if (!selection || !selection->outlineCacheValid()) {
+            return CursorHit_Outside;
         }
+
+        const QPainterPath selectionPath = selection->outlineCache();
+
+        if (modifiers == Qt::NoModifier) {
+            const qreal handleRadius = qreal(this->handleRadius()) / canvas->coordinatesConverter()->effectiveZoom();
+
+            QPainterPath samplePath;
+            samplePath.addEllipse(pos, handleRadius, handleRadius);
+
+            if (selectionPath.intersects(samplePath) && !selectionPath.contains(samplePath)) {
+                    return CursorHit_Border;
+                }
+        }
+
+        if (selectionPath.contains(pos)) {
+            return CursorHit_Inside;
+        }
+
+        return CursorHit_Outside;
+    }
+
+    inline bool canBeginNewAction(KoPointerEvent *event, const QPointF &pos, CursorHit hit)
+    {
+        /* Prevent interrupting while selecting a region */
+        if (isSelecting()) {
+            BaseClass::beginPrimaryAction(event);
+            return false;
+        }
+
+        /* Prevent interrupting while moving */
+        if (isMovingContent()) {
+            /* We must update the offsets here, so the offset is sane later */
+            m_dragStartPos = pos;
+            m_dragStartOffset = m_accumulatedOffset;
+            /* User clicked outside? Commit changes and start a new stroke */
+            /* This eliminates extra keystrokes to start a new transaction */
+            if (hit == CursorHit_Outside) {
+                commitMoveSelectionStroke();
+                BaseClass::beginPrimaryAction(event);
+                return false;
+            }
+        }
+
+        return true;
     }
 
     void beginPrimaryAction(KoPointerEvent *event) override
     {
-        if (isSelecting()) {
-            BaseClass::beginPrimaryAction(event);
-            return;
-        }
-        if (isMovingSelection()) {
+        const QPointF pos = this->convertToPixelCoord(event->point);
+        const CursorHit hit = checkCursorHit(pos, event->modifiers());
+
+        if (!canBeginNewAction(event, pos, hit)) {
             return;
         }
 
-        const QPointF pos = this->convertToPixelCoord(event->point);
         KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
+
+        if (hit == CursorHit_Inside && this->moveSelectedContent()) {
+            KisSelectionSP selection = canvas->viewManager()->selection();
+            KisPaintLayerSP layer = dynamic_cast<KisPaintLayer*>(this->currentNode().data());
+            if (this->beginMoveContentInteraction() && selection && layer) {
+                KisStrokeStrategy *strategy =
+                    new MoveSelectionStrokeStrategy(layer, selection, this->image().data(), this->image().data());
+                initializeStrokeAttributes(pos, strategy, true);
+                updateCursor();
+            }
+            return;
+        }
+
+        if (m_currentInteraction == Interaction_MoveContent &&
+            (hit == CursorHit_Inside || hit == CursorHit_Border)) {
+            // we shouldn't pass the control to the parent tool
+            // when we have the already started the move content action
+            return;
+        }
 
         KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos, event->modifiers());
         if (selectionMask) {
             if (this->beginMoveSelectionInteraction()) {
-                KisStrokeStrategy *strategy = new MoveStrokeStrategy({selectionMask}, this->image().data(), this->image().data());
-                m_moveStrokeId = this->image()->startStroke(strategy);
-                m_dragStartPos = pos;
-                m_didMove = true;
+                KisStrokeStrategy *strategy =
+                    new MoveStrokeStrategy({selectionMask}, this->image().data(), this->image().data());
+                initializeStrokeAttributes(pos, strategy, true);
+                updateCursor();
                 return;
             }
         }
@@ -427,19 +561,26 @@ public:
 
     void continuePrimaryAction(KoPointerEvent *event) override
     {
-        if (isMovingSelection()) {
+        if (isMovingSelection() || isMovingContent()) {
             const QPointF pos = this->convertToPixelCoord(event->point);
-            const QPoint offset((pos - m_dragStartPos).toPoint());
-
+            const QPoint delta = (pos - m_dragStartPos).toPoint();
+            const QPoint offset = m_dragStartOffset + delta;
+            m_accumulatedOffset = offset;
             this->image()->addJob(m_moveStrokeId, new MoveStrokeStrategy::Data(offset));
             return;
-        }
+    }
 
         BaseClass::continuePrimaryAction(event);
     }
 
     void endPrimaryAction(KoPointerEvent *event) override
     {
+        if (isMovingContent()) {
+            const QPointF pos = this->convertToPixelCoord(event->point);
+            const QPoint delta = (pos - m_dragStartPos).toPoint();
+            m_accumulatedOffset = m_dragStartOffset + delta;
+            return;
+        }
         if (isMovingSelection()) {
             this->image()->endStroke(m_moveStrokeId);
             m_moveStrokeId.clear();
@@ -475,6 +616,14 @@ public:
         return nullptr;
     }
 
+    inline void initializeStrokeAttributes(const QPointF &pos, KisStrokeStrategy *strategy, bool moved) {
+        m_moveStrokeId = this->image()->startStroke(strategy);
+        m_dragStartPos = pos;
+        m_didMove = moved;
+        m_accumulatedOffset = QPoint();
+        m_dragStartOffset = QPoint();
+    }
+
     bool beginMoveSelectionInteraction() {
         if (m_currentInteraction != Interaction_None) {
             return false;
@@ -485,6 +634,23 @@ public:
 
     bool endMoveSelectionInteraction() {
         if (!isMovingSelection()) {
+            return false;
+        }
+        m_currentInteraction = Interaction_None;
+        updateCursorDelayed();
+        return true;
+    }
+
+    bool beginMoveContentInteraction() {
+        if (m_currentInteraction != Interaction_None) {
+            return false;
+        }
+        m_currentInteraction = Interaction_MoveContent;
+        return true;
+    }
+
+    bool endMoveContentInteraction() {
+        if (!isMovingContent()) {
             return false;
         }
         m_currentInteraction = Interaction_None;
@@ -513,8 +679,80 @@ public:
         return m_currentInteraction == Interaction_MoveSelection;
     }
 
+    bool isMovingContent() const {
+        return m_currentInteraction == Interaction_MoveContent;
+    }
+
     bool isSelecting() const {
         return m_currentInteraction == Interaction_Select;
+    }
+
+    bool disabledMoveContentWhileMovingContent() const {
+        /* User could disable the option in the middle of an action */
+        return isMovingContent() && !moveSelectedContent();
+    }
+
+    void updateCursor()
+    {
+
+        const Interaction interaction = currentInteraction();
+        const CursorHit hit = checkCursorHit(m_currentPos, m_currentModifiers);
+
+        switch (interaction)
+        {
+            case Interaction_MoveContent:
+                switch (hit)
+                {
+                    case CursorHit_Border:
+                        this->useCursor(KisCursor::moveCursor());
+                        break;
+                    case CursorHit_Inside:
+                        this->useCursor(KisCursor::moveCursor());
+                        break;
+                    case CursorHit_Outside:
+                        this->resetCursorStyle();
+                        break;
+                    case CursorHit_None:
+                    default:
+                        this->resetCursorStyle();
+                        break;
+                }
+                break;
+            case Interaction_MoveSelection:
+                switch (hit)
+                {
+                    case CursorHit_Border:
+                        this->useCursor(KisCursor::moveSelectionCursor());
+                        break;
+                    case CursorHit_Inside:
+                        this->resetCursorStyle();
+                        break;
+                    case CursorHit_Outside:
+                        this->resetCursorStyle();
+                        break;
+                    case CursorHit_None:
+                    default:
+                        this->resetCursorStyle();
+                        break;
+                }
+                break;
+            case Interaction_Select:
+                this->resetCursorStyle();
+                break;
+            case Interaction_None:
+                if (hit == CursorHit_Border){
+                    this->useCursor(KisCursor::moveSelectionCursor());
+                }
+                else if (hit == CursorHit_Inside && this->moveSelectedContent()) {
+                    this->useCursor(KisCursor::moveCursor());
+                } else {
+                    this->resetCursorStyle();
+                }
+                break;
+            default:
+                this->resetCursorStyle();
+                break;
+        }
     }
 
     void updateCursorDelayed() {
@@ -523,12 +761,7 @@ public:
             this,
             [this]()
             {
-                KisNodeSP selectionMask = locateSelectionMaskUnderCursor(m_currentPos, m_currentModifiers);
-                if (selectionMask) {
-                    this->useCursor(KisCursor::moveSelectionCursor());
-                } else {
-                    this->resetCursorStyle();
-                }
+                updateCursor();
             }
         );
     }
@@ -551,15 +784,22 @@ private:
     {
         Interaction_None,
         Interaction_Select,
-        Interaction_MoveSelection
+        Interaction_MoveSelection,
+        Interaction_MoveContent
     };
 
     Interaction m_currentInteraction{Interaction_None};
+
+    Interaction currentInteraction() const {
+        return m_currentInteraction;
+    }
 
     Qt::KeyboardModifiers m_currentModifiers;
 
     QPointF m_dragStartPos;
     QPointF m_currentPos;
+    QPoint m_accumulatedOffset;
+    QPoint m_dragStartOffset;
     KisStrokeId m_moveStrokeId;
     bool m_didMove = false;
 

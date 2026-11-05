@@ -142,7 +142,6 @@ void KisSelectionDecoration::selectionChanged()
                 view()->canvasBase()->updateCanvas();
             }
 
-
             m_selectionActionsPanel->setVisible(true);
         } else {
             m_signalCompressor.start();
@@ -205,7 +204,7 @@ void KisSelectionDecoration::toggleSelectionVisibility() {
     m_selectionVisibility = !m_selectionVisibility;
 }
 
-bool KisSelectionDecoration::selectionVisible() {
+bool KisSelectionDecoration::selectionVisible() const {
     return m_selectionVisibility;
 }
 

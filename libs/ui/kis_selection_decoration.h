@@ -40,7 +40,7 @@ public:
     void setCanvasWidget(KisCanvasWidgetBase* canvas) override;
 
     void toggleSelectionVisibility();
-    bool selectionVisible();
+    bool selectionVisible() const;
 
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;

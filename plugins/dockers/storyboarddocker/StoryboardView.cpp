@@ -283,26 +283,26 @@ void StoryboardView::slotContextMenuRequested(const QPoint &point)
     QMenu contextMenu;
     QModelIndex index = indexAt(point);
     if (!index.isValid()) {
-        contextMenu.addAction(i18nc("Add new scene as the last storyboard", "Add Scene"), [index, pModel] {pModel->insertItem(index, false); });
+        contextMenu.addAction(i18nc("Add new scene as the last storyboard", "Add Scene"), pModel, [index, pModel] {pModel->insertItem(index, false); });
     }
     else if (index.parent().isValid()) {
         index = index.parent();
     }
 
     if (index.isValid()) {
-        contextMenu.addAction(i18nc("Add scene after active scene", "Add Scene After"), [index, pModel] {pModel->insertItem(index, true); });
+        contextMenu.addAction(i18nc("Add scene after active scene", "Add Scene After"), pModel, [index, pModel] {pModel->insertItem(index, true); });
         if (index.row() > 0) {
-            contextMenu.addAction(i18nc("Add scene before active scene", "Add Scene Before"), [index, pModel] {pModel->insertItem(index, false); });
+            contextMenu.addAction(i18nc("Add scene before active scene", "Add Scene Before"), pModel, [index, pModel] {pModel->insertItem(index, false); });
         }
 
-        contextMenu.addAction(i18nc("Duplicate current scene from storyboard docker", "Duplicate Scene"), [index, pModel] {
+        contextMenu.addAction(i18nc("Duplicate current scene from storyboard docker", "Duplicate Scene"), pModel, [index, pModel] {
            int row = index.row();
            KisDuplicateStoryboardCommand *command = new KisDuplicateStoryboardCommand(row, pModel);
            command->redo();
            pModel->pushUndoCommand(command);
         });
 
-        contextMenu.addAction(i18nc("Remove current scene from storyboards", "Remove Scene"), [index, pModel] {
+        contextMenu.addAction(i18nc("Remove current scene from storyboards", "Remove Scene"), pModel, [index, pModel] {
             int row = index.row();
             KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, pModel->getData().at(row), pModel);
             pModel->removeItem(index, command);

@@ -303,26 +303,31 @@ KisAngleSelector::KisAngleSelector(QWidget* parent)
     connect(
         m_d->angleGauge,
         &KisAngleGauge::angleChanged,
+        this,
         std::bind(&Private::on_angleGauge_angleChanged, m_d.data(), _1)
     );
     connect(
         m_d->spinBox,
         QOverload<double>::of(&KisDoubleParseSpinBox::valueChanged),
+        this,
         std::bind(&Private::on_spinBox_valueChanged, m_d.data(), _1)
     );
     connect(
         m_d->actionFlipHorizontally,
         &QAction::triggered,
+        this,
         std::bind(&Private::on_actionFlipHorizontally_triggered, m_d.data())
     );
     connect(
         m_d->actionFlipVertically,
         &QAction::triggered,
+        this,
         std::bind(&Private::on_actionFlipVertically_triggered, m_d.data())
     );
     connect(
         m_d->actionFlipHorizontallyAndVertically,
         &QAction::triggered,
+        this,
         std::bind(&Private::on_actionFlipHorizontallyAndVertically_triggered, m_d.data())
     );
     connect(m_d->actionResetAngle, SIGNAL(triggered()), SLOT(reset()));

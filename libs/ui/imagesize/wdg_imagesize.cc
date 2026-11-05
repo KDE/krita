@@ -84,7 +84,7 @@ WdgImageSize::WdgImageSize(QWidget *parent, int width, int height, double resolu
         m_page->pixelFilterCmb->setCurrent(KisCmbIDList::AutoOptionID);
     }
 
-    connect(this, &WdgImageSize::sigDesiredSizeChanged, [this](qint32 width, qint32 height, double){
+    connect(this, &WdgImageSize::sigDesiredSizeChanged, this, [this](qint32 width, qint32 height, double){
         KisFilterStrategy *filterStrategy = KisFilterStrategyRegistry::instance()->autoFilterStrategy(m_originalSize, QSize(width, height));
         m_page->pixelFilterCmb->setAutoHint(filterStrategy->name());
     });
@@ -116,10 +116,10 @@ WdgImageSize::WdgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->pixelHeightDouble->setDisplayUnit(false);
     m_page->pixelWidthDouble->setFocus();
 
-    connect(m_page->pixelWidthDouble, qOverload<double>(&KisDoubleParseUnitSpinBox::valueChanged), [this](){
+    connect(m_page->pixelWidthDouble, qOverload<double>(&KisDoubleParseUnitSpinBox::valueChanged), this, [this](){
         Q_EMIT sigDesiredSizeChanged(desiredWidth(), desiredHeight(), desiredResolution());
     });
-    connect(m_page->pixelHeightDouble, qOverload<double>(&KisDoubleParseUnitSpinBox::valueChanged), [this](){
+    connect(m_page->pixelHeightDouble, qOverload<double>(&KisDoubleParseUnitSpinBox::valueChanged), this, [this](){
         Q_EMIT sigDesiredSizeChanged(desiredWidth(), desiredHeight(), desiredResolution());
     });
 

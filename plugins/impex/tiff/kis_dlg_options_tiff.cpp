@@ -47,6 +47,7 @@ KisTIFFOptionsWidget::KisTIFFOptionsWidget(QWidget *parent)
 
     connect(kComboBoxCompressionType,
             QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this,
             [&](int index) {
                 const int deflate = kComboBoxCompressionType->findData(2);
                 const int lzw = kComboBoxCompressionType->findData(3);

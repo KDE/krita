@@ -104,7 +104,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     d->uiFilterDialog.chkFilterSelectedFrames->setChecked(d->filterManager->filterAllSelectedFrames());
 
     //Handle create mask toggle based on state of chkFilterSelectedFrames
-    connect(d->uiFilterDialog.chkFilterSelectedFrames, &QCheckBox::toggled, [this](const bool state){
+    connect(d->uiFilterDialog.chkFilterSelectedFrames, &QCheckBox::toggled, this, [this](const bool state){
         if (d->currentFilter) {
             d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(!state && d->currentFilter->supportsAdjustmentLayers());
         }

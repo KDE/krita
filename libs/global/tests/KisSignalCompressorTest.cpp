@@ -144,7 +144,7 @@ void testIdleChecksImpl(int compressorInterval,
 
     QObject::connect(&timer, SIGNAL(timeout()), &compressor, SLOT(start()));
     QObject::connect(&compressor, SIGNAL(timeout()), &tester, SLOT(start()));
-    QObject::connect(&compressor, &KisSignalCompressor::timeout,
+    QObject::connect(&compressor, &KisSignalCompressor::timeout, qApp,
                      [&elapsedTimer] () { elapsedTimer.restart(); });
 
     timer.start();

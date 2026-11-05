@@ -327,7 +327,7 @@ KisInputLevelsSlider::KisInputLevelsSlider(QWidget *parent)
     m_handles[1].position = 1.0;
     m_handles[1].color = Qt::white;
     m_selectedHandle = 0;
-    connect(this, &KisInputLevelsSlider::handlePositionChanged,
+    connect(this, &KisInputLevelsSlider::handlePositionChanged, this,
         [this](int handleIndex, qreal position)
         {
             if (handleIndex == m_handles.first().index) {

@@ -130,7 +130,7 @@ LutDockerDock::LutDockerDock()
     m_exposureDoubleWidget->setValue(0.0);
     m_exposureDoubleWidget->setSingleStep(0.25);
 
-    connect(m_exposureDoubleWidget, QOverload<double>::of(&KisDoubleSliderSpinBox::valueChanged),
+    connect(m_exposureDoubleWidget, QOverload<double>::of(&KisDoubleSliderSpinBox::valueChanged), this,
             [this](double value){ m_exposureCompressor->start(value); });
 
     // Gamma needs to be exponential (gamma *= 1.1f, gamma /= 1.1f as steps)
@@ -140,7 +140,7 @@ LutDockerDock::LutDockerDock()
     m_gammaDoubleWidget->setValue(1.0);
     m_gammaDoubleWidget->setSingleStep(0.1);
 
-    connect(m_gammaDoubleWidget, QOverload<double>::of(&KisDoubleSliderSpinBox::valueChanged),
+    connect(m_gammaDoubleWidget, QOverload<double>::of(&KisDoubleSliderSpinBox::valueChanged), this,
             [this](double value){ m_gammaCompressor->start(value); });
 
     m_bwPointChooser = new BlackWhitePointChooser(this);

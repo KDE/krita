@@ -76,7 +76,7 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
 
         // Handle logged errors..
         // Due to various reasons (including image preview), ffmpeg uses STDERR and not STDOUT for general output logging.
-        connect(this, &KisFFMpegWrapper::sigReadSTDERR, [renderLogPath](QByteArray stderrBuffer){
+        connect(this, &KisFFMpegWrapper::sigReadSTDERR, this, [renderLogPath](QByteArray stderrBuffer){
             QFile renderLog(renderLogPath);
             if (renderLog.open(QIODevice::WriteOnly | QIODevice::Append)) {
                 renderLog.write(stderrBuffer);
@@ -95,7 +95,7 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
 
         if (sessionRenderLog.open(QIODevice::WriteOnly | QIODevice::Append)) {
             // Append finished renderlog to sessionlog..
-            connect(this, &KisFFMpegWrapper::sigFinishedWithError, [renderLogPath, sessionRenderLogPath](QString){
+            connect(this, &KisFFMpegWrapper::sigFinishedWithError, this, [renderLogPath, sessionRenderLogPath](QString){
                 QFile renderLog(renderLogPath);
                 QFile sessionRenderLog(sessionRenderLogPath);
                 if (renderLog.open(QIODevice::ReadOnly) &&
@@ -169,12 +169,12 @@ KisImportExportErrorCode KisFFMpegWrapper::start(const KisFFMpegWrapperSettings 
 
     QSharedPointer<ProcessResults> processResults = toQShared(new ProcessResults);
 
-    connect( this, &KisFFMpegWrapper::sigFinishedWithError, [processResults](const QString& errMsg){
+    connect( this, &KisFFMpegWrapper::sigFinishedWithError, this, [processResults](const QString& errMsg){
         processResults->finish = true;
         processResults->error = errMsg;
     });
 
-    connect( this, &KisFFMpegWrapper::sigFinished, [processResults](){
+    connect( this, &KisFFMpegWrapper::sigFinished, this, [processResults](){
        processResults->finish = true;
     });
 

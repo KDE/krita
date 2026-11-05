@@ -48,7 +48,7 @@ bool RecorderProfileSettings::editProfile(RecorderProfile *profile, const Record
     fillProfile(*profile);
 
     disconnect(ui->buttonPresetRevert);
-    connect(ui->buttonPresetRevert, &QPushButton::clicked, [&] { fillProfile(defaultProfile); });
+    connect(ui->buttonPresetRevert, &QPushButton::clicked, this, [&] { fillProfile(defaultProfile); });
 
     if (exec() != QDialog::Accepted)
         return false;

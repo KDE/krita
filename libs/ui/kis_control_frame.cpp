@@ -110,7 +110,7 @@ void KisControlFrame::setup(QWidget *parent)
     connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_dual, SLOT(setBackgroundColor(KoColor)));
     connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_dual, SLOT(setForegroundColor(KoColor)));
     m_dual->setFixedSize(28, 28);
-    connect(m_viewManager, &KisViewManager::viewChanged, [this]() {
+    connect(m_viewManager, &KisViewManager::viewChanged, this, [this]() {
         slotUpdateDisplayRenderer(m_dual);
     });
 
@@ -129,7 +129,7 @@ void KisControlFrame::setup(QWidget *parent)
     connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_foreground, SLOT(setForegroundColor(KoColor)));
     m_foreground->setFixedSize(28, 28);
     connect(action, SIGNAL(triggered()), m_foreground, SLOT(openForegroundDialog()));
-    connect(m_viewManager, &KisViewManager::viewChanged, [this](){
+    connect(m_viewManager, &KisViewManager::viewChanged, this, [this](){
         slotUpdateDisplayRenderer(m_foreground);
     });
 
@@ -148,7 +148,7 @@ void KisControlFrame::setup(QWidget *parent)
     connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_background, SLOT(setForegroundColor(KoColor)));
     m_background->setFixedSize(28, 28);
     connect(action, SIGNAL(triggered()), m_background, SLOT(openBackgroundDialog()));
-    connect(m_viewManager, &KisViewManager::viewChanged, [this]() {
+    connect(m_viewManager, &KisViewManager::viewChanged,this, [this]() {
         slotUpdateDisplayRenderer(m_background);
     });
 
@@ -167,7 +167,7 @@ void KisControlFrame::setup(QWidget *parent)
     connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_swap, SLOT(setForegroundColor(KoColor)));
     m_swap->setFixedSize(28, 28);
     connect(action, SIGNAL(triggered()), m_swap, SLOT(swapColours()));
-    connect(m_viewManager, &KisViewManager::viewChanged, [this]() {
+    connect(m_viewManager, &KisViewManager::viewChanged, this, [this]() {
         slotUpdateDisplayRenderer(m_swap);
     });
 
@@ -184,7 +184,7 @@ void KisControlFrame::setup(QWidget *parent)
     connect(m_reset, SIGNAL(backgroundColorChanged(KoColor)), m_viewManager->canvasResourceProvider(), SLOT(slotSetBGColor(KoColor)));
     m_reset->setFixedSize(28, 28);
     connect(action, SIGNAL(triggered()), m_reset, SLOT(ResetColours()));
-    connect(m_viewManager, &KisViewManager::viewChanged, [this]() {
+    connect(m_viewManager, &KisViewManager::viewChanged, this, [this]() {
         slotUpdateDisplayRenderer(m_reset);
     });
     

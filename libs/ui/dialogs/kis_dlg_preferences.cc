@@ -673,7 +673,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     // this should be the last item we add.
     m_resourceFolderSelector->addItem(i18n("Choose Manually"));
 
-    connect(m_resourceFolderSelector, qOverload<int>(&QComboBox::activated), [this](int index) {
+    connect(m_resourceFolderSelector, qOverload<int>(&QComboBox::activated), this, [this](int index) {
         const int previousIndex = m_resourceFolderSelector->currentIndex();
 
         // if it is the last item in the last item, then open file picker and set the name returned as the filename
@@ -752,6 +752,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
         connect(grpWindowsAppData,
                 &KisWarningBlock::linkActivated,
+                qApp,
                 [userPath = appDataDir.absolutePath(),
                  privatePath = privateResourceDir.absolutePath()](const QString &link) {
                     if (link == QStringLiteral("copyuser")) {

@@ -38,7 +38,7 @@ KisGradientColorEditor::KisGradientColorEditor(QWidget *parent)
     m_d->colorTypeForegroundButton->setAutoRaise(true);
     m_d->colorTypeForegroundButton->setIcon(KisIconUtils::loadIcon("object-order-lower-calligra"));
     m_d->colorTypeForegroundButton->setToolTip(i18nc("Button to change the gradient stop type to foreground", "Foreground color"));
-    connect(m_d->colorTypeForegroundButton, &QToolButton::toggled,
+    connect(m_d->colorTypeForegroundButton, &QToolButton::toggled, this,
         [this](bool toggled)
         {
             if (toggled) {
@@ -53,7 +53,7 @@ KisGradientColorEditor::KisGradientColorEditor(QWidget *parent)
     m_d->colorTypeBackgroundButton->setAutoRaise(true);
     m_d->colorTypeBackgroundButton->setIcon(KisIconUtils::loadIcon("object-order-raise-calligra"));
     m_d->colorTypeBackgroundButton->setToolTip(i18nc("Button to change the gradient stop type to background", "Background color"));
-    connect(m_d->colorTypeBackgroundButton, &QToolButton::toggled,
+    connect(m_d->colorTypeBackgroundButton, &QToolButton::toggled, this,
         [this](bool toggled)
         {
             if (toggled) {
@@ -68,7 +68,7 @@ KisGradientColorEditor::KisGradientColorEditor(QWidget *parent)
     m_d->colorTypeCustomButton->setAutoRaise(true);
     m_d->colorTypeCustomButton->setIcon(KisIconUtils::loadIcon("wheel-sectors"));
     m_d->colorTypeCustomButton->setToolTip(i18nc("Button to change the gradient stop type to custom color", "Custom color"));
-    connect(m_d->colorTypeCustomButton, &QToolButton::toggled,
+    connect(m_d->colorTypeCustomButton, &QToolButton::toggled, this,
         [this](bool toggled)
         {
             if (toggled) {

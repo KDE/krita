@@ -645,7 +645,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
     //configure the unit manager
     KisSpinBoxUnitManagerFactory::setDefaultUnitManagerBuilder(new KisDocumentAwareSpinBoxUnitManagerBuilder());
-    connect(this, &KisApplication::aboutToQuit, &KisSpinBoxUnitManagerFactory::clearUnitManagerBuilder); //ensure the builder is destroyed when the application leave.
+    connect(this, &KisApplication::aboutToQuit, qApp, &KisSpinBoxUnitManagerFactory::clearUnitManagerBuilder); //ensure the builder is destroyed when the application leave.
     //the new syntax slot syntax allow to connect to a non q_object static method.
 
     // Long-press emulation.

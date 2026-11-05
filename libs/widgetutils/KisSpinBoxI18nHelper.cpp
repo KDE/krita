@@ -41,7 +41,7 @@ namespace KisSpinBoxI18nHelper
         };
         // Apply prefix/suffix with existing value immediately.
         changeHandler(spinBox->value());
-        QObject::connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), changeHandler);
+        QObject::connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), spinBox, changeHandler);
         spinBox->setProperty(HANDLER_PROPERTY_NAME, QVariant::fromValue(HandlerWrapper(changeHandler)));
     }
 

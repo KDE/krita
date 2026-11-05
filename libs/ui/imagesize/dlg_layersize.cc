@@ -111,7 +111,7 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
     connect(_widthUnitManager, SIGNAL(unitChanged(int)), m_page->newWidthUnit, SLOT(setCurrentIndex(int)));
     connect(_heightUnitManager, SIGNAL(unitChanged(int)), m_page->newHeightUnit, SLOT(setCurrentIndex(int)));
 
-    connect(this, &DlgLayerSize::sigDesiredSizeChanged, [this](qint32 width, qint32 height, double){
+    connect(this, &DlgLayerSize::sigDesiredSizeChanged, this, [this](qint32 width, qint32 height, double){
         KisFilterStrategy *filterStrategy = KisFilterStrategyRegistry::instance()->autoFilterStrategy(QSize(m_originalWidth, m_originalHeight), QSize(width, height));
         m_page->filterCmb->setAutoHint(filterStrategy->name());
     });

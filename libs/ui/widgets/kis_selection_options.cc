@@ -307,11 +307,13 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     // Make connections
     connect(m_d->optionButtonStripMode,
             QOverload<int, bool>::of(&KisOptionButtonStrip::buttonToggled),
+            this,
             [this](int i, int c) {
                 m_d->on_optionButtonStripMode_buttonToggled(i, c);
             });
     connect(m_d->optionButtonStripAction,
             QOverload<int, bool>::of(&KisOptionButtonStrip::buttonToggled),
+            this,
             [this](int i, int c) {
                 m_d->on_optionButtonStripAction_buttonToggled(i, c);
             });
@@ -329,6 +331,7 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
             SIGNAL(featherSelectionChanged(int)));
     connect(m_d->optionButtonStripReference,
             QOverload<int, bool>::of(&KisOptionButtonStrip::buttonToggled),
+            this,
             [this](int i, int c) {
                 m_d->on_optionButtonStripReference_buttonToggled(i, c);
             });

@@ -37,6 +37,7 @@ KisOptionButtonStrip::KisOptionButtonStrip(QWidget *parent)
     connect(
         m_d->buttonGroup,
         QOverload<QAbstractButton *, bool>::of(&QButtonGroup::buttonToggled),
+        this,
         [this](QAbstractButton *button, bool checked) {
             Q_EMIT buttonToggled(dynamic_cast<KoGroupButton *>(button), checked);
             Q_EMIT buttonToggled(m_d->buttonGroup->id(button), checked);

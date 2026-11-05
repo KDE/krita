@@ -580,7 +580,7 @@ void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
 
         // Connect this lambda after setting the initial checked state because
         // we don't want to overwrite the config when doing the initial setup.
-        connect(langItem, &QAction::toggled, [=](bool checked) {
+        connect(langItem, &QAction::toggled, qApp, [=](bool checked) {
             KisConfig cfg(false);
             // It is safe to modify `enabledNewsLangs` here, because the slots
             // are called synchronously on the UI thread so there is no need

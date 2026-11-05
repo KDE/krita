@@ -263,7 +263,7 @@ RenderedFrames KisDlgImportVideoAnimation::renderFrames(const QDir& directory)
 
         QScopedPointer<KisFFMpegWrapper> ffmpeg(new KisFFMpegWrapper(this));
         frameTimeList = {0}; // We always have a frame 0 here...
-        connect(ffmpeg.data(), &KisFFMpegWrapper::sigReadSTDOUT, [&](QByteArray arr) {
+        connect(ffmpeg.data(), &KisFFMpegWrapper::sigReadSTDOUT, this, [&](QByteArray arr) {
             QString out = QString(arr);
 
             QStringList integerOuts = out.split("\n", Qt::SkipEmptyParts);

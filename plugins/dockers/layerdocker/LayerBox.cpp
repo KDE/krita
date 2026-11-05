@@ -293,7 +293,7 @@ LayerBox::LayerBox()
 
     layerFilterWidget = new KisLayerFilterWidget(this);
     connect(layerFilterWidget, SIGNAL(filteringOptionsChanged()), this, SLOT(updateLayerFiltering()));
-    connect(layerFilterWidget, &KisLayerFilterWidget::filteringOptionsChanged, [this, filterIcon, filterEnabledIcon](){
+    connect(layerFilterWidget, &KisLayerFilterWidget::filteringOptionsChanged, this, [this, filterIcon, filterEnabledIcon](){
         if (layerFilterWidget->isCurrentlyFiltering()) {
             m_wdgLayerBox->bnLayerFilters->setIcon(filterEnabledIcon);
         } else {

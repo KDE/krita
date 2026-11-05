@@ -271,7 +271,7 @@ QWidget *SvgTextTool::createOptionWidget()
         if (docker) {
             optionWidget->setPalette(docker->palette());
             m_optionManager->setTextPropertiesOpen(docker->isVisible());
-            connect(m_optionManager.data(), &SvgTextToolOptionsManager::openTextPropertiesDocker, [docker](){
+            connect(m_optionManager.data(), &SvgTextToolOptionsManager::openTextPropertiesDocker, docker, [docker](){
                         docker->setVisible(!docker->isVisible());
                     });
             // Once we have docker toggling actions, we should revisit this.

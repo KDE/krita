@@ -64,7 +64,7 @@ void connectControl(KisCompositeOpListWidget *widget, QObject *source, const cha
     helper->slotPropertyChanged(prop.read(source).value<QString>());
 
     if (prop.isWritable()) {
-        QObject::connect(helper, &ConnectCompositeOpListWidgetHelper::sigWidgetChanged, [prop, source] (const QString &value) { prop.write(source, QVariant::fromValue(value)); });
+        QObject::connect(helper, &ConnectCompositeOpListWidgetHelper::sigWidgetChanged, source, [prop, source] (const QString &value) { prop.write(source, QVariant::fromValue(value)); });
     }
 }
 

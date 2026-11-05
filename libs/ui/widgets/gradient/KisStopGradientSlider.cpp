@@ -514,8 +514,8 @@ void KisStopGradientSlider::chooseSelectedStopColor()
                               Q_EMIT sigSelectedStop(m_selectedStop);
                               Q_EMIT updateRequested();
                           };
-        connect(dialog, &KisDlgInternalColorSelector::signalForegroundColorChosen, setColorFn);
-        connect(dialog, &QDialog::accepted, setColorFn);
+        connect(dialog, &KisDlgInternalColorSelector::signalForegroundColorChosen, this, setColorFn);
+        connect(dialog, &QDialog::accepted, this, setColorFn);
         colorDialog = dialog;
     } else {
         QColorDialog *dialog = new QColorDialog(this);
@@ -528,12 +528,12 @@ void KisStopGradientSlider::chooseSelectedStopColor()
                               Q_EMIT sigSelectedStop(m_selectedStop);
                               Q_EMIT updateRequested();
                           };
-        connect(dialog, &QColorDialog::currentColorChanged, setColorFn);
-        connect(dialog, &QDialog::accepted, setColorFn);
+        connect(dialog, &QColorDialog::currentColorChanged, this, setColorFn);
+        connect(dialog, &QDialog::accepted, this, setColorFn);
         colorDialog = dialog;
     }
     // common functionality
-    connect(colorDialog, &QDialog::rejected, [stops, this]()
+    connect(colorDialog, &QDialog::rejected, this, [stops, this]()
                                              {
                                                  m_gradient->setStops(stops);
                                                  Q_EMIT sigSelectedStop(m_selectedStop);

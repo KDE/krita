@@ -26,15 +26,17 @@ Q_GLOBAL_STATIC(IdentityResolutionProxyHolder, s_holder)
 }
 
 struct KisImageResolutionProxy::Private {
-    Private(KisImageWSP image)
-        : lastKnownXRes(1.0),
+    Private(KisImageWSP image, KisImageResolutionProxy *_q)
+        : q(_q),
+          lastKnownXRes(1.0),
           lastKnownYRes(1.0)
     {
         setImage(image);
     }
 
-    Private(const Private &rhs)
-        : lastKnownXRes(rhs.lastKnownXRes),
+    Private(const Private &rhs, KisImageResolutionProxy *_q)
+        : q(_q),
+          lastKnownXRes(rhs.lastKnownXRes),
           lastKnownYRes(rhs.lastKnownYRes)
     {
         setImage(rhs.image);
@@ -51,6 +53,7 @@ struct KisImageResolutionProxy::Private {
         }
     }
 
+    KisImageResolutionProxy *q {nullptr};
     KisImageWSP image;
     qreal lastKnownXRes;
     qreal lastKnownYRes;
@@ -66,13 +69,13 @@ KisImageResolutionProxy::KisImageResolutionProxy()
 }
 
 KisImageResolutionProxy::KisImageResolutionProxy(KisImageWSP image)
-    : m_d(new Private(image))
+    : m_d(new Private(image, this))
 {
 }
 
 KisImageResolutionProxy::KisImageResolutionProxy(const KisImageResolutionProxy &rhs)
     : QObject(nullptr)
-    , m_d(new Private(*rhs.m_d))
+    , m_d(new Private(*rhs.m_d, this))
 {
 }
 
@@ -137,7 +140,7 @@ void KisImageResolutionProxy::Private::setImage(KisImageWSP image)
         lastKnownXRes = image->xRes();
         lastKnownYRes = image->yRes();
 
-        imageConnection = connect(image.data(), &KisImage::sigResolutionChanged,
+        imageConnection = connect(image.data(), &KisImage::sigResolutionChanged, q,
                                     std::bind(&Private::slotImageResolutionChanged, this,
                                               std::placeholders::_1, std::placeholders::_2));
     } else {

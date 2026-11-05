@@ -94,10 +94,10 @@ public:
         }
         m_delegateTool = newDelegateTool;
         if (m_delegateTool) {
-            BaseClass::connect(m_delegateTool, SIGNAL(activateTool(QString)), SIGNAL(activateTool(QString)));
-            BaseClass::connect(m_delegateTool, &DelegateType::cursorChanged, [this](const QCursor &c) { this->BaseClass::useCursor(c); });
-            BaseClass::connect(m_delegateTool, SIGNAL(selectionChanged(bool)), SIGNAL(selectionChanged(bool)));
-            BaseClass::connect(m_delegateTool, SIGNAL(statusTextChanged(QString)), SIGNAL(statusTextChanged(QString)));
+            BaseClass::connect(m_delegateTool, SIGNAL(activateTool(QString)), this, SIGNAL(activateTool(QString)));
+            BaseClass::connect(m_delegateTool, &DelegateType::cursorChanged, this, [this](const QCursor &c) { this->BaseClass::useCursor(c); });
+            BaseClass::connect(m_delegateTool, SIGNAL(selectionChanged(bool)), this, SIGNAL(selectionChanged(bool)));
+            BaseClass::connect(m_delegateTool, SIGNAL(statusTextChanged(QString)), this, SIGNAL(statusTextChanged(QString)));
         }
     }
 

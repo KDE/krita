@@ -621,7 +621,7 @@ void KisLevelsConfigWidget::slot_buttonAutoLevels_clicked()
     autolevelsDialog->setCaption(i18nc("@title:window", "Auto Levels"));
     autolevelsDialog->setMainWidget(m_autoLevelsWidget);
     autolevelsDialog->setAttribute(Qt::WA_DeleteOnClose);
-    connect(autolevelsDialog, &QDialog::rejected,
+    connect(autolevelsDialog, &QDialog::rejected, this,
         [this, previousLevelsCurve]()
         {
             *m_activeLevelsCurve = previousLevelsCurve;
@@ -629,7 +629,7 @@ void KisLevelsConfigWidget::slot_buttonAutoLevels_clicked()
             Q_EMIT sigConfigurationItemChanged();
         }
     );
-    connect(autolevelsDialog, &QDialog::finished, [this](){ setEnabled(true); });
+    connect(autolevelsDialog, &QDialog::finished, this, [this](){ setEnabled(true); });
 
     setEnabled(false);
     autolevelsDialog->setEnabled(true);
@@ -672,7 +672,7 @@ void KisLevelsConfigWidget::slot_buttonAutoLevelsAllChannels_clicked()
     autolevelsDialog->setCaption(i18nc("@title:window", "Auto Levels"));
     autolevelsDialog->setMainWidget(m_autoLevelsWidget);
     autolevelsDialog->setAttribute(Qt::WA_DeleteOnClose);
-    connect(autolevelsDialog, &QDialog::rejected,
+    connect(autolevelsDialog, &QDialog::rejected, this,
         [this, previousLevelsCurves]()
         {
             // We maintain a pointer to the active levels info in m_levelsCurves
@@ -685,7 +685,7 @@ void KisLevelsConfigWidget::slot_buttonAutoLevelsAllChannels_clicked()
             Q_EMIT sigConfigurationItemChanged();
         }
     );
-    connect(autolevelsDialog, &QDialog::finished, [this](){ setEnabled(true); });
+    connect(autolevelsDialog, &QDialog::finished, this, [this](){ setEnabled(true); });
 
     setEnabled(false);
     autolevelsDialog->setEnabled(true);

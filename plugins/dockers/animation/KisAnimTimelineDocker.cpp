@@ -306,7 +306,7 @@ KisAnimTimelineDocker::KisAnimTimelineDocker()
     // Titlebar Widget..
     setTitleBarWidget(m_d->titlebar);
 
-    connect(m_d->titlebar->btnOnionSkinsMenu, &QToolButton::released, [this](){
+    connect(m_d->titlebar->btnOnionSkinsMenu, &QToolButton::released, this, [this](){
         if (m_d->mainWindow) {
             QDockWidget *docker = m_d->mainWindow->dockWidget("OnionSkinsDocker");
             if (docker) {

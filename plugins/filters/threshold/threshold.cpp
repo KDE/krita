@@ -114,7 +114,7 @@ KisThresholdConfigWidget::KisThresholdConfigWidget(QWidget * parent, KisPaintDev
     m_page.intThreshold->setValue(128);
 
     connect(m_page.intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page.intThreshold, QOverload<int>::of(&QSpinBox::valueChanged),
+    connect(m_page.intThreshold, QOverload<int>::of(&QSpinBox::valueChanged), this,
         [this](int value)
         {
             KisSignalsBlocker blocker(m_page.thresholdGradient);
@@ -122,7 +122,7 @@ KisThresholdConfigWidget::KisThresholdConfigWidget(QWidget * parent, KisPaintDev
         }
     );
     connect(m_page.thresholdGradient, SIGNAL(thresholdChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page.thresholdGradient, &KisThresholdSlider::thresholdChanged,
+    connect(m_page.thresholdGradient, &KisThresholdSlider::thresholdChanged, this,
         [this](qreal value)
         {
             KisSignalsBlocker blocker(m_page.intThreshold);

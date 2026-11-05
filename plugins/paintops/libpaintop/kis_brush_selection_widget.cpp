@@ -147,7 +147,7 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(int maxBrushSize,
 
     m_d->brushType.bind([this](int value) {m_stackedWidget->setCurrentIndex(value); });
     m_d->brushType.bind([this](int value) {m_buttonGroup->button(value)->setChecked(true); });
-    connect(m_buttonGroup, &QButtonGroup::idClicked, [this] (int id) {m_d->brushType.set(id);});
+    connect(m_buttonGroup, &QButtonGroup::idClicked, this, [this] (int id) {m_d->brushType.set(id);});
 
 
     Q_FOREACH (QWidget *widget, m_chooserMap.values()) {

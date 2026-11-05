@@ -38,7 +38,7 @@ KisDitherWidget::KisDitherWidget(QWidget* parent)
     noiseSeedLineEdit->setValidator(new QIntValidator(this));
     QObject::connect(noiseSeedLineEdit, &QLineEdit::textChanged, this, &KisDitherWidget::sigConfigurationItemChanged);
 
-    QObject::connect(noiseSeedRandomizeButton, &QToolButton::clicked, [this](){
+    QObject::connect(noiseSeedRandomizeButton, &QToolButton::clicked, this, [this](){
         noiseSeedLineEdit->setText(QString::number(rand()));
     });
 

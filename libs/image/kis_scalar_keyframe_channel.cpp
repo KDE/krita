@@ -314,6 +314,7 @@ void KisScalarKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, 
         scalarKeyframe->valueChangedChannelConnection =
             QObject::connect(scalarKeyframe.data(),
                              &KisScalarKeyframe::sigChanged,
+                             this,
                              [this, time](const KisScalarKeyframe* key){
                                  Q_UNUSED(key);
                                  Q_EMIT sigKeyframeChanged(this, time);

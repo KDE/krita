@@ -296,7 +296,7 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
         QOpenGLDebugLogger* openglLogger = new QOpenGLDebugLogger(ctx);
         if (openglLogger->initialize()) {
             qDebug() << "QOpenGLDebugLogger is initialized. Check whether you get a message below.";
-            QObject::connect(openglLogger, &QOpenGLDebugLogger::messageLogged, &openglOnMessageLogged);
+            QObject::connect(openglLogger, &QOpenGLDebugLogger::messageLogged, qApp, &openglOnMessageLogged);
             openglLogger->startLogging(g_isDebugSynchronous ? QOpenGLDebugLogger::SynchronousLogging : QOpenGLDebugLogger::AsynchronousLogging);
             openglLogger->logMessage(QOpenGLDebugMessage::createApplicationMessage(QStringLiteral("QOpenGLDebugLogger is logging.")));
         } else {

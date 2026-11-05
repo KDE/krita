@@ -227,7 +227,7 @@ void KisSelectLayerAction::inputEvent(QEvent *event)
                     }
                 }
                 QAction *action = menu->addAction(QString(4 * indentation, ' ') + node->name());
-                QObject::connect(action, &QAction::triggered,
+                QObject::connect(action, &QAction::triggered, menu,
                     [this, node, selectionOverrideMode]()
                     {
                         d->selectNode(node, selectionOverrideMode);
@@ -246,7 +246,7 @@ void KisSelectLayerAction::inputEvent(QEvent *event)
                 QAction *action = menu->addAction(i18nc("Menu entry for the select layer under cursor canvas input action",
                                                         "Select all layers"));
                 action->setVisible(numberOfLayers > 1);
-                QObject::connect(action, &QAction::triggered,
+                QObject::connect(action, &QAction::triggered, menu,
                     [this, foundNodes, selectionOverrideMode]()
                     {
                         d->selectNodes(foundNodes, selectionOverrideMode, false);

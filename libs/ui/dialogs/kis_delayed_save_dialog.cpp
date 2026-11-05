@@ -65,7 +65,7 @@ KisDelayedSaveDialog::KisDelayedSaveDialog(KisImageSP image, Type type, int busy
         connect(this, &KoDialog::user1Clicked, this, &KisDelayedSaveDialog::reject);
     } else if (type == GeneralDialog) {
         setButtons(KoDialog::Cancel);
-        connect(this, &KoDialog::cancelClicked, &KisDelayedSaveDialog::reject);
+        connect(this, &KoDialog::cancelClicked, this, &KisDelayedSaveDialog::reject);
     } else { // type == ForcedDialog, disable closing
         setButtons(KoDialog::None);
         setWindowFlags(windowFlags() & ~Qt::WindowCloseButtonHint);

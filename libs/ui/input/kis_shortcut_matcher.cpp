@@ -507,6 +507,7 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
         m_d->touchHoldEventPostponer.emplace(TOUCH_SLOP, m_d->touchHoldDelayMs);
         QObject::connect(&m_d->touchHoldEventPostponer.value(),
                          &KisTouchHoldEventsPostponer::sigHoldCompleted,
+                         &m_d->touchHoldEventPostponer.value(),
                          [this]() {
                              slotTouchHoldCompleted();
                          });

@@ -124,7 +124,7 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     alphaIndexSpinBox->setPrefix(QString("%1  ").arg(i18nc("Index as in Index Color", "Index:")));
     alphaIndexSpinBox->setRange(0, 255);
     QObject::connect(alphaIndexSpinBox, QOverload<int>::of(&KisSliderSpinBox::valueChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
-    QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, [this](){
+    QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, this, [this](){
         const KoColorSetSP palette = m_paletteWidget->currentResource().staticCast<KoColorSet>();
         alphaIndexSpinBox->setMaximum(palette ? int(palette->colorCount() - 1) : 0);
         alphaIndexSpinBox->setValue(std::min(alphaIndexSpinBox->value(), alphaIndexSpinBox->maximum()));

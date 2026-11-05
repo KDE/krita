@@ -806,7 +806,7 @@ void KisSegmentGradientEditor::editSelectedHandle()
     editor->show();
     dialog->resize(0, 0);
 
-    connect(dialog, &QDialog::finished, [this, editor, index](int)
+    connect(dialog, &QDialog::finished, this, [this, editor, index](int)
                                         {
                                             handleEditorContainer->insertWidget(index, editor);
                                             handleEditorContainer->setCurrentIndex(index);

@@ -2776,6 +2776,7 @@ void KisMainWindow::updateWindowMenu()
 
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&New Workspace...")),
             &QAction::triggered,
+            this,
             [=]() {
         QString name;
         name = QInputDialog::getText(this, i18nc("@title:window", "New Workspace..."),

@@ -81,7 +81,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(int maxBrushSize,
     m_fadeAspectLocker->connectSpinBoxes(inputHFade, inputVFade, aspectButton);
     m_fadeAspectLocker->setBlockUpdateSignalOnDrag(false);
 
-    connect(m_fadeAspectLocker.data(), &KisAspectRatioLocker::sliderValueChanged,
+    connect(m_fadeAspectLocker.data(), &KisAspectRatioLocker::sliderValueChanged, this,
             [this] () {
                 m_d->model->sethorizontalFade(inputHFade->value());
                 m_d->model->setverticalFade(inputVFade->value());

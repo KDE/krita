@@ -171,7 +171,8 @@ KisCurveOptionWidget::KisCurveOptionWidget(lager::cursor<KisCurveOptionDataCommo
                   std::placeholders::_1));
     connect(m_curveOptionWidget->sensorSelector,
             &KisMultiSensorsSelector::highlightedSensorChanged,
-            std::bind(&KisCurveOptionModel::setactiveSensorId, &m_d->model, std::placeholders::_1));
+            &m_d->model,
+            &KisCurveOptionModel::setactiveSensorId);
 
     // set all the icons for the curve preset shapes
     updateThemedIcons();

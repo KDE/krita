@@ -262,7 +262,7 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
             connect(scroller, SIGNAL(stateChanged(QScroller::State)),
                     this, SLOT(slotScrollerStateChanged(QScroller::State)));
 
-            connect(&m_d->kineticScrollInfiniteFrameUpdater, &QTimer::timeout, [this, scroller](){
+            connect(&m_d->kineticScrollInfiniteFrameUpdater, &QTimer::timeout, this, [this, scroller](){
                 slotUpdateInfiniteFramesCount();
                 scroller->resendPrepareEvent();
             });
@@ -367,7 +367,7 @@ void KisAnimTimelineFramesView::setActionManager(KisActionManager *actionManager
         connect(action, SIGNAL(triggered()), SLOT(slotCopyFrames()));
 
         action = m_d->actionMan->createAction("copy_frames_as_clones");
-        connect(action, &KisAction::triggered, [this](){clone(false);});
+        connect(action, &KisAction::triggered, this, [this](){clone(false);});
 
         action = m_d->actionMan->createAction("make_clones_unique");
         connect(action, SIGNAL(triggered()), SLOT(slotMakeClonesUnique()));

@@ -465,7 +465,7 @@ void KisStopGradientEditor::editSelectedStop()
     editor->show();
     dialog->resize(0, 0);
 
-    connect(dialog, &QDialog::finished, [this, editor, index](int)
+    connect(dialog, &QDialog::finished, this, [this, editor, index](int)
                                         {
                                             stopEditorContainer->insertWidget(index, editor);
                                             stopEditorContainer->setCurrentIndex(index);

@@ -101,7 +101,7 @@ CompositionDockerDock::CompositionDockerDock( )
 
     exportCompositions->setMenu(exportMenu);
 
-    connect(exportMenu, &QMenu::triggered, [this](QAction* triggered){
+    connect(exportMenu, &QMenu::triggered, this, [this](QAction* triggered){
         exportCompositions->setDefaultAction(triggered);
     });
 

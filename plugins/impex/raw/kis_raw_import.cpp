@@ -68,7 +68,7 @@ KisRawImport::KisRawImport(QObject *parent, const QVariantList &)
     m_dialog->setMainWidget(m_rawWidget);
     connect(m_dialog, &KoDialog::applyClicked, this, &KisRawImport::slotUpdatePreview);
     connect(m_rawWidget, &WdgRawImport::paint, this, &KisRawImport::slotUpdatePreview);
-    connect(m_rawWidget->rawSettings, &DcrawSettingsWidget::signalSettingsChanged, [&]() {
+    connect(m_rawWidget->rawSettings, &DcrawSettingsWidget::signalSettingsChanged, this, [&]() {
         m_dialog->enableButtonApply(true);
     });
 }

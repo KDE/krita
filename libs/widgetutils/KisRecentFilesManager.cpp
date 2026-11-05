@@ -42,7 +42,7 @@ KisRecentFilesManager::Private::Private(KisRecentFilesManager *q)
 {
     m_saveOnIdleTimer.setSingleShot(true);
     m_saveOnIdleTimer.setInterval(0);
-    m_q->connect(&m_saveOnIdleTimer, &QTimer::timeout, [this]() {
+    m_q->connect(&m_saveOnIdleTimer, &QTimer::timeout, m_q, [this]() {
         m_q->saveEntries(KSharedConfig::openConfig()->group("RecentFiles"));
     });
 }

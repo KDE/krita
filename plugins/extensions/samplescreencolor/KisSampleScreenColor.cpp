@@ -19,10 +19,10 @@ KisSampleScreenColor::KisSampleScreenColor(QObject *parent, const QVariantList &
     : KisActionPlugin(parent)
 {
     KisAction *action = createAction("sample_screen_color");
-    connect(action, &QAction::triggered, [this](){ slotSampleScreenColor(false); });
+    connect(action, &QAction::triggered, this, [this](){ slotSampleScreenColor(false); });
 
     action = createAction("sample_screen_color_real_canvas");
-    connect(action, &QAction::triggered, [this](){ slotSampleScreenColor(true); });
+    connect(action, &QAction::triggered, this, [this](){ slotSampleScreenColor(true); });
 }
 
 KisSampleScreenColor::~KisSampleScreenColor()

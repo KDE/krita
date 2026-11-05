@@ -45,7 +45,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
     textFilter->setClearButtonEnabled(true);
 
     connect(textFilter, SIGNAL(textChanged(QString)), this, SIGNAL(filteringOptionsChanged()));
-    connect(textFilter, &QLineEdit::returnPressed, [this]() {
+    connect(textFilter, &QLineEdit::returnPressed, this, [this]() {
         QMenu* menu = dynamic_cast<QMenu*>(parentWidget());
         if (menu) {
             menu->close();
@@ -80,9 +80,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
 
     resetButton = new QPushButton(i18n("Reset Filters"), this);
     resetButton->setMinimumHeight(28);
-    connect(resetButton, &QPushButton::clicked, [this](){
-       this->reset();
-    });
+    connect(resetButton, &QPushButton::clicked, this, &KisLayerFilterWidget::reset);
 
 
     layout->addWidget(textFilter);

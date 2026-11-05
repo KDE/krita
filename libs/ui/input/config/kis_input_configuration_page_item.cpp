@@ -41,7 +41,7 @@ KisInputConfigurationPageItem::KisInputConfigurationPageItem(QWidget *parent, Qt
     ui->warningConflictButton->setIcon(KisIconUtils::loadIcon("warning"));
     ui->warningConflictButton->setFlat(true);
     ui->warningConflictButton->hide();
-    connect(ui->warningConflictButton, &QPushButton::clicked, [&]() {
+    connect(ui->warningConflictButton, &QPushButton::clicked, this, [&]() {
         QToolTip::showText(QCursor::pos(), ui->warningConflictButton->toolTip());
     });
 

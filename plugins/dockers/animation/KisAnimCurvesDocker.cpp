@@ -320,7 +320,7 @@ KisAnimCurvesDocker::KisAnimCurvesDocker()
     setTitleBarWidget(m_d->titlebar);
     setEnabled(false);
 
-    connect(m_d->titlebar->btnOnionSkinsMenu, &QToolButton::released, [this](){
+    connect(m_d->titlebar->btnOnionSkinsMenu, &QToolButton::released, this, [this](){
         if (m_d->mainWindow) {
             QDockWidget *docker = m_d->mainWindow->dockWidget("OnionSkinsDocker");
             if (docker) {
@@ -329,13 +329,13 @@ KisAnimCurvesDocker::KisAnimCurvesDocker()
         }
     });
 
-    connect(m_d->titlebar->btnZoomHori, &KisZoomButton::zoom, [this](qreal zoomDelta){
+    connect(m_d->titlebar->btnZoomHori, &KisZoomButton::zoom, this, [this](qreal zoomDelta){
         if (m_d->curvesView) {
             m_d->curvesView->changeZoom(Qt::Horizontal, zoomDelta);
         }
     });
 
-    connect(m_d->titlebar->btnZoomVert, &KisZoomButton::zoom, [this](qreal zoomDelta){
+    connect(m_d->titlebar->btnZoomVert, &KisZoomButton::zoom, this, [this](qreal zoomDelta){
         if (m_d->curvesView) {
             m_d->curvesView->changeZoom(Qt::Vertical, zoomDelta);
         }

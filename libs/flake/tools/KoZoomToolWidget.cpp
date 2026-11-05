@@ -49,6 +49,7 @@ KoZoomToolWidget::KoZoomToolWidget(KoZoomTool* tool, QWidget* parent)
 
     connect(zoomModeButtonStripAction,
             QOverload<int, bool>::of(&KisOptionButtonStrip::buttonToggled),
+            m_tool,
             [this](int index, int checked) {
                 if (checked) {
                     m_tool->setZoomInMode(!bool(index));

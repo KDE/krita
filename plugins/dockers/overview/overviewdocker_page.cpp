@@ -454,7 +454,7 @@ void OverviewDockerPage::showControls(int delay) const
     delay = qMax(delay, 0);
 
     m_showControlsTimer.disconnect(SIGNAL(timeout()));
-    connect(&m_showControlsTimer, &QTimer::timeout, animFunction);
+    connect(&m_showControlsTimer, &QTimer::timeout, this, animFunction);
     m_showControlsTimer.start(delay);
 }
 
@@ -491,7 +491,7 @@ void OverviewDockerPage::hideControls(int delay) const
     delay = qMax(delay, 0);
 
     m_showControlsTimer.disconnect(SIGNAL(timeout()));
-    connect(&m_showControlsTimer, &QTimer::timeout, animFunction);
+    connect(&m_showControlsTimer, &QTimer::timeout, this, animFunction);
     m_showControlsTimer.start(delay);
 }
 

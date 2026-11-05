@@ -768,7 +768,7 @@ void RecorderExport::onButtonEditProfileClicked()
 #else
     RecorderProfileSettings settingsDialog(this);
 
-    connect(&settingsDialog, &RecorderProfileSettings::requestPreview, [&](const QString & arguments) {
+    connect(&settingsDialog, &RecorderProfileSettings::requestPreview, this, [&](const QString & arguments) {
         settingsDialog.setPreview(settings->ffmpegPath % " -y " % d->applyVariables(arguments).replace("\n", " ")
                                   % " \"" % settings->videoFilePath % "\"");
     });

@@ -269,7 +269,7 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     d->ui->btnSolidColorSample->setEnabled(false);
     d->ui->btnSolidColorSample->setVisible(false);
 
-    connect(d->colorAction, &KoColorPopupAction::colorChanged, [this](KoColor color) {
+    connect(d->colorAction, &KoColorPopupAction::colorChanged, this, [this](KoColor color) {
         d->colorChangedCompressor.start({color.toQColor(), d->fillVariant});
     });
 

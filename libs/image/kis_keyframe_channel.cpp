@@ -95,15 +95,15 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bo
     : m_d(new Private(id, bounds))
 {
     // Added keyframes should fire channel updated signal..
-    connect(this, &KisKeyframeChannel::sigAddedKeyframe, [this](const KisKeyframeChannel *, int) {
+    connect(this, &KisKeyframeChannel::sigAddedKeyframe, this, [this](const KisKeyframeChannel *, int) {
         Q_EMIT sigAnyKeyframeChange();
     });
 
-    connect(this, &KisKeyframeChannel::sigKeyframeHasBeenRemoved, [this](const KisKeyframeChannel *, int) {
+    connect(this, &KisKeyframeChannel::sigKeyframeHasBeenRemoved, this, [this](const KisKeyframeChannel *, int) {
         Q_EMIT sigAnyKeyframeChange();
     });
 
-    connect(this, &KisKeyframeChannel::sigKeyframeChanged, [this](const KisKeyframeChannel *, int) {
+    connect(this, &KisKeyframeChannel::sigKeyframeChanged, this, [this](const KisKeyframeChannel *, int) {
         Q_EMIT sigAnyKeyframeChange();
     });
 }

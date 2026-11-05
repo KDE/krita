@@ -36,7 +36,7 @@ KisCollapsibleButtonGroup::KisCollapsibleButtonGroup(QWidget *parent)
     m_d->collapsedButton.reset(new QToolButton(this));
     m_d->layout->addWidget(m_d->collapsedButton.data());
 
-    connect(m_d->collapsedButton.data(), &QToolButton::triggered, [this](QAction* triggered) {
+    connect(m_d->collapsedButton.data(), &QToolButton::triggered, this, [this](QAction* triggered) {
         m_d->collapsedButton->setDefaultAction(triggered);
     });
 }	

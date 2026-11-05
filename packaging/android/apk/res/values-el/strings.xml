@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="remote_action_click">Πάτημα</string>
+  <string name="remote_action_doubleclick">Διπλό πάτημα</string>
+  <string name="remote_action_swipeup">Κύλιση πάνω</string>
+  <string name="remote_action_swipedown">Κύλιση κάτω</string>
+  <string name="remote_action_swipeleft">Κύλιση αριστερά</string>
+  <string name="remote_action_swiperight">Κύλιση δεξιά</string>
+  <string name="remote_action_circlecw">Κύκλος δεξιόστροφα</string>
+  <string name="remote_action_circleccw">Κύκλος αριστερόστροφα</string>
+  <string name="something_wrong">Κάτι πήγε στραβά...</string>
+  <string name="cancelled">Ακυρώθηκε</string>
+  <string name="save_notification_text">Αποθηκεύεται έγγραφο</string>
+  <string name="cancel_save_notification">Ακύρωση</string>
+  <string name="donation_dialog_loading">Το Krita φορτώνει…</string>
+  <string name="donation_dialog_loaded">Το Krita είναι έτοιμο!</string>
+  <string name="donation_dialog_button_back">Πίσω</string>
+  <string name="donation_dialog_button_close">Κλείσιμο</string>
+  <string name="donation_dialog_header_support">Στηρίξτε το Krita</string>
+  <string name="donation_dialog_header_button">♥︎ Εμφάνιση επιλογών υποστηρικτή</string>
+  <string name="donation_dialog_supporter_text">Ευχαριστούμε που στηρίζετε το Krita! Η συνεισφορά σας βοηθάει να συνεχίζουμε την ανάπτυξή του.</string>
+  <string name="product_donations_description">&lt;h2&gt;Δωρεές&lt;/h2&gt;&lt;p&gt;Βοηθήστε την συνεχή ανάπτυξη του Krita με μία απευθείας δωρεά μέσω PayPal, πιστωτικής ή χρεωστικής κάρτας και πολλές άλλες μεθόδους πληρωμής.&lt;/p&gt;</string>
+  <string name="product_donations_button">Δωρεά</string>
+  <string name="product_development_fund_description">&lt;h2&gt;Ταμείο ανάπτυξης&lt;/h2&gt;&lt;p&gt;Γίνετε μέλος στο ταμείο ανάπτυξης του Krita και βοηθήστε την συνεχή ανάπτυξή του με μία μηνιαία συνεισφορά. Είναι διαθέσιμα διαφορετικά επίπεδα με προνόμια.&lt;/p&gt;</string>
+  <string name="product_development_fund_button">Γίνε μέλος του Ταμείου</string>
+  <string name="product_button_subscribe">Εγγραφή</string>
+  <string name="product_button_subscribe_for_month">Εγγραφή για %s/μήνα</string>
+  <string name="product_button_buy">Αγορά</string>
+  <string name="product_button_buy_for">Αγορά για %s</string>
+  <string name="product_supporter_badge_title">Σήμα υποστηρικτή</string>
+  <string name="product_supporter_badge_description">&lt;p&gt;Ένα σήμα για πρώιμους υποστηρικτές του Krita στο Android.&lt;/p&gt;</string>
+  <string name="product_subscription_title">Συνδρομή υποστηρικτή</string>
+  <string name="product_subscription_description">&lt;p&gt;Στηρίξτε την ανάπτυξη του Krita με μηνιαία συνεισφορά. Όσο είστε εγγεγραμμένοι, έχετε πρόσβαση σε &lt;strong&gt;όλα&lt;/strong&gt; τα προνόμια υποστηρικτή όταν κυκλοφορούν. Για την ώρα λαμβάνετε %1$d πακέτα προμηθειών που περιέχουν πάνω από %2$d πινέλα, συμπεριλαμβανομένου του πακέτου Ψηφιακό ατελιέ, με περισσότερα να έρχονται μελλοντικά.&lt;/p&gt;</string>
+  <string name="product_onetime_title">Πακέτο υποστηρικτή Krita 5.3</string>
+  <string name="product_onetime_description">&lt;p&gt;Σε αυτό το πακέτο θα λάβετε %1$d πακέτα προμηθειών που μαζίπεριέχουν πάνω από %2$d πινέλα, συμπεριλαμβανομένου του επί πληρωμή πακέτου Ψηφιακό ατελιέ. Αυτή είναι μία &lt;strong&gt;εφάπαξ αγορά&lt;/strong&gt;, δεν θα εγγραφείτε σε συνδρομή.&lt;/p&gt;</string>
+  <string name="show_this_dialog_when_krita_starts">Εμφάνιση διαλόγου όταν ξεκινά το Krita</string>
+  <string name="ok">OK</string>
+  <string name="interface_scale_default">Κλίμακα διεπαφής: %d%% (προεπιλογή)</string>
+  <string name="interface_scale">Κλίμακα διεπαφής: %d%%</string>
+</resources>

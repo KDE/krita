@@ -82,8 +82,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-04 01:00+0000\n"
-"PO-Revision-Date: 2026-11-03 07:44+0200\n"
+"POT-Creation-Date: 2026-11-05 00:53+0000\n"
+"PO-Revision-Date: 2026-11-04 07:45+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -24566,8 +24566,8 @@ msgstr "Локальные источники"
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
 #: libs/ui/widgets/kis_custom_image_widget.cc:456
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1581
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1606
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1609
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/logdocker/LogDockerDock.cpp:227
 #: plugins/dockers/lut/lutdocker_dock.cpp:696
@@ -25002,7 +25002,7 @@ msgstr "Миниатюра"
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:125 libs/resources/KisTagModel.cpp:301
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:606
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:504
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:805
@@ -29946,13 +29946,7 @@ msgstr "Просмотр цветового пространства"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-#| "\"><span style=\" font-weight:600; text-decoration: underline; color:"
-#| "#006e28;\">Color Spaces</span></a>  determine how colors are encoded in "
-#| "your files. Different color spaces have different properties and are used "
-#| "for different purposes.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
 "\"><span style=\" font-weight:600; text-decoration: underline; \">Color "
@@ -29962,9 +29956,9 @@ msgid ""
 msgstr ""
 "<html><head/><body><p><a href=\"https://ru.wikipedia.org/wiki/"
 "Цветовое_пространство\"><span style=\" font-weight:600; text-decoration: "
-"underline; color:#006e28;\">Цветовые пространства</span></a> определяют то, "
-"как кодируются цвета в ваших файлах. Разные цветовые пространства имеют "
-"разные параметры и используются для разных целей.</p></body></html>"
+"underline;\">Цветовые пространства</span></a> определяют то, как кодируются "
+"цвета в ваших файлах. Разные цветовые пространства имеют разные параметры и "
+"используются для разных целей.</p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:51
@@ -43028,50 +43022,57 @@ msgstr "Глобальный цвет"
 msgid "Custom Color"
 msgstr "Свой цвет"
 
+#. i18n: ectx: property (text), widget (QLabel, brushPriorityLabel)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:251
+#, fuzzy, kde-format
+#| msgid "Brush Preset History"
+msgid "Brush Priority:"
+msgstr "Журнал профилей кистей"
+
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:330
 #, kde-format
 msgid "Control Widget Options"
 msgstr "Параметры виджета управления"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:354
 #, kde-format
 msgid "Show Move"
 msgstr "Показывать движение"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:320
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:370
 #, kde-format
 msgid "Show Snapping"
 msgstr "Показать привязку"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:336
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:386
 #, kde-format
 msgid "Show Lock"
 msgstr "Показывать блокирование"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:352
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:402
 #, kde-format
 msgid "Show Duplicate"
 msgstr "Показывать дублирование"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:368
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:418
 #, kde-format
 msgid "Show Delete"
 msgstr "Показывать удаление"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:403
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:453
 #, kde-format
 msgid "Load Assistant Set"
 msgstr "Загрузить вспомогательный набор"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:422
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:472
 #, kde-format
 msgid "Save Assistant Set"
 msgstr "Сохранить вспомогательный набор"
@@ -43086,12 +43087,12 @@ msgstr "Вспомогательные концентрические эллип
 msgid "Concentric Ellipse"
 msgstr "Концентрические эллипсы"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:29
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:30
 #, kde-format
 msgid "Curvilinear Perspective assistant"
 msgstr "Инструмент создания криволинейной перспективы"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:265
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:323
 #, kde-format
 msgid "Curvilinear Perspective"
 msgstr "Криволинейная перспектива"
@@ -43154,45 +43155,53 @@ msgstr "Бесконечная направляющая линейка"
 msgid "Infinite Ruler"
 msgstr "Бесконечная линейка"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1438
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1463
 #, kde-format
 msgid "Select an Assistant"
 msgstr "Выбор линейки"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1609
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr ""
 "Обнаружены ошибки. Не все вспомогательные средства были успешно загружены."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1672
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1697
 #, kde-format
 msgid "Save Assistant"
 msgstr "Сохранение линейки"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1770
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1776
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
+#, kde-format
+msgid ""
+"When a brush is over perspective helpers, and needs to decide on the one to "
+"follow (eg for the \"Perspective\" brush sensor), this will be used. "
+"Priority is like counting, lower number comes first."
+msgstr ""
+
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1797
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1803
 #, kde-format
 msgid "Opacity: "
 msgstr "Непрозрачность: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1783
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1787
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1810
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1814
 #, kde-format
 msgid "Density: "
 msgstr "Плотность: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1792
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1819
 #, kde-format
 msgid "Subdivisions: "
 msgstr "Деления:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1796
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1830
 #, kde-format
 msgid "Minor Subdivisions: "
 msgstr "Малые деления: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:189
+#: plugins/assistants/Assistants/kis_assistant_tool.h:190
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, kde-format
 msgid "Assistant Tool"
@@ -43326,12 +43335,12 @@ msgctxt "A type of drawing assistants"
 msgid "Spline"
 msgstr "Сплайн"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:28
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:30
 #, kde-format
 msgid "Two point assistant"
 msgstr "Вспомогательный инструмент двухточечной перспективы"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:532
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:606
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "Двухточечная перспектива"
@@ -51631,12 +51640,7 @@ msgstr "Ошибка: не удалось инициализировать ме�
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
-#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
-#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-#| "Scripting School</span></a>!</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
 "out the <a href=\"https://scripting.krita.org/lessons/introduction\"><span "
@@ -51645,8 +51649,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Информация о том, как писать сценарии Krita, "
 "представлена в <a href=\"https://scripting.krita.org/lessons/introduction"
-"\"><span style=\" text-decoration: underline; color:#2980b9;\">Школе "
-"создания сценариев Krita</span></a>!</p></body></html>"
+"\"><span style=\" text-decoration: underline;\">Школе создания сценариев "
+"Krita</span></a>!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
 #, kde-format
@@ -66349,39 +66353,29 @@ msgstr "Панель быстрой настройки"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:145
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:335
-#, fuzzy
-#| msgctxt "@label:button"
-#| msgid "Add Style Preset"
 msgid "Add Preset"
-msgstr "Добавить профиль стиля"
+msgstr "Добавить профиль"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:149
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:397
-#, fuzzy
-#| msgctxt "@info:tooltip"
-#| msgid "Delete resource"
 msgid "Delete Preset"
-msgstr "Удалить ресурс"
+msgstr "Удалить профиль"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:313
 msgid "Enter brush size (px):"
-msgstr ""
+msgstr "Введите размер кисти (пикс.):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:319
-#, fuzzy
-#| msgid "Outline opacity:"
 msgid "Enter opacity (%):"
-msgstr "Непрозрачность контура:"
+msgstr "Введите непрозрачность (%):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:325
 msgid "Enter flow (%):"
-msgstr ""
+msgstr "Введите нажим (%):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:398
-#, fuzzy
-#| msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgid "Are you sure you want to delete this preset?"
-msgstr "Удалить маску <b>«%1»</b>?"
+msgstr "Удалить этот профиль?"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"

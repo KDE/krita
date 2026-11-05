@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-04 01:00+0000\n"
+"POT-Creation-Date: 2026-11-05 00:53+0000\n"
 "PO-Revision-Date: 2026-10-26 22:17+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -24287,8 +24287,8 @@ msgstr "Risorse locali"
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
 #: libs/ui/widgets/kis_custom_image_widget.cc:456
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1581
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1606
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1609
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/logdocker/LogDockerDock.cpp:227
 #: plugins/dockers/lut/lutdocker_dock.cpp:696
@@ -24727,7 +24727,7 @@ msgstr "Miniatura"
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:125 libs/resources/KisTagModel.cpp:301
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:606
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:504
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:805
@@ -42631,50 +42631,57 @@ msgstr "Colore globale:"
 msgid "Custom Color"
 msgstr "Colore personalizzato"
 
+#. i18n: ectx: property (text), widget (QLabel, brushPriorityLabel)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:251
+#, fuzzy, kde-format
+#| msgid "Brush Preset History"
+msgid "Brush Priority:"
+msgstr "Cronologia preimpostazioni del pennello"
+
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:330
 #, kde-format
 msgid "Control Widget Options"
 msgstr "Opzioni per l'oggetto di controllo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:354
 #, kde-format
 msgid "Show Move"
 msgstr "Mostra Sposta"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:320
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:370
 #, kde-format
 msgid "Show Snapping"
 msgstr "Mostra Aggancia"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:336
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:386
 #, kde-format
 msgid "Show Lock"
 msgstr "Mostra Blocca"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:352
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:402
 #, kde-format
 msgid "Show Duplicate"
 msgstr "Mostra Duplica"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:368
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:418
 #, kde-format
 msgid "Show Delete"
 msgstr "Mostra Elimina"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:403
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:453
 #, kde-format
 msgid "Load Assistant Set"
 msgstr "Carica impostazioni assistente"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:422
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:472
 #, kde-format
 msgid "Save Assistant Set"
 msgstr "Salva impostazioni assistente"
@@ -42689,12 +42696,12 @@ msgstr "Assistente dell'ellisse concentrica"
 msgid "Concentric Ellipse"
 msgstr "Ellisse concentrica"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:29
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:30
 #, kde-format
 msgid "Curvilinear Perspective assistant"
 msgstr "Assistente prospettiva curvilineare"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:265
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:323
 #, kde-format
 msgid "Curvilinear Perspective"
 msgstr "Prospettiva curvilineare"
@@ -42751,46 +42758,54 @@ msgstr "Assistente del righello infinito"
 msgid "Infinite Ruler"
 msgstr "Righello infinito"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1438
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1463
 #, kde-format
 msgid "Select an Assistant"
 msgstr "Seleziona un assistente"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1609
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr ""
 "Sono stati rilevati errori. Non tutti gli assistenti sono stati caricati "
 "correttamente."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1672
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1697
 #, kde-format
 msgid "Save Assistant"
 msgstr "Salva assistente"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1770
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1776
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
+#, kde-format
+msgid ""
+"When a brush is over perspective helpers, and needs to decide on the one to "
+"follow (eg for the \"Perspective\" brush sensor), this will be used. "
+"Priority is like counting, lower number comes first."
+msgstr ""
+
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1797
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1803
 #, kde-format
 msgid "Opacity: "
 msgstr "Opacità: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1783
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1787
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1810
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1814
 #, kde-format
 msgid "Density: "
 msgstr "Densità: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1792
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1819
 #, kde-format
 msgid "Subdivisions: "
 msgstr "Suddivisioni: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1796
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1830
 #, kde-format
 msgid "Minor Subdivisions: "
 msgstr "Suddivisioni minori: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:189
+#: plugins/assistants/Assistants/kis_assistant_tool.h:190
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, kde-format
 msgid "Assistant Tool"
@@ -42924,12 +42939,12 @@ msgctxt "A type of drawing assistants"
 msgid "Spline"
 msgstr "Spline"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:28
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:30
 #, kde-format
 msgid "Two point assistant"
 msgstr "Assistente a due punti"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:532
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:606
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "Prospettiva a due punti"

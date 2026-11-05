@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-04 01:00+0000\n"
+"POT-Creation-Date: 2026-11-05 00:53+0000\n"
 "PO-Revision-Date: 2025-10-04 21:46+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -24431,8 +24431,8 @@ msgstr "Șterge plan"
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
 #: libs/ui/widgets/kis_custom_image_widget.cc:456
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1581
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1606
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1609
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/logdocker/LogDockerDock.cpp:227
 #: plugins/dockers/lut/lutdocker_dock.cpp:696
@@ -24879,7 +24879,7 @@ msgstr "Importă imagine"
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:125 libs/resources/KisTagModel.cpp:301
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:606
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:504
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:805
@@ -42053,52 +42053,58 @@ msgstr "Selecția"
 msgid "Custom Color"
 msgstr "Pensulă"
 
+#. i18n: ectx: property (text), widget (QLabel, brushPriorityLabel)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:251
+#, fuzzy, kde-format
+msgid "Brush Priority:"
+msgstr "Preconfigurări:"
+
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:330
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgid "Control Widget Options"
 msgstr "Opțiuni instrument"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:354
 #, fuzzy, kde-format
 msgid "Show Move"
 msgstr "Umbre 2"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:320
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:370
 #, fuzzy, kde-format
 msgid "Show Snapping"
 msgstr "Alfa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:336
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:386
 #, fuzzy, kde-format
 msgid "Show Lock"
 msgstr "Stânci"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:352
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:402
 #, fuzzy, kde-format
 msgid "Show Duplicate"
 msgstr "&Următorul plan..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:368
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:418
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgid "Show Delete"
 msgstr "Șterge"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:403
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:453
 #, fuzzy, kde-format
 msgid "Load Assistant Set"
 msgstr "Dizolvă"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:422
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:472
 #, fuzzy, kde-format
 msgid "Save Assistant Set"
 msgstr "Dizolvă"
@@ -42113,12 +42119,12 @@ msgstr "Dizolvă"
 msgid "Concentric Ellipse"
 msgstr "Selecția"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:29
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:30
 #, fuzzy, kde-format
 msgid "Curvilinear Perspective assistant"
 msgstr "Unealtă de ș&tergere"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:265
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:323
 #, fuzzy, kde-format
 msgid "Curvilinear Perspective"
 msgstr "Unealtă de ș&tergere"
@@ -42178,46 +42184,54 @@ msgstr "Dizolvă"
 msgid "Infinite Ruler"
 msgstr "&Ascunde/afișează plan..."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1438
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1463
 #, fuzzy, kde-format
 msgid "Select an Assistant"
 msgstr "Dizolvă"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1584
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1609
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr ""
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1672
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1697
 #, fuzzy, kde-format
 msgid "Save Assistant"
 msgstr "Dizolvă"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1770
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1776
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
+#, kde-format
+msgid ""
+"When a brush is over perspective helpers, and needs to decide on the one to "
+"follow (eg for the \"Perspective\" brush sensor), this will be used. "
+"Priority is like counting, lower number comes first."
+msgstr ""
+
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1797
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1803
 #, fuzzy, kde-format
 msgid "Opacity: "
 msgstr "Opacitate"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1783
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1787
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1810
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1814
 #, fuzzy, kde-format
 msgid "Density: "
 msgstr "Descriere:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1792
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1819
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Subdivisions: "
 msgstr "Subdiviziune:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1796
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1830
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Minor Subdivisions: "
 msgstr "Subdiviziune:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:189
+#: plugins/assistants/Assistants/kis_assistant_tool.h:190
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, fuzzy, kde-format
 msgid "Assistant Tool"
@@ -42351,12 +42365,12 @@ msgctxt "A type of drawing assistants"
 msgid "Spline"
 msgstr "Legată"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:28
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:30
 #, fuzzy, kde-format
 msgid "Two point assistant"
 msgstr "Dizolvă"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:532
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:606
 #, fuzzy, kde-format
 msgid "2 Point Perspective"
 msgstr "Unealtă de ș&tergere"

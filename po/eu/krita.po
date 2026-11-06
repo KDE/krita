@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-05 00:53+0000\n"
+"POT-Creation-Date: 2026-11-06 00:48+0000\n"
 "PO-Revision-Date: 2026-08-17 11:24+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -21464,7 +21464,7 @@ msgstr "Tamaina"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1483
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1997
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1998
 #: libs/ui/forms/wdgdisplaysettings.ui:379
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -21472,8 +21472,8 @@ msgstr "Tamaina"
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:72
-#: libs/ui/widgets/kis_selection_options.cc:200
-#: libs/ui/widgets/kis_selection_options.cc:215
+#: libs/ui/widgets/kis_selection_options.cc:205
+#: libs/ui/widgets/kis_selection_options.cc:220
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:540
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:652
@@ -24511,7 +24511,7 @@ msgstr "Baliabide lokalak"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1202
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1203
 #: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:506
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
@@ -24526,7 +24526,7 @@ msgstr "Baliabide lokalak"
 #: libs/ui/KisMainWindow.cpp:1263 libs/ui/KisMainWindow.cpp:1360
 #: libs/ui/KisMainWindow.cpp:2107 libs/ui/KisMainWindow.cpp:2116
 #: libs/ui/KisMainWindow.cpp:2255 libs/ui/KisMainWindow.cpp:2316
-#: libs/ui/KisMainWindow.cpp:2335 libs/ui/KisMainWindow.cpp:2977
+#: libs/ui/KisMainWindow.cpp:2335 libs/ui/KisMainWindow.cpp:2978
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24805,8 +24805,8 @@ msgstr "Baliabide batzuk falta dira"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2384
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2388
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2385
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2389
 #: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:336
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -25673,7 +25673,7 @@ msgid "Dimensions larger than 1920 pixels are not widely supported."
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2421
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2422
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Warning"
@@ -26654,8 +26654,8 @@ msgstr "Bideo-animazioa inportatzea"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:24
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2689
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2691
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2690
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2692
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -27638,12 +27638,12 @@ msgstr "Geruzaren propietateak"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1490
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1493
 #: libs/ui/dialogs/kis_dlg_preferences.cc:344
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1910
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1914
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1918
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2003
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2472
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2530 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1911
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1915
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2004
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2473
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2531 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280
 #: libs/ui/widgets/kis_custom_image_widget.cc:105
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
@@ -27716,7 +27716,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Sartu estilo-izen berria"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2782
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2783
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -28022,60 +28022,60 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1154
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1155
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1155
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1156
 #, fuzzy, kde-format
 #| msgid "Circle"
 msgctxt "Preview option for a circular/ring-shaped color sampler"
 msgid "Circle"
 msgstr "Zirkulua"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1156
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1157
 #, fuzzy, kde-format
 #| msgid "Rectangle"
 msgctxt "Preview option for a rectangular color sampler left of the cursor"
 msgid "Rectangle Left"
 msgstr "Laukizuzena"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1157
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1158
 #, fuzzy, kde-format
 #| msgid "Rectangle"
 msgctxt "Preview option for a rectangular color sampler right of the cursor"
 msgid "Rectangle Right"
 msgstr "Laukizuzena"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1158
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1159
 #, fuzzy, kde-format
 #| msgid "Rectangle Tool"
 msgctxt "Preview option for a rectangular color sampler above the cursor"
 msgid "Rectangle Above"
 msgstr "Laukizuzen tresna"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1190
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1191
 #, kde-format
 msgid "Select a Background Image"
 msgstr "Hautatu atzeko planorako irudia"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1202
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1203
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 ez da baliozko irudi-fitxategia!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1223
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>Abisua:</b> kokaleku hau ez da idazgarria."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1354
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1664
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1355
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1665
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -28083,18 +28083,18 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "%1 pantaila (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1375
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1376
 #, kde-format
 msgid "Display's color space is managed by the operating system"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1382
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1383
 #, fuzzy, kde-format
 #| msgid "Color Management"
 msgid "Enable canvas color management"
 msgstr "Kolore-kudeaketa"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1385
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1386
 #, kde-format
 msgid ""
 "<p>Enabling canvas color management automatically creates a separate native "
@@ -28106,47 +28106,47 @@ msgid ""
 "\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1405
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1406
 #, fuzzy, kde-format
 #| msgid "Uncalibrated color space"
 msgid "Canvas surface color space:"
 msgstr "Kalibratu gabeko kolore-eremua"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1408
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1409
 #, kde-format
 msgid "Preferred by operating system"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1409
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1410
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1410
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1411
 #, kde-format
 msgid "Rec 709 Linear"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1411
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1412
 #, fuzzy, kde-format
 #| msgctxt "Color space name"
 #| msgid "Rec 2100 PQ"
 msgid "Rec 2020 PQ"
 msgstr "Rec 2100 PQ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1412
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1413
 #, kde-format
 msgid "Unmanaged (testing only)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1415
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1416
 #, kde-format
 msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
 "Use \"preferred\" space unless you know what you are doing</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1422
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1423
 #, fuzzy, kde-format
 #| msgid "Brush Flow Mode (needs restart):"
 msgid "Canvas surface bit depth (needs restart):"
@@ -28155,7 +28155,7 @@ msgstr "Pintzela irristatzeko modua (berrabiatu beharra dago):"
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1425
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1426
 #: libs/ui/widgets/KisDitherWidget.ui:119
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:244
@@ -28163,19 +28163,19 @@ msgstr "Pintzela irristatzeko modua (berrabiatu beharra dago):"
 msgid "Auto"
 msgstr "Automatikoa"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1426
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1434
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1427
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1435
 #, kde-format
 msgid "8-bit"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1427
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1434
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1428
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1435
 #, kde-format
 msgid "10-bit"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1430
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1431
 #, kde-format
 msgid ""
 "<p>The bit depth of the color that is passed to the window compositor. You "
@@ -28183,64 +28183,64 @@ msgid ""
 "display</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1435
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1436
 #, fuzzy, kde-format
 #| msgid "Uncalibrated color space"
 msgid "Current canvas surface bit depth:"
 msgstr "Kalibratu gabeko kolore-eremua"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1443
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1444
 #, kde-format
 msgid ""
 "Color space preferred by the operating system:\n"
 "%1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1449
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1450
 #, fuzzy, kde-format
 #| msgid "Emboss Diagonal"
 msgid "Diagram:"
 msgstr "Bozeldu diagonalki"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1453
 #, fuzzy, kde-format
 #| msgid "Preferences"
 msgctxt "@info:radiobutton"
 msgid "Preferred Space"
 msgstr "Hobespenak"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the space preferred by the operating system."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1457
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1458
 #, fuzzy, kde-format
 #| msgid "Current Display Format"
 msgctxt "@info:radiobutton"
 msgid "Current Display"
 msgstr "Azaltzeko uneko formatua"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1460
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the space representing the currently active display."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1557
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1558
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:799
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "Instalatu kolore-profilak"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1804
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1805
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1818
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1819
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -28249,7 +28249,7 @@ msgstr ""
 "Erabili tableta-gidariaren denbora-zigiluak pintzelaren abiadurarako (akats "
 "larriak sor ditzake WinTab tableten APIarekin erabiltzean)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1820
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1821
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "Erabili tableta-gidariaren denbora-zigilua pintzelaren abiadurarako"
@@ -28257,7 +28257,7 @@ msgstr "Erabili tableta-gidariaren denbora-zigilua pintzelaren abiadurarako"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1850
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1851
 #, fuzzy, kde-format
 #| msgid "Maximum brush size:"
 msgid "Maximum brush speed: {n} px/ms"
@@ -28268,7 +28268,7 @@ msgstr[1] "Pintzelaren neurri maximoa:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1859
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1860
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Brush Smoothing: Disabled"
@@ -28277,7 +28277,7 @@ msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "Pintzel-leuntzea: Desgaitua"
 msgstr[1] "Pintzel-leuntzea: Desgaitua"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1866
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1867
 #, fuzzy, kde-format
 #| msgctxt "Context: dynamic sensors"
 #| msgid "Tilt direction"
@@ -28285,13 +28285,13 @@ msgid "Pen tilt direction offset: "
 msgstr "Makurduraren norabidea"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1964
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1965
 #: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1985
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -28300,80 +28300,80 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr "seg"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1988
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1989
 #, kde-format
 msgid " fps"
 msgstr " fps"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2227
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Software errendatzailea (oso motela)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2232
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11, ANGLEren bidez"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2234
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "OpenGL ANGLE bidez"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2235
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2236
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2242
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2243
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Ezezaguna"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2262
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2263
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Automatikoa (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2321
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2322
 #, fuzzy, kde-format
 #| msgid "Current"
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
 msgstr "Unekoa"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2322
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2323
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2323
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2324
 #, fuzzy, kde-format
 #| msgid "Current"
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
 msgstr "Unekoa"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2324
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2325
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2330
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2331
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -28381,78 +28381,78 @@ msgid ""
 "switching between EGL and GLX</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2370
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2371
 #, kde-format
 msgid "Display Id: %1"
 msgstr "Pantailaren ID: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2371
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2372
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Pantaila-izena: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2372
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2373
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Luminantzia min.: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2373
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2374
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Luminantzia max.: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2374
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2375
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Fotograma osoko gehienezko luminantzia: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2375
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2376
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Gorri lehena: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2376
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2377
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Berde lehena: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2377
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2378
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Urdin lehena: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2378
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2379
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Puntu zuria: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2559
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2560
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Abisua:</b> uneko bistaratzaileak ez du onartzen HDR errendatzea"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2682
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2683
 #, kde-format
 msgid "Configure Krita"
 msgstr "Konfiguratu Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2699
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2700
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Teklatu-lasterbideak"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2701
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2702
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Lasterbideak"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2711
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2712
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Oihalaren sarrerako ezarpenak"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2712
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2713
 #, kde-format
 msgid "Canvas Input"
 msgstr "Oihalaren sarrerakoa"
@@ -28460,8 +28460,8 @@ msgstr "Oihalaren sarrerakoa"
 #. i18n: ectx: attribute (title), widget (QWidget, Display)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2719
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2721
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2720
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2722
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -28469,65 +28469,65 @@ msgstr "Oihalaren sarrerakoa"
 msgid "Display"
 msgstr "Pantaila"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2729
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2730
 #: plugins/dockers/logdocker/LogDockerDock.cpp:324
 #, kde-format
 msgid "Color Management"
 msgstr "Kolore-kudeaketa"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2731
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2732
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Kolorea"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2739
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2741
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2740
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2742
 #: plugins/dockers/logdocker/LogDockerDock.cpp:320
 #, kde-format
 msgid "Performance"
 msgstr "Errendimendua"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2749
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2750
 #, kde-format
 msgid "Tablet settings"
 msgstr "Tabletaren ezarpenak"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2751
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2752
 #, kde-format
 msgid "Tablet"
 msgstr "Tableta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2759
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2760
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Oihalenak baino ez diren ezarpenak"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2761
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2762
 #, kde-format
 msgid "Canvas-only"
 msgstr "Oihalenak baino ez"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2769
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2771
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2770
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2772
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Paleta gainerakorra"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2779
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2780
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Egilea"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2781
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2782
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, kde-format
 msgid "Author"
 msgstr "Egilea"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2788
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2789
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -31348,7 +31348,7 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1232
-#: libs/ui/widgets/kis_selection_options.cc:181
+#: libs/ui/widgets/kis_selection_options.cc:182
 #, kde-format
 msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
@@ -31357,7 +31357,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1235
-#: libs/ui/widgets/kis_selection_options.cc:179
+#: libs/ui/widgets/kis_selection_options.cc:180
 #, fuzzy, kde-format
 #| msgid "Selection Actions"
 msgid "Enable Selection Actions Bar"
@@ -37265,25 +37265,25 @@ msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Langune &berria..."
 
-#: libs/ui/KisMainWindow.cpp:2781
+#: libs/ui/KisMainWindow.cpp:2782
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Langune berria..."
 
-#: libs/ui/KisMainWindow.cpp:2825
+#: libs/ui/KisMainWindow.cpp:2826
 #, fuzzy, kde-format
 #| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2828
+#: libs/ui/KisMainWindow.cpp:2829
 #, fuzzy, kde-format
 #| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:3000
+#: libs/ui/KisMainWindow.cpp:3001
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -37292,19 +37292,19 @@ msgstr ""
 "Krita-ren LittleCMS koloreak kudeatzeko plugina instalatuta gabe dago. "
 "Krita, orain, itxi egingo da."
 
-#: libs/ui/KisMainWindow.cpp:3016
+#: libs/ui/KisMainWindow.cpp:3017
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Instalazio errorea"
 
-#: libs/ui/KisMainWindow.cpp:3129
+#: libs/ui/KisMainWindow.cpp:3130
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Gaiak"
 
-#: libs/ui/KisMainWindow.cpp:3215
+#: libs/ui/KisMainWindow.cpp:3216
 #, fuzzy, kde-format
 #| msgid "Custom Pattern"
 msgid "Expanding Spacer"
@@ -39019,6 +39019,11 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "«%1» iragazkia"
 
+#: libs/ui/tool/strokes/move_selection_stroke_strategy.cpp:29
+msgctxt "(qtundo-format)"
+msgid "Move Selection"
+msgstr "Mugitu hautapena"
+
 #: libs/ui/toolbox/KoToolBox.cpp:362 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
@@ -40348,138 +40353,154 @@ msgstr "%1 motorra"
 msgid "No Preview for this engine"
 msgstr "Motor honetarako aurreikusterik ez"
 
-#: libs/ui/widgets/kis_selection_options.cc:192
+#: libs/ui/widgets/kis_selection_options.cc:194
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Move Selection"
+msgctxt "The move-selected-content checkbox in selection tool options"
+msgid "Move Selected Content"
+msgstr "Mugitu hautapena"
+
+#: libs/ui/widgets/kis_selection_options.cc:197
 #: plugins/tools/basictools/kis_tool_fill.cc:591
 #, kde-format
 msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
 msgstr "Ertzak leuntzea"
 
-#: libs/ui/widgets/kis_selection_options.cc:197
+#: libs/ui/widgets/kis_selection_options.cc:202
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in selection tools options"
 msgid "Grow: "
 msgstr "Handitu: "
 
-#: libs/ui/widgets/kis_selection_options.cc:212
+#: libs/ui/widgets/kis_selection_options.cc:217
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in selection tools options"
 msgid "Feather: "
 msgstr "Luma: "
 
-#: libs/ui/widgets/kis_selection_options.cc:234
+#: libs/ui/widgets/kis_selection_options.cc:239
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pixel Selection"
 msgstr "Pixel hautapena"
 
-#: libs/ui/widgets/kis_selection_options.cc:236
+#: libs/ui/widgets/kis_selection_options.cc:241
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Vector Selection"
 msgstr "Bektore hautapena"
 
-#: libs/ui/widgets/kis_selection_options.cc:239
-#: libs/ui/widgets/kis_selection_options.cc:485
+#: libs/ui/widgets/kis_selection_options.cc:244
+#: libs/ui/widgets/kis_selection_options.cc:511
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace"
 msgstr "Ordeztu"
 
-#: libs/ui/widgets/kis_selection_options.cc:241
-#: libs/ui/widgets/kis_selection_options.cc:500
+#: libs/ui/widgets/kis_selection_options.cc:246
+#: libs/ui/widgets/kis_selection_options.cc:526
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Intersect"
 msgstr "Ebaki"
 
-#: libs/ui/widgets/kis_selection_options.cc:243
-#: libs/ui/widgets/kis_selection_options.cc:490
+#: libs/ui/widgets/kis_selection_options.cc:248
+#: libs/ui/widgets/kis_selection_options.cc:516
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add"
 msgstr "Gehitu"
 
-#: libs/ui/widgets/kis_selection_options.cc:245
-#: libs/ui/widgets/kis_selection_options.cc:495
+#: libs/ui/widgets/kis_selection_options.cc:250
+#: libs/ui/widgets/kis_selection_options.cc:521
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract"
 msgstr "Kendu"
 
-#: libs/ui/widgets/kis_selection_options.cc:247
-#: libs/ui/widgets/kis_selection_options.cc:505
+#: libs/ui/widgets/kis_selection_options.cc:252
+#: libs/ui/widgets/kis_selection_options.cc:531
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference"
 msgstr "Diferentzia simetrikoa"
 
-#: libs/ui/widgets/kis_selection_options.cc:250
+#: libs/ui/widgets/kis_selection_options.cc:255
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Move Selection"
+msgctxt "@info:tooltip"
+msgid "Move Selected Content"
+msgstr "Mugitu hautapena"
+
+#: libs/ui/widgets/kis_selection_options.cc:258
 #, fuzzy, kde-format
 #| msgid "Set line width of actual selection"
 msgid "Smooths the edges of the selection"
 msgstr "Ezarri uneko hautapenaren marra-zabalera"
 
-#: libs/ui/widgets/kis_selection_options.cc:252
+#: libs/ui/widgets/kis_selection_options.cc:260
 #, fuzzy, kde-format
 #| msgid "Grow/shrink selection: "
 msgid "Grow or shrink the selection by the set amount"
 msgstr "Handitu/uzkurtu hautapena: "
 
-#: libs/ui/widgets/kis_selection_options.cc:254
+#: libs/ui/widgets/kis_selection_options.cc:262
 #: plugins/tools/basictools/kis_tool_fill.cc:663
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:572
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:256
+#: libs/ui/widgets/kis_selection_options.cc:264
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:259
+#: libs/ui/widgets/kis_selection_options.cc:267
 #, fuzzy, kde-format
 #| msgid "Select the blending mode for the layer."
 msgid "Select regions found from the active layer"
 msgstr "Hautatu geruzaren nahaste-modua"
 
-#: libs/ui/widgets/kis_selection_options.cc:261
+#: libs/ui/widgets/kis_selection_options.cc:269
 #, fuzzy, kde-format
 #| msgid "Select the blending mode for the layer."
 msgid "Select regions found from the active group"
 msgstr "Hautatu geruzaren nahaste-modua"
 
-#: libs/ui/widgets/kis_selection_options.cc:263
+#: libs/ui/widgets/kis_selection_options.cc:271
 #, fuzzy, kde-format
 msgid "Select regions found from the merging of all layers"
 msgstr "Hautatu kolore bat iruditik edo uneko geruzatik"
 
-#: libs/ui/widgets/kis_selection_options.cc:265
+#: libs/ui/widgets/kis_selection_options.cc:273
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
 
-#: libs/ui/widgets/kis_selection_options.cc:273
+#: libs/ui/widgets/kis_selection_options.cc:281
 #, kde-format
 msgctxt "The 'mode' section label in selection tools options"
 msgid "Mode"
 msgstr "Modua"
 
-#: libs/ui/widgets/kis_selection_options.cc:280
+#: libs/ui/widgets/kis_selection_options.cc:288
 #, kde-format
 msgctxt "The 'action' section label in selection tools options"
 msgid "Action"
 msgstr "Ekintza"
 
-#: libs/ui/widgets/kis_selection_options.cc:287
+#: libs/ui/widgets/kis_selection_options.cc:295
 #, kde-format
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "Erreferentzia"
 
-#: libs/ui/widgets/kis_selection_options.cc:298
+#: libs/ui/widgets/kis_selection_options.cc:308
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "HSV Adjustment"
@@ -40487,31 +40508,31 @@ msgctxt "The 'adjustments' section label in selection tools options"
 msgid "Adjustments"
 msgstr "HSV doiketa"
 
-#: libs/ui/widgets/kis_selection_options.cc:486
+#: libs/ui/widgets/kis_selection_options.cc:512
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace (%1)"
 msgstr "Ordeztu (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:491
+#: libs/ui/widgets/kis_selection_options.cc:517
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add (%1)"
 msgstr "Gehitu (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:496
+#: libs/ui/widgets/kis_selection_options.cc:522
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract (%1)"
 msgstr "Kendu (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:501
+#: libs/ui/widgets/kis_selection_options.cc:527
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Intersect (%1)"
 msgstr "Ebaki (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:507
+#: libs/ui/widgets/kis_selection_options.cc:533
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference (%1)"
@@ -59551,7 +59572,7 @@ msgid "Enter preferred resolution (PPI) for \"%1\""
 msgstr "Sartu «%1»rentzako hobetsitako bereizmena (PPI) "
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:37
-#: plugins/impex/tiff/kis_dlg_options_tiff.cpp:57
+#: plugins/impex/tiff/kis_dlg_options_tiff.cpp:58
 #, kde-format
 msgctxt "TIFF options"
 msgid "None"
@@ -59582,13 +59603,13 @@ msgctxt "TIFF options"
 msgid "Pixar Log"
 msgstr "Pixar Log"
 
-#: plugins/impex/tiff/kis_dlg_options_tiff.cpp:59
+#: plugins/impex/tiff/kis_dlg_options_tiff.cpp:60
 #, kde-format
 msgctxt "TIFF options"
 msgid "Horizontal Differencing"
 msgstr "Diferentziazio horizontala"
 
-#: plugins/impex/tiff/kis_dlg_options_tiff.cpp:62
+#: plugins/impex/tiff/kis_dlg_options_tiff.cpp:63
 #, kde-format
 msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
@@ -67491,11 +67512,6 @@ msgctxt "action"
 msgid "Freehand Path Tool"
 msgstr "Esku hutsezko bide tresna"
 
-#: plugins/tools/basictools/strokes/move_selection_stroke_strategy.cpp:29
-msgctxt "(qtundo-format)"
-msgid "Move Selection"
-msgstr "Mugitu hautapena"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbPalette)
 #: plugins/tools/basictools/wdgcolorsampler.ui:67
 #, kde-format
@@ -71986,20 +72002,6 @@ msgstr ""
 
 #~ msgid "Get your Krita Supporter Badge here!"
 #~ msgstr "Eskuratu hemen zure Krita-ren laguntzaile domina!"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Move Selection"
-#~ msgctxt "The move-selected-content checkbox in selection tool options"
-#~ msgid "Move Selected Content"
-#~ msgstr "Mugitu hautapena"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Move Selection"
-#~ msgctxt "@info:tooltip"
-#~ msgid "Move Selected Content"
-#~ msgstr "Mugitu hautapena"
 
 #~ msgid "Page Orientation:"
 #~ msgstr "Orrialdearen orientazioa:"

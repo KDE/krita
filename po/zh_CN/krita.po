@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-05 00:53+0000\n"
+"POT-Creation-Date: 2026-11-06 00:48+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -21013,7 +21013,7 @@ msgstr "大小"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1483
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1997
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1998
 #: libs/ui/forms/wdgdisplaysettings.ui:379
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -21021,8 +21021,8 @@ msgstr "大小"
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:72
-#: libs/ui/widgets/kis_selection_options.cc:200
-#: libs/ui/widgets/kis_selection_options.cc:215
+#: libs/ui/widgets/kis_selection_options.cc:205
+#: libs/ui/widgets/kis_selection_options.cc:220
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:540
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:652
@@ -24000,7 +24000,7 @@ msgstr "本地资源"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1202
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1203
 #: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:506
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
@@ -24015,7 +24015,7 @@ msgstr "本地资源"
 #: libs/ui/KisMainWindow.cpp:1263 libs/ui/KisMainWindow.cpp:1360
 #: libs/ui/KisMainWindow.cpp:2107 libs/ui/KisMainWindow.cpp:2116
 #: libs/ui/KisMainWindow.cpp:2255 libs/ui/KisMainWindow.cpp:2316
-#: libs/ui/KisMainWindow.cpp:2335 libs/ui/KisMainWindow.cpp:2977
+#: libs/ui/KisMainWindow.cpp:2335 libs/ui/KisMainWindow.cpp:2978
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24290,8 +24290,8 @@ msgstr "缺少某些资源："
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2384
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2388
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2385
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2389
 #: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:336
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -25137,7 +25137,7 @@ msgid "Dimensions larger than 1920 pixels are not widely supported."
 msgstr "大于 1920 像素的分辨率目前尚未得到广泛支持。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2421
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2422
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Warning"
@@ -26099,8 +26099,8 @@ msgstr "视频动画导入"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:24
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2689
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2691
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2690
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2692
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -27055,12 +27055,12 @@ msgstr "图层属性"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1490
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1493
 #: libs/ui/dialogs/kis_dlg_preferences.cc:344
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1910
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1914
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1918
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2003
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2472
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2530 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1911
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1915
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2004
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2473
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2531 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280
 #: libs/ui/widgets/kis_custom_image_widget.cc:105
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
@@ -27133,7 +27133,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "输入新样式名称"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2782
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2783
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -27433,55 +27433,55 @@ msgstr ""
 "<p><b>私人应用目录</b> (<a href=\"copyprivate\">Copy</a>)：<br/>\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1154
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1155
 #, kde-format
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "无"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1155
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1156
 #, kde-format
 msgctxt "Preview option for a circular/ring-shaped color sampler"
 msgid "Circle"
 msgstr "圆形"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1156
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1157
 #, kde-format
 msgctxt "Preview option for a rectangular color sampler left of the cursor"
 msgid "Rectangle Left"
 msgstr "矩形 (左侧)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1157
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1158
 #, kde-format
 msgctxt "Preview option for a rectangular color sampler right of the cursor"
 msgid "Rectangle Right"
 msgstr "矩形 (右侧)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1158
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1159
 #, kde-format
 msgctxt "Preview option for a rectangular color sampler above the cursor"
 msgid "Rectangle Above"
 msgstr "矩形 (上方)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1190
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1191
 #, kde-format
 msgid "Select a Background Image"
 msgstr "选择背景图像"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1202
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1203
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 不是有效的图像文件。"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1223
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>警告：</b>此位置不可写入。"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1354
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1664
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1355
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1665
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -27489,17 +27489,17 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "显示器 %1 (%2)："
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1375
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1376
 #, kde-format
 msgid "Display's color space is managed by the operating system"
 msgstr "由操作系统管理的显示器色彩空间"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1382
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1383
 #, kde-format
 msgid "Enable canvas color management"
 msgstr "启用画布色彩管理"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1385
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1386
 #, kde-format
 msgid ""
 "<p>Enabling canvas color management automatically creates a separate native "
@@ -27516,37 +27516,37 @@ msgstr ""
 "色彩校样模式将被限制为“使用全局显示设置”，导致无法针对纸张白点进行校样等情"
 "况。</li></ol></p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1405
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1406
 #, kde-format
 msgid "Canvas surface color space:"
 msgstr "画布表面色彩空间："
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1408
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1409
 #, kde-format
 msgid "Preferred by operating system"
 msgstr "操作系统首选色彩空间"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1409
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1410
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
 msgstr "Rec 709 Gamma 2.2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1410
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1411
 #, kde-format
 msgid "Rec 709 Linear"
 msgstr "Rec 709 Linear"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1411
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1412
 #, kde-format
 msgid "Rec 2020 PQ"
 msgstr "Rec 2020 PQ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1412
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1413
 #, kde-format
 msgid "Unmanaged (testing only)"
 msgstr "不进行色彩管理 (仅用于测试)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1415
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1416
 #, kde-format
 msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
@@ -27555,7 +27555,7 @@ msgstr ""
 "<p>传输到窗口合成器中像素的色彩空间。除非您清楚自己在做什么，否则请使用“操作"
 "系统首选”色彩空间。</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1422
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1423
 #, kde-format
 msgid "Canvas surface bit depth (needs restart):"
 msgstr "画布表面位深度 (需要重启)："
@@ -27563,7 +27563,7 @@ msgstr "画布表面位深度 (需要重启)："
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1425
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1426
 #: libs/ui/widgets/KisDitherWidget.ui:119
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:244
@@ -27571,19 +27571,19 @@ msgstr "画布表面位深度 (需要重启)："
 msgid "Auto"
 msgstr "自动"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1426
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1434
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1427
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1435
 #, kde-format
 msgid "8-bit"
 msgstr "8 位"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1427
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1434
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1428
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1435
 #, kde-format
 msgid "10-bit"
 msgstr "10 位"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1430
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1431
 #, kde-format
 msgid ""
 "<p>The bit depth of the color that is passed to the window compositor. You "
@@ -27593,12 +27593,12 @@ msgstr ""
 "<p>传递给窗口合成器的颜色位深度。如果您想使用显示器的 HDR 功能，请切换到 10 "
 "位模式</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1435
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1436
 #, kde-format
 msgid "Current canvas surface bit depth:"
 msgstr "当前画布表面位深度："
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1443
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1444
 #, kde-format
 msgid ""
 "Color space preferred by the operating system:\n"
@@ -27607,48 +27607,48 @@ msgstr ""
 "操作系统首选色彩空间：\n"
 "%1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1449
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1450
 #, kde-format
 msgid "Diagram:"
 msgstr "图表："
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1453
 #, kde-format
 msgctxt "@info:radiobutton"
 msgid "Preferred Space"
 msgstr "系统首选空间"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the space preferred by the operating system."
 msgstr "这是操作系统首选的色彩空间。"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1457
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1458
 #, kde-format
 msgctxt "@info:radiobutton"
 msgid "Current Display"
 msgstr "当前显示器空间"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1460
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the space representing the currently active display."
 msgstr "这是代表了当前活动显示器的色彩空间。"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1557
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1558
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:799
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "安装色彩特性文件"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1804
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1805
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr "数位板软件接口 (当前接口：“%1”)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1818
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1819
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -27657,7 +27657,7 @@ msgstr ""
 "使用数位板驱动程序的时间戳来确定笔刷速度 (使用 WinTab 接口时可能会造成笔迹异"
 "常)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1820
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1821
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "使用数位板驱动时间戳确定笔刷速度"
@@ -27665,7 +27665,7 @@ msgstr "使用数位板驱动时间戳确定笔刷速度"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1850
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1851
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -27674,25 +27674,25 @@ msgstr[0] "最大笔刷速度：{n} 像素/毫秒"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1859
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1860
 #, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "笔刷速度平滑：{n} 次采样"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1866
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1867
 #, kde-format
 msgid "Pen tilt direction offset: "
 msgstr "笔身指向偏移："
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1964
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1965
 #: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1985
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -27701,78 +27701,78 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " 秒"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1988
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1989
 #, kde-format
 msgid " fps"
 msgstr " 帧/秒"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2227
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "软件渲染器 - 非常缓慢"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2232
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 - 通过 ANGLE 转译"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2234
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "OpenGL (通过 ANGLE)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2235
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2236
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2242
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2243
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "未知"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2262
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2263
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "自动 (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2321
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2322
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
 msgstr "GLX (当前)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2322
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2323
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
 msgstr "GLX"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2323
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2324
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
 msgstr "EGL (当前)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2324
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2325
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
 msgstr "EGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2330
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2331
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -27782,78 +27782,78 @@ msgstr ""
 "<p>如果您在 X11 或 XWayland 环境下使用 Krita 遇到运行缓慢的情况，可尝试在 "
 "EGL 和 GLX 模式之间切换</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2370
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2371
 #, kde-format
 msgid "Display Id: %1"
 msgstr "显示器 ID：%1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2371
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2372
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "显示器名称：%1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2372
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2373
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "最小亮度：%1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2373
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2374
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "最大亮度：%1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2374
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2375
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "最大全帧亮度：%1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2375
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2376
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "红原色：%1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2376
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2377
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "绿原色：%1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2377
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2378
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "蓝原色：%1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2378
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2379
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "白点：%1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2559
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2560
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>警告：</b>当前显示不支持 HDR 渲染"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2682
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2683
 #, kde-format
 msgid "Configure Krita"
 msgstr "配置 Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2699
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2700
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "键盘快捷键"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2701
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2702
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "快捷键"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2711
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2712
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "画布快捷键"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2712
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2713
 #, kde-format
 msgid "Canvas Input"
 msgstr "画布快捷键"
@@ -27861,8 +27861,8 @@ msgstr "画布快捷键"
 #. i18n: ectx: attribute (title), widget (QWidget, Display)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2719
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2721
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2720
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2722
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -27870,65 +27870,65 @@ msgstr "画布快捷键"
 msgid "Display"
 msgstr "显示"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2729
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2730
 #: plugins/dockers/logdocker/LogDockerDock.cpp:324
 #, kde-format
 msgid "Color Management"
 msgstr "色彩管理"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2731
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2732
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "色彩管理"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2739
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2741
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2740
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2742
 #: plugins/dockers/logdocker/LogDockerDock.cpp:320
 #, kde-format
 msgid "Performance"
 msgstr "性能"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2749
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2750
 #, kde-format
 msgid "Tablet settings"
 msgstr "数位板设置"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2751
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2752
 #, kde-format
 msgid "Tablet"
 msgstr "数位板"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2759
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2760
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "隐藏面板模式设置"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2761
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2762
 #, kde-format
 msgid "Canvas-only"
 msgstr "隐藏面板模式"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2769
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2771
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2770
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2772
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "弹出面板"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2779
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2780
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "作者档案"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2781
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2782
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, kde-format
 msgid "Author"
 msgstr "作者"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2788
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2789
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -30664,7 +30664,7 @@ msgstr "画布缩放操作使用水平轴"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1232
-#: libs/ui/widgets/kis_selection_options.cc:181
+#: libs/ui/widgets/kis_selection_options.cc:182
 #, kde-format
 msgid ""
 "When enabled, any selections will produce a small floating panel of useful "
@@ -30673,7 +30673,7 @@ msgstr "启用后，任意选区都会显示包含选区相关操作的小型浮
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableSelectionActionBar)
 #: libs/ui/forms/wdggeneralsettings.ui:1235
-#: libs/ui/widgets/kis_selection_options.cc:179
+#: libs/ui/widgets/kis_selection_options.cc:180
 #, kde-format
 msgid "Enable Selection Actions Bar"
 msgstr "启用选区操作浮动工具条"
@@ -36430,42 +36430,42 @@ msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "新建工作区(&N)..."
 
-#: libs/ui/KisMainWindow.cpp:2781
+#: libs/ui/KisMainWindow.cpp:2782
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "新建工作区..."
 
-#: libs/ui/KisMainWindow.cpp:2825
+#: libs/ui/KisMainWindow.cpp:2826
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2828
+#: libs/ui/KisMainWindow.cpp:2829
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:3000
+#: libs/ui/KisMainWindow.cpp:3001
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr "Krita 的 LittleCMS 色彩管理插件没有安装。Krita 将立即退出。"
 
-#: libs/ui/KisMainWindow.cpp:3016
+#: libs/ui/KisMainWindow.cpp:3017
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "安装错误"
 
-#: libs/ui/KisMainWindow.cpp:3129
+#: libs/ui/KisMainWindow.cpp:3130
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "主题(&T)"
 
-#: libs/ui/KisMainWindow.cpp:3215
+#: libs/ui/KisMainWindow.cpp:3216
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "<<--- 空白占位符 (自动伸展) --->>"
@@ -38144,6 +38144,11 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "滤镜“%1”"
 
+#: libs/ui/tool/strokes/move_selection_stroke_strategy.cpp:29
+msgctxt "(qtundo-format)"
+msgid "Move Selection"
+msgstr "移动选区"
+
 #: libs/ui/toolbox/KoToolBox.cpp:362 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
@@ -39532,165 +39537,181 @@ msgstr "笔刷引擎：%1"
 msgid "No Preview for this engine"
 msgstr "此引擎没有预览"
 
-#: libs/ui/widgets/kis_selection_options.cc:192
+#: libs/ui/widgets/kis_selection_options.cc:194
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Move Selection"
+msgctxt "The move-selected-content checkbox in selection tool options"
+msgid "Move Selected Content"
+msgstr "移动选区"
+
+#: libs/ui/widgets/kis_selection_options.cc:197
 #: plugins/tools/basictools/kis_tool_fill.cc:591
 #, kde-format
 msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
 msgstr "抗锯齿"
 
-#: libs/ui/widgets/kis_selection_options.cc:197
+#: libs/ui/widgets/kis_selection_options.cc:202
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in selection tools options"
 msgid "Grow: "
 msgstr "扩大/缩小："
 
-#: libs/ui/widgets/kis_selection_options.cc:212
+#: libs/ui/widgets/kis_selection_options.cc:217
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in selection tools options"
 msgid "Feather: "
 msgstr "羽化半径："
 
-#: libs/ui/widgets/kis_selection_options.cc:234
+#: libs/ui/widgets/kis_selection_options.cc:239
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pixel Selection"
 msgstr "像素选区：适合像素画/四方连续"
 
-#: libs/ui/widgets/kis_selection_options.cc:236
+#: libs/ui/widgets/kis_selection_options.cc:241
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Vector Selection"
 msgstr "矢量选区：一般用途/轮廓平滑/不劣化/可转为矢量形状"
 
-#: libs/ui/widgets/kis_selection_options.cc:239
-#: libs/ui/widgets/kis_selection_options.cc:485
+#: libs/ui/widgets/kis_selection_options.cc:244
+#: libs/ui/widgets/kis_selection_options.cc:511
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace"
 msgstr "替换"
 
-#: libs/ui/widgets/kis_selection_options.cc:241
-#: libs/ui/widgets/kis_selection_options.cc:500
+#: libs/ui/widgets/kis_selection_options.cc:246
+#: libs/ui/widgets/kis_selection_options.cc:526
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Intersect"
 msgstr "交集"
 
-#: libs/ui/widgets/kis_selection_options.cc:243
-#: libs/ui/widgets/kis_selection_options.cc:490
+#: libs/ui/widgets/kis_selection_options.cc:248
+#: libs/ui/widgets/kis_selection_options.cc:516
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add"
 msgstr "添加"
 
-#: libs/ui/widgets/kis_selection_options.cc:245
-#: libs/ui/widgets/kis_selection_options.cc:495
+#: libs/ui/widgets/kis_selection_options.cc:250
+#: libs/ui/widgets/kis_selection_options.cc:521
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract"
 msgstr "减去"
 
-#: libs/ui/widgets/kis_selection_options.cc:247
-#: libs/ui/widgets/kis_selection_options.cc:505
+#: libs/ui/widgets/kis_selection_options.cc:252
+#: libs/ui/widgets/kis_selection_options.cc:531
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference"
 msgstr "互斥"
 
-#: libs/ui/widgets/kis_selection_options.cc:250
+#: libs/ui/widgets/kis_selection_options.cc:255
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Move Selection"
+msgctxt "@info:tooltip"
+msgid "Move Selected Content"
+msgstr "移动选区"
+
+#: libs/ui/widgets/kis_selection_options.cc:258
 #, kde-format
 msgid "Smooths the edges of the selection"
 msgstr "平滑选区边缘"
 
-#: libs/ui/widgets/kis_selection_options.cc:252
+#: libs/ui/widgets/kis_selection_options.cc:260
 #, kde-format
 msgid "Grow or shrink the selection by the set amount"
 msgstr "按照设置值扩大或缩小选区"
 
-#: libs/ui/widgets/kis_selection_options.cc:254
+#: libs/ui/widgets/kis_selection_options.cc:262
 #: plugins/tools/basictools/kis_tool_fill.cc:663
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:572
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr "最深/最不透明颜色作为填充边界"
 
-#: libs/ui/widgets/kis_selection_options.cc:256
+#: libs/ui/widgets/kis_selection_options.cc:264
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr "按照设置值模糊选区"
 
-#: libs/ui/widgets/kis_selection_options.cc:259
+#: libs/ui/widgets/kis_selection_options.cc:267
 #, kde-format
 msgid "Select regions found from the active layer"
 msgstr "当前图层"
 
-#: libs/ui/widgets/kis_selection_options.cc:261
+#: libs/ui/widgets/kis_selection_options.cc:269
 #, fuzzy, kde-format
 #| msgid "Select regions found from the active layer"
 msgid "Select regions found from the active group"
 msgstr "当前图层"
 
-#: libs/ui/widgets/kis_selection_options.cc:263
+#: libs/ui/widgets/kis_selection_options.cc:271
 #, kde-format
 msgid "Select regions found from the merging of all layers"
 msgstr "所有图层"
 
-#: libs/ui/widgets/kis_selection_options.cc:265
+#: libs/ui/widgets/kis_selection_options.cc:273
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr "带有指定颜色标签的图层"
 
-#: libs/ui/widgets/kis_selection_options.cc:273
+#: libs/ui/widgets/kis_selection_options.cc:281
 #, kde-format
 msgctxt "The 'mode' section label in selection tools options"
 msgid "Mode"
 msgstr "模式"
 
-#: libs/ui/widgets/kis_selection_options.cc:280
+#: libs/ui/widgets/kis_selection_options.cc:288
 #, kde-format
 msgctxt "The 'action' section label in selection tools options"
 msgid "Action"
 msgstr "操作"
 
-#: libs/ui/widgets/kis_selection_options.cc:287
+#: libs/ui/widgets/kis_selection_options.cc:295
 #, kde-format
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "采样图层"
 
-#: libs/ui/widgets/kis_selection_options.cc:298
+#: libs/ui/widgets/kis_selection_options.cc:308
 #, kde-format
 msgctxt "The 'adjustments' section label in selection tools options"
 msgid "Adjustments"
 msgstr "边缘微调"
 
-#: libs/ui/widgets/kis_selection_options.cc:486
+#: libs/ui/widgets/kis_selection_options.cc:512
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace (%1)"
 msgstr "替换 (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:491
+#: libs/ui/widgets/kis_selection_options.cc:517
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add (%1)"
 msgstr "添加 (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:496
+#: libs/ui/widgets/kis_selection_options.cc:522
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract (%1)"
 msgstr "减去 (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:501
+#: libs/ui/widgets/kis_selection_options.cc:527
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Intersect (%1)"
 msgstr "交集 (%1)"
 
-#: libs/ui/widgets/kis_selection_options.cc:507
+#: libs/ui/widgets/kis_selection_options.cc:533
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Symmetric Difference (%1)"
@@ -58488,7 +58509,7 @@ msgid "Enter preferred resolution (PPI) for \"%1\""
 msgstr "输入 \"%1\" 的首选分辨率 (PPI)"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:37
-#: plugins/impex/tiff/kis_dlg_options_tiff.cpp:57
+#: plugins/impex/tiff/kis_dlg_options_tiff.cpp:58
 #, kde-format
 msgctxt "TIFF options"
 msgid "None"
@@ -58518,13 +58539,13 @@ msgctxt "TIFF options"
 msgid "Pixar Log"
 msgstr "Pixar Log 编码"
 
-#: plugins/impex/tiff/kis_dlg_options_tiff.cpp:59
+#: plugins/impex/tiff/kis_dlg_options_tiff.cpp:60
 #, kde-format
 msgctxt "TIFF options"
 msgid "Horizontal Differencing"
 msgstr "水平差分法"
 
-#: plugins/impex/tiff/kis_dlg_options_tiff.cpp:62
+#: plugins/impex/tiff/kis_dlg_options_tiff.cpp:63
 #, kde-format
 msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
@@ -66204,11 +66225,6 @@ msgstr "曲线工具/钢笔：单击画布开始绘制，双击或Shift+双击�
 msgctxt "action"
 msgid "Freehand Path Tool"
 msgstr "手绘路径工具/自由钢笔"
-
-#: plugins/tools/basictools/strokes/move_selection_stroke_strategy.cpp:29
-msgctxt "(qtundo-format)"
-msgid "Move Selection"
-msgstr "移动选区"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbPalette)
 #: plugins/tools/basictools/wdgcolorsampler.ui:67

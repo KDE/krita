@@ -51,9 +51,9 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     /// Receive preview image from live preview view.
-    void slotLivePreviewImageReady(int presetId, QImage &previewImage);
+    void slotLivePreviewImageReady(int presetId, QImage previewImage);
 
-    void slotPreviewImageReady(int presetId, QImage &previewImage);
+    void slotPreviewImageReady(int presetId, QImage previewImage);
 
     /// Handle preset settings change.
     void slotPresetSettingsChanged(KisPaintOpPresetSP preset);
@@ -82,8 +82,8 @@ private:
     // Disk cache
     void initDiskCache();
     QString getDiskCacheFilename(int presetId) const;
-    bool loadFromDiskCache(int presetId, QImage &image);
-    void saveToDiskCache(int presetId, QImage &image);
+    QImage loadFromDiskCache(int presetId);
+    void saveToDiskCache(int presetId, QImage image);
     bool hasDiskCache(int presetId) const;
     void removeDiskCache(int presetId);
 

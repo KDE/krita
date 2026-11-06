@@ -122,13 +122,19 @@ QString KisBrushStrokePreviewCache::getDiskCacheFilename(int presetId) const
     return QDir(m_d->diskCachePath).filePath(QString::number(presetId) + QStringLiteral(".png"));
 }
 
-bool KisBrushStrokePreviewCache::loadFromDiskCache(int presetId, QImage &image)
+QImage KisBrushStrokePreviewCache::loadFromDiskCache(int presetId)
 {
+    QImage image;
     const QString filename = getDiskCacheFilename(presetId);
-    return QFile::exists(filename) && image.load(filename);
+
+    if (QFile::exists(filename)) {
+        image.load(filename);
+    }
+
+    return image;
 }
 
-void KisBrushStrokePreviewCache::saveToDiskCache(int presetId, QImage &image)
+void KisBrushStrokePreviewCache::saveToDiskCache(int presetId, QImage image)
 {
     if (image.isNull()) {
         return;
@@ -227,22 +233,24 @@ QImage KisBrushStrokePreviewCache::getPreview(int presetId, const QSize &size, i
         // Get md5 first
         QString md5 = KisResourceLocator::instance()->md5ForId(presetId);
 
-        QImage diskImage;
-        loadFromDiskCache(presetId, diskImage);
+        const QImage diskImage = loadFromDiskCache(presetId);
 
-        // If there's an md5 mismatch request preview regeneration
-        if (diskImage.text("md5") != md5) {
-            removeDiskCache(presetId);
-            requestPreviewGeneration(presetId);
-            return generatePlaceholder(size, pixelRatio);
+        if (!diskImage.isNull()) {
+
+            // If there's an md5 mismatch request preview regeneration
+            if (diskImage.text("md5") != md5) {
+                removeDiskCache(presetId);
+                requestPreviewGeneration(presetId);
+                return generatePlaceholder(size, pixelRatio);
+            }
+            evictIfNeeded();
+            m_d->cache.insert(baseKey, diskImage);
+            m_d->accessOrder.append(baseKey);
+            QImage scaled = scalePreviewToSize(diskImage, size);
+            m_d->scaledCache.insert(sizedKey, scaled);
+
+            return scaled;
         }
-        evictIfNeeded();
-        m_d->cache.insert(baseKey, {diskImage});
-        m_d->accessOrder.append(baseKey);
-        QImage scaled = scalePreviewToSize(diskImage, size);
-        m_d->scaledCache.insert(sizedKey, scaled);
-
-        return scaled;
     }
 
     // We schedule a preview to be generated here and in the meantime show a placeholder
@@ -339,7 +347,7 @@ QImage KisBrushStrokePreviewCache::generateNoPreviewPlaceholder(const QSize &siz
     return placeholder;
 }
 
-void KisBrushStrokePreviewCache::slotLivePreviewImageReady(int presetId, QImage &previewImage)
+void KisBrushStrokePreviewCache::slotLivePreviewImageReady(int presetId, QImage previewImage)
 {
     if (presetId < 0 || previewImage.isNull()) {
         return;
@@ -350,7 +358,7 @@ void KisBrushStrokePreviewCache::slotLivePreviewImageReady(int presetId, QImage 
     slotPreviewImageReady(presetId, previewImage);
 }
 
-void KisBrushStrokePreviewCache::slotPreviewImageReady(int presetId, QImage &previewImage)
+void KisBrushStrokePreviewCache::slotPreviewImageReady(int presetId, QImage previewImage)
 {
     {
         const QString baseKey = generateCacheKey(presetId);

@@ -66,7 +66,7 @@ Q_SIGNALS:
      * @param presetId The presetId (resource id).
      * @param previewImage Preview image.
      */
-    void sigPreviewImageReady(int presetId, QImage &previewImage);
+    void sigPreviewImageReady(int presetId, QImage previewImage);
 
 private Q_SLOTS:
     void updateStroke();

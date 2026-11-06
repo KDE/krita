@@ -1787,7 +1787,7 @@ void KisConfig::setVastScrolling(const qreal factor) const
 
 int KisConfig::presetChooserViewMode(bool defaultValue) const
 {
-    return (defaultValue ? 0 : m_cfg.readEntry("presetChooserViewMode", 0));
+    return (defaultValue ? 3 : m_cfg.readEntry("presetChooserViewMode", 3));
 }
 
 void KisConfig::setPresetChooserViewMode(const int mode) const

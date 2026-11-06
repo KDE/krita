@@ -36,6 +36,7 @@ private Q_SLOTS:
     void slotThumbnailMode();
     void slotDetailMode();
     void slotStrokeMode();
+    void slotStrokeThumbnailMode();
     void slotUpdateMenu();
     void paintEvent(QPaintEvent *) override;
    

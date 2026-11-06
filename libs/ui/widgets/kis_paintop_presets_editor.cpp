@@ -178,6 +178,14 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
             connect(action, &QAction::triggered,
                 m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::setViewModeToStroke);
 
+            action = viewModeMenu->addAction(KisIconUtils::loadIcon("krita_tool_freehand"),i18n("Thumbnails and Strokes"));
+            action->setCheckable(true);
+            action->setChecked(mode == KisPresetChooser::STROKE_THUMBNAIL);
+            action->setActionGroup(actionGroup);
+
+            connect(action, &QAction::triggered,
+                m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::setViewModeToStrokeThumbnail);
+
             // Icon Size Slider
             viewModeMenu->addSection(i18n("Icon Size"));
 

@@ -64,9 +64,10 @@ public:
     void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
 
     QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override {
-        if (m_viewMode == KisPresetChooser::STROKE) {
+        if (m_viewMode == KisPresetChooser::STROKE || m_viewMode == KisPresetChooser::STROKE_THUMBNAIL) {
             int height = m_iconSize;
-            int width = static_cast<int>(height * calculateAspectRatio(m_iconSize));
+            int width = static_cast<int>(height * calculateAspectRatio(m_iconSize)
+                                         + (m_viewMode == KisPresetChooser::STROKE_THUMBNAIL ? height : 0));
             return QSize(width, height);
         }
         return option.decorationSize;
@@ -95,15 +96,15 @@ public:
         return ASPECT_RATIO_MIN + t * (ASPECT_RATIO_MAX - ASPECT_RATIO_MIN);
     }
 
-    static QSize calculateStrokeThumbnailSize(int iconSize) {
+    static QSize calculateStrokeThumbnailSize(int iconSize, bool withIcon) {
         int clampedSize = qBound(SLIDER_MIN, iconSize, SLIDER_MAX);
         double aspectRatio = calculateAspectRatio(clampedSize);
-        return QSize(static_cast<int>(clampedSize * aspectRatio), clampedSize);
+        return QSize(static_cast<int>(clampedSize * aspectRatio) + (withIcon ? clampedSize : 0), clampedSize);
     }
 
 private:
     void paintThumbnail(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    void paintStrokePreview(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paintStrokePreview(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index, bool paint_thumbnail) const;
     bool m_showText;
     KisPresetChooser::ViewMode m_viewMode;
     bool m_useDirtyPresets;
@@ -123,8 +124,8 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         return;
     }
 
-    if (m_viewMode == KisPresetChooser::STROKE) {
-        paintStrokePreview(painter, option, index);
+    if (m_viewMode == KisPresetChooser::STROKE || m_viewMode == KisPresetChooser::STROKE_THUMBNAIL) {
+        paintStrokePreview(painter, option, index, m_viewMode == KisPresetChooser::STROKE_THUMBNAIL);
     } else {
         paintThumbnail(painter, option, index);
     }
@@ -214,7 +215,7 @@ void KisPresetDelegate::paintThumbnail(QPainter *painter, const QStyleOptionView
     }
 }
 
-void KisPresetDelegate::paintStrokePreview(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void KisPresetDelegate::paintStrokePreview(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index, bool paintThumbnail) const
 {
     bool dirty = index.data(Qt::UserRole + KisAbstractResourceModel::Dirty).toBool();
     int presetId = index.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt();
@@ -232,6 +233,7 @@ void KisPresetDelegate::paintStrokePreview(QPainter *painter, const QStyleOption
     painter->fillRect(option.rect, borderColor);
     QRect innerRect = option.rect.adjusted(2, 2, -2, -2);
     painter->fillRect(innerRect, backgroundColor);
+
     if (isSelected) {
         const QColor accentColor = option.palette.highlight().color();
         const qreal bgLightness = backgroundColor.lightnessF();
@@ -247,10 +249,34 @@ void KisPresetDelegate::paintStrokePreview(QPainter *painter, const QStyleOption
         }
     }
 
+    if (paintThumbnail) {
+        QImage preview = KisResourceThumbnailCache::instance()->getImage(index);
+
+        QRect imageRect = innerRect.adjusted(2, 2, -2, -2);
+
+        if (preview.isNull()) {
+            preview = QImage(imageRect.height() * devicePixelRatioF,
+                             imageRect.height() * devicePixelRatioF,
+                             QImage::Format_RGB32);
+            preview.fill(Qt::red);
+        }
+
+
+        QImage previewHighDpi = KisResourceThumbnailCache::instance()->getImage(
+            index,
+            QSize(imageRect.height(), imageRect.height()) * devicePixelRatioF,
+            Qt::IgnoreAspectRatio,
+            Qt::SmoothTransformation);
+
+        painter->drawImage(imageRect.topLeft(), previewHighDpi);
+        innerRect = innerRect.adjusted(innerRect.height(), 2, -2, 0);
+    }
+
     // Keep text height fixed; stroke area shrinks.
     QFontMetrics fm(painter->font());
     const int bottomPadding = 1;
-    const int textAreaHeight = fm.height() + 4 + bottomPadding;
+    const int topPadding = 1;
+    const int textAreaHeight = fm.height() + 4 + bottomPadding +topPadding;
     const int textAreaTopTrim = 3;
 
     QRect strokeRect = innerRect;
@@ -289,7 +315,7 @@ void KisPresetDelegate::paintStrokePreview(QPainter *painter, const QStyleOption
     QString elidedName = fm.elidedText(presetDisplayName, Qt::ElideRight, innerRect.width() - 14);
 
     QRect textRect = innerRect;
-    textRect.setTop(innerRect.bottom() - textAreaHeight);
+    textRect.setTop(innerRect.bottom() - textAreaHeight + topPadding);
     textRect.setLeft(innerRect.left() + 7);
     textRect.setBottom(innerRect.bottom() - bottomPadding);
     painter->setPen(textColor);
@@ -375,6 +401,11 @@ void KisPresetChooser::setViewModeToStroke()
     setViewMode(KisPresetChooser::ViewMode::STROKE);
 }
 
+void KisPresetChooser::setViewModeToStrokeThumbnail()
+{
+    setViewMode(KisPresetChooser::ViewMode::STROKE_THUMBNAIL);
+}
+
 void KisPresetChooser::notifyConfigChanged()
 {
     KisConfig cfg(true);
@@ -399,6 +430,21 @@ void KisPresetChooser::updateViewSettings()
         m_delegate->setViewMode(ViewMode::DETAIL);
         break;
     }
+
+    case ViewMode::STROKE_THUMBNAIL: {
+        m_chooser->setListViewMode(ListViewMode::IconGrid);
+        m_delegate->setShowText(false);
+        m_delegate->setViewMode(ViewMode::STROKE_THUMBNAIL);
+
+        int currentIconSize = iconSize();
+        m_delegate->setIconSize(currentIconSize);
+        QSize thumbnailSize = KisPresetDelegate::calculateStrokeThumbnailSize(currentIconSize, true);
+
+        m_chooser->itemView()->setGridSize(thumbnailSize);
+        m_chooser->itemView()->setIconSize(thumbnailSize);
+        m_chooser->itemView()->doItemsLayout();
+        break;
+    }
     case ViewMode::STROKE: {
         m_chooser->setListViewMode(ListViewMode::IconGrid);
         m_delegate->setShowText(false);
@@ -406,7 +452,7 @@ void KisPresetChooser::updateViewSettings()
 
         int currentIconSize = iconSize();
         m_delegate->setIconSize(currentIconSize);
-        QSize thumbnailSize = KisPresetDelegate::calculateStrokeThumbnailSize(currentIconSize);
+        QSize thumbnailSize = KisPresetDelegate::calculateStrokeThumbnailSize(currentIconSize, false);
 
         m_chooser->itemView()->setGridSize(thumbnailSize);
         m_chooser->itemView()->setIconSize(thumbnailSize);
@@ -451,9 +497,9 @@ void KisPresetChooser::setIconSize(int newSize)
     KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
     chooserSync->setBaseLength(newSize);
 
-    if (m_mode == ViewMode::STROKE) {
+    if (m_mode == ViewMode::STROKE || m_mode == ViewMode::STROKE_THUMBNAIL) {
         m_delegate->setIconSize(newSize);
-        QSize thumbnailSize = KisPresetDelegate::calculateStrokeThumbnailSize(newSize);
+        QSize thumbnailSize = KisPresetDelegate::calculateStrokeThumbnailSize(newSize, m_mode == ViewMode::STROKE_THUMBNAIL);
 
         m_chooser->itemView()->setGridSize(thumbnailSize);
         m_chooser->itemView()->setIconSize(thumbnailSize);
@@ -478,7 +524,7 @@ void KisPresetChooser::changeEvent(QEvent *event)
 {
     QWidget::changeEvent(event);
     if (event->type() == QEvent::PaletteChange) {
-        if (m_mode == ViewMode::STROKE) {
+        if (m_mode == ViewMode::STROKE || m_mode == ViewMode::STROKE_THUMBNAIL) {
             m_chooser->itemView()->viewport()->update();
         }
     }
@@ -486,11 +532,11 @@ void KisPresetChooser::changeEvent(QEvent *event)
 
 void KisPresetChooser::showHideBrushNames(ListViewMode newViewMode)
 {
-    if (m_mode == ViewMode::STROKE) {
+    if (m_mode == ViewMode::STROKE || m_mode == ViewMode::STROKE_THUMBNAIL) {
         m_delegate->setShowText(false);
         // Restore non-square grid size.
         int currentIconSize = iconSize();
-        QSize thumbnailSize = KisPresetDelegate::calculateStrokeThumbnailSize(currentIconSize);
+        QSize thumbnailSize = KisPresetDelegate::calculateStrokeThumbnailSize(currentIconSize, m_mode == ViewMode::STROKE_THUMBNAIL);
         m_chooser->itemView()->setGridSize(thumbnailSize);
         m_chooser->itemView()->setIconSize(thumbnailSize);
         m_chooser->itemView()->doItemsLayout();
@@ -511,7 +557,7 @@ void KisPresetChooser::slotStrokePreviewReady(int presetId)
 {
     Q_UNUSED(presetId);
 
-    if (m_mode != ViewMode::STROKE) {
+    if (m_mode != ViewMode::STROKE && m_mode != ViewMode::STROKE_THUMBNAIL) {
         return;
     }
 
@@ -520,12 +566,12 @@ void KisPresetChooser::slotStrokePreviewReady(int presetId)
 
 void KisPresetChooser::slotBaseLengthChanged(int length)
 {
-    if (m_mode != ViewMode::STROKE) {
+    if (m_mode != ViewMode::STROKE&& m_mode != ViewMode::STROKE_THUMBNAIL) {
         return;
     }
 
     m_delegate->setIconSize(length);
-    QSize thumbnailSize = KisPresetDelegate::calculateStrokeThumbnailSize(length);
+    QSize thumbnailSize = KisPresetDelegate::calculateStrokeThumbnailSize(length, m_mode == ViewMode::STROKE_THUMBNAIL);
 
     m_chooser->itemView()->setGridSize(thumbnailSize);
     m_chooser->itemView()->setIconSize(thumbnailSize);

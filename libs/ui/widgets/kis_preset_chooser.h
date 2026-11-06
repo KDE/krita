@@ -39,7 +39,8 @@ public:
     enum ViewMode {
         THUMBNAIL, /// Shows thumbnails
         DETAIL,    /// Shows thumbnails with text next to it
-        STROKE     /// Shows stroke previews with text
+        STROKE,     /// Shows stroke previews with text
+        STROKE_THUMBNAIL, /// Shows stroke previews with text and thumbnail
     };
 
     /// Sets a list of resources in the paintop list, when ever user press enter in the lineedit of paintop_presets_popup Class
@@ -47,6 +48,7 @@ public:
     void setViewModeToThumbnail();
     void setViewModeToDetail();
     void setViewModeToStroke();
+    void setViewModeToStrokeThumbnail();
 
     void setCurrentResource(KoResourceSP resource);
 

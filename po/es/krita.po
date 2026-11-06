@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-02 03:00+0000\n"
-"PO-Revision-Date: 2026-11-02 00:02+0100\n"
+"PO-Revision-Date: 2026-11-05 12:51+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -14518,7 +14518,7 @@ msgstr "Reflejar vista alrededor del lienzo"
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "A&mpliar al 100 %"
+msgstr "A&mpliar al 100 %"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
@@ -14528,7 +14528,7 @@ msgstr "A&mpliar al 100 %"
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr "Ampliar al 100 %"
+msgstr "Ampliar al 100 %"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
@@ -21786,7 +21786,7 @@ msgstr "Rotación (Z)"
 #: libs/image/kis_layer.cc:275 libs/widgets/KoZoomActionState.cpp:20
 #, kde-format
 msgid "%1%"
-msgstr "%1 %"
+msgstr "%1 %"
 
 #. i18n: ectx: property (toolTip), widget (KisCompositeOpComboBox, cmbComposite)
 #: libs/image/kis_layer.cc:280 libs/ui/widgets/kis_cmb_composite.cc:76
@@ -25747,7 +25747,7 @@ msgstr ""
 "muestra signos de defectos en la pantalla, se le recomienda encarecidamente "
 "que use FFMpeg versión 4.4 o superior.</span></p><p><span style=\" font-"
 "style:italic;\">Nota 2: El formato GIF solo permite una transparencia del "
-"100 % o del 0 %. La transparencia parcial </span><span style=\" font-style:"
+"100 % o del 0 %. La transparencia parcial </span><span style=\" font-style:"
 "italic; text-decoration: underline;\">no</span><span style=\" font-style:"
 "italic;\"> está permitida. Si necesita transparencia parcial, considere el "
 "uso de los formatos APNG o WEBP.</span><br/></p></body></html>"
@@ -27336,7 +27336,7 @@ msgstr "Propiedades de la capa"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
-msgstr "{n} %"
+msgstr "{n} %"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:128
 #, kde-format
@@ -32204,7 +32204,7 @@ msgstr ""
 "archivos o durante la regeneración de la caché de animación), Krita hará el "
 "número de copias indicado de la imagen y no trabajará sobre ellas en "
 "paralelo. Cada copia solicitará más memoria para almacenamiento (alrededor "
-"del 20 % del tamaño de cada imagen), por lo que solo debería aumentar este "
+"del 20 % del tamaño de cada imagen), por lo que solo debería aumentar este "
 "límite si dispone de suficiente memoria en su equipo.</p><p><br/></"
 "p><p><span style=\" font-weight:600;\">Valor recomendado:</span> defina el "
 "límite de clones al mismo valor que el número de núcleos <span style=\" text-"
@@ -32446,7 +32446,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Añadir área adicional a la región de interés a cada "
 "lado del lienzo.</p><p><span style=\" font-weight:600;\">Valor recomendado:</"
-"span> 25 %. La región de interés se extenderá un 25 % a cada lado.</p></"
+"span> 25 %. La región de interés se extenderá un 25 % a cada lado.</p></"
 "body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBackgroundCacheGeneration)
@@ -34282,7 +34282,7 @@ msgstr "Alejar desde el cursor"
 #: libs/ui/input/kis_zoom_action.cpp:80 libs/ui/kis_popup_palette.cpp:214
 #, kde-format
 msgid "Zoom to 100%"
-msgstr "Ampliar al 100 %"
+msgstr "Ampliar al 100 %"
 
 #: libs/ui/input/kis_zoom_action.cpp:81
 #, kde-format
@@ -34432,13 +34432,13 @@ msgstr "Nueva configuración %1"
 #: libs/ui/kis_canvas_controls_manager.cpp:292
 #, kde-format
 msgid "Brush Opacity: %1%"
-msgstr "Opacidad del pincel: %1 %"
+msgstr "Opacidad del pincel: %1 %"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:324
 #, kde-format
 msgctxt "Brush Option Flow"
 msgid "Flow: %1%"
-msgstr "Flujo: %1 %"
+msgstr "Flujo: %1 %"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:352
 #, kde-format
@@ -34450,7 +34450,7 @@ msgstr "Desvanecer: %1"
 #, kde-format
 msgctxt "Brush Option Scatter"
 msgid "Scatter: %1%"
-msgstr "Dispersión: %1 %"
+msgstr "Dispersión: %1 %"
 
 #: libs/ui/kis_change_file_layer_command.h:24
 msgctxt "(qtundo-format)"
@@ -35014,13 +35014,13 @@ msgstr "Desactivada: no se permite la clonación de grupos de tránsito."
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
-msgstr "%1 %"
+msgstr "%1 %"
 
 #: libs/ui/kis_node_model.cpp:605
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
-msgstr "%1 % %2"
+msgstr "%1 % %2"
 
 #: libs/ui/kis_paintop_box.cc:100
 #, kde-format
@@ -35056,13 +35056,13 @@ msgstr "Seleccionar valor predefinido del pincel"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
-msgstr "Opacidad: {n} %"
+msgstr "Opacidad: {n} %"
 
 #: libs/ui/kis_paintop_box.cc:267
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
-msgstr "Flujo: {n} %"
+msgstr "Flujo: {n} %"
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
@@ -35182,7 +35182,7 @@ msgstr "Solo el lienzo"
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
 #, kde-format
 msgid "100%"
-msgstr "100 %"
+msgstr "100 %"
 
 #: libs/ui/kis_popup_palette.cpp:220
 #, kde-format
@@ -38622,7 +38622,7 @@ msgstr "Transparente"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Position: {n}%"
-msgstr "Posición: {n} %"
+msgstr "Posición: {n} %"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:39
 #, kde-format
@@ -43471,7 +43471,7 @@ msgstr "Silenciar"
 msgctxt ""
 "@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
 msgid "Volume: {n}%"
-msgstr "Volumen: {n} %"
+msgstr "Volumen: {n} %"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:173
 #, kde-format
@@ -43506,7 +43506,7 @@ msgstr "FPS reales:\t%1"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:639
 #, kde-format
 msgid "Frames dropped:\t%1%"
-msgstr "Fotogramas descartados:\t%1 %"
+msgstr "Fotogramas descartados:\t%1 %"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:699
 #, kde-format
@@ -43674,7 +43674,7 @@ msgstr "Hacer a los clones únicos"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Tint: {n}%"
-msgstr "Tinte: {n} %"
+msgstr "Tinte: {n} %"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:49
 #, kde-format
@@ -59761,7 +59761,7 @@ msgstr "Línea de conexión"
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
 #, kde-format
 msgid "0%"
-msgstr "0 %"
+msgstr "0 %"
 
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:55
 #, kde-format
@@ -61149,7 +61149,7 @@ msgid ""
 msgstr ""
 "Nivel de precisión 1 (más rápido)\n"
 "Precisión de subpíxeles: desactivada\n"
-"Precisión de tamaño de pincel: 5 %\n"
+"Precisión de tamaño de pincel: 5 %\n"
 "\n"
 "Óptimo para pinceles muy grandes"
 
@@ -61164,7 +61164,7 @@ msgid ""
 msgstr ""
 "Nivel de precisión 2\n"
 "Precisión de subpíxeles: desactivada\n"
-"Precisión de tamaño de pincel: 1 %\n"
+"Precisión de tamaño de pincel: 1 %\n"
 "\n"
 "Óptimo para pinceles grandes"
 
@@ -61189,10 +61189,10 @@ msgid ""
 "Gives up to 50% better performance in comparison to Level 5"
 msgstr ""
 "Nivel de precisión 4 (óptimo)\n"
-"Precisión de subpíxeles: 50 %\n"
+"Precisión de subpíxeles: 50 %\n"
 "Precisión de tamaño de pincel: exacto\n"
 "\n"
-"Proporciona hasta un 50 % de mejor rendimiento que el nivel 5"
+"Proporciona hasta un 50 % de mejor rendimiento que el nivel 5"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:77
 #, kde-format
@@ -61291,8 +61291,8 @@ msgid ""
 msgstr ""
 "Reinicia todos los ajustes a sus valores predeterminados:\n"
 " Punto neutro: 127\n"
-" Brillo: 0 %\n"
-" Contraste: 0 %"
+" Brillo: 0 %\n"
+" Contraste: 0 %"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
@@ -61801,7 +61801,7 @@ msgstr "Tono en sentido horario"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
 #, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "(0 % es el color activo)"
+msgstr "(0 % es el color activo)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118
@@ -61809,7 +61809,7 @@ msgstr "(0 % es el color activo)"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:141
 #, kde-format
 msgid "+100%"
-msgstr "+100 %"
+msgstr "+100 %"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:107
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:119
@@ -61817,7 +61817,7 @@ msgstr "+100 %"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:142
 #, kde-format
 msgid "-100%"
-msgstr "-100 %"
+msgstr "-100 %"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:109
 #, kde-format
@@ -65025,7 +65025,7 @@ msgstr "Cambiar carpeta de referencias"
 #: plugins/python/photobash_images/photobash_images_docker.py:229
 #, python-brace-format
 msgid "Image Scale: {0}%"
-msgstr "Escala de la imagen: {0} %"
+msgstr "Escala de la imagen: {0} %"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:331
 #, python-brace-format
@@ -65884,7 +65884,7 @@ msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
 "is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Escala: {n} %"
+msgstr "Escala: {n} %"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:555
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:482
@@ -65904,7 +65904,7 @@ msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
 "percent sign"
 msgid "Spread: {n}%"
-msgstr "Extensión: {n} %"
+msgstr "Extensión: {n} %"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
@@ -67053,19 +67053,19 @@ msgstr "Herramienta de imágenes de referencia"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}%"
-msgstr "Opacidad [*varía*]: {n} %"
+msgstr "Opacidad [*varía*]: {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation: {n}%"
-msgstr "Saturación: {n} %"
+msgstr "Saturación: {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:55
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation [*varies*]: {n}%"
-msgstr "Saturación [*varía*]: {n} %"
+msgstr "Saturación [*varía*]: {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -67366,7 +67366,7 @@ msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Extensión: {n} %"
+msgstr "Extensión: {n} %"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
 #, kde-format
@@ -67535,7 +67535,7 @@ msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Extensión: {n} %"
+msgstr "Extensión: {n} %"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, kde-format
@@ -68905,7 +68905,7 @@ msgctxt ""
 "The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Escala: {n} %"
+msgstr "Escala: {n} %"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:491
 #, kde-format
@@ -68919,7 +68919,7 @@ msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Extensión: {n} %"
+msgstr "Extensión: {n} %"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
 #, kde-format
@@ -69311,7 +69311,7 @@ msgstr ""
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Clean up: {n}%"
-msgstr "Limpieza: {n} %"
+msgstr "Limpieza: {n} %"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:128
 #, kde-format
@@ -69321,7 +69321,7 @@ msgid ""
 "the closed contours. 0% - no effect, 100% - max effect"
 msgstr ""
 "La máscara tratará de eliminar partes de los trazos clave situados fuera de "
-"los contornos cerrados. 0 %: sin efecto; 100 %: máximo efecto."
+"los contornos cerrados. 0 %: sin efecto; 100 %: máximo efecto."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdates)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:23

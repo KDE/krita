@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-02 03:00+0000\n"
-"PO-Revision-Date: 2026-09-30 08:47+0300\n"
+"PO-Revision-Date: 2026-11-05 13:53+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -42651,10 +42651,9 @@ msgstr[2] "שכפול %1 תמוניות מפתח"
 msgstr[3] "שכפול %1 תמוניות מפתח"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:427
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Make clones Unique"
-msgstr "אלפא"
+msgstr "הפיכת העותקים לייחודיים"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #, fuzzy, kde-format
@@ -45212,10 +45211,10 @@ msgid "%1, variant: %2"
 msgstr "%1, הגוון: %2"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "On"
-msgstr "&פתח"
+msgstr "פעיל"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
 #, kde-format

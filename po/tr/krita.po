@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-06 00:48+0000\n"
-"PO-Revision-Date: 2026-10-24 21:11+0300\n"
+"PO-Revision-Date: 2026-11-06 19:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -42376,10 +42376,9 @@ msgstr "Özel Renk"
 
 #. i18n: ectx: property (text), widget (QLabel, brushPriorityLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:251
-#, fuzzy, kde-format
-#| msgid "Brush Preset History"
+#, kde-format
 msgid "Brush Priority:"
-msgstr "Fırça Önayarı Geçmişi"
+msgstr "Fırça önceliği:"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:330
@@ -42523,6 +42522,10 @@ msgid ""
 "follow (eg for the \"Perspective\" brush sensor), this will be used. "
 "Priority is like counting, lower number comes first."
 msgstr ""
+"Bir fırça perspektif yardımcılarının üzerinde olduğunda ve takip edilecek "
+"fırçaya karar verilmesi gerektiğinde (örneğin “Perspektif” fırça "
+"algılayıcısı için), bu kullanılacaktır. Öncelik saymaya benzer, küçük sayı "
+"önce gelir."
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1797
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1803

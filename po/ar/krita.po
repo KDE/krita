@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-06 00:48+0000\n"
-"PO-Revision-Date: 2026-11-05 09:35+0400\n"
+"PO-Revision-Date: 2026-11-06 15:39+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -42157,10 +42157,9 @@ msgstr "لون مخصّص"
 
 #. i18n: ectx: property (text), widget (QLabel, brushPriorityLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:251
-#, fuzzy, kde-format
-#| msgid "Brush Preset History"
+#, kde-format
 msgid "Brush Priority:"
-msgstr "تأريخ الفُرش مسبقة الضّبط"
+msgstr "أولوية الفرشاة:"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:330

@@ -83,7 +83,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-06 00:48+0000\n"
-"PO-Revision-Date: 2026-11-05 07:47+0200\n"
+"PO-Revision-Date: 2026-11-06 07:49+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -40581,12 +40581,10 @@ msgid "No Preview for this engine"
 msgstr "Предварительный просмотр для этого модуля отсутствует"
 
 #: libs/ui/widgets/kis_selection_options.cc:194
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The move-selected-content checkbox in selection tool options"
 msgid "Move Selected Content"
-msgstr ""
-"Перемещение выделения\n"
-"перемещение выделения"
+msgstr "Перемещать выделенное содержимое"
 
 #: libs/ui/widgets/kis_selection_options.cc:197
 #: plugins/tools/basictools/kis_tool_fill.cc:591
@@ -40655,12 +40653,10 @@ msgid "Symmetric Difference"
 msgstr "Симметричная разница"
 
 #: libs/ui/widgets/kis_selection_options.cc:255
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move Selected Content"
-msgstr ""
-"Перемещение выделения\n"
-"перемещение выделения"
+msgstr "Перемещать выделенное содержимое"
 
 #: libs/ui/widgets/kis_selection_options.cc:258
 #, kde-format

@@ -40518,7 +40518,9 @@ msgid "No Preview for this engine"
 msgstr "Pas d'aperçu pour ce moteur"
 
 #: libs/ui/widgets/kis_selection_options.cc:194
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "The move-selected-content checkbox in selection tool options"
+#| msgid "Move Selected Content"
 msgctxt "The move-selected-content checkbox in selection tool options"
 msgid "Move Selected Content"
 msgstr "Déplacer le contenu sélectionné"
@@ -40590,7 +40592,9 @@ msgid "Symmetric Difference"
 msgstr "Différence symétrique"
 
 #: libs/ui/widgets/kis_selection_options.cc:255
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Move Selected Content"
 msgctxt "@info:tooltip"
 msgid "Move Selected Content"
 msgstr "Déplacer le contenu sélectionné"

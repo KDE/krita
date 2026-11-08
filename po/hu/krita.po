@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-06 00:48+0000\n"
+"POT-Creation-Date: 2026-11-08 02:55+0000\n"
 "PO-Revision-Date: 2026-08-12 15:01+0200\n"
 "Last-Translator: Benedek Péter <benedekppeter@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -66024,6 +66024,7 @@ msgid "Activate Brush Preset {num}"
 msgstr "{num}. ecsetkészlet aktiválása"
 
 #: plugins/python/tenbrushes/tenbrushes.py:121
+#, python-brace-format
 msgid ""
 "{}\n"
 "selected"

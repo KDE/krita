@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-06 00:48+0000\n"
-"PO-Revision-Date: 2026-11-05 13:53+0200\n"
+"POT-Creation-Date: 2026-11-08 02:55+0000\n"
+"PO-Revision-Date: 2026-11-07 21:34+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -61716,8 +61716,7 @@ msgstr "&בוחר צבעים"
 #. i18n: context: text @ Action (assign_profile_to_image), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
-#, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
+#, kde-format
 msgctxt "action"
 msgid "Assign Profile to Image"
 msgstr "הקצאת פרופיל לתמונה"
@@ -61740,8 +61739,7 @@ msgstr "הקצאת פרופיל לתמונה"
 #. i18n: context: text @ Action (pykrita_channels2layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
-#, fuzzy, kde-format
-#| msgid "Channels to layers"
+#, kde-format
 msgctxt "action"
 msgid "Channels to layers"
 msgstr "ערוצים לשכבות"
@@ -61827,8 +61825,7 @@ msgstr "<i>שחור</i>"
 #. i18n: context: text @ Action (color_space), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Space"
 msgstr "מרחב צבעים"
@@ -63214,8 +63211,7 @@ msgstr ""
 #. i18n: context: text @ Action (document_tools), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
-#, fuzzy, kde-format
-#| msgid "Document Tools"
+#, kde-format
 msgctxt "action"
 msgid "Document Tools"
 msgstr "כלי מסמך"
@@ -63263,8 +63259,7 @@ msgstr "המסמכים הנבחרים נערכו."
 #. i18n: context: text @ Action (export_layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
-#, fuzzy, kde-format
-#| msgid "Export Layers"
+#, kde-format
 msgctxt "action"
 msgid "Export Layers"
 msgstr "ייצוא שכבות"
@@ -63822,39 +63817,29 @@ msgstr "מעגן הגדרות מהירות"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:145
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:335
-#, fuzzy
-#| msgctxt "@label:button"
-#| msgid "Add Style Preset"
 msgid "Add Preset"
-msgstr "הוספת ערכת סגנון"
+msgstr "הוספת ערכה"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:149
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:397
-#, fuzzy
-#| msgctxt "@info:tooltip"
-#| msgid "Delete resource"
 msgid "Delete Preset"
-msgstr "מחיקת משאב"
+msgstr "מחיקת ערכה"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:313
 msgid "Enter brush size (px):"
 msgstr ""
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:319
-#, fuzzy
-#| msgid "Outline opacity:"
 msgid "Enter opacity (%):"
-msgstr "אטימות מתאר:"
+msgstr "מילוי אטימות (%):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:325
 msgid "Enter flow (%):"
 msgstr ""
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:398
-#, fuzzy
-#| msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgid "Are you sure you want to delete this preset?"
-msgstr "למחוק את המסכה <b>‚%1’</b>?"
+msgstr "למחוק את הערכה הזאת?"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"
@@ -64106,6 +64091,7 @@ msgid "Activate Brush Preset {num}"
 msgstr "הפעלת ערכת מכחולים {num}"
 
 #: plugins/python/tenbrushes/tenbrushes.py:121
+#, python-brace-format
 msgid ""
 "{}\n"
 "selected"

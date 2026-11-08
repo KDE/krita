@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-06 00:48+0000\n"
+"POT-Creation-Date: 2026-11-08 02:55+0000\n"
 "PO-Revision-Date: 2026-06-11 17:03+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -65823,6 +65823,7 @@ msgid "Activate Brush Preset {num}"
 msgstr "啟動筆刷預設 {num}"
 
 #: plugins/python/tenbrushes/tenbrushes.py:121
+#, python-brace-format
 msgid ""
 "{}\n"
 "selected"

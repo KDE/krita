@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-06 00:48+0000\n"
-"PO-Revision-Date: 2026-10-28 16:39+0200\n"
+"POT-Creation-Date: 2026-11-08 02:55+0000\n"
+"PO-Revision-Date: 2026-11-07 22:13+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 26.08.2\n"
+"X-Generator: Lokalize 26.08.3\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,1000,-1,-1,-1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -11480,120 +11480,101 @@ msgstr "Обновяване на обхвата на възпроизвежда
 
 #. i18n: context: text @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2527
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Constant"
-msgstr "Интерполация"
+msgstr "Константно интерполиране"
 
 #. i18n: context: toolTip @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2529
-#, fuzzy, kde-format
-#| msgid "Hold constant value. No interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Hold constant value. No interpolation."
 msgstr "Задържане на постоянна стойност. Без интерполация."
 
 #. i18n: context: text @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2539
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Linear"
-msgstr "Интерполация"
+msgstr "Линейна интерполация"
 
 #. i18n: context: toolTip @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2541
-#, fuzzy, kde-format
-#| msgid "Linear interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Linear interpolation."
-msgstr "Линейна интерполация"
+msgstr "Линейна интерполация."
 
 #. i18n: context: text @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2551
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Bezier"
-msgstr "Интерполация"
+msgstr "Интерполация на Безие"
 
 #. i18n: context: toolTip @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2553
-#, fuzzy, kde-format
-#| msgid "Bezier curve interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Bezier curve interpolation."
 msgstr "Интерполация с крива на Безие"
 
 #. i18n: context: text @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2563
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Sharp"
-msgstr "Интерполация"
+msgstr "Остро интерполиране"
 
 #. i18n: context: toolTip @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2565
-#, fuzzy, kde-format
-#| msgid "Sharp interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Sharp interpolation tangents."
-msgstr "Остри тангенси за интерполация"
+msgstr "Остри допирателни за интерполация"
 
 #. i18n: context: text @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2575
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Smooth"
-msgstr "Интерполация"
+msgstr "Гладка интерполация"
 
 #. i18n: context: toolTip @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2577
-#, fuzzy, kde-format
-#| msgid "Smooth interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Smooth interpolation tangents."
-msgstr "Гладки тангенси за интерполация"
+msgstr "Гладки допирателни за интерполация"
 
 #. i18n: context: text @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2587
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Range"
-msgstr "Мащабиране на изгледа според обхвата на канала."
+msgstr "Мащабиране до побиране на диапазона"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2589
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit channel range."
 msgstr "Мащабиране на изгледа според обхвата на канала."
 
 #. i18n: context: text @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2599
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Curve"
-msgstr "Мащабиране на изгледа според кривата."
+msgstr "Мащабиране до побирране на кривата."
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2601
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit curve."
-msgstr "Мащабиране на изгледа според кривата."
+msgstr "Мащабиране на изгледа до побиране на кривата."
 
 #. i18n: context: text @ Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2611
@@ -20832,14 +20813,12 @@ msgid "Zoom"
 msgstr "Увеличаване на мащаба"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:38
-#, fuzzy, kde-format
-#| msgid "Zoom In"
+#, kde-format
 msgid "Zoom in"
-msgstr "Увеличаване на мащаба"
+msgstr "Увеличаване"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:40
-#, fuzzy, kde-format
-#| msgid "Zoom Out"
+#, kde-format
 msgid "Zoom out"
 msgstr "Намаляване"
 
@@ -20855,10 +20834,9 @@ msgstr "Режим"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/flake/tools/KoZoomToolWidget.ui:34
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgid "Zoom to fit:"
-msgstr "Мащабиране на изгледа според обхвата на канала."
+msgstr "Мащабиране до размер:"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -29542,13 +29520,7 @@ msgstr "Преглед на цветови пространства"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-#| "\"><span style=\" font-weight:600; text-decoration: underline; color:"
-#| "#006e28;\">Color Spaces</span></a>  determine how colors are encoded in "
-#| "your files. Different color spaces have different properties and are used "
-#| "for different purposes.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
 "\"><span style=\" font-weight:600; text-decoration: underline; \">Color "
@@ -29557,9 +29529,9 @@ msgid ""
 "p></body></html>"
 msgstr ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-"\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
-"\">Цветови пространства</span></a>  определя как цветовете се кодират в "
-"вашите файлове. Различните цветови пространства имат различни свойства и се "
+"\"><span style=\" font-weight:600; text-decoration: underline; \">Цветови "
+"пространства</span></a> определят начина на кодиране на цветовете във вашите "
+"файлове. Различните цветови пространства имат различни свойства и се "
 "използват за различни цели.</p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -33900,16 +33872,14 @@ msgid "Sample Background Color from Merged Image"
 msgstr "Проба на цвят на фон от обединено изображение"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:42
-#, fuzzy, kde-format
-#| msgid "Sample Foreground Color from Current Layer"
+#, kde-format
 msgid "Sample Foreground Color from Current Group"
-msgstr "Проба цвят на предния план от текущия слой"
+msgstr "Извличане на преден цвят от текущата група"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:43
-#, fuzzy, kde-format
-#| msgid "Sample Background Color from Current Layer"
+#, kde-format
 msgid "Sample Background Color from Current Group"
-msgstr "Проба цвят на фона от текущия слой"
+msgstr "Вземане на примерен цвят на фона от текущата група"
 
 #: libs/ui/input/kis_change_frame_action.cpp:27
 #, kde-format
@@ -40093,12 +40063,10 @@ msgid "No Preview for this engine"
 msgstr "Няма предварителен преглед за този енджин"
 
 #: libs/ui/widgets/kis_selection_options.cc:194
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "The move-selected-content checkbox in selection tool options"
 msgid "Move Selected Content"
-msgstr "Преместване на селекция"
+msgstr "Преместване на избраното съдържание"
 
 #: libs/ui/widgets/kis_selection_options.cc:197
 #: plugins/tools/basictools/kis_tool_fill.cc:591
@@ -40167,12 +40135,10 @@ msgid "Symmetric Difference"
 msgstr "Симетрична разлика"
 
 #: libs/ui/widgets/kis_selection_options.cc:255
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move Selected Content"
-msgstr "Преместване на селекция"
+msgstr "Преместване на избраното съдържание"
 
 #: libs/ui/widgets/kis_selection_options.cc:258
 #, kde-format
@@ -40203,10 +40169,9 @@ msgid "Select regions found from the active layer"
 msgstr "Избор на области, намерени в активния слой"
 
 #: libs/ui/widgets/kis_selection_options.cc:269
-#, fuzzy, kde-format
-#| msgid "Select regions found from the active layer"
+#, kde-format
 msgid "Select regions found from the active group"
-msgstr "Избор на области, намерени в активния слой"
+msgstr "Селектиране на региони от активната група"
 
 #: libs/ui/widgets/kis_selection_options.cc:271
 #, kde-format
@@ -42548,10 +42513,9 @@ msgstr "Персонализиран цвят"
 
 #. i18n: ectx: property (text), widget (QLabel, brushPriorityLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:251
-#, fuzzy, kde-format
-#| msgid "Brush Preset History"
+#, kde-format
 msgid "Brush Priority:"
-msgstr "История на настройки на четки"
+msgstr "Приоритет на четката:"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:330
@@ -42695,6 +42659,9 @@ msgid ""
 "follow (eg for the \"Perspective\" brush sensor), this will be used. "
 "Priority is like counting, lower number comes first."
 msgstr ""
+"Когато четката е над помощни линии за перспектива и трябва да се определи "
+"коя да следва (напр. за сензора на четката „Перспектива“), се използва тази "
+"настройка. Приоритетът работи като броене – по-ниският номер има предимство."
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1797
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1803
@@ -44942,6 +44909,8 @@ msgid ""
 "Bakes the current settings into the current projection, and opens it as a "
 "new image. Will use \"%1\" ICC profile as display space."
 msgstr ""
+"Вграждане на текущите настройки в текущата проекция и отваряне като ново "
+"изображение. Ще се използва ICC профилът „%1“ като пространство за показване."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:301
 #, kde-format
@@ -44987,12 +44956,10 @@ msgid "None"
 msgstr "Без"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:675
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgctxt "@title:window"
 msgid "Convert to image colorspace?"
-msgstr "Преобразуване на цветовото пространство на изображение"
+msgstr "Конвертиране към цветовото пространство на изображението?"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:676
 #, kde-format
@@ -45001,14 +44968,14 @@ msgid ""
 "The resulting image will be assigned the profile \"%1\".Convert it from "
 "there to the current image colorspace?"
 msgstr ""
+"На резултатното изображение ще бъде присвоен профилът „%1“. Преобразуване от "
+"него към цветовото пространство на текущото изображение?"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:697
-#, fuzzy, kde-format
-#| msgid "Store Softproofing configuration in the image"
+#, kde-format
 msgctxt "Message for ocio baking progress bar."
 msgid "Baking configuration into image..."
-msgstr ""
-"Запазване на настройките за проверка на цветово предаване в изображението"
+msgstr "Вграждане на конфигурацията в изображението..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -45108,10 +45075,9 @@ msgstr "Конфигурация на черните и белите нива н
 
 #. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
 #: plugins/dockers/lut/wdglut.ui:412
-#, fuzzy, kde-format
-#| msgid "&Wave..."
+#, kde-format
 msgid "Bake..."
-msgstr "&Вълна..."
+msgstr "Изпичане..."
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
@@ -45740,10 +45706,9 @@ msgid "0 B"
 msgstr "0 B"
 
 #: plugins/dockers/recorder/recorder_writer.cpp:631
-#, fuzzy, kde-format
-#| msgid "Start Recording"
+#, kde-format
 msgid "Stopping recording"
-msgstr "Започване на записа"
+msgstr "Спиране на записа"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDirectory)
 #: plugins/dockers/recorder/recorderdocker.ui:95
@@ -45880,22 +45845,19 @@ msgstr "Автоматично записване"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxFocusedRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:374
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Record only the visible area of the canvas.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Използване на наклона на таблета за определяне на "
-"нормалите.</p></body></html>"
+"<html><head/><body><p>Запис само на видимата област от платното.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxFocusedRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:377
 #, kde-format
 msgid "Record focused area"
-msgstr ""
+msgstr "Запис на фокусираната област"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRecordToggle)
 #: plugins/dockers/recorder/recorderdocker.ui:396
@@ -51005,12 +50967,7 @@ msgstr "Грешка: Python енджинът не можа да бъде ини
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
-#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
-#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-#| "Scripting School</span></a>!</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
 "out the <a href=\"https://scripting.krita.org/lessons/introduction\"><span "
@@ -51019,8 +50976,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Ако искате да научите как да пишете скриптове за "
 "Krita, разгледайте <a href=\"https://scripting.krita.org/lessons/introduction"
-"\"><span style=\" text-decoration: underline; color:#2980b9;\">Училището за "
-"скриптове на Krita</span></a>!</p></body></html>"
+"\"><span style=\" text-decoration: underline;\">Училище за скриптове на "
+"Krita</span></a>!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
 #, kde-format
@@ -63506,8 +63463,7 @@ msgstr "Стойност за смесване на посока/наклон"
 #. i18n: context: text @ Action (assign_profile_to_image), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
-#, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
+#, kde-format
 msgctxt "action"
 msgid "Assign Profile to Image"
 msgstr "Приписване на профил към изображението"
@@ -63530,8 +63486,7 @@ msgstr "Приписване на профил към изображението
 #. i18n: context: text @ Action (pykrita_channels2layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
-#, fuzzy, kde-format
-#| msgid "Channels to layers"
+#, kde-format
 msgctxt "action"
 msgid "Channels to layers"
 msgstr "Канали към слой"
@@ -63617,8 +63572,7 @@ msgstr "<i>Черно</i>"
 #. i18n: context: text @ Action (color_space), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Space"
 msgstr "Цветово пространство"
@@ -65063,8 +65017,7 @@ msgstr "Автор на допълнително текстово съдържа
 #. i18n: context: text @ Action (document_tools), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
-#, fuzzy, kde-format
-#| msgid "Document Tools"
+#, kde-format
 msgctxt "action"
 msgid "Document Tools"
 msgstr "Инструменти за документи"
@@ -65112,8 +65065,7 @@ msgstr "Избраните документи бяха модифицирани.
 #. i18n: context: text @ Action (export_layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
-#, fuzzy, kde-format
-#| msgid "Export Layers"
+#, kde-format
 msgctxt "action"
 msgid "Export Layers"
 msgstr "Експортиране на слоеве"
@@ -65201,8 +65153,7 @@ msgstr "Избор на папка"
 #. i18n: context: text @ Action (filter_manager), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
-#, fuzzy, kde-format
-#| msgid "Filter Manager"
+#, kde-format
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Управление на филтри"
@@ -65231,8 +65182,7 @@ msgstr "Филтри:"
 #. i18n: context: text @ Action (high_pass_filter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
-#, fuzzy, kde-format
-#| msgid "High Pass"
+#, kde-format
 msgctxt "action"
 msgid "High Pass"
 msgstr "Високи честоти"
@@ -65369,11 +65319,10 @@ msgstr "Създаване на нов скрипт"
 #. i18n: context: text @ Action (Krita Script Starter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/krita_script_starter/krita_script_starter.action:4
 #: plugins/python/krita_script_starter/krita_script_starter.action:8
-#, fuzzy, kde-format
-#| msgid "BBD's Krita Script Starter"
+#, kde-format
 msgctxt "action"
 msgid "Krita Script Starter"
-msgstr "Krita Script Starter на BBD"
+msgstr "Krita Script Starter"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
@@ -65693,39 +65642,30 @@ msgstr "Докер за бързи настройки"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:145
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:335
-#, fuzzy
-#| msgctxt "@label:button"
-#| msgid "Add Style Preset"
 msgid "Add Preset"
-msgstr "Добавяне на предварително зададен стил"
+msgstr "Добавяне на предварително зададена настройка"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:149
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:397
-#, fuzzy
-#| msgctxt "@info:tooltip"
-#| msgid "Delete resource"
 msgid "Delete Preset"
-msgstr "Изтриване на ресурс"
+msgstr "Изтриване на предварително зададена настройка"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:313
 msgid "Enter brush size (px):"
-msgstr ""
+msgstr "Размер на четката (px):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:319
-#, fuzzy
-#| msgid "Outline opacity:"
 msgid "Enter opacity (%):"
-msgstr "Прозрачност на контура:"
+msgstr "Въвеждане на непрозрачност (%):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:325
 msgid "Enter flow (%):"
-msgstr ""
+msgstr "Въвеждане на поток (%):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:398
-#, fuzzy
-#| msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgid "Are you sure you want to delete this preset?"
-msgstr "Сигурни ли сте, че искате да изтриете маската <b>'%1'</b>?"
+msgstr ""
+"Сигурни ли сте, че искате да изтриете този предварително зададен профил?"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"
@@ -65753,8 +65693,7 @@ msgstr "Дебагер"
 #. i18n: context: text @ Action (python_scripter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
-#, fuzzy, kde-format
-#| msgid "Scripter"
+#, kde-format
 msgctxt "action"
 msgid "Scripter"
 msgstr "Скриптер"
@@ -65975,6 +65914,7 @@ msgid "Activate Brush Preset {num}"
 msgstr "Активиране на четка  {num}"
 
 #: plugins/python/tenbrushes/tenbrushes.py:121
+#, python-brace-format
 msgid ""
 "{}\n"
 "selected"
@@ -66660,50 +66600,50 @@ msgid "Color Sampler Tool"
 msgstr "Избиране на цвят"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:76
-#, fuzzy, kde-format
-#| msgid "Bounding Box"
+#, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "Bounding Box"
-msgstr "Ограничителна рамка"
+msgstr "Ограничителен правоъгълник"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:77
 #, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "3-Point"
-msgstr ""
+msgstr "3-точки"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:78
 #, kde-format
 msgid "Place the ellipse inside a bounding box"
-msgstr ""
+msgstr "Поставяне на елипса в ограничаващ правоъгълник"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:79
 #, kde-format
 msgid "Place the ellipse by setting the major axis and width"
-msgstr ""
+msgstr "Поставяне на елипса чрез задаване на главната ос и ширината"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:110
-#, fuzzy, kde-format
-#| msgid "Element"
+#, kde-format
 msgctxt "Ellipse tool placement mode option label"
 msgid "Placement:"
-msgstr "Елемент"
+msgstr "Разполагане:"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:343
 #, kde-format
 msgid "Click to place the other end of the ellipse axis."
-msgstr ""
+msgstr "Кликване за поставяне на другия край на оста на елипсата."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:345
 #, kde-format
 msgid "Click to set the ellipse width."
-msgstr ""
+msgstr "Кликване за задаване на ширината на елипсата."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:347
 #, kde-format
 msgid ""
 "Drag handles to adjust the ellipse. Press Enter to apply or Esc to cancel."
 msgstr ""
+"Плъзгане на контролните точки за регулиране на елипсата. Натискане на Enter "
+"за прилагане или Esc за отказ."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:584
 #: plugins/tools/basictools/kis_tool_ellipse.cc:606
@@ -67271,10 +67211,9 @@ msgstr "Проба на всички видими слоеве"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:145
-#, fuzzy, kde-format
-#| msgid "Sample Current Layer"
+#, kde-format
 msgid "Sample Current Group"
-msgstr "Извадка от текущия слой"
+msgstr "Избор от текущата група"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:150
@@ -71308,9 +71247,3 @@ msgstr ""
 "Превключване между пълен обхват и подмножество.\n"
 "Пълен обхват: [%1, %2]\n"
 "Подмножество: [%3, %4]"
-
-#~ msgid "&Zoom In"
-#~ msgstr "&Увеличаване на мащаба"
-
-#~ msgid "Zoo&m Out"
-#~ msgstr "Нама&ляване на мащаба"

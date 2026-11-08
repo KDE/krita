@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-06 00:48+0000\n"
+"POT-Creation-Date: 2026-11-08 02:55+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -64654,7 +64654,7 @@ msgid "Activate Brush Preset {num}"
 msgstr "Bosim:"
 
 #: plugins/python/tenbrushes/tenbrushes.py:121
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid ""
 "{}\n"
 "selected"

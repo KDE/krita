@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-06 00:48+0000\n"
+"POT-Creation-Date: 2026-11-08 02:55+0000\n"
 "PO-Revision-Date: 2026-09-11 15:32+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
@@ -40518,9 +40518,7 @@ msgid "No Preview for this engine"
 msgstr "Pas d'aperçu pour ce moteur"
 
 #: libs/ui/widgets/kis_selection_options.cc:194
-#, fuzzy, kde-format
-#| msgctxt "The move-selected-content checkbox in selection tool options"
-#| msgid "Move Selected Content"
+#, kde-format
 msgctxt "The move-selected-content checkbox in selection tool options"
 msgid "Move Selected Content"
 msgstr "Déplacer le contenu sélectionné"
@@ -40592,9 +40590,7 @@ msgid "Symmetric Difference"
 msgstr "Différence symétrique"
 
 #: libs/ui/widgets/kis_selection_options.cc:255
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Move Selected Content"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move Selected Content"
 msgstr "Déplacer le contenu sélectionné"
@@ -66645,6 +66641,7 @@ msgid "Activate Brush Preset {num}"
 msgstr "Activer le préréglage de la brosse {num}"
 
 #: plugins/python/tenbrushes/tenbrushes.py:121
+#, python-brace-format
 msgid ""
 "{}\n"
 "selected"

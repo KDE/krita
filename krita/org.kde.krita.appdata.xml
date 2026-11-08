@@ -588,10 +588,18 @@
     <screenshot>
       <caption>Or the active </caption>
       <caption xml:lang="ar">أو النشط</caption>
+      <caption xml:lang="bg">Или активния</caption>
       <caption xml:lang="ca">O l'actiu</caption>
       <caption xml:lang="ca-valencia">O l'actiu</caption>
+      <caption xml:lang="es">O al activo</caption>
+      <caption xml:lang="he">או הפעיל</caption>
+      <caption xml:lang="ka">ან აქტიური</caption>
+      <caption xml:lang="nl">Of het actieve</caption>
       <caption xml:lang="pt-BR">Ou o ativo</caption>
+      <caption xml:lang="ru">Или активный</caption>
+      <caption xml:lang="sl">Ali aktivni</caption>
       <caption xml:lang="tr">Veya etkin</caption>
+      <caption xml:lang="uk">Або активний</caption>
       <image>https://cdn.kde.org/screenshots/krita/community.png</image>
     </screenshot>
   </screenshots>

@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-02 03:00+0000\n"
+"POT-Creation-Date: 2026-11-08 00:12+0000\n"
 "PO-Revision-Date: 2026-10-29 13:53+0100\n"
 "Last-Translator: freek <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -65402,6 +65402,7 @@ msgid "Activate Brush Preset {num}"
 msgstr "Penseelinstelling activeren {num}"
 
 #: plugins/python/tenbrushes/tenbrushes.py:121
+#, python-brace-format
 msgid ""
 "{}\n"
 "selected"

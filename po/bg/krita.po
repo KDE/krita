@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-02 03:00+0000\n"
-"PO-Revision-Date: 2026-10-28 16:33+0200\n"
+"POT-Creation-Date: 2026-11-08 00:12+0000\n"
+"PO-Revision-Date: 2026-11-07 21:50+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 26.08.2\n"
+"X-Generator: Lokalize 26.08.3\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,1000,-1,-1,-1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -11478,120 +11478,101 @@ msgstr "Обновяване на обхвата на възпроизвежда
 
 #. i18n: context: text @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2527
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Constant"
-msgstr "Интерполация"
+msgstr "Константно интерполиране"
 
 #. i18n: context: toolTip @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2529
-#, fuzzy, kde-format
-#| msgid "Hold constant value. No interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Hold constant value. No interpolation."
 msgstr "Задържане на постоянна стойност. Без интерполация."
 
 #. i18n: context: text @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2539
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Linear"
-msgstr "Интерполация"
+msgstr "Линейна интерполация"
 
 #. i18n: context: toolTip @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2541
-#, fuzzy, kde-format
-#| msgid "Linear interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Linear interpolation."
-msgstr "Линейна интерполация"
+msgstr "Линейна интерполация."
 
 #. i18n: context: text @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2551
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Bezier"
-msgstr "Интерполация"
+msgstr "Интерполация на Безие"
 
 #. i18n: context: toolTip @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2553
-#, fuzzy, kde-format
-#| msgid "Bezier curve interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Bezier curve interpolation."
 msgstr "Интерполация с крива на Безие"
 
 #. i18n: context: text @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2563
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Sharp"
-msgstr "Интерполация"
+msgstr "Остро интерполиране"
 
 #. i18n: context: toolTip @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2565
-#, fuzzy, kde-format
-#| msgid "Sharp interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Sharp interpolation tangents."
-msgstr "Остри тангенси за интерполация"
+msgstr "Остри допирателни за интерполация"
 
 #. i18n: context: text @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2575
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Smooth"
-msgstr "Интерполация"
+msgstr "Гладка интерполация"
 
 #. i18n: context: toolTip @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2577
-#, fuzzy, kde-format
-#| msgid "Smooth interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Smooth interpolation tangents."
-msgstr "Гладки тангенси за интерполация"
+msgstr "Гладки допирателни за интерполация"
 
 #. i18n: context: text @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2587
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Range"
-msgstr "Мащабиране на изгледа според обхвата на канала."
+msgstr "Мащабиране до побиране на диапазона"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2589
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit channel range."
 msgstr "Мащабиране на изгледа според обхвата на канала."
 
 #. i18n: context: text @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2599
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Curve"
-msgstr "Мащабиране на изгледа според кривата."
+msgstr "Мащабиране до побирране на кривата."
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2601
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit curve."
-msgstr "Мащабиране на изгледа според кривата."
+msgstr "Мащабиране на изгледа до побиране на кривата."
 
 #. i18n: context: text @ Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2611
@@ -62888,8 +62869,7 @@ msgstr "Стойност за смесване на посока/наклон"
 #. i18n: context: text @ Action (assign_profile_to_image), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
-#, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
+#, kde-format
 msgctxt "action"
 msgid "Assign Profile to Image"
 msgstr "Приписване на профил към изображението"
@@ -62912,8 +62892,7 @@ msgstr "Приписване на профил към изображението
 #. i18n: context: text @ Action (pykrita_channels2layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
-#, fuzzy, kde-format
-#| msgid "Channels to layers"
+#, kde-format
 msgctxt "action"
 msgid "Channels to layers"
 msgstr "Канали към слой"
@@ -62999,8 +62978,7 @@ msgstr "<i>Черно</i>"
 #. i18n: context: text @ Action (color_space), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Space"
 msgstr "Цветово пространство"
@@ -64445,8 +64423,7 @@ msgstr "Автор на допълнително текстово съдържа
 #. i18n: context: text @ Action (document_tools), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
-#, fuzzy, kde-format
-#| msgid "Document Tools"
+#, kde-format
 msgctxt "action"
 msgid "Document Tools"
 msgstr "Инструменти за документи"
@@ -64494,8 +64471,7 @@ msgstr "Избраните документи бяха модифицирани.
 #. i18n: context: text @ Action (export_layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
-#, fuzzy, kde-format
-#| msgid "Export Layers"
+#, kde-format
 msgctxt "action"
 msgid "Export Layers"
 msgstr "Експортиране на слоеве"
@@ -64583,8 +64559,7 @@ msgstr "Избор на папка"
 #. i18n: context: text @ Action (filter_manager), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
-#, fuzzy, kde-format
-#| msgid "Filter Manager"
+#, kde-format
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Управление на филтри"
@@ -64613,8 +64588,7 @@ msgstr "Филтри:"
 #. i18n: context: text @ Action (high_pass_filter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
-#, fuzzy, kde-format
-#| msgid "High Pass"
+#, kde-format
 msgctxt "action"
 msgid "High Pass"
 msgstr "Високи честоти"
@@ -64751,11 +64725,10 @@ msgstr "Създаване на нов скрипт"
 #. i18n: context: text @ Action (Krita Script Starter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/krita_script_starter/krita_script_starter.action:4
 #: plugins/python/krita_script_starter/krita_script_starter.action:8
-#, fuzzy, kde-format
-#| msgid "BBD's Krita Script Starter"
+#, kde-format
 msgctxt "action"
 msgid "Krita Script Starter"
-msgstr "Krita Script Starter на BBD"
+msgstr "Krita Script Starter"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
@@ -65099,8 +65072,7 @@ msgstr "Дебагер"
 #. i18n: context: text @ Action (python_scripter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
-#, fuzzy, kde-format
-#| msgid "Scripter"
+#, kde-format
 msgctxt "action"
 msgid "Scripter"
 msgstr "Скриптер"
@@ -65321,6 +65293,7 @@ msgid "Activate Brush Preset {num}"
 msgstr "Активиране на четка  {num}"
 
 #: plugins/python/tenbrushes/tenbrushes.py:121
+#, python-brace-format
 msgid ""
 "{}\n"
 "selected"
@@ -66250,7 +66223,7 @@ msgstr "Рисуване на крива на Безие"
 #: plugins/tools/basictools/kis_tool_path.h:84
 #, kde-format
 msgid "Bezier Curve Tool: Shift-mouseclick ends the curve."
-msgstr "Крива на Bezier:Shift-кликване завършва кривата"
+msgstr "Крива на Безие:Shift-кликване завършва кривата"
 
 #: plugins/tools/basictools/kis_tool_pencil.cc:133
 msgctxt "(qtundo-format)"
@@ -66277,7 +66250,7 @@ msgstr "Правоъгълници"
 #, kde-format
 msgctxt "action"
 msgid "Bezier Curve Tool"
-msgstr "Крива на Bezier"
+msgstr "Крива на Безие"
 
 #. i18n: context: toolTip @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -66288,7 +66261,7 @@ msgstr "Крива на Bezier"
 #, kde-format
 msgctxt "action"
 msgid "Bezier Curve Tool. Shift-mouseclick or double-click ends the curve."
-msgstr "Крива на Bezier:Shift-кликване или двойно кликване завършва кривата"
+msgstr "Крива на Безие:Shift-кликване или двойно кликване завършва кривата"
 
 #. i18n: context: text @ Action (KisToolPencil), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolPencil), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -67398,7 +67371,7 @@ msgstr "Селектиране чрез крива на Безие"
 #: plugins/tools/selectiontools/kis_tool_select_path.h:88
 #, kde-format
 msgid "Bezier Curve Selection Tool"
-msgstr "Селекция с криви на Bezier"
+msgstr "Селекция с криви на Безие"
 
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
 #, kde-format
@@ -67638,7 +67611,7 @@ msgstr "Селекция на ръка"
 #, kde-format
 msgctxt "action"
 msgid "Bezier Curve Selection Tool"
-msgstr "Селекция с криви на Bezier"
+msgstr "Селекция с криви на Безие"
 
 #. i18n: context: toolTip @ Action (KisToolSelectPolygonal), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolSelectPolygonal), Actions (tool-shortcuts), ActionCollection (Tools)

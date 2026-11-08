@@ -96,7 +96,14 @@ parts:
       - --prefix=/usr
       - --enable-fixed-path=/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
     override-build: |
-      craftctl default
+      if ! craftctl default; then
+        echo "========== GPGME CONFIG.LOG =========="
+        find "$CRAFT_PART_BUILD" -name config.log \
+          -type f -print -exec cat {} \;
+        echo "========== END CONFIG.LOG =========="
+        exit 1
+      fi
+
       rsync -a --ignore-existing $CRAFT_PART_INSTALL/ /
   poppler:
     after:

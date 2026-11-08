@@ -95,9 +95,6 @@ parts:
       - --enable-languages=cpp,qt6
       - --prefix=/usr
       - --enable-fixed-path=/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-    build-environment: &buildenvironment
-      - LD_LIBRARY_PATH: $LD_LIBRARY_PATH:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:/snap/kf6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/usr
-      - PKG_CONFIG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
     override-build: |
       craftctl default
       rsync -a --ignore-existing $CRAFT_PART_INSTALL/ /

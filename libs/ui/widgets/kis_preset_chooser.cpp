@@ -268,6 +268,8 @@ void KisPresetDelegate::paintStrokePreview(QPainter *painter, const QStyleOption
             Qt::IgnoreAspectRatio,
             Qt::SmoothTransformation);
 
+        previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
+
         painter->drawImage(imageRect.topLeft(), previewHighDpi);
         innerRect = innerRect.adjusted(innerRect.height(), 2, -2, 0);
     }

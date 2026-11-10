@@ -144,7 +144,8 @@ if arguments.archive_artifacts:
                  'build.gradle',
                  'gradlew',
                  'gradle.properties',
-                 'local.properties',]
+                 'local.properties',
+                 'version.properties']
 
         for file in files:
             shutil.move(os.path.join(repackagePath, file),

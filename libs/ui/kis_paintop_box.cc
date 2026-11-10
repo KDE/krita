@@ -848,7 +848,13 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
     }
 
     {
-        KisSignalsBlocker b1(m_cmbCompositeOp, m_eraseModeButton);
+        std::vector<QSignalBlocker> b1;
+        b1.emplace_back(m_cmbCompositeOp);
+        b1.emplace_back(m_eraseModeButton);
+        for (auto *action : m_eraseModeButton->actions()) {
+            b1.emplace_back(action);
+        }
+
         m_cmbCompositeOp->selectCompositeOp(KoID(compositeOpID));
         m_eraseModeButton->setChecked(compositeOpID == COMPOSITE_ERASE || m_resourceProvider->eraserMode());
     }

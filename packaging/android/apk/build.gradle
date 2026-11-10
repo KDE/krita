@@ -35,6 +35,15 @@ ext {
     // tldr; at one time, either qt5AndroidDir or qtResPath is valid and points
     //       to the same files
     qtResPath = System.getenv('KRITA_BUILD_APPBUNDLE') ? 'extra-bundle-deps/android/java' : ""
+
+    props = new Properties().tap {
+        def propsFile = file('version.properties')
+        if (propsFile.exists()) {
+            load(propsFile.newInputStream())
+        } else {
+            throw new FileNotFoundException('version.properties file is not found!')
+        }
+    }
 }
 
 tasks.register('configure') {
@@ -189,8 +198,8 @@ android {
 
     project.ext.constant = 5
 
-    def versionMajor    = 5
-    def versionMinor    = 4
+    def versionMajor    = project.ext.props['versionMajor'].toInteger()
+    def versionMinor    = project.ext.props['versionMinor'].toInteger()
 
     /**
      * This version does **not** correspond to the patch version
@@ -198,7 +207,7 @@ android {
      * (including alpha and beta) release of versionMajor.versionMinor
      * branch
      */
-    def versionRelease  = 0
+    def versionRelease  = project.ext.props['apkVersionTransitional'].toInteger()
 
     defaultConfig {
         compileSdk androidCompileSdkVersion.toInteger()
@@ -213,7 +222,7 @@ android {
         targetSdkVersion 36
         minSdkVersion 24
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
-        versionName "5.4.0-prealpha"
+        versionName project.ext.props['versionString']
         def unstableSuffix = System.getenv('KRITA_UNSTABLE_PACKAGE_SUFFIX')
         archivesBaseName = System.getenv('KRITA_BUILD_APPBUNDLE') ? "krita-$versionName$unstableSuffix" : "krita-$abi-$versionName$unstableSuffix"
     }

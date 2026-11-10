@@ -152,6 +152,12 @@ set(KRITA_VERSION_RELEASE 0)
 # - Stable: Set to 100, bump to 101 if emergency update is needed
 set(KRITA_VERSION_REVISION 0)
 
+# This version does **not** correspond to the patch version
+# of Krita. Instead, it is just incremented for every public
+# (including alpha and beta) release of KRITA_STABLE_VERSION_MINOR
+# branch
+set(KRITA_APK_VERSION_TRANSITIONAL 0)
+
 # In MSI packages we cannot use the fourth digit for release numbering,
 # since this digit is used by Microsoft Store internally. Hence we cannot
 # release hotfix releases (like 6.0.1.1, 6.0.1.2) on Windows. Therefore we
@@ -1747,6 +1753,12 @@ if (ANDROID)
 endif()
 
 if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
+    # we don't need to add an explicit dependency to create-apk-krita,
+    # because ecm_androiddeployqt repopulates the project directory
+    # every time unconditionally
+    configure_file(${CMAKE_SOURCE_DIR}/packaging/android/apk/version.properties.in
+                   ${CMAKE_SOURCE_DIR}/packaging/android/apk/version.properties)
+
     set (_CMAKE_ANDROID_DIR "${ECM_DIR}/../toolchain")
     list(LENGTH QTANDROID_EXPORTED_TARGET targetsCount)
     include(${_CMAKE_ANDROID_DIR}/ECMAndroidDeployQt.cmake)

@@ -1050,8 +1050,8 @@ KisForest<FontFamilyNode>::composition_iterator searchNodes (KisForest<FontFamil
             localizedFontFamilies.begin(),
             localizedFontFamilies.end(),
             [&](const QString &localizedFamily) {
-                return localizedFamily.compare(family, Qt::CaseInsensitive)
-                || (!familySimplified.isEmpty() && localizedFamily.compare(familySimplified, Qt::CaseInsensitive));
+                return localizedFamily.compare(family, Qt::CaseInsensitive) == 0
+                || (!familySimplified.isEmpty() && localizedFamily.compare(familySimplified, Qt::CaseInsensitive) == 0);
             });
 
         return matchingLocalizedFamilyIt != localizedFontFamilies.end();

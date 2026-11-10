@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:55+0000\n"
-"PO-Revision-Date: 2026-10-26 22:17+0100\n"
+"PO-Revision-Date: 2026-11-05 17:44+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 26.08.1\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -11528,116 +11528,101 @@ msgstr "Aggiorna intervallo riproduzione"
 
 #. i18n: context: text @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2527
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Constant"
-msgstr "Interpolazione"
+msgstr "Interpola costante"
 
 #. i18n: context: toolTip @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2529
-#, fuzzy, kde-format
-#| msgid "Hold constant value. No interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Hold constant value. No interpolation."
 msgstr "Mantieni un valore costante. Nessuna interpolazione."
 
 #. i18n: context: text @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2539
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Linear"
-msgstr "Interpolazione"
+msgstr "Interpola lineare"
 
 #. i18n: context: toolTip @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2541
-#, fuzzy, kde-format
-#| msgid "Linear interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Linear interpolation."
-msgstr "Interpolazione lineare"
+msgstr "Interpolazione lineare."
 
 #. i18n: context: text @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2551
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Bezier"
-msgstr "Interpolazione"
+msgstr "Interpolazione Bézier"
 
 #. i18n: context: toolTip @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2553
-#, fuzzy, kde-format
-#| msgid "Bezier curve interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Bezier curve interpolation."
-msgstr "Interpolazione curva di Bézier"
+msgstr "Interpolazione della curva di Bézier."
 
 #. i18n: context: text @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2563
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Sharp"
-msgstr "Interpolazione"
+msgstr "Interpola acuto"
 
 #. i18n: context: toolTip @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2565
-#, fuzzy, kde-format
-#| msgid "Sharp interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Sharp interpolation tangents."
 msgstr "Tangenti di interpolazione acuta."
 
 #. i18n: context: text @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2575
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Smooth"
-msgstr "Interpolazione"
+msgstr "Interpola smussato"
 
 #. i18n: context: toolTip @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2577
-#, fuzzy, kde-format
-#| msgid "Smooth interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Smooth interpolation tangents."
 msgstr "Tangenti di interpolazione fluida."
 
 #. i18n: context: text @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2587
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Zoom Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Range"
-msgstr "Adatta alla pagina"
+msgstr "Adatta all'intervallo"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2589
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit channel range."
-msgstr "Adatta la vista all'intervallo dei canali"
+msgstr "Adatta la vista all'intervallo dei canali."
 
 #. i18n: context: text @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2599
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Curve"
-msgstr "Adatta la vista alla curva"
+msgstr "Adatta alla curva"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2601
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit curve."
-msgstr "Adatta la vista alla curva"
+msgstr "Adatta la vista alla curva."
 
 #. i18n: context: text @ Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2611
@@ -15004,7 +14989,7 @@ msgstr "Aggancia intersezione"
 #, kde-format
 msgctxt "action"
 msgid "Snap Bounding Box"
-msgstr "Aggancia riquadro esterno"
+msgstr "Aggancia riquadro di delimitazione"
 
 #. i18n: context: text @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
@@ -20915,14 +20900,12 @@ msgid "Zoom"
 msgstr "Ingrandimento"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:38
-#, fuzzy, kde-format
-#| msgid "Zoom In"
+#, kde-format
 msgid "Zoom in"
 msgstr "Ingrandisci"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:40
-#, fuzzy, kde-format
-#| msgid "Zoom Out"
+#, kde-format
 msgid "Zoom out"
 msgstr "Rimpicciolisci"
 
@@ -20938,10 +20921,9 @@ msgstr "Modalità"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/flake/tools/KoZoomToolWidget.ui:34
-#, fuzzy, kde-format
-#| msgid "Zoom to fit"
+#, kde-format
 msgid "Zoom to fit:"
-msgstr "Ingrandimento adattativo"
+msgstr "Ingrandimento adattativo:"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -26987,7 +26969,7 @@ msgstr "Intersezione"
 #: libs/ui/canvas/kis_guides_manager.cpp:785
 #, kde-format
 msgid "Bounding Box"
-msgstr "Riquadro esterno"
+msgstr "Riquadro di delimitazione"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:786
 #, kde-format
@@ -29625,13 +29607,7 @@ msgstr "Navigatore Spazio dei colori"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-#| "\"><span style=\" font-weight:600; text-decoration: underline; color:"
-#| "#006e28;\">Color Spaces</span></a>  determine how colors are encoded in "
-#| "your files. Different color spaces have different properties and are used "
-#| "for different purposes.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
 "\"><span style=\" font-weight:600; text-decoration: underline; \">Color "
@@ -29641,9 +29617,9 @@ msgid ""
 msgstr ""
 "<html><head/><body><p><a href=\"https://it.wikipedia.org/wiki/"
 "Spazio_dei_colori\"><span style=\" font-weight:600; text-decoration: "
-"underline; color:#006e28;\">Gli Spazi dei colori</span></a> determinano come "
-"vengono codificati i colori nei tuoi file. Spazi dei colori diversi hanno "
-"proprietà diverse e sono usati per scopi diversi.</p></body></html>"
+"underline;\">Gli Spazi dei colori</span></a> determinano come vengono "
+"codificati i colori nei tuoi file. Spazi dei colori diversi hanno proprietà "
+"diverse e sono usati per scopi diversi.</p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:51
@@ -33991,16 +33967,14 @@ msgid "Sample Background Color from Merged Image"
 msgstr "Campiona colore di sfondo dall'immagine fusa"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:42
-#, fuzzy, kde-format
-#| msgid "Sample Foreground Color from Current Layer"
+#, kde-format
 msgid "Sample Foreground Color from Current Group"
-msgstr "Campiona colore di primo piano dal livello attuale"
+msgstr "Campiona colore di primo piano dal gruppo attuale"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:43
-#, fuzzy, kde-format
-#| msgid "Sample Background Color from Current Layer"
+#, kde-format
 msgid "Sample Background Color from Current Group"
-msgstr "Campiona colore di sfondo dal livello attuale"
+msgstr "Campiona colore di sfondo dal gruppo attuale"
 
 #: libs/ui/input/kis_change_frame_action.cpp:27
 #, kde-format
@@ -34469,7 +34443,7 @@ msgstr "Rotellina del mouse"
 #, kde-format
 msgctxt "Shortcut type"
 msgid "Touch Gesture"
-msgstr "Gesto Tocco"
+msgstr "Gesto tattile"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:534
 #, kde-format
@@ -34734,14 +34708,14 @@ msgstr "Mostra l'oggetto a comparsa dello strumento attivo."
 #: libs/ui/input/KisTouchGestureAction.cpp:17
 #, kde-format
 msgid "Touch Gestures"
-msgstr "Gesti del tocco"
+msgstr "Gesti tattili"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:18
 #, kde-format
 msgid ""
 "The Touch Gestures actions launch a single action for the specified gesture"
 msgstr ""
-"Le azioni Gesti del tocco avviano una singola azione per il gesto specificato"
+"Le azioni Gesti tattili avviano una singola azione per il gesto specificato"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:23
 #, kde-format
@@ -40302,10 +40276,9 @@ msgid "Select regions found from the active layer"
 msgstr "Seleziona le regioni rinvenute nel livello attivo"
 
 #: libs/ui/widgets/kis_selection_options.cc:269
-#, fuzzy, kde-format
-#| msgid "Select regions found from the active layer"
+#, kde-format
 msgid "Select regions found from the active group"
-msgstr "Seleziona le regioni rinvenute nel livello attivo"
+msgstr "Seleziona le regioni rinvenute nel gruppo attivo"
 
 #: libs/ui/widgets/kis_selection_options.cc:271
 #, kde-format
@@ -42650,10 +42623,9 @@ msgstr "Colore personalizzato"
 
 #. i18n: ectx: property (text), widget (QLabel, brushPriorityLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:251
-#, fuzzy, kde-format
-#| msgid "Brush Preset History"
+#, kde-format
 msgid "Brush Priority:"
-msgstr "Cronologia preimpostazioni del pennello"
+msgstr "Priorità pennello:"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:330
@@ -42799,6 +42771,10 @@ msgid ""
 "follow (eg for the \"Perspective\" brush sensor), this will be used. "
 "Priority is like counting, lower number comes first."
 msgstr ""
+"Quando un pennello si trova sugli assistenti alla prospettiva e deve "
+"decidere quale assistente seguire (per es. per il sensore del pennello "
+"«Prospettiva»), verrà utilizzata questa opzione. La priorità dipende dal "
+"conteggio, ha precedenza il numero più basso."
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1797
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1803
@@ -45048,6 +45024,9 @@ msgid ""
 "Bakes the current settings into the current projection, and opens it as a "
 "new image. Will use \"%1\" ICC profile as display space."
 msgstr ""
+"Integra le impostazioni attuali all'interno dell'attuale proiezione, e la "
+"apre come nuova immagine. Verrà utilizzato il profilo ICC «%1» come spazio "
+"di visualizzazione."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:301
 #, kde-format
@@ -45093,12 +45072,10 @@ msgid "None"
 msgstr "Nessuna"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:675
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgctxt "@title:window"
 msgid "Convert to image colorspace?"
-msgstr "Converti lo spazio dei colori dell'immagine"
+msgstr "Convertire in spazio dei colori dell'immagine?"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:676
 #, kde-format
@@ -45107,13 +45084,14 @@ msgid ""
 "The resulting image will be assigned the profile \"%1\".Convert it from "
 "there to the current image colorspace?"
 msgstr ""
+"L'immagine risultante sarà assegnata al profilo «%1». Convertirla da lì allo "
+"spazio dei colori dell'immagine attuale?"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:697
-#, fuzzy, kde-format
-#| msgid "Store Softproofing configuration in the image"
+#, kde-format
 msgctxt "Message for ocio baking progress bar."
 msgid "Baking configuration into image..."
-msgstr "Memorizza la configurazione di prova colore nell'immagine"
+msgstr "Integrazione della configurazione all'interno dell'immagine..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -45213,10 +45191,9 @@ msgstr "Configura i punti bianchi e neri della vista"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
 #: plugins/dockers/lut/wdglut.ui:412
-#, fuzzy, kde-format
-#| msgid "Save..."
+#, kde-format
 msgid "Bake..."
-msgstr "Salva..."
+msgstr "Integra..."
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
@@ -45844,11 +45821,9 @@ msgid "0 B"
 msgstr "0 B"
 
 #: plugins/dockers/recorder/recorder_writer.cpp:631
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Start recording macro"
+#, kde-format
 msgid "Stopping recording"
-msgstr "Inizia la registrazione della macro"
+msgstr "Interruzione registrazione"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDirectory)
 #: plugins/dockers/recorder/recorderdocker.ui:95
@@ -45985,22 +45960,19 @@ msgstr "Registra automaticamente"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxFocusedRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:374
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Record only the visible area of the canvas.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Usa l'inclinazione della tavoletta per determinare le "
-"normali.</p></body></html>"
+"<html><head/><body><p>Registra solo l'area visibile della tela.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxFocusedRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:377
 #, kde-format
 msgid "Record focused area"
-msgstr ""
+msgstr "Registra area visibile"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRecordToggle)
 #: plugins/dockers/recorder/recorderdocker.ui:396
@@ -51126,12 +51098,7 @@ msgstr "Errore: impossibile inizializzare il motore Python"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
-#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
-#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-#| "Scripting School</span></a>!</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
 "out the <a href=\"https://scripting.krita.org/lessons/introduction\"><span "
@@ -51140,8 +51107,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Se vuoi imparare a scrivere script per Krita, dai "
 "un'occhiata alla <a href=\"https://scripting.krita.org/lessons/introduction"
-"\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-"Scripting School</span></a>!</p></body></html>"
+"\"><span style=\" text-decoration: underline;\">Krita Scripting School</"
+"span></a>!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
 #, kde-format
@@ -52279,90 +52246,72 @@ msgid "Do nothing"
 msgstr "Non fare nulla"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgid "S-Pen Pro Air Actions"
-msgstr "S-Pen - Azioni"
+msgstr "S-Pen Pro - Air Actions"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Actions"
-msgstr "S-Pen - Azioni"
+msgstr "S-Pen Pro - Air Actions"
 
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Click"
-msgstr "S-Pen - Clic sul pulsante"
+msgstr "S-Pen Pro Air - Clic sul pulsante"
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Double Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Double Click"
-msgstr "S-Pen - Doppio clic sul pulsante"
+msgstr "S-Pen Pro Air - Doppio clic sul pulsante"
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Up"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Up"
-msgstr "S-Pen - Scorri in alto"
+msgstr "S-Pen Pro Air - Scorri in alto"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Down"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro AirGesture Swipe Down"
-msgstr "S-Pen - Scorri in basso"
+msgstr "S-Pen Pro Air - Scorri in basso"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Left"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Left"
-msgstr "S-Pen - Scorri a sinistra"
+msgstr "S-Pen Pro Air - Scorri a sinistra"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Right"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Right"
-msgstr "S-Pen - Scorri a destra"
+msgstr "S-Pen Pro Air - Scorri a destra"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Clockwise"
-msgstr "S-Pen - Cerchio in senso orario"
+msgstr "S-Pen Pro Air - Cerchio in senso orario"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Counter-Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
-msgstr "S-Pen - Cerchio in senso antiorario"
+msgstr "S-Pen Pro Air - Cerchio in senso antiorario"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:112
@@ -52379,6 +52328,10 @@ msgid ""
 "work. Note that only the S-Pen Pro supports Air Actions, the regular S-Pen "
 "does not. Not all devices support gestures."
 msgstr ""
+"Affinché le azioni funzionino, devi abilitare le Air Actions per Krita nelle "
+"impostazioni di sistema. Tieni presente che soltanto la S-Pen Pro supporta "
+"le Air Actions, la S-Pen non le supporta. Non tutti i dispositivi supportano "
+"i gesti."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -63694,11 +63647,10 @@ msgstr "Valore della miscela direzione/inclinazione"
 #. i18n: context: text @ Action (assign_profile_to_image), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
-#, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
+#, kde-format
 msgctxt "action"
 msgid "Assign Profile to Image"
-msgstr "Assegna profilo a un'immagine"
+msgstr "Assegna profilo all'immagine"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:25
 msgid "Assign Profile"
@@ -63718,8 +63670,7 @@ msgstr "Assegna profilo a un'immagine"
 #. i18n: context: text @ Action (pykrita_channels2layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
-#, fuzzy, kde-format
-#| msgid "Channels to layers"
+#, kde-format
 msgctxt "action"
 msgid "Channels to layers"
 msgstr "Canali ai livelli"
@@ -63805,8 +63756,7 @@ msgstr "<i>Nero</i>"
 #. i18n: context: text @ Action (color_space), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Space"
 msgstr "Spazio dei colori"
@@ -65259,16 +65209,15 @@ msgstr "Scrittore del contenuto testuale supplementare"
 #. i18n: context: text @ Action (document_tools), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
-#, fuzzy, kde-format
-#| msgid "Document Tools"
+#, kde-format
 msgctxt "action"
 msgid "Document Tools"
-msgstr "Strumenti del documento"
+msgstr "Strumenti per i documenti"
 
 #: plugins/python/documenttools/documenttools.py:17
 #: plugins/python/documenttools/uidocumenttools.py:62
 msgid "Document Tools"
-msgstr "Strumenti del documento"
+msgstr "Strumenti per i documenti"
 
 #: plugins/python/documenttools/documenttools.py:19
 msgid "Plugin to manipulate properties of selected documents."
@@ -65308,8 +65257,7 @@ msgstr "I documenti selezionati sono stati modificati."
 #. i18n: context: text @ Action (export_layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
-#, fuzzy, kde-format
-#| msgid "Export Layers"
+#, kde-format
 msgctxt "action"
 msgid "Export Layers"
 msgstr "Esporta livelli"
@@ -65397,8 +65345,7 @@ msgstr "Seleziona una cartella"
 #. i18n: context: text @ Action (filter_manager), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
-#, fuzzy, kde-format
-#| msgid "Filter Manager"
+#, kde-format
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Gestore dei filtri"
@@ -65427,8 +65374,7 @@ msgstr "Filtri:"
 #. i18n: context: text @ Action (high_pass_filter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
-#, fuzzy, kde-format
-#| msgid "High Pass"
+#, kde-format
 msgctxt "action"
 msgid "High Pass"
 msgstr "Passa alto"
@@ -65565,11 +65511,10 @@ msgstr "Crea script"
 #. i18n: context: text @ Action (Krita Script Starter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/krita_script_starter/krita_script_starter.action:4
 #: plugins/python/krita_script_starter/krita_script_starter.action:8
-#, fuzzy, kde-format
-#| msgid "BBD's Krita Script Starter"
+#, kde-format
 msgctxt "action"
 msgid "Krita Script Starter"
-msgstr "Avviatore script Krita di BBD"
+msgstr "Avviatore script di Krita"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
@@ -65888,39 +65833,29 @@ msgstr "Area delle impostazioni rapide"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:145
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:335
-#, fuzzy
-#| msgctxt "@label:button"
-#| msgid "Add Style Preset"
 msgid "Add Preset"
-msgstr "Aggiungi preimpostazione stile"
+msgstr "Aggiungi preimpostazione"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:149
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:397
-#, fuzzy
-#| msgctxt "@info:tooltip"
-#| msgid "Delete resource"
 msgid "Delete Preset"
-msgstr "Elimina risorsa"
+msgstr "Elimina preimpostazione"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:313
 msgid "Enter brush size (px):"
-msgstr ""
+msgstr "Inserisci dimensione del pennello (px):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:319
-#, fuzzy
-#| msgid "Outline opacity:"
 msgid "Enter opacity (%):"
-msgstr "Opacità contorno:"
+msgstr "Inserisci opacità (%):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:325
 msgid "Enter flow (%):"
-msgstr ""
+msgstr "Inserisci flusso (%):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:398
-#, fuzzy
-#| msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgid "Are you sure you want to delete this preset?"
-msgstr "Vuoi davvero eliminare la maschera <b>'%1'</b>?"
+msgstr "Vuoi davvero eliminare questa preimpostazione?"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"
@@ -65948,8 +65883,7 @@ msgstr "Debugger"
 #. i18n: context: text @ Action (python_scripter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
-#, fuzzy, kde-format
-#| msgid "Scripter"
+#, kde-format
 msgctxt "action"
 msgid "Scripter"
 msgstr "Creatore script"
@@ -66854,51 +66788,50 @@ msgid "Color Sampler Tool"
 msgstr "Strumento Campionatore dei colori"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:76
-#, fuzzy, kde-format
-#| msgid "Bounding Box"
+#, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "Bounding Box"
-msgstr "Riquadro esterno"
+msgstr "Riquadro di delimitazione"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:77
 #, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "3-Point"
-msgstr ""
+msgstr "3 punti"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:78
 #, kde-format
 msgid "Place the ellipse inside a bounding box"
-msgstr ""
+msgstr "Posiziona l'ellisse all'interno di un riquadro di delimitazione"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:79
 #, kde-format
 msgid "Place the ellipse by setting the major axis and width"
-msgstr ""
+msgstr "Posiziona l'ellisse impostando l'asse principale e la larghezza"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:110
-#, fuzzy, kde-format
-#| msgid "Placement"
+#, kde-format
 msgctxt "Ellipse tool placement mode option label"
 msgid "Placement:"
-msgstr "Posizionamento"
+msgstr "Posizionamento:"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:343
 #, kde-format
 msgid "Click to place the other end of the ellipse axis."
-msgstr ""
+msgstr "Fai clic per posizionare l'altra estremità dell'asse dell'ellisse."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:345
-#, fuzzy, kde-format
-#| msgid "Click to select text shape."
+#, kde-format
 msgid "Click to set the ellipse width."
-msgstr "Un clic permette di scegliere la forma del testo."
+msgstr "Fai clic per impostare la larghezza dell'ellisse."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:347
 #, kde-format
 msgid ""
 "Drag handles to adjust the ellipse. Press Enter to apply or Esc to cancel."
 msgstr ""
+"Trascina le maniglie per regolare l'ellisse. Premi Invio per applicare o Esc "
+"per annullare."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:584
 #: plugins/tools/basictools/kis_tool_ellipse.cc:606
@@ -67468,10 +67401,9 @@ msgstr "Campiona tutti i livelli visibili"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:145
-#, fuzzy, kde-format
-#| msgid "Sample Current Layer"
+#, kde-format
 msgid "Sample Current Group"
-msgstr "Campiona il livello attuale"
+msgstr "Campiona il gruppo attuale"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:150

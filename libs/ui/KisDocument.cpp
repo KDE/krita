@@ -66,6 +66,7 @@
 #include <QPainter>
 #include <QRect>
 #include <QScopedPointer>
+#include <QScopedValueRollback>
 #include <QSize>
 #include <QStringList>
 #include <QtGlobal>
@@ -992,7 +993,9 @@ QByteArray KisDocument::serializeToNativeByteArray()
         return buffer.data();
     }
 
-    d->savingImage = d->image;
+    // temporary set the saving image to avoid shared pointer
+    // leaking (see bug 528540)
+    QScopedValueRollback<KisImageSP> rollback(d->savingImage, d->image);
 
     if (!filter->convert(this, &buffer).isOk()) {
         qWarning() << "serializeToByteArray():: Could not export to our native format";

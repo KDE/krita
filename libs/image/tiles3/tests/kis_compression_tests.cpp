@@ -9,7 +9,6 @@
 
 #include <QImage>
 
-#include "../../../sdk/tests/testutil.h"
 #include "tiles3/swap/kis_lzf_compression.h"
 #include <kis_debug.h>
 
@@ -28,7 +27,7 @@ void KisCompressionTests::roundTrip(KisAbstractCompression *compression)
     QImage referenceImage(QString(FILES_DATA_DIR) + QDir::separator() + TEST_FILE);
 
     QImage image(referenceImage);
-    qint32 srcSize = image.byteCount();
+    qint32 srcSize = image.sizeInBytes();
 
     qint32 outputSize = compression->outputBufferSize(srcSize);
     quint8 *output = new quint8[outputSize];
@@ -51,7 +50,7 @@ void KisCompressionTests::roundTripTwoPass(KisAbstractCompression *compression)
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + TEST_FILE);
 
-    qint32 srcSize = image.byteCount();
+    qint32 srcSize = image.sizeInBytes();
     qint32 outputSize = compression->outputBufferSize(srcSize);
 
     quint8 *output = new quint8[outputSize];
@@ -84,7 +83,7 @@ void KisCompressionTests::benchmarkCompression(KisAbstractCompression *compressi
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + TEST_FILE);
 
-    qint32 srcSize = image.byteCount();
+    qint32 srcSize = image.sizeInBytes();
     qint32 outputSize = compression->outputBufferSize(srcSize);
 
     quint8 *output = new quint8[outputSize];
@@ -102,7 +101,7 @@ void KisCompressionTests::benchmarkCompressionTwoPass(KisAbstractCompression *co
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + TEST_FILE);
 
-    qint32 srcSize = image.byteCount();
+    qint32 srcSize = image.sizeInBytes();
     qint32 outputSize = compression->outputBufferSize(srcSize);
 
     quint8 *output = new quint8[outputSize];
@@ -124,7 +123,7 @@ void KisCompressionTests::benchmarkDecompression(KisAbstractCompression *compres
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + TEST_FILE);
 
-    qint32 srcSize = image.byteCount();
+    qint32 srcSize = image.sizeInBytes();
     qint32 outputSize = compression->outputBufferSize(srcSize);
 
     quint8 *output = new quint8[outputSize];
@@ -146,7 +145,7 @@ void KisCompressionTests::benchmarkDecompressionTwoPass(KisAbstractCompression *
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + TEST_FILE);
 
-    qint32 srcSize = image.byteCount();
+    qint32 srcSize = image.sizeInBytes();
     qint32 outputSize = compression->outputBufferSize(srcSize);
 
     quint8 *output = new quint8[outputSize];
@@ -212,7 +211,7 @@ void KisCompressionTests::testLzfOverflow()
 void KisCompressionTests::benchmarkMemCpy()
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + TEST_FILE);
-    qint32 srcSize = image.byteCount();
+    qint32 srcSize = image.sizeInBytes();
     quint8 *output = new quint8[srcSize];
 
     QBENCHMARK {

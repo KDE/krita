@@ -83,7 +83,7 @@ void KisTileCompressorsTest::doLowLevelRoundTrip(KisAbstractTileCompressor *comp
     QVERIFY(memoryIsFilled(oddPixel1, td->data(), TILESIZE));
 
     delete[] buffer;
-    tile->unlock();
+    tile->unlockForWrite();
 }
 
 void KisTileCompressorsTest::doLowLevelRoundTripIncompressible(KisAbstractTileCompressor *compressor)
@@ -129,7 +129,7 @@ void KisTileCompressorsTest::doLowLevelRoundTripIncompressible(KisAbstractTileCo
     QVERIFY(!memcmp(td->data(), incompressibleArray.data(), TILESIZE));
 
     delete[] buffer;
-    tile->unlock();
+    tile->unlockForWrite();
 }
 
 void KisTileCompressorsTest::testRoundTripLegacy()

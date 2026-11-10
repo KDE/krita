@@ -9,7 +9,6 @@
 #include <QDir>
 
 #include <KoStore.h>
-#include <OdfDebug.h>
 #include <stdlib.h>
 
 #include <string.h>

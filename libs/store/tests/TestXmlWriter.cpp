@@ -20,13 +20,9 @@ private Q_SLOTS:
     void testAttributes();
     void testIndent();
     void testTextNode();
-    void testTextSpan();
-    void testTextSpanWithTabCache();
-    void testProcessingInstruction();
     void testAddManifestEntry();
     void testEscapingLongString();
     void testEscalingLongString2();
-    void testConfig();
 
     void speedTest();
 
@@ -120,37 +116,6 @@ void TestXmlWriter::testTextNode()
     QCOMPARE(content(), QString("<a><b><c/>text</b>\n </a>"));
 }
 
-void TestXmlWriter::testTextSpan()
-{
-    setup();
-    writer->startElement("p", false /*no indent*/);
-    writer->addTextSpan(QString::fromLatin1("   \t\n foo  "));
-    writer->endElement();
-    QCOMPARE(content(), QString("<p><text:s text:c=\"3\"/><text:tab/><text:line-break/> foo<text:s text:c=\"2\"/></p>"));
-}
-
-void TestXmlWriter::testTextSpanWithTabCache()
-{
-    setup();
-    writer->startElement("p", false /*no indent*/);
-    QMap<int, int> tabCache;
-    tabCache.insert(3, 0);
-    writer->addTextSpan(QString::fromUtf8("   \t\n foö  "), tabCache);
-    writer->endElement();
-    QCOMPARE(content(), QString::fromUtf8("<p><text:s text:c=\"3\"/><text:tab text:tab-ref=\"1\"/>"
-            "<text:line-break/> foö<text:s text:c=\"2\"/></p>"));
-}
-
-void TestXmlWriter::testProcessingInstruction()
-{
-    setup();
-    writer->startElement("p", false /*no indent*/);
-    writer->addProcessingInstruction("opendocument foobar");
-    writer->addTextSpan(QString::fromLatin1("foo"));
-    writer->endElement();
-    QCOMPARE(content(), QString("<p><?opendocument foobar?>foo</p>"));
-}
-
 void TestXmlWriter::testAddManifestEntry()
 {
     setup();
@@ -190,21 +155,6 @@ void TestXmlWriter::testEscalingLongString2()
     expected += longPath.toUtf8() + "\"/>";
     QCOMPARE(content(), expected);
 
-}
-
-void TestXmlWriter::testConfig()
-{
-    setup();
-    const bool val = true;
-    const int num = 1;
-    const qreal numdouble = 5.0;
-    writer->addConfigItem(QString::fromLatin1("TestConfigBool"), val);
-    writer->addConfigItem(QString::fromLatin1("TestConfigInt"), num);
-    writer->addConfigItem(QString::fromLatin1("TestConfigDouble"), numdouble);
-    QCOMPARE(content(), QString("<config:config-item config:name=\"TestConfigBool\""
-            " config:type=\"boolean\">true</config:config-item>\n"
-            " <config:config-item config:name=\"TestConfigInt\" config:type=\"int\">1</config:config-item>\n"
-            " <config:config-item config:name=\"TestConfigDouble\" config:type=\"double\">5</config:config-item>"));
 }
 
 static const int NumParagraphs = 30000;

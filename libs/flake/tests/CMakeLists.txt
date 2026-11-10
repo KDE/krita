@@ -27,6 +27,7 @@ kis_add_tests(
     TestFontLibraryResourceUtils.cpp
     TestSvgTextShape.cpp
     TestDependentShapes.cpp
+    TestKoUnit.cpp
 
     LINK_LIBRARIES kritaflake kritatestsdk
     )

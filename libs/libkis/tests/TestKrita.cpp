@@ -33,7 +33,7 @@ void TestKrita::testKrita()
 
     QStringList profiles = krita->profiles("RGBA", "U8");
     QVERIFY(profiles.size() != 0);
-    Document *doc = krita->createDocument(100, 100, "test", "RGBA", "U8", profiles.first());
+    Document *doc = krita->createDocument(100, 100, "test", "RGBA", "U8", profiles.first(), 100);
     QVERIFY(doc);
     QCOMPARE(krita->documents().size(), 1);
 

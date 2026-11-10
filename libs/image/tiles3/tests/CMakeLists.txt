@@ -8,6 +8,9 @@ kis_add_tests(
     kis_swapped_data_store_test.cpp
     kis_tile_data_store_test.cpp
     kis_tile_data_pooler_test.cpp
+    kis_compression_tests.cpp
+    kis_tile_compressors_test.cpp
+
     LINK_LIBRARIES kritaimage kritatestsdk
     )
 

@@ -1,5 +1,5 @@
 kis_add_tests(
-    #TestKrita.cpp
+    TestKrita.cpp
     TestChannel.cpp
     TestDocument.cpp
     TestNode.cpp

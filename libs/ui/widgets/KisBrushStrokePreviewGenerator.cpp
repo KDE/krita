@@ -41,8 +41,33 @@ void KisBrushStrokePreviewGenerator::setSourceView(KisPresetLivePreviewView *vie
         connect(generatorView, &KisPresetLivePreviewView::sigPreviewImageReady,
                 m_cache, &KisBrushStrokePreviewCache::slotLivePreviewImageReady,
                 Qt::UniqueConnection);
+
+        connect(generatorView, &KisPresetLivePreviewView::sigPreviewImageReady,
+                this, &KisBrushStrokePreviewGenerator::slotPreviewFinished,
+                Qt::UniqueConnection);
+
         m_livePreviewView = generatorView;
     }
+}
+
+void KisBrushStrokePreviewGenerator::slotPreviewFinished(int finishedPresetId)
+{
+    // Only now remove the item from the queue, since it actually Finished, so that there are no duplicate requests
+    if (finishedPresetId > 0) {
+        m_queue.removeIf([finishedPresetId](KisPaintOpPresetSP preset) {
+            return preset->resourceId() == finishedPresetId;
+        });
+    }
+
+    if (!m_queue.isEmpty()) {
+        KisPaintOpPresetSP preset = m_queue.first();
+
+        m_livePreviewView->setCurrentPreset(preset);
+        m_livePreviewView->requestUpdateStroke();
+        return;
+    }
+
+    m_generationInProgress = false;
 }
 
 void KisBrushStrokePreviewGenerator::requestPreview(KisPaintOpPresetSP preset)
@@ -57,6 +82,16 @@ void KisBrushStrokePreviewGenerator::requestPreview(KisPaintOpPresetSP preset)
         return;
     }
 
-    m_livePreviewView->setCurrentPreset(preset);
-    m_livePreviewView->requestUpdateStroke();
+    if (m_queue.contains(preset)) {
+        // Preset already queued for generation, so ignore it
+        return;
+    }
+
+    if (!m_generationInProgress) {
+        m_livePreviewView->setCurrentPreset(preset);
+        m_livePreviewView->requestUpdateStroke();
+        m_generationInProgress = true;
+    } else {
+        m_queue.push_back( preset);
+    }
 }

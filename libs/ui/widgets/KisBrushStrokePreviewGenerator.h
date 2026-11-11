@@ -27,9 +27,14 @@ public:
     void setSourceView(KisPresetLivePreviewView *view);
     void requestPreview(KisPaintOpPresetSP preset);
 
+private Q_SLOTS:
+    void slotPreviewFinished(int presetId);
+
 private:
     KisBrushStrokePreviewCache *m_cache = nullptr;
     QPointer<KisPresetLivePreviewView> m_livePreviewView;
+    QVector<KisPaintOpPresetSP> m_queue;
+    bool m_generationInProgress = false;
 };
 
 #endif

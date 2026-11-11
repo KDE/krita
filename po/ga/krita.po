@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 02:55+0000\n"
+"POT-Creation-Date: 2026-11-11 00:59+0000\n"
 "PO-Revision-Date: 2026-05-02 13:49+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
 "Language-Team: Irish <http://weblate.amgelocalnet.duckdns.org/projects/kde-"
@@ -21809,7 +21809,7 @@ msgstr "Íomhá Iompórtáilte"
 
 #. i18n.
 #: libs/image/kis_image.cc:762 libs/ui/kis_import_catcher.cc:50
-#: libs/ui/KisDocument.cpp:2701 plugins/impex/psd/psd_loader.cpp:221
+#: libs/ui/KisDocument.cpp:2704 plugins/impex/psd/psd_loader.cpp:221
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
@@ -24320,9 +24320,9 @@ msgstr "Acmhainní Áitiúla"
 #: libs/ui/kis_node_manager.cpp:1384 libs/ui/KisApplication.cpp:1230
 #: libs/ui/KisApplication.cpp:1233 libs/ui/KisApplication.cpp:1249
 #: libs/ui/KisApplication.cpp:1281 libs/ui/KisApplication.cpp:1295
-#: libs/ui/KisApplication.cpp:1323 libs/ui/KisDocument.cpp:1057
-#: libs/ui/KisDocument.cpp:1072 libs/ui/KisDocument.cpp:2039
-#: libs/ui/KisDocument.cpp:2082 libs/ui/KisDocument.cpp:2093
+#: libs/ui/KisApplication.cpp:1323 libs/ui/KisDocument.cpp:1060
+#: libs/ui/KisDocument.cpp:1075 libs/ui/KisDocument.cpp:2042
+#: libs/ui/KisDocument.cpp:2085 libs/ui/KisDocument.cpp:2096
 #: libs/ui/KisMainWindow.cpp:1049 libs/ui/KisMainWindow.cpp:1119
 #: libs/ui/KisMainWindow.cpp:1263 libs/ui/KisMainWindow.cpp:1360
 #: libs/ui/KisMainWindow.cpp:2107 libs/ui/KisMainWindow.cpp:2116
@@ -35693,8 +35693,8 @@ msgstr "Roghnaigh spás oibre"
 msgid "Brush composite"
 msgstr "Scuab ilchodach"
 
-#: libs/ui/kis_paintop_box.cc:1338 libs/ui/kis_paintop_box.cc:1360
-#: libs/ui/kis_paintop_box.cc:1374
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, kde-format
 msgid ""
 "%1\n"
@@ -36388,34 +36388,34 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Doiciméad Clónáilte"
 
-#: libs/ui/KisDocument.cpp:792
+#: libs/ui/KisDocument.cpp:793
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "Ní féidir scríobh chuig %1. Sábháil faoi ainm difriúil le do thoil."
 
-#: libs/ui/KisDocument.cpp:843
+#: libs/ui/KisDocument.cpp:844
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Theip ar chomhad cúltaca a chruthú"
 
-#: libs/ui/KisDocument.cpp:860
+#: libs/ui/KisDocument.cpp:861
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Theip ar chomhad cúltaca uimhrithe a chruthú"
 
-#: libs/ui/KisDocument.cpp:882
+#: libs/ui/KisDocument.cpp:883
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Doiciméad á easpórtáil..."
 
-#: libs/ui/KisDocument.cpp:883
+#: libs/ui/KisDocument.cpp:884
 #, kde-format
 msgid "Saving Document..."
 msgstr "Doiciméad á Shábháil..."
 
-#: libs/ui/KisDocument.cpp:898
+#: libs/ui/KisDocument.cpp:899
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -36424,28 +36424,28 @@ msgstr ""
 "Níorbh fhéidir tosú ag sábháil %1. Fan go dtí go mbeidh an oibríocht sábhála "
 "reatha críochnaithe."
 
-#: libs/ui/KisDocument.cpp:903
+#: libs/ui/KisDocument.cpp:904
 #, kde-format
 msgid "Could not start saving %1. Image is busy"
 msgstr "Níorbh fhéidir tosú ag sábháil %1. Tá an íomhá gnóthach"
 
-#: libs/ui/KisDocument.cpp:908
+#: libs/ui/KisDocument.cpp:909
 #, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr "Níorbh fhéidir tosú ag sábháil %1. Tharla teip anaithnid"
 
-#: libs/ui/KisDocument.cpp:1051
+#: libs/ui/KisDocument.cpp:1054
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Earráid le linn sábháil %1: %2"
 
-#: libs/ui/KisDocument.cpp:1058
+#: libs/ui/KisDocument.cpp:1061
 #, kde-format
 msgid "Could not save %1."
 msgstr "Níorbh fhéidir %1 a shábháil."
 
-#: libs/ui/KisDocument.cpp:1075
+#: libs/ui/KisDocument.cpp:1078
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -36453,45 +36453,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "Tá %1 sábháilte ach níl sé críochnaithe."
 
-#: libs/ui/KisDocument.cpp:1081
+#: libs/ui/KisDocument.cpp:1084
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Tharla roinnt fadhbanna agus an sábháil á dhéanamh."
 
-#: libs/ui/KisDocument.cpp:1098
+#: libs/ui/KisDocument.cpp:1101
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Críochnaíodh ag sábháil %1"
 
-#: libs/ui/KisDocument.cpp:1539
+#: libs/ui/KisDocument.cpp:1542
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Uathshábháil... %1"
 
-#: libs/ui/KisDocument.cpp:1547
+#: libs/ui/KisDocument.cpp:1550
 #, kde-format
 msgid "Autosaving..."
 msgstr "Sábháil go hUathoibríoch..."
 
-#: libs/ui/KisDocument.cpp:1553
+#: libs/ui/KisDocument.cpp:1556
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Uathshábháil curtha siar: tá an doiciméad gnóthach..."
 
-#: libs/ui/KisDocument.cpp:1696
+#: libs/ui/KisDocument.cpp:1699
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Earráid le linn uathshábháil %1: %2"
 
-#: libs/ui/KisDocument.cpp:1710
+#: libs/ui/KisDocument.cpp:1713
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Críochnaíodh uathshábháil %1"
 
-#: libs/ui/KisDocument.cpp:1967
+#: libs/ui/KisDocument.cpp:1970
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -36500,38 +36500,38 @@ msgstr ""
 "Cosán Mífhoirmithe\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:2039
+#: libs/ui/KisDocument.cpp:2042
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Níl an comhad %1 ann."
 
-#: libs/ui/KisDocument.cpp:2068
+#: libs/ui/KisDocument.cpp:2071
 #, kde-format
 msgid "Opening document"
 msgstr "Ag oscailt an doiciméid"
 
-#: libs/ui/KisDocument.cpp:2083
+#: libs/ui/KisDocument.cpp:2086
 #, kde-format
 msgid "Could not open %1."
 msgstr "Níorbh fhéidir %1 a oscailt."
 
-#: libs/ui/KisDocument.cpp:2094
+#: libs/ui/KisDocument.cpp:2097
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Bhí fadhbanna ann ag oscailt %1."
 
-#: libs/ui/KisDocument.cpp:2232
+#: libs/ui/KisDocument.cpp:2235
 #, kde-format
 msgid "Not Saved"
 msgstr "Níor Sábháil"
 
-#: libs/ui/KisDocument.cpp:2708
+#: libs/ui/KisDocument.cpp:2711
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Líonadh Cúlra"
 
-#: libs/ui/KisDocument.cpp:2770
+#: libs/ui/KisDocument.cpp:2773
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

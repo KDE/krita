@@ -371,7 +371,7 @@ void KisPaintingAssistant::setEditorWidgetOffset(QPointF offset)
 }
 
 
-void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path, const KoColorDisplayRendererInterface *displayRenderInterface, bool isSnappingOn)
+void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path, const KoColorDisplayRendererInterface *displayRenderInterface, bool isSnappingOn, QPen startingPen)
 {
 
     QColor paintingColor = displayRenderInterface->convertColorToDisplayColorSpace(KoColor(effectiveAssistantColor(), KoColorSpaceRegistry::instance()->rgb8()));;
@@ -381,7 +381,9 @@ void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path,
     }
 
     painter.save();
-    QPen pen_a(paintingColor, d->mainLineWidth * d->decorationThickness);
+    QPen pen_a = startingPen;
+    pen_a.setColor(paintingColor);
+    pen_a.setWidth(d->mainLineWidth * d->decorationThickness);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
     painter.drawPath(path);

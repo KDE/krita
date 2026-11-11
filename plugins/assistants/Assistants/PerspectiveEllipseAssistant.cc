@@ -426,18 +426,9 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
 
             gc.save();
 
-            QPen p(gc.pen());
-            p.setCosmetic(true);
-            p.setStyle(Qt::DotLine);
-            QColor color = effectiveAssistantColor();
-            if (!isSnappingActive()) {
-                color.setAlpha(color.alpha()*0.2);
-            }
-            p.setWidthF(1.5);
-            p.setColor(color);
-            gc.setPen(p);
-
-            gc.drawPath(axes);
+            QPen dotted(Qt::DotLine);
+            // needs dotline
+            drawPath(gc, axes, displayRenderInterface, isSnappingActive(), dotted);
 
             gc.restore();
         }

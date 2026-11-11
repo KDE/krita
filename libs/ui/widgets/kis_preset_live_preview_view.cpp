@@ -27,15 +27,6 @@
 #include <KoCompositeOpRegistry.h>
 #include "KisBrushStrokePreviewCache.h"
 
-
-static bool needsBlendingModeOverride(const QString &compositeOp)
-{
-    //Brush presets with Erase blending mode have blank stroke previews without this
-    static const QSet<QString> invisibleModes = {COMPOSITE_ERASE};
-    return invisibleModes.contains(compositeOp);
-}
-
-
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent)
     : QGraphicsView(parent),
       m_updateCompressor(DefaultUpdateDelayMs, KisSignalCompressor::FIRST_ACTIVE)
@@ -283,10 +274,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     KisPaintOpSettingsSP settings = proxy_preset->settings();
     settings->setPaintOpSize(previewSize);
 
-    const QString compositeOp = settings->paintOpCompositeOp();
-    if (needsBlendingModeOverride(compositeOp)) {
-        settings->setPaintOpCompositeOp(COMPOSITE_OVER);
-    }
+    settings->setPaintOpCompositeOp(COMPOSITE_OVER);
 
     int maxTextureSize = 200;
     int textureOffsetX = settings->getInt("Texture/Pattern/MaximumOffsetX")*2;
@@ -348,9 +336,8 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     resources->setOpacity(settings->paintOpOpacity());
     resources->setMirroring(false, false); // ignore mirroring in toolbar
 
-    if (needsBlendingModeOverride(compositeOp)) {
-        resources->setCompositeOpId(COMPOSITE_OVER);
-    }
+    //always set it to COMPOSITE_OVER in case there are any issues
+    resources->setCompositeOpId(COMPOSITE_OVER);
 
     resources->setFGColorOverride(m_paintColor);
     KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();

@@ -36,6 +36,8 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <ksharedconfig.h>
 #include <kis_rectangle_constraint_widget.h>
+#include <KisHandlePainterHelper.h>
+#include <KoColorDisplayRendererInterface.h>
 
 #include <cmath>
 
@@ -501,8 +503,9 @@ void KisToolEllipse::paintThreePointHandles(QPainter &gc)
 {
     gc.save();
     gc.setRenderHint(QPainter::Antialiasing, true);
-    gc.setPen(QPen(Qt::black, 1.0));
-    gc.setBrush(QBrush(Qt::white));
+    const KisHandlePalette palette = canvas()->displayRendererInterface()->handlePaletteForDisplayColorSpace();
+    gc.setPen(QPen(palette.black, 1.0));
+    gc.setBrush(QBrush(palette.white));
 
     const qreal radius = qMax<qreal>(3.0, handleRadius() * 0.75);
     for (const QPointF &point : m_threePointHandles) {

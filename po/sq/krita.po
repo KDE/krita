@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2023-12-13 16:50-0500\n"
 "Last-Translator: Agron Selimaj <as9902613@gmail.com>\n"
 "Language-Team: sq\n"
@@ -39887,7 +39887,6 @@ msgid "%1:"
 msgstr "%"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, fuzzy, kde-format
 msgid "Color name:"
 msgstr "Zgjedhës i ngjyrës"
@@ -40301,29 +40300,6 @@ msgstr "Ngopja"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Zgjedhës i ngjyrës"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, fuzzy, kde-format
-msgid "Add Color To Palette"
-msgstr "Zgjedhës i ngjyrës"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, fuzzy, kde-format
-msgid "Palette"
-msgstr "Imazhi"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, fuzzy, kde-format
-msgid "Add/Remove Colors"
-msgstr "Përzgjedhje"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, fuzzy, kde-format
@@ -41715,7 +41691,7 @@ msgstr "Transformo"
 msgid "Perspective Ellipse assistant"
 msgstr "Transformo"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, fuzzy, kde-format
 #| msgid "Transform"
 msgid "Perspective Ellipse"
@@ -41758,7 +41734,7 @@ msgstr "Transformo"
 msgid "Vanishing Point assistant"
 msgstr "Vijat"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "Vijat"
@@ -44006,6 +43982,13 @@ msgstr "Parapamje"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, fuzzy, kde-format
+msgid "Palette"
+msgstr "Imazhi"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, fuzzy, kde-format
@@ -69534,6 +69517,14 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Add Color To Palette"
+#~ msgstr "Zgjedhës i ngjyrës"
+
+#, fuzzy
+#~ msgid "Add/Remove Colors"
+#~ msgstr "Përzgjedhje"
 
 #, fuzzy
 #~| msgid "Zoom In"

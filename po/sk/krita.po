@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2026-09-14 20:10+0200\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -40745,7 +40745,6 @@ msgid "%1:"
 msgstr "%1:"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
 msgid "Color name:"
 msgstr "Meno farby:"
@@ -41167,29 +41166,6 @@ msgstr "Plávajúci panel"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Zatvoriť panel"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, kde-format
-msgid "Add Color To Palette"
-msgstr "Pridať farbu do palety"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr "Nie je možné zapisovať do súboru palety %1. Možno je len na čítanie."
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "Paleta"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
-msgstr "Pridať/odstrániť farby"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, kde-format
@@ -42665,7 +42641,7 @@ msgstr "Perspektíva"
 msgid "Perspective Ellipse assistant"
 msgstr "Asistent perspektívnej elipsy"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspektívna elipsa"
@@ -42706,7 +42682,7 @@ msgstr "Perspektíva 2 bodov"
 msgid "Vanishing Point assistant"
 msgstr "Asistent úbežníka"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, kde-format
 msgid "Vanishing Point"
 msgstr "Úbežník"
@@ -44963,6 +44939,13 @@ msgstr "Prehľad"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Pripnúť navigačné ovládacie prvky"
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "Paleta"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, kde-format
@@ -71004,6 +70987,16 @@ msgstr ""
 "Prepnúť medzi plným a čiastkovým rozsahom.\n"
 "Plný rozsah: [%1, %2]\n"
 "Čiastkový rozsah: [%3, %4]"
+
+#~ msgid "Add Color To Palette"
+#~ msgstr "Pridať farbu do palety"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr ""
+#~ "Nie je možné zapisovať do súboru palety %1. Možno je len na čítanie."
+
+#~ msgid "Add/Remove Colors"
+#~ msgstr "Pridať/odstrániť farby"
 
 #~ msgid "&Zoom In"
 #~ msgstr "Priblížiť"

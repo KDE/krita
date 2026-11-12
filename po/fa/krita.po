@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2024-08-14 00:39+0330\n"
 "Last-Translator: Mohi Mirdamadi <mohi.pub@gmail.com>\n"
 "Language-Team: fa\n"
@@ -40529,7 +40529,6 @@ msgid "%1:"
 msgstr "۱:۱"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, fuzzy, kde-format
 msgid "Color name:"
 msgstr "فاصله رنگ:"
@@ -40956,30 +40955,6 @@ msgstr "نمایش &توری‌"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "سند سفارشی"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, fuzzy, kde-format
-msgid "Add Color To Palette"
-msgstr "گزیننده رنگ"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, fuzzy, kde-format
-#| msgid "Cannot write to palette file %1. Maybe it is read-only."
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr "نمی‌توان در پرونده پالت %1 نوشت. شاید آن فقط خواندنی باشد."
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "پالت"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
-msgstr "افزودن/حذف رنگها"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, fuzzy, kde-format
@@ -42376,7 +42351,7 @@ msgstr "توری ژرف‌نمایی"
 msgid "Perspective Ellipse assistant"
 msgstr "توری ژرف‌نمایی"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"
@@ -42418,7 +42393,7 @@ msgstr "توری ژرف‌نمایی"
 msgid "Vanishing Point assistant"
 msgstr "نمایش خط‌کشها"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "گزینه‌ها"
@@ -44707,6 +44682,13 @@ msgstr "خلاصه"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "پالت"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, fuzzy, kde-format
@@ -70760,6 +70742,18 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Add Color To Palette"
+#~ msgstr "گزیننده رنگ"
+
+#, fuzzy
+#~| msgid "Cannot write to palette file %1. Maybe it is read-only."
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr "نمی‌توان در پرونده پالت %1 نوشت. شاید آن فقط خواندنی باشد."
+
+#~ msgid "Add/Remove Colors"
+#~ msgstr "افزودن/حذف رنگها"
 
 #, fuzzy
 #~| msgid "Zoom In"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2022-07-08 04:45+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Toki Pona <http://weblate.blackquill.cc/projects/ante-toki-pi-"
@@ -39912,7 +39912,6 @@ msgid "%1:"
 msgstr "poki '%1'"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, fuzzy, kde-format
 #| msgid "Color:"
 msgid "Color name:"
@@ -40333,29 +40332,6 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close Docker"
-msgstr ""
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, kde-format
-msgid "Add Color To Palette"
-msgstr ""
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr ""
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
 msgstr ""
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
@@ -41759,7 +41735,7 @@ msgstr ""
 msgid "Perspective Ellipse assistant"
 msgstr ""
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr ""
@@ -41800,7 +41776,7 @@ msgstr ""
 msgid "Vanishing Point assistant"
 msgstr ""
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, kde-format
 msgid "Vanishing Point"
 msgstr ""
@@ -44052,6 +44028,13 @@ msgstr ""
 #, kde-format
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
 msgstr ""
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66

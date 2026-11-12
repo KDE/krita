@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -41491,7 +41491,6 @@ msgid "%1:"
 msgstr "%1:"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
 msgid "Color name:"
 msgstr "Όνομα χρώματος:"
@@ -41930,30 +41929,6 @@ msgstr "Εμφάνιση προσαρτήσεων"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Κλείσιμο εγγράφου"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, kde-format
-msgid "Add Color To Palette"
-msgstr "Προσθήκη χρώματος στην παλέτα"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr ""
-"Αδυναμία εγγραφής του αρχείου παλέτας %1. Ίσως είναι μόνο για ανάγνωση. "
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "Παλέτα"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
-msgstr "Προσθήκη/αφαίρεση χρωμάτων"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, fuzzy, kde-format
@@ -43370,7 +43345,7 @@ msgstr "Προοπτική"
 msgid "Perspective Ellipse assistant"
 msgstr "Βοηθός προοπτικής"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"
@@ -43415,7 +43390,7 @@ msgstr "Προοπτική"
 msgid "Vanishing Point assistant"
 msgstr "Βοηθοί ζωγραφικής"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "Επιλογές"
@@ -45762,6 +45737,13 @@ msgstr "Περίληψη"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "Παλέτα"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, fuzzy, kde-format
@@ -72630,6 +72612,16 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#~ msgid "Add Color To Palette"
+#~ msgstr "Προσθήκη χρώματος στην παλέτα"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr ""
+#~ "Αδυναμία εγγραφής του αρχείου παλέτας %1. Ίσως είναι μόνο για ανάγνωση. "
+
+#~ msgid "Add/Remove Colors"
+#~ msgstr "Προσθήκη/αφαίρεση χρωμάτων"
 
 #, fuzzy
 #~| msgid "Zoom In"

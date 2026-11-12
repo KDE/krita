@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2026-11-05 17:44+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -40969,7 +40969,6 @@ msgid "%1:"
 msgstr "%1:"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
 msgid "Color name:"
 msgstr "Nome del colore:"
@@ -41391,30 +41390,6 @@ msgstr "Muovi area di aggancio"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Chiudi area di aggancio"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, kde-format
-msgid "Add Color To Palette"
-msgstr "Aggiungi colore alla tavolozza"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr ""
-"Impossibile scrivere la tavolozza sul file %1. Forse è di sola lettura. "
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "Tavolozza"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
-msgstr "Aggiungi/rimuovi colori"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, kde-format
@@ -42906,7 +42881,7 @@ msgstr "Prospettiva"
 msgid "Perspective Ellipse assistant"
 msgstr "Assistente ellisse della prospettiva"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Ellisse della prospettiva"
@@ -42947,7 +42922,7 @@ msgstr "Prospettiva a due punti"
 msgid "Vanishing Point assistant"
 msgstr "Assistenti del punto di fuga"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, kde-format
 msgid "Vanishing Point"
 msgstr "Punto di fuga"
@@ -45205,6 +45180,13 @@ msgstr "Panoramica"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Fissa controlli di navigazione"
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "Tavolozza"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, kde-format
@@ -71443,6 +71425,16 @@ msgstr ""
 "Alterna tra intervallo intero e subintervallo.\n"
 "Intervallo intero: [%1, %2]\n"
 "Subintervallo: [%3, %4]"
+
+#~ msgid "Add Color To Palette"
+#~ msgstr "Aggiungi colore alla tavolozza"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr ""
+#~ "Impossibile scrivere la tavolozza sul file %1. Forse è di sola lettura. "
+
+#~ msgid "Add/Remove Colors"
+#~ msgstr "Aggiungi/rimuovi colori"
 
 #~ msgid "&Zoom In"
 #~ msgstr "In&grandisci"

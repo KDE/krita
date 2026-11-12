@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -39903,7 +39903,6 @@ msgid "%1:"
 msgstr "Umzuzwana"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, fuzzy, kde-format
 msgid "Color name:"
 msgstr "&Umkhethi Wombala"
@@ -40323,29 +40322,6 @@ msgstr "Vula Uxwebhu"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Vula Uxwebhu"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, fuzzy, kde-format
-msgid "Add Color To Palette"
-msgstr "&Umkhethi Wombala"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, fuzzy, kde-format
-msgid "Palette"
-msgstr "Iibhodi ezinemibala zokuzoba"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, fuzzy, kde-format
-msgid "Add/Remove Colors"
-msgstr "Susa Umhlathi"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, fuzzy, kde-format
@@ -41730,7 +41706,7 @@ msgstr "&Isixhobo Somcimi"
 msgid "Perspective Ellipse assistant"
 msgstr "&Isixhobo Somcimi"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "&Isixhobo Somcimi"
@@ -41771,7 +41747,7 @@ msgstr "&Isixhobo Somcimi"
 msgid "Vanishing Point assistant"
 msgstr "Nyibilikisa"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "Unobumba wokuqala Wesigrike"
@@ -44015,6 +43991,13 @@ msgstr "Leka ngaphezulu"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, fuzzy, kde-format
+msgid "Palette"
+msgstr "Iibhodi ezinemibala zokuzoba"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, fuzzy, kde-format
@@ -69468,6 +69451,14 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Add Color To Palette"
+#~ msgstr "&Umkhethi Wombala"
+
+#, fuzzy
+#~ msgid "Add/Remove Colors"
+#~ msgstr "Susa Umhlathi"
 
 #, fuzzy
 #~ msgid "&Zoom In"

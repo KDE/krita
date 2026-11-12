@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -40334,7 +40334,6 @@ msgid "%1:"
 msgstr "%1："
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
 msgid "Color name:"
 msgstr "颜色名称："
@@ -40750,29 +40749,6 @@ msgstr "浮动显示面板"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "关闭面板"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, kde-format
-msgid "Add Color To Palette"
-msgstr "添加颜色至色板"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr "无法写入色板文件 %1。它可能是只读文件。 "
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "色板"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
-msgstr "添加/移除颜色"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, kde-format
@@ -42207,7 +42183,7 @@ msgstr "透视"
 msgid "Perspective Ellipse assistant"
 msgstr "透视椭圆辅助尺"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "透视椭圆"
@@ -42248,7 +42224,7 @@ msgstr "两点透视"
 msgid "Vanishing Point assistant"
 msgstr "灭点辅助尺"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, kde-format
 msgid "Vanishing Point"
 msgstr "灭点"
@@ -44490,6 +44466,13 @@ msgstr "导航器 = 总览图"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "始终显示导航控件"
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "色板"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, kde-format
@@ -70234,6 +70217,15 @@ msgstr ""
 "切换全范围/子范围模式。\n"
 "全范围：[%1, %2]\n"
 "子范围：[%3, %4]"
+
+#~ msgid "Add Color To Palette"
+#~ msgstr "添加颜色至色板"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr "无法写入色板文件 %1。它可能是只读文件。 "
+
+#~ msgid "Add/Remove Colors"
+#~ msgstr "添加/移除颜色"
 
 #~ msgid "&Zoom In"
 #~ msgstr "放大(&Z)"

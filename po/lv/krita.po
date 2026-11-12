@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -40131,7 +40131,6 @@ msgid "%1:"
 msgstr "1:1"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, fuzzy, kde-format
 msgid "Color name:"
 msgstr "Krāsu telpa:"
@@ -40551,29 +40550,6 @@ msgstr "Pielāgots dokuments"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Pielāgots dokuments"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, fuzzy, kde-format
-msgid "Add Color To Palette"
-msgstr "Krāsu izvēlētājs"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, fuzzy, kde-format
-msgid "Palette"
-msgstr "Palete"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, fuzzy, kde-format
-msgid "Add/Remove Colors"
-msgstr "Aizvākt kolonnu"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, fuzzy, kde-format
@@ -41963,7 +41939,7 @@ msgstr "Perspektīva Režģis"
 msgid "Perspective Ellipse assistant"
 msgstr "Perspektīva Režģis"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspektīva Režģis"
@@ -42004,7 +41980,7 @@ msgstr "Perspektīva Režģis"
 msgid "Vanishing Point assistant"
 msgstr "Skate Rūlīši"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "Alfa Opcijas"
@@ -44271,6 +44247,13 @@ msgstr "Pārskats"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, fuzzy, kde-format
+msgid "Palette"
+msgstr "Palete"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, fuzzy, kde-format
@@ -69873,6 +69856,14 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Add Color To Palette"
+#~ msgstr "Krāsu izvēlētājs"
+
+#, fuzzy
+#~ msgid "Add/Remove Colors"
+#~ msgstr "Aizvākt kolonnu"
 
 #, fuzzy
 #~| msgid "Zoom In"

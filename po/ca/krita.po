@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2026-11-05 09:46+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -40961,7 +40961,6 @@ msgid "%1:"
 msgstr "%1:"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
 msgid "Color name:"
 msgstr "Nom del color:"
@@ -41385,30 +41384,6 @@ msgstr "Acoblador flotant"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Tanca l'acoblador"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, kde-format
-msgid "Add Color To Palette"
-msgstr "Afegeix color a la paleta"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr ""
-"No es pot escriure al fitxer de paleta %1. Potser només és de lectura. "
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "Paleta"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
-msgstr "Afegeix/Elimina colors"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, kde-format
@@ -42895,7 +42870,7 @@ msgstr "Perspectiva"
 msgid "Perspective Ellipse assistant"
 msgstr "Assistent de perspectiva d'el·lipses"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspectiva d'el·lipses"
@@ -42936,7 +42911,7 @@ msgstr "Perspectiva de 2 punts"
 msgid "Vanishing Point assistant"
 msgstr "Assistents de punt de fuga"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, kde-format
 msgid "Vanishing Point"
 msgstr "Punt de fuga"
@@ -45188,6 +45163,13 @@ msgstr "Vista general"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Controls de navegació amb pins"
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "Paleta"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, kde-format
@@ -71391,6 +71373,16 @@ msgstr ""
 "Commuta entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
+
+#~ msgid "Add Color To Palette"
+#~ msgstr "Afegeix color a la paleta"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr ""
+#~ "No es pot escriure al fitxer de paleta %1. Potser només és de lectura. "
+
+#~ msgid "Add/Remove Colors"
+#~ msgstr "Afegeix/Elimina colors"
 
 #~ msgid "&Zoom In"
 #~ msgstr "&Amplia"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2026-11-06 19:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -4868,7 +4868,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Stylised_Tree.kpp"
 msgid "z) Stamp Stylised Tree"
-msgstr "z) Biçemlendirilmiş Ağaç Damgası"
+msgstr "z) Stillendirilmiş Ağaç Damgası"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -6971,7 +6971,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "vegetal_stylised.gih"
 msgid "deevad_vegetal-stylised_colormask_01"
-msgstr "değerlendirilmemiş_biçemli bitki_renk-maskesi_01"
+msgstr "değerlendirilmemiş_stilli bitki_renk-maskesi_01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/water_still.gih:1
@@ -13064,7 +13064,7 @@ msgstr "Görseli düzleştir"
 #, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
-msgstr "Katman &Biçemi…"
+msgstr "Katman &Stili…"
 
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
@@ -13074,7 +13074,7 @@ msgstr "Katman &Biçemi…"
 #, kde-format
 msgctxt "action"
 msgid "Layer Style"
-msgstr "Katman Biçemi"
+msgstr "Katman Stili"
 
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
@@ -13950,14 +13950,14 @@ msgstr "Birleştirilmiş kopyala"
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer Style"
-msgstr "Katman Biçemini Kopyala"
+msgstr "Katman Stilini Kopyala"
 
 #. i18n: context: toolTip @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:351
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer Style from the Current Node"
-msgstr "Geçerli Düğümden Katman Biçemini Kopyala"
+msgstr "Geçerli Düğümden Katman Stilini Kopyala"
 
 #. i18n: context: text @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:361
@@ -14038,7 +14038,7 @@ msgstr "Yeni görselin içine yapıştır"
 #, kde-format
 msgctxt "action"
 msgid "Paste Shape Style"
-msgstr "Şekil Biçemini Yapıştır"
+msgstr "Şekil Stilini Yapıştır"
 
 #. i18n: context: text @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:421
@@ -14065,14 +14065,14 @@ msgstr "Başvurulan Görsel Olarak Yapıştır"
 #, kde-format
 msgctxt "action"
 msgid "Paste Layer Style"
-msgstr "Katman Biçemi Yapıştır"
+msgstr "Katman Stili Yapıştır"
 
 #. i18n: context: toolTip @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:435
 #, kde-format
 msgctxt "action"
 msgid "Paste Layer Style into the Current Node"
-msgstr "Katman Biçemini Geçerli Düğüme Yapıştır"
+msgstr "Katman Stilini Geçerli Düğüme Yapıştır"
 
 #. i18n: context: text @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:446
@@ -16025,7 +16025,7 @@ msgstr "Temalar"
 #, kde-format
 msgctxt "action"
 msgid "&Styles"
-msgstr "&Biçemler"
+msgstr "&Stiller"
 
 #. i18n: context: toolTip @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
@@ -16035,7 +16035,7 @@ msgstr "&Biçemler"
 #, kde-format
 msgctxt "action"
 msgid "Styles"
-msgstr "Biçemler"
+msgstr "Stiller"
 
 #. i18n: context: text @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
@@ -16946,7 +16946,7 @@ msgstr "Yüksekliğe Sığdır"
 #, kde-format
 msgctxt "info:placeholder"
 msgid "Style Sample"
-msgstr "Biçem örneklemi"
+msgstr "Stil örneklemi"
 
 #: libs/flake/svg/SvgParser.cpp:1761
 #, kde-format
@@ -19550,7 +19550,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Math script style alternates"
-msgstr "Matematik Yazısı Biçem Alternatifleri"
+msgstr "Matematik Yazısı Stil Alternatifleri"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:190
 #, kde-format
@@ -21334,7 +21334,7 @@ msgstr "Taşı"
 #: libs/image/commands_new/kis_set_layer_style_command.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Change Layer Style"
-msgstr "Katman Biçemini Değiştir"
+msgstr "Katman Stilini Değiştir"
 
 #: libs/image/commands_new/kis_switch_current_time_command.cpp:17
 msgctxt "(qtundo-format)"
@@ -21859,7 +21859,7 @@ msgstr "Görünür"
 #: libs/image/kis_layer_properties_icons.cpp:25
 #, kde-format
 msgid "Layer Style"
-msgstr "Katman Biçemi"
+msgstr "Katman Stili"
 
 #: libs/image/kis_layer_properties_icons.cpp:26
 #, kde-format
@@ -22298,22 +22298,22 @@ msgstr "açık"
 #: libs/image/layerstyles/kis_ls_stroke_filter.cpp:67
 #, kde-format
 msgid "Stroke (style)"
-msgstr "Vuruş (biçem)"
+msgstr "Vuruş (stil)"
 
 #: libs/image/layerstyles/kis_ls_drop_shadow_filter.cpp:36
 #, kde-format
 msgid "Drop Shadow (style)"
-msgstr "Gölge (biçem)"
+msgstr "Gölge (stil)"
 
 #: libs/image/layerstyles/kis_ls_overlay_filter.cpp:38
 #, kde-format
 msgid "Overlay (style)"
-msgstr "Kaplama (biçem)"
+msgstr "Kaplama (stil)"
 
 #: libs/image/layerstyles/kis_ls_satin_filter.cpp:34
 #, kde-format
 msgid "Satin (style)"
-msgstr "Saten (biçem)"
+msgstr "Saten (stil)"
 
 #: libs/image/lazybrush/kis_colorize_mask.cpp:945
 msgctxt "(qtundo-format)"
@@ -22548,7 +22548,7 @@ msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>layer styles</b>. The layer styles will not be saved."
 msgstr ""
-"Görsel, <b>katman biçemleri</b> içeriyor. Katman biçemleri kaydedilmeyecek."
+"Görsel, <b>katman stilleri</b> içeriyor. Katman stilleri kaydedilmeyecek."
 
 #: libs/impex/ShapeLayerTypeCheck.h:118
 #, kde-format
@@ -22656,7 +22656,7 @@ msgstr "OpenRaster Görseli"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Photoshop Layer Style Library"
-msgstr "Photoshop Katman Biçemi Kitaplığı"
+msgstr "Photoshop Katman Stili Kitaplığı"
 
 #: libs/koplugin/KisMimeDatabase.cpp:234
 #, kde-format
@@ -24462,7 +24462,7 @@ msgstr "Adobe Fırça Kitaplığı"
 #: libs/resources/KisResourceStorage.h:125
 #, kde-format
 msgid "Adobe Style Library"
-msgstr "Adobe Biçem Kitaplığı"
+msgstr "Adobe Stil Kitaplığı"
 
 #: libs/resources/KisResourceStorage.h:129
 #, kde-format
@@ -24552,7 +24552,7 @@ msgstr "Görev Kümeleri"
 #, kde-format
 msgctxt "resource type"
 msgid "Layer Styles"
-msgstr "Katman Biçemleri"
+msgstr "Katman Stilleri"
 
 #: libs/resources/KisResourceTypes.cpp:57
 #, kde-format
@@ -24564,7 +24564,7 @@ msgstr "Yazıtipi Aileleri"
 #, kde-format
 msgctxt "resource type"
 msgid "Style Presets"
-msgstr "Biçem Önayarları"
+msgstr "Stil Önayarları"
 
 #: libs/resources/KisStorageModel.cpp:512
 #: libs/widgets/KoConfigAuthorPage.cpp:89
@@ -25109,7 +25109,7 @@ msgstr "Yapıştırılmış"
 #: libs/ui/actions/KisPasteActionFactories.cpp:384
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
-msgstr "Biçem Yapıştır"
+msgstr "Stil Yapıştır"
 
 #: libs/ui/actions/KisTransformToolActivationCommand.cpp:16
 msgctxt "(qtundo-format)"
@@ -27272,13 +27272,13 @@ msgstr "Katman Özelliklerini Değiştir"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:107
 #, kde-format
 msgid "Layer Styles"
-msgstr "Katman Biçemleri"
+msgstr "Katman Stilleri"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:318
 #, kde-format
 msgctxt "@title:window"
 msgid "Enter new style name"
-msgstr "Yeni biçem adını gir"
+msgstr "Yeni stil adını gir"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2783
 #, kde-format
@@ -27290,7 +27290,7 @@ msgstr "Ad:"
 #, kde-format
 msgctxt "Default name for a new style"
 msgid "New Style"
-msgstr "Yeni Biçem"
+msgstr "Yeni Stil"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:380
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:444
@@ -27301,7 +27301,7 @@ msgstr "ASL dosyasını seç"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:402
 #, kde-format
 msgid "Could not load layer style library %1."
-msgstr "Katman biçem kitaplığı %1 yüklenemedi."
+msgstr "Katman stil kitaplığı %1 yüklenemedi."
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:416
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:256
@@ -27316,7 +27316,7 @@ msgid ""
 "There is already a layer style library with this name installed. Do you want "
 "to overwrite it?"
 msgstr ""
-"Bu adda başka bir katman biçemi kitaplığı hâlihazırda var. Üzerine yazmak "
+"Bu adda başka bir katman stili kitaplığı hâlihazırda var. Üzerine yazmak "
 "istiyor musunuz?"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1000
@@ -35689,7 +35689,7 @@ msgstr "SeExpr Betikleri"
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
-msgstr "Katman biçemleri"
+msgstr "Katman stilleri"
 
 #: libs/ui/KisApplication.cpp:441
 #, kde-format
@@ -35699,7 +35699,7 @@ msgstr "Yazıtipi Aileleri"
 #: libs/ui/KisApplication.cpp:442
 #, kde-format
 msgid "Style Presets"
-msgstr "Biçem Önayarları"
+msgstr "Stil Önayarları"
 
 #: libs/ui/KisApplication.cpp:454
 #, kde-format
@@ -36514,7 +36514,7 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
-"Bir <b>katman biçemi</b> içeren bir görselde gelişmiş dışa aktarma yapılmaya "
+"Bir <b>katman stili</b> içeren bir görselde gelişmiş dışa aktarma yapılmaya "
 "çalışılıyor. Yeniden boyutlandırma öncesi görsel <b>düzleştirilecektir</b>."
 
 #: libs/ui/KisImportExportManager.cpp:613
@@ -36596,7 +36596,7 @@ msgstr "Katman Küçük Görsellerini Güncelle"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
-msgstr "Biçemler"
+msgstr "Stiller"
 
 #: libs/ui/KisMainWindow.cpp:197
 #, kde-format
@@ -38101,7 +38101,7 @@ msgstr "Efektleri etkinleştir"
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:39
 #, kde-format
 msgid "Styles"
-msgstr "Biçemler"
+msgstr "Stiller"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
@@ -40708,13 +40708,13 @@ msgstr "Gerçek seçimin çizgi genişliğini ayarla"
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, kde-format
 msgid "Line Style:"
-msgstr "Çizgi biçemi:"
+msgstr "Çizgi stili:"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:252
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line style"
-msgstr "Çizgi biçemi"
+msgstr "Çizgi stili"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:263
 #, kde-format
@@ -40740,7 +40740,6 @@ msgid "%1:"
 msgstr "%1:"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
 msgid "Color name:"
 msgstr "Renk adı:"
@@ -41162,29 +41161,6 @@ msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Paneli Kapat"
 
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, kde-format
-msgid "Add Color To Palette"
-msgstr "Rengi Palete Ekle"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr "%1 palet dosyasına yazılamıyor. Saltokunur olabilir. "
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "Palet"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
-msgstr "Renk Ekle/Kaldır"
-
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, kde-format
 msgid "1. Foreground to Transparent"
@@ -41395,7 +41371,7 @@ msgstr "Yazıtipi ailesi"
 #: libs/widgetutils/kis_font_family_combo_box.cpp:233
 #, kde-format
 msgid "Font Style"
-msgstr "Yazıtipi biçemi"
+msgstr "Yazıtipi stili"
 
 #: libs/widgetutils/kis_multipliers_double_slider_spinbox.cpp:51
 #, kde-format
@@ -42657,7 +42633,7 @@ msgstr "Perspektif"
 msgid "Perspective Ellipse assistant"
 msgstr "Perspektif Elips yardımcısı"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspektif Elips"
@@ -42698,7 +42674,7 @@ msgstr "2 Noktalı Perspektif"
 msgid "Vanishing Point assistant"
 msgstr "Ufuk Noktası Yardımcısı"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, kde-format
 msgid "Vanishing Point"
 msgstr "Ufuk Noktası"
@@ -44324,7 +44300,7 @@ msgstr "Hücre boyutu:"
 #: plugins/dockers/griddocker/grid_config_widget.ui:168
 #, kde-format
 msgid "Vertical Style:"
-msgstr "Dikey biçem:"
+msgstr "Dikey stil:"
 
 #. i18n: ectx: property (text), widget (QLabel, cellSpacingLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:184
@@ -44342,7 +44318,7 @@ msgstr "Sağ kenarlık:"
 #: plugins/dockers/griddocker/grid_config_widget.ui:210
 #, kde-format
 msgid "Main Style:"
-msgstr "Ana biçem:"
+msgstr "Ana stil:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSubdivision)
 #: plugins/dockers/griddocker/grid_config_widget.ui:233
@@ -44354,7 +44330,7 @@ msgstr "Alt bölüm:"
 #: plugins/dockers/griddocker/grid_config_widget.ui:273
 #, kde-format
 msgid "Subdivision Style:"
-msgstr "Alt bölüm biçemi:"
+msgstr "Alt bölüm stili:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblXSpacing)
 #: plugins/dockers/griddocker/grid_config_widget.ui:568
@@ -44465,7 +44441,7 @@ msgstr "Ağaç Girintilemesi"
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
-msgstr "Harmanlama Bilgi Biçemi"
+msgstr "Harmanlama Bilgi Stili"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
@@ -44946,6 +44922,13 @@ msgstr "Genel Görünüm"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Dolaşım denetimlerini sabitle"
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "Palet"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, kde-format
@@ -46442,7 +46425,7 @@ msgstr "Yüzde (%)"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Style Preset"
-msgstr "Biçem Önayarını Düzenle"
+msgstr "Stil Önayarını Düzenle"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:117
 #, kde-format
@@ -46703,7 +46686,7 @@ msgstr "Başlık:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Name:"
-msgstr "Biçem adı:"
+msgstr "Stil adı:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:89
 #, kde-format
@@ -46715,13 +46698,13 @@ msgstr "Açıklama:"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Style Description."
-msgstr "Biçem açıklaması"
+msgstr "Stil açıklaması"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:114
 #, kde-format
 msgctxt "label:listbox"
 msgid "Style Type:"
-msgstr "Biçem türü:"
+msgstr "Stil türü:"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:122
 #, kde-format
@@ -46739,7 +46722,7 @@ msgstr "Paragraf"
 #, kde-format
 msgctxt "@option:check"
 msgid "Style is Pixel Relative"
-msgstr "Biçem, piksele göreceli"
+msgstr "Stil, piksele göreceli"
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:136
 #, kde-format
@@ -46750,9 +46733,9 @@ msgid ""
 "ensure the style will maintain the same pixel size across different "
 "documents."
 msgstr ""
-"Öntanımlı olarak biçemler nokta türünden saklanır; bu, piksel türünden "
+"Öntanımlı olarak stiller nokta türünden saklanır; bu, piksel türünden "
 "boyutların belge yazdırma çözünürlüğüne bağlı olarak farklı olacağı anlamına "
-"gelir. Biçemin farklı belgelerde aynı piksel boyutunu korumasını sağlamak "
+"gelir. Stilin farklı belgelerde aynı piksel boyutunu korumasını sağlamak "
 "için bu seçeneği açın."
 
 #: plugins/dockers/textproperties/qml/CssStylePresetEdit.qml:143
@@ -47048,7 +47031,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Font Style"
-msgstr "Yazıtipi biçemi"
+msgstr "Yazıtipi stili"
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:18
 #, kde-format
@@ -47057,7 +47040,7 @@ msgid ""
 "Font style allows setting the sub style of the given font family, such as "
 "italics and bold"
 msgstr ""
-"Yazıtipi biçemi, verilen yazıtipi ailesinin alt biçemini ayarlamaya olanak "
+"Yazıtipi stili, verilen yazıtipi ailesinin alt stilini ayarlamaya olanak "
 "tanır; örneğin, kalın ve yatık."
 
 #: plugins/dockers/textproperties/qml/FontStyle.qml:20
@@ -47652,7 +47635,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Style:"
-msgstr "Biçem:"
+msgstr "Stil:"
 
 #: plugins/dockers/textproperties/qml/OTNumeric.qml:116
 #, kde-format
@@ -48032,19 +48015,19 @@ msgstr "Önayar"
 #, kde-format
 msgctxt "@label:button"
 msgid "Add Style Preset"
-msgstr "Biçem Önayarı Ekle"
+msgstr "Stil Önayarı Ekle"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:147
 #, kde-format
 msgctxt "@label:button"
 msgid "Edit Style Preset"
-msgstr "Biçem Önayarını Düzenle"
+msgstr "Stil Önayarını Düzenle"
 
 #: plugins/dockers/textproperties/qml/TextProperties.qml:166
 #, kde-format
 msgctxt "@label:button"
 msgid "Clone Style Preset"
-msgstr "Biçem Önayarını Klonla"
+msgstr "Stil Önayarını Klonla"
 
 #: plugins/dockers/textproperties/qml/TextPropertyBaseList.qml:308
 #, kde-format
@@ -48121,7 +48104,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Text rendering controls the hinting and rendering style for the property"
 msgstr ""
-"Metin sunması, özellik için olan piksel hizalamasını ve sunma biçemini "
+"Metin sunması, özellik için olan piksel hizalamasını ve sunma stilini "
 "denetler."
 
 #: plugins/dockers/textproperties/qml/TextRendering.qml:18
@@ -48462,7 +48445,7 @@ msgstr "Dikey, soldan sağa"
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "New Style Preset"
-msgstr "Yeni biçem önayarı"
+msgstr "Yeni stil önayarı"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:36
 #, kde-format
@@ -51752,7 +51735,7 @@ msgstr "Kaydetme Konumunu Seç"
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:271
 #, kde-format
 msgid "Layer styles"
-msgstr "Katman biçemleri"
+msgstr "Katman stilleri"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:274
 #, kde-format
@@ -55348,13 +55331,13 @@ msgstr "Alfa kanalını koru"
 #: plugins/impex/brush/wdg_export_gih.ui:76
 #, kde-format
 msgid "Brush Style"
-msgstr "Fırça Biçemi"
+msgstr "Fırça Stili"
 
 #. i18n: ectx: property (text), widget (QLabel, styleLbl)
 #: plugins/impex/brush/wdg_export_gih.ui:99
 #, kde-format
 msgid "Style:"
-msgstr "Biçem:"
+msgstr "Stil:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, brushStyle)
 #: plugins/impex/brush/wdg_export_gih.ui:116
@@ -55372,7 +55355,7 @@ msgstr "Canlandırılmış"
 #: plugins/impex/brush/wdg_export_gih.ui:134
 #, kde-format
 msgid "Animated style options"
-msgstr "Canlandırılmış biçem seçenekleri"
+msgstr "Canlandırılmış stil seçenekleri"
 
 #. i18n: ectx: property (text), widget (QLabel, selectionModeLbl)
 #: plugins/impex/brush/wdg_export_gih.ui:227
@@ -57700,7 +57683,7 @@ msgstr "Ek açıklamalar kaydedilemedi."
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save layer styles."
-msgstr "Katman biçemleri kaydedilemedi."
+msgstr "Katman stilleri kaydedilemedi."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:666
 #, kde-format
@@ -60398,7 +60381,7 @@ msgstr "Sert kenar"
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:138
 #, kde-format
 msgid "Fill Style"
-msgstr "Doldurma Biçemi"
+msgstr "Doldurma Stili"
 
 #. i18n: ectx: property (text), widget (QRadioButton, patternButton)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:166
@@ -60795,7 +60778,7 @@ msgstr "Y orijini:"
 #: plugins/paintops/hatching/wdghatchingoptions.ui:262
 #, kde-format
 msgid "Crosshatching style"
-msgstr "Çapraz tarama biçemi"
+msgstr "Çapraz tarama stili"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noCrosshatchingRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:286
@@ -60831,7 +60814,7 @@ msgstr "&Moiré deseni"
 #: plugins/paintops/hatching/wdghatchingoptions.ui:384
 #, kde-format
 msgid "Separation Style"
-msgstr "Ayrılma Biçemi"
+msgstr "Ayrılma Stili"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:396
@@ -63614,7 +63597,7 @@ msgstr "Çizer Bilgisi"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:393
 msgid "Style Sheet"
-msgstr "Biçem Dosyası"
+msgstr "Stil Dosyası"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:395
 msgid "ACBF"
@@ -67041,7 +67024,7 @@ msgstr "Rengi güncelle"
 msgid "Style for the on-canvas popup to comparing sampled colors"
 msgstr ""
 "Örneklenen renkleri karşılaştırmak için kullanılan tuval üzeri açılır "
-"pencerenin biçemi"
+"pencerenin stili"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
 #: plugins/tools/basictools/wdgmovetool.ui:42
@@ -67444,7 +67427,7 @@ msgid ""
 "state, only the shape is resized, keeping the stroke width and style "
 "unaltered.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>“Biçemleri ölçekle” <span style=\" font-weight:600;"
+"<html><head/><body><p>“Stilleri ölçekle” <span style=\" font-weight:600;"
 "\">etkinleştirildiğinde</span>, şeklin fırça darbesi şeklin kendisiyle "
 "birlikte ölçeklenir.</p><p><span style=\" font-weight:600;\">Devre dışı</"
 "span> durumda, fırça darbesinin genişliğini ve biçimini değiştirmeden şekil "
@@ -67454,7 +67437,7 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:205
 #, kde-format
 msgid "Scale Styles"
-msgstr "Biçemleri ölçekle"
+msgstr "Stilleri ölçekle"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGlobalCoordinates)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:218
@@ -68899,7 +68882,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:placeholder"
 msgid "Select Style Preset"
-msgstr "Biçem önayarı seç"
+msgstr "Stil önayarı seç"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:117
 #, kde-format
@@ -68913,8 +68896,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Open the Text Properties Docker to edit properties like font size and style."
 msgstr ""
-"Yazıtipi puntosu ve biçemi gibi özellikleri düzenlemek için Metin "
-"Özellikleri panelini açın."
+"Yazıtipi puntosu ve stili gibi özellikleri düzenlemek için Metin Özellikleri "
+"panelini açın."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:139
 #, kde-format
@@ -70918,7 +70901,7 @@ msgid ""
 "Font Family \"%1\" is missing on this machine. This style preset may not "
 "work correctly."
 msgstr ""
-"Bu makinede “%1” yazıtipi ailesi yok. Bu biçem önayarı düzgün çalışmayabilir."
+"Bu makinede “%1” yazıtipi ailesi yok. Bu stil önayarı düzgün çalışmayabilir."
 
 #: qmlmodules/components/qml/ResourceView.qml:149
 #, kde-format
@@ -70979,6 +70962,15 @@ msgstr ""
 "Tam erim ve alt erim arasında geçiş yapın.\n"
 "Tam erim: [%1, %2]\n"
 "Alt erim: [%3, %4]"
+
+#~ msgid "Add Color To Palette"
+#~ msgstr "Rengi Palete Ekle"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr "%1 palet dosyasına yazılamıyor. Saltokunur olabilir. "
+
+#~ msgid "Add/Remove Colors"
+#~ msgstr "Renk Ekle/Kaldır"
 
 #~ msgid "&Zoom In"
 #~ msgstr "&Yakınlaştır"

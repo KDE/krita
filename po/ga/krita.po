@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2026-05-02 13:49+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
 "Language-Team: Irish <http://weblate.amgelocalnet.duckdns.org/projects/kde-"
@@ -41161,7 +41161,6 @@ msgid "%1:"
 msgstr "%1:"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
 msgid "Color name:"
 msgstr "Ainm datha:"
@@ -41584,31 +41583,6 @@ msgstr "Docálaí Snámh"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Dún Docker"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, kde-format
-msgid "Add Color To Palette"
-msgstr "Cuir Dath leis an Pailéad"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr ""
-"Ní féidir scríobh chuig comhad pailéid %1. B'fhéidir gur comhad inléite "
-"amháin é. "
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "Pailéad"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
-msgstr "Cuir Dathanna Leis/Bain Dathanna"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, kde-format
@@ -43108,7 +43082,7 @@ msgstr "Peirspictíocht"
 msgid "Perspective Ellipse assistant"
 msgstr "Cúntóir Éilips Peirspictíochta"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Éilips Pheirspictíochta"
@@ -43149,7 +43123,7 @@ msgstr "Peirspictíocht 2 Phointe"
 msgid "Vanishing Point assistant"
 msgstr "Cúntóir Pointe Imithe"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, kde-format
 msgid "Vanishing Point"
 msgstr "Pointe Imithe"
@@ -45430,6 +45404,13 @@ msgstr "Forbhreathnú"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Rialuithe nascleanúna bioráin"
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "Pailéad"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, kde-format
@@ -71838,6 +71819,17 @@ msgstr ""
 "Athraigh idir raon iomlán agus fo-raon.\n"
 "Raon iomlán: [%1, %2]\n"
 "Fo-raon: [%3, %4]"
+
+#~ msgid "Add Color To Palette"
+#~ msgstr "Cuir Dath leis an Pailéad"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr ""
+#~ "Ní féidir scríobh chuig comhad pailéid %1. B'fhéidir gur comhad inléite "
+#~ "amháin é. "
+
+#~ msgid "Add/Remove Colors"
+#~ msgstr "Cuir Dathanna Leis/Bain Dathanna"
 
 #~ msgid "&Zoom In"
 #~ msgstr "&Zúmáil Isteach"

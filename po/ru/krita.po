@@ -82,8 +82,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
-"PO-Revision-Date: 2026-11-06 07:49+0200\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
+"PO-Revision-Date: 2026-11-11 23:00+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -14571,7 +14571,7 @@ msgstr "Отзеркалить отображение вокруг холста"
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "&Масштаб 100%"
+msgstr "&Масштаб 100 %"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
@@ -14581,7 +14581,7 @@ msgstr "&Масштаб 100%"
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr "Масштаб 100%"
+msgstr "Масштаб 100 %"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
@@ -22173,7 +22173,7 @@ msgstr "Поворот (Z)"
 #: libs/image/kis_layer.cc:275 libs/widgets/KoZoomActionState.cpp:20
 #, kde-format
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #. i18n: ectx: property (toolTip), widget (KisCompositeOpComboBox, cmbComposite)
 #: libs/image/kis_layer.cc:280 libs/ui/widgets/kis_cmb_composite.cc:76
@@ -26207,7 +26207,7 @@ msgstr ""
 "FFmpeg по крайней мере версии 4.2. Если в полученном GIF заметны разрывы "
 "кадров, настоятельно рекомендуется использовать FFmpeg версии не ниже 4.4.</"
 "span></p><p><span style=\" font-style:italic;\">Примечание 2: Формат GIF "
-"поддерживает только 100% или 0% прозрачность. Частичная прозрачность </"
+"поддерживает только 100 % или 0 % прозрачность. Частичная прозрачность </"
 "span><span style=\" font-style:italic; text-decoration: underline;\">не</"
 "span><span style=\" font-style:italic;\"> поддерживается. Если потребуется "
 "частичная прозрачность, рекомендуется воспользоваться APNG или WEBP.</"
@@ -32848,7 +32848,7 @@ msgstr ""
 "<html><head/><body><p>При визуализации кадров анимации (в файлы или во время "
 "создания кэша анимации) Krita создаст указанное количество копий изображения "
 "и будет работать с ними параллельно основному процессу. Для хранения каждой "
-"копии потребуется больше ОЗУ (около 20% от размера изображения), поэтому "
+"копии потребуется больше ОЗУ (около 20 % от размера изображения), поэтому "
 "увеличивать это ограничение целесообразно только если установлено достаточно "
 "ОЗУ.</p><p><br/></p><p><span style=\" font-weight:600;\">Рекомендованное "
 "значение:</span>установите ограничение количества копий на количество <span "
@@ -33091,8 +33091,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Добавить дополнительную область к видимой области с "
 "каждой стороны холста.</p><p><span style=\" font-weight:600;"
-"\">Рекомендованное значение</span> — 25%, это значит, что видимая область "
-"будет увеличена на 25% с каждой стороны.</p></body></html>"
+"\">Рекомендованное значение</span> — 25 %, это значит, что видимая область "
+"будет увеличена на 25 % с каждой стороны.</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:529
@@ -34949,7 +34949,7 @@ msgstr "Уменьшить от курсора"
 #: libs/ui/input/kis_zoom_action.cpp:61 libs/ui/kis_popup_palette.cpp:214
 #, kde-format
 msgid "Zoom to 100%"
-msgstr "Масштаб 100%"
+msgstr "Масштаб 100 %"
 
 #: libs/ui/input/kis_zoom_action.cpp:62
 #, kde-format
@@ -35149,13 +35149,13 @@ msgstr "Новые параметры %1"
 #: libs/ui/kis_canvas_controls_manager.cpp:292
 #, kde-format
 msgid "Brush Opacity: %1%"
-msgstr "Непрозрачность кисти: %1%"
+msgstr "Непрозрачность кисти: %1 %"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:324
 #, kde-format
 msgctxt "Brush Option Flow"
 msgid "Flow: %1%"
-msgstr "Нажим: %1%"
+msgstr "Нажим: %1 %"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:352
 #, kde-format
@@ -35167,7 +35167,7 @@ msgstr "Угасание: %1"
 #, kde-format
 msgctxt "Brush Option Scatter"
 msgid "Scatter: %1%"
-msgstr "Рассеяние: %1%"
+msgstr "Рассеяние: %1 %"
 
 #: libs/ui/kis_change_file_layer_command.h:24
 msgctxt "(qtundo-format)"
@@ -35817,13 +35817,13 @@ msgstr ""
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #: libs/ui/kis_node_model.cpp:605
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
-msgstr "%1% %2"
+msgstr "%1 % %2"
 
 #: libs/ui/kis_paintop_box.cc:100
 #, kde-format
@@ -35988,7 +35988,7 @@ msgstr "Только холст"
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
 #, kde-format
 msgid "100%"
-msgstr "100%"
+msgstr "100 %"
 
 #: libs/ui/kis_popup_palette.cpp:220
 #, kde-format
@@ -36237,7 +36237,7 @@ msgstr "%1  %2"
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
-msgstr "Масштаб: %1 %"
+msgstr "Масштаб: %1 %"
 
 #: libs/ui/KisApplication.cpp:403
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:266
@@ -41379,7 +41379,6 @@ msgid "%1:"
 msgstr "%1:"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
 msgid "Color name:"
 msgstr "Название цвета:"
@@ -41809,31 +41808,6 @@ msgstr "Плавающая панель"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Закрыть панель"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, kde-format
-msgid "Add Color To Palette"
-msgstr "Добавить цвет в палитру"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr ""
-"Не удалось записать в файл палитры %1. Вероятно, он доступен только для "
-"чтения."
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "Палитра"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
-msgstr "Добавить/Удалить цвета"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, kde-format
@@ -43331,7 +43305,7 @@ msgstr "Перспектива"
 msgid "Perspective Ellipse assistant"
 msgstr "Инструмент создания перспективы эллипса"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Перспектива эллипса"
@@ -43372,7 +43346,7 @@ msgstr "Двухточечная перспектива"
 msgid "Vanishing Point assistant"
 msgstr "Вспомогательная точка схода"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, kde-format
 msgid "Vanishing Point"
 msgstr "Точка схода"
@@ -44304,7 +44278,7 @@ msgstr "Реальная частота кадров:\t%1"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:639
 #, kde-format
 msgid "Frames dropped:\t%1%"
-msgstr "Кадров пропущено:\t%1%"
+msgstr "Кадров пропущено:\t%1 %"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:699
 #, kde-format
@@ -45352,7 +45326,7 @@ msgstr "&Добавить"
 #: plugins/dockers/layerdocker/NodeDelegate.cpp:1357
 #, kde-format
 msgid "%1 %"
-msgstr "%1 %"
+msgstr "%1 %"
 
 #. i18n: ectx: property (whatsThis), widget (KisCompositeOpComboBox, cmbComposite)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:59
@@ -45738,6 +45712,13 @@ msgstr "Обзор"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Закрепить элементы управления навигацией"
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "Палитра"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, kde-format
@@ -60992,7 +60973,7 @@ msgstr "Соединительная линия"
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
 #, kde-format
 msgid "0%"
-msgstr "0%"
+msgstr "0 %"
 
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:55
 #, kde-format
@@ -62366,7 +62347,7 @@ msgid ""
 msgstr ""
 "Уровень точности 1 (самый быстрый)\n"
 "Субпиксельная точность: отключено\n"
-"Точность размера кисти: 5%\n"
+"Точность размера кисти: 5 %\n"
 "\n"
 "Оптимально для очень больших кистей"
 
@@ -62381,7 +62362,7 @@ msgid ""
 msgstr ""
 "Уровень точности 2\n"
 "Субпиксельная точность: отключено\n"
-"Точность размера кисти: 1%\n"
+"Точность размера кисти: 1 %\n"
 "\n"
 "Оптимально для больших кистей"
 
@@ -62406,10 +62387,10 @@ msgid ""
 "Gives up to 50% better performance in comparison to Level 5"
 msgstr ""
 "Уровень точности 4 (оптимальный)\n"
-"Субпиксельная точность: 50%\n"
+"Субпиксельная точность: 50 %\n"
 "Точность размера кисти: строгая\n"
 "\n"
-"По сравнению с 5 уровнем работает на 50% быстрее"
+"По сравнению с 5 уровнем работает на 50 % быстрее"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:75
 #, kde-format
@@ -62533,8 +62514,8 @@ msgid ""
 msgstr ""
 "Сбрасывает все параметры к значениям по умолчанию:\n"
 "Нейтральная точка: 127\n"
-" Яркость: 0%\n"
-" Контрастность: 0%"
+" Яркость: 0 %\n"
+" Контрастность: 0 %"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
 #, kde-format
@@ -63042,7 +63023,7 @@ msgstr "CW оттенок"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
 #, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "(0% активного цвета)"
+msgstr "(0 % активного цвета)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118
@@ -63050,7 +63031,7 @@ msgstr "(0% активного цвета)"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:141
 #, kde-format
 msgid "+100%"
-msgstr "+100%"
+msgstr "+100 %"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:107
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:119
@@ -63058,7 +63039,7 @@ msgstr "+100%"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:142
 #, kde-format
 msgid "-100%"
-msgstr "-100%"
+msgstr "-100 %"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:109
 #, kde-format
@@ -70850,7 +70831,7 @@ msgid ""
 "the closed contours. 0% - no effect, 100% - max effect"
 msgstr ""
 "Маска попытается удалить те части ключевых мазков, которые будут расположены "
-"вне замкнутых контуров. 0% — нулевой эффект, 100% — максимальный эффект."
+"вне замкнутых контуров. 0 % — нулевой эффект, 100 % — максимальный эффект."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdates)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:23
@@ -72088,6 +72069,17 @@ msgstr ""
 "Переключение между полным диапазоном и поддиапазоном.\n"
 "Полный диапазон: [%1, %2]\n"
 "Поддиапазон: [%3, %4]"
+
+#~ msgid "Add Color To Palette"
+#~ msgstr "Добавить цвет в палитру"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr ""
+#~ "Не удалось записать в файл палитры %1. Вероятно, он доступен только для "
+#~ "чтения."
+
+#~ msgid "Add/Remove Colors"
+#~ msgstr "Добавить/Удалить цвета"
 
 #~ msgid "&Zoom In"
 #~ msgstr "&Увеличить масштаб"

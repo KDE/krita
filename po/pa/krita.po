@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -43434,7 +43434,6 @@ msgid "%1:"
 msgstr "%1 ਸਲਾਈਡ"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgid "Color name:"
@@ -43889,32 +43888,6 @@ msgstr "ਡੌਕੂਮੈਂਟ"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "ਡੌਕੂਮੈਂਟ"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, fuzzy, kde-format
-#| msgid "Import Slideshow"
-msgid "Add Color To Palette"
-msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, fuzzy, kde-format
-#| msgid "Page %1"
-msgid "Palette"
-msgstr "ਸਫ਼ਾ %1"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, fuzzy, kde-format
-#| msgid "Remove points"
-msgid "Add/Remove Colors"
-msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, fuzzy, kde-format
@@ -45447,7 +45420,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 msgid "Perspective Ellipse assistant"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Perspective Ellipse"
@@ -45495,7 +45468,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 msgid "Vanishing Point assistant"
 msgstr "ਸ਼ਕਲ"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, kde-format
 msgid "Vanishing Point"
 msgstr ""
@@ -48025,6 +47998,14 @@ msgstr "...ਸੰਰਚਨਾ"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, fuzzy, kde-format
+#| msgid "Page %1"
+msgid "Palette"
+msgstr "ਸਫ਼ਾ %1"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, fuzzy, kde-format
@@ -76224,6 +76205,16 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Import Slideshow"
+#~ msgid "Add Color To Palette"
+#~ msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
+
+#, fuzzy
+#~| msgid "Remove points"
+#~ msgid "Add/Remove Colors"
+#~ msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
 #, fuzzy
 #~| msgid "Zoom"

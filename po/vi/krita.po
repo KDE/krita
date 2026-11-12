@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -40331,7 +40331,6 @@ msgid "%1:"
 msgstr "%1:"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, fuzzy, kde-format
 msgid "Color name:"
 msgstr "Không gian màu:"
@@ -40759,29 +40758,6 @@ msgstr "Đá"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Tài liệu Riêng"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, kde-format
-msgid "Add Color To Palette"
-msgstr "Thêm Màu vào Bảng màu"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr "Không thể ghi vào tệp bảng màu %1. Có thể nó chỉ được đọc."
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "Bảng màu"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
-msgstr "Thêm/Xoá Màu"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, fuzzy, kde-format
@@ -42178,7 +42154,7 @@ msgstr "Công cụ &xoá"
 msgid "Perspective Ellipse assistant"
 msgstr "Công cụ &xoá"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "Công cụ &xoá"
@@ -42219,7 +42195,7 @@ msgstr "Công cụ &xoá"
 msgid "Vanishing Point assistant"
 msgstr "Hiện thước kẻ"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "tuỳ chọn"
@@ -44476,6 +44452,13 @@ msgstr "sửa định sẵn"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "Bảng màu"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, fuzzy, kde-format
@@ -70372,6 +70355,15 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#~ msgid "Add Color To Palette"
+#~ msgstr "Thêm Màu vào Bảng màu"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr "Không thể ghi vào tệp bảng màu %1. Có thể nó chỉ được đọc."
+
+#~ msgid "Add/Remove Colors"
+#~ msgstr "Thêm/Xoá Màu"
 
 #, fuzzy
 #~ msgid "&Zoom In"

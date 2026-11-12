@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -40534,7 +40534,6 @@ msgid "%1:"
 msgstr "%1 ៖"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, fuzzy, kde-format
 msgid "Color name:"
 msgstr "គំរូ​ពណ៌ ៖"
@@ -40961,29 +40960,6 @@ msgstr "ឧបករណ៍​ចូលផែ​សម្រាប់​ក្ត
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "បើក​នៅ​ក្នុង​ឯកសារ​ថ្មី"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, fuzzy, kde-format
-msgid "Add Color To Palette"
-msgstr "បន្ថែម​ទៅ​ក្ដារ​លាយ ៖"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, fuzzy, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr "មិន​អាច​សរសេរ​ទៅ​កាន់​ឯកសារ​ក្ដារលាយ %1 បាន​ឡើយ​។ ប្រហែល​ជា​វា​បាន​តែ​អាន​ប៉ុណ្ណោះ ។"
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "ក្ដារលាយ"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, fuzzy, kde-format
-msgid "Add/Remove Colors"
-msgstr "យក​ពណ៌​ដែល​បាន​ជ្រើស​ចេញ​"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, fuzzy, kde-format
@@ -42380,7 +42356,7 @@ msgstr "យថា​ទស្សន៍"
 msgid "Perspective Ellipse assistant"
 msgstr "អ្នក​ជំនួយការ​យថាទស្សន៍​"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"
@@ -42425,7 +42401,7 @@ msgstr "យថា​ទស្សន៍"
 msgid "Vanishing Point assistant"
 msgstr "អ្នក​ជំនួយការ​គូរ"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "ចំណុច​ជម្រះ"
@@ -44705,6 +44681,13 @@ msgstr "ទិដ្ឋភាព​ទូទៅ"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "ក្ដារលាយ"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, fuzzy, kde-format
@@ -70958,6 +70941,18 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Add Color To Palette"
+#~ msgstr "បន្ថែម​ទៅ​ក្ដារ​លាយ ៖"
+
+#, fuzzy
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr "មិន​អាច​សរសេរ​ទៅ​កាន់​ឯកសារ​ក្ដារលាយ %1 បាន​ឡើយ​។ ប្រហែល​ជា​វា​បាន​តែ​អាន​ប៉ុណ្ណោះ ។"
+
+#, fuzzy
+#~ msgid "Add/Remove Colors"
+#~ msgstr "យក​ពណ៌​ដែល​បាន​ជ្រើស​ចេញ​"
 
 #, fuzzy
 #~| msgid "Zoom In"

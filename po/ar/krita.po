@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
-"PO-Revision-Date: 2026-11-06 15:39+0400\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
+"PO-Revision-Date: 2026-11-11 20:45+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -40529,7 +40529,6 @@ msgid "%1:"
 msgstr "%1:"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
 msgid "Color name:"
 msgstr "اسم اللون:"
@@ -40946,29 +40945,6 @@ msgstr "رصيف عائم"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "أغلق الرّصيف"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, kde-format
-msgid "Add Color To Palette"
-msgstr "أضف اللون إلى اللوحة"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr "تعذّرت الكتابة في ملف اللوحة %1. قد يكون للقراءة فقط. "
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "لوحة الألوان"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
-msgstr "أضف/أزِل ألوان"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, kde-format
@@ -42303,6 +42279,9 @@ msgid ""
 "follow (eg for the \"Perspective\" brush sensor), this will be used. "
 "Priority is like counting, lower number comes first."
 msgstr ""
+"عندما تمر الفرشاة فوق عناصر المساعدة في المنظور، وتحتاج إلى تحديد العنصر "
+"الذي ستتبعه (على سبيل المثال، بالنسبة لمستشعر الفرشاة «Perspective»)، "
+"ستستخدم هذه القاعدة. تعمل الأولوية كعملية العد، حيث يأتي الرقم الأصغر أولاً."
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1797
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1803
@@ -42434,7 +42413,7 @@ msgstr "منظور"
 msgid "Perspective Ellipse assistant"
 msgstr "مساعد الإهليلج المنظوري"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "إهليلج منظوري"
@@ -42475,7 +42454,7 @@ msgstr "منظور نقطتين"
 msgid "Vanishing Point assistant"
 msgstr "مساعد نقطة التلاشي"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, kde-format
 msgid "Vanishing Point"
 msgstr "نقطة التلاشي"
@@ -44746,6 +44725,13 @@ msgstr "نظرة عامة"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "ثبّت عناصر التحكم في التنقل"
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "لوحة الألوان"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, kde-format
@@ -70536,6 +70522,15 @@ msgstr ""
 "بدّل بين النطاق الكامل والنطاق الفرعي.\n"
 "النطاق الكامل: [%1, %2]\n"
 "النطاق الفرعي: [%3, %4]"
+
+#~ msgid "Add Color To Palette"
+#~ msgstr "أضف اللون إلى اللوحة"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr "تعذّرت الكتابة في ملف اللوحة %1. قد يكون للقراءة فقط. "
+
+#~ msgid "Add/Remove Colors"
+#~ msgstr "أضف/أزِل ألوان"
 
 #~ msgid "&Zoom In"
 #~ msgstr "&قرّب"

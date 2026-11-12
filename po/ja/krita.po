@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2026-06-07 12:10+0900\n"
 "Last-Translator: Mint <5602mint@gmail.com>\n"
 "Language-Team: Japanese <kde-i18n-doc@kde.org>\n"
@@ -41243,7 +41243,6 @@ msgid "%1:"
 msgstr "%1:"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, kde-format
 msgid "Color name:"
 msgstr "色名:"
@@ -41666,31 +41665,6 @@ msgstr "ドッキングパネルのフロート化"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "ドッキングパネルを閉じる"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, kde-format
-msgid "Add Color To Palette"
-msgstr "パレットに色を追加"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr ""
-"パレットファイル %1 に書き込めません。読み取り専用になっている可能性がありま"
-"す。"
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "パレット"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
-msgstr "色を追加/削除"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, kde-format
@@ -43185,7 +43159,7 @@ msgstr "パースグリッド"
 msgid "Perspective Ellipse assistant"
 msgstr "曲線パース補助線"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "曲線パース"
@@ -43230,7 +43204,7 @@ msgstr "2点パースグリッド"
 msgid "Vanishing Point assistant"
 msgstr "消失点補助"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, kde-format
 msgid "Vanishing Point"
 msgstr "消失点"
@@ -45477,6 +45451,13 @@ msgstr "上書き"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "ピンナビゲーションを制御"
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "パレット"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, kde-format
@@ -71991,6 +71972,17 @@ msgstr ""
 "全範囲と部分範囲を切り替えます。\n"
 "全範囲: [%1, %2]\n"
 "部分範囲: [%3, %4]"
+
+#~ msgid "Add Color To Palette"
+#~ msgstr "パレットに色を追加"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr ""
+#~ "パレットファイル %1 に書き込めません。読み取り専用になっている可能性があり"
+#~ "ます。"
+
+#~ msgid "Add/Remove Colors"
+#~ msgstr "色を追加/削除"
 
 #~ msgid "&Zoom In"
 #~ msgstr "倍率拡大(&Z)"

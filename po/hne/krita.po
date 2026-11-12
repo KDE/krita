@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:59+0000\n"
+"POT-Creation-Date: 2026-11-12 00:57+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -40602,7 +40602,6 @@ msgid "%1:"
 msgstr "%1:"
 
 #: libs/widgets/kis_color_input.cpp:337
-#: libs/widgets/KoEditColorSetDialog.cpp:158
 #, fuzzy, kde-format
 msgid "Color name:"
 msgstr "रंग जगह:"
@@ -41035,29 +41034,6 @@ msgstr "डाकर्स"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "मनमाफिक कागद"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:158
-#, kde-format
-msgid "Add Color To Palette"
-msgstr "रंगपट्टिका मं रंग जोड़व"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr "रंगपट्टिका फाइल %1 मं लिख नइ सकिस. सायद ए सिरिफ पढ़े जइसन हे."
-
-#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
-#: libs/widgets/KoEditColorSetDialog.cpp:201
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
-#: plugins/filters/palettize/palettize.ui:39
-#, kde-format
-msgid "Palette"
-msgstr "रंगदानी"
-
-#: libs/widgets/KoEditColorSetDialog.cpp:215
-#, kde-format
-msgid "Add/Remove Colors"
-msgstr "रंगों ल जोड़व/मेटाव"
 
 #: libs/widgets/KoResourceServerProvider.cpp:44
 #, fuzzy, kde-format
@@ -42458,7 +42434,7 @@ msgstr "पर्सपेक्टिव ग्रिड"
 msgid "Perspective Ellipse assistant"
 msgstr "पर्सपेक्टिव ग्रिड"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:632
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:623
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"
@@ -42500,7 +42476,7 @@ msgstr "पर्सपेक्टिव ग्रिड"
 msgid "Vanishing Point assistant"
 msgstr "रूलर सहायक देखाव (&S)"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:338
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "विकल्प"
@@ -44800,6 +44776,13 @@ msgstr "ओवरव्यू"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, paletteLabel)
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/filters/palettize/palettize.ui:39
+#, kde-format
+msgid "Palette"
+msgstr "रंगदानी"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
 #, fuzzy, kde-format
@@ -71028,6 +71011,15 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#~ msgid "Add Color To Palette"
+#~ msgstr "रंगपट्टिका मं रंग जोड़व"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
+#~ msgstr "रंगपट्टिका फाइल %1 मं लिख नइ सकिस. सायद ए सिरिफ पढ़े जइसन हे."
+
+#~ msgid "Add/Remove Colors"
+#~ msgstr "रंगों ल जोड़व/मेटाव"
 
 #, fuzzy
 #~| msgid "Zoom In"

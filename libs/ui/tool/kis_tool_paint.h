@@ -116,6 +116,8 @@ private Q_SLOTS:
 
     void slotPopupQuickHelp();
 
+    void slotCanvasOffsetChanged();
+
     void increaseBrushSize();
     void decreaseBrushSize();
     void showBrushSize();

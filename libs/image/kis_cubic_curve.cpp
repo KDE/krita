@@ -164,12 +164,17 @@ KisCubicCurve::KisCubicCurve()
 }
 
 KisCubicCurve::KisCubicCurve(const QList<QPointF> &points)
+    : KisCubicCurve(points, false)
+{
+}
+
+KisCubicCurve::KisCubicCurve(const QList<QPointF>& points, bool setAsCorner)
     : d(new Private)
 {
     d->data = new Data;
     d->data->points.reserve(points.size());
     Q_FOREACH(const QPointF p, points) {
-        d->data->points.append({ p, false });
+        d->data->points.append({ p, setAsCorner });
     }
     d->data->keepSorted();
 }

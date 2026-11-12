@@ -57,6 +57,7 @@ public:
     KisCubicCurve();
 
     KisCubicCurve(const QList<QPointF>& points);
+    KisCubicCurve(const QList<QPointF>& points, bool setAsCorner);
     KisCubicCurve(const QList<KisCubicCurvePoint>& points);
 
     KisCubicCurve(const QString &curveString);

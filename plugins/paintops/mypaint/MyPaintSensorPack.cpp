@@ -103,7 +103,7 @@ MyPaintSensorDataWithRange::MyPaintSensorDataWithRange(const KoID &id)
         points = {{0,0}, {1,1}};
     }
 
-    curve = KisCubicCurve(points).toString();
+    curve = KisCubicCurve(points, true).toString();
     curveRange = KisAlgebra2D::accumulateBounds(points);
     reshapeCurve();
 }
@@ -362,7 +362,7 @@ bool MyPaintSensorPack::read(KisCurveOptionDataCommon &data, const KisProperties
 
         if (points.size() > 1) {
             (*it)->isActive = true;
-            (*it)->curve = KisCubicCurve(points).toString();
+            (*it)->curve = KisCubicCurve(points, true).toString();
             (*it)->setBaseCurveRange(KisAlgebra2D::accumulateBounds(points));
             dynamic_cast<MyPaintSensorDataWithRange*>(*it)->reshapeCurve();
         } else {

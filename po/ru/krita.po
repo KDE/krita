@@ -83,7 +83,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 00:12+0000\n"
-"PO-Revision-Date: 2026-10-29 07:46+0200\n"
+"PO-Revision-Date: 2026-11-11 22:57+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -14586,7 +14586,7 @@ msgstr "Отзеркалить отображение вокруг холста"
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "&Масштаб 100%"
+msgstr "&Масштаб 100 %"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
@@ -14596,7 +14596,7 @@ msgstr "&Масштаб 100%"
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr "Масштаб 100%"
+msgstr "Масштаб 100 %"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
@@ -22072,7 +22072,7 @@ msgstr "Поворот (Z)"
 #: libs/image/kis_layer.cc:275 libs/widgets/KoZoomActionState.cpp:20
 #, kde-format
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #. i18n: ectx: property (toolTip), widget (KisCompositeOpComboBox, cmbComposite)
 #: libs/image/kis_layer.cc:280 libs/ui/widgets/kis_cmb_composite.cc:76
@@ -26094,7 +26094,7 @@ msgstr ""
 "FFmpeg по крайней мере версии 4.2. Если в полученном GIF заметны разрывы "
 "кадров, настоятельно рекомендуется использовать FFmpeg версии не ниже 4.4.</"
 "span></p><p><span style=\" font-style:italic;\">Примечание 2: Формат GIF "
-"поддерживает только 100% или 0% прозрачность. Частичная прозрачность </"
+"поддерживает только 100 % или 0 % прозрачность. Частичная прозрачность </"
 "span><span style=\" font-style:italic; text-decoration: underline;\">не</"
 "span><span style=\" font-style:italic;\"> поддерживается. Если потребуется "
 "частичная прозрачность, рекомендуется воспользоваться APNG или WEBP.</"
@@ -32573,7 +32573,7 @@ msgstr ""
 "<html><head/><body><p>При визуализации кадров анимации (в файлы или во время "
 "создания кэша анимации) Krita создаст указанное количество копий изображения "
 "и будет работать с ними параллельно основному процессу. Для хранения каждой "
-"копии потребуется больше ОЗУ (около 20% от размера изображения), поэтому "
+"копии потребуется больше ОЗУ (около 20 % от размера изображения), поэтому "
 "увеличивать это ограничение целесообразно только если установлено достаточно "
 "ОЗУ.</p><p><br/></p><p><span style=\" font-weight:600;\">Рекомендованное "
 "значение:</span>установите ограничение количества копий на количество <span "
@@ -32816,8 +32816,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Добавить дополнительную область к видимой области с "
 "каждой стороны холста.</p><p><span style=\" font-weight:600;"
-"\">Рекомендованное значение</span> — 25%, это значит, что видимая область "
-"будет увеличена на 25% с каждой стороны.</p></body></html>"
+"\">Рекомендованное значение</span> — 25 %, это значит, что видимая область "
+"будет увеличена на 25 % с каждой стороны.</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:529
@@ -34656,7 +34656,7 @@ msgstr "Уменьшить от курсора"
 #: libs/ui/input/kis_zoom_action.cpp:80 libs/ui/kis_popup_palette.cpp:214
 #, kde-format
 msgid "Zoom to 100%"
-msgstr "Масштаб 100%"
+msgstr "Масштаб 100 %"
 
 #: libs/ui/input/kis_zoom_action.cpp:81
 #, kde-format
@@ -34808,13 +34808,13 @@ msgstr "Новые параметры %1"
 #: libs/ui/kis_canvas_controls_manager.cpp:292
 #, kde-format
 msgid "Brush Opacity: %1%"
-msgstr "Непрозрачность кисти: %1%"
+msgstr "Непрозрачность кисти: %1 %"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:324
 #, kde-format
 msgctxt "Brush Option Flow"
 msgid "Flow: %1%"
-msgstr "Нажим: %1%"
+msgstr "Нажим: %1 %"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:352
 #, kde-format
@@ -34826,7 +34826,7 @@ msgstr "Угасание: %1"
 #, kde-format
 msgctxt "Brush Option Scatter"
 msgid "Scatter: %1%"
-msgstr "Рассеяние: %1%"
+msgstr "Рассеяние: %1 %"
 
 #: libs/ui/kis_change_file_layer_command.h:24
 msgctxt "(qtundo-format)"
@@ -35471,13 +35471,13 @@ msgstr ""
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #: libs/ui/kis_node_model.cpp:605
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
-msgstr "%1% %2"
+msgstr "%1 % %2"
 
 #: libs/ui/kis_paintop_box.cc:100
 #, kde-format
@@ -35640,7 +35640,7 @@ msgstr "Только холст"
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
 #, kde-format
 msgid "100%"
-msgstr "100%"
+msgstr "100 %"
 
 #: libs/ui/kis_popup_palette.cpp:220
 #, kde-format
@@ -35984,7 +35984,7 @@ msgstr "%1  %2"
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
-msgstr "Масштаб: %1 %"
+msgstr "Масштаб: %1 %"
 
 #: libs/ui/KisApplication.cpp:430
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:266
@@ -44012,7 +44012,7 @@ msgstr "Реальная частота кадров:\t%1"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:639
 #, kde-format
 msgid "Frames dropped:\t%1%"
-msgstr "Кадров пропущено:\t%1%"
+msgstr "Кадров пропущено:\t%1 %"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:699
 #, kde-format
@@ -45047,7 +45047,7 @@ msgstr "&Добавить"
 #: plugins/dockers/layerdocker/NodeDelegate.cpp:1357
 #, kde-format
 msgid "%1 %"
-msgstr "%1 %"
+msgstr "%1 %"
 
 #: plugins/dockers/layerdocker/NodeToolTip.cpp:48
 #, kde-format
@@ -60401,7 +60401,7 @@ msgstr "Соединительная линия"
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
 #, kde-format
 msgid "0%"
-msgstr "0%"
+msgstr "0 %"
 
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:55
 #, kde-format
@@ -61787,7 +61787,7 @@ msgid ""
 msgstr ""
 "Уровень точности 1 (самый быстрый)\n"
 "Субпиксельная точность: отключено\n"
-"Точность размера кисти: 5%\n"
+"Точность размера кисти: 5 %\n"
 "\n"
 "Оптимально для очень больших кистей"
 
@@ -61802,7 +61802,7 @@ msgid ""
 msgstr ""
 "Уровень точности 2\n"
 "Субпиксельная точность: отключено\n"
-"Точность размера кисти: 1%\n"
+"Точность размера кисти: 1 %\n"
 "\n"
 "Оптимально для больших кистей"
 
@@ -61827,10 +61827,10 @@ msgid ""
 "Gives up to 50% better performance in comparison to Level 5"
 msgstr ""
 "Уровень точности 4 (оптимальный)\n"
-"Субпиксельная точность: 50%\n"
+"Субпиксельная точность: 50 %\n"
 "Точность размера кисти: строгая\n"
 "\n"
-"По сравнению с 5 уровнем работает на 50% быстрее"
+"По сравнению с 5 уровнем работает на 50 % быстрее"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:77
 #, kde-format
@@ -61929,8 +61929,8 @@ msgid ""
 msgstr ""
 "Сбрасывает все параметры к значениям по умолчанию:\n"
 "Нейтральная точка: 127\n"
-" Яркость: 0%\n"
-" Контрастность: 0%"
+" Яркость: 0 %\n"
+" Контрастность: 0 %"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
@@ -62442,7 +62442,7 @@ msgstr "CW оттенок"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
 #, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "(0% активного цвета)"
+msgstr "(0 % активного цвета)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118
@@ -62450,7 +62450,7 @@ msgstr "(0% активного цвета)"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:141
 #, kde-format
 msgid "+100%"
-msgstr "+100%"
+msgstr "+100 %"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:107
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:119
@@ -62458,7 +62458,7 @@ msgstr "+100%"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:142
 #, kde-format
 msgid "-100%"
-msgstr "-100%"
+msgstr "-100 %"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:109
 #, kde-format
@@ -70046,7 +70046,7 @@ msgid ""
 "the closed contours. 0% - no effect, 100% - max effect"
 msgstr ""
 "Маска попытается удалить те части ключевых мазков, которые будут расположены "
-"вне замкнутых контуров. 0% — нулевой эффект, 100% — максимальный эффект."
+"вне замкнутых контуров. 0 % — нулевой эффект, 100 % — максимальный эффект."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdates)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:23

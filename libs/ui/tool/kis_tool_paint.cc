@@ -163,6 +163,15 @@ void KisToolPaint::activate(const QSet<KoShape*> &shapes)
     }
 
     KisTool::activate(shapes);
+
+    if (canvas() && canvas()->canvasController()) {
+        connect(canvas()->canvasController()->proxyObject,
+                SIGNAL(canvasOffsetChanged()),
+                this,
+                SLOT(slotCanvasOffsetChanged()),
+                Qt::UniqueConnection);
+    }
+    
     if (flags() & KisTool::FLAG_USES_CUSTOM_SIZE) {
         connect(action("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
         connect(action("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);
@@ -194,7 +203,36 @@ void KisToolPaint::deactivate()
     tryRestoreOpacitySnapshot();
     Q_EMIT statusTextChanged(QString());
 
+    if (canvas() && canvas()->canvasController()) {
+        disconnect(canvas()->canvasController()->proxyObject,
+                   SIGNAL(canvasOffsetChanged()),
+                   this,
+                   SLOT(slotCanvasOffsetChanged()));
+    }
+
     KisTool::deactivate();
+}
+
+void KisToolPaint::slotCanvasOffsetChanged()
+{
+    if (!isActive() || !isOutlineEnabled())
+        return;
+
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
+    if (!kisCanvas)
+        return;
+
+    QWidget *widget = kisCanvas->canvasWidget();
+    if (!widget)
+        return;
+
+    const QPointF widgetPos = widget->mapFromGlobal(QCursor::pos());
+    if (!widget->rect().contains(widgetPos.toPoint()))
+        return;
+
+    const QPointF docPoint = kisCanvas->coordinatesConverter()->widgetToDocument(widgetPos);
+
+    requestUpdateOutline(docPoint, lastDeliveredPointerEvent());
 }
 
 void KisToolPaint::slotColorPickerRequestedCursor(const QCursor &cursor)

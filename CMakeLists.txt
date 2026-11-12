@@ -1757,7 +1757,7 @@ if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
     # because ecm_androiddeployqt repopulates the project directory
     # every time unconditionally
     configure_file(${CMAKE_SOURCE_DIR}/packaging/android/apk/version.properties.in
-                   ${CMAKE_SOURCE_DIR}/packaging/android/apk/version.properties)
+                   ${CMAKE_BINARY_DIR}/version.properties)
 
     set (_CMAKE_ANDROID_DIR "${ECM_DIR}/../toolchain")
     list(LENGTH QTANDROID_EXPORTED_TARGET targetsCount)
@@ -1775,7 +1775,26 @@ if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
         endif()
 
         ecm_androiddeployqt("${exportedTarget}" "${ECM_ADDITIONAL_FIND_ROOT_PATH}")
-        set_target_properties(create-apk-${exportedTarget} PROPERTIES ANDROID_APK_DIR "${APK_DIR}")
+
+        set(VERSIONED_BUILD_DIR "${CMAKE_BINARY_DIR}/${QTANDROID_EXPORTED_TARGET}_build_apk.in/")
+
+        # `ecm_androiddeployqt` unconditionally recopies the entire apk folder
+        # on every run. Therefore we have two options: 1) write `version.properties`
+        # in the **source** tree (which is ugly), or 2) make another copy of the folder in
+        # the build tree (not very pretty also).
+        #
+        # The code below uses the second approach and just copies the apk-source folder
+        # into the build tree under a custom name (`*_build_apk.in`). This folder will
+        # later be used by `ecm_androiddeployqt` for building the actual apk.
+        add_custom_target(prepare-versioned-apk-build-dir-${exportedTarget}
+            COMMAND ${CMAKE_COMMAND} -E echo "Prepare a versioned build directory for $<TARGET_NAME:${QTANDROID_EXPORTED_TARGET}>"
+            COMMAND ${CMAKE_COMMAND} -E remove_directory "${VERSIONED_BUILD_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E copy_directory "${APK_DIR}" "${VERSIONED_BUILD_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/version.properties "${VERSIONED_BUILD_DIR}"
+        )
+
+        add_dependencies(create-apk-${exportedTarget} prepare-versioned-apk-build-dir-${exportedTarget})
+        set_target_properties(create-apk-${exportedTarget} PROPERTIES ANDROID_APK_DIR "${VERSIONED_BUILD_DIR}")
     endforeach()
 elseif(ANDROID)
     message(STATUS "You can export a target by specifying -DQTANDROID_EXPORTED_TARGET=<targetname> and -DANDROID_APK_DIR=<paths>")

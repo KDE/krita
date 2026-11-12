@@ -35,6 +35,6 @@
   <string name="product_onetime_description">&lt;p&gt;В этот набор входят %1$d наборов ресурсов, которые вместе содержат более %2$d кистей, включая платный набор Digital Atelier. Это &lt;strong&gt;разовая покупка&lt;/strong&gt;, подписка не оформляется.&lt;/p&gt;</string>
   <string name="show_this_dialog_when_krita_starts">Показывать это окно при запуске Krita</string>
   <string name="ok">ОК</string>
-  <string name="interface_scale_default">Масштаб интерфейса: %d%% (по умолчанию)</string>
-  <string name="interface_scale">Масштаб интерфейса: %d%%</string>
+  <string name="interface_scale_default">Масштаб интерфейса: %d %% (по умолчанию)</string>
+  <string name="interface_scale">Масштаб интерфейса: %d %%</string>
 </resources>

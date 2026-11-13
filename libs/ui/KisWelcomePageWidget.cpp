@@ -205,7 +205,9 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     if (!qEnvironmentVariableIsSet("SteamAppId")) { // do not create updater for linux/steam
         if (qEnvironmentVariableIsSet("APPIMAGE")) {
             m_versionUpdater.reset(new KisAppimageUpdater());
-        } else {
+        }
+        // Fall back to the manual updater if the AppImage one doesn't work.
+        if (m_versionUpdater.isNull() || !m_versionUpdater->hasUpdateCapability()) {
             m_versionUpdater.reset(new KisManualUpdater());
         }
     }

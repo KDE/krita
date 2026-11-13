@@ -721,5 +721,7 @@
         <file>light_more-blue.svg</file>
         <file>light_hue-shift-CCW.svg</file>
         <file>light_hue-shift-CW.svg</file>
+        <file>dark_render-animation.svg</file>
+        <file>light_render-animation.svg</file>
     </qresource>
 </RCC>

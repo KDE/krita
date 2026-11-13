@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 00:12+0000\n"
+"POT-Creation-Date: 2026-11-13 03:37+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -34620,8 +34620,8 @@ msgstr "เครื่องมือเ&ลือกสี"
 msgid "Brush composite"
 msgstr "แปรงทาสี"
 
-#: libs/ui/kis_paintop_box.cc:1338 libs/ui/kis_paintop_box.cc:1360
-#: libs/ui/kis_paintop_box.cc:1374
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, fuzzy, kde-format
 msgid ""
 "%1\n"

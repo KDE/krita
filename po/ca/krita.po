@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 00:12+0000\n"
-"PO-Revision-Date: 2026-10-29 11:41+0100\n"
+"POT-Creation-Date: 2026-11-13 03:37+0000\n"
+"PO-Revision-Date: 2026-11-12 20:04+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -27899,7 +27899,7 @@ msgid ""
 "when using WinTab tablet API)"
 msgstr ""
 "Usa les marques de temps del controlador de la tauleta per a la velocitat "
-"del pinzell (pot causar defectes severs en usar l'API de la tauleta WinTab)"
+"del pinzell (pot causar defectes greus en usar l'API de la tauleta WinTab)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1667
 #, kde-format
@@ -35163,8 +35163,8 @@ msgstr "Escull l'espai de treball"
 msgid "Brush composite"
 msgstr "Composició del pinzell"
 
-#: libs/ui/kis_paintop_box.cc:1338 libs/ui/kis_paintop_box.cc:1360
-#: libs/ui/kis_paintop_box.cc:1374
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, kde-format
 msgid ""
 "%1\n"

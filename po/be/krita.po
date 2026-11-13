@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 00:12+0000\n"
+"POT-Creation-Date: 2026-11-13 03:37+0000\n"
 "PO-Revision-Date: 2008-01-01 23:08+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -34551,8 +34551,8 @@ msgstr "Колеравая прастора:"
 msgid "Brush composite"
 msgstr "Памер пэндзля"
 
-#: libs/ui/kis_paintop_box.cc:1338 libs/ui/kis_paintop_box.cc:1360
-#: libs/ui/kis_paintop_box.cc:1374
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, fuzzy, kde-format
 msgid ""
 "%1\n"

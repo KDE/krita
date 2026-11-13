@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 00:12+0000\n"
+"POT-Creation-Date: 2026-11-13 03:37+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -36522,8 +36522,8 @@ msgstr "작업 공간 선택"
 msgid "Brush composite"
 msgstr "브러시 합성"
 
-#: libs/ui/kis_paintop_box.cc:1338 libs/ui/kis_paintop_box.cc:1360
-#: libs/ui/kis_paintop_box.cc:1374
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, kde-format
 msgid ""
 "%1\n"

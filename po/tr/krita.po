@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 00:12+0000\n"
+"POT-Creation-Date: 2026-11-13 03:37+0000\n"
 "PO-Revision-Date: 2026-11-04 22:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -34993,8 +34993,8 @@ msgstr "Çalışma alanını seç"
 msgid "Brush composite"
 msgstr "Kompozit fırça"
 
-#: libs/ui/kis_paintop_box.cc:1338 libs/ui/kis_paintop_box.cc:1360
-#: libs/ui/kis_paintop_box.cc:1374
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, kde-format
 msgid ""
 "%1\n"

@@ -6,10 +6,16 @@
  */
 
 #include <QEvent>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsScene>
+#include <QPalette>
+#include <QSet>
+
+#include <KoColorSpaceRegistry.h>
 
 #include <kis_preset_live_preview_view.h>
-#include <QDebug>
-#include <QGraphicsPixmapItem>
+#include <kis_image.h>
+#include <kis_paint_layer.h>
 #include "kis_paintop_settings.h"
 #include <strokes/freehand_stroke.h>
 #include <strokes/KisFreehandStrokeInfo.h>
@@ -18,10 +24,21 @@
 #include <KisGlobalResourcesInterface.h>
 #include "kis_transaction.h"
 #include <KoCanvasResourceProvider.h>
+#include <KoCompositeOpRegistry.h>
+#include "KisBrushStrokePreviewCache.h"
+
+
+static bool needsBlendingModeOverride(const QString &compositeOp)
+{
+    //Brush presets with Erase blending mode have blank stroke previews without this
+    static const QSet<QString> invisibleModes = {COMPOSITE_ERASE};
+    return invisibleModes.contains(compositeOp);
+}
+
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent)
     : QGraphicsView(parent),
-      m_updateCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
+      m_updateCompressor(DefaultUpdateDelayMs, KisSignalCompressor::FIRST_ACTIVE)
 {
     connect(&m_updateCompressor, SIGNAL(timeout()), SLOT(updateStroke()));
 }
@@ -36,9 +53,9 @@ void KisPresetLivePreviewView::setup(KoCanvasResourceProvider* resourceManager)
 {
     m_resourceManager = resourceManager;
 
-    // initializing to 0 helps check later if they actually have something in them
-    m_noPreviewText = 0;
-    m_sceneImageItem = 0;
+    // initializing to nullptr helps check later if they actually have something in them
+    m_noPreviewText = nullptr;
+    m_sceneImageItem = nullptr;
 
     setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
     setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
@@ -73,119 +90,163 @@ void KisPresetLivePreviewView::requestUpdateStroke()
     m_updateCompressor.start();
 }
 
+void KisPresetLivePreviewView::requestUpdateStrokeImmediate()
+{
+    if (m_previewGenerationInProgress) {
+        m_updateCompressor.start();
+        return;
+    }
+    updateStroke();
+}
+
+void KisPresetLivePreviewView::setBatchPreviewMode(bool enabled)
+{
+    if (m_batchPreviewMode == enabled) {
+        return;
+    }
+    m_batchPreviewMode = enabled;
+    m_updateCompressor.setDelay(enabled ? 0 : DefaultUpdateDelayMs);
+}
+
+void KisPresetLivePreviewView::setCachePreviewMode(bool enabled)
+{
+    m_cachePreviewMode = enabled;
+}
+
+KoCanvasResourceProvider* KisPresetLivePreviewView::resourceManager() const
+{
+    return m_resourceManager;
+}
+
 void KisPresetLivePreviewView::updateStroke()
 {
-    // do not paint a stroke if we are any of these engines (they have some issue currently)
-    if (m_currentPreset->paintOp().id() == "roundmarker" ||
-            m_currentPreset->paintOp().id() == "experimentbrush" ||
-            m_currentPreset->paintOp().id() == "duplicate") {
+    if (!m_currentPreset) {
+        return;
+    }
 
-        paintBackground();
+    if (m_previewGenerationInProgress) {
+        m_updateCompressor.start();
+        return;
+    }
+
+    m_previewPresetId = m_currentPreset->resourceId();
+
+    // do not paint a stroke if we are any of these engines (they have some issue currently)
+    if (KisBrushStrokePreviewCache::isNoPreviewEngine(m_currentPreset->paintOp().id())) {
+        paintBackground(m_cachePreviewMode);
         slotPreviewGenerationCompleted();
         return;
     }
 
-    if (!m_previewGenerationInProgress) {
-        paintBackground();
-        setupAndPaintStroke();
-    } else {
-        m_updateCompressor.start();
-    }
+    paintBackground(m_cachePreviewMode);
+    setupAndPaintStroke();
 }
 
 void KisPresetLivePreviewView::slotPreviewGenerationCompleted()
 {
     m_previewGenerationInProgress = false;
 
-    QImage m_temp_image;
-    m_temp_image = m_layer->paintDevice()->convertToQImage(0, m_image->bounds());
+    m_lastPreviewImage = m_layer->paintDevice()->convertToQImage(0, m_image->bounds());
 
-    // only add the object once...then just update the pixmap so we can move the preview around
-    if (!m_sceneImageItem) {
-        m_sceneImageItem = m_brushPreviewScene->addPixmap(QPixmap::fromImage(m_temp_image));
-    } else {
-        m_sceneImageItem->setPixmap(QPixmap::fromImage(m_temp_image));
+    if (!m_batchPreviewMode && !m_cachePreviewMode) {
+        // only add the object once...then just update the pixmap so we can move the preview around
+        if (!m_sceneImageItem) {
+            m_sceneImageItem = m_brushPreviewScene->addPixmap(QPixmap::fromImage(m_lastPreviewImage));
+        } else {
+            m_sceneImageItem->setPixmap(QPixmap::fromImage(m_lastPreviewImage));
+        }
+    }
+
+    // Emit preview for caching.
+    const int presetId = m_previewPresetId >= 0
+        ? m_previewPresetId
+        : (m_currentPreset ? m_currentPreset->resourceId() : -1);
+    if (presetId >= 0 && !m_lastPreviewImage.isNull()) {
+        Q_EMIT sigPreviewImageReady(presetId, m_lastPreviewImage);
+    }
+
+    m_previewPresetId = -1;
+}
+
+void KisPresetLivePreviewView::paintStripedBackground()
+{
+    const int grayStrips = 20;
+    const float sectionPercent = 1.0f / grayStrips;
+    const int imageWidth = m_layer->image()->width();
+    const int imageHeight = m_layer->image()->height();
+
+    for (int i = 0; i < grayStrips; i++) {
+        KoColor fillColor(m_layer->paintDevice()->colorSpace());
+        fillColor.fromQColor((i % 2) ? QColor(80, 80, 80) : QColor(140, 140, 140));
+
+        const QRect fillRect(imageWidth * sectionPercent * i,
+                             0,
+                             imageWidth * (sectionPercent * i + sectionPercent),
+                             imageHeight);
+
+        KisTransaction t(m_layer->paintDevice());
+        m_layer->paintDevice()->fill(fillRect, fillColor);
+        t.end();
     }
 }
 
-void KisPresetLivePreviewView::paintBackground()
+void KisPresetLivePreviewView::paintBackground(bool cacheMode)
 {
     // clean up "no preview" text object if it exists. we will add it later if we need it
     if (m_noPreviewText) {
         this->scene()->removeItem(m_noPreviewText);
-        m_noPreviewText = 0;
+        m_noPreviewText = nullptr;
     }
 
+    const QString paintOpId = m_currentPreset->paintOp().id();
 
-    if (m_currentPreset->paintOp().id() == "colorsmudge" ||
-            m_currentPreset->paintOp().id() == "deformbrush" ||
-            m_currentPreset->paintOp().id() == "filter") {
-
-        // easier to see deformations and smudging with alternating stripes in the background
-        // paint the whole background with alternating stripes
-        // filter engine may or may not show things depending on the filter...but it is better than nothing
-
-        int grayStrips = 20;
-        for (int i=0; i < grayStrips; i++ ) {
-
-            float sectionPercent = 1.0 / (float)grayStrips;
-            bool isAlternating = i % 2;
-            KoColor fillColor(m_layer->paintDevice()->colorSpace());
-
-            if (isAlternating) {
-                fillColor.fromQColor(QColor(80,80,80));
-            } else {
-                fillColor.fromQColor(QColor(140,140,140));
-            }
-
-
-            const QRect fillRect(m_layer->image()->width()*sectionPercent*i,
-                                 0,
-                                 m_layer->image()->width()*(sectionPercent*i +sectionPercent),
-                                 m_layer->image()->height());
-
-            KisTransaction t(m_layer->paintDevice());
-            m_layer->paintDevice()->fill(fillRect, fillColor);
-            t.end();
+    if (cacheMode) {
+        if (KisBrushStrokePreviewCache::isNoPreviewEngine(paintOpId)) {
+            m_layer->paintDevice()->clear();
+            m_paintColor = KoColor(QColor(Qt::white), m_colorSpace);
+            return;
         }
 
-        m_paintColor = KoColor(Qt::white, m_colorSpace);
+        if (KisBrushStrokePreviewCache::needsStripedBackground(paintOpId)) {
+            paintStripedBackground();
+        } else {
+            m_layer->paintDevice()->clear();
+        }
 
+        m_paintColor = KoColor(QColor(Qt::white), m_colorSpace);
+        return;
     }
-    else if (m_currentPreset->paintOp().id() == "roundmarker" ||
-             m_currentPreset->paintOp().id() == "experimentbrush" ||
-             m_currentPreset->paintOp().id() == "duplicate" ) {
 
-        // cases where we will not show a preview for now
-        // roundbrush (quick) -- this isn't showing anything, disable showing preview
-        // experimentbrush -- this creates artifacts that carry over to other previews and messes up their display
-        // duplicate (clone) brush doesn't have a preview as it doesn't show anything)
+    const QColor backgroundColor = palette().color(QPalette::Window);
+    const QColor textColor = palette().color(QPalette::Text);
 
-        // fill with gray first to clear out what existed from previous preview        
+    if (KisBrushStrokePreviewCache::needsStripedBackground(paintOpId)) {
+        paintStripedBackground();
+        m_paintColor = KoColor(textColor, m_colorSpace);
+    }
+    else if (KisBrushStrokePreviewCache::isNoPreviewEngine(paintOpId)) {
         KisTransaction t(m_layer->paintDevice());
-        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Window) , m_colorSpace));
+        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(backgroundColor, m_colorSpace));
         t.end();
 
-        m_paintColor = KoColor(palette().color(QPalette::Text), m_colorSpace);
+        m_paintColor = KoColor(textColor, m_colorSpace);
 
         QFont font;
         font.setPixelSize(14);
         font.setBold(false);
 
         m_noPreviewText = this->scene()->addText(i18n("No Preview for this engine"),font);
+        m_noPreviewText->setDefaultTextColor(textColor);
         m_noPreviewText->setPos(50, this->height()/4);
 
         return;
-
     }
     else {
-
-        // fill with gray first to clear out what existed from previous preview
         KisTransaction t(m_layer->paintDevice());
-        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Window) , m_colorSpace));
+        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(backgroundColor, m_colorSpace));
         t.end();
 
-        m_paintColor = KoColor(palette().color(QPalette::Text), m_colorSpace);
+        m_paintColor = KoColor(textColor, m_colorSpace);
     }
 }
 
@@ -230,6 +291,11 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     KisPaintOpPresetSP proxy_preset = m_currentPreset->clone().dynamicCast<KisPaintOpPreset>();
     KisPaintOpSettingsSP settings = proxy_preset->settings();
     settings->setPaintOpSize(previewSize);
+
+    const QString compositeOp = settings->paintOpCompositeOp();
+    if (needsBlendingModeOverride(compositeOp)) {
+        settings->setPaintOpCompositeOp(COMPOSITE_OVER);
+    }
 
     int maxTextureSize = 200;
     int textureOffsetX = settings->getInt("Texture/Pattern/MaximumOffsetX")*2;
@@ -290,6 +356,10 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                      proxy_preset);
     resources->setOpacity(settings->paintOpOpacity());
     resources->setMirroring(false, false); // ignore mirroring in toolbar
+
+    if (needsBlendingModeOverride(compositeOp)) {
+        resources->setCompositeOpId(COMPOSITE_OVER);
+    }
 
     resources->setFGColorOverride(m_paintColor);
     KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();
@@ -389,7 +459,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 void KisPresetLivePreviewView::changeEvent(QEvent *event)
 {
     QWidget::changeEvent(event);
-    if (event->type() == QEvent::PaletteChange) {
+    if (event->type() == QEvent::PaletteChange && !m_cachePreviewMode) {
         if (m_currentPreset) {
             requestUpdateStroke();
         }

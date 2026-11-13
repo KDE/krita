@@ -14,6 +14,7 @@ kis_add_tests(
     kis_animation_exporter_test.cpp
     kis_prescaled_projection_test.cpp
     kis_animation_importer_test.cpp
+    kis_brush_stroke_preview_cache_test.cpp
     KisSpinBoxSplineUnitConverterTest.cpp
     KisDocumentReplaceTest.cpp
     KisRssReaderTest.cpp

@@ -65,6 +65,7 @@
 #include "widgets/kis_paintop_presets_chooser_popup.h"
 #include "widgets/kis_workspace_chooser.h"
 #include "widgets/kis_paintop_list_widget.h"
+#include "widgets/KisBrushStrokePreviewCache.h"
 #include "kis_slider_spin_box.h"
 #include "KisAngleSelector.h"
 #include "kis_multipliers_double_slider_spinbox.h"
@@ -285,14 +286,14 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         slOpacity->setSingleStep(5);
         slOpacity->setMinimumWidth(qMax(sliderWidth, slOpacity->sizeHint().width()));
         slOpacity->setFixedHeight(buttonsize);
-        slOpacity->setBlockUpdateSignalOnDrag(true);
+        slOpacity->setBlockUpdateSignalOnDrag(false);
 
         slFlow->setRange(0, 100, 0);
         slFlow->setValue(100);
         slFlow->setSingleStep(5);
         slFlow->setMinimumWidth(qMax(sliderWidth, slFlow->sizeHint().width()));
         slFlow->setFixedHeight(buttonsize);
-        slFlow->setBlockUpdateSignalOnDrag(true);
+        slFlow->setBlockUpdateSignalOnDrag(false);
 
         slSize->setRange(0.01, KisImageConfig(true).maxBrushSize(), 2);
         slSize->setValue(100);
@@ -302,7 +303,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         slSize->setSuffix(i18n(" px"));
         slSize->setMinimumWidth(qMax(sliderWidth, slSize->sizeHint().width()));
         slSize->setFixedHeight(buttonsize);
-        slSize->setBlockUpdateSignalOnDrag(true);
+        slSize->setBlockUpdateSignalOnDrag(false);
 
         slRotation->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
         slRotation->setRange(-360.0, 360.0);
@@ -319,7 +320,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
         slPatternSize->setSuffix(i18n("x"));
         slPatternSize->setMinimumWidth(qMax(sliderWidth, slPatternSize->sizeHint().width()));
         slPatternSize->setFixedHeight(buttonsize);
-        slPatternSize->setBlockUpdateSignalOnDrag(true);
+        slPatternSize->setBlockUpdateSignalOnDrag(false);
 
         m_sliderChooser[i]->setMinimumWidth(qMax(sliderWidth, slPatternSize->sizeHint().width()));
 
@@ -1044,6 +1045,9 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
              */
             m_presetsChooserPopup->canvasResourceChanged(preset);
             m_presetsEditor->currentPresetChanged(preset);
+
+            // Track the current preset for settings changes in the stroke preview cache
+            KisBrushStrokePreviewCache::instance()->slotSetCurrentPreset(preset);
         }
 
         if (key == KoCanvasResource::CurrentCompositeOp) {
@@ -1087,6 +1091,10 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
         if (key == KoCanvasResource::MirrorVertical) {
             m_vMirrorAction->setChecked(value.toBool());
         }
+
+        // Notify the stroke preview cache of canvas resource changes
+        // (size, flow, opacity, rotation changes via shortcuts)
+        KisBrushStrokePreviewCache::instance()->slotCanvasResourceChanged(key, value);
 
         sender()->blockSignals(false);
     }
@@ -1421,6 +1429,7 @@ void KisPaintopBox::slotReloadPreset()
         const bool result = rserver->reloadResource(preset);
         KIS_SAFE_ASSERT_RECOVER_NOOP(result && "couldn't reload preset");
     }
+
 }
 void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is changed and not when preset is changed
 {
@@ -1470,6 +1479,7 @@ void KisPaintopBox::slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP p)
     /// explicitly mark the preset as dirty since the properties
     /// might have the same values (updated before)
     preset->setDirty(true);
+
 }
 
 void KisPaintopBox::slotDropLockedOption(KisPropertiesConfigurationSP p)
@@ -1491,6 +1501,7 @@ void KisPaintopBox::slotDropLockedOption(KisPropertiesConfigurationSP p)
 
         }
     }
+
 }
 void KisPaintopBox::slotDirtyPresetToggled(bool value)
 {

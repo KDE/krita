@@ -360,6 +360,11 @@ void KisResourcesSnapshot::setOpacity(qreal opacity)
     m_d->opacity = opacity;
 }
 
+void KisResourcesSnapshot::setCompositeOpId(const QString &compositeOpId)
+{
+    m_d->compositeOpId = compositeOpId;
+}
+
 void KisResourcesSnapshot::setMirroring(bool horizontal, bool vertical)
 {
     m_d->mirrorMaskHorizontal = horizontal;

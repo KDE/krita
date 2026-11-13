@@ -276,6 +276,8 @@ set(kritaui_LIB_SRCS
     widgets/kis_pattern_chooser.cc
 
     widgets/kis_preset_chooser.cpp
+    widgets/KisBrushStrokePreviewCache.cpp
+    widgets/KisBrushStrokePreviewGenerator.cpp
     widgets/kis_progress_widget.cpp
     widgets/kis_selection_options.cc
     widgets/kis_scratch_pad.cpp

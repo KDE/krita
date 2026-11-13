@@ -50,6 +50,7 @@
 // ones from brush engine selector
 #include <brushengine/kis_paintop_factory.h>
 #include <kis_preset_live_preview_view.h>
+#include "KisBrushStrokePreviewCache.h"
 
 #include <lager/state.hpp>
 
@@ -168,6 +169,14 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
 
             connect(action, &QAction::triggered,
                 m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::setViewModeToDetail);
+
+            action = viewModeMenu->addAction(KisIconUtils::loadIcon("krita_tool_freehand"),i18n("Strokes"));
+            action->setCheckable(true);
+            action->setChecked(mode == KisPresetChooser::STROKE);
+            action->setActionGroup(actionGroup);
+
+            connect(action, &QAction::triggered,
+                m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::setViewModeToStroke);
 
             // Icon Size Slider
             viewModeMenu->addSection(i18n("Icon Size"));
@@ -291,6 +300,10 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
 
     // setup things like the scene construct images, layers, etc that is a one-time thing
     m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setup(resourceProvider->resourceManager());
+
+    // Register the live preview view with the cache for preview generation.
+    KisBrushStrokePreviewCache::instance()->registerLivePreviewView(
+        m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView);
 
     // Responsive Layout
     m_d->horzSplitter = new QSplitter(this);  // you can't add QSplitter to a UI file

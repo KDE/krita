@@ -7,23 +7,22 @@
 #ifndef _KIS_PRESET_LIVE_PREVIEW_
 #define _KIS_PRESET_LIVE_PREVIEW_
 
-#include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QPainterPath>
-#include <QGraphicsPixmapItem>
 
-#include "kis_paintop_preset.h"
-#include "KoColorSpaceRegistry.h"
-#include "kis_paint_layer.h"
-#include "kis_painter.h"
-#include "kis_distance_information.h"
-#include "kis_painting_information_builder.h"
-#include <kis_image.h>
-#include <kis_types.h>
 #include <KoColor.h>
+
+#include "kis_distance_information.h"
+#include "kis_paintop_preset.h"
+#include "kis_painting_information_builder.h"
 #include "kis_signal_compressor.h"
+#include <kis_types.h>
 
 class KoCanvasResourceProvider;
+class KoColorSpace;
+class QGraphicsPixmapItem;
+class QGraphicsScene;
+class QGraphicsTextItem;
 
 /**
  * Widget for displaying a live brush preview of your
@@ -56,12 +55,26 @@ public:
      */
     void setCurrentPreset(KisPaintOpPresetSP preset);
     void requestUpdateStroke();
+    void requestUpdateStrokeImmediate();
+    void setBatchPreviewMode(bool enabled);
+    void setCachePreviewMode(bool enabled);
+    KoCanvasResourceProvider* resourceManager() const;
+
+Q_SIGNALS:
+    /**
+     * @brief Emitted when a preview image is generated.
+     *
+     * @param presetId The presetId (resource id).
+     * @param previewImage Preview image.
+     */
+    void sigPreviewImageReady(int presetId, const QImage &previewImage);
 
 private Q_SLOTS:
     void updateStroke();
     void slotPreviewGenerationCompleted();
 
 private:
+    static constexpr int DefaultUpdateDelayMs = 100;
 
     ///internally sets the Resource Provider for brush preview (allowing gradients in preview)
     KoCanvasResourceProvider* m_resourceManager {nullptr};
@@ -115,6 +128,8 @@ private:
 
     bool m_previewGenerationInProgress {false};
     KisSignalCompressor m_updateCompressor;
+    bool m_batchPreviewMode {false};
+    bool m_cachePreviewMode {false};
 
     /// the range of brush sizes that will control zooming in/out
     const float m_minBrushVal {10.0};
@@ -133,7 +148,12 @@ private:
      * @brief works as both clearing the previous stroke, providing
      * striped backgrounds for smudging brushes, and text if there is no preview
      */
-    void paintBackground();
+    void paintBackground(bool cacheMode);
+
+    /**
+     * @brief Paint alternating gray stripes on the paint device
+     */
+    void paintStripedBackground();
 
     /**
      * @brief creates and performs the actual stroke that goes on top of the background
@@ -142,6 +162,12 @@ private:
     void setupAndPaintStroke();
 
     void changeEvent(QEvent*) override;
+
+    /// Last preview image.
+    QImage m_lastPreviewImage;
+
+    /// presetId (resource id) associated with the in-flight preview generation.
+    int m_previewPresetId {-1};
 };
 
 #endif

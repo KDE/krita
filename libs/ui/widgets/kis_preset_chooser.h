@@ -13,7 +13,6 @@
 
 #include <KoResource.h>
 #include <KoID.h>
-#include "kis_signal_auto_connection.h"
 #include "ResourceListViewModes.h"
 
 class KoAbstractResourceServerAdapter;
@@ -39,13 +38,15 @@ public:
 
     enum ViewMode {
         THUMBNAIL, /// Shows thumbnails
-        DETAIL  /// Shows thumbnails with text next to it
+        DETAIL,    /// Shows thumbnails with text next to it
+        STROKE     /// Shows stroke previews with text
     };
 
     /// Sets a list of resources in the paintop list, when ever user press enter in the lineedit of paintop_presets_popup Class
     void setViewMode(ViewMode mode);
     void setViewModeToThumbnail();
     void setViewModeToDetail();
+    void setViewModeToStroke();
 
     void setCurrentResource(KoResourceSP resource);
 
@@ -80,20 +81,18 @@ public Q_SLOTS:
     /// KisResourceItemChooser is in horizontal layout.
     void showHideBrushNames(ListViewMode newViewMode);
 
+protected:
+    void changeEvent(QEvent *event) override;
+
 private Q_SLOTS:
     void notifyConfigChanged();
-    void slotResourceWasSelected(KoResourceSP resource);
-    void slotCurrentPresetChanged();
+    void slotStrokePreviewReady(int presetId);
+    void slotGenerateStrokePreviews();
 
 private:
-    KisResourceItemChooser *m_chooser {0};
-    KisPresetDelegate* m_delegate {0};
+    KisResourceItemChooser *m_chooser {nullptr};
+    KisPresetDelegate* m_delegate {nullptr};
     ViewMode m_mode;
-
-    class PaintOpFilterModel;
-    QPointer<PaintOpFilterModel> m_paintOpFilterModel;
-
-    KisSignalAutoConnectionsStore m_currentPresetConnections;
 };
 
 #endif

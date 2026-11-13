@@ -57,6 +57,11 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     action->setChecked(mode == KisPresetChooser::DETAIL);
     action->setActionGroup(actionGroup);
 
+    action = menu->addAction(KisIconUtils::loadIcon("krita_tool_freehand"), i18n("Strokes"), this, SLOT(slotStrokeMode()));
+    action->setCheckable(true);
+    action->setChecked(mode == KisPresetChooser::STROKE);
+    action->setActionGroup(actionGroup);
+
     // add widget slider to control icon size
     QSlider* iconSizeSlider = new QSlider(this);
     iconSizeSlider->setOrientation(Qt::Horizontal);
@@ -113,6 +118,12 @@ void KisPaintOpPresetsChooserPopup::slotDetailMode()
 {
     KisConfig(false).setPresetChooserViewMode(KisPresetChooser::DETAIL);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(KisPresetChooser::DETAIL);
+}
+
+void KisPaintOpPresetsChooserPopup::slotStrokeMode()
+{
+    KisConfig(false).setPresetChooserViewMode(KisPresetChooser::STROKE);
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(KisPresetChooser::STROKE);
 }
 
 void KisPaintOpPresetsChooserPopup::slotUpdateMenu()

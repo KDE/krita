@@ -7,9 +7,12 @@
 #ifndef KRITA_KISCOLORSMUDGESTRATEGYLIGHTNESS_H
 #define KRITA_KISCOLORSMUDGESTRATEGYLIGHTNESS_H
 
+#include <QScopedPointer>
 #include "KisColorSmudgeStrategyBase.h"
 #include "kis_painter.h"
 #include "KisPaintThicknessOptionData.h"
+
+class KisOverlayPaintDeviceWrapper;
 
 class KisColorSmudgeStrategyLightness : public KisColorSmudgeStrategyBase
 {
@@ -39,7 +42,8 @@ private:
     KisPaintDeviceSP m_heightmapDevice;
     KisPaintDeviceSP m_colorOnlyDevice;
     KisPaintDeviceSP m_projectionDevice;
-    KisOverlayPaintDeviceWrapper *m_layerOverlayDevice {nullptr};
+    QScopedPointer<KisOverlayPaintDeviceWrapper> m_ownedOverlayDevice;
+    KisOverlayPaintDeviceWrapper *m_layerOverlayDevice {nullptr}; // Not owned.
     KisColorSmudgeSourceSP m_sourceWrapperDevice;
     KisPainter m_finalPainter;
     KisPainter m_heightmapPainter;

@@ -14,6 +14,7 @@
 #include "kis_selection.h"
 
 #include "KisColorSmudgeInterstrokeData.h"
+#include "KisOverlayPaintDeviceWrapper.h"
 #include "kis_algebra_2d.h"
 #include <KoBgrColorSpaceTraits.h>
 
@@ -59,6 +60,10 @@ void KisColorSmudgeStrategyLightness::initializePainting()
         m_heightmapDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
         m_heightmapDevice->setDefaultBounds(m_colorOnlyDevice->defaultBounds());
         m_heightmapDevice->setSupportsWraparoundMode(m_colorOnlyDevice->supportsWraproundMode());
+        // Create an owned overlay wrapper for fallback mode (e.g., stroke preview generation)
+        m_ownedOverlayDevice.reset(new KisOverlayPaintDeviceWrapper(
+            m_colorOnlyDevice, 1, KisOverlayPaintDeviceWrapper::LazyPreciseMode));
+        m_layerOverlayDevice = m_ownedOverlayDevice.data();
     }
 
     initializePaintingImpl(m_colorOnlyDevice->colorSpace(),

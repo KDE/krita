@@ -65,6 +65,8 @@ public:
     bool needsSpacingUpdates() const;
 
     void setOpacity(qreal opacity);
+    /// Override the composite op for the snapshot.
+    void setCompositeOpId(const QString &compositeOpId);
     void setMirroring(bool horizontal, bool vertical);
     qreal opacity() const;
     QString compositeOpId() const;

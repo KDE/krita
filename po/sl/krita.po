@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-12 00:57+0000\n"
-"PO-Revision-Date: 2026-10-08 08:25+0200\n"
+"POT-Creation-Date: 2026-11-13 00:55+0000\n"
+"PO-Revision-Date: 2026-11-12 10:38+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -11476,117 +11476,98 @@ msgstr "Posodobi obseg predvajanja"
 
 #. i18n: context: text @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2527
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Constant"
-msgstr "Interpolacija"
+msgstr "Interpolacija s konstanto"
 
 #. i18n: context: toolTip @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2529
-#, fuzzy, kde-format
-#| msgid "Hold constant value. No interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Hold constant value. No interpolation."
 msgstr "Drži konstantno vrednost. Brez interpolacije."
 
 #. i18n: context: text @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2539
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Linear"
-msgstr "Interpolacija"
+msgstr "Interpolacija, linearna"
 
 #. i18n: context: toolTip @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2541
-#, fuzzy, kde-format
-#| msgid "Linear interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Linear interpolation."
 msgstr "Linearna interpolacija."
 
 #. i18n: context: text @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2551
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Bezier"
-msgstr "Interpolacija"
+msgstr "Interpolacija, Bezier"
 
 #. i18n: context: toolTip @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2553
-#, fuzzy, kde-format
-#| msgid "Bezier curve interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Bezier curve interpolation."
 msgstr "Interpolacija krivulje Bezier."
 
 #. i18n: context: text @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2563
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Sharp"
-msgstr "Interpolacija"
+msgstr "Interpolacija, ostra"
 
 #. i18n: context: toolTip @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2565
-#, fuzzy, kde-format
-#| msgid "Sharp interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Sharp interpolation tangents."
 msgstr "Ostre interpolacijske tangente."
 
 #. i18n: context: text @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2575
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Smooth"
-msgstr "Interpolacija"
+msgstr "Interpolacija, gladka"
 
 #. i18n: context: toolTip @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2577
-#, fuzzy, kde-format
-#| msgid "Smooth interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Smooth interpolation tangents."
 msgstr "Gladke interpolacijske tangente."
 
 #. i18n: context: text @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2587
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Range"
-msgstr "Približajte/oddaljite pogled, da se prilega obsegu kanalov."
+msgstr "Približaj/oddalji pogled na velikost obsega"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2589
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit channel range."
 msgstr "Približajte/oddaljite pogled, da se prilega obsegu kanalov."
 
 #. i18n: context: text @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2599
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Curve"
-msgstr "Približajte/oddaljite pogled, da se prilega krivulji."
+msgstr "Približaj/oddalji pogled na velikost krivulje"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2601
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit curve."
 msgstr "Približajte/oddaljite pogled, da se prilega krivulji."
@@ -20803,16 +20784,14 @@ msgid "Zoom"
 msgstr "Povečava"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:38
-#, fuzzy, kde-format
-#| msgid "Zoom In"
+#, kde-format
 msgid "Zoom in"
-msgstr "Približa pogled"
+msgstr "Približaj pogled"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:40
-#, fuzzy, kde-format
-#| msgid "Zoom Out"
+#, kde-format
 msgid "Zoom out"
-msgstr "Pomanjšaj"
+msgstr "Oddalji pogled"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
 #. i18n: ectx: property (text), widget (QToolButton, btnArrange)
@@ -20826,10 +20805,9 @@ msgstr "Način"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/flake/tools/KoZoomToolWidget.ui:34
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgid "Zoom to fit:"
-msgstr "Približajte/oddaljite pogled, da se prilega obsegu kanalov."
+msgstr "Približaj/oddalji na velikost:"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -28722,7 +28700,7 @@ msgstr "Oblika"
 #: libs/ui/forms/KisNewsItem.ui:158
 #, kde-format
 msgid "Mark as Read"
-msgstr ""
+msgstr "Označi kot prebrano"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:97
@@ -28847,7 +28825,7 @@ msgstr "Novice"
 #: libs/ui/forms/KisWelcomePage.ui:1311
 #, kde-format
 msgid "Mark all as read"
-msgstr ""
+msgstr "Označi vse kot prebrano"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
 #: libs/ui/forms/KisWelcomePage.ui:1337
@@ -29489,13 +29467,7 @@ msgstr "Brskalnik barvnih prostorov"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-#| "\"><span style=\" font-weight:600; text-decoration: underline; color:"
-#| "#006e28;\">Color Spaces</span></a>  determine how colors are encoded in "
-#| "your files. Different color spaces have different properties and are used "
-#| "for different purposes.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
 "\"><span style=\" font-weight:600; text-decoration: underline; \">Color "
@@ -29504,10 +29476,10 @@ msgid ""
 "p></body></html>"
 msgstr ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-"\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
-"\">Barvni prostori</span></a> določajo, kako so barve kodirane v vaših "
-"datotekah. Različni barvni prostori imajo različne lastnosti in se "
-"uporabljajo za različne namene.</p></body></html>"
+"\"><span style=\" font-weight:600; text-decoration: underline; \">Barvni "
+"prostori</span></a> določajo, kako so barve kodirane v vaših datotekah. "
+"Različni barvni prostori imajo različne lastnosti in se uporabljajo za "
+"različne namene.</p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:51
@@ -33819,16 +33791,14 @@ msgid "Sample Background Color from Merged Image"
 msgstr "Vzorec barve ozadja iz spojene slike"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:42
-#, fuzzy, kde-format
-#| msgid "Sample Foreground Color from Current Layer"
+#, kde-format
 msgid "Sample Foreground Color from Current Group"
-msgstr "Vzorec barve ospredja iz trenutne plasti"
+msgstr "Vzorči barvo ospredja iz trenutne skupine"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:43
-#, fuzzy, kde-format
-#| msgid "Sample Background Color from Current Layer"
+#, kde-format
 msgid "Sample Background Color from Current Group"
-msgstr "Vzorec barve ozadja iz trenutne plasti"
+msgstr "Vzorči barvo ozadja iz trenutne skupine"
 
 #: libs/ui/input/kis_change_frame_action.cpp:27
 #, kde-format
@@ -38405,7 +38375,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
-#: plugins/tools/basictools/kis_tool_ellipse.cc:167
+#: plugins/tools/basictools/kis_tool_ellipse.cc:169
 #: plugins/tools/basictools/kis_tool_line.cc:212
 #: plugins/tools/basictools/kis_tool_path.cc:91
 #: plugins/tools/basictools/kis_tool_pencil.cc:64
@@ -38418,7 +38388,7 @@ msgstr "Ustroj čopičev MyPaint ni na voljo za ta barvni prostor"
 #: libs/ui/tool/kis_tool_polyline_base.cpp:116
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:163
-#: plugins/tools/basictools/kis_tool_ellipse.cc:160
+#: plugins/tools/basictools/kis_tool_ellipse.cc:162
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:69
 #, kde-format
 msgid ""
@@ -39988,12 +39958,10 @@ msgid "No Preview for this engine"
 msgstr "Za ta pogon ni predogleda"
 
 #: libs/ui/widgets/kis_selection_options.cc:194
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "The move-selected-content checkbox in selection tool options"
 msgid "Move Selected Content"
-msgstr "Premakni izbor"
+msgstr "Premakni izbrano vsebino"
 
 #: libs/ui/widgets/kis_selection_options.cc:197
 #: plugins/tools/basictools/kis_tool_fill.cc:591
@@ -40062,12 +40030,10 @@ msgid "Symmetric Difference"
 msgstr "Simetrična razlika"
 
 #: libs/ui/widgets/kis_selection_options.cc:255
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Move Selected Content"
-msgstr "Premakni izbor"
+msgstr "Premakni izbrano vsebino"
 
 #: libs/ui/widgets/kis_selection_options.cc:258
 #, kde-format
@@ -40099,10 +40065,9 @@ msgid "Select regions found from the active layer"
 msgstr "Izberi območja, najdena na aktivni plasti"
 
 #: libs/ui/widgets/kis_selection_options.cc:269
-#, fuzzy, kde-format
-#| msgid "Select regions found from the active layer"
+#, kde-format
 msgid "Select regions found from the active group"
-msgstr "Izberi območja, najdena na aktivni plasti"
+msgstr "Izberi območja, najdena v aktivni skupini"
 
 #: libs/ui/widgets/kis_selection_options.cc:271
 #, kde-format
@@ -40507,12 +40472,12 @@ msgstr "Maska je onemogočena"
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid "("
-msgstr ""
+msgstr "("
 
 #: libs/ui/widgets/KisNewsItem.cpp:27
 #, kde-format
 msgid ")"
-msgstr ""
+msgstr ")"
 
 #: libs/ui/widgets/KisWarningWidget.cpp:41
 #, kde-format
@@ -42418,10 +42383,9 @@ msgstr "Barva po meri"
 
 #. i18n: ectx: property (text), widget (QLabel, brushPriorityLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:251
-#, fuzzy, kde-format
-#| msgid "Brush Preset History"
+#, kde-format
 msgid "Brush Priority:"
-msgstr "Zgodovina prednastavitev čopiča"
+msgstr "Prioriteta čopiča:"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:330
@@ -44821,6 +44785,8 @@ msgid ""
 "Bakes the current settings into the current projection, and opens it as a "
 "new image. Will use \"%1\" ICC profile as display space."
 msgstr ""
+"Zapeče trenutne nastavitve v trenutno projekcijo in jo odpre kot novo sliko. "
+"Kot prostor prikaza bo uporabljen profil ICC »%1«."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:301
 #, kde-format
@@ -44866,12 +44832,10 @@ msgid "None"
 msgstr "Brez"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:675
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgctxt "@title:window"
 msgid "Convert to image colorspace?"
-msgstr "Pretvori barvni prostor slike"
+msgstr "Ali želite pretvoriti v barvni prostor slike?"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:676
 #, kde-format
@@ -44880,13 +44844,14 @@ msgid ""
 "The resulting image will be assigned the profile \"%1\".Convert it from "
 "there to the current image colorspace?"
 msgstr ""
+"Končni sliki bo dodeljen profil »%1«. Jo od tam naprej želite pretvoriti v "
+"barvni prostor trenutne slike?"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:697
 #, fuzzy, kde-format
-#| msgid "Store Softproofing configuration in the image"
 msgctxt "Message for ocio baking progress bar."
 msgid "Baking configuration into image..."
-msgstr "Shranjuj prilagoditve preverjanja videza pred izdajo v sliko"
+msgstr "Spajanje prilagoditev v sliko …"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -44987,9 +44952,8 @@ msgstr "Prilagodi črno-bele točke pogleda"
 #. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
 #: plugins/dockers/lut/wdglut.ui:412
 #, fuzzy, kde-format
-#| msgid "&Wave..."
 msgid "Bake..."
-msgstr "&Val ..."
+msgstr "Zapeci ..."
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
@@ -45625,10 +45589,9 @@ msgid "0 B"
 msgstr "0 B"
 
 #: plugins/dockers/recorder/recorder_writer.cpp:631
-#, fuzzy, kde-format
-#| msgid "Start Recording"
+#, kde-format
 msgid "Stopping recording"
-msgstr "Začni snemati"
+msgstr "Ustavljanje snemanja"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDirectory)
 #: plugins/dockers/recorder/recorderdocker.ui:95
@@ -45762,22 +45725,18 @@ msgstr "Samodejno snemanje"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxFocusedRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:374
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Record only the visible area of the canvas.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Z nagibom tablice določite normalne vrednosti.</p></"
-"body></html>"
+"<html><head/><body><p>Posnemi le vidno področje platna.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxFocusedRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:377
 #, kde-format
 msgid "Record focused area"
-msgstr ""
+msgstr "Snemaj področje s pozornostjo"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRecordToggle)
 #: plugins/dockers/recorder/recorderdocker.ui:396
@@ -50879,12 +50838,7 @@ msgstr "Napaka: pogona Python ni bilo mogoče inicializirati"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
-#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
-#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-#| "Scripting School</span></a>!</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
 "out the <a href=\"https://scripting.krita.org/lessons/introduction\"><span "
@@ -50893,8 +50847,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Če se želite naučiti pisati skripte Krita, si oglejte "
 "<a href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" "
-"text-decoration: underline; color:#2980b9;\">Šolo pisanja skriptov Krita</"
-"span></a> (v angleškem jeziku)!</p></body></html>"
+"text-decoration: underline;\">Šolo pisanja skriptov Krita</span></a> (v "
+"angleškem jeziku)!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
 #, kde-format
@@ -52040,90 +51994,72 @@ msgid "Do nothing"
 msgstr "Ne naredi ničesar"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgid "S-Pen Pro Air Actions"
-msgstr "Dejanja S-Pen"
+msgstr "Dejanja S-Pen Pro Air"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Actions"
-msgstr "Dejanja S-Pen"
+msgstr "Dejanja S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Click"
-msgstr "Klik gumba S-Pen"
+msgstr "Klik gumba S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Double Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Double Click"
-msgstr "Dvojni klik gumba S-Pen"
+msgstr "Dvojni klik gumba S-Pen Pro Air"
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Up"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Up"
-msgstr "Poteza S-Pen, podrsaj navzgor"
+msgstr "Poteza S-Pen Pro Air, podrsaj navzgor"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Down"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro AirGesture Swipe Down"
-msgstr "Poteza S-Pen, podrsaj navzdol"
+msgstr "Poteza S-Pen Pro Air, podrsaj navzdol"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Left"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Left"
-msgstr "Poteza S-Pen, podrsaj levo"
+msgstr "Poteza S-Pen Pro Air, podrsaj levo"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Right"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Right"
-msgstr "Poteza S-Pen: podrsaj desno"
+msgstr "Poteza S-Pen Pro Air, podrsaj desno"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Clockwise"
-msgstr "Poteza S-Pen: krog v SUK"
+msgstr "Poteza S-Pen Pro Air, krog v SUK"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Counter-Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
-msgstr "Poteza S-Pen: krog v nasprotni SUK"
+msgstr "Poteza S-Pen Pro Air, krog v nasprotni SUK"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:112
@@ -52140,6 +52076,9 @@ msgid ""
 "work. Note that only the S-Pen Pro supports Air Actions, the regular S-Pen "
 "does not. Not all devices support gestures."
 msgstr ""
+"Omogočiti morate dejanja Air za Krito v svojih sistemskih nastavitvah, da bo "
+"delovalo. Upoštevajte, da le S-Pen Pro podpira dejanja Air Actions, medtem "
+"ko jih običajni S-Pen ne. Vse naprave ne podpirajo gest."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -54115,47 +54054,43 @@ msgstr "Prag:"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:56
 #, fuzzy, kde-format
-#| msgid "&Gradient Map..."
 msgid "Tone/Gamut Map..."
-msgstr "Pre&slikaj preliv …"
+msgstr "Preslikaj tone/gamut …"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:155
 #, kde-format
 msgid "LAB"
-msgstr ""
+msgstr "LAB"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:156
 #, kde-format
 msgid "XYZ (ICtCp)"
-msgstr ""
+msgstr "XYZ (ICtCp)"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:157
 #, kde-format
 msgid "XYZ (OkLAB)"
-msgstr ""
+msgstr "XYZ (OkLAB)"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:159
 #, kde-format
 msgid "Reinhard"
-msgstr ""
+msgstr "Reinhard"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:160
-#, kde-format
+#, fuzzy, kde-format
 msgid "Piecewise Filmic"
-msgstr ""
+msgstr "Komadna filmična (piecewise filmic)"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:162
 #, fuzzy, kde-format
-#| msgctxt "Lightness Map blend mode for brush texture"
-#| msgid "Lightness Map"
 msgid "Use Chroma-Lightness Cusp Map"
-msgstr "Preslikaj svetlost"
+msgstr "Uporabi preslikavo krome-svetlosti cusp"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:163
-#, fuzzy, kde-format
-#| msgid "Minimum Quality"
+#, kde-format
 msgid "Minimum Delta E"
-msgstr "Najnižja kakovost"
+msgstr "Najnižja delta E"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:165
 #, kde-format
@@ -54178,43 +54113,36 @@ msgstr ""
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:306
 #, kde-format
 msgid "Current Maximum White: %1"
-msgstr ""
+msgstr "Trenutna najvišja raven beline: %1"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.h:28
 #, fuzzy, kde-format
-#| msgid "Gamut Masks"
 msgid "Tone/Gamut Map"
-msgstr "Maske gamuta"
+msgstr "Preslikava tonov/gamuta"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:22
-#, fuzzy, kde-format
-#| msgctxt "Color model"
-#| msgid "Model:"
+#, kde-format
 msgid "Model:"
 msgstr "Model:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkToneMap)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:41
 #, fuzzy, kde-format
-#| msgctxt "Layer name for translation of template"
-#| msgid "Tones"
 msgid "Tone Map"
-msgstr "Toni"
+msgstr "Preslikava tonov"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:57
-#, fuzzy, kde-format
-#| msgid "White:"
+#, kde-format
 msgid "Max White:"
-msgstr "Bela:"
+msgstr "Najv. belina:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:80
-#, fuzzy, kde-format
-#| msgid "Strength:"
+#, kde-format
 msgid "Toe Strength:"
-msgstr "Moč:"
+msgstr "Moč palca:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeStrength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:87
@@ -54223,84 +54151,78 @@ msgid ""
 "The sharpness of the toe fall-off. 0.0 makes it linear, while 1.0 produces a "
 "sharp angle."
 msgstr ""
+"Ostrina upada palca. 0,0 pomeni linearnost, medtem ko 1,0 povzroči oster kot."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:103
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Toe Length:"
-msgstr "Dolžina:"
+msgstr "Dolžina palca:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnToeLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:110
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "How much of the dynamic range is in the toe. 0.0 means none, while 1.0 is "
 "half the curve."
 msgstr ""
+"Koliko dinamičnega obsega je v palcu. 0,0 predstavlja nič, medtem ko je 1,0 "
+"pol krivulje."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:126
 #, fuzzy, kde-format
-#| msgid "Anc&hor Strength:"
 msgid "Shoulder Strength:"
-msgstr "Moč si&dra:"
+msgstr "Moč rame:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderStrength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:133
 #, kde-format
 msgid "Curvature of the shoulder. 1.0 is linear."
-msgstr ""
+msgstr "Ukrivljenost rame: 1,0 je linearna."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:149
 #, fuzzy, kde-format
-#| msgid "Smudge Length"
 msgid "Shoulder Length:"
-msgstr "Dolžina razmaza"
+msgstr "Dolžina rame:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:156
-#, kde-format
+#, fuzzy, kde-format
 msgid "Determines the maximum white in stops."
-msgstr ""
+msgstr "Določa največjo stopnjo beline v postojih."
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnShoulderLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:159
 #, fuzzy, kde-format
-#| msgctxt "Button to edit the selected stop color in the stop gradient editor"
-#| msgid "Edit stop"
 msgid " stops"
-msgstr "Uredi postanek"
+msgstr " postankov"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:172
 #, fuzzy, kde-format
-#| msgid "Shear angle X:"
 msgid "Shoulder Angle:"
-msgstr "Kot striženja X:"
+msgstr "Kot rame:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnShoulderAngle)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:179
 #, kde-format
 msgid ""
 "Angle of the shoulder, determines the smoothness of the shift to full white."
-msgstr ""
+msgstr "Kot rame, določa gladkost zamika v polno belino."
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkGamutMap)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:210
 #, fuzzy, kde-format
-#| msgid "Gamut Masks"
 msgid "Gamut Map"
-msgstr "Maske gamuta"
+msgstr "Preslikava gamuta"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:219
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Workspace"
-#| msgid "Wide Gamut"
+#, kde-format
 msgid "Target Gamut:"
-msgstr "Širok gamut"
+msgstr "Ciljni gamut:"
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format
@@ -63358,8 +63280,7 @@ msgstr "Vrednost mešanice smeri/nagiba"
 #. i18n: context: text @ Action (assign_profile_to_image), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
-#, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
+#, kde-format
 msgctxt "action"
 msgid "Assign Profile to Image"
 msgstr "Dodeli profil sliki"
@@ -63382,8 +63303,7 @@ msgstr "Dodeli profil sliki"
 #. i18n: context: text @ Action (pykrita_channels2layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
-#, fuzzy, kde-format
-#| msgid "Channels to layers"
+#, kde-format
 msgctxt "action"
 msgid "Channels to layers"
 msgstr "Kanali v plasti"
@@ -63469,8 +63389,7 @@ msgstr "<i>Črna</i>"
 #. i18n: context: text @ Action (color_space), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Space"
 msgstr "Barvni prostor"
@@ -64907,8 +64826,7 @@ msgstr "Pisec dodatnih besedilnih vsebin"
 #. i18n: context: text @ Action (document_tools), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
-#, fuzzy, kde-format
-#| msgid "Document Tools"
+#, kde-format
 msgctxt "action"
 msgid "Document Tools"
 msgstr "Orodja za dokumente"
@@ -64956,8 +64874,7 @@ msgstr "Izbrani dokumenti so bili spremenjeni."
 #. i18n: context: text @ Action (export_layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
-#, fuzzy, kde-format
-#| msgid "Export Layers"
+#, kde-format
 msgctxt "action"
 msgid "Export Layers"
 msgstr "Izvozi plasti"
@@ -65045,8 +64962,7 @@ msgstr "Izberite mapo"
 #. i18n: context: text @ Action (filter_manager), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
-#, fuzzy, kde-format
-#| msgid "Filter Manager"
+#, kde-format
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Upravitelj filtrov"
@@ -65075,8 +64991,7 @@ msgstr "Filtri:"
 #. i18n: context: text @ Action (high_pass_filter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
-#, fuzzy, kde-format
-#| msgid "High Pass"
+#, kde-format
 msgctxt "action"
 msgid "High Pass"
 msgstr "Visokopasovni"
@@ -65211,11 +65126,10 @@ msgstr "Ustvari skript"
 #. i18n: context: text @ Action (Krita Script Starter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/krita_script_starter/krita_script_starter.action:4
 #: plugins/python/krita_script_starter/krita_script_starter.action:8
-#, fuzzy, kde-format
-#| msgid "BBD's Krita Script Starter"
+#, kde-format
 msgctxt "action"
 msgid "Krita Script Starter"
-msgstr "BBD-jev Zaganjalnik skriptov Krita"
+msgstr "Zaganjalnik skriptov Krite"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
@@ -65533,39 +65447,29 @@ msgstr "Hitre nastavitve"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:145
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:335
-#, fuzzy
-#| msgctxt "@label:button"
-#| msgid "Add Style Preset"
 msgid "Add Preset"
-msgstr "Dodaj prednastavitev sloga"
+msgstr "Dodaj prednastavitev"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:149
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:397
-#, fuzzy
-#| msgctxt "@info:tooltip"
-#| msgid "Delete resource"
 msgid "Delete Preset"
-msgstr "Izbriši vir"
+msgstr "Izbriši prednastavitev"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:313
 msgid "Enter brush size (px):"
-msgstr ""
+msgstr "Vnesite velikost čopiča (sl. točke):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:319
-#, fuzzy
-#| msgid "Outline opacity:"
 msgid "Enter opacity (%):"
-msgstr "Prekrivnost orisa:"
+msgstr "Vnesite prekrivnost (%):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:325
 msgid "Enter flow (%):"
-msgstr ""
+msgstr "Vnesite tok (%):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:398
-#, fuzzy
-#| msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgid "Are you sure you want to delete this preset?"
-msgstr "Ali ste prepričani, da želite izbrisati masko <b>»%1«</b>?"
+msgstr "Ali ste prepričani, da želite izbrisati to prednastavitev?"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"
@@ -65593,8 +65497,7 @@ msgstr "Razhroščevalnik"
 #. i18n: context: text @ Action (python_scripter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
-#, fuzzy, kde-format
-#| msgid "Scripter"
+#, kde-format
 msgctxt "action"
 msgid "Scripter"
 msgstr "Skripterka"
@@ -66498,55 +66401,55 @@ msgstr "Omogoči pripenjanje pri uporabi radirke"
 msgid "Color Sampler Tool"
 msgstr "Orodje Vzorčevalnik barv"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:76
-#, fuzzy, kde-format
-#| msgid "Bounding Box"
+#: plugins/tools/basictools/kis_tool_ellipse.cc:78
+#, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "Bounding Box"
 msgstr "Obrobni okvir"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:77
+#: plugins/tools/basictools/kis_tool_ellipse.cc:79
 #, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "3-Point"
-msgstr ""
+msgstr "3-točkovno"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:78
+#: plugins/tools/basictools/kis_tool_ellipse.cc:80
 #, kde-format
 msgid "Place the ellipse inside a bounding box"
-msgstr ""
+msgstr "Umesti elipso v obsegajoči okvir"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:79
+#: plugins/tools/basictools/kis_tool_ellipse.cc:81
 #, kde-format
 msgid "Place the ellipse by setting the major axis and width"
-msgstr ""
+msgstr "Umesti elipso z nastavljanjem glavne osi in širine"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:110
-#, fuzzy, kde-format
-#| msgid "Element"
+#: plugins/tools/basictools/kis_tool_ellipse.cc:112
+#, kde-format
 msgctxt "Ellipse tool placement mode option label"
 msgid "Placement:"
-msgstr "Element"
-
-#: plugins/tools/basictools/kis_tool_ellipse.cc:343
-#, kde-format
-msgid "Click to place the other end of the ellipse axis."
-msgstr ""
+msgstr "Postavitev:"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:345
 #, kde-format
-msgid "Click to set the ellipse width."
-msgstr ""
+msgid "Click to place the other end of the ellipse axis."
+msgstr "S klikom postavite drug konec osi elipse."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:347
+#, kde-format
+msgid "Click to set the ellipse width."
+msgstr "S klikom nastavite širino elipse."
+
+#: plugins/tools/basictools/kis_tool_ellipse.cc:349
 #, kde-format
 msgid ""
 "Drag handles to adjust the ellipse. Press Enter to apply or Esc to cancel."
 msgstr ""
+"Povlecite ročice, da prilagodite elipso. Pritisnite vnašalko, da vrednosti "
+"uveljavite, ali ubežnico, da jih prekličete."
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:584
-#: plugins/tools/basictools/kis_tool_ellipse.cc:606
-#: plugins/tools/basictools/kis_tool_ellipse.cc:623
+#: plugins/tools/basictools/kis_tool_ellipse.cc:587
+#: plugins/tools/basictools/kis_tool_ellipse.cc:609
+#: plugins/tools/basictools/kis_tool_ellipse.cc:626
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Nariši elipso"
@@ -67106,10 +67009,9 @@ msgstr "Vzorči vse vidne plasti"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:145
-#, fuzzy, kde-format
-#| msgid "Sample Current Layer"
+#, kde-format
 msgid "Sample Current Group"
-msgstr "Vzorči trenutno plast"
+msgstr "Vzorči trenutno skupino"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:150
@@ -71127,98 +71029,3 @@ msgstr ""
 "Preklopite med polnim obsegom in podobsegom.\n"
 "Celoten obseg: [%1, %2]\n"
 "Podobseg: [%3, %4]"
-
-#~ msgid "Add Color To Palette"
-#~ msgstr "Dodaj barvo k paleti"
-
-#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
-#~ msgstr "V datoteko palete %1 ni mogoče pisati. Mogoče je samo za branje. "
-
-#~ msgid "Add/Remove Colors"
-#~ msgstr "Dodaj/odstrani barve"
-
-#~ msgid "&Zoom In"
-#~ msgstr "Pri&bližaj"
-
-#~ msgid "Zoo&m Out"
-#~ msgstr "O&ddalji"
-
-#~ msgid ""
-#~ "<html><head/><body><p>This is an Hybrid Log Gamma image. Krita does not "
-#~ "support sending HLG to the monitor, so for import it is recommended to "
-#~ "convert from scene linear to display linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>To je slika z hibridno logaritemsko gamo (HLG). "
-#~ "Krita ne podpira pošiljanja HLG na zaslon, zato je za uvoz priporočljivo "
-#~ "pretvoriti iz linearnega prizora v linearni prikaz.</p></body></html>"
-
-#~ msgid "Apply HLG OOTF"
-#~ msgstr "Uporabi HLG OOTF"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Display gamma. By default this is 1.2 for "
-#~ "converting from scene to display linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Prikaži gamo. Privzeto je to 1,2 za pretvorbo iz "
-#~ "prizora v prikaz linearnega.</p></body></html>"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The display brightness in nits. By default this is "
-#~ "set to 1000 for converting to display linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Svetlost zaslona v nitih. Privzeto je nastavljeno "
-#~ "na 1000 za pretvorbo v linearni prikaz.</p></body></html>"
-
-#~ msgctxt "action"
-#~ msgid "S-Pen Actions"
-#~ msgstr "Dejanja S-Pen"
-
-#~ msgid ""
-#~ "Make sure the actions are corresponding to the correct gesture on the "
-#~ "system level. These can be configured under S Pen Settings > Air actions."
-#~ msgstr ""
-#~ "Prepričajte se, da dejanja ustrezajo pravilni potezi na sistemski ravni. "
-#~ "Te lahko prilagodite v nastavitvah S Pen > Dejanja Air."
-
-#~ msgid ""
-#~ "The following buttons are supported on the Note 9, Note 10, Tab S6 and "
-#~ "Tab S9 devices."
-#~ msgstr ""
-#~ "Naslednja dejanja gumbov so podprta na napravah Note 9, Note 10, Tab S6 "
-#~ "in Tab S9."
-
-#~ msgid ""
-#~ "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
-#~ "devices."
-#~ msgstr "Naslednje poteze so podprte na napravah Note 10, Tab S6 in Tab S9."
-
-#~ msgid ""
-#~ "<html><head/><body><p>Display gamma. By default this is 1.2 for "
-#~ "converting from PQ.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Prikaži gamo. Privzeto je to 1,2 za pretvorbo iz PQ."
-#~ "</p></body></html>"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The display brightness in nits. By default this is "
-#~ "set to 1000 for converting from PQ.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Svetlost zaslona v nitih. Privzeto je nastavljeno "
-#~ "na 1000 za pretvorbo iz PQ.</p></body></html>"
-
-#~ msgid " cd/m²"
-#~ msgstr " cd/m²"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Hybrid Log Gamma needs an extra conversion step in "
-#~ "between, as Krita currently cannot send HLG data directly to the display. "
-#~ "Therefore we apply the HLG opto-optical curve to convert from display to "
-#~ "scene linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Hibridna logaritemska gama potrebuje vmesni dodaten "
-#~ "korak pretvorbe, saj Krita trenutno ne more poslati podatkov HLG "
-#~ "neposredno na zaslon. Zato uporabimo HLG opto-optično krivuljo za "
-#~ "pretvorbo iz zaslona v prizor linearno.</p></body></html>"
-
-#~ msgid "Apply reverse Hybrid Log Gamma OOTF"
-#~ msgstr "Uporabi obratno hibridno logaritemsko gamo OOTF"

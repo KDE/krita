@@ -55,7 +55,7 @@ struct KisBrushStrokePreviewCache::Private {
 
     struct PlaceholderStroke {
         QImage image;
-        int pixelRatio;
+        qreal pixelRatio;
     };
 
     std::optional<PlaceholderStroke> placeholder;
@@ -194,7 +194,7 @@ void KisBrushStrokePreviewCache::updateAccessOrder(const QString &key)
     m_d->accessOrder.append(key);
 }
 
-QImage KisBrushStrokePreviewCache::getPreview(int presetId, const QSize &size, int pixelRatio )
+QImage KisBrushStrokePreviewCache::getPreview(int presetId, const QSize &size, qreal pixelRatio )
 {
     if (presetId < 0 || size.isEmpty()) {
         return size.isEmpty() ? QImage() : generatePlaceholder(size, pixelRatio);
@@ -299,12 +299,12 @@ QImage KisBrushStrokePreviewCache::scalePreviewToSize(const QImage &source, cons
     return scaled;
 }
 
-QImage KisBrushStrokePreviewCache::generatePlaceholder(const QSize &size, int pixelRatio) const
+QImage KisBrushStrokePreviewCache::generatePlaceholder(const QSize &size, qreal pixelRatio) const
 {
     // Cache previews with the same size, just because on first startup there will be A LOT of requests to generate them
     // and we don't need to waste the work
     if (m_d->placeholder.has_value()) {
-        if (m_d->placeholder.value().image.size() == size && m_d->placeholder.value().pixelRatio == pixelRatio) {
+        if (m_d->placeholder.value().image.size() == size && qFuzzyCompare(m_d->placeholder.value().pixelRatio, pixelRatio)) {
             return m_d->placeholder.value().image;
         }
     }
@@ -315,7 +315,7 @@ QImage KisBrushStrokePreviewCache::generatePlaceholder(const QSize &size, int pi
     QPainter painter(&placeholder);
     painter.setPen(Qt::white);
     QFont font;
-    font.setPixelSize(qMin(size.height() / 2, 10 * pixelRatio));
+    font.setPixelSize(qMin(size.height() / 2, qRound(10.0 * pixelRatio)));
     painter.setFont(font);
     painter.drawText(placeholder.rect(), Qt::AlignCenter, i18n("Loading..."));
 
@@ -324,10 +324,10 @@ QImage KisBrushStrokePreviewCache::generatePlaceholder(const QSize &size, int pi
     return placeholder;
 }
 
-QImage KisBrushStrokePreviewCache::generateNoPreviewPlaceholder(const QSize &size, int pixelRatio) const
+QImage KisBrushStrokePreviewCache::generateNoPreviewPlaceholder(const QSize &size, qreal pixelRatio) const
 {
     if (m_d->noPreviewPlaceholder.has_value()) {
-        if (m_d->noPreviewPlaceholder.value().image.size() == size && m_d->noPreviewPlaceholder.value().pixelRatio == pixelRatio) {
+        if (m_d->noPreviewPlaceholder.value().image.size() == size && qFuzzyCompare(m_d->noPreviewPlaceholder.value().pixelRatio, pixelRatio)) {
             return m_d->noPreviewPlaceholder.value().image;
         }
     }
@@ -338,7 +338,7 @@ QImage KisBrushStrokePreviewCache::generateNoPreviewPlaceholder(const QSize &siz
     QPainter painter(&placeholder);
     painter.setPen(Qt::white);
     QFont font;
-    font.setPixelSize(qMin(size.height() / 2, 10 * pixelRatio));
+    font.setPixelSize(qMin(size.height() / 2, qRound(10.0 * pixelRatio)));
     painter.setFont(font);
     painter.drawText(placeholder.rect(), Qt::AlignCenter, i18n("No Preview"));
 

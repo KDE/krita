@@ -37,7 +37,7 @@ public:
     static bool isNoPreviewEngine(const QString &paintOpId);
 
     /// Get cached preview scaled to size, or placeholder if not cached.
-    QImage getPreview(int presetId, const QSize &size, int pixelRatio);
+    QImage getPreview(int presetId, const QSize &size, qreal pixelRatio);
 
     /// Invalidate cache for a preset when its settings change.
     void invalidatePreset(int presetId);
@@ -74,8 +74,8 @@ private:
     /// Make sure that we have under >= 500 items cached, if there are more remove the oldest ones
     void evictIfNeeded();
     void updateAccessOrder(const QString &key);
-    QImage generatePlaceholder(const QSize &size, int pixelRatio) const;
-    QImage generateNoPreviewPlaceholder(const QSize &size, int pixelRatio) const;
+    QImage generatePlaceholder(const QSize &size, qreal pixelRatio) const;
+    QImage generateNoPreviewPlaceholder(const QSize &size, qreal pixelRatio) const;
     QString generateSettingsFingerprint(KisPaintOpPresetSP preset) const;
     QImage scalePreviewToSize(const QImage &source, const QSize &targetSize) const;
 

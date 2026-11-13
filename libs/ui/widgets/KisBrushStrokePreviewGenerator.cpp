@@ -54,9 +54,13 @@ void KisBrushStrokePreviewGenerator::slotPreviewFinished(int finishedPresetId)
 {
     // Only now remove the item from the queue, since it actually Finished, so that there are no duplicate requests
     if (finishedPresetId > 0) {
-        m_queue.removeIf([finishedPresetId](KisPaintOpPresetSP preset) {
-            return preset->resourceId() == finishedPresetId;
-        });
+        // TODO: Replace with `removeIf` when we finally drop qt5
+        for (int i = 0; i < m_queue.count(); i++) {
+            if (m_queue[i]->resourceId() == finishedPresetId) {
+                m_queue.remove(i);
+                break;
+            }
+        }
     }
 
     if (!m_queue.isEmpty()) {

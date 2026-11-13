@@ -27,6 +27,7 @@ public:
     explicit KisNewsWidget(QWidget *parent = nullptr);
 
     void toggleNewsLanguage(QString langCode, bool enabled);
+    void toggleNews(bool toggle);
 
 Q_SIGNALS:
     void newsDataChanged();
@@ -37,7 +38,6 @@ protected:
     bool event(QEvent *event) override;
 
 private Q_SLOTS:
-    void toggleNews(bool toggle);
     void rssDataChanged();
     void dismissAll();
     void updateNewsState();

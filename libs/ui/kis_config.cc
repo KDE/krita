@@ -3024,6 +3024,26 @@ void KisConfig::setLayerThumbnailGenerationTimeout(int value)
     m_cfg.writeEntry("layerThumbnailGenerationTimeout", value);
 }
 
+bool KisConfig::newsCheckEnabled() const
+{
+    return m_cfg.readEntry(QStringLiteral("newsCheckEnabled"), true);
+}
+
+void KisConfig::setNewsCheckEnabled(bool value)
+{
+    m_cfg.writeEntry(QStringLiteral("newsCheckEnabled"), value);
+}
+
+bool KisConfig::newsFirstStartup() const
+{
+    return m_cfg.readEntry(QStringLiteral("newsFirstStartup"), true);
+}
+
+void KisConfig::setNewsFirstStartup(bool value)
+{
+    m_cfg.writeEntry(QStringLiteral("newsFirstStartup"), value);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

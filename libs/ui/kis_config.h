@@ -888,6 +888,12 @@ public:
     int layerThumbnailGenerationTimeout(bool defaultValue = false) const;
     void setLayerThumbnailGenerationTimeout(int value);
 
+    bool newsCheckEnabled() const;
+    void setNewsCheckEnabled(bool value);
+
+    bool newsFirstStartup() const;
+    void setNewsFirstStartup(bool value);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

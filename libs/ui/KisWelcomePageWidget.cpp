@@ -90,13 +90,6 @@
 #include <QRandomGenerator>
 #endif
 
-// Used for triggering a QAction::setChecked signal from a QLabel::linkActivated signal
-void ShowNewsAction::enableFromLink(QString unused_url)
-{
-    Q_UNUSED(unused_url);
-    Q_EMIT setChecked(true);
-}
-
 
 // class to override item height for Breeze since qss seems to not work
 class RecentItemDelegate : public QStyledItemDelegate
@@ -155,10 +148,9 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     // News widget...
     QMenu *newsOptionsMenu = new QMenu(this);
     newsOptionsMenu->setToolTipsVisible(true);
-    ShowNewsAction *showNewsAction = new ShowNewsAction(i18n("Enable news and check for new releases"), newsOptionsMenu);
-    newsOptionsMenu->addAction(showNewsAction);
-    showNewsAction->setToolTip(i18n("Show news about Krita: this needs internet to retrieve information from the krita.org website"));
-    showNewsAction->setCheckable(true);
+    m_enableNewsAction = newsOptionsMenu->addAction(i18n("Automatically check for updates"));
+    m_enableNewsAction->setToolTip(i18n("Show news about Krita: this needs internet to retrieve information from the krita.org website"));
+    m_enableNewsAction->setCheckable(true);
 
     newsOptionsMenu->addSection(i18n("Language"));
     QAction *newsInfoAction = newsOptionsMenu->addAction(i18n("English news is always up to date."));
@@ -167,20 +159,17 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     setupNewsLangSelection(newsOptionsMenu);
     btnNewsOptions->setMenu(newsOptionsMenu);
 
+    checkNowButton->setIcon(KisIconUtils::loadIcon(QStringLiteral("view-refresh")));
+
     labelSupportText->setFont(largerFont());
 
     connect(btnDismisAll, SIGNAL(clicked()), newsWidget, SLOT(dismissAll()));
     connect(newsWidget, SIGNAL(newsStateChanged(bool)), this, SLOT(newsStateChanged(bool)));
     newsStateChanged(false);
 
-    connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(setVisible(bool)));
-    connect(showNewsAction, SIGNAL(toggled(bool)), labelNoFeed, SLOT(setHidden(bool)));
-    connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
-    connect(labelNoFeed, SIGNAL(linkActivated(QString)), showNewsAction, SLOT(enableFromLink(QString)));
-
-#ifdef ENABLE_UPDATERS
-    connect(showNewsAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleUpdateChecks(bool)));
-#endif
+    connect(m_enableNewsAction, SIGNAL(triggered(bool)), this, SLOT(slotSetNewsEnabled(bool)));
+    connect(enableNewsBox, SIGNAL(clicked(bool)), this, SLOT(slotSetNewsEnabled(bool)));
+    connect(checkNowButton, SIGNAL(clicked()), this, SLOT(slotCheckNews()));
 
     supporterBadge->hide();
     wdgAndroidSupportBanner->hide();
@@ -188,10 +177,19 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     initDonations();
 #endif
 
-    // configure the News area
-    KisConfig cfg(true);
-    m_networkIsAllowed = cfg.readEntry<bool>("FetchNews", false);
+    // We want to enable updates by default, but allow the user the chance to
+    // disable them before making a network connection when they see the option
+    // the first time.
+    bool newsCheckEnabled, newsFirstStartup;
+    {
+        KisConfig cfg(false);
+        newsCheckEnabled = cfg.newsCheckEnabled();
+        newsFirstStartup = cfg.newsFirstStartup();
+        cfg.setNewsFirstStartup(false);
+    }
 
+    m_enableNewsAction->setChecked(newsCheckEnabled);
+    enableNewsBox->setChecked(newsCheckEnabled);
 
 #ifdef ENABLE_UPDATERS
 #ifndef Q_OS_ANDROID
@@ -227,18 +225,15 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 		connect(bnErrorDetails, SIGNAL(clicked()), this, SLOT(slotShowUpdaterErrorDetails()));
 		connect(m_versionUpdater.data(), SIGNAL(sigUpdateCheckStateChange(KisUpdaterStatus)),
 				this, SLOT(slotSetUpdateStatus(const KisUpdaterStatus&)));
-
-        if (m_networkIsAllowed) { // only if the user wants them
-			m_versionUpdater->checkForUpdate();
-		}
 	}
 #endif // ifndef Q_OS_ANDROID
 #endif // ENABLE_UPDATERS
 
-
-    showNewsAction->setChecked(m_networkIsAllowed);
-    newsWidget->setVisible(m_networkIsAllowed);
-    versionNotificationLabel->setEnabled(m_networkIsAllowed);
+    if (newsCheckEnabled && !newsFirstStartup) {
+        slotCheckNews();
+    } else {
+        newsWidget->hide();
+    }
 
     // Drop area..
     setAcceptDrops(true);
@@ -373,14 +368,6 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE\">")
                               .append(i18n("Powered by KDE")).append("</a>"));
-
-    QString translationNoFeed = i18n("You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-decoration: underline;\">enable news</a> from krita.org in various languages with the menu above");
-    labelNoFeed->setText(translationNoFeed.replace("COLOR_PLACEHOLDER", blendedColor.name()));
-
-    const QColor faintTextColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.4);
-    const QString &faintTextStyle = "QWidget{color: " + faintTextColor.name() + "}";
-    labelNoRecentDocs->setStyleSheet(faintTextStyle);
-    labelNoFeed->setStyleSheet(faintTextStyle);
 
     const QColor frameColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.1);
     const QString &frameQss = "{border: 1px solid " + frameColor.name() + "}";
@@ -697,28 +684,29 @@ void KisWelcomePageWidget::slotRecentFilesModelIsUpToDate()
     clearRecentFilesLink->setVisible(!modelIsEmpty);
 }
 
-#ifdef ENABLE_UPDATERS
-void KisWelcomePageWidget::slotToggleUpdateChecks(bool state)
+void KisWelcomePageWidget::slotSetNewsEnabled(bool newsEnabled)
 {
-	if (m_versionUpdater.isNull()) {
-		return;
-	}
-
-    m_networkIsAllowed = state;
-
-    if (m_networkIsAllowed) {
-        m_versionUpdater->checkForUpdate();
-    }
-
-    updateVersionUpdaterFrame();
+    enableNewsBox->setChecked(newsEnabled);
+    m_enableNewsAction->setChecked(newsEnabled);
+    KisConfig(false).setNewsCheckEnabled(newsEnabled);
 }
+
+void KisWelcomePageWidget::slotCheckNews()
+{
+    checkNowButton->setEnabled(false);
+    noNewsWidget->hide();
+    newsWidget->show();
+    newsWidget->toggleNews(true);
+#ifdef ENABLE_UPDATERS
+    m_versionUpdater->checkForUpdate();
+    updateVersionUpdaterFrame();
+#endif
+}
+
+#ifdef ENABLE_UPDATERS
 void KisWelcomePageWidget::slotRunVersionUpdate()
 {
-	if (m_versionUpdater.isNull()) {
-		return;
-	}
-
-    if (m_networkIsAllowed) {
+	if (!m_versionUpdater.isNull()) {
 		m_versionUpdater->doUpdate();
 	}
 }
@@ -741,7 +729,7 @@ void KisWelcomePageWidget::updateVersionUpdaterFrame()
     bnVersionUpdate->setVisible(false);
     bnErrorDetails->setVisible(false);
 
-    if (!m_networkIsAllowed || m_versionUpdater.isNull()) {
+    if (m_versionUpdater.isNull()) {
         return;
     }
 

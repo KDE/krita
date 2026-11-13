@@ -23,16 +23,6 @@
 class RecentItemDelegate;
 class KisMainWindow;
 
-// Custom QAction to bridge a QLabel::linkActivated signal to a QAction::setChecked signal
-class ShowNewsAction : public QAction
-{
-  Q_OBJECT
-public:
-    using QAction::QAction;
-private Q_SLOTS:
-    void enableFromLink(QString unused_url);
-};
-
 /// A widget for displaying if no documents are open. This will display in the MDI area
 class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcomePage
 {
@@ -75,9 +65,11 @@ private Q_SLOTS:
 
     void slotScrollerStateChanged(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 
+    void slotSetNewsEnabled(bool newsEnabled);
+    void slotCheckNews();
+
 #ifdef ENABLE_UPDATERS
     void slotRunVersionUpdate();
-    void slotToggleUpdateChecks(bool state);
 #endif
 
 #ifdef Q_OS_ANDROID
@@ -129,11 +121,11 @@ private:
     QColor blendedColor;
     QString blendedStyle;
 
+    QAction *m_enableNewsAction;
 #ifdef ENABLE_UPDATERS
     QScopedPointer<KisUpdaterBase> m_versionUpdater;
     KisUpdaterStatus m_updaterStatus;
 #endif
-    bool m_networkIsAllowed {false};
 
     QScopedPointer<RecentItemDelegate> recentItemDelegate;
 

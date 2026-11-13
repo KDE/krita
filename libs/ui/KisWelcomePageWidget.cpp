@@ -726,6 +726,8 @@ void KisWelcomePageWidget::updateVersionUpdaterFrame()
 {
     updaterFrame->setVisible(false);
     versionNotificationLabel->setVisible(false);
+    versionNotificationLabel->setEnabled(false);
+    updateWidget->setVisible(false);
     bnVersionUpdate->setVisible(false);
     bnErrorDetails->setVisible(false);
 
@@ -739,11 +741,13 @@ void KisWelcomePageWidget::updateVersionUpdaterFrame()
         updaterFrame->setVisible(true);
         updaterFrame->setEnabled(true);
         versionLabelText = i18n("New version of Krita is available.");
+        versionNotificationLabel->setEnabled(true);
         versionNotificationLabel->setVisible(true);
         updateIcon->setIcon(KisIconUtils::loadIcon("update-medium"));
 
         if (m_versionUpdater->hasUpdateCapability()) {
             bnVersionUpdate->setVisible(true);
+            updateWidget->setVisible(true);
         } else {
             // build URL for label
             QString downloadLink = QString(" <a style=\"color: %1; text-decoration: underline\" href=\"%2?%3\">Download Krita %4</a>")
@@ -770,6 +774,7 @@ void KisWelcomePageWidget::updateVersionUpdaterFrame()
         versionLabelText = i18n("An error occurred during the update");
         versionNotificationLabel->setVisible(true);
         bnErrorDetails->setVisible(true);
+        updateWidget->setVisible(true);
         updateIcon->setIcon(KisIconUtils::loadIcon("warning"));
     } else if (m_updaterStatus.status() == UpdaterStatus::StatusID::RESTART_REQUIRED) {
         updaterFrame->setVisible(true);

@@ -137,7 +137,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="render_animation">
-      <icon></icon>
+      <icon>render-animation</icon>
       <text>&amp;Render Animation...</text>
       <whatsThis></whatsThis>
       <toolTip>Render Animation to GIF, Image Sequence or Video</toolTip>
@@ -149,7 +149,7 @@
       <statusTip></statusTip>
     </Action>
       <Action name="render_animation_again">
-      <icon></icon>
+      <icon>render-animation</icon>
       <text>&amp;Render Animation Again</text>
       <whatsThis></whatsThis>
       <toolTip>Render Animation Again</toolTip>

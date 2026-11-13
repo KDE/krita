@@ -128,8 +128,7 @@ void TestXmlWriter::testAddManifestEntry()
 void TestXmlWriter::testEscapingLongString()
 {
     int sz = 15000;  // must be more than KoXmlWriter::s_escapeBufferLen
-    QString x(sz);
-    x.fill('x', sz);
+    QString x(sz, 'x');
     x += '&';
     setup();
 

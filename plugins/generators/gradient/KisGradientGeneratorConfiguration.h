@@ -323,9 +323,9 @@ public:
     static inline KisGradientPainter::enumGradientDither stringToDither(QString const & ditherString,
                                                                         KisGradientPainter::enumGradientDither defaultDither = KisGradientPainter::GradientDitherNone)
     {
-        if (ditherString == "none") {
+        if (ditherString == "none" || ditherString == "false") {
             return KisGradientPainter::GradientDitherNone;
-        } else if (ditherString == "blue_noise") {
+        } else if (ditherString == "blue_noise" || ditherString == "true") {
             return KisGradientPainter::GradientDitherBlueNoise;
         } else if (ditherString == "bayer2") {
             return KisGradientPainter::GradientDitherBayer2;

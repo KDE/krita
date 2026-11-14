@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-13 00:55+0000\n"
+"POT-Creation-Date: 2026-11-14 01:01+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -21948,7 +21948,7 @@ msgstr "Ўлчами:"
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
-#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
+#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:303
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:72
 #: libs/ui/widgets/kis_selection_options.cc:205
 #: libs/ui/widgets/kis_selection_options.cc:220
@@ -25212,39 +25212,39 @@ msgstr "Сақлаш учун файлни яратиб бўлмади"
 msgid "2. The resource location at %1 is not writable."
 msgstr "Сақлаш учун файлни яратиб бўлмади"
 
-#: libs/resources/KisResourceLocator.cpp:872
+#: libs/resources/KisResourceLocator.cpp:900
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not add %1 to the database"
 msgstr "Расмни юклаб бўлмади."
 
-#: libs/resources/KisResourceLocator.cpp:927
-#: libs/resources/KisResourceLocator.cpp:1283
+#: libs/resources/KisResourceLocator.cpp:955
+#: libs/resources/KisResourceLocator.cpp:1311
 #, fuzzy, kde-format
 #| msgid "Could not read the beginning of the file."
 msgid "Could not remove storage %1 from the database"
 msgstr "Файлнинг бошини ўқиб бўлмади."
 
-#: libs/resources/KisResourceLocator.cpp:1036
+#: libs/resources/KisResourceLocator.cpp:1064
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not synchronize updated font registry with the database"
 msgstr "Расмни юклаб бўлмади."
 
-#: libs/resources/KisResourceLocator.cpp:1044
+#: libs/resources/KisResourceLocator.cpp:1072
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:1051
+#: libs/resources/KisResourceLocator.cpp:1079
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "3. Could not create the resource location at %1."
 msgstr "Сақлаш учун файлни яратиб бўлмади"
 
-#: libs/resources/KisResourceLocator.cpp:1064
-#: libs/resources/KisResourceLocator.cpp:1080
+#: libs/resources/KisResourceLocator.cpp:1092
+#: libs/resources/KisResourceLocator.cpp:1108
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open %1\n"
@@ -25254,32 +25254,32 @@ msgstr ""
 "%1 файлини очиб бўлмади.\n"
 "Сабаб: %2"
 
-#: libs/resources/KisResourceLocator.cpp:1076
+#: libs/resources/KisResourceLocator.cpp:1104
 #, fuzzy, kde-format
 #| msgid "Could not export file."
 msgid "Installing the resources from bundle %1."
 msgstr "Файлни экспорт қилиб бўлмади."
 
-#: libs/resources/KisResourceLocator.cpp:1107
+#: libs/resources/KisResourceLocator.cpp:1135
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Temporary Resources"
 msgstr "Ҳужжатни импорт қилиш"
 
-#: libs/resources/KisResourceLocator.cpp:1113
+#: libs/resources/KisResourceLocator.cpp:1141
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Select Font"
 msgid "Font Storage"
 msgstr "Шрифтни танлаш"
 
-#: libs/resources/KisResourceLocator.cpp:1232
+#: libs/resources/KisResourceLocator.cpp:1260
 #, fuzzy, kde-format
 msgid "Synchronizing the resources."
 msgstr "Матнни ўчириш"
 
-#: libs/resources/KisResourceLocator.cpp:1245
-#: libs/resources/KisResourceLocator.cpp:1253
+#: libs/resources/KisResourceLocator.cpp:1273
+#: libs/resources/KisResourceLocator.cpp:1281
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not synchronize %1 with the database"
@@ -25617,7 +25617,7 @@ msgstr "Белги услубини ўзгартириш"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:125 libs/resources/KisTagModel.cpp:301
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:606
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:627
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:504
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
@@ -25687,7 +25687,7 @@ msgid "Tag File Name"
 msgstr "Хатчўпнинг номи:"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:108
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:978
 #, fuzzy, kde-format
 msgid "Resource is broken!"
 msgstr "Матнни ўчириш"
@@ -27360,6 +27360,7 @@ msgstr "Объект"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
+#: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:343
 #: libs/widgetutils/KisPreviewFileDialog.cpp:96
 #, fuzzy, kde-format
 #| msgid "Preview:"
@@ -28246,8 +28247,8 @@ msgstr "Рўйхатнинг турини ўзгартириш"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1919
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2004
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2473
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2531 libs/ui/kis_paintop_box.cc:279
-#: libs/ui/kis_paintop_box.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2531 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/kis_paintop_box.cc:281
 #: libs/ui/widgets/kis_custom_image_widget.cc:105
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -30905,8 +30906,8 @@ msgstr "Ранги:"
 #. i18n: ectx: property (text), widget (QLabel, pageSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:372 libs/ui/kis_paintop_box.cc:268
-#: libs/ui/kis_paintop_box.cc:275
+#: libs/ui/forms/wdgdisplaysettings.ui:372 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/kis_paintop_box.cc:276
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:50
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
@@ -31799,7 +31800,7 @@ msgstr "Кўриб чиқиш:"
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
 #. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
-#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:319
+#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:320
 #: plugins/dockers/recorder/recorder_export.ui:300
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
 #, fuzzy, kde-format
@@ -33069,7 +33070,7 @@ msgid "path"
 msgstr "Гуруҳни олиб ташлаш"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:476
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:477
 #, fuzzy, kde-format
 #| msgid "Show %1 Toolbar"
 msgid "Brush Editor"
@@ -36401,29 +36402,29 @@ msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
 msgstr ""
 
-#: libs/ui/kis_paintop_box.cc:100
+#: libs/ui/kis_paintop_box.cc:101
 #, fuzzy, kde-format
 #| msgid "More Line Colors..."
 msgid "Painter's Toolchest"
 msgstr "Кўпроқ чизиқ ранглари"
 
-#: libs/ui/kis_paintop_box.cc:112
+#: libs/ui/kis_paintop_box.cc:113
 #, fuzzy, kde-format
 msgid "Tool Settings"
 msgstr "Қатор:"
 
-#: libs/ui/kis_paintop_box.cc:120
+#: libs/ui/kis_paintop_box.cc:121
 #, fuzzy, kde-format
 msgid "Edit brush settings"
 msgstr "Қатор:"
 
-#: libs/ui/kis_paintop_box.cc:127
+#: libs/ui/kis_paintop_box.cc:128
 #, fuzzy, kde-format
 #| msgid "Choose Filter"
 msgid "Choose brush preset"
 msgstr "Филтерни танлаш"
 
-#: libs/ui/kis_paintop_box.cc:265
+#: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:398
@@ -36439,7 +36440,7 @@ msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
 msgstr "Шаҳар:"
 
-#: libs/ui/kis_paintop_box.cc:267
+#: libs/ui/kis_paintop_box.cc:268
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "{n} is the number value, % is the percent sign"
@@ -36451,7 +36452,7 @@ msgstr "Йўқ"
 #. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeRotation)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
-#: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
+#: libs/ui/kis_paintop_box.cc:270 libs/ui/kis_paintop_box.cc:277
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:165
@@ -36461,7 +36462,7 @@ msgstr "Йўқ"
 msgid "Rotation:"
 msgstr "намойиш"
 
-#: libs/ui/kis_paintop_box.cc:270 libs/ui/kis_paintop_box.cc:277
+#: libs/ui/kis_paintop_box.cc:271 libs/ui/kis_paintop_box.cc:278
 #, fuzzy, kde-format
 #| msgid "Page Size"
 msgid "Pattern Scale:"
@@ -36471,7 +36472,7 @@ msgstr "Бетнинг ўлчами"
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/kis_paintop_box.cc:273
+#: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:103
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:59
@@ -36482,27 +36483,27 @@ msgid "Opacity:"
 msgstr "Шаҳар:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
-#: libs/ui/kis_paintop_box.cc:274
+#: libs/ui/kis_paintop_box.cc:275
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2057
 #, fuzzy, kde-format
 #| msgid "None"
 msgid "Flow:"
 msgstr "Йўқ"
 
-#: libs/ui/kis_paintop_box.cc:336
+#: libs/ui/kis_paintop_box.cc:337
 #, fuzzy, kde-format
 #| msgid "Choose Filter"
 msgid "Choose workspace"
 msgstr "Филтерни танлаш"
 
-#: libs/ui/kis_paintop_box.cc:379
+#: libs/ui/kis_paintop_box.cc:380
 #, fuzzy, kde-format
 #| msgid "St&yle"
 msgid "Brush composite"
 msgstr "&Услуб"
 
-#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
-#: libs/ui/kis_paintop_box.cc:1380
+#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
+#: libs/ui/kis_paintop_box.cc:1384
 #, fuzzy, kde-format
 #| msgid "Completion"
 msgid ""
@@ -39747,8 +39748,8 @@ msgid "Compact"
 msgstr "Ташкилот:"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:188
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:83
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:190
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:238
 #, fuzzy, kde-format
@@ -40953,7 +40954,7 @@ msgid "Mid-gray level:"
 msgstr "Сония"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:152
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:153
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:182
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:30
 #, fuzzy, kde-format
@@ -40962,7 +40963,7 @@ msgid "Display"
 msgstr "&Алмаштириш:"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:156
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:157
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:190
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:42
 #, fuzzy, kde-format
@@ -40971,7 +40972,7 @@ msgstr "Белги услубини ўзгартириш"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:164
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
@@ -40979,50 +40980,67 @@ msgstr "Белги услубини ўзгартириш"
 msgid "Details"
 msgstr "&Андоза"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:102
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
+#, fuzzy, kde-format
+#| msgid "Current Section"
+msgid "Strokes"
+msgstr "Жорий бўлим"
+
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
+#, fuzzy, kde-format
+msgid "Strokes and Thumbnails"
+msgstr "Белги услубини ўзгартириш"
+
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
 #, kde-format
 msgid "The settings for this preset have changed from their default."
 msgstr ""
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:104
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:105
 #, fuzzy, kde-format
 #| msgid "Change Shadow"
 msgid "Toggle showing presets"
 msgstr "Сояни ўзгартириш"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:106
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:107
 #, fuzzy, kde-format
 #| msgid "Change Shadow"
 msgid "Toggle showing scratchpad"
 msgstr "Сояни ўзгартириш"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:108
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
 #, fuzzy, kde-format
 #| msgid "Choose Filter"
 msgid "Reload the brush preset"
 msgstr "Филтерни танлаш"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:110
 #, fuzzy, kde-format
 #| msgid "Choose Filter"
 msgid "Rename the brush preset"
 msgstr "Филтерни танлаш"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:209
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
+#, fuzzy, kde-format
+msgid "Thumbnails and Strokes"
+msgstr "Белги услубини ўзгартириш"
+
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
 #, fuzzy, kde-format
 #| msgid "Show %1 Toolbar"
 msgid "Detach Brush Editor"
 msgstr "%1 асбоблар панелини кўрсатиш"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:538
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:559
 #, fuzzy, kde-format
 #| msgid "Bookmark name:"
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
 msgstr "Хатчўпнинг номи:"
 
-#: libs/ui/widgets/kis_preset_live_preview_view.cpp:175
+#: libs/ui/widgets/kis_preset_live_preview_view.cpp:220
 #, kde-format
 msgid "No Preview for this engine"
 msgstr ""
@@ -41442,6 +41460,12 @@ msgctxt ""
 "histogram (0%) or to the point selected in the method (100%)"
 msgid "Amount:"
 msgstr "Давлат:"
+
+#: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:320
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "Loading..."
+msgstr "Ҳужжатни импорт қилиш"
 
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, fuzzy, kde-format

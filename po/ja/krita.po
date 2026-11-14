@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-13 00:55+0000\n"
+"POT-Creation-Date: 2026-11-14 01:01+0000\n"
 "PO-Revision-Date: 2026-06-07 12:10+0900\n"
 "Last-Translator: Mint <5602mint@gmail.com>\n"
 "Language-Team: Japanese <kde-i18n-doc@kde.org>\n"
@@ -21480,7 +21480,7 @@ msgstr "サイズ"
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
-#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
+#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:303
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:72
 #: libs/ui/widgets/kis_selection_options.cc:205
 #: libs/ui/widgets/kis_selection_options.cc:220
@@ -24613,65 +24613,65 @@ msgstr "1. リソースの場所を作成できませんでした。%1"
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. リソースの場所は書き込みできません。%1"
 
-#: libs/resources/KisResourceLocator.cpp:872
+#: libs/resources/KisResourceLocator.cpp:900
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "データベースに追加できませんでした。%1"
 
-#: libs/resources/KisResourceLocator.cpp:927
-#: libs/resources/KisResourceLocator.cpp:1283
+#: libs/resources/KisResourceLocator.cpp:955
+#: libs/resources/KisResourceLocator.cpp:1311
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "データベースからストレージを削除できませんでした。%1"
 
-#: libs/resources/KisResourceLocator.cpp:1036
+#: libs/resources/KisResourceLocator.cpp:1064
 #, fuzzy, kde-format
 #| msgid "Could not synchronize %1 with the database"
 msgid "Could not synchronize updated font registry with the database"
 msgstr "データベースと同期できませんでした。%1"
 
-#: libs/resources/KisResourceLocator.cpp:1044
+#: libs/resources/KisResourceLocator.cpp:1072
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "Krita の初回起動です。初期化に通常より時間がかかります。"
 
-#: libs/resources/KisResourceLocator.cpp:1051
+#: libs/resources/KisResourceLocator.cpp:1079
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. リソースの場所を作成できませんでした。%1"
 
-#: libs/resources/KisResourceLocator.cpp:1064
-#: libs/resources/KisResourceLocator.cpp:1080
+#: libs/resources/KisResourceLocator.cpp:1092
+#: libs/resources/KisResourceLocator.cpp:1108
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "リソースのコピーが行えませんでした。%1 → %2"
 
-#: libs/resources/KisResourceLocator.cpp:1076
+#: libs/resources/KisResourceLocator.cpp:1104
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "バンドルからリソースをインストールしています。%1"
 
-#: libs/resources/KisResourceLocator.cpp:1107
+#: libs/resources/KisResourceLocator.cpp:1135
 #, kde-format
 msgid "Temporary Resources"
 msgstr "一時リソース"
 
-#: libs/resources/KisResourceLocator.cpp:1113
+#: libs/resources/KisResourceLocator.cpp:1141
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Font Style"
 msgid "Font Storage"
 msgstr "フォントスタイル"
 
-#: libs/resources/KisResourceLocator.cpp:1232
+#: libs/resources/KisResourceLocator.cpp:1260
 #, fuzzy, kde-format
 #| msgid "Initializing the resources."
 msgid "Synchronizing the resources."
 msgstr "リソースを初期化しています。"
 
-#: libs/resources/KisResourceLocator.cpp:1245
-#: libs/resources/KisResourceLocator.cpp:1253
+#: libs/resources/KisResourceLocator.cpp:1273
+#: libs/resources/KisResourceLocator.cpp:1281
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "データベースと同期できませんでした。%1"
@@ -24995,7 +24995,7 @@ msgstr "サムネイル"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:125 libs/resources/KisTagModel.cpp:301
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:606
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:627
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:504
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
@@ -25066,7 +25066,7 @@ msgid "Tag File Name"
 msgstr "タグファイル名"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:108
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:978
 #, fuzzy, kde-format
 #| msgid "Resource View"
 msgid "Resource is broken!"
@@ -26706,6 +26706,7 @@ msgstr "動画ファイル:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
+#: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:343
 #: libs/widgetutils/KisPreviewFileDialog.cpp:96
 #, kde-format
 msgid "No Preview"
@@ -27652,8 +27653,8 @@ msgstr "レイヤーのプロパティ"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1919
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2004
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2473
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2531 libs/ui/kis_paintop_box.cc:279
-#: libs/ui/kis_paintop_box.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2531 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/kis_paintop_box.cc:281
 #: libs/ui/widgets/kis_custom_image_widget.cc:105
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -30350,8 +30351,8 @@ msgstr "色 2:"
 #. i18n: ectx: property (text), widget (QLabel, pageSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:372 libs/ui/kis_paintop_box.cc:268
-#: libs/ui/kis_paintop_box.cc:275
+#: libs/ui/forms/wdgdisplaysettings.ui:372 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/kis_paintop_box.cc:276
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:50
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
@@ -31227,7 +31228,7 @@ msgstr "プレビューなし"
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
 #. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
-#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:319
+#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:320
 #: plugins/dockers/recorder/recorder_export.ui:300
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
 #, kde-format
@@ -32499,7 +32500,7 @@ msgid "path"
 msgstr "パス"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:476
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:477
 #, kde-format
 msgid "Brush Editor"
 msgstr "ブラシエディタ"
@@ -35727,27 +35728,27 @@ msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
 msgstr "%1% %2"
 
-#: libs/ui/kis_paintop_box.cc:100
+#: libs/ui/kis_paintop_box.cc:101
 #, kde-format
 msgid "Painter's Toolchest"
 msgstr "Painter のツールチェスト"
 
-#: libs/ui/kis_paintop_box.cc:112
+#: libs/ui/kis_paintop_box.cc:113
 #, kde-format
 msgid "Tool Settings"
 msgstr "ツール設定"
 
-#: libs/ui/kis_paintop_box.cc:120
+#: libs/ui/kis_paintop_box.cc:121
 #, kde-format
 msgid "Edit brush settings"
 msgstr "ブラシ設定を編集"
 
-#: libs/ui/kis_paintop_box.cc:127
+#: libs/ui/kis_paintop_box.cc:128
 #, kde-format
 msgid "Choose brush preset"
 msgstr "ブラシプリセットを選択"
 
-#: libs/ui/kis_paintop_box.cc:265
+#: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:398
@@ -35763,7 +35764,7 @@ msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
 msgstr "不透明度: {n}%"
 
-#: libs/ui/kis_paintop_box.cc:267
+#: libs/ui/kis_paintop_box.cc:268
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
@@ -35774,7 +35775,7 @@ msgstr "流量: {n}%"
 #. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeRotation)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
-#: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
+#: libs/ui/kis_paintop_box.cc:270 libs/ui/kis_paintop_box.cc:277
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:165
@@ -35784,7 +35785,7 @@ msgstr "流量: {n}%"
 msgid "Rotation:"
 msgstr "回転:"
 
-#: libs/ui/kis_paintop_box.cc:270 libs/ui/kis_paintop_box.cc:277
+#: libs/ui/kis_paintop_box.cc:271 libs/ui/kis_paintop_box.cc:278
 #, kde-format
 msgid "Pattern Scale:"
 msgstr "パターンスケール:"
@@ -35793,7 +35794,7 @@ msgstr "パターンスケール:"
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/kis_paintop_box.cc:273
+#: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:103
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:59
@@ -35804,24 +35805,24 @@ msgid "Opacity:"
 msgstr "不透明度:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
-#: libs/ui/kis_paintop_box.cc:274
+#: libs/ui/kis_paintop_box.cc:275
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2057
 #, kde-format
 msgid "Flow:"
 msgstr "流量:"
 
-#: libs/ui/kis_paintop_box.cc:336
+#: libs/ui/kis_paintop_box.cc:337
 #, kde-format
 msgid "Choose workspace"
 msgstr "ワークスペースを選択"
 
-#: libs/ui/kis_paintop_box.cc:379
+#: libs/ui/kis_paintop_box.cc:380
 #, kde-format
 msgid "Brush composite"
 msgstr "ブラシの合成"
 
-#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
-#: libs/ui/kis_paintop_box.cc:1380
+#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
+#: libs/ui/kis_paintop_box.cc:1384
 #, kde-format
 msgid ""
 "%1\n"
@@ -39004,8 +39005,8 @@ msgid "Compact"
 msgstr "会社:"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:188
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:83
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:190
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:238
 #, kde-format
@@ -40368,7 +40369,7 @@ msgid "Mid-gray level:"
 msgstr "Mid-gray level:"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:152
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:153
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:182
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:30
 #, kde-format
@@ -40377,7 +40378,7 @@ msgid "Display"
 msgstr "表示"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:156
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:157
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:190
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:42
 #, kde-format
@@ -40386,7 +40387,7 @@ msgstr "サムネイル"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:164
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
@@ -40394,44 +40395,64 @@ msgstr "サムネイル"
 msgid "Details"
 msgstr "詳細表示"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:102
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
+#, fuzzy, kde-format
+#| msgctxt "Draws a line around an area"
+#| msgid "Stroke"
+msgid "Strokes"
+msgstr "縁取り"
+
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
+#, fuzzy, kde-format
+#| msgid "Large Thumbnail"
+msgid "Strokes and Thumbnails"
+msgstr "大きなサムネイル"
+
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
 #, kde-format
 msgid "The settings for this preset have changed from their default."
 msgstr "このプリセットの設定は、デフォルトから変更されています。"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:104
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:105
 #, kde-format
 msgid "Toggle showing presets"
 msgstr "プリセット表示を切り替え"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:106
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:107
 #, kde-format
 msgid "Toggle showing scratchpad"
 msgstr "スクラッチパッド表示を切り替え"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:108
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
 #, kde-format
 msgid "Reload the brush preset"
 msgstr "ブラシプリセットを再読み込み"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:110
 #, kde-format
 msgid "Rename the brush preset"
 msgstr "ブラシプリセット名を変更"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:209
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
+#, fuzzy, kde-format
+#| msgid "Thumbnail Size"
+msgid "Thumbnails and Strokes"
+msgstr "サムネイルのサイズ"
+
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
 #, kde-format
 msgid "Detach Brush Editor"
 msgstr "ブラシエディタを分離"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:538
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:559
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
 msgstr "%1 エンジン"
 
-#: libs/ui/widgets/kis_preset_live_preview_view.cpp:175
+#: libs/ui/widgets/kis_preset_live_preview_view.cpp:220
 #, kde-format
 msgid "No Preview for this engine"
 msgstr "このエンジンのプレビューはありません"
@@ -40834,6 +40855,12 @@ msgctxt ""
 "histogram (0%) or to the point selected in the method (100%)"
 msgid "Amount:"
 msgstr "量:"
+
+#: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:320
+#, fuzzy, kde-format
+#| msgid "Loading Pages..."
+msgid "Loading..."
+msgstr "ページを読み込み中..."
 
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format

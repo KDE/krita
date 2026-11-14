@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-12 00:57+0000\n"
+"POT-Creation-Date: 2026-11-14 01:01+0000\n"
 "PO-Revision-Date: 2026-11-07 12:38+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -21182,7 +21182,7 @@ msgstr "Tamaño"
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
-#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
+#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:303
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:72
 #: libs/ui/widgets/kis_selection_options.cc:205
 #: libs/ui/widgets/kis_selection_options.cc:220
@@ -24286,25 +24286,25 @@ msgstr "1. No se ha podido crear la ubicación del recurso en %1."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. No se puede escribir en la ubicación del recurso en %1."
 
-#: libs/resources/KisResourceLocator.cpp:872
+#: libs/resources/KisResourceLocator.cpp:900
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "No se puede añadir %1 a la base de datos"
 
-#: libs/resources/KisResourceLocator.cpp:927
-#: libs/resources/KisResourceLocator.cpp:1283
+#: libs/resources/KisResourceLocator.cpp:955
+#: libs/resources/KisResourceLocator.cpp:1311
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "No se puede eliminar el almacenamiento %1 de la base de datos"
 
-#: libs/resources/KisResourceLocator.cpp:1036
+#: libs/resources/KisResourceLocator.cpp:1064
 #, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr ""
 "No se puede sincronizar el registro de fuentes actualizado con la base de "
 "datos"
 
-#: libs/resources/KisResourceLocator.cpp:1044
+#: libs/resources/KisResourceLocator.cpp:1072
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
@@ -24312,40 +24312,40 @@ msgstr ""
 "Está ejecutando Krita por primera vez. La inicialización llevará cierto "
 "tiempo."
 
-#: libs/resources/KisResourceLocator.cpp:1051
+#: libs/resources/KisResourceLocator.cpp:1079
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. No se puede crear la ubicación del recurso en %1."
 
-#: libs/resources/KisResourceLocator.cpp:1064
-#: libs/resources/KisResourceLocator.cpp:1080
+#: libs/resources/KisResourceLocator.cpp:1092
+#: libs/resources/KisResourceLocator.cpp:1108
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "No se ha podido copiar el recurso %1 en %2"
 
-#: libs/resources/KisResourceLocator.cpp:1076
+#: libs/resources/KisResourceLocator.cpp:1104
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Instalando los recursos del paquete %1."
 
-#: libs/resources/KisResourceLocator.cpp:1107
+#: libs/resources/KisResourceLocator.cpp:1135
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Recursos temporales"
 
-#: libs/resources/KisResourceLocator.cpp:1113
+#: libs/resources/KisResourceLocator.cpp:1141
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
 msgstr "Almacenamiento de tipos de letra"
 
-#: libs/resources/KisResourceLocator.cpp:1232
+#: libs/resources/KisResourceLocator.cpp:1260
 #, kde-format
 msgid "Synchronizing the resources."
 msgstr "Sincronizando los recursos."
 
-#: libs/resources/KisResourceLocator.cpp:1245
-#: libs/resources/KisResourceLocator.cpp:1253
+#: libs/resources/KisResourceLocator.cpp:1273
+#: libs/resources/KisResourceLocator.cpp:1281
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "No se ha podido sincronizar %1 con la base de datos"
@@ -24664,7 +24664,7 @@ msgstr "Miniatura"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:125 libs/resources/KisTagModel.cpp:301
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:606
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:627
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:504
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
@@ -24732,7 +24732,7 @@ msgid "Tag File Name"
 msgstr "Nombre de archivo de etiqueta"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:108
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:978
 #, kde-format
 msgid "Resource is broken!"
 msgstr "El recurso está dañado"
@@ -26362,6 +26362,7 @@ msgstr "Archivo de vídeo:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
+#: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:343
 #: libs/widgetutils/KisPreviewFileDialog.cpp:96
 #, kde-format
 msgid "No Preview"
@@ -27277,8 +27278,8 @@ msgstr "Propiedades de la capa"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1919
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2004
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2473
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2531 libs/ui/kis_paintop_box.cc:279
-#: libs/ui/kis_paintop_box.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2531 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/kis_paintop_box.cc:281
 #: libs/ui/widgets/kis_custom_image_widget.cc:105
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -29970,8 +29971,8 @@ msgstr "Color 2:"
 #. i18n: ectx: property (text), widget (QLabel, pageSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:372 libs/ui/kis_paintop_box.cc:268
-#: libs/ui/kis_paintop_box.cc:275
+#: libs/ui/forms/wdgdisplaysettings.ui:372 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/kis_paintop_box.cc:276
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:50
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
@@ -30850,7 +30851,7 @@ msgstr "Escala de vista previa de ampliación:"
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
 #. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
-#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:319
+#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:320
 #: plugins/dockers/recorder/recorder_export.ui:300
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
 #, kde-format
@@ -32145,7 +32146,7 @@ msgid "path"
 msgstr "ruta"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:476
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:477
 #, kde-format
 msgid "Brush Editor"
 msgstr "Editor de pincel"
@@ -35366,27 +35367,27 @@ msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
 msgstr "%1 % %2"
 
-#: libs/ui/kis_paintop_box.cc:100
+#: libs/ui/kis_paintop_box.cc:101
 #, kde-format
 msgid "Painter's Toolchest"
 msgstr "Cofre de herramientas del pintor"
 
-#: libs/ui/kis_paintop_box.cc:112
+#: libs/ui/kis_paintop_box.cc:113
 #, kde-format
 msgid "Tool Settings"
 msgstr "Preferencias de la herramienta"
 
-#: libs/ui/kis_paintop_box.cc:120
+#: libs/ui/kis_paintop_box.cc:121
 #, kde-format
 msgid "Edit brush settings"
 msgstr "Editar las preferencias del pincel"
 
-#: libs/ui/kis_paintop_box.cc:127
+#: libs/ui/kis_paintop_box.cc:128
 #, kde-format
 msgid "Choose brush preset"
 msgstr "Seleccionar valor predefinido del pincel"
 
-#: libs/ui/kis_paintop_box.cc:265
+#: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:398
@@ -35402,7 +35403,7 @@ msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
 msgstr "Opacidad: {n} %"
 
-#: libs/ui/kis_paintop_box.cc:267
+#: libs/ui/kis_paintop_box.cc:268
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
@@ -35413,7 +35414,7 @@ msgstr "Flujo: {n} %"
 #. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeRotation)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
-#: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
+#: libs/ui/kis_paintop_box.cc:270 libs/ui/kis_paintop_box.cc:277
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:165
@@ -35423,7 +35424,7 @@ msgstr "Flujo: {n} %"
 msgid "Rotation:"
 msgstr "Rotación: "
 
-#: libs/ui/kis_paintop_box.cc:270 libs/ui/kis_paintop_box.cc:277
+#: libs/ui/kis_paintop_box.cc:271 libs/ui/kis_paintop_box.cc:278
 #, kde-format
 msgid "Pattern Scale:"
 msgstr "Escala del patrón"
@@ -35432,7 +35433,7 @@ msgstr "Escala del patrón"
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/kis_paintop_box.cc:273
+#: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:103
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:59
@@ -35443,24 +35444,24 @@ msgid "Opacity:"
 msgstr "Opacidad:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
-#: libs/ui/kis_paintop_box.cc:274
+#: libs/ui/kis_paintop_box.cc:275
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2057
 #, kde-format
 msgid "Flow:"
 msgstr "Flujo:"
 
-#: libs/ui/kis_paintop_box.cc:336
+#: libs/ui/kis_paintop_box.cc:337
 #, kde-format
 msgid "Choose workspace"
 msgstr "Seleccionar espacio de trabajo"
 
-#: libs/ui/kis_paintop_box.cc:379
+#: libs/ui/kis_paintop_box.cc:380
 #, kde-format
 msgid "Brush composite"
 msgstr "Pincel de composición"
 
-#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
-#: libs/ui/kis_paintop_box.cc:1380
+#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
+#: libs/ui/kis_paintop_box.cc:1384
 #, kde-format
 msgid ""
 "%1\n"
@@ -38511,7 +38512,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
-#: plugins/tools/basictools/kis_tool_ellipse.cc:167
+#: plugins/tools/basictools/kis_tool_ellipse.cc:169
 #: plugins/tools/basictools/kis_tool_line.cc:212
 #: plugins/tools/basictools/kis_tool_path.cc:91
 #: plugins/tools/basictools/kis_tool_pencil.cc:64
@@ -38526,7 +38527,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:116
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:163
-#: plugins/tools/basictools/kis_tool_ellipse.cc:160
+#: plugins/tools/basictools/kis_tool_ellipse.cc:162
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:69
 #, kde-format
 msgid ""
@@ -38645,8 +38646,8 @@ msgid "Compact"
 msgstr "Compacta"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:188
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:83
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:190
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:238
 #, kde-format
@@ -40046,7 +40047,7 @@ msgid "Mid-gray level:"
 msgstr "Nivel de gris medio:"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:152
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:153
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:182
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:30
 #, kde-format
@@ -40055,7 +40056,7 @@ msgid "Display"
 msgstr "Mostrar"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:156
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:157
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:190
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:42
 #, kde-format
@@ -40064,7 +40065,7 @@ msgstr "Miniaturas"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:164
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
@@ -40072,45 +40073,65 @@ msgstr "Miniaturas"
 msgid "Details"
 msgstr "Detalles"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:102
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
+#, fuzzy, kde-format
+#| msgctxt "Draws a line around an area"
+#| msgid "Stroke"
+msgid "Strokes"
+msgstr "Trazo"
+
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
+#, fuzzy, kde-format
+#| msgid "Large Thumbnail"
+msgid "Strokes and Thumbnails"
+msgstr "Miniatura grande"
+
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
 #, kde-format
 msgid "The settings for this preset have changed from their default."
 msgstr ""
 "Las preferencias de este preajuste han cambiado de su valor predeterminado."
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:104
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:105
 #, kde-format
 msgid "Toggle showing presets"
 msgstr "Conmutar la visualización de preajustes"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:106
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:107
 #, kde-format
 msgid "Toggle showing scratchpad"
 msgstr "Conmutar la visualización del bloc de notas"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:108
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
 #, kde-format
 msgid "Reload the brush preset"
 msgstr "Volver a cargar el preajuste del pincel"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:110
 #, kde-format
 msgid "Rename the brush preset"
 msgstr "Cambiar nombre del preajuste de pincel"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:209
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
+#, fuzzy, kde-format
+#| msgid "Thumbnail Size"
+msgid "Thumbnails and Strokes"
+msgstr "Tamaño de las miniaturas"
+
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
 #, kde-format
 msgid "Detach Brush Editor"
 msgstr "Desprender el editor de pincel"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:538
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:559
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
 msgstr "Motor %1"
 
-#: libs/ui/widgets/kis_preset_live_preview_view.cpp:175
+#: libs/ui/widgets/kis_preset_live_preview_view.cpp:220
 #, kde-format
 msgid "No Preview for this engine"
 msgstr "No hay vista previa para este motor"
@@ -40508,6 +40529,12 @@ msgctxt ""
 "histogram (0%) or to the point selected in the method (100%)"
 msgid "Amount:"
 msgstr "Cantidad:"
+
+#: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:320
+#, fuzzy, kde-format
+#| msgid "Loading Pages..."
+msgid "Loading..."
+msgstr "Cargando páginas…"
 
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format
@@ -66686,45 +66713,45 @@ msgstr "Activar ajuste cuando se usan borradores"
 msgid "Color Sampler Tool"
 msgstr "Herramienta del muestreador de color"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:76
+#: plugins/tools/basictools/kis_tool_ellipse.cc:78
 #, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "Bounding Box"
 msgstr "Cuadro de contorno"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:77
+#: plugins/tools/basictools/kis_tool_ellipse.cc:79
 #, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "3-Point"
 msgstr "3 puntos"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:78
+#: plugins/tools/basictools/kis_tool_ellipse.cc:80
 #, kde-format
 msgid "Place the ellipse inside a bounding box"
 msgstr "Colocar la elipse dentro de un cuadro de contorno"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:79
+#: plugins/tools/basictools/kis_tool_ellipse.cc:81
 #, kde-format
 msgid "Place the ellipse by setting the major axis and width"
 msgstr "Coloque la elipse definiendo el eje mayor y la anchura"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:110
+#: plugins/tools/basictools/kis_tool_ellipse.cc:112
 #, kde-format
 msgctxt "Ellipse tool placement mode option label"
 msgid "Placement:"
 msgstr "Colocación:"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:343
+#: plugins/tools/basictools/kis_tool_ellipse.cc:345
 #, kde-format
 msgid "Click to place the other end of the ellipse axis."
 msgstr "Clic para situar el otro extremo del eje de la elipse."
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:345
+#: plugins/tools/basictools/kis_tool_ellipse.cc:347
 #, kde-format
 msgid "Click to set the ellipse width."
 msgstr "Clic para definir la anchura de la elipse."
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:347
+#: plugins/tools/basictools/kis_tool_ellipse.cc:349
 #, kde-format
 msgid ""
 "Drag handles to adjust the ellipse. Press Enter to apply or Esc to cancel."
@@ -66732,9 +66759,9 @@ msgstr ""
 "Arrastre los tiradores para ajustar la elipse. Pulse Intro para aplicar o "
 "Esc para cancelar."
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:584
-#: plugins/tools/basictools/kis_tool_ellipse.cc:606
-#: plugins/tools/basictools/kis_tool_ellipse.cc:623
+#: plugins/tools/basictools/kis_tool_ellipse.cc:587
+#: plugins/tools/basictools/kis_tool_ellipse.cc:609
+#: plugins/tools/basictools/kis_tool_ellipse.cc:626
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Dibujar elipse"

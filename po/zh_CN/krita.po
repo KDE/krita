@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-13 00:55+0000\n"
+"POT-Creation-Date: 2026-11-14 01:01+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -21019,7 +21019,7 @@ msgstr "大小"
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
-#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:302
+#: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:303
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:72
 #: libs/ui/widgets/kis_selection_options.cc:205
 #: libs/ui/widgets/kis_selection_options.cc:220
@@ -24086,62 +24086,62 @@ msgstr "1. 无法在 %1 创建资源位置。"
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. 位于 %1 的资源位置无法写入。"
 
-#: libs/resources/KisResourceLocator.cpp:872
+#: libs/resources/KisResourceLocator.cpp:900
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "无法将 %1 添加到数据库"
 
-#: libs/resources/KisResourceLocator.cpp:927
-#: libs/resources/KisResourceLocator.cpp:1283
+#: libs/resources/KisResourceLocator.cpp:955
+#: libs/resources/KisResourceLocator.cpp:1311
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "无法将存储项 %1 从数据库移除"
 
-#: libs/resources/KisResourceLocator.cpp:1036
+#: libs/resources/KisResourceLocator.cpp:1064
 #, kde-format
 msgid "Could not synchronize updated font registry with the database"
 msgstr "无法将更新后的字体注册表与数据库同步"
 
-#: libs/resources/KisResourceLocator.cpp:1044
+#: libs/resources/KisResourceLocator.cpp:1072
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "这是 Krita 的首次运行。程序的初始化需要一些时间。"
 
-#: libs/resources/KisResourceLocator.cpp:1051
+#: libs/resources/KisResourceLocator.cpp:1079
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. 无法在 %1 创建资源位置。"
 
-#: libs/resources/KisResourceLocator.cpp:1064
-#: libs/resources/KisResourceLocator.cpp:1080
+#: libs/resources/KisResourceLocator.cpp:1092
+#: libs/resources/KisResourceLocator.cpp:1108
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "无法将资源 %1 复制到 %2"
 
-#: libs/resources/KisResourceLocator.cpp:1076
+#: libs/resources/KisResourceLocator.cpp:1104
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "正在从资源包 %1 安装资源。"
 
-#: libs/resources/KisResourceLocator.cpp:1107
+#: libs/resources/KisResourceLocator.cpp:1135
 #, kde-format
 msgid "Temporary Resources"
 msgstr "临时资源"
 
-#: libs/resources/KisResourceLocator.cpp:1113
+#: libs/resources/KisResourceLocator.cpp:1141
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
 msgstr "字体存储"
 
-#: libs/resources/KisResourceLocator.cpp:1232
+#: libs/resources/KisResourceLocator.cpp:1260
 #, kde-format
 msgid "Synchronizing the resources."
 msgstr "正在同步资源。"
 
-#: libs/resources/KisResourceLocator.cpp:1245
-#: libs/resources/KisResourceLocator.cpp:1253
+#: libs/resources/KisResourceLocator.cpp:1273
+#: libs/resources/KisResourceLocator.cpp:1281
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "无法将 %1 与数据库同步"
@@ -24460,7 +24460,7 @@ msgstr "缩略图"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:125 libs/resources/KisTagModel.cpp:301
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:606
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:627
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:504
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
@@ -24528,7 +24528,7 @@ msgid "Tag File Name"
 msgstr "标签文件名"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:108
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:957
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:978
 #, kde-format
 msgid "Resource is broken!"
 msgstr "资源已损坏。"
@@ -26122,6 +26122,7 @@ msgstr "视频文件："
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
+#: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:343
 #: libs/widgetutils/KisPreviewFileDialog.cpp:96
 #, kde-format
 msgid "No Preview"
@@ -27060,8 +27061,8 @@ msgstr "图层属性"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1919
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2004
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2473
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2531 libs/ui/kis_paintop_box.cc:279
-#: libs/ui/kis_paintop_box.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2531 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/kis_paintop_box.cc:281
 #: libs/ui/widgets/kis_custom_image_widget.cc:105
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -29686,8 +29687,8 @@ msgstr "颜色 2："
 #. i18n: ectx: property (text), widget (QLabel, pageSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgdisplaysettings.ui:372 libs/ui/kis_paintop_box.cc:268
-#: libs/ui/kis_paintop_box.cc:275
+#: libs/ui/forms/wdgdisplaysettings.ui:372 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/kis_paintop_box.cc:276
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:50
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
@@ -30541,7 +30542,7 @@ msgstr "缩放预览的缩放级别："
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
 #. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
-#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:319
+#: libs/ui/forms/wdggeneralsettings.ui:1047 libs/ui/kis_paintop_box.cc:320
 #: plugins/dockers/recorder/recorder_export.ui:300
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
 #, kde-format
@@ -31791,7 +31792,7 @@ msgid "path"
 msgstr "路径"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:476
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:477
 #, kde-format
 msgid "Brush Editor"
 msgstr "笔刷编辑器"
@@ -34956,27 +34957,27 @@ msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
 msgstr "%1% %2"
 
-#: libs/ui/kis_paintop_box.cc:100
+#: libs/ui/kis_paintop_box.cc:101
 #, kde-format
 msgid "Painter's Toolchest"
 msgstr "绘画工具箱"
 
-#: libs/ui/kis_paintop_box.cc:112
+#: libs/ui/kis_paintop_box.cc:113
 #, kde-format
 msgid "Tool Settings"
 msgstr "工具设置"
 
-#: libs/ui/kis_paintop_box.cc:120
+#: libs/ui/kis_paintop_box.cc:121
 #, kde-format
 msgid "Edit brush settings"
 msgstr "笔刷编辑器"
 
-#: libs/ui/kis_paintop_box.cc:127
+#: libs/ui/kis_paintop_box.cc:128
 #, kde-format
 msgid "Choose brush preset"
 msgstr "笔刷预设列表"
 
-#: libs/ui/kis_paintop_box.cc:265
+#: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:398
@@ -34992,7 +34993,7 @@ msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
 msgstr "不透明度：{n}%"
 
-#: libs/ui/kis_paintop_box.cc:267
+#: libs/ui/kis_paintop_box.cc:268
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
@@ -35003,7 +35004,7 @@ msgstr "流量：{n}%"
 #. i18n: ectx: property (text), widget (QLabel, lblLiquifyShapeRotation)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
-#: libs/ui/kis_paintop_box.cc:269 libs/ui/kis_paintop_box.cc:276
+#: libs/ui/kis_paintop_box.cc:270 libs/ui/kis_paintop_box.cc:277
 #: plugins/filters/blur/wdg_lens_blur.ui:84
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:165
@@ -35013,7 +35014,7 @@ msgstr "流量：{n}%"
 msgid "Rotation:"
 msgstr "旋转："
 
-#: libs/ui/kis_paintop_box.cc:270 libs/ui/kis_paintop_box.cc:277
+#: libs/ui/kis_paintop_box.cc:271 libs/ui/kis_paintop_box.cc:278
 #, kde-format
 msgid "Pattern Scale:"
 msgstr "图案缩放："
@@ -35022,7 +35023,7 @@ msgstr "图案缩放："
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/kis_paintop_box.cc:273
+#: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:103
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:59
@@ -35033,24 +35034,24 @@ msgid "Opacity:"
 msgstr "不透明度："
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
-#: libs/ui/kis_paintop_box.cc:274
+#: libs/ui/kis_paintop_box.cc:275
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2057
 #, kde-format
 msgid "Flow:"
 msgstr "流量："
 
-#: libs/ui/kis_paintop_box.cc:336
+#: libs/ui/kis_paintop_box.cc:337
 #, kde-format
 msgid "Choose workspace"
 msgstr "打开工作区切换/管理面板"
 
-#: libs/ui/kis_paintop_box.cc:379
+#: libs/ui/kis_paintop_box.cc:380
 #, kde-format
 msgid "Brush composite"
 msgstr "笔刷混合模式"
 
-#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
-#: libs/ui/kis_paintop_box.cc:1380
+#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
+#: libs/ui/kis_paintop_box.cc:1384
 #, kde-format
 msgid ""
 "%1\n"
@@ -38171,8 +38172,8 @@ msgid "Compact"
 msgstr "紧凑模式"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:188
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:83
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:190
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:238
 #, kde-format
@@ -39469,7 +39470,7 @@ msgid "Mid-gray level:"
 msgstr "中间灰亮度："
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:152
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:153
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:182
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:30
 #, kde-format
@@ -39478,7 +39479,7 @@ msgid "Display"
 msgstr "显示"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:156
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:157
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:190
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:42
 #, kde-format
@@ -39487,7 +39488,7 @@ msgstr "缩略图"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:164
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
@@ -39495,44 +39496,64 @@ msgstr "缩略图"
 msgid "Details"
 msgstr "详细信息"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:102
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
+#, fuzzy, kde-format
+#| msgctxt "Draws a line around an area"
+#| msgid "Stroke"
+msgid "Strokes"
+msgstr "描边"
+
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
+#, fuzzy, kde-format
+#| msgid "Large Thumbnail"
+msgid "Strokes and Thumbnails"
+msgstr "大缩略图"
+
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
 #, kde-format
 msgid "The settings for this preset have changed from their default."
 msgstr "此预设的当前设置已被更改为不同于其默认值。"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:104
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:105
 #, kde-format
 msgid "Toggle showing presets"
 msgstr "显示/隐藏预设"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:106
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:107
 #, kde-format
 msgid "Toggle showing scratchpad"
 msgstr "显示/隐藏绘图区"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:108
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
 #, kde-format
 msgid "Reload the brush preset"
 msgstr "重置为预设原始状态"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:110
 #, kde-format
 msgid "Rename the brush preset"
 msgstr "重命名笔刷预设"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:209
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
+#, fuzzy, kde-format
+#| msgid "Thumbnail Size"
+msgid "Thumbnails and Strokes"
+msgstr "缩略图大小"
+
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
 #, kde-format
 msgid "Detach Brush Editor"
 msgstr "分离笔刷编辑器"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:538
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:559
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
 msgstr "笔刷引擎：%1"
 
-#: libs/ui/widgets/kis_preset_live_preview_view.cpp:175
+#: libs/ui/widgets/kis_preset_live_preview_view.cpp:220
 #, kde-format
 msgid "No Preview for this engine"
 msgstr "此引擎没有预览"
@@ -39929,6 +39950,12 @@ msgctxt ""
 "histogram (0%) or to the point selected in the method (100%)"
 msgid "Amount:"
 msgstr "强度："
+
+#: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:320
+#, fuzzy, kde-format
+#| msgid "Loading Pages..."
+msgid "Loading..."
+msgstr "正在加载页面..."
 
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format

@@ -841,10 +841,6 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
 #endif
     KisApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
 
-    // Set up remote arguments.
-    QObject::connect(&app, &KisApplication::messageReceived,
-                     &app, &KisApplication::remoteArguments);
-
     // Hardware information
     KisUsageLogger::writeSysInfo("\nHardware Information\n");
     KisUsageLogger::writeSysInfo(QString("  GPU Acceleration: %1").arg(kritarc.value("OpenGLRenderer", "auto").toString()));
@@ -870,6 +866,14 @@ if (!qEnvironmentVariableIsEmpty("KRITA_OPENGL_DEBUG")) {
         KisUsageLogger::log("Could not start Krita Application");
         return 1;
     }
+
+    // Single-application handling. Other instances of Krita send messages to
+    // this instance if the user starts it again, passing relevant arguments
+    // like files to open along. Messages received during startup are queued
+    // and will spill once the application is marked ready.
+    QObject::connect(&app, &KisApplication::messageReceived,
+                     &app, &KisApplication::remoteArguments);
+    app.setSingleApplicationReady();
 
     int state = KisApplication::exec();
 

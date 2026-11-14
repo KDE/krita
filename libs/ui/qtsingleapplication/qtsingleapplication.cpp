@@ -100,7 +100,7 @@ void QtSingleApplication::sysInit(const QString &appId)
 {
     actWin = 0;
     peer = new QtLocalPeer(this, appId);
-    connect(peer, SIGNAL(messageReceived(const QString&)), SIGNAL(messageReceived(const QString&)));
+    connect(peer, SIGNAL(messageReceived(const QString&)), SIGNAL(messageReceived(const QString&)), Qt::QueuedConnection);
 }
 
 
@@ -266,6 +266,12 @@ void QtSingleApplication::setActivationWindow(QWidget* aw, bool activateOnMessag
 QWidget* QtSingleApplication::activationWindow() const
 {
     return actWin;
+}
+
+
+void QtSingleApplication::setSingleApplicationReady()
+{
+    peer->setReady();
 }
 
 

@@ -70,6 +70,12 @@ QtLocalPeer::QtLocalPeer(QObject* parent, const QString &appId)
                        + QLatin1String("-lockfile");
     lockFile.setFileName(lockName);
     lockFile.open(QIODevice::ReadWrite);
+
+    connect(this,
+            &QtLocalPeer::sigMessageReceivedInternal,
+            this,
+            &QtLocalPeer::slotHandleMessageInternal,
+            Qt::QueuedConnection);
 }
 
 
@@ -133,6 +139,16 @@ bool QtLocalPeer::sendMessage(const QString &message, int timeout)
     return res;
 }
 
+void QtLocalPeer::setReady()
+{
+    if (!ready) {
+        ready = true;
+        for (const QString &queuedMessage : queuedMessages) {
+            Q_EMIT messageReceived(queuedMessage);
+        }
+        queuedMessages.clear();
+    }
+}
 
 void QtLocalPeer::receiveConnection()
 {
@@ -173,5 +189,14 @@ void QtLocalPeer::receiveConnection()
     socket->waitForBytesWritten(1000);
     socket->waitForDisconnected(1000); // make sure client reads ack
     delete socket;
-    emit messageReceived(message); //### (might take a long time to return)
+    Q_EMIT sigMessageReceivedInternal(message);
+}
+
+void QtLocalPeer::slotHandleMessageInternal(const QString &message)
+{
+    if (ready) {
+        Q_EMIT messageReceived(message);
+    } else {
+        queuedMessages.append(message);
+    }
 }

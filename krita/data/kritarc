@@ -354,6 +354,9 @@ ToolButtonStyle=IconOnly
 [krita][Toolbar customToolBar2]
 ToolButtonStyle=IconOnly
 
+[krita][Toolbar animationToolBar]
+ToolButtonStyle=IconOnly
+
 [TemplateChooserDialog]
 ShowCustomDocumentWidgetByDefault=true
 LastReturnType=Custom Document

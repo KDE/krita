@@ -786,5 +786,11 @@
         <file>light_hue-shift-CW.svg</file>
         <file>dark_render-animation.svg</file>
         <file>light_render-animation.svg</file>
+        <file>dark_add-clone-frame-22.svg</file>
+        <file>light_add-clone-frame-22.svg</file>
+        <file>dark_copy-keyframe-22.svg</file>
+        <file>dark_paste-keyframes-22.svg</file>
+        <file>light_copy-keyframe-22.svg</file>
+        <file>light_paste-keyframes-22.svg</file>
     </qresource>
 </RCC>

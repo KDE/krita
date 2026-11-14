@@ -126,11 +126,11 @@ endif()
 # make a change that applies to all systems, remove any conditions. The version
 # you specify should always be one higher than any version number you see here,
 # no matter what you're doing. Do not re-use versions.
-set(KRITA5_XMLGUI_VERSION 545)
+set(KRITA5_XMLGUI_VERSION 546)
 
 # After updating the version number properly, put the new hash that the CMake
 # error lists as the "actual hash" here.
-set(krita5_xmlgui_hash_expected "3552fc6831582120dfe9eb0d9df537bc")
+set(krita5_xmlgui_hash_expected "bc7da21ea662f8d9923b835127db8e37")
 
 # You can stop reading now, the stuff that follows doesn't need to be modified.
 # ==============================================================================

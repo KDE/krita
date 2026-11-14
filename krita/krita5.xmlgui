@@ -459,6 +459,19 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     <Action name="select_layout"/>
     <Action name="workspaces"/>
   </ToolBar>
+  <ToolBar name="animationToolBar" fullWidth="false" position="bottom">
+    <Text>Animation</Text>
+    <Action name="remove_frames_and_pull"/>
+    <Separator/>
+    <Action name="insert_hold_column"/>
+    <Action name="remove_hold_column"/>
+    <Separator/>
+    <Action name="set_end_time"/>
+    <Action name="set_start_time"/>
+    <Separator/>
+    <Action name="mirror_frames"/>
+    <Action name="render_animation"/>
+  </ToolBar>
   <ToolBar name="customToolBar1" fullWidth="false" position="top">
     <Text>Custom toolbar 1</Text>
   </ToolBar>

@@ -116,6 +116,20 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
         btnRemoveKeyframe->setAutoRaise(true);
         layout->addWidget(btnRemoveKeyframe);
 
+        layout->addSpacing(SPACING_UNIT);
+
+        btnCloneKeyframe = new QToolButton(this);
+        btnCloneKeyframe->setAutoRaise(true);
+        layout->addWidget(btnCloneKeyframe);
+
+        btnCopyKeyframe = new QToolButton(this);
+        btnCopyKeyframe->setAutoRaise(true);
+        layout->addWidget(btnCopyKeyframe);
+
+        btnPasteKeyframe = new QToolButton(this);
+        btnPasteKeyframe->setAutoRaise(true);
+        layout->addWidget(btnPasteKeyframe);
+
         widgetAreaLayout->addWidget(widget);
     }
 
@@ -654,6 +668,14 @@ void KisAnimTimelineDocker::unsetCanvas()
     setCanvas(0);
 }
 
+void KisAnimTimelineDocker::setUpFrameOptionButton(const KisAction *action,const QString iconName,QToolButton *button)
+{
+    button->setIcon(KisIconUtils::loadIcon(iconName));
+    button->setIconSize(QSize(22, 22));
+    button->setToolTip(action->toolTip());
+    QObject::connect(button, SIGNAL(released()), action, SLOT(trigger()));
+}
+
 void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
 {
     m_d->mainWindow = view->mainWindow();
@@ -665,22 +687,22 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
     KisAnimTimelineDockerTitlebar* titleBar = static_cast<KisAnimTimelineDockerTitlebar*>(titleBarWidget());
 
     action = actionManager->actionByName("add_blank_frame");
-    titleBar->btnAddKeyframe->setIcon(KisIconUtils::loadIcon("addblankframe"));
-    titleBar->btnAddKeyframe->setIconSize(QSize(22, 22));
-    titleBar->btnAddKeyframe->setToolTip(action->toolTip());
-    QObject::connect(titleBar->btnAddKeyframe, SIGNAL(released()), action, SLOT(trigger()));
+    setUpFrameOptionButton(action,"addblankframe",titleBar->btnAddKeyframe);
 
     action = actionManager->actionByName("add_duplicate_frame");
-    titleBar->btnDuplicateKeyframe->setIcon(KisIconUtils::loadIcon("addduplicateframe"));
-    titleBar->btnDuplicateKeyframe->setIconSize(QSize(22, 22));
-    titleBar->btnDuplicateKeyframe->setToolTip(action->toolTip());
-    QObject::connect(titleBar->btnDuplicateKeyframe, SIGNAL(released()), action, SLOT(trigger()));
+    setUpFrameOptionButton(action,"addduplicateframe",titleBar->btnDuplicateKeyframe);
 
     action = actionManager->actionByName("remove_frames");
-    titleBar->btnRemoveKeyframe->setIcon(KisIconUtils::loadIcon("deletekeyframe"));
-    titleBar->btnRemoveKeyframe->setIconSize(QSize(22, 22));
-    titleBar->btnRemoveKeyframe->setToolTip(action->toolTip());
-    QObject::connect(titleBar->btnRemoveKeyframe, SIGNAL(released()), action, SLOT(trigger()));
+    setUpFrameOptionButton(action,"deletekeyframe",titleBar->btnRemoveKeyframe);
+
+    action = actionManager->actionByName("copy_frames_as_clones");
+    setUpFrameOptionButton(action,"add-clone-frame-22",titleBar->btnCloneKeyframe);
+
+    action = actionManager->actionByName("copy_frames");
+    setUpFrameOptionButton(action,"copy-keyframe-22",titleBar->btnCopyKeyframe);
+
+    action = actionManager->actionByName("paste_frames");
+    setUpFrameOptionButton(action,"paste-keyframes-22",titleBar->btnPasteKeyframe);
 
     // Connect playback-related actions..
     action = actionManager->createAction("toggle_playback");

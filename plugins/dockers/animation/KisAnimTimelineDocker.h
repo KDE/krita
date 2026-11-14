@@ -53,6 +53,9 @@ public:
     QToolButton *btnAddKeyframe;
     QToolButton *btnDuplicateKeyframe;
     QToolButton *btnRemoveKeyframe;
+    QToolButton *btnCopyKeyframe;
+    QToolButton *btnCloneKeyframe;
+    QToolButton *btnPasteKeyframe;
 
     QToolButton *btnOnionSkinsMenu;
     QToolButton *btnAudioMenu;
@@ -117,6 +120,8 @@ public Q_SLOTS:
 
 private:
     void establishPlaybackEngineConnections(KisPlaybackEngine *playbackEngine, KisActionManager *actionManager = nullptr);
+
+    void setUpFrameOptionButton(const KisAction *action,const QString iconName,QToolButton *button);
 
     struct Private;
     const QScopedPointer<Private> m_d;

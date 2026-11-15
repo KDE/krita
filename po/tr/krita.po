@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-14 01:01+0000\n"
-"PO-Revision-Date: 2026-11-06 19:55+0300\n"
+"PO-Revision-Date: 2026-11-14 18:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -39903,17 +39903,14 @@ msgstr "Ayrıntılar"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgid "Strokes"
-msgstr "Vuruş"
+msgstr "Vuruşlar"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
-#, fuzzy, kde-format
-#| msgid "Large Thumbnail"
+#, kde-format
 msgid "Strokes and Thumbnails"
-msgstr "Büyük Boyutlu Küçük Görsel"
+msgstr "Vuruşlar ve Küçük Görseller"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
@@ -39942,10 +39939,9 @@ msgid "Rename the brush preset"
 msgstr "Fırça önayarını yeniden adlandır"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
-#, fuzzy, kde-format
-#| msgid "Thumbnail Size"
+#, kde-format
 msgid "Thumbnails and Strokes"
-msgstr "Küçük Görsel Boyutu"
+msgstr "Küçük Görseller ve Vuruşlar"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
 #, kde-format
@@ -40357,10 +40353,9 @@ msgid "Amount:"
 msgstr "Miktar:"
 
 #: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:320
-#, fuzzy, kde-format
-#| msgid "Loading Pages..."
+#, kde-format
 msgid "Loading..."
-msgstr "Sayfalar Yükleniyor…"
+msgstr "Yükleniyor…"
 
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format

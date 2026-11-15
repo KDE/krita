@@ -39673,10 +39673,9 @@ msgid "Amount:"
 msgstr "Množství:"
 
 #: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:320
-#, fuzzy, kde-format
-#| msgid "Launching..."
+#, kde-format
 msgid "Loading..."
-msgstr "Spouštím..."
+msgstr "Probíhá načítání..."
 
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format

@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-14 01:01+0000\n"
-"PO-Revision-Date: 2026-11-11 20:45+0400\n"
+"PO-Revision-Date: 2026-11-14 17:11+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -17631,7 +17631,7 @@ msgstr "بوبوموفو ممتدّ"
 #, kde-format
 msgctxt "@title"
 msgid "CJK Strokes"
-msgstr "تركيبات ص‌ي‌ك"
+msgstr "ضربات ص‌ي‌ك"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:136
 #, kde-format
@@ -21809,7 +21809,7 @@ msgstr "تحديث النّتيجة"
 #: libs/image/kis_layer_properties_icons.cpp:34
 #, kde-format
 msgid "Edit Key Strokes"
-msgstr "عدِّل ضربات إطار رئيس"
+msgstr "عدِّل الضربات رئيسة"
 
 #: libs/image/kis_layer_properties_icons.cpp:35
 #, kde-format
@@ -26572,7 +26572,7 @@ msgstr "إصدار FFmpeg:"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:447
 #, kde-format
 msgid "None"
-msgstr "بلا"
+msgstr "لا شيء"
 
 #: libs/ui/canvas/kis_canvas2.cpp:1540
 #, kde-format
@@ -39696,17 +39696,14 @@ msgstr "التّفاصيل"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgid "Strokes"
-msgstr "حدّ"
+msgstr "الضربات"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
-#, fuzzy, kde-format
-#| msgid "Large Thumbnail"
+#, kde-format
 msgid "Strokes and Thumbnails"
-msgstr "صورة مصغرة كبيرة"
+msgstr "الضربات والمصغرات"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
@@ -39735,10 +39732,9 @@ msgid "Rename the brush preset"
 msgstr "أعِد تسمية إعداد الفرشاة المبدئي"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
-#, fuzzy, kde-format
-#| msgid "Thumbnail Size"
+#, kde-format
 msgid "Thumbnails and Strokes"
-msgstr "حجم المصغرات"
+msgstr "المصغرات والضربات"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
 #, kde-format
@@ -40147,10 +40143,9 @@ msgid "Amount:"
 msgstr "الكمّيّة:"
 
 #: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:320
-#, fuzzy, kde-format
-#| msgid "Loading Pages..."
+#, kde-format
 msgid "Loading..."
-msgstr "تحميل الصفحات..."
+msgstr "يُحمّل..."
 
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-14 01:01+0000\n"
-"PO-Revision-Date: 2026-11-05 18:07+0200\n"
+"PO-Revision-Date: 2026-11-14 21:06+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -40460,17 +40460,14 @@ msgstr "Подробиці"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgid "Strokes"
-msgstr "Штрих"
+msgstr "Мазки"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
-#, fuzzy, kde-format
-#| msgid "Large Thumbnail"
+#, kde-format
 msgid "Strokes and Thumbnails"
-msgstr "Велика мініатюра"
+msgstr "Мазки і мініатюри"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
@@ -40499,10 +40496,9 @@ msgid "Rename the brush preset"
 msgstr "Перейменувати набір пензлів"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
-#, fuzzy, kde-format
-#| msgid "Thumbnail Size"
+#, kde-format
 msgid "Thumbnails and Strokes"
-msgstr "Розмір мініатюр"
+msgstr "Мініатюри і мазки"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
 #, kde-format
@@ -40915,10 +40911,9 @@ msgid "Amount:"
 msgstr "Величина:"
 
 #: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:320
-#, fuzzy, kde-format
-#| msgid "Loading Pages..."
+#, kde-format
 msgid "Loading..."
-msgstr "Завантажуємо сторінки…"
+msgstr "Завантаження…"
 
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format

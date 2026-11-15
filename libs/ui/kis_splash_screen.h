@@ -9,6 +9,7 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QVector>
 
 class QPixmap;
 class QSvgWidget;
@@ -21,8 +22,15 @@ class KRITAUI_EXPORT KisSplashScreen : public QWidget
     Q_OBJECT
 public:
     struct Source {
+        QString key;
+        QString title;
         QString resourcePath;
-        QString artistCredit;
+        QString artistName;
+        bool isAvailable;
+        bool isDefault;
+
+        QString description() const;
+        QString artistCredit() const;
     };
 
     explicit KisSplashScreen(int height, QWidget *parent = 0,
@@ -34,12 +42,15 @@ public:
 
     void setLoadingText(QString text);
 
-    static Source getImageSource();
+    static Source getCurrentSource();
+    static Source getAvailableSource(const QString &key);
+    static bool canChooseSplashScreen();
+    static QVector<Source> getSources();
 
 private:
     void updateSplashImage(const int height);
 
-private:
+    static QString defaultSplashResourcePath();
 
     QTimer m_timer;
     bool m_displayLinks { false };

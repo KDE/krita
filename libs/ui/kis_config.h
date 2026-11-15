@@ -483,6 +483,9 @@ public:
     bool firstRun(bool defaultValue = false) const;
     void setFirstRun(const bool firstRun) const;
 
+    QString splashScreenImage(bool defaultValue = false) const;
+    void setSplashScreenImage(const QString &value);
+
     bool clicklessSpacePan(bool defaultValue = false) const;
     void setClicklessSpacePan(const bool toggle) const;
 

@@ -84,6 +84,7 @@ public:
     bool showRootLayer();
     int autoSaveInterval();
     void setDefault();
+    QString splashScreenImage() const;
     int undoStackSize();
     bool showOutlineWhilePainting();
     bool showEraserOutlineWhilePainting();
@@ -132,11 +133,15 @@ private Q_SLOTS:
     void colorSamplePreviewThicknessChanged(qreal value);
     void colorSamplePreviewOutlineEnabledChanged(int value);
 
+    void slotUpdateCurrentSplashScreenTitle();
+    void slotChangeSplashScreen();
+
     static void setButtonGroupEnabled(const QButtonGroup& buttonGroup, bool value);
 
 public:
     QButtonGroup m_pasteFormatGroup;
     KisCumulativeUndoData m_cumulativeUndoData;
+    QString m_splashScreenImage;
 };
 
 

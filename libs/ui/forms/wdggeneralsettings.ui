@@ -42,7 +42,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>5</number>
+      <number>0</number>
      </property>
      <property name="movable">
       <bool>false</bool>
@@ -697,7 +697,7 @@
             <x>0</x>
             <y>0</y>
             <width>1669</width>
-            <height>781</height>
+            <height>778</height>
            </rect>
           </property>
           <layout class="QFormLayout" name="formLayout_19">
@@ -1396,7 +1396,7 @@
             <x>0</x>
             <y>0</y>
             <width>1689</width>
-            <height>801</height>
+            <height>798</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1443,7 +1443,7 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item row="4" column="0">
             <widget class="QLabel" name="label">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -1459,7 +1459,7 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item row="4" column="1">
             <widget class="KisIntParseSpinBox" name="m_undoStackSize">
              <property name="toolTip">
               <string>Only applies to new or newly opened images.</string>
@@ -1478,7 +1478,7 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
+           <item row="5" column="1">
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
               <widget class="QCheckBox" name="chkCumulativeUndo">
@@ -1509,14 +1509,14 @@
              </item>
             </layout>
            </item>
-           <item row="5" column="1">
+           <item row="6" column="1">
             <widget class="QCheckBox" name="chkShowRootLayer">
              <property name="text">
               <string>Show root layer</string>
              </property>
             </widget>
            </item>
-           <item row="6" column="1">
+           <item row="7" column="1">
             <widget class="QCheckBox" name="chkUsageLogging">
              <property name="text">
               <string>Enable Logging for bug reports</string>
@@ -1526,7 +1526,7 @@
              </property>
             </widget>
            </item>
-           <item row="7" column="1">
+           <item row="8" column="1">
             <widget class="QFrame" name="frame_4">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
@@ -1583,14 +1583,24 @@
              </layout>
             </widget>
            </item>
-           <item row="10" column="0">
+           <item row="10" column="1">
+            <widget class="QCheckBox" name="chkIgnoreHighFunctionKeys">
+             <property name="toolTip">
+              <string>Some applications may emulate presses of function keys with high numbers (e.g. F22) to bring themselves to the foreground. This may break Krita's shortcuts and actions system. If you have a keyboard with F13 or higher function keys, and you wish to use them, try disabling this option, but take this potential problem into account.</string>
+             </property>
+             <property name="text">
+              <string>Ignore high function keys (F13-F24)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="0">
             <widget class="QLabel" name="label_9">
              <property name="text">
               <string>Maximum brush size:</string>
              </property>
             </widget>
            </item>
-           <item row="10" column="1">
+           <item row="11" column="1">
             <widget class="QFrame" name="frame">
              <layout class="QHBoxLayout" name="horizontalLayout_2">
               <property name="leftMargin">
@@ -1659,7 +1669,7 @@
              </layout>
             </widget>
            </item>
-           <item row="11" column="0" colspan="2">
+           <item row="12" column="0" colspan="2">
             <widget class="QGroupBox" name="chkForcedFontDPI">
              <property name="title">
               <string>Font DPI Workaround</string>
@@ -1699,7 +1709,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
              </layout>
             </widget>
            </item>
-           <item row="12" column="0" colspan="2">
+           <item row="13" column="0" colspan="2">
             <widget class="QGroupBox" name="groupBox_51">
              <property name="title">
               <string>Automatic layer naming</string>
@@ -1729,14 +1739,14 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
              </layout>
             </widget>
            </item>
-           <item row="13" column="0" colspan="2">
+           <item row="14" column="0" colspan="2">
             <widget class="QCheckBox" name="chkEnableLongPress">
              <property name="text">
               <string>Long-press to open context menus</string>
              </property>
             </widget>
            </item>
-           <item row="14" column="0" colspan="2">
+           <item row="15" column="0" colspan="2">
             <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">
              <property name="title">
               <string>Kinetic Scrolling (needs restart)</string>
@@ -1815,7 +1825,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
              </layout>
             </widget>
            </item>
-           <item row="15" column="0" colspan="2">
+           <item row="16" column="0" colspan="2">
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -1828,13 +1838,44 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
              </property>
             </spacer>
            </item>
-           <item row="9" column="1">
-            <widget class="QCheckBox" name="chkIgnoreHighFunctionKeys">
-             <property name="toolTip">
-              <string>Some applications may emulate presses of function keys with high numbers (e.g. F22) to bring themselves to the foreground. This may break Krita's shortcuts and actions system. If you have a keyboard with F13 or higher function keys, and you wish to use them, try disabling this option, but take this potential problem into account.</string>
-             </property>
+           <item row="3" column="1">
+            <layout class="QHBoxLayout" name="m_lytSplash">
+             <item>
+              <widget class="QLabel" name="m_lblCurrentSplash">
+               <property name="text">
+                <string notr="true">splash image title goes here</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::PlainText</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="m_btnChangeSplash">
+               <property name="text">
+                <string>Change…</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="m_spcSplash">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="m_lblSplashTitle">
              <property name="text">
-              <string>Ignore high function keys (F13-F24)</string>
+              <string>Splash screen:</string>
              </property>
             </widget>
            </item>

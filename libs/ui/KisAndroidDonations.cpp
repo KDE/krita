@@ -4,6 +4,7 @@
 #include "KisAndroidDonations.h"
 
 #include "KisApplication.h"
+#include "kis_config.h"
 #include "kis_splash_screen.h"
 
 #include <QAndroidJniEnvironment>
@@ -99,8 +100,8 @@ void KisAndroidDonations::showDonationDialog(bool splash)
     jbyteArray splashBytes = nullptr;
     QString splashArtist;
     if (splash) {
-        KisSplashScreen::Source source = KisSplashScreen::getImageSource();
-        splashArtist = source.artistCredit;
+        KisSplashScreen::Source source = KisSplashScreen::getCurrentSource();
+        splashArtist = source.artistCredit();
         QFile f(source.resourcePath);
         if (f.open(QIODevice::ReadOnly)) {
             QByteArray buf = f.readAll();
@@ -206,6 +207,11 @@ void KisAndroidDonations::slotUpdateState(int state, long long ownedProductFlags
     if (int(m_state) != state || m_ownedProductFlags != ownedProductFlags) {
         m_state = State(state);
         m_ownedProductFlags = ownedProductFlags;
+        // Reset the splash screen setting if we're definitely not a supporter.
+        if (!isMaybeSupporter()) {
+            KisConfig cfg(false);
+            cfg.setSplashScreenImage(cfg.splashScreenImage(true));
+        }
         Q_EMIT sigStateChanged();
     }
 }

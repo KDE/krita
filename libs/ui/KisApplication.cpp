@@ -965,20 +965,34 @@ void KisApplication::processPostponedSynchronizationEvents()
     }
 }
 
+#ifndef Q_OS_ANDROID
 bool KisApplication::isStoreApplication()
 {
-    if (qEnvironmentVariableIsSet("STEAMAPPID") || qEnvironmentVariableIsSet("SteamAppId")) {
+    if (qEnvironmentVariableIsSet("STEAMAPPID") || qEnvironmentVariableIsSet("SteamAppId")
+        || qEnvironmentVariableIsSet("STEAMGAMEID") || qEnvironmentVariableIsSet("SteamGameId")) {
         return true;
     }
 
-    if (applicationDirPath().toLower().contains("steam")) {
+    for (const QString &arg : arguments()) {
+        if (arg.startsWith("-epicapp=", Qt::CaseInsensitive) || arg.compare("-EpicPortal", Qt::CaseInsensitive) == 0) {
+            return true;
+        }
+    }
+
+    if (QDir(applicationDirPath()).exists(".egstore")) {
+        return true;
+    }
+
+    if (QRegularExpression(QStringLiteral("[/\\\\](?:steam|steamapps|epic\\s*games)[/\\\\]"),
+                           QRegularExpression::CaseInsensitiveOption)
+            .match(applicationDirPath())
+            .hasMatch()) {
         return true;
     }
 
 #ifdef Q_OS_WIN
     // This is also true for user-installed MSIX, but that's
-    // likely only true in institutional situations, where
-    // we don't want to show the beginning banner either.
+    // likely only true in institutional situations, so whatever.
     if (KisWindowsPackageUtils::isRunningInPackage()) {
         return true;
     }
@@ -993,6 +1007,7 @@ bool KisApplication::isStoreApplication()
 
     return false;
 }
+#endif
 
 void KisApplication::verifyMetatypeRegistration()
 {

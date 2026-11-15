@@ -14,7 +14,6 @@
 #include <QCheckBox>
 #include <kis_debug.h>
 #include <QFile>
-#include <QScreen>
 #include <QWindow>
 #include <QSvgWidget>
 #include <QVBoxLayout>
@@ -24,11 +23,13 @@
 #include <KisApplication.h>
 
 #include <kis_icon.h>
+#include <kis_config.h>
 
 #include <klocalizedstring.h>
-#include <kconfig.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
+
+#ifdef Q_OS_ANDROID
+#include <KisAndroidDonations.h>
+#endif
 
 static void addDropShadow(QWidget *widget)
 {
@@ -37,6 +38,35 @@ static void addDropShadow(QWidget *widget)
     effect->setOffset(0.5);
     effect->setColor(QColor(0, 0, 0, 255));
     widget->setGraphicsEffect(effect);
+}
+
+QString KisSplashScreen::Source::description() const
+{
+    QString text;
+    if (artistName.isEmpty()) {
+        text = title;
+    } else {
+        text = i18nc("Splash image by artist", "%1 by %2", title, artistName);
+    }
+
+    if (isAvailable) {
+        if (isDefault) {
+            return i18nc("Splash image default", "%1 (default)", text);
+        } else {
+            return text;
+        }
+    } else {
+        return i18nc("Splash image unavailable", "%1 (not available)", text);
+    }
+}
+
+QString KisSplashScreen::Source::artistCredit() const
+{
+    if (artistName.isEmpty()) {
+        return QString();
+    } else {
+        return i18nc("splash image credit", "Artwork by: %1", artistName);
+    }
 }
 
 KisSplashScreen::KisSplashScreen(int height, QWidget *parent, Qt::WindowFlags f)
@@ -85,7 +115,7 @@ void KisSplashScreen::updateSplashImage(const int height)
     const int marginTop = height * 0.05;
     const int marginRight = height * 0.1;
 
-    Source source = getImageSource();
+    Source source = getCurrentSource();
     QPixmap img(source.resourcePath);
 
     if (img.isNull() || img.height() == 0) return;
@@ -114,7 +144,7 @@ void KisSplashScreen::updateSplashImage(const int height)
     m_loadingTextLabel->setFixedWidth(m_bannerSvg->geometry().right() - marginRight);
 
     // Place credits text on bottom right with similar margins.
-    m_artCreditsLabel->setText(source.artistCredit);
+    m_artCreditsLabel->setText(source.artistCredit());
     m_artCreditsLabel->setFixedWidth(m_loadingTextLabel->width());
     m_artCreditsLabel->setFixedHeight(20);
     m_artCreditsLabel->move(m_loadingTextLabel->x(), height - marginTop - m_artCreditsLabel->height());
@@ -129,32 +159,74 @@ void KisSplashScreen::setLoadingText(QString text)
     m_loadingTextLabel->setText(htmlText);
 }
 
-KisSplashScreen::Source KisSplashScreen::getImageSource()
+KisSplashScreen::Source KisSplashScreen::getCurrentSource()
 {
-    QString artistCredit = i18nc("Normal splash artist name", "Tyson Tan");
+    return getAvailableSource(KisConfig(true).splashScreenImage());
+}
+
+KisSplashScreen::Source KisSplashScreen::getAvailableSource(const QString &key)
+{
+    QVector<Source> sources = getSources();
+    for (const Source &source : sources) {
+        if (source.isAvailable && source.key == key) {
+            return source;
+        }
+    }
+    return sources[0];
+}
+
+bool KisSplashScreen::canChooseSplashScreen()
+{
+    // The "professional" splash screen is available on purchased versions of
+    // Krita, since professionals can pay for their tools. On Android, we'll
+    // err on the side of allowing changing the splash screen unless we have
+    // evidence to the contrary, otherwise a bad internet connection could
+    // show the user the wrong splash screen. KisAndroidDonations will reset
+    // the splash screen setting if it sees the user is not a supporter.
+#ifdef Q_OS_ANDROID
+    KisAndroidDonations *donations = KisAndroidDonations::instance();
+    return !donations || donations->isMaybeSupporter();
+#else
+    return KisApplication::isStoreApplication();
+#endif
+}
+
+QVector<KisSplashScreen::Source> KisSplashScreen::getSources()
+{
+    bool canChoose = canChooseSplashScreen();
+    return {
+        // First entry is used as the default.
+        {
+            QString(),
+            i18nc("Normal splash artwork title, consider leaving it English", "Electric Hearts"),
+            defaultSplashResourcePath(),
+            i18nc("Normal splash artist name", "Tyson Tan"),
+            true,
+            true,
+        },
+        {
+            QStringLiteral("corpo1"),
+            i18n("Professional"),
+            QStringLiteral(":/splash/corpo1.jpg"),
+            QString(),
+            canChoose,
+            false,
+        },
+    };
+}
+
+QString KisSplashScreen::defaultSplashResourcePath()
+{
     // Loading the ginormous 4K PNG splash image increases the startup time on
     // Android by several seconds and at the same time looks really bad when
     // scaled down to a dinky size. Instead of overengineering this into an
     // Enterprise Splash Screen Solution where we choose the image based on
     // screen size or something, we'll just use a HD JPEG instead. It's fine.
 #ifdef Q_OS_ANDROID
-    QString resourcePath = QStringLiteral(":/splash/hd.jpg");
+    return QStringLiteral(":/splash/hd.jpg");
 #else
-    QString resourcePath = QStringLiteral(":/splash/0.png");
-    // TODO: Re-add the holiday splash...
-#if 0
-    QDate currentDate = QDate::currentDate();
-    if (currentDate > QDate(currentDate.year(), 12, 4) ||
-            currentDate < QDate(currentDate.year(), 1, 9)) {
-        resourcePath = QStringLiteral(":/splash/1.png");
-        artistCredit = QStringLiteral("???")};
-    }
+    return QStringLiteral(":/splash/0.png");
 #endif
-#endif
-    if (!artistCredit.isEmpty()) {
-        artistCredit = i18nc("splash image credit", "Artwork by: %1", artistCredit);
-    }
-    return Source{resourcePath, artistCredit};
 }
 
 void KisSplashScreen::repaint()

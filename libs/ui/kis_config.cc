@@ -1816,6 +1816,20 @@ void KisConfig::setFirstRun(const bool first) const
     m_cfg.writeEntry("firstRun", first);
 }
 
+QString KisConfig::splashScreenImage(bool defaultValue) const
+{
+    if (defaultValue) {
+        return QString();
+    } else {
+        return m_cfg.readEntry(QStringLiteral("splashScreenImage"), QString());
+    }
+}
+
+void KisConfig::setSplashScreenImage(const QString &value)
+{
+    m_cfg.writeEntry(QStringLiteral("splashScreenImage"), value);
+}
+
 int KisConfig::horizontalSplitLines(bool defaultValue) const
 {
     return (defaultValue ? 1 : m_cfg.readEntry("horizontalSplitLines", 1));

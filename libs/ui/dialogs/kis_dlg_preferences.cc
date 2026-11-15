@@ -86,6 +86,7 @@
 #include "KisMainWindow.h"
 #include "KisMimeDatabase.h"
 #include "kis_file_name_requester.h"
+#include "KisSplashSourceDialog.h"
 #include <KisWidgetConnectionUtils.h>
 #include <dialogs/KisFrameRateLimitModel.h>
 #include <KisPlatformPluginInterfaceFactory.h>
@@ -523,6 +524,10 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
 
+    m_splashScreenImage = cfg.splashScreenImage();
+    slotUpdateCurrentSplashScreenTitle();
+    connect(m_btnChangeSplash, &QPushButton::clicked, this, &GeneralTab::slotChangeSplashScreen);
+
     m_undoStackSize->setValue(cfg.undoStackLimit());
     chkCumulativeUndo->setChecked(cfg.useCumulativeUndoRedo());
     connect(chkCumulativeUndo, SIGNAL(toggled(bool)), btnAdvancedCumulativeUndo, SLOT(setEnabled(bool)));
@@ -811,6 +816,9 @@ void GeneralTab::setDefault()
     m_autosaveSpinBox->setValue(cfg.autoSaveInterval(true) / 60);
     chkHideAutosaveFiles->setChecked(true);
 
+    m_splashScreenImage = cfg.splashScreenImage(true);
+    slotUpdateCurrentSplashScreenTitle();
+
     m_undoStackSize->setValue(cfg.undoStackLimit(true));
     chkCumulativeUndo->setChecked(cfg.useCumulativeUndoRedo(true));
     m_cumulativeUndoData = cfg.cumulativeUndoData(true);
@@ -932,6 +940,20 @@ void GeneralTab::colorSamplePreviewOutlineEnabledChanged(int value)
     m_lblColorSamplerPreviewSizePreview->setOutlineEnabled(value);
 }
 
+void GeneralTab::slotUpdateCurrentSplashScreenTitle()
+{
+    m_lblCurrentSplash->setText(KisSplashScreen::getAvailableSource(m_splashScreenImage).description());
+}
+
+void GeneralTab::slotChangeSplashScreen()
+{
+    KisSplashSourceDialog dlg(m_splashScreenImage, this);
+    if (dlg.exec() == QDialog::Accepted) {
+        m_splashScreenImage = dlg.selectedKey();
+        slotUpdateCurrentSplashScreenTitle();
+    }
+}
+
 void GeneralTab::setButtonGroupEnabled(const QButtonGroup &buttonGroup, bool value)
 {
     Q_FOREACH(QAbstractButton* button, buttonGroup.buttons()) {
@@ -1026,6 +1048,11 @@ int GeneralTab::autoSaveInterval()
 {
     //convert to seconds
     return m_autosaveCheckBox->isChecked() ? m_autosaveSpinBox->value() * 60 : 0;
+}
+
+QString GeneralTab::splashScreenImage() const
+{
+    return m_splashScreenImage;
 }
 
 int GeneralTab::undoStackSize()
@@ -3129,6 +3156,7 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
         cfg.setSelectionActionBar(m_general->chkEnableSelectionActionBar->isChecked());
 
         cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());
+        cfg.setSplashScreenImage(m_general->splashScreenImage());
         cfg.setUndoStackLimit(m_general->undoStackSize());
         cfg.setCumulativeUndoRedo(m_general->chkCumulativeUndo->isChecked());
         cfg.setCumulativeUndoData(m_general->m_cumulativeUndoData);

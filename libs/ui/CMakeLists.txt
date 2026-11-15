@@ -73,6 +73,7 @@ set(kritaui_LIB_SRCS
     dialogs/KisRecoverNamedAutosaveDialog.cpp
     dialogs/KisDlgSavePreset.cpp
     dialogs/kis_dlg_missing_color_profile.cpp
+    dialogs/KisSplashSourceDialog.cpp
 
     dialogs/KisDlgConfigureCumulativeUndo.cpp
     dialogs/KisCumulativeUndoModel.cpp
@@ -340,6 +341,7 @@ set(kritaui_LIB_SRCS
     widgets/KisNewsItem.cpp
     widgets/KisGamutMaskToolbar.cpp
 	widgets/KisColorSamplerPreviewPreview.cpp
+    widgets/KisSplashPreview.cpp
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
     utils/KisSpinBoxSplineUnitConverter.cpp
@@ -653,6 +655,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     widgets/KisDlgListPicker.ui
     dialogs/kis_delayed_save_dialog.ui
     dialogs/KisRecoverNamedAutosaveDialog.ui
+    dialogs/KisSplashSourceDialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
     input/config/kis_input_configuration_page_item.ui

@@ -90,8 +90,15 @@ public:
     void initializeGlobals(const KisApplicationArguments &args);
     void processPostponedSynchronizationEvents();
 
-    /// @return true if Krita has been acquired through an app store
-    bool isStoreApplication();
+#ifndef Q_OS_ANDROID
+    /**
+     * Tries to detect if Krita has been bought on a store. The user can
+     * definitely fake this and it's probably also not 100% reliable, but
+     * should be good enough for what we're doing with it. On Android, check
+     * KisAndroidDonations for an in-app purchase instead.
+     */
+    static bool isStoreApplication();
+#endif
 
     static void verifyMetatypeRegistration();
 

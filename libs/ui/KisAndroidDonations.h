@@ -39,6 +39,19 @@ public:
 
     State state() const { return m_state; }
 
+    bool isMaybeSupporter()
+    {
+        // Only returns false if we're sure the user is *not* a supporter.
+        // If we're not sure (yet), returns true.
+        switch (m_state) {
+        case State::Unavailable:
+        case State::NoSupport:
+            return false;
+        default:
+            return true;
+        }
+    }
+
     bool shouldShowSupporterBadge() const;
 
     bool isShowDonationManagementDialogPending() const

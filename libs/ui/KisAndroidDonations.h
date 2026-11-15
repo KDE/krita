@@ -90,6 +90,8 @@ private:
 
     void syncState();
 
+    static QByteArray makeSplashScreen(QString &outSplashArtist);
+
     State m_state{State::Unknown};
     long long m_ownedProductFlags{0L};
     bool m_showDonationManagementDialogPending{false};

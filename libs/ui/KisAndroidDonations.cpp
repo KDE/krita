@@ -8,8 +8,15 @@
 #include "kis_splash_screen.h"
 
 #include <QAndroidJniEnvironment>
+#include <QBuffer>
+#include <QGraphicsDropShadowEffect>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsScene>
 #include <QImage>
+#include <QPainter>
+#include <QSvgRenderer>
 #include <QTemporaryFile>
+#include <QTextOption>
 #include <QtAndroid>
 
 // See DonationHelper.java for notes!
@@ -100,22 +107,11 @@ void KisAndroidDonations::showDonationDialog(bool splash)
     jbyteArray splashBytes = nullptr;
     QString splashArtist;
     if (splash) {
-        KisSplashScreen::Source source = KisSplashScreen::getCurrentSource();
-        splashArtist = source.artistCredit();
-        QFile f(source.resourcePath);
-        if (f.open(QIODevice::ReadOnly)) {
-            QByteArray buf = f.readAll();
-            f.close();
-
-            jsize length = buf.size();
-            if (length > 0) {
-                splashBytes = env->NewByteArray(length);
-                env->SetByteArrayRegion(splashBytes, 0, length, reinterpret_cast<const jbyte *>(buf.constData()));
-            }
-        } else {
-            qWarning("Failed to read splash screen image from '%s': %s",
-                     qUtf8Printable(source.resourcePath),
-                     qUtf8Printable(f.errorString()));
+        QByteArray buf = makeSplashScreen(splashArtist);
+        jsize length = buf.size();
+        if (length > 0) {
+            splashBytes = env->NewByteArray(length);
+            env->SetByteArrayRegion(splashBytes, 0, length, reinterpret_cast<const jbyte *>(buf.constData()));
         }
     }
     QAndroidJniObject splashArtistObject = QAndroidJniObject::fromString(splashArtist);
@@ -238,6 +234,75 @@ bool KisAndroidDonations::isProductOwned(const QString &productId) const
 void KisAndroidDonations::syncState()
 {
     QAndroidJniObject::callStaticMethod<void>("org/krita/android/DonationHelper", "syncState", "()V");
+}
+
+QByteArray KisAndroidDonations::makeSplashScreen(QString &outSplashArtist)
+{
+    KisSplashScreen::Source source = KisSplashScreen::getCurrentSource();
+    QImage image(source.resourcePath);
+    if (image.isNull()) {
+        qWarning("Failed to read splash screen image from '%s'", qUtf8Printable(source.resourcePath));
+        return QByteArray();
+    }
+
+    // Similar logic to kis_splash_screen.cpp, just baking it into the image.
+    {
+        int width = image.width();
+        int height = image.height();
+        int bannerHeight = int(qreal(height) * 0.16875 * 1.5);
+        int marginTop = int(qreal(height) * 0.05);
+        int marginRight = int(qreal(height) * 0.1);
+
+        QGraphicsScene scene;
+        {
+            QImage topImage = QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+            topImage.fill(Qt::transparent);
+            {
+                QPainter painter(&topImage);
+
+                QSvgRenderer bannerSvg(QStringLiteral(":/splash/banner.svg"));
+                QSvgRenderer brandingSvg(QStringLiteral(":/krita-branding.svgz"));
+                QSize bannerSvgSize = bannerSvg.defaultSize();
+                if (bannerSvg.isValid() && brandingSvg.isValid() && !bannerSvgSize.isEmpty()) {
+                    int bannerWidth = bannerHeight * bannerSvgSize.width() / bannerSvgSize.height();
+                    QRect bannerSvgRect(width - bannerWidth - marginRight, marginTop, bannerWidth, bannerHeight);
+                    bannerSvg.render(&painter, bannerSvgRect);
+
+                    QRect brandingSvgRect(bannerSvgRect.x() - bannerHeight, marginTop, bannerHeight, bannerHeight);
+                    brandingSvg.render(&painter, brandingSvgRect);
+                } else {
+                    qWarning("Failed to read splash screen banner/branding");
+                }
+            }
+
+            QGraphicsPixmapItem *item = scene.addPixmap(QPixmap::fromImage(topImage));
+            QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+            effect->setBlurRadius(4);
+            effect->setOffset(0.5);
+            effect->setColor(QColor(0, 0, 0, 255));
+            item->setGraphicsEffect(effect);
+        }
+
+        {
+            QPainter painter(&image);
+            painter.setRenderHint(QPainter::Antialiasing);
+            QRectF sceneRect(QRectF(QRect(0, 0, width, height)));
+            scene.render(&painter, sceneRect, sceneRect);
+        }
+    }
+
+    QByteArray bytes;
+    {
+        QBuffer buffer(&bytes);
+        buffer.open(QIODevice::WriteOnly);
+        if (!image.save(&buffer, "JPEG", 100)) {
+            qWarning("Failed to write splash screen");
+            return QByteArray();
+        }
+    }
+
+    outSplashArtist = source.artistCredit();
+    return bytes;
 }
 
 extern "C" JNIEXPORT void JNICALL Java_org_krita_android_JNIWrappers_donationStateUpdated(JNIEnv * /*env*/,

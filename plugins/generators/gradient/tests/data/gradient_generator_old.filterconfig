@@ -1,0 +1,31 @@
+<!DOCTYPE params>
+<params version="1">
+ <param name="antialias_threshold" type="internal">0</param>
+ <param name="dither" type="internal">false</param>
+ <param name="end_position_angle" type="internal">0</param>
+ <param name="end_position_coordinate_system" type="string"><![CDATA[cartesian]]></param>
+ <param name="end_position_distance" type="internal">100</param>
+ <param name="end_position_distance_units" type="string"><![CDATA[percent_of_width]]></param>
+ <param name="end_position_x" type="internal">100</param>
+ <param name="end_position_x_positioning" type="string"><![CDATA[absolute]]></param>
+ <param name="end_position_x_units" type="string"><![CDATA[percent_of_width]]></param>
+ <param name="end_position_y" type="internal">50</param>
+ <param name="end_position_y_positioning" type="string"><![CDATA[absolute]]></param>
+ <param name="end_position_y_units" type="string"><![CDATA[percent_of_height]]></param>
+ <param name="gradient" type="string"><![CDATA[<gradient name="0. Foreground to Background" type="stop">
+ <stop alpha="1" bitdepth="U16" offset="0" stoptype="0">
+  <RGB b="0.835294127464294" g="0.34901961684227" r="0.0588235296308994" space="sRGB-elle-V2-srgbtrc.icc"/>
+ </stop>
+ <stop alpha="1" bitdepth="U16" offset="1" stoptype="0">
+  <RGB b="1" g="1" r="1" space="sRGB-elle-V2-srgbtrc.icc"/>
+ </stop>
+</gradient>
+]]></param>
+ <param name="repeat" type="string"><![CDATA[none]]></param>
+ <param name="reverse" type="internal">false</param>
+ <param name="shape" type="string"><![CDATA[linear]]></param>
+ <param name="start_position_x" type="internal">0</param>
+ <param name="start_position_x_units" type="string"><![CDATA[percent_of_width]]></param>
+ <param name="start_position_y" type="internal">50</param>
+ <param name="start_position_y_units" type="string"><![CDATA[percent_of_height]]></param>
+</params>

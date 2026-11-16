@@ -31,15 +31,27 @@ void KisGradientGeneratorTest::testDithering_data()
 {
     QTest::addColumn<bool>("useLegacyFormat");
     QTest::addColumn<QString>("ditherMode");
+    QTest::addColumn<int>("ditherSteps");
 
-    QTest::newRow("old_no-dither") << true << "none";
-    QTest::newRow("old_blue") << true << "blue";
+    QTest::newRow("old_no-dither") << true << "none" << 0;
+    QTest::newRow("old_blue-noise") << true << "blue_noise" << 0;
+    QTest::newRow("new_no-dither_steps-2") << false << "none" << 2;
+    QTest::newRow("new_blue-noise_steps-2") << false << "blue_noise" << 2;
+    QTest::newRow("new_bayer2_steps-2") << false << "bayer2" << 2;
+    QTest::newRow("new_bayer4_steps-2") << false << "bayer4" << 2;
+    QTest::newRow("new_bayer8_steps-2") << false << "bayer8" << 2;
+    QTest::newRow("new_no-dither_steps-4") << false << "none" << 4;
+    QTest::newRow("new_blue-noise_steps-4") << false << "blue_noise" << 4;
+    QTest::newRow("new_bayer2_steps-4") << false << "bayer2" << 4;
+    QTest::newRow("new_bayer4_steps-4") << false << "bayer4" << 4;
+    QTest::newRow("new_bayer8_steps-4") << false << "bayer8" << 4;
 }
 
 void KisGradientGeneratorTest::testDithering()
 {
     QFETCH(bool, useLegacyFormat);
     QFETCH(QString, ditherMode);
+    QFETCH(int, ditherSteps);
 
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->get("gradient");
     QVERIFY(generator);
@@ -47,21 +59,23 @@ void KisGradientGeneratorTest::testDithering()
     KisFilterConfigurationSP config = generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
     QVERIFY(config);
 
+    QFile configFile(QString(FILES_DATA_DIR) + QDir::separator() + "gradient_generator.filterconfig");
+    if (!configFile.open(QFile::ReadOnly)) {
+        QFAIL("Faled to open the reference config file");
+    }
+    config->fromXML(configFile.readAll());
+
     if (useLegacyFormat) {
-        QFile configFile(QString(FILES_DATA_DIR) + QDir::separator() + "gradient_generator_old.filterconfig");
-        if (!configFile.open(QFile::ReadOnly)) {
-            QFAIL("Faled to open the reference config file");
-        }
-        config->fromXML(configFile.readAll());
         if (ditherMode == "none") {
             config->setProperty("dither", false);
-        } else if (ditherMode == "blue") {
+        } else if (ditherMode == "blue_noise") {
             config->setProperty("dither", true);
         } else {
             qFatal("Dither mode %s is not supported in the legacy format", ditherMode.toLatin1().data());
         }
     } else {
-        qFatal("not implemented");
+        config->setProperty("dither", ditherMode);
+        config->setProperty("dither_steps", ditherSteps);
     }
 
     QSize testImageSize(256, 256);

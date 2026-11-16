@@ -491,10 +491,10 @@ QString getAutoNewsLang()
     if (autoNewsLang.isEmpty()) {
         // If nothing else, use English.
         autoNewsLang = QString("en");
-    } else if (autoNewsLang == "ja") {
-        return QString("jp");
+    } else if (autoNewsLang == "jp") {
+        return QString("ja");
     } else if (autoNewsLang == "zh_CN") {
-        return QString("zh");
+        return QString("zh-cn");
     } else if (autoNewsLang == "zh_TW") {
         return QString("zh-tw");
     } else if (autoNewsLang == "zh_HK") {

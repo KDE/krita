@@ -83,7 +83,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-14 01:01+0000\n"
-"PO-Revision-Date: 2026-11-11 23:00+0200\n"
+"PO-Revision-Date: 2026-11-14 08:47+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -40541,17 +40541,14 @@ msgstr "Подробности"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgid "Strokes"
-msgstr "Обводка"
+msgstr "Штрихи"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
-#, fuzzy, kde-format
-#| msgid "Large Thumbnail"
+#, kde-format
 msgid "Strokes and Thumbnails"
-msgstr "Большая миниатюра"
+msgstr "Штрихи и миниатюры"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
@@ -40580,10 +40577,9 @@ msgid "Rename the brush preset"
 msgstr "Переименовать профиль кисти"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
-#, fuzzy, kde-format
-#| msgid "Thumbnail Size"
+#, kde-format
 msgid "Thumbnails and Strokes"
-msgstr "Размер миниатюр"
+msgstr "Миниатюры и штрихи"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
 #, kde-format
@@ -40996,10 +40992,9 @@ msgid "Amount:"
 msgstr "Величина:"
 
 #: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:320
-#, fuzzy, kde-format
-#| msgid "Loading Pages..."
+#, kde-format
 msgid "Loading..."
-msgstr "Загрузка страниц..."
+msgstr "Загрузка..."
 
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format

@@ -730,6 +730,29 @@ void RecorderWriterManager::onTimer()
         return out;
     };
 
+    //Expands source to the aspect ratio of target in the most effiient way
+    auto expandToAspectRatio = [](QRectF source, QRectF target) {
+        float targetAspect = (float)target.width() / (float)target.height();
+
+        float sourceAspect = (float)source.width() / source.height();
+
+        QRectF out = source;
+
+        if (sourceAspect > targetAspect) {
+            // Expanding vertically
+            out.setHeight(source.width() / targetAspect);
+            out.moveTop(out.y() - ((source.height() - out.height()) / 2));
+        } else {
+            // Expanding horizontally
+            out.setWidth(source.height() * targetAspect);
+            out.moveLeft(out.x() - ((source.width() - out.width()) / 2));
+        }
+
+        float outAspect = (float)out.width() / out.height();
+
+        return out;
+    };
+
     //TODO: try other easing functions
     auto easeOutCubic = [](qreal t) {
         return 1 - qPow(1 - t, 3);
@@ -740,7 +763,9 @@ void RecorderWriterManager::onTimer()
     for (int frame = 0; frame < totalFrames; frame++) {
         //Linear animations look really bad, so do easing
         QRect interpolatedRect = lerp(d->oldRegion, region, easeOutCubic((qreal)(frame + 1) / (qreal)totalFrames));
-        rects.push_back(interpolatedRect);
+        QRect expandedRect = expandToAspectRatio(interpolatedRect, fullSize).toRect();
+        
+        rects.push_back(expandedRect);
     };
 
     QRect copyArea = rects.first();

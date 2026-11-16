@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-13 03:37+0000\n"
-"PO-Revision-Date: 2026-11-04 22:36+0300\n"
+"PO-Revision-Date: 2026-11-15 19:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19301,7 +19301,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs contextually with alternates, required to make the font work."
 msgstr ""
-"Yazıtipinin çalışması için gerekli olan glifleri bağlamsal olarak "
+"Yazı tipinin çalışması için gerekli olan glifleri, bağlamsal olarak "
 "alternatiflerle değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:119
@@ -19345,7 +19345,7 @@ msgid ""
 "Indicates how much the font is suitable for its current size. Does nothing "
 "in Krita."
 msgstr ""
-"Yazıtipinin geçerli boyutu için ne kadar uygun olduğunu gösterir. Krita’da "
+"Yazı tipinin geçerli boyutu için ne kadar uygun olduğunu gösterir. Krita’da "
 "hiçbir şey yapmaz."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:131
@@ -19734,7 +19734,7 @@ msgctxt "@tooltip"
 msgid ""
 "Controls substitution for above base forms in Khmer and other Indic scripts"
 msgstr ""
-"Kmer ve diğer Hint yazılarında taban üstü biçimler için ikameyi denetler."
+"Kmer ve diğer Hint yazılarında taban üstü biçimler için ikâmeyi denetler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:249
 #, kde-format
@@ -19783,7 +19783,7 @@ msgstr "Taban Altı Biçimler"
 msgctxt "@tooltip"
 msgid "Controls substitution for below base forms in Indic scripts."
 msgstr ""
-"Kmer ve diğer Hint yazılarında taban altı biçimler için ikameyi denetler."
+"Kmer ve diğer Hint yazılarında taban altı biçimler için ikâmeyi denetler."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:265
 #, kde-format
@@ -20029,7 +20029,7 @@ msgstr "Uzman Biçimler"
 msgctxt "@tooltip"
 msgid "Replaces standard forms in Japanese fonts with expert forms."
 msgstr ""
-"Japonca yazıtiplerindeki standart biçimleri uzman biçimlerle değiştirir."
+"Japonca yazı tiplerindeki standart biçimleri, uzman biçimlerle değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:339
 #, kde-format
@@ -20069,7 +20069,7 @@ msgid ""
 "Replaces standard kana in Japanese fonts with ones suited for horizontal "
 "layout."
 msgstr ""
-"Japonca yazıtiplerindeki standart Kana’yı yatay yerleşim için uygun "
+"Japonca yazı tiplerindeki standart Kana’yı, yatay yerleşim için uygun "
 "olanlarla değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:351
@@ -20099,7 +20099,7 @@ msgid ""
 "Replaces 'JIS X 0213:2004' form kanji in Japanese fonts with the Hojo ('JIS "
 "X 0212-1990') forms."
 msgstr ""
-"Japonca yazıtiplerindeki “JIS X 0213:2004” formundaki Kanjileri, Hojo (“JIS "
+"Japonca yazı tiplerindeki “JIS X 0213:2004” formundaki Kanji’yi, Hojo (“JIS "
 "X 0212-1990”) biçimleriyle değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:359
@@ -20141,7 +20141,7 @@ msgstr "JIS78 Biçimleri"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS78 forms."
 msgstr ""
-"Japonca yazıtiplerindeki standart biçim Kanji’yi JIS78 biçimleriyle "
+"Japonca yazı tiplerindeki standart biçim Kanji’yi, JIS78 biçimleriyle "
 "değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:371
@@ -20155,7 +20155,7 @@ msgstr "JIS83 Biçimleri"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS83 forms."
 msgstr ""
-"Japonca yazıtiplerindeki standart biçim Kanji’yi JIS83 biçimleriyle "
+"Japonca yazı tiplerindeki standart biçim Kanji’yi, JIS83 biçimleriyle "
 "değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:375
@@ -20169,7 +20169,7 @@ msgstr "JIS90 Biçimleri"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS90 forms."
 msgstr ""
-"Japonca yazıtiplerindeki standart biçim Kanji’yi JIS90 biçimleriyle "
+"Japonca yazı tiplerindeki standart biçim Kanji’yi, JIS90 biçimleriyle "
 "değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:379
@@ -20183,7 +20183,7 @@ msgstr "JIS2004 Biçimleri"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS2004 forms."
 msgstr ""
-"Japonca yazıtiplerindeki standart biçim Kanji’yi JIS2004 biçimleriyle "
+"Japonca yazı tiplerindeki standart biçim Kanji’yi, JIS2004 biçimleriyle "
 "değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:383
@@ -20211,7 +20211,7 @@ msgstr "NLC Kanji Biçimleri"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the NLC forms."
 msgstr ""
-"Japonca yazıtiplerindeki standart biçimdeki Kanji’yi NLC biçimleriyle "
+"Japonca yazı tiplerindeki standart biçimdeki Kanji’yi, NLC biçimleriyle "
 "değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:391
@@ -20239,7 +20239,7 @@ msgstr "Orantılı Kana"
 msgctxt "@tooltip"
 msgid "Replaces full-width kana in Japanese fonts with proportional kana."
 msgstr ""
-"Japonca yazıtiplerindeki tam genişlikteki Kana’yı orantılı Kana ile "
+"Japonca yazı tiplerindeki tam genişlikteki Kana’yı, orantılı Kana ile "
 "değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:399
@@ -20279,8 +20279,8 @@ msgid ""
 "Replaces glyphs in CJK fonts with ones suited for the small text in ruby "
 "annotations."
 msgstr ""
-"ÇJK yazıtiplerindeki glifleri Ruby ek açıklamalarındaki küçük metinler için "
-"uygun olanlarla değiştirir."
+"ÇJK yazı tiplerindeki glifleri, Ruby ek açıklamalarındaki küçük metinler "
+"için uygun olanlarla değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:411
 #, kde-format
@@ -20293,7 +20293,7 @@ msgstr "Basitleştirilmiş Biçimler"
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with 'simplified' forms."
 msgstr ""
-"ÇJK yazıtiplerindeki glifleri “basitleştirilmiş” biçimlerle değiştirir."
+"ÇJK yazı tiplerindeki glifleri, “basitleştirilmiş” biçimlerle değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:415
 #, kde-format
@@ -20323,7 +20323,7 @@ msgid ""
 "Replaces standard form Kanji in Japanese fonts with the ones traditionally "
 "used in names."
 msgstr ""
-"Japonca yazıtiplerindeki standart biçim Kanji’yi geleneksel olarak adlarda "
+"Japonca yazı tiplerindeki standart biçim Kanji’yi, geleneksel olarak adlarda "
 "kullanılanlarla değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
@@ -20336,7 +20336,7 @@ msgstr "Geleneksel Biçimler"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
-msgstr "ÇJK yazıtiplerindeki glifleri “geleneksel” biçimlerle değiştirir."
+msgstr "ÇJK yazı tiplerindeki glifleri, “geleneksel” biçimlerle değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
 #, kde-format
@@ -20393,7 +20393,7 @@ msgstr "Dikey Alternatifler"
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with ones suited for vertical writing."
 msgstr ""
-"CJK yazıtiplerindeki glifleri dikey yazı için uygun olanlarla değiştirir."
+"CJK yazı tiplerindeki glifleri, dikey yazı için uygun olanlarla değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:447
 #, kde-format
@@ -20436,7 +20436,7 @@ msgid ""
 "Replaces standard kana in Japanese fonts with ones suited for vertical "
 "layout."
 msgstr ""
-"Japonca yazıtiplerindeki standart Kana’yı dikey yerleşim için uygun "
+"Japonca yazı tiplerindeki standart Kana’yı, dikey yerleşim için uygun "
 "olanlarla değiştirir."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:459
@@ -20637,7 +20637,7 @@ msgid ""
 "Positions Arabic combining marks in fonts for Windows 95 using glyph "
 "substitution."
 msgstr ""
-"Glif ikamesi kullanarak Windows 95 için olan yazıtiplerindeki Arapça "
+"Glif ikâmesi kullanarak Windows 95 için olan yazı tiplerindeki Arapça "
 "birleştirme işaretlerini konumlandırır."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:517
@@ -24164,7 +24164,7 @@ msgstr "Geçici Özkaynaklar"
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
-msgstr "Yazıtipi Deposu"
+msgstr "Yazı Tipi Deposu"
 
 #: libs/resources/KisResourceLocator.cpp:1232
 #, kde-format
@@ -30457,7 +30457,7 @@ msgstr "Özel arayüz yazıtipi kullan"
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:29
 #, kde-format
 msgid "Font:"
-msgstr "Yazıtipi:"
+msgstr "Yazı tipi:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkHiDPI)
 #: libs/ui/forms/wdggeneralsettings.ui:551
@@ -30932,7 +30932,7 @@ msgstr "(Yeniden başlatma gerektirir)"
 #: libs/ui/forms/wdggeneralsettings.ui:1563
 #, kde-format
 msgid "Font DPI Workaround"
-msgstr "Yazıtipi DPI’si geçici çözümü"
+msgstr "Yazı tipi DPI’si geçici çözümü"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1578
@@ -46606,7 +46606,7 @@ msgstr "Yedek Aile Ekle"
 #, kde-format
 msgctxt "@label"
 msgid "Font Kerning"
-msgstr "Yazıtipi aralıklandırması"
+msgstr "Yazı tipi aralıklandırması"
 
 #: plugins/dockers/textproperties/qml/FontKerning.qml:20
 #, kde-format
@@ -63001,7 +63001,7 @@ msgstr "Çizeri Kaldır"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:343
 msgid "Use font"
-msgstr "Yazıtipi kullan"
+msgstr "Yazı tipi kullan"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:370
 msgid "Text Colors"
@@ -64934,7 +64934,7 @@ msgstr "Sözdizim vurgulayıcısı:"
 
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:23
 msgid "Fonts:"
-msgstr "Yazıtipleri:"
+msgstr "Yazı tipleri:"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 msgid "Scope"

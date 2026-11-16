@@ -46480,7 +46480,7 @@ msgstr "Alinea al centre del quadro em ideogràfic."
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Hanging"
-msgstr "Suspensió"
+msgstr "Amb sagnat francés"
 
 #: plugins/dockers/textproperties/qml/AlignmentBaseline.qml:91
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:89
@@ -47093,8 +47093,8 @@ msgid ""
 "punctuation."
 msgstr ""
 "La puntuació suspesa permet fer penjar tant els signes de puntuació "
-"d'obertura i de tancament, així com les comes. Esta implementació només "
-"implementa la puntuació suspesa de l'estil asiàtic oriental."
+"d'obertura com els de tancament, així com les comes. Esta implementació "
+"només implementa la puntuació suspesa de l'estil asiàtic oriental."
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:18
 #, kde-format
@@ -47108,7 +47108,7 @@ msgstr "puntuació suspesa, burasagari"
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang First"
-msgstr "Sagnat de la primera línia"
+msgstr "Penja al començament"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:124
 #, kde-format
@@ -47120,7 +47120,7 @@ msgstr "Final de línia:"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "No Hanging"
-msgstr "Sense suspensió"
+msgstr "Sense sagnat francés"
 
 #: plugins/dockers/textproperties/qml/HangingPunctuation.qml:133
 #, kde-format
@@ -47138,7 +47138,7 @@ msgstr "Força les comes penjades"
 #, kde-format
 msgctxt "@option:check"
 msgid "Hang Last"
-msgstr "Sagnat de l'última línia"
+msgstr "Penja al final"
 
 #: plugins/dockers/textproperties/qml/Language.qml:14
 #, kde-format
@@ -67924,7 +67924,7 @@ msgstr "Ideogràfic"
 #, kde-format
 msgctxt "Type setting mode line name"
 msgid "Hanging"
-msgstr "Suspensió"
+msgstr "Amb sagnat francés"
 
 #: plugins/tools/svgtexttool/SvgTextCursor.cpp:489
 #, kde-format

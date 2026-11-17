@@ -1237,8 +1237,8 @@ void KisView::slotThemeChanged(QPalette pal)
     }
 }
 
-void KisView::slotUpdateDocumentTitle()
-{
+QString KisView::getTitle() {
+
     QString title = d->document->caption();
 
     if (!d->document->isReadWrite()) {
@@ -1255,6 +1255,13 @@ void KisView::slotUpdateDocumentTitle()
     if (fileSizeStats.imageSize) {
         title += QString(" (").append( KFormat().formatByteSize(qreal(fileSizeStats.imageSize))).append( ") ");
     }
+
+    return title;
+}
+
+void KisView::slotUpdateDocumentTitle()
+{
+    QString title = getTitle();
 
     title += "[*]";
 

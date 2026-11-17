@@ -361,6 +361,64 @@ public:
     }
 };
 
+//This feels like a bit of a hack tbh, but better than digging around in QMdiArea
+class TabBarFilter : public QObject {
+public:
+    TabBarFilter(QMdiArea *mdi)
+        : mdi(mdi)
+    {
+    }
+
+    bool eventFilter(QObject *watched, QEvent *event) override
+    {
+        // This probably has too many checks, but i do not trust it to not trigger them
+        QTabBar *tabBar = dynamic_cast<QTabBar *>(watched);
+        if (!tabBar) {
+            // Shouldn't happen, but better safe than sorry
+            return false;
+        }
+
+        if (event->type() != QEvent::ToolTip) {
+            return false;
+        }
+
+        QHelpEvent *ev = dynamic_cast<QHelpEvent *>(event);
+        if (!ev) {
+            return false;
+        }
+
+        int tabIndex = tabBar->tabAt(ev->pos());
+
+        if (tabIndex == -1 || tabIndex > (mdi->subWindowList().count() - 1)) {
+            return false;
+        }
+
+        QMdiSubWindow *win = mdi->subWindowList()[tabIndex];
+
+        if (!win) {
+            return false;
+        }
+
+        KisView *view = dynamic_cast<KisView *>(win->widget());
+        if (!view) {
+            return false;
+        }
+
+        QString title = view->getTitle();
+
+        if (view->document()->isModified()) {
+            title += "*";
+        }
+
+        tabBar->setTabToolTip(tabIndex, title);
+
+        return false;
+    };
+
+private:
+    QMdiArea *mdi;
+};
+
 KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
@@ -689,6 +747,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         tabBar->setExpanding(true);
         tabBar->setAcceptDrops(true);
         tabBar->setChangeCurrentOnDrag(true);
+
+        tabBar->installEventFilter(new TabBarFilter(d->mdiArea));
     }
 
     applyMainWindowSettings(d->windowStateConfig);

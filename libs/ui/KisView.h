@@ -192,6 +192,8 @@ public:
     void saveViewState(KisPropertiesConfiguration &config) const;
     void restoreViewState(const KisPropertiesConfiguration &config);
 
+    QString getTitle();
+
 public Q_SLOTS:
 
     /**

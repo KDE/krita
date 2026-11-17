@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-13 03:37+0000\n"
+"POT-Creation-Date: 2026-11-17 03:32+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -16459,7 +16459,7 @@ msgctxt "action"
 msgid "Change Interface Scale"
 msgstr "Promijeni obitelj pisma"
 
-#: krita/main.cc:723
+#: krita/main.cc:728
 #, fuzzy, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
@@ -16467,7 +16467,7 @@ msgstr ""
 "(c) 1999-2002 The Krita team.\n"
 "(c) 2002-2003 Patrick Julien.\n"
 
-#: krita/main.cc:820 libs/ui/KisApplication.cpp:523
+#: krita/main.cc:825 libs/ui/KisApplication.cpp:523
 #: libs/ui/KisApplication.cpp:848
 #, fuzzy, kde-format
 #| msgid "Warning"
@@ -16475,7 +16475,7 @@ msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Upozorenje"
 
-#: krita/main.cc:821
+#: krita/main.cc:826
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"

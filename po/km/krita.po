@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-13 03:37+0000\n"
+"POT-Creation-Date: 2026-11-17 03:32+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -16686,21 +16686,21 @@ msgctxt "action"
 msgid "Change Interface Scale"
 msgstr "គូស​ចតុកោណកែង​"
 
-#: krita/main.cc:723
+#: krita/main.cc:728
 #, fuzzy, kde-format
 #| msgid "(c) 1999-2010 The Krita team.\n"
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "រក្សាសិទ្ធិ​ឆ្នាំ ១៩៩៩-២០១០ ដោយ​ក្រុម Krita ។\n"
 
-#: krita/main.cc:820 libs/ui/KisApplication.cpp:523
+#: krita/main.cc:825 libs/ui/KisApplication.cpp:523
 #: libs/ui/KisApplication.cpp:848
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "ការ​ព្រមាន!"
 
-#: krita/main.cc:821
+#: krita/main.cc:826
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"

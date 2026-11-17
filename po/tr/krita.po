@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-13 03:37+0000\n"
-"PO-Revision-Date: 2026-11-15 19:35+0300\n"
+"POT-Creation-Date: 2026-11-17 03:32+0000\n"
+"PO-Revision-Date: 2026-11-16 19:12+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -14398,7 +14398,7 @@ msgstr "Dikey Sarmala"
 #, kde-format
 msgctxt "action"
 msgid "&Instant Preview Mode"
-msgstr "Anında &Önizleme Kipi"
+msgstr "Anında Ö&n İzleme Kipi"
 
 #. i18n: context: toolTip @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
@@ -16471,20 +16471,20 @@ msgctxt "action"
 msgid "Change Interface Scale"
 msgstr "Arayüz ölçeğini değiştir"
 
-#: krita/main.cc:723
+#: krita/main.cc:728
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–2026 Krita Geliştiricileri"
 
-#: krita/main.cc:820 libs/ui/KisApplication.cpp:523
+#: krita/main.cc:825 libs/ui/KisApplication.cpp:523
 #: libs/ui/KisApplication.cpp:848
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Uyarı"
 
-#: krita/main.cc:821
+#: krita/main.cc:826
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16579,7 +16579,7 @@ msgstr "Fırça Rastgeleliği önerilen değeri 0,0"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
-msgstr "Aralama > 0,5; Anında Önizlemeyi devre dışı bırakmayı düşünün"
+msgstr "Aralama > 0,5; “Anında Ön İzleme”yi devre dışı bırakmayı düşünün"
 
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:28
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:35
@@ -26328,7 +26328,7 @@ msgstr "Video dosyası:"
 #: libs/widgetutils/KisPreviewFileDialog.cpp:96
 #, kde-format
 msgid "No Preview"
-msgstr "Önizleme yok"
+msgstr "Ön izleme yok"
 
 #. i18n: ectx: property (text), widget (QLabel, lblThisMin_2)
 #. i18n: ectx: property (text), widget (QLabel, lblUnderMin_2)
@@ -30066,7 +30066,7 @@ msgstr "Profil:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:62
 #, kde-format
 msgid "Preview"
-msgstr "Önizleme"
+msgstr "Ön izle"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFilterSelectedFrames)
 #: libs/ui/forms/wdgfilterdialog.ui:74
@@ -36746,7 +36746,7 @@ msgstr "Resim"
 #: libs/ui/KisTemplateCreateDia.cpp:132
 #, kde-format
 msgid "&Preview"
-msgstr "&Önizleme"
+msgstr "Ö&n İzle"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpCustom)
 #: libs/ui/KisTemplateCreateDia.cpp:137
@@ -37915,7 +37915,7 @@ msgstr "&Dışa Aktar…"
 #: libs/ui/layerstyles/wdglayerstyles.ui:177
 #, kde-format
 msgid "Pre&view"
-msgstr "Ö&nizleme"
+msgstr "Ö& nizle"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFillType)
@@ -39583,7 +39583,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Instant Preview Mode is disabled by the following options:<ul>%1</ul></p>"
 msgstr ""
-"<p>Anında Önizleme Kipi, aşağıdaki seçenekler tarafından devre dışı "
+"<p>Anında Önizleme kipi, aşağıdaki seçenekler tarafından devre dışı "
 "bırakıldı:<ul>%1</ul></p>"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:142
@@ -39605,14 +39605,14 @@ msgid ""
 "<p>Instant Preview may look different from the final result. In case of "
 "troubles try disabling the following options:<ul>%1</ul></p>"
 msgstr ""
-"<p>Anında Önizleme son sonuçtan farklı görünebilir. Sorun oluşması durumunda "
-"aşağıdaki seçenekleri devre dışı bırakın:<ul>%1</ul></p>"
+"<p>Anında Önizleme, son sonuçtan farklı görünebilir. Sorun oluşması "
+"durumunda aşağıdaki seçenekleri devre dışı bırakın:<ul>%1</ul></p>"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:164
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Instant Preview Mode is available</p>"
-msgstr "<p>Anında Önizleme Kipi kullanılabilir</p>"
+msgstr "<p>“Anında Ön İzleme” kipi kullanılabilir</p>"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, kde-format
@@ -41183,7 +41183,7 @@ msgstr "&Aşağı Adım"
 #: libs/widgetutils/KisPreviewFileDialog.cpp:58
 #, kde-format
 msgid "Toggle Preview"
-msgstr "Önizlemeyi Aç/Kapat"
+msgstr "Ön İzlemeyi Aç/Kapat"
 
 #: libs/widgetutils/KoFileDialog.cpp:270
 #, kde-format
@@ -43138,7 +43138,7 @@ msgstr "Hız: "
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:94
 #, kde-format
 msgid "Preview playback speed"
-msgstr "Önizleme oynatma hızı"
+msgstr "Ön izleme oynatma hızı"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:131
 #, kde-format
@@ -45153,7 +45153,7 @@ msgstr "Temizle"
 #, kde-format
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
-msgstr "Önizleme"
+msgstr "Ön İzleme"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:140
 #, kde-format
@@ -61611,7 +61611,7 @@ msgstr "En yüksek X: "
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
 msgstr ""
-"%1 seçeneğinde Rastgele Algılayıcı Etkin; Anında Önizleme’yi devre dışı "
+"%1 seçeneğinde Rastgele Algılayıcı Etkin; “Anında Önizleme”yi devre dışı "
 "bırakmayı düşünün"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:44
@@ -61733,7 +61733,7 @@ msgstr "Rastgele Radyan"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Radius by Random, consider disabling Instant Preview"
-msgstr "Rastgele Radyan; Anında Önizleme’yi devre dışı bırakmayı düşünün"
+msgstr "Rastgele Radyan; “Anında Önizleme”yi devre dışı bırakmayı düşünün"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:48
 #, kde-format
@@ -61839,7 +61839,7 @@ msgstr "Rastgele Ofset"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Offset by Random, consider disabling Instant Preview"
-msgstr "Rastgele Ofset; Anında Önizleme’yi devre dışı bırakmayı düşünün"
+msgstr "Rastgele Ofset; “Anında Önizleme”yi devre dışı bırakmayı düşünün"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:250
 #, kde-format
@@ -65944,7 +65944,7 @@ msgstr "Algılayıcı kullan"
 #: plugins/tools/basictools/kis_tool_line.cc:105
 #, kde-format
 msgid "Show Preview"
-msgstr "Önizleme göster"
+msgstr "Ön izlemeyi göster"
 
 #: plugins/tools/basictools/kis_tool_line.cc:108
 #, kde-format
@@ -69824,7 +69824,7 @@ msgstr "Ayrıntılılığı Ayarla:"
 #, kde-format
 msgctxt "The Granularity value for Cage Transformation Preview"
 msgid "Preview"
-msgstr "Önizleme"
+msgstr "Ön izleme"
 
 #. i18n: ectx: property (text), widget (QLabel, realGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1762

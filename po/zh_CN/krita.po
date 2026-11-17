@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-14 01:01+0000\n"
+"POT-Creation-Date: 2026-11-17 01:03+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16449,31 +16449,31 @@ msgid "Change Interface Scale"
 msgstr "更改界面缩放比例"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
-#: krita/main.cc:719 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
+#: krita/main.cc:724 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
 #: libs/ui/kis_splash_screen.cpp:46
 #, kde-format
 msgid "Krita"
 msgstr "Krita"
 
-#: krita/main.cc:721
+#: krita/main.cc:726
 #, kde-format
 msgid "Krita is the full-featured digital art studio"
 msgstr "Krita 是一款功能齐全的数字绘画工作室软件"
 
-#: krita/main.cc:723
+#: krita/main.cc:728
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–2026 The Krita Developers"
 
-#: krita/main.cc:820 libs/ui/KisApplication.cpp:503
+#: krita/main.cc:825 libs/ui/KisApplication.cpp:503
 #: libs/ui/KisApplication.cpp:836
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita：警告"
 
-#: krita/main.cc:821
+#: krita/main.cc:826
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -24021,7 +24021,7 @@ msgstr "本地资源"
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:689 libs/ui/KisView.cpp:1176
-#: libs/ui/KisWelcomePageWidget.cpp:734 libs/ui/KisWindowLayoutResource.cpp:390
+#: libs/ui/KisWelcomePageWidget.cpp:724 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
 #: libs/ui/widgets/kis_custom_image_widget.cc:456
@@ -28550,7 +28550,7 @@ msgid "Start"
 msgstr "开始创作"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:606
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:595
 #, kde-format
 msgid "DEV BUILD"
 msgstr "正在运行测试版本"
@@ -28590,45 +28590,45 @@ msgid "Community"
 msgstr "社区资源"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:363
+#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:360
 #, kde-format
 msgid "User Manual"
 msgstr "使用手册"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
 #. i18n: ectx: property (text), widget (QPushButton, m_btnSupport)
-#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:366
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:363
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:173
 #, kde-format
 msgid "Support Krita"
 msgstr "捐款支持"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:375
+#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:372
 #, kde-format
 msgid "Powered by KDE"
 msgstr "Krita 由 KDE 社区开发维护"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:372
+#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:369
 #, kde-format
 msgid "Source Code"
 msgstr "源代码库"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:360
+#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:357
 #, kde-format
 msgid "Getting Started"
 msgstr "新手入门"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:357
+#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:354
 #, kde-format
 msgid "User Community"
 msgstr "用户社区"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:369
+#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:366
 #, kde-format
 msgid "Krita Website"
 msgstr "官方网站"
@@ -28673,37 +28673,53 @@ msgid "News options"
 msgstr "资讯选项"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1453
+#: libs/ui/forms/KisWelcomePage.ui:1462
 #, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "Krita 版本 X.X.X 已经推出"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:1504
+#: libs/ui/forms/KisWelcomePage.ui:1520
 #, kde-format
 msgid "Update now!"
 msgstr "立即更新"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:1511
+#: libs/ui/forms/KisWelcomePage.ui:1527
 #, kde-format
 msgid "Show details"
 msgstr "显示详情"
 
-#. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1563 libs/ui/KisWelcomePageWidget.cpp:377
+#. i18n: ectx: property (toolTip), widget (QCheckBox, enableNewsBox)
+#: libs/ui/forms/KisWelcomePage.ui:1608 libs/ui/KisWelcomePageWidget.cpp:152
 #, kde-format
 msgid ""
-"You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
-"decoration: underline;\">enable news</a> from krita.org in various languages "
-"with the menu above"
+"Show news about Krita: this needs internet to retrieve information from the "
+"krita.org website"
 msgstr ""
-"<a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-decoration: "
-"underline;\">点击启用最新资讯功能</a>，即可在此显示 Krita 官方网站的新闻并在"
-"新版 Krita 推出时通知您。资讯的语言可从右上方菜单按钮中选择。"
+"显示 Krita 的官方网站的最新资讯并检测新版软件。重要文章均有中文版，打开后可自"
+"动或手动在网站右上角切换中文。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enableNewsBox)
+#: libs/ui/forms/KisWelcomePage.ui:1611 libs/ui/KisWelcomePageWidget.cpp:151
+#, kde-format
+msgid "Automatically check for updates"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, checkNowButton)
+#: libs/ui/forms/KisWelcomePage.ui:1631
+#, kde-format
+msgid "Retrieve news and updates from krita.org now."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, checkNowButton)
+#: libs/ui/forms/KisWelcomePage.ui:1634
+#, kde-format
+msgid "Check Now"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1703
+#: libs/ui/forms/KisWelcomePage.ui:1756
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -28734,19 +28750,19 @@ msgstr ""
 "fund.krita.org/\">发展基金会员</a> 的捐款支持。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAndroidSupporter)
-#: libs/ui/forms/KisWelcomePage.ui:1735
+#: libs/ui/forms/KisWelcomePage.ui:1788
 #, kde-format
 msgid "Krita is made possible thanks to ongoing support from people like you!"
 msgstr "Krita 能够持续发展，离不开像您这样的捐款支持者！"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupporterManage)
-#: libs/ui/forms/KisWelcomePage.ui:1748
+#: libs/ui/forms/KisWelcomePage.ui:1801
 #, kde-format
 msgid "Manage Supporter Benefits"
 msgstr "管理捐款支持者权益"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
-#: libs/ui/forms/KisWelcomePage.ui:1793 libs/ui/KisWelcomePageWidget.cpp:848
+#: libs/ui/forms/KisWelcomePage.ui:1846 libs/ui/KisWelcomePageWidget.cpp:843
 #, kde-format
 msgid "Support Krita!"
 msgstr "捐款支持 Krita"
@@ -36935,63 +36951,49 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "匿名"
 
-#: libs/ui/KisWelcomePageWidget.cpp:158
-#, kde-format
-msgid "Enable news and check for new releases"
-msgstr "显示最新资讯/检查软件更新"
-
-#: libs/ui/KisWelcomePageWidget.cpp:160
-#, kde-format
-msgid ""
-"Show news about Krita: this needs internet to retrieve information from the "
-"krita.org website"
-msgstr ""
-"显示 Krita 的官方网站的最新资讯并检测新版软件。重要文章均有中文版，打开后可自"
-"动或手动在网站右上角切换中文。"
-
-#: libs/ui/KisWelcomePageWidget.cpp:163
+#: libs/ui/KisWelcomePageWidget.cpp:155
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, kde-format
 msgid "Language"
 msgstr "语言"
 
-#: libs/ui/KisWelcomePageWidget.cpp:164
+#: libs/ui/KisWelcomePageWidget.cpp:156
 #, kde-format
 msgid "English news is always up to date."
 msgstr "英文资讯内容更加及时和齐全。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:646
+#: libs/ui/KisWelcomePageWidget.cpp:635
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "忘记“%1”"
 
-#: libs/ui/KisWelcomePageWidget.cpp:753
+#: libs/ui/KisWelcomePageWidget.cpp:745
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Krita 已经推出了新版本。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:782
+#: libs/ui/KisWelcomePageWidget.cpp:776
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "更新时发生错误"
 
-#: libs/ui/KisWelcomePageWidget.cpp:788
+#: libs/ui/KisWelcomePageWidget.cpp:783
 #, kde-format
 msgid "Restart is required."
 msgstr "需要重启软件。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:847
+#: libs/ui/KisWelcomePageWidget.cpp:842
 #, kde-format
 msgid "Become a Supporter!"
 msgstr "成为捐款支持者"
 
-#: libs/ui/KisWelcomePageWidget.cpp:851
+#: libs/ui/KisWelcomePageWidget.cpp:846
 #, kde-format
 msgid "Supporters get brush packs and more."
 msgstr "捐款支持者可获得笔刷包和更多资源。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:852
+#: libs/ui/KisWelcomePageWidget.cpp:847
 #, kde-format
 msgid "Contributions keep development going."
 msgstr "捐款能帮助 Krita 项目存续并发展。"
@@ -70244,6 +70246,18 @@ msgstr ""
 "切换全范围/子范围模式。\n"
 "全范围：[%1, %2]\n"
 "子范围：[%3, %4]"
+
+#~ msgid ""
+#~ "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
+#~ "decoration: underline;\">enable news</a> from krita.org in various "
+#~ "languages with the menu above"
+#~ msgstr ""
+#~ "<a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-decoration: "
+#~ "underline;\">点击启用最新资讯功能</a>，即可在此显示 Krita 官方网站的新闻并"
+#~ "在新版 Krita 推出时通知您。资讯的语言可从右上方菜单按钮中选择。"
+
+#~ msgid "Enable news and check for new releases"
+#~ msgstr "显示最新资讯/检查软件更新"
 
 #~ msgid "Add Color To Palette"
 #~ msgstr "添加颜色至色板"

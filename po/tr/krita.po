@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-14 01:01+0000\n"
-"PO-Revision-Date: 2026-11-15 19:35+0300\n"
+"POT-Creation-Date: 2026-11-17 01:03+0000\n"
+"PO-Revision-Date: 2026-11-16 19:12+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -14383,7 +14383,7 @@ msgstr "Dikey Sarmala"
 #, kde-format
 msgctxt "action"
 msgid "&Instant Preview Mode"
-msgstr "Anında &Önizleme Kipi"
+msgstr "Anında Ö&n İzleme Kipi"
 
 #. i18n: context: toolTip @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
@@ -14393,7 +14393,7 @@ msgstr "Anında &Önizleme Kipi"
 #, kde-format
 msgctxt "action"
 msgid "Instant Preview Mode"
-msgstr "Anında Önizleme Kipi"
+msgstr "Anında Ön İzleme Kipi"
 
 #. i18n: context: text @ Action (softProof), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:712
@@ -14974,7 +14974,7 @@ msgstr "Boyama Yardımcısını Göster"
 #, kde-format
 msgctxt "action"
 msgid "Show &Assistant Previews"
-msgstr "Y&ardımcı Önizlemelerini Göster"
+msgstr "Y&ardımcı Ön İzlemelerini Göster"
 
 #. i18n: context: toolTip @ Action (view_toggle_assistant_previews), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_assistant_previews), Actions (View), ActionCollection (Menu)
@@ -14984,7 +14984,7 @@ msgstr "Y&ardımcı Önizlemelerini Göster"
 #, kde-format
 msgctxt "action"
 msgid "Show Assistant Previews"
-msgstr "Yardımcı Önizlemelerini Göster"
+msgstr "Yardımcı Ön İzlemelerini Göster"
 
 #. i18n: context: text @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1132
@@ -16457,31 +16457,31 @@ msgid "Change Interface Scale"
 msgstr "Arayüz ölçeğini değiştir"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
-#: krita/main.cc:719 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
+#: krita/main.cc:724 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
 #: libs/ui/kis_splash_screen.cpp:46
 #, kde-format
 msgid "Krita"
 msgstr "Krita"
 
-#: krita/main.cc:721
+#: krita/main.cc:726
 #, kde-format
 msgid "Krita is the full-featured digital art studio"
 msgstr "Krita, tam özellikli bir sayısal sanat stüdyosudur"
 
-#: krita/main.cc:723
+#: krita/main.cc:728
 #, kde-format
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–2026 Krita Geliştiricileri"
 
-#: krita/main.cc:820 libs/ui/KisApplication.cpp:503
+#: krita/main.cc:825 libs/ui/KisApplication.cpp:503
 #: libs/ui/KisApplication.cpp:836
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Uyarı"
 
-#: krita/main.cc:821
+#: krita/main.cc:826
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16576,7 +16576,7 @@ msgstr "Fırça Rastgeleliği önerilen değeri 0,0"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
-msgstr "Aralama > 0,5; Anında Önizlemeyi devre dışı bırakmayı düşünün"
+msgstr "Aralama > 0,5; “Anında Ön İzleme”yi devre dışı bırakmayı düşünün"
 
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:28
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:35
@@ -22093,7 +22093,7 @@ msgstr "Kareleri Birbiriyle Değiştir"
 #: libs/image/kis_sync_lod_cache_stroke_strategy.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Instant Preview"
-msgstr "Anında Önizleme"
+msgstr "Anında Ön İzleme"
 
 #: libs/image/kis_update_scheduler.cpp:126
 #, kde-format
@@ -24165,7 +24165,7 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:689 libs/ui/KisView.cpp:1176
-#: libs/ui/KisWelcomePageWidget.cpp:734 libs/ui/KisWindowLayoutResource.cpp:390
+#: libs/ui/KisWelcomePageWidget.cpp:724 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
 #: libs/ui/widgets/kis_custom_image_widget.cc:456
@@ -26300,7 +26300,7 @@ msgstr "Video dosyası:"
 #: libs/widgetutils/KisPreviewFileDialog.cpp:96
 #, kde-format
 msgid "No Preview"
-msgstr "Önizleme yok"
+msgstr "Ön izleme yok"
 
 #. i18n: ectx: property (text), widget (QLabel, lblThisMin_2)
 #. i18n: ectx: property (text), widget (QLabel, lblUnderMin_2)
@@ -26742,12 +26742,12 @@ msgstr ""
 #: libs/ui/canvas/kis_canvas_controller.cpp:407
 #, kde-format
 msgid "Instant Preview Mode: %1"
-msgstr "Anında önizleme kipi: %1"
+msgstr "Anında ön izleme kipi: %1"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:414
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
-msgstr "Anında Önizleme yalnızca OpenGL etkinleştirildiğinde desteklenir"
+msgstr "Anında Ön İzleme yalnızca OpenGL etkinleştirildiğinde desteklenir"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/canvas/kis_canvas_controller.cpp:420
@@ -26763,7 +26763,7 @@ msgid ""
 " in Trilinear or High Quality filtering modes.\n"
 "Current mode is %1"
 msgstr ""
-"Anında Önizleme, Üçlü Doğrusal\n"
+"Anında Ön İzleme, Üçlü Doğrusal\n"
 " veya Yüksek Kalite süzme kiplerinde desteklenir.\n"
 "Geçerli kip %1"
 
@@ -26774,7 +26774,7 @@ msgid ""
 "\n"
 "%1"
 msgstr ""
-"Anında Önizleme kipi etkinleştirilemedi!\n"
+"Anında Ön İzleme kipi etkinleştirilemedi!\n"
 "\n"
 "%1"
 
@@ -27424,7 +27424,7 @@ msgstr "Çember ana hattı"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:265
 #, kde-format
 msgid "Preview Outline"
-msgstr "Ana hattı önizle"
+msgstr "Ana hattı ön izle"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:266
 #, kde-format
@@ -28721,7 +28721,7 @@ msgid "Start"
 msgstr "Başlangıç"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:606
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:595
 #, kde-format
 msgid "DEV BUILD"
 msgstr "GELİŞTİRME YAPISI"
@@ -28761,45 +28761,45 @@ msgid "Community"
 msgstr "Topluluk"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:363
+#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:360
 #, kde-format
 msgid "User Manual"
 msgstr "Kullanıcı Kılavuzu"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
 #. i18n: ectx: property (text), widget (QPushButton, m_btnSupport)
-#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:366
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:363
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:173
 #, kde-format
 msgid "Support Krita"
 msgstr "Krita’yı Destekle"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:375
+#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:372
 #, kde-format
 msgid "Powered by KDE"
 msgstr "Gücünü KDE’den Alır"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:372
+#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:369
 #, kde-format
 msgid "Source Code"
 msgstr "Kaynak Kodu"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:360
+#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:357
 #, kde-format
 msgid "Getting Started"
 msgstr "Başlangıç"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:357
+#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:354
 #, kde-format
 msgid "User Community"
 msgstr "Kullanıcı Topluluğu"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:369
+#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:366
 #, kde-format
 msgid "Krita Website"
 msgstr "Krita Web Sitesi"
@@ -28846,37 +28846,53 @@ msgid "News options"
 msgstr "Haberler seçenekleri"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1453
+#: libs/ui/forms/KisWelcomePage.ui:1462
 #, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "Krita Sürüm X.X.X Kullanılabilir"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:1504
+#: libs/ui/forms/KisWelcomePage.ui:1520
 #, kde-format
 msgid "Update now!"
 msgstr "Şimdi güncelle!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:1511
+#: libs/ui/forms/KisWelcomePage.ui:1527
 #, kde-format
 msgid "Show details"
 msgstr "Ayrıntıları göster"
 
-#. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1563 libs/ui/KisWelcomePageWidget.cpp:377
+#. i18n: ectx: property (toolTip), widget (QCheckBox, enableNewsBox)
+#: libs/ui/forms/KisWelcomePage.ui:1608 libs/ui/KisWelcomePageWidget.cpp:152
 #, kde-format
 msgid ""
-"You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
-"decoration: underline;\">enable news</a> from krita.org in various languages "
-"with the menu above"
+"Show news about Krita: this needs internet to retrieve information from the "
+"krita.org website"
 msgstr ""
-"Üstteki menüden, krita.org’da değişik dillerde yayımlanan <a href=\"ignored"
-"\" style=\"color: COLOR_PLACEHOLDER; text-decoration: underline;\">haberleri "
-"etkinleştirebilirsiniz</a>"
+"Krita hakkında haberler göster: bu özellik krita.org web sitesinden "
+"haberleri almak için internet bağlantısına gereksinim duyar"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enableNewsBox)
+#: libs/ui/forms/KisWelcomePage.ui:1611 libs/ui/KisWelcomePageWidget.cpp:151
+#, kde-format
+msgid "Automatically check for updates"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, checkNowButton)
+#: libs/ui/forms/KisWelcomePage.ui:1631
+#, kde-format
+msgid "Retrieve news and updates from krita.org now."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, checkNowButton)
+#: libs/ui/forms/KisWelcomePage.ui:1634
+#, kde-format
+msgid "Check Now"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1703
+#: libs/ui/forms/KisWelcomePage.ui:1756
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -28909,7 +28925,7 @@ msgstr ""
 "sürmektedir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAndroidSupporter)
-#: libs/ui/forms/KisWelcomePage.ui:1735
+#: libs/ui/forms/KisWelcomePage.ui:1788
 #, kde-format
 msgid "Krita is made possible thanks to ongoing support from people like you!"
 msgstr ""
@@ -28917,13 +28933,13 @@ msgstr ""
 "kılınmaktadır!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupporterManage)
-#: libs/ui/forms/KisWelcomePage.ui:1748
+#: libs/ui/forms/KisWelcomePage.ui:1801
 #, kde-format
 msgid "Manage Supporter Benefits"
 msgstr "Destekçi Avantajlarını Yönet"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
-#: libs/ui/forms/KisWelcomePage.ui:1793 libs/ui/KisWelcomePageWidget.cpp:848
+#: libs/ui/forms/KisWelcomePage.ui:1846 libs/ui/KisWelcomePageWidget.cpp:843
 #, kde-format
 msgid "Support Krita!"
 msgstr "Krita’yı Destekle!"
@@ -30180,7 +30196,7 @@ msgstr "İletişim Kutusu"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:62
 #, kde-format
 msgid "Preview"
-msgstr "Önizleme"
+msgstr "Ön izle"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFilterSelectedFrames)
 #: libs/ui/forms/wdgfilterdialog.ui:74
@@ -30742,13 +30758,14 @@ msgstr "Ek karşılaştırma alanı"
 #: libs/ui/forms/wdggeneralsettings.ui:1031
 #, kde-format
 msgid "Enable Zoom Preview (Pixel-Perfect Color Sampler)"
-msgstr "Yakınlaştırma Önizlemesini Etkinleştir (Tam Piksel Renk Örnekleyicisi)"
+msgstr ""
+"Yakınlaştırma Ön İzlemesini Etkinleştir (Tam Piksel Renk Örnekleyicisi)"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblColorSamplerZoomPreviewScale)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
 #, kde-format
 msgid "Zoom Preview Scale:"
-msgstr "Yakınlaştırma önizlemesi ölçeği:"
+msgstr "Yakınlaştırma ön izlemesi ölçeği:"
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, m_ssbColorSamplerZoomPreviewScale)
 #. i18n: ectx: property (text), widget (QLabel, rowsColumnsXLabel)
@@ -32628,19 +32645,19 @@ msgstr "Arka plan önbellek üretimini etkinleştir"
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, kde-format
 msgid "Instant Preview"
-msgstr "Anında Önizleme"
+msgstr "Anında Ön İzleme"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolUseInStackPreview)
 #: libs/ui/forms/wdgperformancesettings.ui:565
 #, kde-format
 msgid "Use in-stack preview in Transform Tool"
-msgstr "Dönüşüm Aracı’nda yığın içi önizlemeyi kullan"
+msgstr "Dönüşüm Aracı’nda yığın içi ön izlemeyi kullan"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/forms/wdgperformancesettings.ui:572
 #, kde-format
 msgid "Force Instant Preview"
-msgstr "Anında Önizlemeyi Zorla"
+msgstr "Anında Ön İzlemeyi Zorla"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFiltersForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:578
@@ -32650,8 +32667,8 @@ msgid ""
 "even if instant preview is disabled in the &quot;View&quot; menu</p></body></"
 "html>"
 msgstr ""
-"<html><head/><body><p>Süzgeç iletişim kutusu, anında önizleme “Görünüm” "
-"menüsünden devre dışı bırakılmış olsa bile her zaman anında önizlemeyi "
+"<html><head/><body><p>Süzgeç iletişim kutusu, anında ön izleme “Görünüm” "
+"menüsünden devre dışı bırakılmış olsa bile her zaman anında ön izlemeyi "
 "kullanır.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFiltersForceLodMode)
@@ -32668,8 +32685,8 @@ msgid ""
 "preview, even if instant preview is disabled in the &quot;View&quot; menu</"
 "p></body></html>"
 msgstr ""
-"<html><head/><body><p>Dönüşüm aracı, anında önizleme “Görünüm” menüsünden "
-"devre dışı bırakılmış olsa bile her zaman anında önizlemeyi kullanır.</p></"
+"<html><head/><body><p>Dönüşüm aracı, anında ön izleme “Görünüm” menüsünden "
+"devre dışı bırakılmış olsa bile her zaman anında ön izlemeyi kullanır.</p></"
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolForceLodMode)
@@ -32686,8 +32703,8 @@ msgid ""
 "even if instant preview is disabled in the &quot;View&quot; menu</p></body></"
 "html>"
 msgstr ""
-"<html><head/><body><p>Taşıma aracı önizlemesi, anında iletişim “Görünüm” "
-"menüsünden devre dışı bırakılmış olsa bile her zaman anında önizlemeyi "
+"<html><head/><body><p>Taşıma aracı ön izlemesi, anında iletişim “Görünüm” "
+"menüsünden devre dışı bırakılmış olsa bile her zaman anında ön izlemeyi "
 "kullanır.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoveToolForceLodMode)
@@ -35534,7 +35551,7 @@ msgstr ""
 "Görsel boyutu:\t %1\n"
 "  — katman:\t %2\n"
 "  — gösterim:\t %3\n"
-"  — anında önizleme:\t %4\n"
+"  — anında ön izleme:\t %4\n"
 
 #: libs/ui/kis_statusbar.cc:291
 #, kde-format
@@ -36992,7 +37009,7 @@ msgstr "Resim"
 #: libs/ui/KisTemplateCreateDia.cpp:132
 #, kde-format
 msgid "&Preview"
-msgstr "&Önizleme"
+msgstr "Ö&n İzle"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpCustom)
 #: libs/ui/KisTemplateCreateDia.cpp:137
@@ -37240,63 +37257,49 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Anonim"
 
-#: libs/ui/KisWelcomePageWidget.cpp:158
-#, kde-format
-msgid "Enable news and check for new releases"
-msgstr "Haberleri etkinleştir ve yeni sürümleri denetle"
-
-#: libs/ui/KisWelcomePageWidget.cpp:160
-#, kde-format
-msgid ""
-"Show news about Krita: this needs internet to retrieve information from the "
-"krita.org website"
-msgstr ""
-"Krita hakkında haberler göster: bu özellik krita.org web sitesinden "
-"haberleri almak için internet bağlantısına gereksinim duyar"
-
-#: libs/ui/KisWelcomePageWidget.cpp:163
+#: libs/ui/KisWelcomePageWidget.cpp:155
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, kde-format
 msgid "Language"
 msgstr "Dil"
 
-#: libs/ui/KisWelcomePageWidget.cpp:164
+#: libs/ui/KisWelcomePageWidget.cpp:156
 #, kde-format
 msgid "English news is always up to date."
 msgstr "İngilizce haberler her zaman günceldir."
 
-#: libs/ui/KisWelcomePageWidget.cpp:646
+#: libs/ui/KisWelcomePageWidget.cpp:635
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Unut: “%1”"
 
-#: libs/ui/KisWelcomePageWidget.cpp:753
+#: libs/ui/KisWelcomePageWidget.cpp:745
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Krita’nın yeni bir sürümü kullanılabilir."
 
-#: libs/ui/KisWelcomePageWidget.cpp:782
+#: libs/ui/KisWelcomePageWidget.cpp:776
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Güncelleme sırasında bir hata oluştu"
 
-#: libs/ui/KisWelcomePageWidget.cpp:788
+#: libs/ui/KisWelcomePageWidget.cpp:783
 #, kde-format
 msgid "Restart is required."
 msgstr "Yeniden başlatma gereklidir."
 
-#: libs/ui/KisWelcomePageWidget.cpp:847
+#: libs/ui/KisWelcomePageWidget.cpp:842
 #, kde-format
 msgid "Become a Supporter!"
 msgstr "Destekçi Olun!"
 
-#: libs/ui/KisWelcomePageWidget.cpp:851
+#: libs/ui/KisWelcomePageWidget.cpp:846
 #, kde-format
 msgid "Supporters get brush packs and more."
 msgstr "Destekçiler, fırça paketleri ve çok daha fazlasına sahip olacaklar."
 
-#: libs/ui/KisWelcomePageWidget.cpp:852
+#: libs/ui/KisWelcomePageWidget.cpp:847
 #, kde-format
 msgid "Contributions keep development going."
 msgstr "Katkılarınız, geliştirme sürecine yardımcı oluyor."
@@ -38161,7 +38164,7 @@ msgstr "&Dışa Aktar…"
 #: libs/ui/layerstyles/wdglayerstyles.ui:177
 #, kde-format
 msgid "Pre&view"
-msgstr "Ö&nizleme"
+msgstr "Ö& nizle"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFillType)
@@ -39795,7 +39798,7 @@ msgstr "Eşik:"
 #, kde-format
 msgctxt "@label:slider"
 msgid "Instant preview threshold:"
-msgstr "Anında önizleme eşiği:"
+msgstr "Anında ön izleme eşiği:"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:59
 #, kde-format
@@ -39808,7 +39811,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Instant Preview Mode is disabled by the following options:<ul>%1</ul></p>"
 msgstr ""
-"<p>Anında Önizleme Kipi, aşağıdaki seçenekler tarafından devre dışı "
+"<p>Anında Ön İzleme kipi, aşağıdaki seçenekler tarafından devre dışı "
 "bırakıldı:<ul>%1</ul></p>"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:142
@@ -39819,7 +39822,7 @@ msgid ""
 "right-click here to change the threshold<ul><li>Brush size %1</"
 "li><li>Threshold: %2</li></ul></p>"
 msgstr ""
-"<p>Anında Önizleme Kipi, anında önizleme eşiği tarafından devre dışı "
+"<p>Anında Ön İzleme kipi, anında ön izleme eşiği tarafından devre dışı "
 "bırakıldı. Eşiği değiştirmek için lütfen buraya sağ tıklayın<ul><li>Fırça "
 "boyutu: %1</li><li>Eşik: %2</li></ul></p>"
 
@@ -39830,19 +39833,19 @@ msgid ""
 "<p>Instant Preview may look different from the final result. In case of "
 "troubles try disabling the following options:<ul>%1</ul></p>"
 msgstr ""
-"<p>Anında Önizleme son sonuçtan farklı görünebilir. Sorun oluşması durumunda "
-"aşağıdaki seçenekleri devre dışı bırakın:<ul>%1</ul></p>"
+"<p>Anında Ön İzleme, son sonuçtan farklı görünebilir. Sorun oluşması "
+"durumunda aşağıdaki seçenekleri devre dışı bırakın:<ul>%1</ul></p>"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:164
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Instant Preview Mode is available</p>"
-msgstr "<p>Anında Önizleme Kipi kullanılabilir</p>"
+msgstr "<p>“Anında Ön İzleme” kipi kullanılabilir</p>"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:168
 #, kde-format
 msgid "(Instant Preview)*"
-msgstr "(Anında Önizleme)*"
+msgstr "(Anında Ön İzleme)*"
 
 #: libs/ui/widgets/kis_meta_data_merge_strategy_chooser_widget.cc:62
 #, kde-format
@@ -39957,7 +39960,7 @@ msgstr "%1 İşletkesi"
 #: libs/ui/widgets/kis_preset_live_preview_view.cpp:220
 #, kde-format
 msgid "No Preview for this engine"
-msgstr "Bu işletke için önizleme yok"
+msgstr "Bu işletke için ön izleme yok"
 
 #: libs/ui/widgets/kis_selection_options.cc:194
 #, kde-format
@@ -41434,7 +41437,7 @@ msgstr "&Aşağı Adım"
 #: libs/widgetutils/KisPreviewFileDialog.cpp:58
 #, kde-format
 msgid "Toggle Preview"
-msgstr "Önizlemeyi Aç/Kapat"
+msgstr "Ön İzlemeyi Aç/Kapat"
 
 #: libs/widgetutils/KoFileDialog.cpp:270
 #, kde-format
@@ -43419,7 +43422,7 @@ msgstr "Hız: "
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:94
 #, kde-format
 msgid "Preview playback speed"
-msgstr "Önizleme oynatma hızı"
+msgstr "Ön izleme oynatma hızı"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:131
 #, kde-format
@@ -45343,14 +45346,14 @@ msgid ""
 "Prepend a preview to the exported video.\n"
 "The preview will show the last frame of the video for the specified duration"
 msgstr ""
-"Dışa aktarılan videonun başına bir önizleme ekleyin.\n"
-"Önizleme, videonun son karesini belirtilen bir süre için gösterir"
+"Dışa aktarılan videonun başına bir ön izleme ekleyin.\n"
+"Ön izleme, videonun son karesini belirtilen bir süre için gösterir."
 
 #. i18n: ectx: property (text), widget (QCheckBox, resultPreviewCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:650
 #, kde-format
 msgid "Enable preview for:"
-msgstr "Şunun için önizlemeyi etkinleştir:"
+msgstr "Şunun için ön izlemeyi etkinleştir:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWarnSizeText)
 #: plugins/dockers/recorder/recorder_export.ui:677
@@ -45489,7 +45492,7 @@ msgstr "Temizle"
 #, kde-format
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
-msgstr "Önizleme"
+msgstr "Ön İzleme"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:140
 #, kde-format
@@ -48747,7 +48750,7 @@ msgstr "Ren&k yamaları"
 #: plugins/tools/basictools/wdgcolorsampler.ui:270
 #, kde-format
 msgid "Preview:"
-msgstr "Önizleme:"
+msgstr "Ön izleme:"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:4
@@ -56974,7 +56977,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>İnce ayrıntılar için gelişmiş renk matematiğini "
 "kullanarak ilerlemeli yüklemeyi etkinleştirir. Görseller, gittikçe daha "
-"keskin bir duruma gelen kaba önizlemeler olarak yüklenir. Daha çok zaman "
+"keskin bir duruma gelen kaba ön izlemeler olarak yüklenir. Daha çok zaman "
 "alır; ancak daha iyi sonuçlar verir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
@@ -57021,9 +57024,9 @@ msgid ""
 "loading. Adds a few bytes to file size but improves the initial low-"
 "resolution preview quality.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>İlerlemeli yükleme için daha iyi bir kaba önizleme "
+"<html><head/><body><p>İlerlemeli yükleme için daha iyi bir kaba ön izleme "
 "oluşturur. Dosya boyutuna ek birkaç bayt ekler; ancak başlangıçtaki ilk "
-"düşük kaliteli önizlemeyi iyileştirir.</p></body></html>"
+"düşük kaliteli ön izlemeyi iyileştirir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:669
@@ -60504,7 +60507,7 @@ msgstr "Kıl"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Bristle Brush (the lines will be thinner than on preview)"
-msgstr "Kıl Fırça (çizgiler önizlemedekinden ince olacak)"
+msgstr "Kıl Fırça (çizgiler ön izlemedekinden ince olacak)"
 
 #: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:56
 #, kde-format
@@ -60761,7 +60764,7 @@ msgstr "Kalınlık"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Hatching Brush (heavy aliasing in preview mode)"
-msgstr "Tarama Fırçası (önizleme kipinde yoğun örtüşme)"
+msgstr "Tarama Fırçası (ön izleme kipinde yoğun örtüşme)"
 
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:65
 #, kde-format
@@ -61991,7 +61994,7 @@ msgstr "Keskinlik"
 #: plugins/paintops/libpaintop/KisSharpnessOptionWidget.cpp:41
 #, kde-format
 msgid "Align the brush preview outline to the pixel grid"
-msgstr "Fırça önizlemesi dış hattını piksel ızgarasına hizala"
+msgstr "Fırça ön izlemesi dış hattını piksel ızgarasına hizala"
 
 #: plugins/paintops/libpaintop/KisSharpnessOptionWidget.cpp:43
 #, kde-format
@@ -62169,7 +62172,7 @@ msgstr "Açıklık Gücü"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Texture->Pattern (low quality preview)"
-msgstr "Doku → Desen (düşük kaliteli önizleme)"
+msgstr "Doku → Desen (düşük kaliteli ön izleme)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRepeat)
 #: plugins/paintops/libpaintop/sensors/SensorDistanceConfiguration.ui:39
@@ -62205,7 +62208,7 @@ msgstr "En yüksek X: "
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
 msgstr ""
-"%1 seçeneğinde Rastgele Algılayıcı Etkin; Anında Önizleme’yi devre dışı "
+"%1 seçeneğinde Rastgele Algılayıcı Etkin; “Anında Ön İzleme”yi devre dışı "
 "bırakmayı düşünün"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:44
@@ -62327,7 +62330,7 @@ msgstr "Rastgele Radyan"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Radius by Random, consider disabling Instant Preview"
-msgstr "Rastgele Radyan; Anında Önizleme’yi devre dışı bırakmayı düşünün"
+msgstr "Rastgele Radyan; “Anında Ön İzleme”yi devre dışı bırakmayı düşünün"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:48
 #, kde-format
@@ -62433,7 +62436,7 @@ msgstr "Rastgele Ofset"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Offset by Random, consider disabling Instant Preview"
-msgstr "Rastgele Ofset; Anında Önizleme’yi devre dışı bırakmayı düşünün"
+msgstr "Rastgele Ofset; “Anında Ön İzleme”yi devre dışı bırakmayı düşünün"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:250
 #, kde-format
@@ -66759,7 +66762,7 @@ msgstr "Algılayıcı kullan"
 #: plugins/tools/basictools/kis_tool_line.cc:105
 #, kde-format
 msgid "Show Preview"
-msgstr "Önizleme göster"
+msgstr "Ön izlemeyi göster"
 
 #: plugins/tools/basictools/kis_tool_line.cc:108
 #, kde-format
@@ -70291,7 +70294,7 @@ msgstr "Kesin"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:81
 #, kde-format
 msgid "Accurate with Instant Preview"
-msgstr "Anında Önizleme ile Kesin"
+msgstr "Anında Ön İzleme ile Kesin"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, freeTransformButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:136
@@ -70558,7 +70561,7 @@ msgstr "Ayrıntılılığı Ayarla:"
 #, kde-format
 msgctxt "The Granularity value for Cage Transformation Preview"
 msgid "Preview"
-msgstr "Önizleme"
+msgstr "Ön izleme"
 
 #. i18n: ectx: property (text), widget (QLabel, realGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1762
@@ -70984,6 +70987,18 @@ msgstr ""
 "Tam erim ve alt erim arasında geçiş yapın.\n"
 "Tam erim: [%1, %2]\n"
 "Alt erim: [%3, %4]"
+
+#~ msgid ""
+#~ "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
+#~ "decoration: underline;\">enable news</a> from krita.org in various "
+#~ "languages with the menu above"
+#~ msgstr ""
+#~ "Üstteki menüden, krita.org’da değişik dillerde yayımlanan <a href="
+#~ "\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-decoration: underline;"
+#~ "\">haberleri etkinleştirebilirsiniz</a>"
+
+#~ msgid "Enable news and check for new releases"
+#~ msgstr "Haberleri etkinleştir ve yeni sürümleri denetle"
 
 #~ msgid "Add Color To Palette"
 #~ msgstr "Rengi Palete Ekle"

@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-14 01:01+0000\n"
+"POT-Creation-Date: 2026-11-17 01:03+0000\n"
 "PO-Revision-Date: 2026-05-09 16:03+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
@@ -16621,32 +16621,32 @@ msgid "Change Interface Scale"
 msgstr "Zmień prostokąt"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
-#: krita/main.cc:719 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
+#: krita/main.cc:724 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
 #: libs/ui/kis_splash_screen.cpp:46
 #, kde-format
 msgid "Krita"
 msgstr "Krita"
 
-#: krita/main.cc:721
+#: krita/main.cc:726
 #, kde-format
 msgid "Krita is the full-featured digital art studio"
 msgstr ""
 
-#: krita/main.cc:723
+#: krita/main.cc:728
 #, fuzzy, kde-format
 #| msgid "© 1999-%1, The Krita Team"
 msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999-%1 Zespół Krity"
 
-#: krita/main.cc:820 libs/ui/KisApplication.cpp:503
+#: krita/main.cc:825 libs/ui/KisApplication.cpp:503
 #: libs/ui/KisApplication.cpp:836
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Ostrzeżenie"
 
-#: krita/main.cc:821
+#: krita/main.cc:826
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -24624,7 +24624,7 @@ msgstr "Miejscowe zasoby"
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:689 libs/ui/KisView.cpp:1176
-#: libs/ui/KisWelcomePageWidget.cpp:734 libs/ui/KisWindowLayoutResource.cpp:390
+#: libs/ui/KisWelcomePageWidget.cpp:724 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
 #: libs/ui/widgets/kis_custom_image_widget.cc:456
@@ -29275,7 +29275,7 @@ msgid "Start"
 msgstr "Początek"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:606
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:595
 #, kde-format
 msgid "DEV BUILD"
 msgstr "WERSJA ROZWOJOWA"
@@ -29315,45 +29315,45 @@ msgid "Community"
 msgstr "Społeczność"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:363
+#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:360
 #, kde-format
 msgid "User Manual"
 msgstr "Instrukcja"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
 #. i18n: ectx: property (text), widget (QPushButton, m_btnSupport)
-#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:366
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:363
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:173
 #, kde-format
 msgid "Support Krita"
 msgstr "Wesprzyj KDE"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:375
+#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:372
 #, kde-format
 msgid "Powered by KDE"
 msgstr "Rozwijane przez KDE"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:372
+#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:369
 #, kde-format
 msgid "Source Code"
 msgstr "Kod źródłowy"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:360
+#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:357
 #, kde-format
 msgid "Getting Started"
 msgstr "Jak zacząć"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:357
+#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:354
 #, kde-format
 msgid "User Community"
 msgstr "Społeczność użytkowników"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:369
+#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:366
 #, kde-format
 msgid "Krita Website"
 msgstr "Strona domowa Krity"
@@ -29400,37 +29400,55 @@ msgid "News options"
 msgstr "Ustawienia wieści"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1453
+#: libs/ui/forms/KisWelcomePage.ui:1462
 #, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "Dostępne jest Krita w wersji X.X.X"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:1504
+#: libs/ui/forms/KisWelcomePage.ui:1520
 #, kde-format
 msgid "Update now!"
 msgstr "Uaktualnij teraz!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:1511
+#: libs/ui/forms/KisWelcomePage.ui:1527
 #, kde-format
 msgid "Show details"
 msgstr "Pokaż szczegóły"
 
-#. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1563 libs/ui/KisWelcomePageWidget.cpp:377
+#. i18n: ectx: property (toolTip), widget (QCheckBox, enableNewsBox)
+#: libs/ui/forms/KisWelcomePage.ui:1608 libs/ui/KisWelcomePageWidget.cpp:152
 #, kde-format
 msgid ""
-"You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
-"decoration: underline;\">enable news</a> from krita.org in various languages "
-"with the menu above"
+"Show news about Krita: this needs internet to retrieve information from the "
+"krita.org website"
 msgstr ""
-"Możesz <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
-"decoration: underline;\">włączyć wieści</a> z krita.org w różnych językach w "
-"menu powyżej"
+"Pokaż wieści o Kricie: wymaga połączenia z siecią, aby pobrać informacje ze "
+"strony krita.org"
+
+#. i18n: ectx: property (text), widget (QCheckBox, enableNewsBox)
+#: libs/ui/forms/KisWelcomePage.ui:1611 libs/ui/KisWelcomePageWidget.cpp:151
+#, fuzzy, kde-format
+#| msgid "Check for updates"
+msgid "Automatically check for updates"
+msgstr "Sprawdź dostępność uaktualnień"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, checkNowButton)
+#: libs/ui/forms/KisWelcomePage.ui:1631
+#, kde-format
+msgid "Retrieve news and updates from krita.org now."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, checkNowButton)
+#: libs/ui/forms/KisWelcomePage.ui:1634
+#, fuzzy, kde-format
+#| msgid "CheckBox"
+msgid "Check Now"
+msgstr "Pole odhaczane"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1703
+#: libs/ui/forms/KisWelcomePage.ui:1756
 #, fuzzy, kde-format
 #| msgid ""
 #| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -29476,20 +29494,20 @@ msgstr ""
 "rozwoju</a>.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAndroidSupporter)
-#: libs/ui/forms/KisWelcomePage.ui:1735
+#: libs/ui/forms/KisWelcomePage.ui:1788
 #, kde-format
 msgid "Krita is made possible thanks to ongoing support from people like you!"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupporterManage)
-#: libs/ui/forms/KisWelcomePage.ui:1748
+#: libs/ui/forms/KisWelcomePage.ui:1801
 #, fuzzy, kde-format
 #| msgid "Manage Resource Bundles"
 msgid "Manage Supporter Benefits"
 msgstr "Zarządzaj zestawami zasobów"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
-#: libs/ui/forms/KisWelcomePage.ui:1793 libs/ui/KisWelcomePageWidget.cpp:848
+#: libs/ui/forms/KisWelcomePage.ui:1846 libs/ui/KisWelcomePageWidget.cpp:843
 #, kde-format
 msgid "Support Krita!"
 msgstr "Wesprzyj Kritę!"
@@ -37875,63 +37893,49 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Anonimowy"
 
-#: libs/ui/KisWelcomePageWidget.cpp:158
-#, kde-format
-msgid "Enable news and check for new releases"
-msgstr "Włącz wieści i dowiaduj się o nowych wydaniach"
-
-#: libs/ui/KisWelcomePageWidget.cpp:160
-#, kde-format
-msgid ""
-"Show news about Krita: this needs internet to retrieve information from the "
-"krita.org website"
-msgstr ""
-"Pokaż wieści o Kricie: wymaga połączenia z siecią, aby pobrać informacje ze "
-"strony krita.org"
-
-#: libs/ui/KisWelcomePageWidget.cpp:163
+#: libs/ui/KisWelcomePageWidget.cpp:155
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 #, kde-format
 msgid "Language"
 msgstr "Język"
 
-#: libs/ui/KisWelcomePageWidget.cpp:164
+#: libs/ui/KisWelcomePageWidget.cpp:156
 #, kde-format
 msgid "English news is always up to date."
 msgstr "Wieści po angielsku są zawsze na czasie."
 
-#: libs/ui/KisWelcomePageWidget.cpp:646
+#: libs/ui/KisWelcomePageWidget.cpp:635
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Zapomnij o \"%1\""
 
-#: libs/ui/KisWelcomePageWidget.cpp:753
+#: libs/ui/KisWelcomePageWidget.cpp:745
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Dostępna jest nowa wersja Krity."
 
-#: libs/ui/KisWelcomePageWidget.cpp:782
+#: libs/ui/KisWelcomePageWidget.cpp:776
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Wystąpił błąd przy uaktualnianiu"
 
-#: libs/ui/KisWelcomePageWidget.cpp:788
+#: libs/ui/KisWelcomePageWidget.cpp:783
 #, kde-format
 msgid "Restart is required."
 msgstr "Wymagane ponowne uruchomienie."
 
-#: libs/ui/KisWelcomePageWidget.cpp:847
+#: libs/ui/KisWelcomePageWidget.cpp:842
 #, kde-format
 msgid "Become a Supporter!"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:851
+#: libs/ui/KisWelcomePageWidget.cpp:846
 #, kde-format
 msgid "Supporters get brush packs and more."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:852
+#: libs/ui/KisWelcomePageWidget.cpp:847
 #, kde-format
 msgid "Contributions keep development going."
 msgstr ""
@@ -72268,6 +72272,18 @@ msgstr ""
 "Pełny zakres: [%1, %2]\n"
 "Podzakres: [%3, %4]"
 
+#~ msgid ""
+#~ "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
+#~ "decoration: underline;\">enable news</a> from krita.org in various "
+#~ "languages with the menu above"
+#~ msgstr ""
+#~ "Możesz <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
+#~ "decoration: underline;\">włączyć wieści</a> z krita.org w różnych "
+#~ "językach w menu powyżej"
+
+#~ msgid "Enable news and check for new releases"
+#~ msgstr "Włącz wieści i dowiaduj się o nowych wydaniach"
+
 #~ msgid "Add Color To Palette"
 #~ msgstr "Dodaj barwę do palety"
 
@@ -75745,9 +75761,6 @@ msgstr ""
 #~ "Pokaż wieści o Kricie: wymaga połączenia z siecią, aby pobrać informacje "
 #~ "ze strony krita.org"
 
-#~ msgid "Check for updates"
-#~ msgstr "Sprawdź dostępność uaktualnień"
-
 #, fuzzy
 #~| msgid "&Gradient:"
 #~ msgid "Gradient:"
@@ -76921,9 +76934,6 @@ msgstr ""
 
 #~ msgid "Tab 1"
 #~ msgstr "Tab 1"
-
-#~ msgid "CheckBox"
-#~ msgstr "Pole odhaczane"
 
 #~ msgid "Tab 2"
 #~ msgstr "Tab 2"

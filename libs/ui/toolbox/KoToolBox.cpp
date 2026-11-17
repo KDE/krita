@@ -227,8 +227,17 @@ void KoToolBox::setButtonsVisible(const QList<QString> &codes)
             button->setVisible( codes.contains(code) );
         }
     }
-    layout()->invalidate();
-    update();
+
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("KoToolBox");
+    QList<QString> disabledTools = cfg.readEntry("disabledTools", QStringList());
+
+    //Make sure to disable disabled tools
+    if (disabledTools.isEmpty()) {
+        layout()->invalidate();
+        update();
+    } else {
+        disableButtonsByName(disabledTools);
+    }
 }
 
 void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *layer)

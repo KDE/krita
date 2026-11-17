@@ -80,9 +80,6 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     }
 
 
-    QList<QString> disabledTools = cfg.readEntry("disabledTools", QStringList());
-    m_toolBox->disableButtonsByName(disabledTools);
-
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));
     connect(this, SIGNAL(topLevelChanged(bool)),

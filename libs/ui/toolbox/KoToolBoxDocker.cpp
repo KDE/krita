@@ -11,6 +11,7 @@
 #include "KisMainWindow.h"
 #include "KoToolBoxDocker_p.h"
 #include "KoToolBoxScrollArea_p.h"
+#include <KoToolManager.h>
 #include "kis_icon_utils.h"
 
 #include <QActionGroup>
@@ -24,6 +25,7 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 #include <KisPart.h>
+#include <KisViewManager.h>
 
 KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     : QDockWidget(i18n("Toolbox"))
@@ -98,6 +100,7 @@ void KoToolBoxDocker::unsetCanvas()
 
 void KoToolBoxDocker::setViewManager(KisViewManager *viewManager)
 {
+    m_viewManager = viewManager;
     m_toolBox->setViewManager(viewManager);
 }
 
@@ -281,7 +284,8 @@ void KoToolBoxDocker::customizeDisabledTools()
     // List of tool names
     QList<QString> cfgDisabledTools = cfg.readEntry("disabledTools", QStringList());
 
-    QList<KoToolAction *> tools = KoToolManager::instance()->toolActionList();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_viewManager);
+    QList<KoToolAction *> tools = m_viewManager->toolManager()->toolActionList();
     std::map<QString, std::map<int, KoToolAction *>> priorities;
 
     // Sort by section -> priority, to ensure that the tools are arranged in the same order they are in the toolbox

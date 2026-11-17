@@ -57,6 +57,7 @@ private:
 
 private:
     KoToolBox *m_toolBox;
+    KisViewManager *m_viewManager {nullptr};
     KoToolBoxScrollArea *m_scrollArea;
     QMenu *m_contextMenu {nullptr};
     Qt::DockWidgetArea m_dockArea {Qt::NoDockWidgetArea};

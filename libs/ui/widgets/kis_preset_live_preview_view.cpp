@@ -62,7 +62,6 @@ void KisPresetLivePreviewView::setup(KoCanvasResourceProvider* resourceManager)
     m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     m_image = new KisImage(0, m_canvasSize.width(), m_canvasSize.height(), m_colorSpace, "stroke sample image");
 
-
     m_layer = new KisPaintLayer(m_image, "livePreviewStrokeSample", OPACITY_OPAQUE_U8, m_colorSpace);
 
     // set scene for the view
@@ -128,7 +127,48 @@ void KisPresetLivePreviewView::slotPreviewGenerationCompleted()
 {
     m_previewGenerationInProgress = false;
 
-    m_lastPreviewImage = m_layer->paintDevice()->convertToQImage(0, m_image->bounds());
+    if (m_currentPreset->settings()->paintOpCompositeOp() == COMPOSITE_ERASE) {
+        KisPaintDeviceSP dev = new KisPaintDevice(m_image->colorSpace());
+        KisPainter painter = KisPainter(dev);
+
+        // TODO: These are configurable for the canvas, figure out what to do with that
+        KoColor checker1(QColor("#dcdcdc"), m_image->colorSpace());
+        KoColor checker2(QColor("#ffffff"), m_image->colorSpace());
+
+        int checkerSize = 12;
+
+        // Just get the upper one, and draw into the unused space
+        int numCheckersV = std::ceil(m_image->height() / (float)checkerSize);
+        int numCheckersH = std::ceil(m_image->width() / (float)checkerSize);
+
+        painter.fill(m_image->bounds().x(), m_image->bounds().y(), m_image->bounds().width(), m_image->bounds().height(), checker2);
+
+        bool altColor = true;
+        for (int y = 0; y < numCheckersV; y++) {
+            for (int x = 0; x < numCheckersH; x++) {
+                altColor = !altColor;
+                if (altColor) {
+                    continue;
+                }
+                painter.fill(x * checkerSize, y * checkerSize, checkerSize, checkerSize, checker1);
+            }
+
+            //Only need to do it if there's an even number of squares
+            if (numCheckersH % 2 == 0) {
+                altColor = !altColor;
+            }
+        }
+
+        if (m_cachePreviewMode
+            && !KisBrushStrokePreviewCache::needsStripedBackground(m_currentPreset->paintOp().id())) {
+            painter.setCompositeOpId(COMPOSITE_ERASE);
+        }
+        painter.bitBlt(m_image->bounds().topLeft(), m_layer->paintDevice(), m_image->bounds());
+
+        m_lastPreviewImage = dev->convertToQImage(0, m_image->bounds());
+    } else {
+        m_lastPreviewImage = m_layer->paintDevice()->convertToQImage(0, m_image->bounds());
+    }
 
     if (!m_cachePreviewMode) {
         // only add the object once...then just update the pixmap so we can move the preview around
@@ -140,9 +180,8 @@ void KisPresetLivePreviewView::slotPreviewGenerationCompleted()
     }
 
     // Emit preview for caching.
-    const int presetId = m_previewPresetId >= 0
-        ? m_previewPresetId
-        : (m_currentPreset ? m_currentPreset->resourceId() : -1);
+    const int presetId =
+        m_previewPresetId >= 0 ? m_previewPresetId : (m_currentPreset ? m_currentPreset->resourceId() : -1);
     if (presetId >= 0 && !m_lastPreviewImage.isNull()) {
         Q_EMIT sigPreviewImageReady(presetId, m_lastPreviewImage);
     }
@@ -182,6 +221,8 @@ void KisPresetLivePreviewView::paintBackground(bool cacheMode)
 
     const QString paintOpId = m_currentPreset->paintOp().id();
 
+    const QColor backgroundColor = palette().color(QPalette::Window);
+
     if (cacheMode) {
         if (KisBrushStrokePreviewCache::isNoPreviewEngine(paintOpId)) {
             m_layer->paintDevice()->clear();
@@ -191,7 +232,13 @@ void KisPresetLivePreviewView::paintBackground(bool cacheMode)
 
         if (KisBrushStrokePreviewCache::needsStripedBackground(paintOpId)) {
             paintStripedBackground();
-        } else {
+        }
+        else if (m_currentPreset->settings()->paintOpCompositeOp() == COMPOSITE_ERASE) {
+            // Doesn't really matter what the color is, just has to be something for the eraser to erase, we're just
+            // gonna use the alpha of the result
+            m_layer->paintDevice()->fill(m_image->bounds(), KoColor(Qt::black, m_colorSpace));
+        }
+        else {
             m_layer->paintDevice()->clear();
         }
 
@@ -199,7 +246,6 @@ void KisPresetLivePreviewView::paintBackground(bool cacheMode)
         return;
     }
 
-    const QColor backgroundColor = palette().color(QPalette::Window);
     const QColor textColor = palette().color(QPalette::Text);
 
     if (KisBrushStrokePreviewCache::needsStripedBackground(paintOpId)) {
@@ -274,7 +320,9 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     KisPaintOpSettingsSP settings = proxy_preset->settings();
     settings->setPaintOpSize(previewSize);
 
-    settings->setPaintOpCompositeOp(COMPOSITE_OVER);
+    if (settings->paintOpCompositeOp() != COMPOSITE_ERASE) {
+        settings->setPaintOpCompositeOp(COMPOSITE_OVER);
+    }
 
     int maxTextureSize = 200;
     int textureOffsetX = settings->getInt("Texture/Pattern/MaximumOffsetX")*2;
@@ -336,8 +384,11 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     resources->setOpacity(settings->paintOpOpacity());
     resources->setMirroring(false, false); // ignore mirroring in toolbar
 
-    //always set it to COMPOSITE_OVER in case there are any issues
-    resources->setCompositeOpId(COMPOSITE_OVER);
+    if (settings->paintOpCompositeOp() != COMPOSITE_ERASE) {
+        resources->setCompositeOpId(COMPOSITE_OVER);
+    } else {
+        resources->setCompositeOpId(COMPOSITE_ERASE);
+    }
 
     resources->setFGColorOverride(m_paintColor);
     KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();

@@ -255,18 +255,8 @@ void KisPresetDelegate::paintStrokePreview(QPainter *painter, const QStyleOption
         strokePreview.fill(Qt::transparent);
     }
 
-    if (useStripedBackground) {
-        strokePreview.setDevicePixelRatio(devicePixelRatioF);
-        painter->drawImage(strokeRect.topLeft(), strokePreview);
-    } else {
-        QImage tinted = strokePreview.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-        QPainter maskPainter(&tinted);
-        maskPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-        maskPainter.fillRect(tinted.rect(), textColor);
-        maskPainter.end();
-        tinted.setDevicePixelRatio(devicePixelRatioF);
-        painter->drawImage(strokeRect.topLeft(), tinted);
-    }
+    strokePreview.setDevicePixelRatio(devicePixelRatioF);
+    painter->drawImage(strokeRect.topLeft(), strokePreview);
 
     QString presetDisplayName = index.data(Qt::UserRole + KisAbstractResourceModel::Name)
                                     .toString()

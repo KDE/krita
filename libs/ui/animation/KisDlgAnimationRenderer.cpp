@@ -633,7 +633,7 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
             Q_FOREACH (const QString &mime, supportedMimeTypes) {
                 QString description = KisMimeDatabase::descriptionForMimeType(mime);
                 if (mime == "video/quicktime") {
-                    description = i18n("ProRes 4444 Video (*.mov)");
+                    description = i18n("ProRes 4444 Video");
                 }
                 if (description.isEmpty()) {
                     description = mime;

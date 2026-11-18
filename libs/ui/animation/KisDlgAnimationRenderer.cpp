@@ -1072,21 +1072,28 @@ void KisDlgAnimationRenderer::slotExportTypeChanged()
         m_page->stkExport->setCurrentWidget(m_page->pgImages);
     }
 #else
-    // if a video format needs to be outputted
-    if (m_page->shouldExportOnlyVideo->isChecked()) {
-         // videos always uses PNG for creating video, so disable the ability to change the format
-         m_page->cmbMimetype->setEnabled(false);
-         m_page->cmbMimetype->setCurrentIndex(m_page->cmbMimetype->findData("image/png"));
-    }
-
     /**
      * A fallback fix for a case when both checkboxes are unchecked
      */
     if (!m_page->shouldExportOnlyVideo->isChecked() &&
         !m_page->shouldExportOnlyImageSequence->isChecked()) {
 
-         KisSignalsBlocker b(m_page->shouldExportOnlyImageSequence);
-         m_page->shouldExportOnlyImageSequence->setChecked(true);
+        if (sender() == m_page->shouldExportOnlyVideo) {
+            KisSignalsBlocker b(m_page->shouldExportOnlyVideo);
+            m_page->shouldExportOnlyVideo->setChecked(true);
+        } else {
+            KisSignalsBlocker b(m_page->shouldExportOnlyImageSequence);
+            m_page->shouldExportOnlyImageSequence->setChecked(true);
+        }
+    }
+
+    // if a video format needs to be outputted
+    if (m_page->shouldExportOnlyVideo->isChecked()) {
+         // videos always uses PNG for creating video, so disable the ability to change the format
+         m_page->cmbMimetype->setEnabled(false);
+         m_page->cmbMimetype->setCurrentIndex(m_page->cmbMimetype->findData("image/png"));
+    } else {
+         m_page->cmbMimetype->setEnabled(true);
     }
 #endif
 

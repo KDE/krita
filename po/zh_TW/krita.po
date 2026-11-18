@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-17 01:03+0000\n"
+"POT-Creation-Date: 2026-11-18 01:08+0000\n"
 "PO-Revision-Date: 2026-06-11 17:03+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -21068,6 +21068,7 @@ msgid "Press %1 to break path at selected segments."
 msgstr "按下 B 以在選取線段斷開路徑。"
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
+#: libs/flake/tools/KoPathToolFactory.cpp:19
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:29
 #, kde-format
 msgid "Edit Shapes Tool"
@@ -21078,6 +21079,14 @@ msgstr "形狀編輯工具"
 #, kde-format
 msgid "Zoom"
 msgstr "縮放"
+
+#: libs/flake/tools/KoZoomToolFactory.cpp:18
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Zoom Tool"
+msgid "Zoom Tool"
+msgstr "縮放工具"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:38
 #, fuzzy, kde-format
@@ -22309,7 +22318,7 @@ msgstr "正在處理"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:28
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:34
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1487
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1547
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -23078,8 +23087,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Radiance RGBE 影像"
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2247
-#: libs/ui/KisMainWindow.cpp:2328
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2307
+#: libs/ui/KisMainWindow.cpp:2388
 #, kde-format
 msgid "Import frames"
 msgstr "匯入影格"
@@ -24446,11 +24455,11 @@ msgstr "本機資源"
 #: libs/ui/KisApplication.cpp:1323 libs/ui/KisDocument.cpp:1060
 #: libs/ui/KisDocument.cpp:1075 libs/ui/KisDocument.cpp:2042
 #: libs/ui/KisDocument.cpp:2085 libs/ui/KisDocument.cpp:2096
-#: libs/ui/KisMainWindow.cpp:1049 libs/ui/KisMainWindow.cpp:1119
-#: libs/ui/KisMainWindow.cpp:1263 libs/ui/KisMainWindow.cpp:1360
-#: libs/ui/KisMainWindow.cpp:2107 libs/ui/KisMainWindow.cpp:2116
-#: libs/ui/KisMainWindow.cpp:2255 libs/ui/KisMainWindow.cpp:2316
-#: libs/ui/KisMainWindow.cpp:2335 libs/ui/KisMainWindow.cpp:2978
+#: libs/ui/KisMainWindow.cpp:1109 libs/ui/KisMainWindow.cpp:1179
+#: libs/ui/KisMainWindow.cpp:1323 libs/ui/KisMainWindow.cpp:1420
+#: libs/ui/KisMainWindow.cpp:2167 libs/ui/KisMainWindow.cpp:2176
+#: libs/ui/KisMainWindow.cpp:2315 libs/ui/KisMainWindow.cpp:2376
+#: libs/ui/KisMainWindow.cpp:2395 libs/ui/KisMainWindow.cpp:3038
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -25005,7 +25014,7 @@ msgid "Delete resource"
 msgstr "刪除資源"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:338
-#: libs/ui/KisMainWindow.cpp:2771
+#: libs/ui/KisMainWindow.cpp:2831
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:369
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -25513,7 +25522,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "動畫影格繪製失敗！輸出檔案不完整。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:65
-#: libs/ui/KisMainWindow.cpp:2358
+#: libs/ui/KisMainWindow.cpp:2418
 #, kde-format
 msgid "Render Animation"
 msgstr "繪製動畫"
@@ -26029,9 +26038,7 @@ msgid "Auto-generate 8bit Palette:"
 msgstr "自動產生 8 位元調色板："
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
-#. i18n: ectx: property (text), widget (QLabel, labelDither)
 #: libs/ui/animation/video_export_options_dialog.ui:309
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:129
 #, kde-format
 msgid "Dithering:"
 msgstr "抖色 (dithering)："
@@ -27497,7 +27504,7 @@ msgid "Numerical"
 msgstr "按數字順序"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:141
-#: libs/ui/KisMainWindow.cpp:1228
+#: libs/ui/KisMainWindow.cpp:1288
 #, kde-format
 msgid "Import Images"
 msgstr "匯入影像"
@@ -27615,7 +27622,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "輸入新樣式名稱"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2783
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2843
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -32356,7 +32363,7 @@ msgstr "目前筆刷預設"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1094
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1154
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -33766,8 +33773,8 @@ msgstr "平移"
 #: libs/ui/imagesize/wdg_canvassize.ui:199
 #: plugins/dockers/griddocker/grid_config_widget.ui:673
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:44
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:241
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:394
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:251
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:404
 #: plugins/generators/simplexnoise/wdgsimplexnoiseoptions.ui:129
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:35
 #, kde-format
@@ -33783,8 +33790,8 @@ msgstr "X："
 #: libs/ui/imagesize/wdg_canvassize.ui:563
 #: plugins/dockers/griddocker/grid_config_widget.ui:704
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:74
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:251
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:404
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:261
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:414
 #: plugins/generators/simplexnoise/wdgsimplexnoiseoptions.ui:149
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:99
 #, kde-format
@@ -34900,6 +34907,7 @@ msgstr "切換至手繪筆刷工具"
 #: libs/ui/input/KisTouchGestureAction.cpp:33
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:56
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
+#: plugins/tools/selectiontools/kis_tool_select_outline.h:53
 #, kde-format
 msgid "Freehand Selection Tool"
 msgstr "手繪選取區域工具"
@@ -36924,32 +36932,32 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "作業空間(&K)"
 
-#: libs/ui/KisMainWindow.cpp:595
+#: libs/ui/KisMainWindow.cpp:653
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "顯示%1工具列"
 
-#: libs/ui/KisMainWindow.cpp:597
+#: libs/ui/KisMainWindow.cpp:655
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "隱藏%1工具列"
 
-#: libs/ui/KisMainWindow.cpp:1091
+#: libs/ui/KisMainWindow.cpp:1151
 #, kde-format
 msgid "Save as %1"
 msgstr "另存為 %1"
 
-#: libs/ui/KisMainWindow.cpp:1119
+#: libs/ui/KisMainWindow.cpp:1179
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "檔案 %1 不存在。"
 
-#: libs/ui/KisMainWindow.cpp:1228
+#: libs/ui/KisMainWindow.cpp:1288
 #, kde-format
 msgid "Open Images"
 msgstr "開啟影像"
 
-#: libs/ui/KisMainWindow.cpp:1361
+#: libs/ui/KisMainWindow.cpp:1421
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -36961,29 +36969,29 @@ msgstr ""
 "\n"
 "請選擇一個原始檔案不會被覆蓋掉的位置！"
 
-#: libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1482
 #, kde-format
 msgid "Exporting"
 msgstr "正在匯出"
 
-#: libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1482
 #, kde-format
 msgid "Saving As"
 msgstr "正在儲存為"
 
-#: libs/ui/KisMainWindow.cpp:2076
+#: libs/ui/KisMainWindow.cpp:2136
 #, kde-format
 msgid "Layers/Masks"
 msgstr "圖層/遮罩"
 
-#: libs/ui/KisMainWindow.cpp:2102
+#: libs/ui/KisMainWindow.cpp:2162
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:365
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "您沒有啟用任何資源包"
 
-#: libs/ui/KisMainWindow.cpp:2106
+#: libs/ui/KisMainWindow.cpp:2166
 #, kde-format
 msgid ""
 "\n"
@@ -36993,7 +37001,7 @@ msgstr ""
 "\n"
 "無可用的筆刷預設。在繼續之前請先啟用一個含有筆刷預設的資源包。\n"
 
-#: libs/ui/KisMainWindow.cpp:2116
+#: libs/ui/KisMainWindow.cpp:2176
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:377
 #, kde-format
@@ -37004,7 +37012,7 @@ msgstr ""
 "\n"
 "只有您在本機的資源可用。"
 
-#: libs/ui/KisMainWindow.cpp:2255 libs/ui/KisMainWindow.cpp:2335
+#: libs/ui/KisMainWindow.cpp:2315 libs/ui/KisMainWindow.cpp:2395
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -37013,59 +37021,59 @@ msgstr ""
 "無法完成匯入動畫：\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2316
+#: libs/ui/KisMainWindow.cpp:2376
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "無法建立新文件。已終止匯入動畫。"
 
-#: libs/ui/KisMainWindow.cpp:2762
+#: libs/ui/KisMainWindow.cpp:2822
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "匯入作業空間(&I)…"
 
-#: libs/ui/KisMainWindow.cpp:2777
+#: libs/ui/KisMainWindow.cpp:2837
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "新作業空間(&N)…"
 
-#: libs/ui/KisMainWindow.cpp:2782
+#: libs/ui/KisMainWindow.cpp:2842
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "新作業空間…"
 
-#: libs/ui/KisMainWindow.cpp:2826
+#: libs/ui/KisMainWindow.cpp:2886
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2829
+#: libs/ui/KisMainWindow.cpp:2889
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:3001
+#: libs/ui/KisMainWindow.cpp:3061
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr "未安裝 Krita 的 LittleCMS 色彩管理外掛程式。Krita 將立即退出。"
 
-#: libs/ui/KisMainWindow.cpp:3017
+#: libs/ui/KisMainWindow.cpp:3077
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "安裝錯誤"
 
-#: libs/ui/KisMainWindow.cpp:3130
+#: libs/ui/KisMainWindow.cpp:3190
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "主題(&T)"
 
-#: libs/ui/KisMainWindow.cpp:3216
+#: libs/ui/KisMainWindow.cpp:3276
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "擴張空白佔位符"
@@ -37424,37 +37432,37 @@ msgstr "防寫"
 msgid "Recovered"
 msgstr "已復原"
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1367
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "螢幕校樣不支援浮點位深度。"
 
-#: libs/ui/KisView.cpp:1365
+#: libs/ui/KisView.cpp:1372
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "已啟用螢幕校樣。"
 
-#: libs/ui/KisView.cpp:1367
+#: libs/ui/KisView.cpp:1374
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "已關閉螢幕校樣。"
 
-#: libs/ui/KisView.cpp:1379
+#: libs/ui/KisView.cpp:1386
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "色域警告不支援浮點色深。"
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1392
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "已啟用色域警告。"
 
-#: libs/ui/KisView.cpp:1387
+#: libs/ui/KisView.cpp:1394
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "但螢幕校樣仍然關閉。"
 
-#: libs/ui/KisView.cpp:1390
+#: libs/ui/KisView.cpp:1397
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "已關閉色域警告。"
@@ -38744,29 +38752,36 @@ msgctxt "(qtundo-format)"
 msgid "Move Selection"
 msgstr "移動選取區域"
 
-#: libs/ui/toolbox/KoToolBox.cpp:362 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:371 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "預設"
 
-#: libs/ui/toolbox/KoToolBox.cpp:369
+#: libs/ui/toolbox/KoToolBox.cpp:378
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:26
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:31
 #, kde-format
 msgid "Toolbox"
 msgstr "工具箱"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:183
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:190
+#, fuzzy, kde-format
+#| msgctxt "Set the gradient chooser to show custom size items"
+#| msgid "Custom size items"
+msgid "Customize Disabled Tools"
+msgstr "自訂項目大小"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, fuzzy, kde-format
 #| msgid "Company:"
 msgid "Compact"
 msgstr "公司："
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:188
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:199
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:83
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:190
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
@@ -38775,38 +38790,38 @@ msgstr "公司："
 msgid "Icon Size"
 msgstr "圖示大小"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:191
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:202
 #, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "排列方向"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:194
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:205
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
 msgstr "自動(&A)"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:201
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:212
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
 msgstr "從左到右(&L)"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:208
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:219
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
 msgstr "從右到左(&R)"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:227
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:238
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgctxt "Toolbox orientation"
 msgid "Orientation"
 msgstr "方向"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:230
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:241
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu Toolbox layout direction"
 #| msgid "&Automatic"
@@ -38814,19 +38829,38 @@ msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Automatic"
 msgstr "自動(&A)"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:237
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:248
 #, fuzzy, kde-format
 #| msgid "Horizontal"
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Horizontal"
 msgstr "垂直"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:244
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:255
 #, fuzzy, kde-format
 #| msgid "&Vertical"
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Vertical"
 msgstr "垂直(&V)"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:344
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Customize Toolbox"
+msgstr "自訂色彩"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:345
+#, fuzzy, kde-format
+#| msgid "Enabled"
+msgid "Enabled tools"
+msgstr "啟用"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:346
+#, fuzzy, kde-format
+#| msgctxt "JPEG-XL encoder options"
+#| msgid "Disabled"
+msgid "Disabled tools"
+msgstr "停用"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format
@@ -42726,6 +42760,7 @@ msgid "Minor Subdivisions: "
 msgstr "刻度細分："
 
 #: plugins/assistants/Assistants/kis_assistant_tool.h:190
+#: plugins/assistants/Assistants/kis_assistant_tool.h:191
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, kde-format
 msgid "Assistant Tool"
@@ -52645,7 +52680,7 @@ msgstr "半徑："
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/filters/blur/wdg_motion_blur.ui:23
 #: plugins/filters/blur/wdgblur.ui:62
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:436
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:446
 #: plugins/paintops/hatching/wdghatchingoptions.ui:53
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:160
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:220
@@ -53397,7 +53432,7 @@ msgid "Gradient Map"
 msgstr "漸變映射"
 
 #: plugins/filters/gradientmap/KisGradientMapFilterConfiguration.h:69
-#: plugins/generators/gradient/KisGradientGeneratorConfiguration.h:173
+#: plugins/generators/gradient/KisGradientGeneratorConfiguration.h:178
 #, kde-format
 msgctxt "Default gradient name for the gradient generator"
 msgid "Unnamed"
@@ -53405,7 +53440,7 @@ msgstr "未命名"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGradientColors)
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:36
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:504
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:514
 #, kde-format
 msgid "Gradient Colors"
 msgstr "漸變色彩"
@@ -54920,49 +54955,102 @@ msgid "Alternating"
 msgstr "交替"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:44
+#: plugins/tools/basictools/kis_tool_gradient.cc:270
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "The gradient will not be dithered"
+msgid "None"
+msgstr "無"
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:45
+#: plugins/tools/basictools/kis_tool_gradient.cc:271
+#, fuzzy, kde-format
+#| msgid "Simplex Noise"
+msgctxt "The gradient will be dithered with Blue Noise"
+msgid "Blue Noise"
+msgstr "單體雜點 (Simplex Noise)"
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:46
+#: plugins/tools/basictools/kis_tool_gradient.cc:272
+#, kde-format
+msgctxt "The gradient will be dithered with Bayer Matrix 2x2"
+msgid "Bayer Matrix 2x2"
+msgstr ""
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:47
+#: plugins/tools/basictools/kis_tool_gradient.cc:273
+#, kde-format
+msgctxt "The gradient will be dithered with Bayer Matrix 4x4"
+msgid "Bayer Matrix 4x4"
+msgstr ""
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:48
+#: plugins/tools/basictools/kis_tool_gradient.cc:274
+#, kde-format
+msgctxt "The gradient will be dithered with Bayer Matrix 8x8"
+msgid "Bayer Matrix 8x8"
+msgstr ""
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:51
 #, kde-format
 msgctxt "The position will be set in pixels"
 msgid "Pixels"
 msgstr "像素"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:45
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:52
 #, kde-format
 msgctxt "The position will be a percentage of the width"
 msgid "Percent of the Width"
 msgstr "寬度百分比"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:46
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:53
 #, kde-format
 msgctxt "The position will be a percentage of the height"
 msgid "Percent of the Height"
 msgstr "高度百分比"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:47
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:54
 #, kde-format
 msgctxt "The position will be a percentage of the longest image side"
 msgid "Percent of the Longest Side"
 msgstr "長邊的百分比"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:48
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:55
 #, kde-format
 msgctxt "The position will be a percentage of the shortest image side"
 msgid "Percent of the Shortest Side"
 msgstr "短邊的百分比"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:51
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:58
 #, kde-format
 msgctxt "The position will be relative to the top-left corner of the image"
 msgid "Absolute"
 msgstr "絕對"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:52
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:59
 #, kde-format
 msgctxt "The position will be relative to the start point"
 msgid "Relative"
 msgstr "相對"
 
-#. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
+#. i18n: ectx: property (text), widget (QLabel, labelDither)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
+#: plugins/tools/basictools/kis_tool_gradient.cc:267
+#, fuzzy, kde-format
+#| msgid "&Dither:"
+msgid "Dither:"
+msgstr "抖色(&D)："
+
+#. i18n: ectx: property (text), widget (QLabel, labelDitherSteps)
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:111
+#: plugins/tools/basictools/kis_tool_gradient.cc:278
+#, fuzzy, kde-format
+#| msgid "&Dither:"
+msgid "Dither steps:"
+msgstr "抖色(&D)："
+
+#. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:125
 #: plugins/tools/basictools/kis_tool_gradient.cc:285
 #, kde-format
 msgid "Anti-alias threshold:"
@@ -54970,7 +55058,7 @@ msgstr "反鋸齒閾值："
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, labelReverse)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:115
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:139
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2092
 #, kde-format
 msgid "Reverse:"
@@ -54978,7 +55066,7 @@ msgstr "反轉："
 
 #. i18n: ectx: property (title), widget (QGroupBox, moveGroup)
 #. i18n: ectx: attribute (title), widget (QWidget, tabPosition)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:159
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:169
 #: plugins/tools/basictools/wdgmovetool.ui:200
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1056
 #, kde-format
@@ -54986,33 +55074,33 @@ msgid "Position"
 msgstr "位置"
 
 #. i18n: ectx: property (text), widget (QLabel, labelStartPosition)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:191
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:201
 #, kde-format
 msgctxt "Start position of the gradient"
 msgid "Start:"
 msgstr "開始："
 
 #. i18n: ectx: property (text), widget (QLabel, labelEndPosition)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:263
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:273
 #, kde-format
 msgctxt "End position of the gradient"
 msgid "End:"
 msgstr "結束："
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonEndPositionCartesianCoordinates)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:285
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:295
 #, kde-format
 msgid "Cartesian Coordinates"
 msgstr "笛卡兒 (XY) 座標"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonEndPositionPolarCoordinates)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:298
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:308
 #, kde-format
 msgid "Polar Coordinates"
 msgstr "極座標"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:443
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:453
 #: plugins/tools/basictools/kis_tool_measure.cc:47
 #, kde-format
 msgid "Distance:"
@@ -65987,12 +66075,14 @@ msgstr "Python 檔案 (*.py)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:27
 #: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
+#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:20
 #, kde-format
 msgid "Select Shapes Tool"
 msgstr "形狀選取工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:28
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:97
+#: plugins/tools/svgtexttool/SvgTextToolFactory.cpp:22
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Text Tool"
@@ -66001,6 +66091,7 @@ msgstr "文字工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:30
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:21
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Calligraphy"
@@ -66009,44 +66100,51 @@ msgstr "西方書法"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:31
 #: plugins/tools/basictools/kis_tool_brush.h:146
+#: plugins/tools/basictools/kis_tool_brush.h:147
 #, kde-format
 msgid "Freehand Brush Tool"
 msgstr "手繪筆刷工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:32
 #: plugins/tools/basictools/kis_tool_line.h:116
+#: plugins/tools/basictools/kis_tool_line.h:117
 #, kde-format
 msgid "Line Tool"
 msgstr "直線工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:33
 #: plugins/tools/basictools/kis_tool_rectangle.h:50
+#: plugins/tools/basictools/kis_tool_rectangle.h:51
 #, kde-format
 msgid "Rectangle Tool"
 msgstr "矩形工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
 #: plugins/tools/basictools/kis_tool_ellipse.h:94
+#: plugins/tools/basictools/kis_tool_ellipse.h:95
 #, kde-format
 msgid "Ellipse Tool"
 msgstr "橢圓工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
-#, fuzzy
+#: plugins/tools/tool_polygon/kis_tool_polygon.h:45
+#, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Polygon Tool"
 msgid "Polygon Tool"
 msgstr "多邊形工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
-#, fuzzy
+#: plugins/tools/tool_polyline/kis_tool_polyline.h:45
+#, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Polyline Tool"
 msgid "Polyline Tool"
 msgstr "折線工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
-#, fuzzy
+#: plugins/tools/basictools/kis_tool_path.h:85
+#, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Bezier Curve Tool"
 msgid "Bezier Curve Tool"
@@ -66054,24 +66152,28 @@ msgstr "貝茲曲線工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:38
 #: plugins/tools/basictools/kis_tool_pencil.h:76
+#: plugins/tools/basictools/kis_tool_pencil.h:77
 #, kde-format
 msgid "Freehand Path Tool"
 msgstr "手繪路徑工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:39
 #: plugins/tools/tool_dyna/kis_tool_dyna.h:139
+#: plugins/tools/tool_dyna/kis_tool_dyna.h:140
 #, kde-format
 msgid "Dynamic Brush Tool"
 msgstr "力學筆刷工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:40
 #: plugins/tools/basictools/kis_tool_multihand.h:99
+#: plugins/tools/basictools/kis_tool_multihand.h:100
 #, kde-format
 msgid "Multibrush Tool"
 msgstr "多重筆刷工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
-#, fuzzy
+#: plugins/tools/tool_transform2/kis_tool_transform.h:371
+#, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Transform Tool"
 msgid "Transform Tool"
@@ -66079,18 +66181,21 @@ msgstr "變形工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:42
 #: plugins/tools/basictools/kis_tool_move.h:183
+#: plugins/tools/basictools/kis_tool_move.h:184
 #, kde-format
 msgid "Move Tool"
 msgstr "移動工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:43
 #: plugins/tools/tool_crop/kis_tool_crop.h:221
+#: plugins/tools/tool_crop/kis_tool_crop.h:222
 #, kde-format
 msgid "Crop Tool"
 msgstr "裁切工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:44
 #: plugins/tools/basictools/kis_tool_gradient.h:112
+#: plugins/tools/basictools/kis_tool_gradient.h:113
 #, kde-format
 msgid "Gradient Tool"
 msgstr "漸變工具"
@@ -66104,18 +66209,21 @@ msgstr "著色遮罩工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:47
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
+#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:80
 #, kde-format
 msgid "Smart Patch Tool"
 msgstr "智慧補丁工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:48
 #: plugins/tools/basictools/kis_tool_fill.h:242
+#: plugins/tools/basictools/kis_tool_fill.h:243
 #, kde-format
 msgid "Fill Tool"
 msgstr "填充工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:49
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:24
 #, kde-format
 msgid "Enclose and Fill Tool"
 msgstr "閉合區域填充工具"
@@ -66129,61 +66237,63 @@ msgstr "測量工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:52
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:97
 #, kde-format
 msgid "Reference Images Tool"
 msgstr "參考圖工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:53
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
+#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:51
 #, kde-format
 msgid "Rectangular Selection Tool"
 msgstr "矩形選取區域工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:54
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:50
 #, kde-format
 msgid "Elliptical Selection Tool"
 msgstr "橢圓選取區域工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:55
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
+#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:49
 #, kde-format
 msgid "Polygonal Selection Tool"
 msgstr "多邊形選取區域工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:57
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:98
 #, kde-format
 msgid "Contiguous Selection Tool"
 msgstr "相連選取區域工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:58
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:59
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:60
 #, kde-format
 msgid "Similar Color Selection Tool"
 msgstr "相似色彩選取區域工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
 #: plugins/tools/selectiontools/kis_tool_select_path.h:88
+#: plugins/tools/selectiontools/kis_tool_select_path.h:89
 #, kde-format
 msgid "Bezier Curve Selection Tool"
 msgstr "貝茲曲線選取區域工具"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:60
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
+#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:103
 #, kde-format
 msgid "Magnetic Selection Tool"
 msgstr "磁性選取區域工具"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Zoom Tool"
-msgid "Zoom Tool"
-msgstr "縮放工具"
-
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
 #: plugins/tools/basictools/kis_tool_pan.cpp:95
+#: plugins/tools/basictools/kis_tool_pan.cpp:96
 #, kde-format
 msgid "Pan Tool"
 msgstr "平移工具"
@@ -66623,6 +66733,7 @@ msgid "Enable snapping when using erasers"
 msgstr "在使用擦除模式時啟用吸附"
 
 #: plugins/tools/basictools/kis_tool_colorsampler.h:108
+#: plugins/tools/basictools/kis_tool_colorsampler.h:109
 #, kde-format
 msgid "Color Sampler Tool"
 msgstr "色彩取樣器工具"
@@ -66965,50 +67076,6 @@ msgctxt "(qtundo-format)"
 msgid "Gradient"
 msgstr "漸變"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:267
-#, fuzzy, kde-format
-#| msgid "&Dither:"
-msgid "Dither:"
-msgstr "抖色(&D)："
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:270
-#, fuzzy, kde-format
-#| msgid "None"
-msgctxt "The gradient will not be dithered"
-msgid "None"
-msgstr "無"
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:271
-#, fuzzy, kde-format
-#| msgid "Simplex Noise"
-msgctxt "The gradient will be dithered with Blue Noise"
-msgid "Blue Noise"
-msgstr "單體雜點 (Simplex Noise)"
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:272
-#, kde-format
-msgctxt "The gradient will be dithered with Bayer Matrix 2x2"
-msgid "Bayer Matrix 2x2"
-msgstr ""
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:273
-#, kde-format
-msgctxt "The gradient will be dithered with Bayer Matrix 4x4"
-msgid "Bayer Matrix 4x4"
-msgstr ""
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:274
-#, kde-format
-msgctxt "The gradient will be dithered with Bayer Matrix 8x8"
-msgid "Bayer Matrix 8x8"
-msgstr ""
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:278
-#, fuzzy, kde-format
-#| msgid "&Dither:"
-msgid "Dither steps:"
-msgstr "抖色(&D)："
-
 #: plugins/tools/basictools/kis_tool_gradient.cc:293
 #, kde-format
 msgctxt "the gradient will be drawn with the color order reversed"
@@ -67069,6 +67136,7 @@ msgstr ""
 "%3°"
 
 #: plugins/tools/basictools/kis_tool_measure.h:102
+#: plugins/tools/basictools/kis_tool_measure.h:103
 #, kde-format
 msgid "Measure Tool"
 msgstr "測量工具"
@@ -69868,6 +69936,7 @@ msgid ""
 msgstr "此工具只適用於向量圖層。要移動顏料圖層，請使用移動工具。"
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
+#: plugins/tools/tool_knife/KisToolKnife.h:72
 #, fuzzy, kde-format
 #| msgid "Colorize Mask Editing Tool"
 msgid "Comic Panel Editing Tool"
@@ -70062,6 +70131,7 @@ msgid "Colorize Mask Key Stroke"
 msgstr "著色遮罩關鍵筆畫"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.h:84
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.h:85
 #, kde-format
 msgid "Colorize Mask Editing Tool"
 msgstr "著色遮罩編輯工具"

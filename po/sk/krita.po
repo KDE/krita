@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-17 01:03+0000\n"
+"POT-Creation-Date: 2026-11-18 01:08+0000\n"
 "PO-Revision-Date: 2026-09-14 20:10+0200\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -20783,6 +20783,7 @@ msgid "Press %1 to break path at selected segments."
 msgstr "Stlačte %1 na prerušenie cesty vo vybraných segmentoch."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
+#: libs/flake/tools/KoPathToolFactory.cpp:19
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:29
 #, kde-format
 msgid "Edit Shapes Tool"
@@ -20793,6 +20794,12 @@ msgstr "Nástroj úpravy tvarov"
 #, kde-format
 msgid "Zoom"
 msgstr "Priblížiť/oddialiť."
+
+#: libs/flake/tools/KoZoomToolFactory.cpp:18
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
+#, kde-format
+msgid "Zoom Tool"
+msgstr "Nástroj priblíženia"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:38
 #, fuzzy, kde-format
@@ -22021,7 +22028,7 @@ msgstr "Spracúvam"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:28
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:34
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1487
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1547
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -22797,8 +22804,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Radiance RGBE obrázok"
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2247
-#: libs/ui/KisMainWindow.cpp:2328
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2307
+#: libs/ui/KisMainWindow.cpp:2388
 #, kde-format
 msgid "Import frames"
 msgstr "Importovať snímky"
@@ -24150,11 +24157,11 @@ msgstr "Lokálne zdroje"
 #: libs/ui/KisApplication.cpp:1323 libs/ui/KisDocument.cpp:1060
 #: libs/ui/KisDocument.cpp:1075 libs/ui/KisDocument.cpp:2042
 #: libs/ui/KisDocument.cpp:2085 libs/ui/KisDocument.cpp:2096
-#: libs/ui/KisMainWindow.cpp:1049 libs/ui/KisMainWindow.cpp:1119
-#: libs/ui/KisMainWindow.cpp:1263 libs/ui/KisMainWindow.cpp:1360
-#: libs/ui/KisMainWindow.cpp:2107 libs/ui/KisMainWindow.cpp:2116
-#: libs/ui/KisMainWindow.cpp:2255 libs/ui/KisMainWindow.cpp:2316
-#: libs/ui/KisMainWindow.cpp:2335 libs/ui/KisMainWindow.cpp:2978
+#: libs/ui/KisMainWindow.cpp:1109 libs/ui/KisMainWindow.cpp:1179
+#: libs/ui/KisMainWindow.cpp:1323 libs/ui/KisMainWindow.cpp:1420
+#: libs/ui/KisMainWindow.cpp:2167 libs/ui/KisMainWindow.cpp:2176
+#: libs/ui/KisMainWindow.cpp:2315 libs/ui/KisMainWindow.cpp:2376
+#: libs/ui/KisMainWindow.cpp:2395 libs/ui/KisMainWindow.cpp:3038
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24701,7 +24708,7 @@ msgid "Delete resource"
 msgstr "Vymazať zdroj"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:338
-#: libs/ui/KisMainWindow.cpp:2771
+#: libs/ui/KisMainWindow.cpp:2831
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:369
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -25209,7 +25216,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Zlyhalo vykresľovanie snímok animácie! Výstupné súbory sú nekompletné."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:65
-#: libs/ui/KisMainWindow.cpp:2358
+#: libs/ui/KisMainWindow.cpp:2418
 #, kde-format
 msgid "Render Animation"
 msgstr "Vykresliť animáciu"
@@ -25732,9 +25739,7 @@ msgid "Auto-generate 8bit Palette:"
 msgstr "Automaticky generovaná 8bitová paleta"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
-#. i18n: ectx: property (text), widget (QLabel, labelDither)
 #: libs/ui/animation/video_export_options_dialog.ui:309
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:129
 #, kde-format
 msgid "Dithering:"
 msgstr "Rozptyľovanie:"
@@ -27154,7 +27159,7 @@ msgid "Numerical"
 msgstr "Číselný"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:141
-#: libs/ui/KisMainWindow.cpp:1228
+#: libs/ui/KisMainWindow.cpp:1288
 #, kde-format
 msgid "Import Images"
 msgstr "Importovať obrázky"
@@ -27272,7 +27277,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Zadať nový názov štýlu"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2783
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2843
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -32059,7 +32064,7 @@ msgstr "Aktuálna predvoľba štetca"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1094
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1154
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -33500,8 +33505,8 @@ msgstr "Posun"
 #: libs/ui/imagesize/wdg_canvassize.ui:199
 #: plugins/dockers/griddocker/grid_config_widget.ui:673
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:44
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:241
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:394
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:251
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:404
 #: plugins/generators/simplexnoise/wdgsimplexnoiseoptions.ui:129
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:35
 #, kde-format
@@ -33517,8 +33522,8 @@ msgstr "X:"
 #: libs/ui/imagesize/wdg_canvassize.ui:563
 #: plugins/dockers/griddocker/grid_config_widget.ui:704
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:74
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:251
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:404
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:261
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:414
 #: plugins/generators/simplexnoise/wdgsimplexnoiseoptions.ui:149
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:99
 #, kde-format
@@ -34618,6 +34623,7 @@ msgstr "Nástroj štetca voľnou rukou"
 #: libs/ui/input/KisTouchGestureAction.cpp:33
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:56
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
+#: plugins/tools/selectiontools/kis_tool_select_outline.h:53
 #, kde-format
 msgid "Freehand Selection Tool"
 msgstr "Nástroj výberu voľnou rukou"
@@ -36641,32 +36647,32 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Pracovná plocha"
 
-#: libs/ui/KisMainWindow.cpp:595
+#: libs/ui/KisMainWindow.cpp:653
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Zobraziť panel nástrojov %1"
 
-#: libs/ui/KisMainWindow.cpp:597
+#: libs/ui/KisMainWindow.cpp:655
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Skryť panel nástrojov %1"
 
-#: libs/ui/KisMainWindow.cpp:1091
+#: libs/ui/KisMainWindow.cpp:1151
 #, kde-format
 msgid "Save as %1"
 msgstr "Uložiť ako %1"
 
-#: libs/ui/KisMainWindow.cpp:1119
+#: libs/ui/KisMainWindow.cpp:1179
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Súbor %1 neexistuje."
 
-#: libs/ui/KisMainWindow.cpp:1228
+#: libs/ui/KisMainWindow.cpp:1288
 #, kde-format
 msgid "Open Images"
 msgstr "Otvoriť obrázky"
 
-#: libs/ui/KisMainWindow.cpp:1361
+#: libs/ui/KisMainWindow.cpp:1421
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -36679,29 +36685,29 @@ msgstr ""
 "\n"
 "Prosím, vyberte umiestnenie, kde nebude prepísaný pôvodný súbor!"
 
-#: libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1482
 #, kde-format
 msgid "Exporting"
 msgstr "Exportovanie"
 
-#: libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1482
 #, kde-format
 msgid "Saving As"
 msgstr "Uloženie ako"
 
-#: libs/ui/KisMainWindow.cpp:2076
+#: libs/ui/KisMainWindow.cpp:2136
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Vrstvy/Masky"
 
-#: libs/ui/KisMainWindow.cpp:2102
+#: libs/ui/KisMainWindow.cpp:2162
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:365
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Nemáte povolené žiadne balíky zdrojov."
 
-#: libs/ui/KisMainWindow.cpp:2106
+#: libs/ui/KisMainWindow.cpp:2166
 #, kde-format
 msgid ""
 "\n"
@@ -36712,7 +36718,7 @@ msgstr ""
 "Nie sú k dispozícii žiadne predvoľby štetcov. Pred pokračovaním aktivujte "
 "balík, ktorý obsahuje predvoľby.\n"
 
-#: libs/ui/KisMainWindow.cpp:2116
+#: libs/ui/KisMainWindow.cpp:2176
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:377
 #, kde-format
@@ -36723,7 +36729,7 @@ msgstr ""
 "\n"
 "Len vaše lokálne zdroje sú k dispozícii."
 
-#: libs/ui/KisMainWindow.cpp:2255 libs/ui/KisMainWindow.cpp:2335
+#: libs/ui/KisMainWindow.cpp:2315 libs/ui/KisMainWindow.cpp:2395
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36732,40 +36738,40 @@ msgstr ""
 "Nepodarilo sa dokončiť import animácie:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2316
+#: libs/ui/KisMainWindow.cpp:2376
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Nepodarilo sa vytvoriť nový dokument. Import animácie sa prerušil."
 
-#: libs/ui/KisMainWindow.cpp:2762
+#: libs/ui/KisMainWindow.cpp:2822
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Import pracovnej plochy..."
 
-#: libs/ui/KisMainWindow.cpp:2777
+#: libs/ui/KisMainWindow.cpp:2837
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nová pracovná plocha..."
 
-#: libs/ui/KisMainWindow.cpp:2782
+#: libs/ui/KisMainWindow.cpp:2842
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nová pracovná plocha"
 
-#: libs/ui/KisMainWindow.cpp:2826
+#: libs/ui/KisMainWindow.cpp:2886
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2829
+#: libs/ui/KisMainWindow.cpp:2889
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:3001
+#: libs/ui/KisMainWindow.cpp:3061
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -36774,19 +36780,19 @@ msgstr ""
 "Zásuvný modul správy farieb Krita LittleCMS nie je nainštalovaný. Krita sa "
 "ukončí."
 
-#: libs/ui/KisMainWindow.cpp:3017
+#: libs/ui/KisMainWindow.cpp:3077
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Chyba inštalácie"
 
-#: libs/ui/KisMainWindow.cpp:3130
+#: libs/ui/KisMainWindow.cpp:3190
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Témy"
 
-#: libs/ui/KisMainWindow.cpp:3216
+#: libs/ui/KisMainWindow.cpp:3276
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Rozširujúca medzera"
@@ -37139,37 +37145,37 @@ msgstr "Chránené proti zápisu"
 msgid "Recovered"
 msgstr "Obnovené"
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1367
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Mäkké overenie nefunguje s reálnymi číslami."
 
-#: libs/ui/KisView.cpp:1365
+#: libs/ui/KisView.cpp:1372
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Mäkké overenie je zapnuté"
 
-#: libs/ui/KisView.cpp:1367
+#: libs/ui/KisView.cpp:1374
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Mäkké overenie je vypnuté"
 
-#: libs/ui/KisView.cpp:1379
+#: libs/ui/KisView.cpp:1386
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Upozornenia škály nefungujú s reálnymi číslami."
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1392
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Upozornenia škály zapnuté."
 
-#: libs/ui/KisView.cpp:1387
+#: libs/ui/KisView.cpp:1394
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Mäkké overenie je stále vypnuté."
 
-#: libs/ui/KisView.cpp:1390
+#: libs/ui/KisView.cpp:1397
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Upozornenia škály vypnuté."
@@ -38486,28 +38492,35 @@ msgctxt "(qtundo-format)"
 msgid "Move Selection"
 msgstr "Presunúť výber"
 
-#: libs/ui/toolbox/KoToolBox.cpp:362 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:371 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Predvolené"
 
-#: libs/ui/toolbox/KoToolBox.cpp:369
+#: libs/ui/toolbox/KoToolBox.cpp:378
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:26
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:31
 #, kde-format
 msgid "Toolbox"
 msgstr "Panel nástrojov"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:183
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:190
+#, fuzzy, kde-format
+#| msgctxt "Set the gradient chooser to show custom size items"
+#| msgid "Custom size items"
+msgid "Customize Disabled Tools"
+msgstr "Vlastná veľkosť položiek"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, kde-format
 msgid "Compact"
 msgstr "Kompaktný"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:188
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:199
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:83
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:190
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
@@ -38516,53 +38529,72 @@ msgstr "Kompaktný"
 msgid "Icon Size"
 msgstr "Veľkosť ikon"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:191
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:202
 #, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Rozloženie"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:194
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:205
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
 msgstr "&Automaticky"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:201
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:212
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
 msgstr "Zľava doprava"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:208
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:219
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
 msgstr "Sprava doľava"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:227
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:238
 #, kde-format
 msgctxt "Toolbox orientation"
 msgid "Orientation"
 msgstr "Orientácia"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:230
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:241
 #, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Automatic"
 msgstr "&Automaticky"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:237
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:248
 #, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Horizontal"
 msgstr "&Horizontálny"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:244
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:255
 #, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Vertical"
 msgstr "Vertikálna"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:344
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Customize Toolbox"
+msgstr "Vlastné farby"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:345
+#, fuzzy, kde-format
+#| msgid "Enabled: false"
+msgid "Enabled tools"
+msgstr "Povolené: nie"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:346
+#, fuzzy, kde-format
+#| msgctxt "touch painting"
+#| msgid "Disabled"
+msgid "Disabled tools"
+msgstr "Zakázané"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format
@@ -42565,6 +42597,7 @@ msgid "Minor Subdivisions: "
 msgstr "Menšie ďalšie členenia: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.h:190
+#: plugins/assistants/Assistants/kis_assistant_tool.h:191
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, kde-format
 msgid "Assistant Tool"
@@ -52349,7 +52382,7 @@ msgstr "Polomer:"
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/filters/blur/wdg_motion_blur.ui:23
 #: plugins/filters/blur/wdgblur.ui:62
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:436
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:446
 #: plugins/paintops/hatching/wdghatchingoptions.ui:53
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:160
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:220
@@ -53097,7 +53130,7 @@ msgid "Gradient Map"
 msgstr "Mapa prechodov"
 
 #: plugins/filters/gradientmap/KisGradientMapFilterConfiguration.h:69
-#: plugins/generators/gradient/KisGradientGeneratorConfiguration.h:173
+#: plugins/generators/gradient/KisGradientGeneratorConfiguration.h:178
 #, kde-format
 msgctxt "Default gradient name for the gradient generator"
 msgid "Unnamed"
@@ -53105,7 +53138,7 @@ msgstr "Nepomenované"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGradientColors)
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:36
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:504
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:514
 #, kde-format
 msgid "Gradient Colors"
 msgstr "Farby prechodu"
@@ -54592,49 +54625,98 @@ msgid "Alternating"
 msgstr "Striedajúce"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:44
+#: plugins/tools/basictools/kis_tool_gradient.cc:270
+#, kde-format
+msgctxt "The gradient will not be dithered"
+msgid "None"
+msgstr "Žiadne"
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:45
+#: plugins/tools/basictools/kis_tool_gradient.cc:271
+#, kde-format
+msgctxt "The gradient will be dithered with Blue Noise"
+msgid "Blue Noise"
+msgstr "Modrý šum"
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:46
+#: plugins/tools/basictools/kis_tool_gradient.cc:272
+#, kde-format
+msgctxt "The gradient will be dithered with Bayer Matrix 2x2"
+msgid "Bayer Matrix 2x2"
+msgstr "Bayerova matica 2x2"
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:47
+#: plugins/tools/basictools/kis_tool_gradient.cc:273
+#, kde-format
+msgctxt "The gradient will be dithered with Bayer Matrix 4x4"
+msgid "Bayer Matrix 4x4"
+msgstr "Bayerova matica 4x4"
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:48
+#: plugins/tools/basictools/kis_tool_gradient.cc:274
+#, kde-format
+msgctxt "The gradient will be dithered with Bayer Matrix 8x8"
+msgid "Bayer Matrix 8x8"
+msgstr "Bayerova matica 8x8"
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:51
 #, kde-format
 msgctxt "The position will be set in pixels"
 msgid "Pixels"
 msgstr "Pixely"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:45
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:52
 #, kde-format
 msgctxt "The position will be a percentage of the width"
 msgid "Percent of the Width"
 msgstr "Percento šírky"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:46
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:53
 #, kde-format
 msgctxt "The position will be a percentage of the height"
 msgid "Percent of the Height"
 msgstr "Percento výšky"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:47
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:54
 #, kde-format
 msgctxt "The position will be a percentage of the longest image side"
 msgid "Percent of the Longest Side"
 msgstr "Percento najdlhšej strany"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:48
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:55
 #, kde-format
 msgctxt "The position will be a percentage of the shortest image side"
 msgid "Percent of the Shortest Side"
 msgstr "Percento najkratšej strany"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:51
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:58
 #, kde-format
 msgctxt "The position will be relative to the top-left corner of the image"
 msgid "Absolute"
 msgstr "Absolútne"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:52
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:59
 #, kde-format
 msgctxt "The position will be relative to the start point"
 msgid "Relative"
 msgstr "Relatívne"
 
-#. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
+#. i18n: ectx: property (text), widget (QLabel, labelDither)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
+#: plugins/tools/basictools/kis_tool_gradient.cc:267
+#, kde-format
+msgid "Dither:"
+msgstr "Rozptyl:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelDitherSteps)
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:111
+#: plugins/tools/basictools/kis_tool_gradient.cc:278
+#, kde-format
+msgid "Dither steps:"
+msgstr "Kroky rozptylu:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:125
 #: plugins/tools/basictools/kis_tool_gradient.cc:285
 #, kde-format
 msgid "Anti-alias threshold:"
@@ -54642,7 +54724,7 @@ msgstr "Prah vyhladzovania:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, labelReverse)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:115
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:139
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2092
 #, kde-format
 msgid "Reverse:"
@@ -54650,7 +54732,7 @@ msgstr "Obrátiť:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, moveGroup)
 #. i18n: ectx: attribute (title), widget (QWidget, tabPosition)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:159
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:169
 #: plugins/tools/basictools/wdgmovetool.ui:200
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1056
 #, kde-format
@@ -54658,33 +54740,33 @@ msgid "Position"
 msgstr "Pozícia"
 
 #. i18n: ectx: property (text), widget (QLabel, labelStartPosition)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:191
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:201
 #, kde-format
 msgctxt "Start position of the gradient"
 msgid "Start:"
 msgstr "Začiatok:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelEndPosition)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:263
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:273
 #, kde-format
 msgctxt "End position of the gradient"
 msgid "End:"
 msgstr "Koniec:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonEndPositionCartesianCoordinates)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:285
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:295
 #, kde-format
 msgid "Cartesian Coordinates"
 msgstr "Kartézske súradnice"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonEndPositionPolarCoordinates)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:298
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:308
 #, kde-format
 msgid "Polar Coordinates"
 msgstr "Polárne súradnice"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:443
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:453
 #: plugins/tools/basictools/kis_tool_measure.cc:47
 #, kde-format
 msgid "Distance:"
@@ -65860,94 +65942,115 @@ msgstr "Súbory Python (*.py)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:27
 #: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
+#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:20
 #, kde-format
 msgid "Select Shapes Tool"
 msgstr "Nástroj výberu tvarov"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:28
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:97
+#: plugins/tools/svgtexttool/SvgTextToolFactory.cpp:22
 #, kde-format
 msgid "Text Tool"
 msgstr "Textový nástroj"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:30
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:21
 #, kde-format
 msgid "Calligraphy"
 msgstr "Kaligrafia"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:31
 #: plugins/tools/basictools/kis_tool_brush.h:146
+#: plugins/tools/basictools/kis_tool_brush.h:147
 #, kde-format
 msgid "Freehand Brush Tool"
 msgstr "Nástroj štetca voľnou rukou"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:32
 #: plugins/tools/basictools/kis_tool_line.h:116
+#: plugins/tools/basictools/kis_tool_line.h:117
 #, kde-format
 msgid "Line Tool"
 msgstr "Nástroj čiar"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:33
 #: plugins/tools/basictools/kis_tool_rectangle.h:50
+#: plugins/tools/basictools/kis_tool_rectangle.h:51
 #, kde-format
 msgid "Rectangle Tool"
 msgstr "Nástroj obdĺžnik"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
 #: plugins/tools/basictools/kis_tool_ellipse.h:94
+#: plugins/tools/basictools/kis_tool_ellipse.h:95
 #, kde-format
 msgid "Ellipse Tool"
 msgstr "Nástroj elipsa"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
+#: plugins/tools/tool_polygon/kis_tool_polygon.h:45
+#, kde-format
 msgid "Polygon Tool"
 msgstr "Nástroj polygónu"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
+#: plugins/tools/tool_polyline/kis_tool_polyline.h:45
+#, kde-format
 msgid "Polyline Tool"
 msgstr "Lomená čiara"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
+#: plugins/tools/basictools/kis_tool_path.h:85
+#, kde-format
 msgid "Bezier Curve Tool"
 msgstr "Nástroj Bézierovej krivky"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:38
 #: plugins/tools/basictools/kis_tool_pencil.h:76
+#: plugins/tools/basictools/kis_tool_pencil.h:77
 #, kde-format
 msgid "Freehand Path Tool"
 msgstr "Nástroj cesty voľnou rukou"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:39
 #: plugins/tools/tool_dyna/kis_tool_dyna.h:139
+#: plugins/tools/tool_dyna/kis_tool_dyna.h:140
 #, kde-format
 msgid "Dynamic Brush Tool"
 msgstr "Nástroj dynamického štetca"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:40
 #: plugins/tools/basictools/kis_tool_multihand.h:99
+#: plugins/tools/basictools/kis_tool_multihand.h:100
 #, kde-format
 msgid "Multibrush Tool"
 msgstr "Viacštetcový nástroj"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
+#: plugins/tools/tool_transform2/kis_tool_transform.h:371
+#, kde-format
 msgid "Transform Tool"
 msgstr "Transformačný nástroj"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:42
 #: plugins/tools/basictools/kis_tool_move.h:183
+#: plugins/tools/basictools/kis_tool_move.h:184
 #, kde-format
 msgid "Move Tool"
 msgstr "Nástroj presunu"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:43
 #: plugins/tools/tool_crop/kis_tool_crop.h:221
+#: plugins/tools/tool_crop/kis_tool_crop.h:222
 #, kde-format
 msgid "Crop Tool"
 msgstr "Nástroj orezania"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:44
 #: plugins/tools/basictools/kis_tool_gradient.h:112
+#: plugins/tools/basictools/kis_tool_gradient.h:113
 #, kde-format
 msgid "Gradient Tool"
 msgstr "Nástroj prechodu"
@@ -65958,18 +66061,21 @@ msgstr "Nástroj zafarbenia masky"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:47
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
+#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:80
 #, kde-format
 msgid "Smart Patch Tool"
 msgstr "Nástroj inteligentnej opravy"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:48
 #: plugins/tools/basictools/kis_tool_fill.h:242
+#: plugins/tools/basictools/kis_tool_fill.h:243
 #, kde-format
 msgid "Fill Tool"
 msgstr "Nástroj vyplnenia"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:49
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:24
 #, kde-format
 msgid "Enclose and Fill Tool"
 msgstr "Nástroj uzavretia a vyplnenia"
@@ -65980,58 +66086,63 @@ msgstr "Merací nástroj"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:52
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:97
 #, kde-format
 msgid "Reference Images Tool"
 msgstr "Nástroj referenčných obrázkov"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:53
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
+#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:51
 #, kde-format
 msgid "Rectangular Selection Tool"
 msgstr "Nástroj pravouhlý výber"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:54
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:50
 #, kde-format
 msgid "Elliptical Selection Tool"
 msgstr "Nástroj eliptický výber"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:55
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
+#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:49
 #, kde-format
 msgid "Polygonal Selection Tool"
 msgstr "Nástroj výberu polygónu"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:57
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:98
 #, kde-format
 msgid "Contiguous Selection Tool"
 msgstr "Nástroj výberu súvislej oblasti"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:58
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:59
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:60
 #, kde-format
 msgid "Similar Color Selection Tool"
 msgstr "Nástroj výberu podobnej farby"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
 #: plugins/tools/selectiontools/kis_tool_select_path.h:88
+#: plugins/tools/selectiontools/kis_tool_select_path.h:89
 #, kde-format
 msgid "Bezier Curve Selection Tool"
 msgstr "Nástroj výberu Bézierovej krivky"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:60
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
+#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:103
 #, kde-format
 msgid "Magnetic Selection Tool"
 msgstr "Nástroj magnetického výberu"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
-msgid "Zoom Tool"
-msgstr "Nástroj priblíženia"
-
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
 #: plugins/tools/basictools/kis_tool_pan.cpp:95
+#: plugins/tools/basictools/kis_tool_pan.cpp:96
 #, kde-format
 msgid "Pan Tool"
 msgstr "Nástroj posunu"
@@ -66384,6 +66495,7 @@ msgid "Enable snapping when using erasers"
 msgstr "Povoliť prichytenie pri používaní gúm"
 
 #: plugins/tools/basictools/kis_tool_colorsampler.h:108
+#: plugins/tools/basictools/kis_tool_colorsampler.h:109
 #, kde-format
 msgid "Color Sampler Tool"
 msgstr "Nástroj vzorkovača farieb"
@@ -66732,46 +66844,6 @@ msgctxt "(qtundo-format)"
 msgid "Gradient"
 msgstr "Prechod"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:267
-#, kde-format
-msgid "Dither:"
-msgstr "Rozptyl:"
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:270
-#, kde-format
-msgctxt "The gradient will not be dithered"
-msgid "None"
-msgstr "Žiadne"
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:271
-#, kde-format
-msgctxt "The gradient will be dithered with Blue Noise"
-msgid "Blue Noise"
-msgstr "Modrý šum"
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:272
-#, kde-format
-msgctxt "The gradient will be dithered with Bayer Matrix 2x2"
-msgid "Bayer Matrix 2x2"
-msgstr "Bayerova matica 2x2"
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:273
-#, kde-format
-msgctxt "The gradient will be dithered with Bayer Matrix 4x4"
-msgid "Bayer Matrix 4x4"
-msgstr "Bayerova matica 4x4"
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:274
-#, kde-format
-msgctxt "The gradient will be dithered with Bayer Matrix 8x8"
-msgid "Bayer Matrix 8x8"
-msgstr "Bayerova matica 8x8"
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:278
-#, kde-format
-msgid "Dither steps:"
-msgstr "Kroky rozptylu:"
-
 #: plugins/tools/basictools/kis_tool_gradient.cc:293
 #, kde-format
 msgctxt "the gradient will be drawn with the color order reversed"
@@ -66834,6 +66906,7 @@ msgstr ""
 "%3°"
 
 #: plugins/tools/basictools/kis_tool_measure.h:102
+#: plugins/tools/basictools/kis_tool_measure.h:103
 #, kde-format
 msgid "Measure Tool"
 msgstr "Merací nástroj"
@@ -69571,6 +69644,7 @@ msgstr ""
 "najskôr vytvoriť vektorovú vrstvu a počiatočný tvar."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
+#: plugins/tools/tool_knife/KisToolKnife.h:72
 #, kde-format
 msgid "Comic Panel Editing Tool"
 msgstr "Nástroj úpravy panela komiksu"
@@ -69743,6 +69817,7 @@ msgid "Colorize Mask Key Stroke"
 msgstr "Zafarbiť kľúčový ťah masky"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.h:84
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.h:85
 #, kde-format
 msgid "Colorize Mask Editing Tool"
 msgstr "Nástroj úpravy zafarbenia masky"

@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-17 01:03+0000\n"
+"POT-Creation-Date: 2026-11-18 01:08+0000\n"
 "PO-Revision-Date: 2026-10-02 21:40+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -20833,6 +20833,7 @@ msgid "Press %1 to break path at selected segments."
 msgstr "Tryck på %1 för att dela upp kontur vid markerade segment."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
+#: libs/flake/tools/KoPathToolFactory.cpp:19
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:29
 #, kde-format
 msgid "Edit Shapes Tool"
@@ -20843,6 +20844,12 @@ msgstr "Formredigeringsverktyg"
 #, kde-format
 msgid "Zoom"
 msgstr "Zooma"
+
+#: libs/flake/tools/KoZoomToolFactory.cpp:18
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
+#, kde-format
+msgid "Zoom Tool"
+msgstr "Zoomverktyg"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:38
 #, fuzzy, kde-format
@@ -22068,7 +22075,7 @@ msgstr "Behandlar"
 #: libs/image/kis_psd_layer_style.cpp:106
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:28
 #: libs/ui/dialogs/KisDlgCreateNewDocument.cpp:34
-#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1487
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1547
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -22848,8 +22855,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Radiance RGBE-bild"
 
-#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2247
-#: libs/ui/KisMainWindow.cpp:2328
+#: libs/libkis/Document.cpp:986 libs/ui/KisMainWindow.cpp:2307
+#: libs/ui/KisMainWindow.cpp:2388
 #, kde-format
 msgid "Import frames"
 msgstr "Importera bildrutor"
@@ -24202,11 +24209,11 @@ msgstr "Lokala resurser"
 #: libs/ui/KisApplication.cpp:1323 libs/ui/KisDocument.cpp:1060
 #: libs/ui/KisDocument.cpp:1075 libs/ui/KisDocument.cpp:2042
 #: libs/ui/KisDocument.cpp:2085 libs/ui/KisDocument.cpp:2096
-#: libs/ui/KisMainWindow.cpp:1049 libs/ui/KisMainWindow.cpp:1119
-#: libs/ui/KisMainWindow.cpp:1263 libs/ui/KisMainWindow.cpp:1360
-#: libs/ui/KisMainWindow.cpp:2107 libs/ui/KisMainWindow.cpp:2116
-#: libs/ui/KisMainWindow.cpp:2255 libs/ui/KisMainWindow.cpp:2316
-#: libs/ui/KisMainWindow.cpp:2335 libs/ui/KisMainWindow.cpp:2978
+#: libs/ui/KisMainWindow.cpp:1109 libs/ui/KisMainWindow.cpp:1179
+#: libs/ui/KisMainWindow.cpp:1323 libs/ui/KisMainWindow.cpp:1420
+#: libs/ui/KisMainWindow.cpp:2167 libs/ui/KisMainWindow.cpp:2176
+#: libs/ui/KisMainWindow.cpp:2315 libs/ui/KisMainWindow.cpp:2376
+#: libs/ui/KisMainWindow.cpp:2395 libs/ui/KisMainWindow.cpp:3038
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
@@ -24753,7 +24760,7 @@ msgid "Delete resource"
 msgstr "Ta bort resurs"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:338
-#: libs/ui/KisMainWindow.cpp:2771
+#: libs/ui/KisMainWindow.cpp:2831
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:369
 #: qmlmodules/components/TagFilterProxyModelQmlWrapper.cpp:347
 #, kde-format
@@ -25261,7 +25268,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Misslyckades återge animeringsbildrutor. Utdatafiler är ofullständiga."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:65
-#: libs/ui/KisMainWindow.cpp:2358
+#: libs/ui/KisMainWindow.cpp:2418
 #, kde-format
 msgid "Render Animation"
 msgstr "Återge animering"
@@ -25784,9 +25791,7 @@ msgid "Auto-generate 8bit Palette:"
 msgstr "Skapa 8-bitars palett automatiskt:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
-#. i18n: ectx: property (text), widget (QLabel, labelDither)
 #: libs/ui/animation/video_export_options_dialog.ui:309
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:129
 #, kde-format
 msgid "Dithering:"
 msgstr "Gitter:"
@@ -27203,7 +27208,7 @@ msgid "Numerical"
 msgstr "Numerisk"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:141
-#: libs/ui/KisMainWindow.cpp:1228
+#: libs/ui/KisMainWindow.cpp:1288
 #, kde-format
 msgid "Import Images"
 msgstr "Importera bilder"
@@ -27321,7 +27326,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Ange nytt stilnamn"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2783
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:319 libs/ui/KisMainWindow.cpp:2843
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -32111,7 +32116,7 @@ msgstr "Nuvarande penselförinställningar"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1094
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1154
 #: libs/ui/widgets/kis_workspace_chooser.cpp:134
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -33549,8 +33554,8 @@ msgstr "Position"
 #: libs/ui/imagesize/wdg_canvassize.ui:199
 #: plugins/dockers/griddocker/grid_config_widget.ui:673
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:44
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:241
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:394
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:251
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:404
 #: plugins/generators/simplexnoise/wdgsimplexnoiseoptions.ui:129
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:35
 #, kde-format
@@ -33566,8 +33571,8 @@ msgstr "X:"
 #: libs/ui/imagesize/wdg_canvassize.ui:563
 #: plugins/dockers/griddocker/grid_config_widget.ui:704
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:74
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:251
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:404
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:261
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:414
 #: plugins/generators/simplexnoise/wdgsimplexnoiseoptions.ui:149
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:99
 #, kde-format
@@ -34665,6 +34670,7 @@ msgstr "Aktivera frihandspenselverktyg"
 #: libs/ui/input/KisTouchGestureAction.cpp:33
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:56
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
+#: plugins/tools/selectiontools/kis_tool_select_outline.h:53
 #, kde-format
 msgid "Freehand Selection Tool"
 msgstr "Frihandsmarkeringsverktyg"
@@ -36688,32 +36694,32 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Ar&betsyta"
 
-#: libs/ui/KisMainWindow.cpp:595
+#: libs/ui/KisMainWindow.cpp:653
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Visa verktygsrad %1"
 
-#: libs/ui/KisMainWindow.cpp:597
+#: libs/ui/KisMainWindow.cpp:655
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Dölj verktygsrad %1"
 
-#: libs/ui/KisMainWindow.cpp:1091
+#: libs/ui/KisMainWindow.cpp:1151
 #, kde-format
 msgid "Save as %1"
 msgstr "Spara som %1"
 
-#: libs/ui/KisMainWindow.cpp:1119
+#: libs/ui/KisMainWindow.cpp:1179
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Filen %1 finns inte."
 
-#: libs/ui/KisMainWindow.cpp:1228
+#: libs/ui/KisMainWindow.cpp:1288
 #, kde-format
 msgid "Open Images"
 msgstr "Öppna bilder"
 
-#: libs/ui/KisMainWindow.cpp:1361
+#: libs/ui/KisMainWindow.cpp:1421
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -36726,29 +36732,29 @@ msgstr ""
 "\n"
 "Välj en plats där originalfilen inte överskrids."
 
-#: libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1482
 #, kde-format
 msgid "Exporting"
 msgstr "Exporterar"
 
-#: libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1482
 #, kde-format
 msgid "Saving As"
 msgstr "Sparar som"
 
-#: libs/ui/KisMainWindow.cpp:2076
+#: libs/ui/KisMainWindow.cpp:2136
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Lager och masker"
 
-#: libs/ui/KisMainWindow.cpp:2102
+#: libs/ui/KisMainWindow.cpp:2162
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:201
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:365
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Du har inga resurspackar aktiverade."
 
-#: libs/ui/KisMainWindow.cpp:2106
+#: libs/ui/KisMainWindow.cpp:2166
 #, kde-format
 msgid ""
 "\n"
@@ -36759,7 +36765,7 @@ msgstr ""
 "Det finns inga tillgängliga penselförinställningar. Aktivera en packe som "
 "har penselförinställningar innan du fortsätter.\n"
 
-#: libs/ui/KisMainWindow.cpp:2116
+#: libs/ui/KisMainWindow.cpp:2176
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:211
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:377
 #, kde-format
@@ -36770,7 +36776,7 @@ msgstr ""
 "\n"
 "Bara dina lokala resurser är tillgängliga."
 
-#: libs/ui/KisMainWindow.cpp:2255 libs/ui/KisMainWindow.cpp:2335
+#: libs/ui/KisMainWindow.cpp:2315 libs/ui/KisMainWindow.cpp:2395
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -36779,40 +36785,40 @@ msgstr ""
 "Kunde inte slutföra import av animering:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2316
+#: libs/ui/KisMainWindow.cpp:2376
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Misslyckades skapa nytt dokument. Import av animering avbruten."
 
-#: libs/ui/KisMainWindow.cpp:2762
+#: libs/ui/KisMainWindow.cpp:2822
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importera arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2777
+#: libs/ui/KisMainWindow.cpp:2837
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Ny arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2782
+#: libs/ui/KisMainWindow.cpp:2842
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Ny arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2826
+#: libs/ui/KisMainWindow.cpp:2886
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2829
+#: libs/ui/KisMainWindow.cpp:2889
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:3001
+#: libs/ui/KisMainWindow.cpp:3061
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -36821,19 +36827,19 @@ msgstr ""
 "Kritas insticksprogram för LittleCMS-färghantering är inte installerat. "
 "Krita avslutas nu."
 
-#: libs/ui/KisMainWindow.cpp:3017
+#: libs/ui/KisMainWindow.cpp:3077
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Installationsfel"
 
-#: libs/ui/KisMainWindow.cpp:3130
+#: libs/ui/KisMainWindow.cpp:3190
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Teman"
 
-#: libs/ui/KisMainWindow.cpp:3216
+#: libs/ui/KisMainWindow.cpp:3276
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Expanderande mellanrum"
@@ -37187,37 +37193,37 @@ msgstr "Skrivskyddad"
 msgid "Recovered"
 msgstr "Återställd"
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1367
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Bildskärmskorrektur fungerar inte med flyttal."
 
-#: libs/ui/KisView.cpp:1365
+#: libs/ui/KisView.cpp:1372
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Bildskärmskorrektur på."
 
-#: libs/ui/KisView.cpp:1367
+#: libs/ui/KisView.cpp:1374
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Bildskärmskorrektur av."
 
-#: libs/ui/KisView.cpp:1379
+#: libs/ui/KisView.cpp:1386
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Färgomfångsvarningar fungerar inte med flyttal."
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1392
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Färgomfångsvarningar på."
 
-#: libs/ui/KisView.cpp:1387
+#: libs/ui/KisView.cpp:1394
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Men bildskärmskorrektur är fortfarande av."
 
-#: libs/ui/KisView.cpp:1390
+#: libs/ui/KisView.cpp:1397
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Färgomfångsvarningar av."
@@ -38530,28 +38536,35 @@ msgctxt "(qtundo-format)"
 msgid "Move Selection"
 msgstr "Flytta markering"
 
-#: libs/ui/toolbox/KoToolBox.cpp:362 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:371 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Förval"
 
-#: libs/ui/toolbox/KoToolBox.cpp:369
+#: libs/ui/toolbox/KoToolBox.cpp:378
 #, kde-format
 msgid "%1x%2"
 msgstr "%1 x %2"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:26
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:31
 #, kde-format
 msgid "Toolbox"
 msgstr "Verktygslåda"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:183
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:190
+#, fuzzy, kde-format
+#| msgctxt "Set the gradient chooser to show custom size items"
+#| msgid "Custom size items"
+msgid "Customize Disabled Tools"
+msgstr "Egen objektstorlek"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, kde-format
 msgid "Compact"
 msgstr "Kompakt"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:188
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:199
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:83
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:190
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
@@ -38560,53 +38573,72 @@ msgstr "Kompakt"
 msgid "Icon Size"
 msgstr "Ikonstorlek"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:191
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:202
 #, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Layout"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:194
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:205
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
 msgstr "&Automatisk"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:201
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:212
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
 msgstr "&Vänster till höger"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:208
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:219
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
 msgstr "&Höger till vänster"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:227
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:238
 #, kde-format
 msgctxt "Toolbox orientation"
 msgid "Orientation"
 msgstr "Orientering"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:230
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:241
 #, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Automatic"
 msgstr "&Automatisk"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:237
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:248
 #, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Horizontal"
 msgstr "&Horisontell"
 
-#: libs/ui/toolbox/KoToolBoxDocker.cpp:244
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:255
 #, kde-format
 msgctxt "@item:inmenu Toolbox orientation"
 msgid "&Vertical"
 msgstr "&Vertikal"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:344
+#, fuzzy, kde-format
+#| msgid "Custom color"
+msgid "Customize Toolbox"
+msgstr "Egen färg"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:345
+#, fuzzy, kde-format
+#| msgid "Enabled: false"
+msgid "Enabled tools"
+msgstr "Aktiverat: falskt"
+
+#: libs/ui/toolbox/KoToolBoxDocker.cpp:346
+#, fuzzy, kde-format
+#| msgctxt "touch painting"
+#| msgid "Disabled"
+msgid "Disabled tools"
+msgstr "Inaktiverad"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format
@@ -42609,6 +42641,7 @@ msgid "Minor Subdivisions: "
 msgstr "Mindre underdelningar: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.h:190
+#: plugins/assistants/Assistants/kis_assistant_tool.h:191
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:50
 #, kde-format
 msgid "Assistant Tool"
@@ -52402,7 +52435,7 @@ msgstr "Radie:"
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/filters/blur/wdg_motion_blur.ui:23
 #: plugins/filters/blur/wdgblur.ui:62
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:436
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:446
 #: plugins/paintops/hatching/wdghatchingoptions.ui:53
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:160
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:220
@@ -53150,7 +53183,7 @@ msgid "Gradient Map"
 msgstr "Toningsavbildning"
 
 #: plugins/filters/gradientmap/KisGradientMapFilterConfiguration.h:69
-#: plugins/generators/gradient/KisGradientGeneratorConfiguration.h:173
+#: plugins/generators/gradient/KisGradientGeneratorConfiguration.h:178
 #, kde-format
 msgctxt "Default gradient name for the gradient generator"
 msgid "Unnamed"
@@ -53158,7 +53191,7 @@ msgstr "Namnlös"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGradientColors)
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:36
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:504
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:514
 #, kde-format
 msgid "Gradient Colors"
 msgstr "Toningsfärger"
@@ -54661,49 +54694,102 @@ msgid "Alternating"
 msgstr "Omväxlande"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:44
+#: plugins/tools/basictools/kis_tool_gradient.cc:270
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "The gradient will not be dithered"
+msgid "None"
+msgstr "Ingen"
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:45
+#: plugins/tools/basictools/kis_tool_gradient.cc:271
+#, fuzzy, kde-format
+#| msgid "Simplex Noise"
+msgctxt "The gradient will be dithered with Blue Noise"
+msgid "Blue Noise"
+msgstr "Simplexbrus"
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:46
+#: plugins/tools/basictools/kis_tool_gradient.cc:272
+#, kde-format
+msgctxt "The gradient will be dithered with Bayer Matrix 2x2"
+msgid "Bayer Matrix 2x2"
+msgstr ""
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:47
+#: plugins/tools/basictools/kis_tool_gradient.cc:273
+#, kde-format
+msgctxt "The gradient will be dithered with Bayer Matrix 4x4"
+msgid "Bayer Matrix 4x4"
+msgstr ""
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:48
+#: plugins/tools/basictools/kis_tool_gradient.cc:274
+#, kde-format
+msgctxt "The gradient will be dithered with Bayer Matrix 8x8"
+msgid "Bayer Matrix 8x8"
+msgstr ""
+
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:51
 #, kde-format
 msgctxt "The position will be set in pixels"
 msgid "Pixels"
 msgstr "Bildpunkter"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:45
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:52
 #, kde-format
 msgctxt "The position will be a percentage of the width"
 msgid "Percent of the Width"
 msgstr "Procent av bredden"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:46
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:53
 #, kde-format
 msgctxt "The position will be a percentage of the height"
 msgid "Percent of the Height"
 msgstr "Procent av höjden"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:47
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:54
 #, kde-format
 msgctxt "The position will be a percentage of the longest image side"
 msgid "Percent of the Longest Side"
 msgstr "Procent av längsta sidan"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:48
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:55
 #, kde-format
 msgctxt "The position will be a percentage of the shortest image side"
 msgid "Percent of the Shortest Side"
 msgstr "Procent av kortaste sidan"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:51
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:58
 #, kde-format
 msgctxt "The position will be relative to the top-left corner of the image"
 msgid "Absolute"
 msgstr "Absolut"
 
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:52
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:59
 #, kde-format
 msgctxt "The position will be relative to the start point"
 msgid "Relative"
 msgstr "Relativ"
 
-#. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
+#. i18n: ectx: property (text), widget (QLabel, labelDither)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
+#: plugins/tools/basictools/kis_tool_gradient.cc:267
+#, fuzzy, kde-format
+#| msgid "&Dither:"
+msgid "Dither:"
+msgstr "&Gitter:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelDitherSteps)
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:111
+#: plugins/tools/basictools/kis_tool_gradient.cc:278
+#, fuzzy, kde-format
+#| msgid "&Dither:"
+msgid "Dither steps:"
+msgstr "&Gitter:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:125
 #: plugins/tools/basictools/kis_tool_gradient.cc:285
 #, kde-format
 msgid "Anti-alias threshold:"
@@ -54711,7 +54797,7 @@ msgstr "Kantutjämningströskel:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, labelReverse)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:115
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:139
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2092
 #, kde-format
 msgid "Reverse:"
@@ -54719,7 +54805,7 @@ msgstr "Omvänd:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, moveGroup)
 #. i18n: ectx: attribute (title), widget (QWidget, tabPosition)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:159
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:169
 #: plugins/tools/basictools/wdgmovetool.ui:200
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1056
 #, kde-format
@@ -54727,33 +54813,33 @@ msgid "Position"
 msgstr "Position"
 
 #. i18n: ectx: property (text), widget (QLabel, labelStartPosition)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:191
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:201
 #, kde-format
 msgctxt "Start position of the gradient"
 msgid "Start:"
 msgstr "Start:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelEndPosition)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:263
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:273
 #, kde-format
 msgctxt "End position of the gradient"
 msgid "End:"
 msgstr "Slut:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonEndPositionCartesianCoordinates)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:285
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:295
 #, kde-format
 msgid "Cartesian Coordinates"
 msgstr "Kartesiska koordinater"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonEndPositionPolarCoordinates)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:298
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:308
 #, kde-format
 msgid "Polar Coordinates"
 msgstr "Polära koordinater"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:443
+#: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:453
 #: plugins/tools/basictools/kis_tool_measure.cc:47
 #, kde-format
 msgid "Distance:"
@@ -65948,94 +66034,115 @@ msgstr "Python-filer (*.py)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:27
 #: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
+#: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:20
 #, kde-format
 msgid "Select Shapes Tool"
 msgstr "Formväljarverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:28
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:97
+#: plugins/tools/svgtexttool/SvgTextToolFactory.cpp:22
 #, kde-format
 msgid "Text Tool"
 msgstr "Textverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:30
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:20
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyToolFactory.cpp:21
 #, kde-format
 msgid "Calligraphy"
 msgstr "Kalligrafi"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:31
 #: plugins/tools/basictools/kis_tool_brush.h:146
+#: plugins/tools/basictools/kis_tool_brush.h:147
 #, kde-format
 msgid "Freehand Brush Tool"
 msgstr "Frihandspenselverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:32
 #: plugins/tools/basictools/kis_tool_line.h:116
+#: plugins/tools/basictools/kis_tool_line.h:117
 #, kde-format
 msgid "Line Tool"
 msgstr "Linjeverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:33
 #: plugins/tools/basictools/kis_tool_rectangle.h:50
+#: plugins/tools/basictools/kis_tool_rectangle.h:51
 #, kde-format
 msgid "Rectangle Tool"
 msgstr "Rektangelverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:34
 #: plugins/tools/basictools/kis_tool_ellipse.h:94
+#: plugins/tools/basictools/kis_tool_ellipse.h:95
 #, kde-format
 msgid "Ellipse Tool"
 msgstr "Ellipsverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:35
+#: plugins/tools/tool_polygon/kis_tool_polygon.h:45
+#, kde-format
 msgid "Polygon Tool"
 msgstr "Polygonverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:36
+#: plugins/tools/tool_polyline/kis_tool_polyline.h:45
+#, kde-format
 msgid "Polyline Tool"
 msgstr "Flerlinjeverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:37
+#: plugins/tools/basictools/kis_tool_path.h:85
+#, kde-format
 msgid "Bezier Curve Tool"
 msgstr "Bezierkurvverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:38
 #: plugins/tools/basictools/kis_tool_pencil.h:76
+#: plugins/tools/basictools/kis_tool_pencil.h:77
 #, kde-format
 msgid "Freehand Path Tool"
 msgstr "Frihandskonturverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:39
 #: plugins/tools/tool_dyna/kis_tool_dyna.h:139
+#: plugins/tools/tool_dyna/kis_tool_dyna.h:140
 #, kde-format
 msgid "Dynamic Brush Tool"
 msgstr "Dynamiskt penselverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:40
 #: plugins/tools/basictools/kis_tool_multihand.h:99
+#: plugins/tools/basictools/kis_tool_multihand.h:100
 #, kde-format
 msgid "Multibrush Tool"
 msgstr "Multipenselverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:41
+#: plugins/tools/tool_transform2/kis_tool_transform.h:371
+#, kde-format
 msgid "Transform Tool"
 msgstr "Transformeringsverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:42
 #: plugins/tools/basictools/kis_tool_move.h:183
+#: plugins/tools/basictools/kis_tool_move.h:184
 #, kde-format
 msgid "Move Tool"
 msgstr "Flyttningsverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:43
 #: plugins/tools/tool_crop/kis_tool_crop.h:221
+#: plugins/tools/tool_crop/kis_tool_crop.h:222
 #, kde-format
 msgid "Crop Tool"
 msgstr "Beskärningsverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:44
 #: plugins/tools/basictools/kis_tool_gradient.h:112
+#: plugins/tools/basictools/kis_tool_gradient.h:113
 #, kde-format
 msgid "Gradient Tool"
 msgstr "Toningsverktyg"
@@ -66046,18 +66153,21 @@ msgstr "Verktyg för färgläggningsmask"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:47
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
+#: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:80
 #, kde-format
 msgid "Smart Patch Tool"
 msgstr "Smart fläckverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:48
 #: plugins/tools/basictools/kis_tool_fill.h:242
+#: plugins/tools/basictools/kis_tool_fill.h:243
 #, kde-format
 msgid "Fill Tool"
 msgstr "Fyllverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:49
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:24
 #, kde-format
 msgid "Enclose and Fill Tool"
 msgstr "Inneslutnings- och fyllverktyg"
@@ -66068,58 +66178,63 @@ msgstr "Mätverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:52
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:97
 #, kde-format
 msgid "Reference Images Tool"
 msgstr "Referensbildverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:53
 #: plugins/tools/selectiontools/kis_tool_select_rectangular.h:50
+#: plugins/tools/selectiontools/kis_tool_select_rectangular.h:51
 #, kde-format
 msgid "Rectangular Selection Tool"
 msgstr "Rektangelmarkeringsverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:54
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.h:49
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.h:50
 #, kde-format
 msgid "Elliptical Selection Tool"
 msgstr "Ellipsmarkeringsverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:55
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.h:48
+#: plugins/tools/selectiontools/kis_tool_select_polygonal.h:49
 #, kde-format
 msgid "Polygonal Selection Tool"
 msgstr "Polygonmarkeringsverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:57
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:98
 #, kde-format
 msgid "Contiguous Selection Tool"
 msgstr "Sammanhängande markeringsverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:58
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:59
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:60
 #, kde-format
 msgid "Similar Color Selection Tool"
 msgstr "Liknande färgmarkeringsverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
 #: plugins/tools/selectiontools/kis_tool_select_path.h:88
+#: plugins/tools/selectiontools/kis_tool_select_path.h:89
 #, kde-format
 msgid "Bezier Curve Selection Tool"
 msgstr "Bezierkurvmarkeringsverktyg"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:60
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
+#: plugins/tools/selectiontools/KisToolSelectMagnetic.h:103
 #, kde-format
 msgid "Magnetic Selection Tool"
 msgstr "Magnetiskt markeringsverktyg"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:61
-msgid "Zoom Tool"
-msgstr "Zoomverktyg"
-
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:62
 #: plugins/tools/basictools/kis_tool_pan.cpp:95
+#: plugins/tools/basictools/kis_tool_pan.cpp:96
 #, kde-format
 msgid "Pan Tool"
 msgstr "Panoreringsverktyg"
@@ -66471,6 +66586,7 @@ msgid "Enable snapping when using erasers"
 msgstr "Aktivera låsning när radergummi används"
 
 #: plugins/tools/basictools/kis_tool_colorsampler.h:108
+#: plugins/tools/basictools/kis_tool_colorsampler.h:109
 #, kde-format
 msgid "Color Sampler Tool"
 msgstr "Färghämtningsverktyg"
@@ -66819,50 +66935,6 @@ msgctxt "(qtundo-format)"
 msgid "Gradient"
 msgstr "Toning"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:267
-#, fuzzy, kde-format
-#| msgid "&Dither:"
-msgid "Dither:"
-msgstr "&Gitter:"
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:270
-#, fuzzy, kde-format
-#| msgid "None"
-msgctxt "The gradient will not be dithered"
-msgid "None"
-msgstr "Ingen"
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:271
-#, fuzzy, kde-format
-#| msgid "Simplex Noise"
-msgctxt "The gradient will be dithered with Blue Noise"
-msgid "Blue Noise"
-msgstr "Simplexbrus"
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:272
-#, kde-format
-msgctxt "The gradient will be dithered with Bayer Matrix 2x2"
-msgid "Bayer Matrix 2x2"
-msgstr ""
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:273
-#, kde-format
-msgctxt "The gradient will be dithered with Bayer Matrix 4x4"
-msgid "Bayer Matrix 4x4"
-msgstr ""
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:274
-#, kde-format
-msgctxt "The gradient will be dithered with Bayer Matrix 8x8"
-msgid "Bayer Matrix 8x8"
-msgstr ""
-
-#: plugins/tools/basictools/kis_tool_gradient.cc:278
-#, fuzzy, kde-format
-#| msgid "&Dither:"
-msgid "Dither steps:"
-msgstr "&Gitter:"
-
 #: plugins/tools/basictools/kis_tool_gradient.cc:293
 #, kde-format
 msgctxt "the gradient will be drawn with the color order reversed"
@@ -66925,6 +66997,7 @@ msgstr ""
 "%3°"
 
 #: plugins/tools/basictools/kis_tool_measure.h:102
+#: plugins/tools/basictools/kis_tool_measure.h:103
 #, kde-format
 msgid "Measure Tool"
 msgstr "Mätverktyg"
@@ -69662,6 +69735,7 @@ msgstr ""
 "ett vektorlager och en startform."
 
 #: plugins/tools/tool_knife/KisToolKnife.h:71
+#: plugins/tools/tool_knife/KisToolKnife.h:72
 #, kde-format
 msgid "Comic Panel Editing Tool"
 msgstr "Redigeringsverktyg för seriepanel"
@@ -69835,6 +69909,7 @@ msgid "Colorize Mask Key Stroke"
 msgstr "Färglägg masknyckeldrag"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.h:84
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.h:85
 #, kde-format
 msgid "Colorize Mask Editing Tool"
 msgstr "Redigeringsverktyg för färgläggningsmask"

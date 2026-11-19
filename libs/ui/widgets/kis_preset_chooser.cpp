@@ -53,7 +53,6 @@ public:
 
     KisPresetDelegate(QObject * parent = nullptr)
         : QAbstractItemDelegate(parent)
-        , m_showText(false)
         , m_viewMode(KisPresetChooser::THUMBNAIL)
         , m_useDirtyPresets(false)
         , m_iconSize(50) {}
@@ -71,10 +70,6 @@ public:
             return QSize(width, height);
         }
         return option.decorationSize;
-    }
-
-    void setShowText(bool showText) {
-        m_showText = showText;
     }
 
     void setViewMode(KisPresetChooser::ViewMode mode) {
@@ -105,7 +100,6 @@ public:
 private:
     void paintThumbnail(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void paintStrokePreview(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index, bool paint_thumbnail) const;
-    bool m_showText;
     KisPresetChooser::ViewMode m_viewMode;
     bool m_useDirtyPresets;
     int m_iconSize;
@@ -148,48 +142,14 @@ void KisPresetDelegate::paintThumbnail(QPainter *painter, const QStyleOptionView
     qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
     QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
-    if (!m_showText) {
-        QImage previewHighDpi =
-            KisResourceThumbnailCache::instance()->getImage(index,
-                                                             paintRect.size() * devicePixelRatioF,
-                                                             Qt::IgnoreAspectRatio,
-                                                             Qt::SmoothTransformation);
-        previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
-        painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
-    }
-    else {
-        QSize pixSize(paintRect.height(), paintRect.height());
-        QImage previewHighDpi = KisResourceThumbnailCache::instance()->getImage(index,
-                                                                                 pixSize * devicePixelRatioF,
-                                                                                 Qt::KeepAspectRatio,
-                                                                                 Qt::SmoothTransformation);
-        previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
-        painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
 
-        // Put an asterisk after the preset if it is dirty. This will help in case the pixmap icon is too small
-
-        QString dirtyPresetIndicator = QString("");
-        if (m_useDirtyPresets && dirty) {
-            dirtyPresetIndicator = QString("*");
-        }
-
-//        qreal brushSize = metaData["paintopSize"].toReal();
-//        qDebug() << "brushsize" << brushSize;
-//        QString brushSizeText;
-//        // Disable displayed decimal precision beyond a certain brush size
-//        if (brushSize < 100) {
-//            brushSizeText = QString::number(brushSize, 'g', 3);
-//        }
-//        else {
-//            brushSizeText = QString::number(brushSize, 'f', 0);
-//        }
-
-//        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText); // brush size
-
-        QString presetDisplayName = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().replace("_", " "); // don't need underscores that might be part of the file name
-        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, presetDisplayName.append(dirtyPresetIndicator));
-
-    }
+    QImage previewHighDpi =
+        KisResourceThumbnailCache::instance()->getImage(index,
+                                                         paintRect.size() * devicePixelRatioF,
+                                                         Qt::IgnoreAspectRatio,
+                                                         Qt::SmoothTransformation);
+    previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
+    painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
 
     if (m_useDirtyPresets && dirty) {
         const QIcon icon = KisIconUtils::loadIcon("dirty-preset");
@@ -393,11 +353,6 @@ void KisPresetChooser::setViewModeToThumbnail()
     setViewMode(KisPresetChooser::ViewMode::THUMBNAIL);
 }
 
-void KisPresetChooser::setViewModeToDetail()
-{
-    setViewMode(KisPresetChooser::ViewMode::DETAIL);
-}
-
 void KisPresetChooser::setViewModeToStroke()
 {
     setViewMode(KisPresetChooser::ViewMode::STROKE);
@@ -422,20 +377,12 @@ void KisPresetChooser::updateViewSettings()
     switch (m_mode) {
     case ViewMode::THUMBNAIL: {
         m_chooser->setListViewMode(ListViewMode::IconGrid);
-        m_delegate->setShowText(false);
         m_delegate->setViewMode(ViewMode::THUMBNAIL);
-        break;
-    }
-    case ViewMode::DETAIL: {
-        m_chooser->setListViewMode(ListViewMode::Detail);
-        m_delegate->setShowText(true);
-        m_delegate->setViewMode(ViewMode::DETAIL);
         break;
     }
 
     case ViewMode::STROKE_THUMBNAIL: {
         m_chooser->setListViewMode(ListViewMode::IconGrid);
-        m_delegate->setShowText(false);
         m_delegate->setViewMode(ViewMode::STROKE_THUMBNAIL);
 
         int currentIconSize = iconSize();
@@ -449,7 +396,6 @@ void KisPresetChooser::updateViewSettings()
     }
     case ViewMode::STROKE: {
         m_chooser->setListViewMode(ListViewMode::IconGrid);
-        m_delegate->setShowText(false);
         m_delegate->setViewMode(ViewMode::STROKE);
 
         int currentIconSize = iconSize();
@@ -534,8 +480,9 @@ void KisPresetChooser::changeEvent(QEvent *event)
 
 void KisPresetChooser::showHideBrushNames(ListViewMode newViewMode)
 {
+    Q_UNUSED(newViewMode);
+
     if (m_mode == ViewMode::STROKE || m_mode == ViewMode::STROKE_THUMBNAIL) {
-        m_delegate->setShowText(false);
         // Restore non-square grid size.
         int currentIconSize = iconSize();
         QSize thumbnailSize = KisPresetDelegate::calculateStrokeThumbnailSize(currentIconSize, m_mode == ViewMode::STROKE_THUMBNAIL);
@@ -543,15 +490,6 @@ void KisPresetChooser::showHideBrushNames(ListViewMode newViewMode)
         m_chooser->itemView()->setIconSize(thumbnailSize);
         m_chooser->itemView()->doItemsLayout();
         return;
-    }
-    switch (newViewMode) {
-    case ListViewMode::Detail: {
-        m_delegate->setShowText(true);
-        break;
-    }
-    default: {
-        m_delegate->setShowText(false);
-    }
     }
 }
 

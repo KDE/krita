@@ -162,14 +162,6 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
             connect(action, &QAction::triggered,
                 m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::setViewModeToThumbnail);
 
-            action = viewModeMenu->addAction(KisIconUtils::loadIcon("view-list-details"), i18n("Details"));
-            action->setCheckable(true);
-            action->setChecked(mode == KisPresetChooser::DETAIL);
-            action->setActionGroup(actionGroup);
-
-            connect(action, &QAction::triggered,
-                m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::setViewModeToDetail);
-
             action = viewModeMenu->addAction(KisIconUtils::loadIcon("krita_tool_freehand"),i18n("Strokes"));
             action->setCheckable(true);
             action->setChecked(mode == KisPresetChooser::STROKE);

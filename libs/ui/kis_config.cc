@@ -1787,7 +1787,8 @@ void KisConfig::setVastScrolling(const qreal factor) const
 
 int KisConfig::presetChooserViewMode(bool defaultValue) const
 {
-    return (defaultValue ? 3 : m_cfg.readEntry("presetChooserViewMode", 3));
+    // For like 10 people that used a nightly after brush preview was merged, but before the detail option was removed.
+    return std::min(2, (defaultValue ? 1 : m_cfg.readEntry("presetChooserViewMode", 1)));
 }
 
 void KisConfig::setPresetChooserViewMode(const int mode) const

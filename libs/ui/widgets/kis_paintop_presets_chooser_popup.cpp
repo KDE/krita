@@ -52,11 +52,6 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     action->setChecked(mode == KisPresetChooser::THUMBNAIL);
     action->setActionGroup(actionGroup);
 
-    action = menu->addAction(KisIconUtils::loadIcon("view-list-details"), i18n("Details"), this, SLOT(slotDetailMode()));
-    action->setCheckable(true);
-    action->setChecked(mode == KisPresetChooser::DETAIL);
-    action->setActionGroup(actionGroup);
-
     action = menu->addAction(KisIconUtils::loadIcon("krita_tool_freehand"), i18n("Strokes"), this, SLOT(slotStrokeMode()));
     action->setCheckable(true);
     action->setChecked(mode == KisPresetChooser::STROKE);
@@ -117,12 +112,6 @@ void KisPaintOpPresetsChooserPopup::slotThumbnailMode()
 {
     KisConfig(false).setPresetChooserViewMode(KisPresetChooser::THUMBNAIL);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(KisPresetChooser::THUMBNAIL);
-}
-
-void KisPaintOpPresetsChooserPopup::slotDetailMode()
-{
-    KisConfig(false).setPresetChooserViewMode(KisPresetChooser::DETAIL);
-    m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(KisPresetChooser::DETAIL);
 }
 
 void KisPaintOpPresetsChooserPopup::slotStrokeMode()

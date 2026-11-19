@@ -38,9 +38,8 @@ public:
 
     enum ViewMode {
         THUMBNAIL, /// Shows thumbnails
-        DETAIL,    /// Shows thumbnails with text next to it
-        STROKE,     /// Shows stroke previews with text
         STROKE_THUMBNAIL, /// Shows stroke previews with text and thumbnail
+        STROKE,     /// Shows stroke previews with text
     };
 
     /// Sets a list of resources in the paintop list, when ever user press enter in the lineedit of paintop_presets_popup Class

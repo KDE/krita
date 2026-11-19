@@ -15,14 +15,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 01:08+0000\n"
-"PO-Revision-Date: 2026-11-07 12:38+0100\n"
+"PO-Revision-Date: 2026-11-18 23:27+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.08.2\n"
+"X-Generator: Lokalize 26.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -28962,19 +28962,19 @@ msgstr ""
 #: libs/ui/forms/KisWelcomePage.ui:1611 libs/ui/KisWelcomePageWidget.cpp:151
 #, kde-format
 msgid "Automatically check for updates"
-msgstr ""
+msgstr "Comprobar actualizaciones automáticamente"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, checkNowButton)
 #: libs/ui/forms/KisWelcomePage.ui:1631
 #, kde-format
 msgid "Retrieve news and updates from krita.org now."
-msgstr ""
+msgstr "Obtener noticias y actualizaciones de krita.org ahora."
 
 #. i18n: ectx: property (text), widget (QPushButton, checkNowButton)
 #: libs/ui/forms/KisWelcomePage.ui:1634
 #, kde-format
 msgid "Check Now"
-msgstr ""
+msgstr "Comprobar ahora"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1756
@@ -40109,17 +40109,14 @@ msgstr "Detalles"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgid "Strokes"
-msgstr "Trazo"
+msgstr "Trazos"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
-#, fuzzy, kde-format
-#| msgid "Large Thumbnail"
+#, kde-format
 msgid "Strokes and Thumbnails"
-msgstr "Miniatura grande"
+msgstr "Trazos y miniaturas"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
@@ -40149,10 +40146,9 @@ msgid "Rename the brush preset"
 msgstr "Cambiar nombre del preajuste de pincel"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
-#, fuzzy, kde-format
-#| msgid "Thumbnail Size"
+#, kde-format
 msgid "Thumbnails and Strokes"
-msgstr "Tamaño de las miniaturas"
+msgstr "Miniaturas y trazos"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
 #, kde-format
@@ -40565,10 +40561,9 @@ msgid "Amount:"
 msgstr "Cantidad:"
 
 #: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:320
-#, fuzzy, kde-format
-#| msgid "Loading Pages..."
+#, kde-format
 msgid "Loading..."
-msgstr "Cargando páginas…"
+msgstr "Cargando…"
 
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format
@@ -71454,26 +71449,3 @@ msgstr ""
 "Cambiar entre intervalo completo y subintervalo.\n"
 "Intervalo completo: [%1, %2]\n"
 "Subintervalo: [%3, %4]"
-
-#~ msgid ""
-#~ "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
-#~ "decoration: underline;\">enable news</a> from krita.org in various "
-#~ "languages with the menu above"
-#~ msgstr ""
-#~ "Puede <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
-#~ "decoration: underline;\">activar las noticias</a> de krita.org en varios "
-#~ "idiomas con el menú superior."
-
-#~ msgid "Enable news and check for new releases"
-#~ msgstr "Activar las novedades y comprobar nuevas publicaciones"
-
-#~ msgid "Add Color To Palette"
-#~ msgstr "Añadir color a la paleta"
-
-#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
-#~ msgstr ""
-#~ "No se puede escribir el archivo de paleta %1. Puede que sea de solo "
-#~ "lectura."
-
-#~ msgid "Add/Remove Colors"
-#~ msgstr "Añadir/eliminar colores"

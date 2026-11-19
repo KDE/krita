@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 01:08+0000\n"
-"PO-Revision-Date: 2026-11-17 05:50-0300\n"
+"PO-Revision-Date: 2026-11-18 05:37-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@kde.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -38594,11 +38594,9 @@ msgid "Toolbox"
 msgstr "Caixa de ferramentas"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:190
-#, fuzzy, kde-format
-#| msgctxt "Set the gradient chooser to show custom size items"
-#| msgid "Custom size items"
+#, kde-format
 msgid "Customize Disabled Tools"
-msgstr "Itens de tamanho personalizado"
+msgstr "Personalizar ferramentas desativadas"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, kde-format
@@ -38663,23 +38661,19 @@ msgid "&Vertical"
 msgstr "&Vertical"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:344
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Customize Toolbox"
-msgstr "Cor personalizada"
+msgstr "Personalizar caixa de ferramentas"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:345
-#, fuzzy, kde-format
-#| msgid "Enabled: false"
+#, kde-format
 msgid "Enabled tools"
-msgstr "Habilitado: falso"
+msgstr "Ferramentas habilitadas"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:346
-#, fuzzy, kde-format
-#| msgctxt "touch painting"
-#| msgid "Disabled"
+#, kde-format
 msgid "Disabled tools"
-msgstr "Desativado"
+msgstr "Ferramentas desabilitadas"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format

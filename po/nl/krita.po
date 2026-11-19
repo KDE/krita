@@ -63,14 +63,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 01:08+0000\n"
-"PO-Revision-Date: 2026-11-17 12:28+0100\n"
-"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"PO-Revision-Date: 2026-11-18 14:06+0100\n"
+"Last-Translator: freek <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.08.3\n"
+"X-Generator: Lokalize 26.04.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -38703,11 +38703,9 @@ msgid "Toolbox"
 msgstr "Gereedschapskist"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:190
-#, fuzzy, kde-format
-#| msgctxt "Set the gradient chooser to show custom size items"
-#| msgid "Custom size items"
+#, kde-format
 msgid "Customize Disabled Tools"
-msgstr "Aangepaste grootte items"
+msgstr "Uitgeschakelde hulpmiddelen aanpassen"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, kde-format
@@ -38772,23 +38770,19 @@ msgid "&Vertical"
 msgstr "&Verticaal"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:344
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Customize Toolbox"
-msgstr "Aangepaste kleur"
+msgstr "Aangepaste gereedschapkist"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:345
-#, fuzzy, kde-format
-#| msgid "Enabled: false"
+#, kde-format
 msgid "Enabled tools"
-msgstr "Ingeschakeld: onwaar"
+msgstr "Ingeschakelde hulpmiddelen"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:346
-#, fuzzy, kde-format
-#| msgctxt "touch painting"
-#| msgid "Disabled"
+#, kde-format
 msgid "Disabled tools"
-msgstr "Uitgeschakeld"
+msgstr "Uitgeschakelde hulpmiddelen"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 01:08+0000\n"
-"PO-Revision-Date: 2026-11-17 18:59+0300\n"
+"PO-Revision-Date: 2026-11-18 18:44+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -38504,11 +38504,9 @@ msgid "Toolbox"
 msgstr "Araç Kutusu"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:190
-#, fuzzy, kde-format
-#| msgctxt "Set the gradient chooser to show custom size items"
-#| msgid "Custom size items"
+#, kde-format
 msgid "Customize Disabled Tools"
-msgstr "Özel boyutlu ögeler"
+msgstr "Devre Dışı Araçları Özelleştir"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, kde-format
@@ -38573,23 +38571,19 @@ msgid "&Vertical"
 msgstr "&Dikey"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:344
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Customize Toolbox"
-msgstr "Özel renk"
+msgstr "Araç Kutusunu Özelleştir"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:345
-#, fuzzy, kde-format
-#| msgid "Enabled: false"
+#, kde-format
 msgid "Enabled tools"
-msgstr "Etkin: Yanlış"
+msgstr "Etkinleştirilmiş araçlar"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:346
-#, fuzzy, kde-format
-#| msgctxt "touch painting"
-#| msgid "Disabled"
+#, kde-format
 msgid "Disabled tools"
-msgstr "Devre dışı"
+msgstr "Devre dışı araçlar"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format

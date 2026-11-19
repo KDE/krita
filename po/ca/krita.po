@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 01:08+0000\n"
-"PO-Revision-Date: 2026-11-17 08:46+0100\n"
+"PO-Revision-Date: 2026-11-18 09:58+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -38706,11 +38706,9 @@ msgid "Toolbox"
 msgstr "Quadre d'eines"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:190
-#, fuzzy, kde-format
-#| msgctxt "Set the gradient chooser to show custom size items"
-#| msgid "Custom size items"
+#, kde-format
 msgid "Customize Disabled Tools"
-msgstr "Elements de mida personalitzada"
+msgstr "Personalitza les eines desactivades"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, kde-format
@@ -38775,23 +38773,19 @@ msgid "&Vertical"
 msgstr "&Vertical"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:344
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Customize Toolbox"
-msgstr "Color personalitzat"
+msgstr "Personalitza el quadre d'eines"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:345
-#, fuzzy, kde-format
-#| msgid "Enabled: false"
+#, kde-format
 msgid "Enabled tools"
-msgstr "Activat: fals"
+msgstr "Eines activades"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:346
-#, fuzzy, kde-format
-#| msgctxt "touch painting"
-#| msgid "Disabled"
+#, kde-format
 msgid "Disabled tools"
-msgstr "Desactivat"
+msgstr "Eines desactivades"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format

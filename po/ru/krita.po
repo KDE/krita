@@ -83,7 +83,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 01:08+0000\n"
-"PO-Revision-Date: 2026-11-14 08:47+0200\n"
+"PO-Revision-Date: 2026-11-18 08:53+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -29337,23 +29337,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, enableNewsBox)
 #: libs/ui/forms/KisWelcomePage.ui:1611 libs/ui/KisWelcomePageWidget.cpp:151
-#, fuzzy, kde-format
-#| msgid "Check for updates"
+#, kde-format
 msgid "Automatically check for updates"
-msgstr "Проверять обновления"
+msgstr "Автоматически проверять обновления"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, checkNowButton)
 #: libs/ui/forms/KisWelcomePage.ui:1631
 #, kde-format
 msgid "Retrieve news and updates from krita.org now."
-msgstr ""
+msgstr "Получить новости и сведения об обновлениях с сайта krita.org."
 
 #. i18n: ectx: property (text), widget (QPushButton, checkNowButton)
 #: libs/ui/forms/KisWelcomePage.ui:1634
-#, fuzzy, kde-format
-#| msgid "CheckBox"
+#, kde-format
 msgid "Check Now"
-msgstr "Флажок"
+msgstr "Проверить сейчас"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1756
@@ -39149,11 +39147,9 @@ msgid "Toolbox"
 msgstr "Инструменты"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:190
-#, fuzzy, kde-format
-#| msgctxt "Set the gradient chooser to show custom size items"
-#| msgid "Custom size items"
+#, kde-format
 msgid "Customize Disabled Tools"
-msgstr "Объекты указанного размера"
+msgstr "Настроить отключённые инструменты"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, kde-format
@@ -39218,23 +39214,19 @@ msgid "&Vertical"
 msgstr "&Вертикально"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:344
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Customize Toolbox"
-msgstr "Свой цвет"
+msgstr "Настроить панель инструментов"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:345
-#, fuzzy, kde-format
-#| msgid "Enabled: false"
+#, kde-format
 msgid "Enabled tools"
-msgstr "Включён: нет"
+msgstr "Включённые инструменты"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:346
-#, fuzzy, kde-format
-#| msgctxt "touch painting"
-#| msgid "Disabled"
+#, kde-format
 msgid "Disabled tools"
-msgstr "Отключено"
+msgstr "Отключённые инструменты"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format

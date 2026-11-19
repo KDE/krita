@@ -128,7 +128,10 @@ KisSmoothingOptionsSP KisToolFreehand::smoothingOptions() const
 void KisToolFreehand::resetCursorStyle()
 {
     if (temporaryStraightRulerActive()) {
-        useCursor(KisCursor::loadWithSize("cursor-cross-full.svg", 31, 31));
+        const int TEMP_RULER_CURSOR_SIZE = 32;
+        useCursor(KisCursor::loadWithSize("cursor-cross-full.svg",
+                                          TEMP_RULER_CURSOR_SIZE,
+                                          TEMP_RULER_CURSOR_SIZE));
         return;
     }
 

@@ -57113,7 +57113,7 @@ msgstr ""
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:611
 #, kde-format
 msgid "Could not read pixel data: %1."
-msgstr "No s'ha pogut llegir les dades dels píxels: %1."
+msgstr "No s'han pogut llegir les dades dels píxels: %1."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:618
 #, kde-format

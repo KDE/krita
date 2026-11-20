@@ -99,9 +99,9 @@ void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarkenCreamy()
 }
 
 
-void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarkenSoft()
+void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarkenClamp()
 {
-    KoCompositeOp *compositeOp = KoOptimizedCompositeOpFactory::createAlphaDarkenSoftOp32(KoColorSpaceRegistry::instance()->rgb8());
+    KoCompositeOp *compositeOp = KoOptimizedCompositeOpFactory::createAlphaDarkenClampOp32(KoColorSpaceRegistry::instance()->rgb8());
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }

@@ -50,7 +50,7 @@ struct OptimizedOpsSelector
             return new KoCompositeOpAlphaDarken<Traits, KoAlphaDarkenParamsWrapperHard>(cs);
         }
     }
-    static KoCompositeOp* createAlphaDarkenSoftOp(const KoColorSpace *cs) {
+    static KoCompositeOp* createAlphaDarkenClampOp(const KoColorSpace *cs) {
         return new KoCompositeOpAlphaDarken<Traits, KoAlphaDarkenParamsWrapperCreamy, false>(cs);
     }
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
@@ -70,8 +70,8 @@ struct OptimizedOpsSelector<KoBgrU8Traits>
             KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy32(cs) :
             KoOptimizedCompositeOpFactory::createAlphaDarkenOpHard32(cs);
     }
-    static KoCompositeOp* createAlphaDarkenSoftOp(const KoColorSpace *cs) {
-        return KoOptimizedCompositeOpFactory::createAlphaDarkenSoftOp32(cs);
+    static KoCompositeOp* createAlphaDarkenClampOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createAlphaDarkenClampOp32(cs);
     }
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
         return KoOptimizedCompositeOpFactory::createOverOp32(cs);
@@ -90,8 +90,8 @@ struct OptimizedOpsSelector<KoLabU8Traits>
             KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy32(cs) :
             KoOptimizedCompositeOpFactory::createAlphaDarkenOpHard32(cs);
     }
-    static KoCompositeOp* createAlphaDarkenSoftOp(const KoColorSpace *cs) {
-        return KoOptimizedCompositeOpFactory::createAlphaDarkenSoftOp32(cs);
+    static KoCompositeOp* createAlphaDarkenClampOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createAlphaDarkenClampOp32(cs);
     }
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
         return KoOptimizedCompositeOpFactory::createOverOp32(cs);
@@ -110,8 +110,8 @@ struct OptimizedOpsSelector<KoRgbF32Traits>
             KoOptimizedCompositeOpFactory::createAlphaDarkenOpHard128(cs);
 
     }
-    static KoCompositeOp* createAlphaDarkenSoftOp(const KoColorSpace *cs) {
-        return KoOptimizedCompositeOpFactory::createAlphaDarkenSoftOp128(cs);
+    static KoCompositeOp* createAlphaDarkenClampOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createAlphaDarkenClampOp128(cs);
     }
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
         return KoOptimizedCompositeOpFactory::createOverOp128(cs);
@@ -130,8 +130,8 @@ struct OptimizedOpsSelector<KoBgrU16Traits>
             KoOptimizedCompositeOpFactory::createAlphaDarkenOpHardU64(cs);
 
     }
-    static KoCompositeOp* createAlphaDarkenSoftOp(const KoColorSpace *cs) {
-        return KoOptimizedCompositeOpFactory::createAlphaDarkenSoftOpU64(cs);
+    static KoCompositeOp* createAlphaDarkenClampOp(const KoColorSpace *cs) {
+        return KoOptimizedCompositeOpFactory::createAlphaDarkenClampOpU64(cs);
     }
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
         return KoOptimizedCompositeOpFactory::createOverOpU64(cs);
@@ -231,7 +231,7 @@ struct AddGeneralOps<Traits, true>
          add<CFPenumbraB<Arg>      >(cs, COMPOSITE_PENUMBRAB     , KoCompositeOp::categoryMix());
          add<&cfPenumbraC<Arg>     >(cs, COMPOSITE_PENUMBRAC     , KoCompositeOp::categoryMix());
          add<&cfPenumbraD<Arg>     >(cs, COMPOSITE_PENUMBRAD     , KoCompositeOp::categoryMix());
-         cs->addCompositeOp(OptimizedOpsSelector<Traits>::createAlphaDarkenSoftOp(cs));
+         cs->addCompositeOp(OptimizedOpsSelector<Traits>::createAlphaDarkenClampOp(cs));
          cs->addCompositeOp(new KoCompositeOpMarker<Traits>(cs));
 
          add<&cfScreen<Arg>      >(cs, COMPOSITE_SCREEN      , KoCompositeOp::categoryLight());
@@ -470,9 +470,9 @@ KoCompositeOp* createAlphaDarkenCompositeOp(const KoColorSpace *cs)
 }
 
 template<class _Traits_>
-KoCompositeOp* createAlphaDarkenSoftCompositeOp(const KoColorSpace *cs)
+KoCompositeOp* createAlphaDarkenClampCompositeOp(const KoColorSpace *cs)
 {
-    return _Private::OptimizedOpsSelector<_Traits_>::createAlphaDarkenSoftOp(cs);
+    return _Private::OptimizedOpsSelector<_Traits_>::createAlphaDarkenClampOp(cs);
 }
 
 #endif

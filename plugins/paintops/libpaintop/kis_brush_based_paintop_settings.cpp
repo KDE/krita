@@ -77,8 +77,8 @@ QString KisBrushBasedPaintOpSettings::indirectPaintingCompositeOp() const
 {
     KisPaintingModeOptionData data;
     data.read(this);
-    if (data.hasPaintingModeProperty && data.paintingMode == enumPaintingMode::SOFT) {
-        return COMPOSITE_ALPHA_DARKEN_SOFT;
+    if (data.hasPaintingModeProperty && data.paintingMode == enumPaintingMode::CLAMP) {
+        return COMPOSITE_ALPHA_DARKEN_CLAMP;
     } else {
         return COMPOSITE_ALPHA_DARKEN;
     }

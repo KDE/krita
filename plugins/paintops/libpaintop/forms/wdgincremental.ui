@@ -77,16 +77,16 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioSoft">
+       <widget class="QRadioButton" name="radioClamp">
         <property name="text">
-         <string>Soft</string>
+         <string>Clamp</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblSoft">
+       <widget class="QLabel" name="lblClamp">
         <property name="text">
-         <string>Prevents opacity from building up at all during a stroke, keeping edges soft and not compounding textures.</string>
+         <string>Prevents opacity from building up at all during a stroke, keeping edges soft and not compounding textures. Also known as "Soft" in other software.</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>

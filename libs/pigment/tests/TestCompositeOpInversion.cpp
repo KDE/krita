@@ -52,7 +52,7 @@ void TestCompositeOpInversion::test()
      *
      *  - COMPOSITE_OVER
      *  - COMPOSITE_ALPHA_DARKEN;
-     *  - COMPOSITE_ALPHA_DARKEN_SOFT;
+     *  - COMPOSITE_ALPHA_DARKEN_CLAMP;
      *  - COMPOSITE_COPY;
      *  - COMPOSITE_ERASE;
      *  - COMPOSITE_DESTINATION_IN;
@@ -125,7 +125,7 @@ void TestCompositeOpInversion::test_data()
     QStringList ids;
     ids << COMPOSITE_OVER;
     ids << COMPOSITE_ALPHA_DARKEN;
-    ids << COMPOSITE_ALPHA_DARKEN_SOFT;
+    ids << COMPOSITE_ALPHA_DARKEN_CLAMP;
     ids << COMPOSITE_COPY;
     ids << COMPOSITE_ERASE;
     ids << COMPOSITE_BEHIND;
@@ -497,7 +497,7 @@ std::vector<std::pair<QString, TestFlags>> generateCompositeOpIdSet()
     addSdrPreservingOp(COMPOSITE_DISSOLVE);
     addSdrPreservingOp(COMPOSITE_OVER);
     addSdrPreservingOp(COMPOSITE_ALPHA_DARKEN);
-    addSdrPreservingOp(COMPOSITE_ALPHA_DARKEN_SOFT);
+    addSdrPreservingOp(COMPOSITE_ALPHA_DARKEN_CLAMP);
     addSdrPreservingOp(COMPOSITE_DESTINATION_IN);
     addSdrPreservingOp(COMPOSITE_DESTINATION_ATOP);
     addSdrPreservingOp(COMPOSITE_ERASE);
@@ -696,7 +696,7 @@ void TestCompositeOpInversion::testU16ModesConsistent_data()
     skipCompositeOps.push_back(COMPOSITE_GREATER);
     skipCompositeOps.push_back(COMPOSITE_OVER);
     skipCompositeOps.push_back(COMPOSITE_ALPHA_DARKEN);
-    skipCompositeOps.push_back(COMPOSITE_ALPHA_DARKEN_SOFT);
+    skipCompositeOps.push_back(COMPOSITE_ALPHA_DARKEN_CLAMP);
     skipCompositeOps.push_back(COMPOSITE_DESTINATION_ATOP);
     skipCompositeOps.push_back(COMPOSITE_DESTINATION_IN);
     skipCompositeOps.push_back(COMPOSITE_ERASE);

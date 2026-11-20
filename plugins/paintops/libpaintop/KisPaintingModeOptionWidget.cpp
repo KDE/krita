@@ -65,7 +65,7 @@ KisPaintingModeOptionWidget::KisPaintingModeOptionWidget(lager::cursor<KisPainti
     QButtonGroup *group = new QButtonGroup(widget);
     group->addButton(widget->radioBuildup, static_cast<int>(enumPaintingMode::BUILDUP));
     group->addButton(widget->radioWash, static_cast<int>(enumPaintingMode::WASH));
-    group->addButton(widget->radioSoft, static_cast<int>(enumPaintingMode::SOFT));
+    group->addButton(widget->radioClamp, static_cast<int>(enumPaintingMode::CLAMP));
     group->setExclusive(true);
 
     setConfigurationPage(widget);

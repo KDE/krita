@@ -146,7 +146,7 @@ struct AlphaDarkenCompositor32 {
                 }
             }();
         } else {
-            // Soft paint mode.
+            // Clamp paint mode.
             const float_m fullFlowAlpha_mask = src_alpha > dst_alpha;
             if (!xsimd::none(fullFlowAlpha_mask)) {
                 dst_alpha = [&]() {
@@ -232,7 +232,7 @@ struct AlphaDarkenCompositor32 {
 
             dst[alpha_pos] = KoStreamedMath<_impl>::round_float_to_u8(dstAlpha);
         } else {
-            // Soft paint mode.
+            // Clamp paint mode.
             if (srcAlphaNorm > dstAlphaNorm) {
                 const float flow = oparams.flow;
 
@@ -261,7 +261,7 @@ class KoOptimizedCompositeOpAlphaDarken32Impl : public KoCompositeOp
 {
 public:
     KoOptimizedCompositeOpAlphaDarken32Impl(const KoColorSpace* cs)
-        : KoCompositeOp(cs, wash ? COMPOSITE_ALPHA_DARKEN : COMPOSITE_ALPHA_DARKEN_SOFT, KoCompositeOp::categoryMix()) {}
+        : KoCompositeOp(cs, wash ? COMPOSITE_ALPHA_DARKEN : COMPOSITE_ALPHA_DARKEN_CLAMP, KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 
@@ -296,11 +296,11 @@ public:
 };
 
 template<typename _impl = xsimd::current_arch>
-class KoOptimizedCompositeOpAlphaDarkenSoft32 :
+class KoOptimizedCompositeOpAlphaDarkenClamp32 :
         public KoOptimizedCompositeOpAlphaDarken32Impl<_impl, KoAlphaDarkenParamsWrapperCreamy, false>
 {
 public:
-    KoOptimizedCompositeOpAlphaDarkenSoft32(const KoColorSpace *cs)
+    KoOptimizedCompositeOpAlphaDarkenClamp32(const KoColorSpace *cs)
         : KoOptimizedCompositeOpAlphaDarken32Impl<_impl, KoAlphaDarkenParamsWrapperCreamy, false>(cs) {
     }
 };

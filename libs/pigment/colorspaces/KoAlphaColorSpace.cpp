@@ -82,7 +82,7 @@ KoAlphaColorSpaceImpl<_CSTrait>::KoAlphaColorSpaceImpl()
     this->addCompositeOp(new KoCompositeOpErase<_CSTrait>(this));
     this->addCompositeOp(new KoCompositeOpCopy2<_CSTrait>(this));
     this->addCompositeOp(createAlphaDarkenCompositeOp<_CSTrait>(this));
-    this->addCompositeOp(createAlphaDarkenSoftCompositeOp<_CSTrait>(this));
+    this->addCompositeOp(createAlphaDarkenClampCompositeOp<_CSTrait>(this));
     this->addCompositeOp(new AlphaColorSpaceMultiplyOp<_CSTrait>(this));
 }
 

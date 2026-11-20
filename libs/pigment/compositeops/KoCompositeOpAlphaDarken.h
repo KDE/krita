@@ -26,7 +26,7 @@ class KoCompositeOpAlphaDarken: public KoCompositeOp
 
 public:
     KoCompositeOpAlphaDarken(const KoColorSpace* cs):
-        KoCompositeOp(cs, wash ? COMPOSITE_ALPHA_DARKEN : COMPOSITE_ALPHA_DARKEN_SOFT, KoCompositeOp::categoryMix()) { }
+        KoCompositeOp(cs, wash ? COMPOSITE_ALPHA_DARKEN : COMPOSITE_ALPHA_DARKEN_CLAMP, KoCompositeOp::categoryMix()) { }
 
     using KoCompositeOp::composite;
 
@@ -81,7 +81,7 @@ public:
                     if constexpr (wash) {
                         dst[alpha_pos] = calculateAlpha(params, paramsWrapper, flow, opacity, srcAlpha, dstAlpha, mskAlpha);
                     } else {
-                        // This is for the Soft paint mode. Instead of meddling
+                        // This is for the Clamp paint mode. Instead of meddling
                         // with opacity and averageOpacity, we just look at the
                         // alpha of each pixel. If it's higher, that's our full
                         // flow alpha, otherwise leave it be. There is a prior

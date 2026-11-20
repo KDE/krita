@@ -17,7 +17,7 @@ bool KisPaintingModeOptionData::read(const KisPropertiesConfiguration *setting)
         paintingMode = enumPaintingMode::BUILDUP;
         break;
     case 3:
-        paintingMode = enumPaintingMode::SOFT;
+        paintingMode = enumPaintingMode::CLAMP;
         break;
     default:
         paintingMode = enumPaintingMode::WASH;
@@ -34,7 +34,7 @@ void KisPaintingModeOptionData::write(KisPropertiesConfiguration *setting) const
     case enumPaintingMode::BUILDUP:
         value = 1;
         break;
-    case enumPaintingMode::SOFT:
+    case enumPaintingMode::CLAMP:
         value = 3;
         break;
     default:

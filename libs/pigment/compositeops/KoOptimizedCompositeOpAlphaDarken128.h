@@ -130,7 +130,7 @@ struct AlphaDarkenCompositor128 {
                 }
             }();
         } else {
-            // Soft paint mode.
+            // Clamp paint mode.
             const float_m fullFlowAlpha_mask = src_alpha > dst_alpha;
             if (!xsimd::none(fullFlowAlpha_mask)) {
                 dst_alpha = [&]() {
@@ -212,7 +212,7 @@ struct AlphaDarkenCompositor128 {
             PixelWrapper<channels_type, _impl>::denormalizeAlpha(dstAlphaNorm);
             dst[alpha_pos] = PixelWrapper<channels_type, _impl>::roundFloatToUint(dstAlphaNorm);
         } else {
-            // Soft paint mode.
+            // Clamp paint mode.
             if (srcAlphaNorm > dstAlphaNorm) {
                 const float flow = oparams.flow;
 
@@ -241,7 +241,7 @@ class KoOptimizedCompositeOpAlphaDarken128Impl : public KoCompositeOp
 {
 public:
     KoOptimizedCompositeOpAlphaDarken128Impl(const KoColorSpace* cs)
-        : KoCompositeOp(cs, wash ? COMPOSITE_ALPHA_DARKEN : COMPOSITE_ALPHA_DARKEN_SOFT, KoCompositeOp::categoryMix()) {}
+        : KoCompositeOp(cs, wash ? COMPOSITE_ALPHA_DARKEN : COMPOSITE_ALPHA_DARKEN_CLAMP, KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 
@@ -274,11 +274,11 @@ public:
 };
 
 template<typename _impl>
-class KoOptimizedCompositeOpAlphaDarkenSoft128
+class KoOptimizedCompositeOpAlphaDarkenClamp128
     : public KoOptimizedCompositeOpAlphaDarken128Impl<_impl, KoAlphaDarkenParamsWrapperCreamy, false>
 {
 public:
-    KoOptimizedCompositeOpAlphaDarkenSoft128(const KoColorSpace* cs)
+    KoOptimizedCompositeOpAlphaDarkenClamp128(const KoColorSpace* cs)
         : KoOptimizedCompositeOpAlphaDarken128Impl<_impl, KoAlphaDarkenParamsWrapperCreamy, false>(cs) {}
 };
 
@@ -287,7 +287,7 @@ class KoOptimizedCompositeOpAlphaDarkenU64Impl : public KoCompositeOp
 {
 public:
     KoOptimizedCompositeOpAlphaDarkenU64Impl(const KoColorSpace* cs)
-        : KoCompositeOp(cs, wash ? COMPOSITE_ALPHA_DARKEN : COMPOSITE_ALPHA_DARKEN_SOFT, KoCompositeOp::categoryMix()) {}
+        : KoCompositeOp(cs, wash ? COMPOSITE_ALPHA_DARKEN : COMPOSITE_ALPHA_DARKEN_CLAMP, KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 
@@ -320,11 +320,11 @@ public:
 };
 
 template<typename _impl>
-class KoOptimizedCompositeOpAlphaDarkenSoftU64
+class KoOptimizedCompositeOpAlphaDarkenClampU64
     : public KoOptimizedCompositeOpAlphaDarkenU64Impl<_impl, KoAlphaDarkenParamsWrapperCreamy, false>
 {
 public:
-    KoOptimizedCompositeOpAlphaDarkenSoftU64(const KoColorSpace* cs)
+    KoOptimizedCompositeOpAlphaDarkenClampU64(const KoColorSpace* cs)
         : KoOptimizedCompositeOpAlphaDarkenU64Impl<_impl, KoAlphaDarkenParamsWrapperCreamy, false>(cs) {}
 };
 

@@ -16,7 +16,7 @@ class KisPropertiesConfiguration;
 enum class enumPaintingMode {
     BUILDUP,
     WASH,
-    SOFT,
+    CLAMP,
 };
 
 struct PAINTOP_EXPORT KisPaintingModeOptionData : boost::equality_comparable<KisPaintingModeOptionData>

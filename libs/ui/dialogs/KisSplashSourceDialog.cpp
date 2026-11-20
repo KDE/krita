@@ -129,6 +129,6 @@ const KisSplashScreen::Source *KisSplashSourceDialog::currentSource() const
 
 QString KisSplashSourceDialog::makePurchaseOption(const QString &key, const QString &text)
 {
-    return QStringLiteral("<li><a href=\"https://krita.org/%1\">%2</a></li>")
+    return QStringLiteral("<li><a href=\"https://krita.org/%1/\">%2</a></li>")
         .arg(key.toHtmlEscaped(), text.toHtmlEscaped());
 }

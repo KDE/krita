@@ -42,13 +42,7 @@ static void addDropShadow(QWidget *widget)
 
 QString KisSplashScreen::Source::description() const
 {
-    QString text;
-    if (artistName.isEmpty()) {
-        text = title;
-    } else {
-        text = i18nc("Splash image by artist", "%1 by %2", title, artistName);
-    }
-
+    QString text = title;
     if (isAvailable) {
         if (isDefault) {
             return i18nc("Splash image default", "%1 (default)", text);
@@ -198,16 +192,18 @@ QVector<KisSplashScreen::Source> KisSplashScreen::getSources()
         // First entry is used as the default.
         {
             QString(),
-            i18nc("Normal splash artwork title, consider leaving it English", "Electric Hearts"),
+            i18nc("Splash screen option showing Kiki", "Mascot"),
             defaultSplashResourcePath(),
-            i18nc("Normal splash artist name", "Tyson Tan"),
+            i18nc("Splash artist name", "Tyson Tan"),
             true,
             true,
         },
         {
             QStringLiteral("corpo1"),
-            i18n("Professional"),
+            i18nc("Splash screen option without Kiki", "Plain"),
             QStringLiteral(":/splash/corpo1.jpg"),
+            // This splash screen was also created by Tyson, but they preferred
+            // to not be credited prominently for something so simple.
             QString(),
             canChoose,
             false,

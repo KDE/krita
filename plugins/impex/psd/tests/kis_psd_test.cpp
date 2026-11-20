@@ -529,7 +529,7 @@ void KisPSDTest::testRoundTripSaiCompositeOps()
     // modes are saved by meddling with the opacity value, so we check that it
     // round-trips here too.
     auto randomOpacity = [] {
-        return QRandomGenerator::global()->bounded(OPACITY_TRANSPARENT_U8, OPACITY_OPAQUE_U8);
+        return quint8(QRandomGenerator::global()->bounded(OPACITY_TRANSPARENT_U8, OPACITY_OPAQUE_U8));
     };
     QList<QPair<QString, quint8>> expectedPairs = {
         {COMPOSITE_BURN, randomOpacity()},

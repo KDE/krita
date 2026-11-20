@@ -700,8 +700,10 @@ void KisWelcomePageWidget::slotCheckNews()
     newsWidget->show();
     newsWidget->toggleNews(true);
 #ifdef ENABLE_UPDATERS
-    m_versionUpdater->checkForUpdate();
-    updateVersionUpdaterFrame();
+    if (m_versionUpdater) {
+        m_versionUpdater->checkForUpdate();
+        updateVersionUpdaterFrame();
+    }
 #endif
 }
 

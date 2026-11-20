@@ -81,7 +81,20 @@ public:
                     if constexpr (wash) {
                         dst[alpha_pos] = calculateAlpha(params, paramsWrapper, flow, opacity, srcAlpha, dstAlpha, mskAlpha);
                     } else {
-                        dst[alpha_pos] = calculateSoftAlpha(params, paramsWrapper, flow, opacity, srcAlpha, dstAlpha, mskAlpha);
+                        // This is for the Soft paint mode. Instead of meddling
+                        // with opacity and averageOpacity, we just look at the
+                        // alpha of each pixel. If it's higher, that's our full
+                        // flow alpha, otherwise leave it be. There is a prior
+                        // commit that implements averageOpacity instead that
+                        // gets a different effect on brush tails, but it's
+                        // doubtful whether that's the right thing to do.
+                        if (srcAlpha > dstAlpha) {
+                            if (params.flow == 1.0f) {
+                                dst[alpha_pos] = srcAlpha;
+                            } else {
+                                dst[alpha_pos] = lerp(dstAlpha, srcAlpha, flow);
+                            }
+                        }
                     }
                 }
 
@@ -140,40 +153,6 @@ public:
         } else {
             channels_type zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlphaLegacy(srcAlpha, dstAlpha);
             return lerp(zeroFlowAlpha, fullFlowAlpha, flow);
-        }
-    }
-
-    static channels_type calculateSoftAlpha(const KoCompositeOp::ParameterInfo &params,
-                                            const ParamsWrapper &paramsWrapper,
-                                            channels_type flow,
-                                            channels_type opacity,
-                                            channels_type srcAlpha,
-                                            channels_type dstAlpha,
-                                            channels_type mskAlpha)
-    {
-        using namespace Arithmetic;
-
-        /**
-         * Soft paint mode is per-pixel instead of per-stroke. Since it has no
-         * legacy brushes like wash, it effectively always uses "creamy" flow.
-         */
-        channels_type averageOpacity = scale<channels_type>(paramsWrapper.averageOpacity);
-        channels_type fullFlowAlpha = srcAlpha;
-
-        if (averageOpacity > opacity) {
-            channels_type ceilingAlpha = mul(mskAlpha, averageOpacity);
-            if (ceilingAlpha > dstAlpha && ceilingAlpha != zeroValue<channels_type>()) {
-                channels_type reverseBlend = KoColorSpaceMaths<channels_type>::divide(dstAlpha, ceilingAlpha);
-                fullFlowAlpha = lerp(srcAlpha, ceilingAlpha, reverseBlend);
-            }
-        }
-
-        if (fullFlowAlpha <= dstAlpha) {
-            return dstAlpha;
-        } else if (params.flow == 1.0f) {
-            return fullFlowAlpha;
-        } else {
-            return lerp(dstAlpha, fullFlowAlpha, flow);
         }
     }
 };

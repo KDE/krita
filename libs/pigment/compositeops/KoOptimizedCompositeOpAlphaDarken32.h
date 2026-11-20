@@ -146,31 +146,15 @@ struct AlphaDarkenCompositor32 {
                 }
             }();
         } else {
-            // Soft paint mode. Always uses "creamy" flow.
-            float_v fullFlowAlpha = src_alpha;
-
-            if (oparams.averageOpacity > opacity) {
-                float_v ceilingAlpha = msk_norm_alpha * average_opacity_vec;
-                float_m ceilingMask = ceilingAlpha > dst_alpha;
-
-                if (!xsimd::none(ceilingMask)) {
-                    // Avoid division by zero.
-                    float_v safeCeiling = xsimd::select(ceilingMask, ceilingAlpha, uint8Max);
-                    float_v reverseBlend = dst_alpha / safeCeiling;
-                    float_v opt1 = (ceilingAlpha - src_alpha) * reverseBlend + src_alpha;
-                    fullFlowAlpha = xsimd::select(ceilingMask, opt1, src_alpha);
-                }
-            }
-
-            float_m updateMask = fullFlowAlpha > dst_alpha;
-            if (!xsimd::none(updateMask)) {
+            // Soft paint mode.
+            const float_m fullFlowAlpha_mask = src_alpha > dst_alpha;
+            if (!xsimd::none(fullFlowAlpha_mask)) {
                 dst_alpha = [&]() {
-                    float flow = oparams.flow;
-                    if (flow == 1.0f) {
-                        return xsimd::select(updateMask, fullFlowAlpha, dst_alpha);
+                    if (oparams.flow == 1.0f) {
+                        return xsimd::select(fullFlowAlpha_mask, src_alpha, dst_alpha);
                     } else {
-                        float_v lerped = (fullFlowAlpha - dst_alpha) * flow_norm_vec + dst_alpha;
-                        return xsimd::select(updateMask, lerped, dst_alpha);
+                        const float_v lerped = (src_alpha - dst_alpha) * flow_norm_vec + dst_alpha;
+                        return xsimd::select(fullFlowAlpha_mask, lerped, dst_alpha);
                     }
                 }();
             }
@@ -248,24 +232,15 @@ struct AlphaDarkenCompositor32 {
 
             dst[alpha_pos] = KoStreamedMath<_impl>::round_float_to_u8(dstAlpha);
         } else {
-            // Soft paint mode. Always uses "creamy" flow.
-            float averageOpacity = oparams.averageOpacity;
-            float fullFlowAlpha = srcAlphaNorm;
+            // Soft paint mode.
+            if (srcAlphaNorm > dstAlphaNorm) {
+                const float flow = oparams.flow;
 
-            if (averageOpacity > opacity) {
-                float ceilingAlpha = mskAlphaNorm * averageOpacity;
-                if (ceilingAlpha > dstAlphaNorm) {
-                    fullFlowAlpha = lerp(srcAlphaNorm, ceilingAlpha, dstAlphaNorm / ceilingAlpha);
-                }
-            }
-
-            if (fullFlowAlpha > dstAlphaNorm) {
-                float dstAlpha = [&]() {
-                    float flow = oparams.flow;
+                const float dstAlpha = [&](){
                     if (flow == 1.0f) {
-                        return fullFlowAlpha * uint8Max;
+                        return srcAlphaNorm * uint8Max;
                     } else {
-                        return lerp(dstAlphaNorm, fullFlowAlpha, flow) * uint8Max;
+                        return lerp(dstAlphaNorm, srcAlphaNorm, flow) * uint8Max;
                     }
                 }();
 

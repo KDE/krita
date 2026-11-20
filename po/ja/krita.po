@@ -36,14 +36,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 03:09+0000\n"
-"PO-Revision-Date: 2026-06-07 12:10+0900\n"
+"PO-Revision-Date: 2026-11-08 21:56+0900\n"
 "Last-Translator: Mint <5602mint@gmail.com>\n"
-"Language-Team: Japanese <kde-i18n-doc@kde.org>\n"
+"Language-Team: Japanese <kde-jp@kde.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.04.2\n"
+"X-Generator: Lokalize 26.08.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -26963,8 +26963,7 @@ msgstr "最後のフレーム:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgid "Images"
 msgstr "画像"
 
@@ -29230,10 +29229,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
 #: libs/ui/forms/KisWelcomePage.ui:1717 libs/ui/KisWelcomePageWidget.cpp:844
-#, fuzzy, kde-format
-#| msgid "Support Krita"
+#, kde-format
 msgid "Support Krita!"
-msgstr "Krita を支援"
+msgstr "Krita を支援してください!"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -41650,12 +41648,12 @@ msgid ""
 "your wish. Make sure you use the severity called \"Wishlist\".</html>"
 msgstr ""
 "<html>ソフトウェアの改善に終わりはありません。KDE チームも日々改良に努めてい"
-"ますが、それにはユーザーであるあなたの協力が必要です。不具合や改善点を見つけ"
-"た場合は、ぜひ教えてください。<br /><br />KDE にはバグ追跡システムがありま"
-"す。<a href=\"%1\">%1</a> または「ヘルプ」メニューの「バグを報告...」画面から"
-"不具合を報告してください。<br /><br />改良のためのいいアイデアをお持ちの場合"
-"も、バグ追跡システムを使ってご要望をどしどしお寄せください。このとき、重要度"
-"には \"Wishlist\" (要望) を指定してください。</html>"
+"ますが、それにはユーザーのみなさまの協力が必要です。不具合や改善点を見つけた"
+"場合は、ぜひ教えてください。<br /><br />KDE にはバグ追跡システムがあります。"
+"<a href=\"%1\">%1</a> または「ヘルプ」メニューの「バグを報告...」画面から不具"
+"合を報告してください。<br /><br />改良のためのいいアイデアをお持ちの場合も、"
+"バグ追跡システムを使ってご要望をどしどしお寄せください。このとき、重要度には "
+"\"Wishlist\" (要望) を指定してください。</html>"
 
 # kxmlgui/kxmlgui6.po から抜粋
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:90
@@ -41688,9 +41686,8 @@ msgid ""
 msgstr ""
 "<p>KDE のソフトウェアは無償で配布されていますが、開発には費用がかかります。"
 "<br /><br />KDE コミュニティはドイツの Tuebingen で KDE e.V. という非営利組織"
-"を法的に設立しています。KDE e.V. は法的･財務的な仕事を、KDE プロジェクトを代"
-"表して担っています。KDE e.V. については <a href=\"%1\">%1</a> をご覧くださ"
-"い。</p>"
+"を法的に設立しており、KDE プロジェクトを代表して法的･財務的な役割を担っていま"
+"す。KDE e.V. についてくわしくは <a href=\"%1\">%1</a> をご覧ください。</p>"
 
 # kxmlgui/kxmlgui6.po から抜粋
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:121
@@ -70902,45 +70899,3 @@ msgstr ""
 "全範囲と部分範囲を切り替えます。\n"
 "全範囲: [%1, %2]\n"
 "部分範囲: [%3, %4]"
-
-#~ msgctxt "action"
-#~ msgid "S-Pen Actions"
-#~ msgstr "S-Pen 操作"
-
-#, fuzzy
-#~| msgid ""
-#~| "Following button actions are supported on the Note 9, Note 10 and Tab S6 "
-#~| "devices."
-#~ msgid ""
-#~ "The following buttons are supported on the Note 9, Note 10, Tab S6 and "
-#~ "Tab S9 devices."
-#~ msgstr ""
-#~ "Note9、Note10、および Tab S6 デバイスでは、以下のボタン操作がサポートされ"
-#~ "ています。"
-
-#, fuzzy
-#~| msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
-#~ msgid ""
-#~ "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
-#~ "devices."
-#~ msgstr ""
-#~ "Note10 および Tab S6 デバイスでは、以下のジェスチャがサポートされていま"
-#~ "す。"
-
-#~ msgid "Use system monitor profile"
-#~ msgstr "システムモニタプロファイルを使用"
-
-#~ msgid ""
-#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
-#~ "2.9 or newer."
-#~ msgstr ""
-#~ "この XCF ファイルは新しすぎます: Krita は GIMP 2.9 以降で書き出された XCF "
-#~ "ファイルに対応していません。"
-
-#, fuzzy
-#~| msgid "Selection Actions"
-#~ msgid "Selection Actions Bar"
-#~ msgstr "選択アクション"
-
-#~ msgid "Get your Krita Supporter Badge here!"
-#~ msgstr "あなたの支援者の証はここにあります!"

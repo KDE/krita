@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 03:09+0000\n"
-"PO-Revision-Date: 2026-11-16 19:12+0300\n"
+"PO-Revision-Date: 2026-11-19 19:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -11321,7 +11321,7 @@ msgstr "Sütunların konumunu yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Clear Cache"
-msgstr "Önbelleği Temizle"
+msgstr "Ön Belleği Temizle"
 
 #. i18n: context: toolTip @ Action (clear_animation_cache), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2385
@@ -28047,7 +28047,7 @@ msgstr "Vuruş Seçim Özellikleri"
 #: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:104
 #, kde-format
 msgid "Regenerating cache..."
-msgstr "Önbellek yeniden üretiliyor…"
+msgstr "Ön bellek yeniden üretiliyor…"
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:64
 #, kde-format
@@ -29677,7 +29677,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Başarımı veya çizim yardımcılarıyla oluşan kalıntı "
 "sorunlarını çözmek için kullanılabilir.\n"
-"              </p><p>Piksel eşlemi önbelleğini değiştirmek bir yeniden "
+"              </p><p>Piksel eşlemi ön belleğini değiştirmek bir yeniden "
 "başlatma gerektirir.</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
@@ -29690,13 +29690,13 @@ msgstr "Doğrudan (Önerilen)"
 #: libs/ui/forms/wdgdisplaysettings.ui:205
 #, kde-format
 msgid "Pixmap Cache"
-msgstr "Piksel eşlemi önbelleği"
+msgstr "Piksel eşlemi ön belleği"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:210
 #, kde-format
 msgid "Large Pixmap Cache"
-msgstr "Büyük piksel eşlemi önbelleği"
+msgstr "Büyük piksel eşlemi ön belleği"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:224
@@ -32099,7 +32099,7 @@ msgid ""
 "\">physical</span> (non-hyperthreaded) cores your CPU has</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Canlandırma kareleri dokunurken (dosyalara veya "
-"canlandırma önbelleği yeniden üretilirken), Krita, görselinizin belirli bir "
+"canlandırma ön belleği yeniden üretilirken), Krita, görselinizin belirli bir "
 "sayıda kopyasını yapar ve üzerilerinde paralel olarak çalışır. Her bir kopya "
 "depolama için daha çok RAM talep eder (görselinizin boyutunun %​20’si kadar); "
 "dolayısıyla yalnızca yeterli RAM’iniz varsa bu sınırı yükseltin.</p><p><br/"
@@ -32220,13 +32220,13 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:442
 #, kde-format
 msgid "Animation Cache"
-msgstr "Canlandırma Önbelleği"
+msgstr "Canlandırma Ön Belleği"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgperformancesettings.ui:448
 #, kde-format
 msgid "Cache Storage Backend"
-msgstr "Önbellek Depolama Arka Ucu"
+msgstr "Ön Bellek Depolama Arka Ucu"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optInMemory)
 #: libs/ui/forms/wdgperformancesettings.ui:454
@@ -32240,7 +32240,7 @@ msgid ""
 "FullHD@25fps video you need extra 200 MiB of memory</p><p>* for 1 second of "
 "4K UltraHD@25fps video you need extra 800 MiB of memory</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Canlandırma karesi önbelleği, herhangi bir sınırlama "
+"<html><head/><body><p>Canlandırma karesi ön belleği, herhangi bir sınırlama "
 "olmadan tümüyle RAM’de saklanır</p><p><span style=\"font-weight:600;\">UYARI:"
 "</span> Lütfen bilgisayarınızda Genel sekmesinden talep edilenden <span "
 "style=\" text-decoration: underline;\">daha fazla</span> ve yeterli RAM "
@@ -32281,7 +32281,7 @@ msgstr "Disk üzerinde"
 #: libs/ui/forms/wdgperformancesettings.ui:477
 #, kde-format
 msgid "Cache Generation Options"
-msgstr "Önbellek Oluşturma Seçenekleri"
+msgstr "Ön Bellek Oluşturma Seçenekleri"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCachedFramesSizeLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:483
@@ -32299,7 +32299,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:486
 #, kde-format
 msgid "Limit cached frame size:"
-msgstr "Önbelleklenmiş kare boyutunu sınırla:"
+msgstr "Ön belleğe alınmış kare boyutunu sınırla:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intCachedFramesSizeLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:499
@@ -32348,8 +32348,8 @@ msgid ""
 "<html><head/><body><p>Automatically prerender animation cache in background "
 "when the user is idle</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Kullanıcı boştayken canlandırma önbelleğini arka "
-"planda önden sun.</p></body></html>"
+"<html><head/><body><p>Kullanıcı boştayken canlandırma ön belleğinin arka "
+"planda önden görüntüsünü alın.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:532
@@ -48839,7 +48839,7 @@ msgstr "Geçerli Katmanı %1 Biçiminden Dönüştür"
 #, kde-format
 msgctxt "action"
 msgid "&Explore Resources Cache Database..."
-msgstr "Ö&zkaynaklar Önbelleği Veri Tabanında Gez…"
+msgstr "Ö&zkaynaklar Ön Belleği Veri Tabanında Gez…"
 
 #. i18n: context: whatsThis @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
@@ -48853,12 +48853,12 @@ msgstr "Ö&zkaynaklar Önbelleği Veri Tabanında Gez…"
 #, kde-format
 msgctxt "action"
 msgid "Resources Cache Database"
-msgstr "Özkaynaklar Önbelleği Veri Tabanı"
+msgstr "Özkaynaklar Ön Belleği Veri Tabanı"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:35
 #, kde-format
 msgid "Resources Cache Database Explorer"
-msgstr "Özkaynaklar Önbelleği Veri Tabanı Gezgini"
+msgstr "Özkaynaklar Ön Belleği Veri Tabanı Gezgini"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #, kde-format

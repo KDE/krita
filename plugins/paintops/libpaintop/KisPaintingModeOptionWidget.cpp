@@ -71,11 +71,11 @@ KisPaintingModeOptionWidget::KisPaintingModeOptionWidget(lager::cursor<KisPainti
     setConfigurationPage(widget);
 
     connectControlState(group, &m_d->model, "paintingModeState", "paintingMode");
-    m_d->model.maskingBrushEnabled.bind([radioBuildup = widget->radioBuildup](bool enabled) {
-        QFont font = radioBuildup->font();
-        font.setStrikeOut(enabled);
-        radioBuildup->setFont(font);
-    });
+    m_d->model.maskingBrushEnabled.bind(
+        [radioBuildup = widget->radioBuildup, lblBuildup = widget->lblBuildup] (bool enabled) {
+            radioBuildup->setEnabled(!enabled);
+            lblBuildup->setEnabled(!enabled);
+        });
 
     QWidget *toolTipWidgets[] = {widget->radioBuildup, widget->lblBuildup};
     for (QWidget *w : toolTipWidgets) {

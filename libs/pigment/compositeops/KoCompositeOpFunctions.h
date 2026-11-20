@@ -1422,7 +1422,7 @@ inline T cfHardMixSAI(T src, T dst, T srcAlpha)
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
 
     composite_type c = composite_type(src) + dst - srcAlpha;
-    if (c < composite_type(0)) {
+    if (c <= composite_type(0)) {
         return zeroValue<T>();
     }
 

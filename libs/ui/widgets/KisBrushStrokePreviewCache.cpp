@@ -75,6 +75,9 @@ struct KisBrushStrokePreviewCache::Private {
     }
 };
 
+//Change this when updating how previews render
+const QString previewVersion = "1";
+
 KisBrushStrokePreviewCache::KisBrushStrokePreviewCache()
     : QObject(nullptr)
     , m_d(new Private)
@@ -152,6 +155,7 @@ void KisBrushStrokePreviewCache::saveToDiskCache(int presetId, QImage image)
     //Save the md5 sum into the preview so that we can know it's the same brush
     QString md5 = preset->md5Sum();
     image.setText("md5", md5);
+    image.setText("version", previewVersion);
 
     QSaveFile file(getDiskCacheFilename(presetId));
     if (file.open(QIODevice::WriteOnly) && image.save(&file, "PNG", 50)) {
@@ -238,11 +242,12 @@ QImage KisBrushStrokePreviewCache::getPreview(int presetId, const QSize &size, q
         if (!diskImage.isNull()) {
 
             // If there's an md5 mismatch request preview regeneration
-            if (diskImage.text("md5") != md5) {
+            if (diskImage.text("md5") != md5 || diskImage.text("version") != previewVersion) {
                 removeDiskCache(presetId);
                 requestPreviewGeneration(presetId);
                 return generatePlaceholder(size, pixelRatio);
             }
+
             evictIfNeeded();
             m_d->cache.insert(baseKey, diskImage);
             m_d->accessOrder.append(baseKey);

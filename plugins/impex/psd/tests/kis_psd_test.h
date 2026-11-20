@@ -28,6 +28,7 @@ private Q_SLOTS:
 
     void testRoundTripUserLocked();
     void testRoundTripGroupCollapsed();
+    void testRoundTripSaiCompositeOps();
 
     void testOpenLayerStylesWithPattern();
     void testOpenLayerStylesWithPatternMulti();

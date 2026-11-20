@@ -9,6 +9,7 @@
 
 #include <simpletest.h>
 #include <QCoreApplication>
+#include <QRandomGenerator>
 
 #include <testui.h>
 
@@ -500,6 +501,78 @@ void KisPSDTest::testRoundTripGroupCollapsed()
 
     QCOMPARE(openedDoc->image()->root()->childCount(), 1);
     QCOMPARE(openedDoc->image()->root()->firstChild()->collapsed(), true);
+}
+
+struct KisPsdTestSaiRoundTripCase {
+    QString compositeOpId;
+    quint8 opacity;
+
+    bool operator==(const KisPsdTestSaiRoundTripCase &other) const { return compositeOpId == other.compositeOpId && opacity == other.opacity; }
+};
+
+void KisPSDTest::testRoundTripSaiCompositeOps()
+{
+    const KoColorProfile *profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+
+    QRect imageRect(0, 0, 512, 512);
+    const KoColorSpace *cs =
+        KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    doc->setFileBatchMode(true);
+    KisImageSP image =
+        new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
+
+    doc->setCurrentImage(image);
+
+    // The SAI blend modes each have a "plain" Photoshop equivalent. The SAI
+    // modes are saved by meddling with the opacity value, so we check that it
+    // round-trips here too.
+    auto randomOpacity = [] {
+        return QRandomGenerator::global()->bounded(OPACITY_TRANSPARENT_U8, OPACITY_OPAQUE_U8);
+    };
+    QList<QPair<QString, quint8>> expectedPairs = {
+        {COMPOSITE_BURN, randomOpacity()},
+        {COMPOSITE_BURN_SAI, randomOpacity()},
+        {COMPOSITE_LINEAR_BURN, randomOpacity()},
+        {COMPOSITE_BURN_SAI, randomOpacity()},
+        {COMPOSITE_DODGE, randomOpacity()},
+        {COMPOSITE_DODGE_SAI, randomOpacity()},
+        {COMPOSITE_LINEAR_DODGE, randomOpacity()},
+        {COMPOSITE_LUMINOSITY_SAI, randomOpacity()},
+        {COMPOSITE_VIVID_LIGHT, randomOpacity()},
+        {COMPOSITE_BURN_DODGE_SAI, randomOpacity()},
+        {COMPOSITE_LINEAR_LIGHT, randomOpacity()},
+        {COMPOSITE_SHADE_SHINE_SAI, randomOpacity()},
+        {COMPOSITE_HARD_MIX_PHOTOSHOP, randomOpacity()},
+        {COMPOSITE_HARD_MIX_SAI, randomOpacity()},
+        {COMPOSITE_DIFF, randomOpacity()},
+        {COMPOSITE_DIFFERENCE_SAI, randomOpacity()},
+    };
+    for (const QPair<QString, quint8> &p : expectedPairs) {
+        KisPaintLayerSP paintLayer = new KisPaintLayer(image, p.first, p.second);
+        paintLayer->setCompositeOpId(p.first);
+        image->addNode(paintLayer, image->root());
+    }
+
+    QCOMPARE(image->root()->childCount(), expectedPairs.size());
+
+    const QByteArray mimeType("image/vnd.adobe.photoshop");
+    QFileInfo dstFileInfo(QDir::currentPath() + '/' + "test_save_sai_composite_ops.psd");
+    bool retval = doc->exportDocumentSync(dstFileInfo.absoluteFilePath(), mimeType);
+    QVERIFY(retval);
+
+    QSharedPointer<KisDocument> openedDoc = openPsdDocument(dstFileInfo);
+    QVERIFY(openedDoc->image());
+
+    int openedChildCount = int(openedDoc->image()->root()->childCount());
+    QList<QPair<QString, quint8>> actualPairs;
+    actualPairs.reserve(openedChildCount);
+    for (int i = 0; i < openedChildCount; ++i) {
+        KisNodeSP node = openedDoc->image()->root()->at(i);
+        actualPairs.append({node->compositeOpId(), node->opacity()});
+    }
+    QCOMPARE(actualPairs, expectedPairs);
 }
 
 void KisPSDTest::testOpenLayerStylesWithPattern()

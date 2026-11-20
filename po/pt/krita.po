@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-18 01:08+0000\n"
+"POT-Creation-Date: 2026-11-20 01:07+0000\n"
 "PO-Revision-Date: 2023-07-13 00:28+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -25384,7 +25384,7 @@ msgstr "Miniatura"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:125 libs/resources/KisTagModel.cpp:301
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:627
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:619
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:504
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
@@ -25455,7 +25455,7 @@ msgid "Tag File Name"
 msgstr "Nome do Ficheiro da Marca"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:108
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:978
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:970
 #, fuzzy, kde-format
 #| msgid "Resource View"
 msgid "Resource is broken!"
@@ -39404,7 +39404,7 @@ msgstr "Sem opções"
 msgid "Local selection is locked."
 msgstr "A selecção local está bloqueada."
 
-#: libs/ui/tool/kis_tool_freehand.cc:332
+#: libs/ui/tool/kis_tool_freehand.cc:335
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -39413,7 +39413,7 @@ msgstr ""
 "A ferramenta do pincel não consegue pintar nesta camada. Seleccione por "
 "favor uma camada ou máscara de pintura."
 
-#: libs/ui/tool/kis_tool_freehand.cc:337
+#: libs/ui/tool/kis_tool_freehand.cc:340
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -39563,8 +39563,8 @@ msgid "Compact"
 msgstr "Companhia:"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:199
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:83
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:190
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:78
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:182
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:238
 #, kde-format
@@ -41005,25 +41005,15 @@ msgstr "Visualização"
 msgid "Thumbnails"
 msgstr "Miniaturas"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
-#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
-#, kde-format
-msgid "Details"
-msgstr "Detalhes"
-
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #, fuzzy, kde-format
 #| msgctxt "Draws a line around an area"
 #| msgid "Stroke"
 msgid "Strokes"
 msgstr "Traço"
 
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
 #, fuzzy, kde-format
 #| msgid "Large Thumbnail"
 msgid "Strokes and Thumbnails"
@@ -41057,18 +41047,18 @@ msgstr "Carregar de novo a predefinição do pincel"
 msgid "Rename the brush preset"
 msgstr "Mudar o nome da predefinição do pincel"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #, fuzzy, kde-format
 #| msgid "Thumbnail Size"
 msgid "Thumbnails and Strokes"
 msgstr "Tamanho da Miniatura"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:218
 #, kde-format
 msgid "Detach Brush Editor"
 msgstr "Dissociar o Editor do Pincel"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:559
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:551
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
@@ -45412,6 +45402,14 @@ msgstr "Deseja gravá-la?"
 #, kde-format
 msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgstr "Tem a certeza que deseja remover a máscara <b>'%1'</b>?"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
+#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
+#, kde-format
+msgid "Details"
+msgstr "Detalhes"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)

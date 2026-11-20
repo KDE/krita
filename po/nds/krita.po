@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-18 01:08+0000\n"
+"POT-Creation-Date: 2026-11-20 01:07+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -25241,7 +25241,7 @@ msgstr "Vöransichten"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:125 libs/resources/KisTagModel.cpp:301
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:627
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:619
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:504
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
@@ -25312,7 +25312,7 @@ msgid "Tag File Name"
 msgstr "Dateinaam"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:108
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:978
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:970
 #, fuzzy, kde-format
 msgid "Resource is broken!"
 msgstr "&Ressourcen"
@@ -38926,14 +38926,14 @@ msgstr "Keen Optschonen"
 msgid "Local selection is locked."
 msgstr "Keen Akschoon utsöcht."
 
-#: libs/ui/tool/kis_tool_freehand.cc:332
+#: libs/ui/tool/kis_tool_freehand.cc:335
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
 "mask."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_freehand.cc:337
+#: libs/ui/tool/kis_tool_freehand.cc:340
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -39081,8 +39081,8 @@ msgid "Compact"
 msgstr "Firma:"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:199
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:83
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:190
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:78
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:182
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:238
 #, fuzzy, kde-format
@@ -40312,23 +40312,13 @@ msgstr "Dorstellen"
 msgid "Thumbnails"
 msgstr "Vöransichten"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
-#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
-#, kde-format
-msgid "Details"
-msgstr "Enkelheiten"
-
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #, fuzzy, kde-format
 msgid "Strokes"
 msgstr "Streek"
 
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
 #, fuzzy, kde-format
 #| msgid "Thumbnails"
 msgid "Strokes and Thumbnails"
@@ -40362,18 +40352,18 @@ msgstr "Pinselvörinstellen utsöken"
 msgid "Rename the brush preset"
 msgstr "Aktuell Pinsel-Vörinstellen"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #, fuzzy, kde-format
 #| msgid "Thumbnail View"
 msgid "Thumbnails and Strokes"
 msgstr "Vöransicht"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:218
 #, fuzzy, kde-format
 msgid "Detach Brush Editor"
 msgstr "Pinsel-Editor"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:559
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:551
 #, fuzzy, kde-format
 #| msgid "KS%1 Engine"
 msgctxt "%1 is the name of a brush engine"
@@ -44713,6 +44703,14 @@ msgstr "Wullt Du de vörhannen Vörlaag \"%1\" redig överschrieven?"
 #, kde-format
 msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
+#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
+#, kde-format
+msgid "Details"
+msgstr "Enkelheiten"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)

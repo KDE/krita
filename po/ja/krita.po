@@ -35,15 +35,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-18 01:08+0000\n"
-"PO-Revision-Date: 2026-06-07 12:10+0900\n"
+"POT-Creation-Date: 2026-11-20 01:07+0000\n"
+"PO-Revision-Date: 2026-11-08 21:56+0900\n"
 "Last-Translator: Mint <5602mint@gmail.com>\n"
-"Language-Team: Japanese <kde-i18n-doc@kde.org>\n"
+"Language-Team: Japanese <kde-jp@kde.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 26.04.2\n"
+"X-Generator: Lokalize 26.08.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -25004,7 +25004,7 @@ msgstr "サムネイル"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:125 libs/resources/KisTagModel.cpp:301
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:627
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:619
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:504
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
@@ -25075,7 +25075,7 @@ msgid "Tag File Name"
 msgstr "タグファイル名"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:108
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:978
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:970
 #, fuzzy, kde-format
 #| msgid "Resource View"
 msgid "Resource is broken!"
@@ -26973,8 +26973,7 @@ msgstr "最後のフレーム:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgid "Images"
 msgstr "画像"
 
@@ -29416,10 +29415,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
 #: libs/ui/forms/KisWelcomePage.ui:1846 libs/ui/KisWelcomePageWidget.cpp:843
-#, fuzzy, kde-format
-#| msgid "Support Krita"
+#, kde-format
 msgid "Support Krita!"
-msgstr "Krita を支援"
+msgstr "Krita を支援してください!"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -38868,7 +38866,7 @@ msgstr "オプションなし"
 msgid "Local selection is locked."
 msgstr "ローカル選択はロックされています。"
 
-#: libs/ui/tool/kis_tool_freehand.cc:332
+#: libs/ui/tool/kis_tool_freehand.cc:335
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -38877,7 +38875,7 @@ msgstr ""
 "ブラシツールはこのレイヤーには描画できません。ペイントレイヤーかマスクを選択"
 "してください。"
 
-#: libs/ui/tool/kis_tool_freehand.cc:337
+#: libs/ui/tool/kis_tool_freehand.cc:340
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -39022,8 +39020,8 @@ msgid "Compact"
 msgstr "会社:"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:199
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:83
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:190
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:78
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:182
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:238
 #, kde-format
@@ -40421,25 +40419,15 @@ msgstr "表示"
 msgid "Thumbnails"
 msgstr "サムネイル"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
-#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
-#, kde-format
-msgid "Details"
-msgstr "詳細表示"
-
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #, fuzzy, kde-format
 #| msgctxt "Draws a line around an area"
 #| msgid "Stroke"
 msgid "Strokes"
 msgstr "縁取り"
 
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
 #, fuzzy, kde-format
 #| msgid "Large Thumbnail"
 msgid "Strokes and Thumbnails"
@@ -40471,18 +40459,18 @@ msgstr "ブラシプリセットを再読み込み"
 msgid "Rename the brush preset"
 msgstr "ブラシプリセット名を変更"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #, fuzzy, kde-format
 #| msgid "Thumbnail Size"
 msgid "Thumbnails and Strokes"
 msgstr "サムネイルのサイズ"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:218
 #, kde-format
 msgid "Detach Brush Editor"
 msgstr "ブラシエディタを分離"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:559
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:551
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
@@ -42059,12 +42047,12 @@ msgid ""
 "your wish. Make sure you use the severity called \"Wishlist\".</html>"
 msgstr ""
 "<html>ソフトウェアの改善に終わりはありません。KDE チームも日々改良に努めてい"
-"ますが、それにはユーザーであるあなたの協力が必要です。不具合や改善点を見つけ"
-"た場合は、ぜひ教えてください。<br /><br />KDE にはバグ追跡システムがありま"
-"す。<a href=\"%1\">%1</a> または「ヘルプ」メニューの「バグを報告...」画面から"
-"不具合を報告してください。<br /><br />改良のためのいいアイデアをお持ちの場合"
-"も、バグ追跡システムを使ってご要望をどしどしお寄せください。このとき、重要度"
-"には \"Wishlist\" (要望) を指定してください。</html>"
+"ますが、それにはユーザーのみなさまの協力が必要です。不具合や改善点を見つけた"
+"場合は、ぜひ教えてください。<br /><br />KDE にはバグ追跡システムがあります。"
+"<a href=\"%1\">%1</a> または「ヘルプ」メニューの「バグを報告...」画面から不具"
+"合を報告してください。<br /><br />改良のためのいいアイデアをお持ちの場合も、"
+"バグ追跡システムを使ってご要望をどしどしお寄せください。このとき、重要度には "
+"\"Wishlist\" (要望) を指定してください。</html>"
 
 # kxmlgui/kxmlgui6.po から抜粋
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:90
@@ -42097,9 +42085,8 @@ msgid ""
 msgstr ""
 "<p>KDE のソフトウェアは無償で配布されていますが、開発には費用がかかります。"
 "<br /><br />KDE コミュニティはドイツの Tuebingen で KDE e.V. という非営利組織"
-"を法的に設立しています。KDE e.V. は法的･財務的な仕事を、KDE プロジェクトを代"
-"表して担っています。KDE e.V. については <a href=\"%1\">%1</a> をご覧くださ"
-"い。</p>"
+"を法的に設立しており、KDE プロジェクトを代表して法的･財務的な役割を担っていま"
+"す。KDE e.V. についてくわしくは <a href=\"%1\">%1</a> をご覧ください。</p>"
 
 # kxmlgui/kxmlgui6.po から抜粋
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:121
@@ -44796,6 +44783,14 @@ msgstr "保存しますか？"
 #, kde-format
 msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgstr "マスク<b>'%1'</b>を削除しますか？"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
+#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
+#, kde-format
+msgid "Details"
+msgstr "詳細表示"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
@@ -54828,10 +54823,11 @@ msgstr ""
 msgid "XYZ (OkLAB)"
 msgstr ""
 
+# プロジェクト貢献者の氏名またはハンドルネームなので原文のままにしています
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:159
 #, kde-format
 msgid "Reinhard"
-msgstr ""
+msgstr "Reinhard"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:160
 #, kde-format
@@ -72071,309 +72067,3 @@ msgstr ""
 "全範囲と部分範囲を切り替えます。\n"
 "全範囲: [%1, %2]\n"
 "部分範囲: [%3, %4]"
-
-#~ msgid ""
-#~ "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
-#~ "decoration: underline;\">enable news</a> from krita.org in various "
-#~ "languages with the menu above"
-#~ msgstr ""
-#~ "メニュー上にいくつかの言語でkrita.org の<a href=\"ignored\" style="
-#~ "\"color: COLOR_PLACEHOLDER; text-decoration: underline;\">お知らせを有効化"
-#~ "</a> することが可能です"
-
-#~ msgid "Enable news and check for new releases"
-#~ msgstr "お知らせを有効化し、新しいリリースを確認する"
-
-#~ msgid "Add Color To Palette"
-#~ msgstr "パレットに色を追加"
-
-#~ msgid "Cannot write to palette file %1. Maybe it is read-only. "
-#~ msgstr ""
-#~ "パレットファイル %1 に書き込めません。読み取り専用になっている可能性があり"
-#~ "ます。"
-
-#~ msgid "Add/Remove Colors"
-#~ msgstr "色を追加/削除"
-
-#~ msgid "&Zoom In"
-#~ msgstr "倍率拡大(&Z)"
-
-#~ msgid "Zoo&m Out"
-#~ msgstr "倍率縮小(&M)"
-
-#~ msgid ""
-#~ "<html><head/><body><p>This is an Hybrid Log Gamma image. Krita does not "
-#~ "support sending HLG to the monitor, so for import it is recommended to "
-#~ "convert from scene linear to display linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>これは Hybrid Log Gamma 画像です。Krita は HLG をモ"
-#~ "ニターに送信することをサポートしていません。そのため、インポートする際には"
-#~ "シーンリニアからディスプレイリニアへの変換を推奨します。</p></body></html>"
-
-#~ msgid "Apply HLG OOTF"
-#~ msgstr "HLG OOTF を適用"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Display gamma. By default this is 1.2 for "
-#~ "converting from scene to display linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>ガンマ値。デフォルトでは、シーンリニアからディスプレ"
-#~ "イリニアへの変換には 1.2 が使用されます。</p></body></html>"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The display brightness in nits. By default this is "
-#~ "set to 1000 for converting to display linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>画面の明るさをニットで指定します。デフォルトでは、"
-#~ "ディスプレイリニアへの変換には 1000 が使用されます。</p></body></html>"
-
-#~ msgctxt "action"
-#~ msgid "S-Pen Actions"
-#~ msgstr "S-Pen 操作"
-
-#, fuzzy
-#~| msgid ""
-#~| "Following button actions are supported on the Note 9, Note 10 and Tab S6 "
-#~| "devices."
-#~ msgid ""
-#~ "The following buttons are supported on the Note 9, Note 10, Tab S6 and "
-#~ "Tab S9 devices."
-#~ msgstr ""
-#~ "Note9、Note10、および Tab S6 デバイスでは、以下のボタン操作がサポートされ"
-#~ "ています。"
-
-#, fuzzy
-#~| msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
-#~ msgid ""
-#~ "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
-#~ "devices."
-#~ msgstr ""
-#~ "Note10 および Tab S6 デバイスでは、以下のジェスチャがサポートされていま"
-#~ "す。"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Display gamma. By default this is 1.2 for "
-#~ "converting from PQ.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>ガンマ値を指定します。デフォルトでは PQ から変換する"
-#~ "ために 1.2 に設定されています。</p></body></html>"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The display brightness in nits. By default this is "
-#~ "set to 1000 for converting from PQ.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>ディスプレイの明るさをニットで指定します。デフォルト"
-#~ "では PQ から変換するために 1000 に設定されています。</p></body></html>"
-
-#~ msgid " cd/m²"
-#~ msgstr " cd/m²"
-
-#~ msgid ""
-#~ "<html><head/><body><p>Hybrid Log Gamma needs an extra conversion step in "
-#~ "between, as Krita currently cannot send HLG data directly to the display. "
-#~ "Therefore we apply the HLG opto-optical curve to convert from display to "
-#~ "scene linear.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>ハイブリッド・ログ = ガンマは、Krita が現在ディスプ"
-#~ "レイに HLG データを直接送信できないため、その間に追加の変換ステップが必要"
-#~ "です。そのため、ディスプレイからシーンリニアに変換するために HLG 光学光学"
-#~ "曲線を適用します。</p></body></html>"
-
-#~ msgid "Apply reverse Hybrid Log Gamma OOTF"
-#~ msgstr "逆ハイブリッド・ログ = ガンマ OOTF を適用"
-
-#~ msgctxt "the gradient will be dithered"
-#~ msgid "Dither"
-#~ msgstr "ディザリング"
-
-#~ msgid "Warning(s):"
-#~ msgstr "警告:"
-
-#~ msgctxt "The suffix after number of frames"
-#~ msgid "frame(s)"
-#~ msgstr "フレーム (秒)"
-
-#~ msgid "Preserve alpha"
-#~ msgstr "アルファを保護"
-
-#~ msgid "Stamp"
-#~ msgstr "スタンプ"
-
-#~ msgid ""
-#~ "Nothing copied\n"
-#~ " to Clipboard"
-#~ msgstr ""
-#~ "クリップボードには何も\n"
-#~ "コピーされていません"
-
-#~ msgid ""
-#~ "Creates a brush tip from the current image selection.\n"
-#~ " If no selection is present the whole image will be used."
-#~ msgstr ""
-#~ "現在の画像の選択範囲からブラシ形状を作成します。\n"
-#~ " 何も選択していない場合、画像全体を使用します。"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Ungroup shapes"
-#~ msgctxt "action"
-#~ msgid "Ungroup shape(s)"
-#~ msgstr "シェイプのグループ化を解除"
-
-#, fuzzy
-#~| msgctxt "(qtundo-format)"
-#~| msgid "Group shapes"
-#~ msgctxt "action"
-#~ msgid "Group shape(s)"
-#~ msgstr "シェイプをグループ化"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Group"
-#~ msgctxt "Groups shape(s) in the context of Vector Interaction Tool"
-#~ msgid "Group"
-#~ msgstr "グループ化"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Group"
-#~ msgctxt "Group shape(s) in the context of Vector Interaction Tool"
-#~ msgid "Group"
-#~ msgstr "グループ化"
-
-#~ msgctxt "action"
-#~ msgid "Quick Group"
-#~ msgstr "クイックグループ化"
-
-#~ msgctxt "action"
-#~ msgid "Quick Ungroup"
-#~ msgstr "クイックグループ解除"
-
-#~ msgid ""
-#~ "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#~ "b></p>"
-#~ msgstr ""
-#~ "<html><head/><body><p align=\"center\"><b><span style=\" color:%1;\">最近"
-#~ "使用したファイル</span></b></p>"
-
-#~ msgid ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Links</span></p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;\">リ"
-#~ "ンク</span></p></body></html>"
-
-#~ msgid ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#~ "\">Recent files</span></p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;\">最"
-#~ "近開いたファイル</span></p></body></html>"
-
-#~ msgid "Hide after startup."
-#~ msgstr "スタートアップの後は表示しない"
-
-#~ msgid "Layer name:"
-#~ msgstr "レイヤー名:"
-
-#~ msgid "No configuration options are available for this filter"
-#~ msgstr "このフィルタには設定オプションはありません"
-
-#~ msgctxt "Shortcut type"
-#~ msgid "Gesture"
-#~ msgstr "ジェスチャー"
-
-#~ msgid "Key Combination"
-#~ msgstr "キーの組み合わせ"
-
-#~ msgid "Gesture"
-#~ msgstr "ジェスチャー"
-
-#~ msgid "Trackpad Pan"
-#~ msgstr "トラックパッドでの平行移動"
-
-#~ msgid "Pan Gesture"
-#~ msgstr "パンジェスチャー"
-
-#~ msgid "Rotate Gesture"
-#~ msgstr "回転ジェスチャー"
-
-#~ msgctxt "action"
-#~ msgid "Ungroup"
-#~ msgstr "グループ化を解除"
-
-#~ msgid "Use system monitor profile"
-#~ msgstr "システムモニタプロファイルを使用"
-
-#~ msgid "Save as HDR image (Rec. 2020 PQ)"
-#~ msgstr "HDR 画像 (2020 PQ 形式) として保存"
-
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">PNG</span> files "
-#~ "have <span style=\" font-style:italic;\">two</span> options to save <span "
-#~ "style=\" font-weight:600;\">sRGB</span> information: as a tag or as an "
-#~ "explicit profile. For use with in websites, <span style=\" font-style:"
-#~ "italic;\">disable</span> this option. For interchange with other "
-#~ "applications, <span style=\" font-style:italic;\">enable</span> this "
-#~ "option.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">PNG</span> ファイ"
-#~ "ルは <span style=\" font-weight:600;\">sRGB</span> 情報を保存するのに"
-#~ "<span style=\" font-style:italic;\">2つ</span>のオプションがあります:タグ"
-#~ "あるいは明示的プロファイルです。ウェブサイトで使用する場合、このオプション"
-#~ "を<span style=\" font-style:italic;\">無効</span>にしてください。他のアプ"
-#~ "リケーションとの互換性を保つには、このオプションを<span style=\" font-"
-#~ "style:italic;\">有効</span>にしてください。</p></body></html>"
-
-#~ msgid "Embed sRGB profile"
-#~ msgstr "sRGB プロファイルを埋め込む"
-
-#~ msgid "Master Display:"
-#~ msgstr "表示:"
-
-#~ msgid "y"
-#~ msgstr "y"
-
-#~ msgid "Red Primary:"
-#~ msgstr "三原色 (赤):"
-
-#~ msgid "Green Primary:"
-#~ msgstr "三原色 (緑):"
-
-#~ msgid "Blue Primary:"
-#~ msgstr "三原色 (青):"
-
-#~ msgid "MaxCLL:"
-#~ msgstr "MaxCLL:"
-
-#~ msgid "MaxFALL:"
-#~ msgstr "MaxFALL:"
-
-#~ msgid ""
-#~ "This XCF file is too new; Krita cannot support XCF files written by GIMP "
-#~ "2.9 or newer."
-#~ msgstr ""
-#~ "この XCF ファイルは新しすぎます: Krita は GIMP 2.9 以降で書き出された XCF "
-#~ "ファイルに対応していません。"
-
-#~ msgctxt "action"
-#~ msgid "Convert to &Animated Layer"
-#~ msgstr "アニメーションレイヤーに変換(&A)"
-
-#~ msgctxt "action"
-#~ msgid "Convert layer into animation frames"
-#~ msgstr "レイヤーをアニメーションフレームに変換"
-
-#~ msgid "&Open Foreground color selector"
-#~ msgstr "描画色セレクターを開く(&O)"
-
-#~ msgid "&Open Background color selector"
-#~ msgstr "背景色セレクターを開く(&O)"
-
-#, fuzzy
-#~| msgid "Selection Actions"
-#~ msgid "Selection Actions Bar"
-#~ msgstr "選択アクション"
-
-#~ msgid "Get your Krita Supporter Badge here!"
-#~ msgstr "あなたの支援者の証はここにあります!"

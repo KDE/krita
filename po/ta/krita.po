@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-18 01:08+0000\n"
+"POT-Creation-Date: 2026-11-20 01:07+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -24616,7 +24616,7 @@ msgstr "உருவத்தை இறக்குமதிசெய்"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:125 libs/resources/KisTagModel.cpp:301
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:627
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:619
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:504
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
@@ -24684,7 +24684,7 @@ msgid "Tag File Name"
 msgstr "சரியான"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:108
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:978
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:970
 #, fuzzy, kde-format
 msgid "Resource is broken!"
 msgstr "சதுரம்"
@@ -37854,14 +37854,14 @@ msgstr "Alpha"
 msgid "Local selection is locked."
 msgstr "தேர்வை அளவுமாற்று"
 
-#: libs/ui/tool/kis_tool_freehand.cc:332
+#: libs/ui/tool/kis_tool_freehand.cc:335
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
 "mask."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_freehand.cc:337
+#: libs/ui/tool/kis_tool_freehand.cc:340
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -37999,8 +37999,8 @@ msgid "Compact"
 msgstr "நிறுவனம்:"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:199
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:83
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:190
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:78
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:182
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:238
 #, fuzzy, kde-format
@@ -39179,23 +39179,13 @@ msgstr "பெயர்ச்சி "
 msgid "Thumbnails"
 msgstr "உருவத்தை இறக்குமதிசெய்"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
-#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
-#, fuzzy, kde-format
-msgid "Details"
-msgstr "&முன்னிருந்த"
-
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #, fuzzy, kde-format
 msgid "Strokes"
 msgstr "சைன்"
 
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
 #, fuzzy, kde-format
 #| msgid "Import Image"
 msgid "Strokes and Thumbnails"
@@ -39227,18 +39217,18 @@ msgstr "அடுக்கு குணங்கள்..."
 msgid "Rename the brush preset"
 msgstr "நிகழ்விலுள்ள அடுக்கை மாற்று"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #, fuzzy, kde-format
 #| msgid "Import Image"
 msgid "Thumbnails and Strokes"
 msgstr "உருவத்தை இறக்குமதிசெய்"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:218
 #, fuzzy, kde-format
 msgid "Detach Brush Editor"
 msgstr "தூரிகை வடிவங்கள்"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:559
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:551
 #, fuzzy, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
@@ -43464,6 +43454,14 @@ msgstr "நீங்கள் கண்டிப்பாக '%1' படிம�
 #, kde-format
 msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
+#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
+#, fuzzy, kde-format
+msgid "Details"
+msgstr "&முன்னிருந்த"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)

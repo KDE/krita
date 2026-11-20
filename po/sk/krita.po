@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-18 01:08+0000\n"
+"POT-Creation-Date: 2026-11-20 01:07+0000\n"
 "PO-Revision-Date: 2026-09-14 20:10+0200\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -11487,113 +11487,98 @@ msgstr "Obnoviť Rozsah Prehrávania"
 
 #. i18n: context: text @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2527
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Constant"
-msgstr "Interpolácia"
+msgstr "Konštantná interpolácia"
 
 #. i18n: context: toolTip @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2529
-#, fuzzy, kde-format
-#| msgid "Hold constant value. No interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Hold constant value. No interpolation."
 msgstr "Podržať konštantnú hodnotu. Žiadna interpolácia."
 
 #. i18n: context: text @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2539
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Linear"
-msgstr "Interpolácia"
+msgstr "Lineárna interpolácia"
 
 #. i18n: context: toolTip @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2541
-#, fuzzy, kde-format
-#| msgid "Linear interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Linear interpolation."
 msgstr "Lineárna interpolácia."
 
 #. i18n: context: text @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2551
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Bezier"
-msgstr "Interpolácia"
+msgstr "Bézierova interpolácia"
 
 #. i18n: context: toolTip @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2553
-#, fuzzy, kde-format
-#| msgid "Bezier curve interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Bezier curve interpolation."
 msgstr "Interpolácia Bézierovej krivky."
 
 #. i18n: context: text @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2563
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Sharp"
-msgstr "Interpolácia"
+msgstr "Ostrá interpolácia"
 
 #. i18n: context: toolTip @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2565
-#, fuzzy, kde-format
-#| msgid "Sharp interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Sharp interpolation tangents."
 msgstr "Ostré interpolačné dotyčnice."
 
 #. i18n: context: text @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2575
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Smooth"
-msgstr "Interpolácia"
+msgstr "Plynulá interpolácia"
 
 #. i18n: context: toolTip @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2577
-#, fuzzy, kde-format
-#| msgid "Smooth interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Smooth interpolation tangents."
 msgstr "Hladké interpolačné dotyčnice."
 
 #. i18n: context: text @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2587
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Zoom Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Range"
-msgstr "Priblížiť na prispôsobenie stránke"
+msgstr "Prispôsobiť zväčšenie rozsahu"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2589
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit channel range."
 msgstr "Prispôsobiť zobrazenie rozsahu kanála."
 
 #. i18n: context: text @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2599
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Curve"
-msgstr "Prispôsobiť zobrazenie krivke."
+msgstr "Prispôsobiť zväčšenie krivke"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2601
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit curve."
 msgstr "Prispôsobiť zobrazenie krivke."
@@ -20802,14 +20787,12 @@ msgid "Zoom Tool"
 msgstr "Nástroj priblíženia"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:38
-#, fuzzy, kde-format
-#| msgid "Zoom In"
+#, kde-format
 msgid "Zoom in"
 msgstr "Priblížiť"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:40
-#, fuzzy, kde-format
-#| msgid "Zoom Out"
+#, kde-format
 msgid "Zoom out"
 msgstr "Oddialiť"
 
@@ -20825,11 +20808,9 @@ msgstr "Režim"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/flake/tools/KoZoomToolWidget.ui:34
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Zoom to fit"
+#, kde-format
 msgid "Zoom to fit:"
-msgstr "Zväčšiť na veľkosť okna"
+msgstr "Prispôsobiť zväčšenie:"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -24606,7 +24587,7 @@ msgstr "Náhľadový obrázok"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:125 libs/resources/KisTagModel.cpp:301
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:627
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:619
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:504
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
@@ -24674,7 +24655,7 @@ msgid "Tag File Name"
 msgstr "Názov súboru značky."
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:108
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:978
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:970
 #, kde-format
 msgid "Resource is broken!"
 msgstr "Zdroj je poškodený!"
@@ -28872,23 +28853,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, enableNewsBox)
 #: libs/ui/forms/KisWelcomePage.ui:1611 libs/ui/KisWelcomePageWidget.cpp:151
-#, fuzzy, kde-format
-#| msgid "Check for updates"
+#, kde-format
 msgid "Automatically check for updates"
-msgstr "Skontrolovať aktualizácie"
+msgstr "Automaticky kontrolovať aktualizácie"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, checkNowButton)
 #: libs/ui/forms/KisWelcomePage.ui:1631
 #, kde-format
 msgid "Retrieve news and updates from krita.org now."
-msgstr ""
+msgstr "Teraz načítať novinky a aktualizácie z krita.org."
 
 #. i18n: ectx: property (text), widget (QPushButton, checkNowButton)
 #: libs/ui/forms/KisWelcomePage.ui:1634
-#, fuzzy, kde-format
-#| msgid "CheckBox"
+#, kde-format
 msgid "Check Now"
-msgstr "Zaškrtávacie pole"
+msgstr "Skontrolovať teraz"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1756
@@ -29492,13 +29471,7 @@ msgstr "Prehliadač farebných priestorov"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-#| "\"><span style=\" font-weight:600; text-decoration: underline; color:"
-#| "#006e28;\">Color Spaces</span></a>  determine how colors are encoded in "
-#| "your files. Different color spaces have different properties and are used "
-#| "for different purposes.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
 "\"><span style=\" font-weight:600; text-decoration: underline; \">Color "
@@ -29507,10 +29480,10 @@ msgid ""
 "p></body></html>"
 msgstr ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-"\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
-"\">Farebné priestory</span></a>  určujú, ako sú farby kódované vo vašich "
-"súboroch. Rôzne farebné priestory majú rôzne vlastnosti a používajú sa na "
-"rôzne účely.</p></body></html>"
+"\"><span style=\" font-weight:600; text-decoration: underline; \">Farebné "
+"priestory</span></a>  určujú, ako sú farby kódované vo vašich súboroch. "
+"Rôzne farebné priestory majú rôzne vlastnosti a používajú sa na rôzne účely."
+"</p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:51
@@ -33818,16 +33791,14 @@ msgid "Sample Background Color from Merged Image"
 msgstr "Vzorkovať farbu pozadia zo zlúčeného obrázku"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:42
-#, fuzzy, kde-format
-#| msgid "Sample Foreground Color from Current Layer"
+#, kde-format
 msgid "Sample Foreground Color from Current Group"
-msgstr "Vzorkovať farbu popredia z aktuálnej vrstvy"
+msgstr "Vzorkovať farbu popredia z aktuálnej skupiny"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:43
-#, fuzzy, kde-format
-#| msgid "Sample Background Color from Current Layer"
+#, kde-format
 msgid "Sample Background Color from Current Group"
-msgstr "Vzorkovať farbu pozadia z aktuálnej vrstvy"
+msgstr "Vzorkovať farbu pozadia z aktuálnej skupiny"
 
 #: libs/ui/input/kis_change_frame_action.cpp:27
 #, kde-format
@@ -38368,7 +38339,7 @@ msgstr "Nie je dostupná žiadna voľba"
 msgid "Local selection is locked."
 msgstr "Lokálny výber je zamknutý."
 
-#: libs/ui/tool/kis_tool_freehand.cc:332
+#: libs/ui/tool/kis_tool_freehand.cc:335
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -38377,7 +38348,7 @@ msgstr ""
 "Nástroj štetca nemôže maľovať na tejto vrstve. Prosím, vyberte vrstvu "
 "maľovania alebo masku."
 
-#: libs/ui/tool/kis_tool_freehand.cc:337
+#: libs/ui/tool/kis_tool_freehand.cc:340
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -38509,11 +38480,9 @@ msgid "Toolbox"
 msgstr "Panel nástrojov"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:190
-#, fuzzy, kde-format
-#| msgctxt "Set the gradient chooser to show custom size items"
-#| msgid "Custom size items"
+#, kde-format
 msgid "Customize Disabled Tools"
-msgstr "Vlastná veľkosť položiek"
+msgstr "Prispôsobiť zakázané nástroje"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, kde-format
@@ -38521,8 +38490,8 @@ msgid "Compact"
 msgstr "Kompaktný"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:199
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:83
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:190
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:78
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:182
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:238
 #, kde-format
@@ -38578,23 +38547,19 @@ msgid "&Vertical"
 msgstr "Vertikálna"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:344
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Customize Toolbox"
-msgstr "Vlastné farby"
+msgstr "Prispôsobiť panel nástrojov"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:345
-#, fuzzy, kde-format
-#| msgid "Enabled: false"
+#, kde-format
 msgid "Enabled tools"
-msgstr "Povolené: nie"
+msgstr "Povolené nástroje"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:346
-#, fuzzy, kde-format
-#| msgctxt "touch painting"
-#| msgid "Disabled"
+#, kde-format
 msgid "Disabled tools"
-msgstr "Zakázané"
+msgstr "Zakázané nástroje"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format
@@ -39933,29 +39898,16 @@ msgstr "Zobraziť"
 msgid "Thumbnails"
 msgstr "Náhľady"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
-#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
 #, kde-format
-msgid "Details"
-msgstr "Podrobnosti"
+msgid "Strokes"
+msgstr "Ťahy"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
-msgid "Strokes"
-msgstr "Ťah"
-
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
-#, fuzzy, kde-format
-#| msgid "Large Thumbnail"
+#, kde-format
 msgid "Strokes and Thumbnails"
-msgstr "Veľký náhľad"
+msgstr "Ťahy a náhľady"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
@@ -39983,18 +39935,17 @@ msgstr "Znovu načítať predvoľbu štetca"
 msgid "Rename the brush preset"
 msgstr "Premenovať predvoľbu štetca"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
-#, fuzzy, kde-format
-#| msgid "Thumbnail Size"
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
+#, kde-format
 msgid "Thumbnails and Strokes"
-msgstr "Veľkosti náhľadov"
+msgstr "Náhľady a ťahy"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:218
 #, kde-format
 msgid "Detach Brush Editor"
 msgstr "Oddeliť editor štetca"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:559
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:551
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
@@ -40112,10 +40063,9 @@ msgid "Select regions found from the active layer"
 msgstr "Vybrať nájdené oblasti z aktívnej vrstvy"
 
 #: libs/ui/widgets/kis_selection_options.cc:269
-#, fuzzy, kde-format
-#| msgid "Select regions found from the active layer"
+#, kde-format
 msgid "Select regions found from the active group"
-msgstr "Vybrať nájdené oblasti z aktívnej vrstvy"
+msgstr "Vybrať nájdené oblasti z aktívnej skupiny"
 
 #: libs/ui/widgets/kis_selection_options.cc:271
 #, kde-format
@@ -40398,10 +40348,9 @@ msgid "Amount:"
 msgstr "Množstvo:"
 
 #: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:320
-#, fuzzy, kde-format
-#| msgid "Loading Pages..."
+#, kde-format
 msgid "Loading..."
-msgstr "Načítavanie stránok..."
+msgstr "Načítava sa..."
 
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format
@@ -42426,10 +42375,9 @@ msgstr "Vlastná farba"
 
 #. i18n: ectx: property (text), widget (QLabel, brushPriorityLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:251
-#, fuzzy, kde-format
-#| msgid "Brush Preset History"
+#, kde-format
 msgid "Brush Priority:"
-msgstr "História predvolieb štetca"
+msgstr "Priorita štetca:"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:330
@@ -42573,6 +42521,9 @@ msgid ""
 "follow (eg for the \"Perspective\" brush sensor), this will be used. "
 "Priority is like counting, lower number comes first."
 msgstr ""
+"Použije sa, keď je štetec nad pomôckami perspektívy a musí sa rozhodnúť, "
+"ktorú nasledovať (napr. pre senzor štetca „Perspektíva“). Priorita funguje "
+"ako počítanie, nižšie číslo má prednosť."
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1797
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1803
@@ -44286,6 +44237,14 @@ msgstr "Chcete ho uložiť?"
 msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgstr "Naozaj chcete vymazať masku <b>'%1'</b>?"
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
+#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
+#, kde-format
+msgid "Details"
+msgstr "Podrobnosti"
+
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
 #. i18n: ectx: property (text), item, widget (KComboBox, cbShape)
@@ -44823,6 +44782,8 @@ msgid ""
 "Bakes the current settings into the current projection, and opens it as a "
 "new image. Will use \"%1\" ICC profile as display space."
 msgstr ""
+"Zapečie aktuálne nastavenia do aktuálnej projekcie a otvorí ju ako nový "
+"obrázok. Ako priestor zobrazenia sa použije profil ICC „%1“."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:301
 #, kde-format
@@ -44868,12 +44829,10 @@ msgid "None"
 msgstr "Žiadne"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:675
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgctxt "@title:window"
 msgid "Convert to image colorspace?"
-msgstr "Previesť farebný priestor obrázka"
+msgstr "Previesť do farebného priestoru obrázka?"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:676
 #, kde-format
@@ -44882,13 +44841,14 @@ msgid ""
 "The resulting image will be assigned the profile \"%1\".Convert it from "
 "there to the current image colorspace?"
 msgstr ""
+"Výslednému obrázku bude priradený profil „%1“. Previesť ho odtiaľ do "
+"farebného priestoru aktuálneho obrázka?"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:697
-#, fuzzy, kde-format
-#| msgid "Store Softproofing configuration in the image"
+#, kde-format
 msgctxt "Message for ocio baking progress bar."
 msgid "Baking configuration into image..."
-msgstr "Uložte do obrázka konfiguráciu Softproofing"
+msgstr "Zapekanie konfigurácie do obrázka..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -44988,10 +44948,9 @@ msgstr "Nastaviť čierne a biele body pohľadu"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
 #: plugins/dockers/lut/wdglut.ui:412
-#, fuzzy, kde-format
-#| msgid "Save..."
+#, kde-format
 msgid "Bake..."
-msgstr "Uložiť..."
+msgstr "Zapiecť..."
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
@@ -45623,9 +45582,9 @@ msgid "0 B"
 msgstr "0 B"
 
 #: plugins/dockers/recorder/recorder_writer.cpp:631
-#, fuzzy, kde-format
+#, kde-format
 msgid "Stopping recording"
-msgstr "Spustiť nahrávanie makra"
+msgstr "Zastavuje sa nahrávanie"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDirectory)
 #: plugins/dockers/recorder/recorderdocker.ui:95
@@ -45761,22 +45720,18 @@ msgstr "Nahrať automaticky"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxFocusedRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:374
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Record only the visible area of the canvas.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Použiť sklon tabletu na určenie normál.</p></body></"
-"html>"
+"<html><head/><body><p>Nahrávať iba viditeľnú oblasť plátna.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxFocusedRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:377
 #, kde-format
 msgid "Record focused area"
-msgstr ""
+msgstr "Nahrávať zameranú oblasť"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRecordToggle)
 #: plugins/dockers/recorder/recorderdocker.ui:396
@@ -50858,12 +50813,7 @@ msgstr "Chyba: Nebolo možné inicializovať aplikačné jadro Python "
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
-#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
-#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-#| "Scripting School</span></a>!</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
 "out the <a href=\"https://scripting.krita.org/lessons/introduction\"><span "
@@ -50872,8 +50822,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Ak sa chcete naučiť písať skripty Krita, pozrite si <a "
 "href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" "
-"text-decoration: underline; color:#2980b9;\">Školu skriptovania Krita</"
-"span></a>!</p></body></html>"
+"text-decoration: underline;\">Školu skriptovania Krita</span></a>!</p></"
+"body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
 #, kde-format
@@ -63333,8 +63283,7 @@ msgstr "Hodnota pre smer/zmiešaný sklon"
 #. i18n: context: text @ Action (assign_profile_to_image), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
-#, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
+#, kde-format
 msgctxt "action"
 msgid "Assign Profile to Image"
 msgstr "Priradiť profil obrázku"
@@ -63357,8 +63306,7 @@ msgstr "Priradiť profil obrázku"
 #. i18n: context: text @ Action (pykrita_channels2layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
-#, fuzzy, kde-format
-#| msgid "Channels to layers"
+#, kde-format
 msgctxt "action"
 msgid "Channels to layers"
 msgstr "Kanály na vrstvy"
@@ -63444,8 +63392,7 @@ msgstr "<i>Čierna</i>"
 #. i18n: context: text @ Action (color_space), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Space"
 msgstr "Farebný priestor"
@@ -64885,8 +64832,7 @@ msgstr "Autor dodatočného textového obsahu"
 #. i18n: context: text @ Action (document_tools), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
-#, fuzzy, kde-format
-#| msgid "Document Tools"
+#, kde-format
 msgctxt "action"
 msgid "Document Tools"
 msgstr "Nástroje dokumentu"
@@ -64934,8 +64880,7 @@ msgstr "Vybrané dokumenty boli zmenené."
 #. i18n: context: text @ Action (export_layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
-#, fuzzy, kde-format
-#| msgid "Export Layers"
+#, kde-format
 msgctxt "action"
 msgid "Export Layers"
 msgstr "Exportovať vrstvy"
@@ -65023,8 +64968,7 @@ msgstr "Vyberať priečinok"
 #. i18n: context: text @ Action (filter_manager), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
-#, fuzzy, kde-format
-#| msgid "Filter Manager"
+#, kde-format
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Správca filtrov"
@@ -65053,8 +64997,7 @@ msgstr "Filtre:"
 #. i18n: context: text @ Action (high_pass_filter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
-#, fuzzy, kde-format
-#| msgid "High Pass"
+#, kde-format
 msgctxt "action"
 msgid "High Pass"
 msgstr "Horný priepust"
@@ -65189,11 +65132,10 @@ msgstr "Vytvoriť skript"
 #. i18n: context: text @ Action (Krita Script Starter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/krita_script_starter/krita_script_starter.action:4
 #: plugins/python/krita_script_starter/krita_script_starter.action:8
-#, fuzzy, kde-format
-#| msgid "BBD's Krita Script Starter"
+#, kde-format
 msgctxt "action"
 msgid "Krita Script Starter"
-msgstr "Spúšťač BBD skriptov Krita"
+msgstr "Spúšťač skriptov Krita"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
@@ -65508,39 +65450,29 @@ msgstr "Panel rýchlych nastavení"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:145
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:335
-#, fuzzy
-#| msgctxt "@label:button"
-#| msgid "Add Style Preset"
 msgid "Add Preset"
-msgstr "Pridať predvoľbu štýlu"
+msgstr "Pridať predvoľbu"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:149
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:397
-#, fuzzy
-#| msgctxt "@info:tooltip"
-#| msgid "Delete resource"
 msgid "Delete Preset"
-msgstr "Vymazať zdroj"
+msgstr "Odstrániť predvoľbu"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:313
 msgid "Enter brush size (px):"
-msgstr ""
+msgstr "Zadajte veľkosť štetca (px):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:319
-#, fuzzy
-#| msgid "Outline opacity:"
 msgid "Enter opacity (%):"
-msgstr "Nepriehľadnosť obrysu:"
+msgstr "Zadajte nepriehľadnosť (%):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:325
 msgid "Enter flow (%):"
-msgstr ""
+msgstr "Zadajte tok (%):"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:398
-#, fuzzy
-#| msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgid "Are you sure you want to delete this preset?"
-msgstr "Naozaj chcete vymazať masku <b>'%1'</b>?"
+msgstr "Naozaj chcete odstrániť túto predvoľbu?"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"
@@ -65568,8 +65500,7 @@ msgstr "Debugger"
 #. i18n: context: text @ Action (python_scripter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
-#, fuzzy, kde-format
-#| msgid "Scripter"
+#, kde-format
 msgctxt "action"
 msgid "Scripter"
 msgstr "Skriptér"
@@ -66501,8 +66432,7 @@ msgid "Color Sampler Tool"
 msgstr "Nástroj vzorkovača farieb"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:78
-#, fuzzy, kde-format
-#| msgid "Bounding Box"
+#, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "Bounding Box"
 msgstr "Ohraničujúci rámček"
@@ -66511,42 +66441,41 @@ msgstr "Ohraničujúci rámček"
 #, kde-format
 msgctxt "Ellipse tool placement mode"
 msgid "3-Point"
-msgstr ""
+msgstr "3 body"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:80
 #, kde-format
 msgid "Place the ellipse inside a bounding box"
-msgstr ""
+msgstr "Umiestniť elipsu do ohraničujúceho rámčeka"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:81
 #, kde-format
 msgid "Place the ellipse by setting the major axis and width"
-msgstr ""
+msgstr "Umiestniť elipsu nastavením hlavnej osi a šírky"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:112
-#, fuzzy, kde-format
-#| msgid "Placement"
+#, kde-format
 msgctxt "Ellipse tool placement mode option label"
 msgid "Placement:"
-msgstr "Umiestnenie"
+msgstr "Umiestnenie:"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:345
 #, kde-format
 msgid "Click to place the other end of the ellipse axis."
-msgstr ""
+msgstr "Kliknutím umiestnite druhý koniec osi elipsy."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:347
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Click to select text shape."
+#, kde-format
 msgid "Click to set the ellipse width."
-msgstr "Kliknite na výber tvaru textu."
+msgstr "Kliknutím nastavte šírku elipsy."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:349
 #, kde-format
 msgid ""
 "Drag handles to adjust the ellipse. Press Enter to apply or Esc to cancel."
 msgstr ""
+"Ťahaním úchytov upravte elipsu. Stlačte Enter na použitie alebo Esc na "
+"zrušenie."
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:587
 #: plugins/tools/basictools/kis_tool_ellipse.cc:609
@@ -67074,10 +67003,9 @@ msgstr "Vzorkovať všetky viditeľné vrstvy"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:145
-#, fuzzy, kde-format
-#| msgid "Sample Current Layer"
+#, kde-format
 msgid "Sample Current Group"
-msgstr "Vzorkovať aktuálnu vrstvu"
+msgstr "Vzorkovať aktuálnu skupinu"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:150

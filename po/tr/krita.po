@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-18 01:08+0000\n"
-"PO-Revision-Date: 2026-11-18 18:44+0300\n"
+"POT-Creation-Date: 2026-11-20 01:07+0000\n"
+"PO-Revision-Date: 2026-11-19 19:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -11323,7 +11323,7 @@ msgstr "Sütunların konumunu yansıt"
 #, kde-format
 msgctxt "action"
 msgid "Clear Cache"
-msgstr "Önbelleği Temizle"
+msgstr "Ön Belleği Temizle"
 
 #. i18n: context: toolTip @ Action (clear_animation_cache), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2385
@@ -24611,7 +24611,7 @@ msgstr "Küçük Görsel"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:125 libs/resources/KisTagModel.cpp:301
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:627
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:619
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:504
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:750
@@ -24679,7 +24679,7 @@ msgid "Tag File Name"
 msgstr "Künye Dosya Adı"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:108
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:978
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:970
 #, kde-format
 msgid "Resource is broken!"
 msgstr "Özkaynak bozulmuş!"
@@ -28106,7 +28106,7 @@ msgstr "Vuruş Seçim Özellikleri"
 #: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:104
 #, kde-format
 msgid "Regenerating cache..."
-msgstr "Önbellek yeniden üretiliyor…"
+msgstr "Ön bellek yeniden üretiliyor…"
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:64
 #, kde-format
@@ -29798,7 +29798,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Başarımı veya çizim yardımcılarıyla oluşan kalıntı "
 "sorunlarını çözmek için kullanılabilir.\n"
-"              </p><p>Piksel eşlemi önbelleğini değiştirmek bir yeniden "
+"              </p><p>Piksel eşlemi ön belleğini değiştirmek bir yeniden "
 "başlatma gerektirir.</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
@@ -29811,13 +29811,13 @@ msgstr "Doğrudan (Önerilen)"
 #: libs/ui/forms/wdgdisplaysettings.ui:205
 #, kde-format
 msgid "Pixmap Cache"
-msgstr "Piksel eşlemi önbelleği"
+msgstr "Piksel eşlemi ön belleği"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:210
 #, kde-format
 msgid "Large Pixmap Cache"
-msgstr "Büyük piksel eşlemi önbelleği"
+msgstr "Büyük piksel eşlemi ön belleği"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:224
@@ -32387,7 +32387,7 @@ msgid ""
 "\">physical</span> (non-hyperthreaded) cores your CPU has</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Canlandırma kareleri dokunurken (dosyalara veya "
-"canlandırma önbelleği yeniden üretilirken), Krita, görselinizin belirli bir "
+"canlandırma ön belleği yeniden üretilirken), Krita, görselinizin belirli bir "
 "sayıda kopyasını yapar ve üzerilerinde paralel olarak çalışır. Her bir kopya "
 "depolama için daha çok RAM talep eder (görselinizin boyutunun %​20’si kadar); "
 "dolayısıyla yalnızca yeterli RAM’iniz varsa bu sınırı yükseltin.</p><p><br/"
@@ -32508,13 +32508,13 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:442
 #, kde-format
 msgid "Animation Cache"
-msgstr "Canlandırma Önbelleği"
+msgstr "Canlandırma Ön Belleği"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgperformancesettings.ui:448
 #, kde-format
 msgid "Cache Storage Backend"
-msgstr "Önbellek Depolama Arka Ucu"
+msgstr "Ön Bellek Depolama Arka Ucu"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optInMemory)
 #: libs/ui/forms/wdgperformancesettings.ui:454
@@ -32528,7 +32528,7 @@ msgid ""
 "FullHD@25fps video you need extra 200 MiB of memory</p><p>* for 1 second of "
 "4K UltraHD@25fps video you need extra 800 MiB of memory</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Canlandırma karesi önbelleği, herhangi bir sınırlama "
+"<html><head/><body><p>Canlandırma karesi ön belleği, herhangi bir sınırlama "
 "olmadan tümüyle RAM’de saklanır</p><p><span style=\"font-weight:600;\">UYARI:"
 "</span> Lütfen bilgisayarınızda Genel sekmesinden talep edilenden <span "
 "style=\" text-decoration: underline;\">daha fazla</span> ve yeterli RAM "
@@ -32553,9 +32553,9 @@ msgid ""
 "at 25 fps. The limit of 2500 px is usually a good choice.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Canlandırma kareleri, sabit diskte takas dosyasıyla "
-"aynı klasörde saklanır. Önbellek sıkıştırılmış şekilde saklanır. Az miktarda "
-"fazladan RAM gerekir.</p><p>Sabit sürücünün veri aktarım hızı düşük "
-"olduğundan, videonuzu 25 fps hızında oynatmak için önbelleklenmiş kare "
+"aynı klasörde saklanır. Ön bellek, sıkıştırılmış şekilde saklanır. Az "
+"miktarda fazladan RAM gerekir.</p><p>Sabit sürücünün veri aktarım hızı düşük "
+"olduğundan, videonuzu 25 fps hızında oynatmak için ön belleğe alınmış kare "
 "boyutunu sınırlamak isteyebilirsiniz. 2500 pks sınırı genellikle iyi bir "
 "seçimdir.</p></body></html>"
 
@@ -32569,7 +32569,7 @@ msgstr "Disk üzerinde"
 #: libs/ui/forms/wdgperformancesettings.ui:477
 #, kde-format
 msgid "Cache Generation Options"
-msgstr "Önbellek Oluşturma Seçenekleri"
+msgstr "Ön Bellek Oluşturma Seçenekleri"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCachedFramesSizeLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:483
@@ -32580,14 +32580,14 @@ msgid ""
 "using on-disk storage backend.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Görsel belirtilen sınırdan büyükse karenin küçültülmüş "
-"sürümünü sun. Disk üzerinde önbellek depolama arka ucunu kullanırken bu "
+"sürümünü sun. Disk üzerinde ön bellek depolama arka ucunu kullanırken bu "
 "seçeneği etkinleştirdiğinizden emin olun..</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCachedFramesSizeLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:486
 #, kde-format
 msgid "Limit cached frame size:"
-msgstr "Önbelleklenmiş kare boyutunu sınırla:"
+msgstr "Ön belleğe alınmış kare boyutunu sınırla:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intCachedFramesSizeLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:499
@@ -32636,14 +32636,14 @@ msgid ""
 "<html><head/><body><p>Automatically prerender animation cache in background "
 "when the user is idle</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Kullanıcı boştayken canlandırma önbelleğini arka "
-"planda önden sun.</p></body></html>"
+"<html><head/><body><p>Kullanıcı boştayken canlandırma ön belleğinin arka "
+"planda önden görüntüsünü alın.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:532
 #, kde-format
 msgid "Enable background cache generation"
-msgstr "Arka plan önbellek üretimini etkinleştir"
+msgstr "Arka plan ön bellek üretimini etkinleştir"
 
 #. i18n: ectx: attribute (title), widget (QWidget, InstantPreview)
 #: libs/ui/forms/wdgperformancesettings.ui:556
@@ -38365,7 +38365,7 @@ msgstr "Seçenek yok"
 msgid "Local selection is locked."
 msgstr "Yerel seçim kilitli."
 
-#: libs/ui/tool/kis_tool_freehand.cc:332
+#: libs/ui/tool/kis_tool_freehand.cc:335
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -38373,7 +38373,7 @@ msgid ""
 msgstr ""
 "Fırça aracı bu katmanda boya yapamaz.  Lütfen boya katmanı veya maske seçin."
 
-#: libs/ui/tool/kis_tool_freehand.cc:337
+#: libs/ui/tool/kis_tool_freehand.cc:340
 #: libs/ui/tool/kis_tool_polyline_base.cpp:122
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -38514,8 +38514,8 @@ msgid "Compact"
 msgstr "Sıkışık"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:199
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:83
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:190
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:78
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:182
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:344
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:238
 #, kde-format
@@ -39920,23 +39920,13 @@ msgstr "Görüntü"
 msgid "Thumbnails"
 msgstr "Küçük Görseller"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
-#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
-#, kde-format
-msgid "Details"
-msgstr "Ayrıntılar"
-
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #, kde-format
 msgid "Strokes"
 msgstr "Vuruşlar"
 
-#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:65
+#: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
 #, kde-format
 msgid "Strokes and Thumbnails"
 msgstr "Vuruşlar ve Küçük Görseller"
@@ -39967,17 +39957,17 @@ msgstr "Fırça önayarını yeniden yükle"
 msgid "Rename the brush preset"
 msgstr "Fırça önayarını yeniden adlandır"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #, kde-format
 msgid "Thumbnails and Strokes"
 msgstr "Küçük Görseller ve Vuruşlar"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:226
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:218
 #, kde-format
 msgid "Detach Brush Editor"
 msgstr "Fırça Düzenleyicisini Ayır"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:559
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:551
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
@@ -44256,6 +44246,14 @@ msgstr "Kaydetmek istiyor musunuz?"
 #, kde-format
 msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgstr "<b>“%1”</b> maskesini silmek istediğinizden emin misiniz?"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:196
+#: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
+#, kde-format
+msgid "Details"
+msgstr "Ayrıntılar"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
@@ -49229,7 +49227,7 @@ msgstr "Geçerli Katmanı %1 Biçiminden Dönüştür"
 #, kde-format
 msgctxt "action"
 msgid "&Explore Resources Cache Database..."
-msgstr "Ö&zkaynaklar Önbelleği Veri Tabanında Gez…"
+msgstr "Ö&zkaynaklar Ön Belleği Veri Tabanında Gez…"
 
 #. i18n: context: whatsThis @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
@@ -49243,12 +49241,12 @@ msgstr "Ö&zkaynaklar Önbelleği Veri Tabanında Gez…"
 #, kde-format
 msgctxt "action"
 msgid "Resources Cache Database"
-msgstr "Özkaynaklar Önbelleği Veri Tabanı"
+msgstr "Özkaynaklar Ön Belleği Veri Tabanı"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:35
 #, kde-format
 msgid "Resources Cache Database Explorer"
-msgstr "Özkaynaklar Önbelleği Veri Tabanı Gezgini"
+msgstr "Özkaynaklar Ön Belleği Veri Tabanı Gezgini"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #, kde-format

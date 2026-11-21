@@ -741,14 +741,26 @@ void RecorderWriterManager::onTimer()
         if (sourceAspect > targetAspect) {
             // Expanding vertically
             out.setHeight(source.width() / targetAspect);
-            out.moveTop(out.y() - ((source.height() - out.height()) / 2));
+            out.moveTop(out.top() - ((source.height() - out.height()) / 2));
         } else {
             // Expanding horizontally
             out.setWidth(source.height() * targetAspect);
-            out.moveLeft(out.x() - ((source.width() - out.width()) / 2));
+            out.moveLeft(out.left() + ((source.width() - out.width()) / 2));
+
         }
 
-        float outAspect = (float)out.width() / out.height();
+        if (out.bottom() > target.bottom()) {
+            out.moveBottom(target.bottom());
+        }
+        if (out.right() > target.right()) {
+            out.moveRight(target.right());
+        }
+        if (out.top() < target.top()) {
+            out.moveTop(target.top());
+        }
+        if (out.left() < target.left()) {
+            out.moveLeft(target.left());
+        }
 
         return out;
     };

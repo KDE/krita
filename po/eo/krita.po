@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-20 01:07+0000\n"
+"POT-Creation-Date: 2026-11-21 01:08+0000\n"
 "PO-Revision-Date: 2025-03-30 23:35+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -16564,7 +16564,7 @@ msgstr "Ŝanĝi ortangulon"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
 #: krita/main.cc:724 libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:21
-#: libs/ui/kis_splash_screen.cpp:46
+#: libs/ui/kis_splash_screen.cpp:70
 #, kde-format
 msgid "Krita"
 msgstr "Krito"
@@ -21414,7 +21414,7 @@ msgstr "Grandeco"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1483
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1998
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2025
 #: libs/ui/forms/wdgdisplaysettings.ui:379
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -21525,7 +21525,7 @@ msgstr "Fluo"
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:50
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:174
 #: plugins/paintops/hatching/KisHatchingStandardOptionData.h:16
-#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:224
+#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:236
 #, kde-format
 msgid "Angle"
 msgstr "Angulo"
@@ -21533,7 +21533,7 @@ msgstr "Angulo"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:22
 #: plugins/dockers/arrangedocker/arrange_docker_widget.ui:322
-#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:276
+#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:288
 #: plugins/paintops/libpaintop/KisSpacingOptionData.h:35
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:126
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:104
@@ -21748,8 +21748,8 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (enigita)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:572
-#: libs/ui/dialogs/kis_dlg_preferences.cc:631
+#: libs/ui/dialogs/kis_dlg_preferences.cc:577
+#: libs/ui/dialogs/kis_dlg_preferences.cc:636
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -21858,7 +21858,7 @@ msgstr ""
 msgid "Mitchell"
 msgstr "Mitchell"
 
-#: libs/image/kis_group_layer.cc:350
+#: libs/image/kis_group_layer.cc:351
 #: libs/image/kis_layer_properties_icons.cpp:29
 #, kde-format
 msgid "Pass Through"
@@ -23709,271 +23709,309 @@ msgctxt "Blending mode - Easy Burn"
 msgid "Easy Burn"
 msgstr "Facila Bruligi"
 
+#: libs/pigment/KoCompositeOpRegistry.cpp:69
+#, kde-format
+msgctxt "Blending mode - Burn (SAI)"
+msgid "Burn (SAI)"
+msgstr ""
+
 #: libs/pigment/KoCompositeOpRegistry.cpp:70
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Shade (IFS Illusions)"
+#| msgid "Shade (IFS Illusions)"
+msgctxt "Blending mode - Shade (SAI)"
+msgid "Shade (SAI)"
+msgstr "Ombro (IFS-iluzioj)"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
 msgctxt "Blending mode - Color Dodge"
 msgid "Color Dodge"
 msgstr "Koloro Dodge"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:71
+#: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
 msgctxt "Blending mode - Color Dodge HDR"
 msgid "Color Dodge HDR"
 msgstr "Kolor-Evita HDR"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:72
+#: libs/pigment/KoCompositeOpRegistry.cpp:74
 #, kde-format
 msgctxt "Blending mode - Linear Dodge"
 msgid "Linear Dodge"
 msgstr "Lineara Dodge"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:73
+#: libs/pigment/KoCompositeOpRegistry.cpp:75
 #, kde-format
 msgctxt "Blending mode - Lighten"
 msgid "Lighten"
 msgstr "Heligi"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:74
+#: libs/pigment/KoCompositeOpRegistry.cpp:76
 #, kde-format
 msgctxt "Blending mode - Linear Light"
 msgid "Linear Light"
 msgstr "Lineara Lumo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:75
+#: libs/pigment/KoCompositeOpRegistry.cpp:77
 #, kde-format
 msgctxt "Blending mode - Screen"
 msgid "Screen"
 msgstr "Ekrano"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:76
+#: libs/pigment/KoCompositeOpRegistry.cpp:78
 #, kde-format
 msgctxt "Blending mode - Pin Light"
 msgid "Pin Light"
 msgstr "Pinlumo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:77
+#: libs/pigment/KoCompositeOpRegistry.cpp:79
 #, kde-format
 msgctxt "Blending mode - Vivid Light"
 msgid "Vivid Light"
 msgstr "Viva Lumo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:78
+#: libs/pigment/KoCompositeOpRegistry.cpp:80
 #, kde-format
 msgctxt "Blending mode - Vivid Light HDR"
 msgid "Vivid Light HDR"
 msgstr "Vigla-Luma HDR"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:79
+#: libs/pigment/KoCompositeOpRegistry.cpp:81
 #, kde-format
 msgctxt "Blending mode - Flat Light"
 msgid "Flat Light"
 msgstr "Plata Lumo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:80
+#: libs/pigment/KoCompositeOpRegistry.cpp:82
 #, kde-format
 msgctxt "Blending mode - Hard Light"
 msgid "Hard Light"
 msgstr "Malmola Lumo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:81
+#: libs/pigment/KoCompositeOpRegistry.cpp:83
 #, kde-format
 msgctxt "Blending mode - Soft Light (IFS Illusions)"
 msgid "Soft Light (IFS Illusions)"
 msgstr "Milda Lumo (IFS-Iluzioj)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:82
+#: libs/pigment/KoCompositeOpRegistry.cpp:84
 #, kde-format
 msgctxt "Blending mode - Soft Light (Pegtop-Delphi)"
 msgid "Soft Light (Pegtop-Delphi)"
 msgstr "Milda Lumo (Pegtop-Delfo)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:83
+#: libs/pigment/KoCompositeOpRegistry.cpp:85
 #, kde-format
 msgctxt "Blending mode - Soft Light (Photoshop)"
 msgid "Soft Light (Photoshop)"
 msgstr "Milda Lumo (Photoshop)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:84
+#: libs/pigment/KoCompositeOpRegistry.cpp:86
 #, kde-format
 msgctxt "Blending mode - Soft Light (SVG)"
 msgid "Soft Light (SVG)"
 msgstr "Milda Lumo (SVG)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:85
+#: libs/pigment/KoCompositeOpRegistry.cpp:87
 #, kde-format
 msgctxt "Blending mode - Gamma Light"
 msgid "Gamma Light"
 msgstr "Gama Lumo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:86
+#: libs/pigment/KoCompositeOpRegistry.cpp:88
 #, kde-format
 msgctxt "Blending mode - Gamma Illumination"
 msgid "Gamma Illumination"
 msgstr "Gama Lumigo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:87
+#: libs/pigment/KoCompositeOpRegistry.cpp:89
 #, kde-format
 msgctxt "Blending mode - Lighter Color"
 msgid "Lighter Color"
 msgstr "Pli Malpeza Koloro"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:88
+#: libs/pigment/KoCompositeOpRegistry.cpp:90
 #, kde-format
 msgctxt "Blending mode - P-Norm A"
 msgid "P-Norm A"
 msgstr "P-Normo A"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:89
+#: libs/pigment/KoCompositeOpRegistry.cpp:91
 #, kde-format
 msgctxt "Blending mode - P-Norm B"
 msgid "P-Norm B"
 msgstr "P-Normo B"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:90
+#: libs/pigment/KoCompositeOpRegistry.cpp:92
 #, kde-format
 msgctxt "Blending mode - Super Light"
 msgid "Super Light"
 msgstr "Super Lumo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:91
+#: libs/pigment/KoCompositeOpRegistry.cpp:93
 #, kde-format
 msgctxt "Blending mode - Tint (IFS Illusions)"
 msgid "Tint (IFS Illusions)"
 msgstr "Nuanco (IFS-iluzioj)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:92
+#: libs/pigment/KoCompositeOpRegistry.cpp:94
 #, kde-format
 msgctxt "Blending mode - Fog Lighten (IFS Illusions)"
 msgid "Fog Lighten (IFS Illusions)"
 msgstr "Nebulo Lighten (IFS Iluzioj)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:93
+#: libs/pigment/KoCompositeOpRegistry.cpp:95
 #, kde-format
 msgctxt "Blending mode - Easy Dodge"
 msgid "Easy Dodge"
 msgstr "Facila Dodge"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:94
+#: libs/pigment/KoCompositeOpRegistry.cpp:96
 #, kde-format
 msgctxt "Blending mode - Luminosity/Shine (SAI)"
 msgid "Luminosity/Shine (SAI)"
 msgstr "Lumeco/Brilo (SAI)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:96
+#: libs/pigment/KoCompositeOpRegistry.cpp:97
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Dodge"
+msgctxt "Blending mode - Dodge (SAI)"
+msgid "Dodge (SAI)"
+msgstr "Dodge"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:99
 #, kde-format
 msgctxt "Blending mode - Modulo"
 msgid "Modulo"
 msgstr "Modulo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:97
+#: libs/pigment/KoCompositeOpRegistry.cpp:100
 #, kde-format
 msgctxt "Blending mode - Modulo - Continuous"
 msgid "Modulo - Continuous"
 msgstr "Modulo - Continuous"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:98
+#: libs/pigment/KoCompositeOpRegistry.cpp:101
 #, kde-format
 msgctxt "Blending mode - Divisive Modulo"
 msgid "Divisive Modulo"
 msgstr "Dispartiga Modulo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:99
+#: libs/pigment/KoCompositeOpRegistry.cpp:102
 #, kde-format
 msgctxt "Blending mode - Divisive Modulo - Continuous"
 msgid "Divisive Modulo - Continuous"
 msgstr "Dispartiga Modulo - Kontinua"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:100
+#: libs/pigment/KoCompositeOpRegistry.cpp:103
 #, kde-format
 msgctxt "Blending mode - Modulo Shift"
 msgid "Modulo Shift"
 msgstr "Modulo Shift"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:101
+#: libs/pigment/KoCompositeOpRegistry.cpp:104
 #, kde-format
 msgctxt "Blending mode - Modulo Shift - Continuous"
 msgid "Modulo Shift - Continuous"
 msgstr "Modulo Shift - Kontinua"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:103
+#: libs/pigment/KoCompositeOpRegistry.cpp:106
 #, kde-format
 msgctxt "Blending mode - Difference"
 msgid "Difference"
 msgstr "Diferenco"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:104
+#: libs/pigment/KoCompositeOpRegistry.cpp:107
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Difference"
+#| msgid "Difference"
+msgctxt "Blending mode - Difference (SAI)"
+msgid "Difference (SAI)"
+msgstr "Diferenco"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:108
 #, kde-format
 msgctxt "Blending mode - Equivalence"
 msgid "Equivalence"
 msgstr "Ekvivalenteco"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:105
+#: libs/pigment/KoCompositeOpRegistry.cpp:109
 #, kde-format
 msgctxt "Blending mode - Additive Subtractive"
 msgid "Additive Subtractive"
 msgstr "Aldonaĵo Subtraktivo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:106
+#: libs/pigment/KoCompositeOpRegistry.cpp:110
 #, kde-format
 msgctxt "Blending mode - Exclusion"
 msgid "Exclusion"
 msgstr "Ekskludo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:107
+#: libs/pigment/KoCompositeOpRegistry.cpp:111
 #, kde-format
 msgctxt "Blending mode - Arcus Tangent"
 msgid "Arcus Tangent"
 msgstr "Arcus Tangent"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:108
+#: libs/pigment/KoCompositeOpRegistry.cpp:112
 #, kde-format
 msgctxt "Blending mode - Negation"
 msgid "Negation"
 msgstr "Negado"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:111
+#: libs/pigment/KoCompositeOpRegistry.cpp:115
 #, kde-format
 msgctxt "Blending mode - Behind"
 msgid "Behind"
 msgstr "Malantaŭe"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:112
+#: libs/pigment/KoCompositeOpRegistry.cpp:116
 #, kde-format
 msgctxt "Blending mode - Greater"
 msgid "Greater"
 msgstr "Pli granda"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:113
+#: libs/pigment/KoCompositeOpRegistry.cpp:117
 #, kde-format
 msgctxt "Blending mode - Overlay"
 msgid "Overlay"
 msgstr "Kovri"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:114
+#: libs/pigment/KoCompositeOpRegistry.cpp:118
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Linear)"
 msgid "Lambert Lighting (Linear)"
 msgstr "Lambert Lighting (Linia)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:115
+#: libs/pigment/KoCompositeOpRegistry.cpp:119
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Gamma 2.2)"
 msgid "Lambert Lighting (Gamma 2.2)"
 msgstr "Lambert Lighting (Gamma 2.2)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:116
+#: libs/pigment/KoCompositeOpRegistry.cpp:120
 #, kde-format
 msgctxt "Blending mode - Erase"
 msgid "Erase"
 msgstr "Rastrumerviŝilo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:117
+#: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
 msgctxt "Blending mode - Alpha Darken"
 msgid "Alpha Darken"
 msgstr "Alpha Darken"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:118
+#: libs/pigment/KoCompositeOpRegistry.cpp:122
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Alpha Darken"
+#| msgid "Alpha Darken"
+msgctxt "Blending mode - Alpha Darken Clamp"
+msgid "Alpha Darken Clamp"
+msgstr "Alpha Darken"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:123
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/marker.gpl"
@@ -23982,55 +24020,63 @@ msgctxt "Blending mode - Marker"
 msgid "Marker"
 msgstr "Markiloj"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:119
+#: libs/pigment/KoCompositeOpRegistry.cpp:124
 #, kde-format
 msgctxt "Blending mode - Hard Mix"
 msgid "Hard Mix"
 msgstr "Malmola Miksaĵo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:120
+#: libs/pigment/KoCompositeOpRegistry.cpp:125
 #, kde-format
 msgctxt "Blending mode - Hard Mix HDR"
 msgid "Hard Mix HDR"
 msgstr "Malmol-Miksa HDR"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:121
+#: libs/pigment/KoCompositeOpRegistry.cpp:126
 #, kde-format
 msgctxt "Blending mode - Hard Mix (Photoshop)"
 msgid "Hard Mix (Photoshop)"
 msgstr "Malmola Miksaĵo (Photoshop)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:122
+#: libs/pigment/KoCompositeOpRegistry.cpp:127
 #, kde-format
 msgctxt "Blending mode - Hard Mix Softer (Photoshop)"
 msgid "Hard Mix Softer (Photoshop)"
 msgstr "Malmola Miksaĵo Pli Milda (Photoshop)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:123
+#: libs/pigment/KoCompositeOpRegistry.cpp:128
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Hard Mix"
+#| msgid "Hard Mix"
+msgctxt "Blending mode - Hard Mix (SAI)"
+msgid "Hard Mix (SAI)"
+msgstr "Malmola Miksaĵo"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:129
 #, kde-format
 msgctxt "Blending mode - Grain Merge"
 msgid "Grain Merge"
 msgstr "Grajna Kunfandado"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:124
+#: libs/pigment/KoCompositeOpRegistry.cpp:130
 #, kde-format
 msgctxt "Blending mode - Grain Extract"
 msgid "Grain Extract"
 msgstr "Grajna Ekstrakto"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:125
+#: libs/pigment/KoCompositeOpRegistry.cpp:131
 #, kde-format
 msgctxt "Blending mode - Parallel"
 msgid "Parallel"
 msgstr "Paralele"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:126
+#: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
 msgctxt "Blending mode - Allanon"
 msgid "Allanon"
 msgstr "Allanon"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:127
+#: libs/pigment/KoCompositeOpRegistry.cpp:133
 #, fuzzy, kde-format
 #| msgctxt "@title"
 #| msgid "Geometric Shapes"
@@ -24038,372 +24084,386 @@ msgctxt "Blending mode - Geometric Mean"
 msgid "Geometric Mean"
 msgstr "Geometriaj Formoj"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:128
+#: libs/pigment/KoCompositeOpRegistry.cpp:134
 #, kde-format
 msgctxt "Blending mode - Destination Atop"
 msgid "Destination Atop"
 msgstr "Celo Supro"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:129
+#: libs/pigment/KoCompositeOpRegistry.cpp:135
 #, kde-format
 msgctxt "Blending mode - Destination In"
 msgid "Destination In"
 msgstr "Celo En"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:130
+#: libs/pigment/KoCompositeOpRegistry.cpp:136
 #, kde-format
 msgctxt "Blending mode - Hard Overlay"
 msgid "Hard Overlay"
 msgstr "Malmola Overlay"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:131
+#: libs/pigment/KoCompositeOpRegistry.cpp:137
 #, kde-format
 msgctxt "Blending mode - Hard Overlay HDR"
 msgid "Hard Overlay HDR"
 msgstr "Malmol-Plustavola HR"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:132
+#: libs/pigment/KoCompositeOpRegistry.cpp:138
 #, kde-format
 msgctxt "Blending mode - Interpolation"
 msgid "Interpolation"
 msgstr "Interpolado"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:133
+#: libs/pigment/KoCompositeOpRegistry.cpp:139
 #, kde-format
 msgctxt "Blending mode - Interpolation - 2X"
 msgid "Interpolation - 2X"
 msgstr "Interpolado - 2X"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:134
+#: libs/pigment/KoCompositeOpRegistry.cpp:140
 #, kde-format
 msgctxt "Blending mode - Penumbra A"
 msgid "Penumbra A"
 msgstr "Penumbra A"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:135
+#: libs/pigment/KoCompositeOpRegistry.cpp:141
 #, kde-format
 msgctxt "Blending mode - Penumbra B"
 msgid "Penumbra B"
 msgstr "Penumbra B"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:136
+#: libs/pigment/KoCompositeOpRegistry.cpp:142
 #, kde-format
 msgctxt "Blending mode - Penumbra C"
 msgid "Penumbra C"
 msgstr "Penumbra C"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:137
+#: libs/pigment/KoCompositeOpRegistry.cpp:143
 #, kde-format
 msgctxt "Blending mode - Penumbra D"
 msgid "Penumbra D"
 msgstr "Penumbra D"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:139
+#: libs/pigment/KoCompositeOpRegistry.cpp:144
+#, kde-format
+msgctxt "Blending mode - Burn/Dodge (SAI)"
+msgid "Burn/Dodge (SAI)"
+msgstr ""
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:145
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Luminosity/Shine (SAI)"
+#| msgid "Luminosity/Shine (SAI)"
+msgctxt "Blending mode - Shade/Shine (SAI)"
+msgid "Shade/Shine (SAI)"
+msgstr "Lumeco/Brilo (SAI)"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:147
 #, kde-format
 msgctxt "Blending mode - Bumpmap"
 msgid "Bumpmap"
 msgstr "Bumpmapo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:140
+#: libs/pigment/KoCompositeOpRegistry.cpp:148
 #, kde-format
 msgctxt "Blending mode - Combine Normal Map"
 msgid "Combine Normal Map"
 msgstr "Kombini Normalan Mapon"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:141
+#: libs/pigment/KoCompositeOpRegistry.cpp:149
 #, kde-format
 msgctxt "Blending mode - Dissolve"
 msgid "Dissolve"
 msgstr "Dissolvi"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:142
+#: libs/pigment/KoCompositeOpRegistry.cpp:150
 #, kde-format
 msgctxt "Blending mode - Copy Red"
 msgid "Copy Red"
 msgstr "Kopii Ruĝan"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:143
+#: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, kde-format
 msgctxt "Blending mode - Copy Green"
 msgid "Copy Green"
 msgstr "Kopii Verdan"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:144
+#: libs/pigment/KoCompositeOpRegistry.cpp:152
 #, kde-format
 msgctxt "Blending mode - Copy Blue"
 msgid "Copy Blue"
 msgstr "Kopii Bluan"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:145
+#: libs/pigment/KoCompositeOpRegistry.cpp:153
 #, kde-format
 msgctxt "Blending mode - Copy"
 msgid "Copy"
 msgstr "Kopii"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:146
+#: libs/pigment/KoCompositeOpRegistry.cpp:154
 #, kde-format
 msgctxt "Blending mode - Tangent Normalmap"
 msgid "Tangent Normalmap"
 msgstr "Tangenta Normalmapo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:148
+#: libs/pigment/KoCompositeOpRegistry.cpp:156
 #, kde-format
 msgctxt "Blending mode - Color HSY"
 msgid "Color"
 msgstr "Koloro"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:149
+#: libs/pigment/KoCompositeOpRegistry.cpp:157
 #, kde-format
 msgctxt "Blending mode - Hue HSY"
 msgid "Hue"
 msgstr "Valoro"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:150
+#: libs/pigment/KoCompositeOpRegistry.cpp:158
 #, kde-format
 msgctxt "Blending mode - Tint HSY"
 msgid "Tint"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:151
+#: libs/pigment/KoCompositeOpRegistry.cpp:159
 #, kde-format
 msgctxt "Blending mode - Saturation HSY"
 msgid "Saturation"
 msgstr "Satureco"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:152
+#: libs/pigment/KoCompositeOpRegistry.cpp:160
 #, kde-format
 msgctxt "Blending mode - Luminosity HSY"
 msgid "Luminosity"
 msgstr "Lumeco"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:153
+#: libs/pigment/KoCompositeOpRegistry.cpp:161
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSY"
 msgid "Decrease Saturation"
 msgstr "Malpliigi Saturacion"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:154
+#: libs/pigment/KoCompositeOpRegistry.cpp:162
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSY"
 msgid "Increase Saturation"
 msgstr "Pliigi Saturacion"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:155
+#: libs/pigment/KoCompositeOpRegistry.cpp:163
 #, kde-format
 msgctxt "Blending mode - Decrease Luminosity HSY"
 msgid "Decrease Luminosity"
 msgstr "Malpliigi Lumecon"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:156
+#: libs/pigment/KoCompositeOpRegistry.cpp:164
 #, kde-format
 msgctxt "Blending mode - Increase Luminosity HSY"
 msgid "Increase Luminosity"
 msgstr "Pliigi Lumecon"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:158
+#: libs/pigment/KoCompositeOpRegistry.cpp:166
 #, kde-format
 msgctxt "Blending mode - Color HSI"
 msgid "Color HSI"
 msgstr "Koloro HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:159
+#: libs/pigment/KoCompositeOpRegistry.cpp:167
 #, kde-format
 msgctxt "Blending mode - Hue HSI"
 msgid "Hue HSI"
 msgstr "Hue HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:160
+#: libs/pigment/KoCompositeOpRegistry.cpp:168
 #, kde-format
 msgctxt "Blending mode - Saturation HSI"
 msgid "Saturation HSI"
 msgstr "Saturiĝo HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:161
+#: libs/pigment/KoCompositeOpRegistry.cpp:169
 #, kde-format
 msgctxt "Blending mode - Intensity HSI"
 msgid "Intensity"
 msgstr "Intenseco"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:162
+#: libs/pigment/KoCompositeOpRegistry.cpp:170
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSI"
 msgid "Decrease Saturation HSI"
 msgstr "Malpliigi Saturiĝon HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:163
+#: libs/pigment/KoCompositeOpRegistry.cpp:171
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSI"
 msgid "Increase Saturation HSI"
 msgstr "Pliigi Saturiĝon HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:164
+#: libs/pigment/KoCompositeOpRegistry.cpp:172
 #, kde-format
 msgctxt "Blending mode - Decrease Intensity"
 msgid "Decrease Intensity"
 msgstr "Malpliigi Intensecon"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:165
+#: libs/pigment/KoCompositeOpRegistry.cpp:173
 #, kde-format
 msgctxt "Blending mode - Increase Intensity"
 msgid "Increase Intensity"
 msgstr "Pliigi Intensecon"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:167
+#: libs/pigment/KoCompositeOpRegistry.cpp:175
 #, kde-format
 msgctxt "Blending mode - Color HSL"
 msgid "Color HSL"
 msgstr "Koloro HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:168
+#: libs/pigment/KoCompositeOpRegistry.cpp:176
 #, kde-format
 msgctxt "Blending mode - Hue HSL"
 msgid "Hue HSL"
 msgstr "Hue HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:169
+#: libs/pigment/KoCompositeOpRegistry.cpp:177
 #, kde-format
 msgctxt "Blending mode - Saturation HSL"
 msgid "Saturation HSL"
 msgstr "Saturiĝo HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:170
+#: libs/pigment/KoCompositeOpRegistry.cpp:178
 #, kde-format
 msgctxt "Blending mode - Lightness HSI"
 msgid "Lightness"
 msgstr "Heleco"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:171
+#: libs/pigment/KoCompositeOpRegistry.cpp:179
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSL"
 msgid "Decrease Saturation HSL"
 msgstr "Malpliigi Saturadon HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:172
+#: libs/pigment/KoCompositeOpRegistry.cpp:180
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSL"
 msgid "Increase Saturation HSL"
 msgstr "Pliigi Saturación HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:173
+#: libs/pigment/KoCompositeOpRegistry.cpp:181
 #, kde-format
 msgctxt "Blending mode - Decrease Lightness"
 msgid "Decrease Lightness"
 msgstr "Malpliigi Malpezecon"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:174
+#: libs/pigment/KoCompositeOpRegistry.cpp:182
 #, kde-format
 msgctxt "Blending mode - Increase Lightness"
 msgid "Increase Lightness"
 msgstr "Pliigi Malpezecon"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:176
+#: libs/pigment/KoCompositeOpRegistry.cpp:184
 #, kde-format
 msgctxt "Blending mode - Color HSV"
 msgid "Color HSV"
 msgstr "Koloro HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:177
+#: libs/pigment/KoCompositeOpRegistry.cpp:185
 #, kde-format
 msgctxt "Blending mode - Hue HSV"
 msgid "Hue HSV"
 msgstr "Hue HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:178
+#: libs/pigment/KoCompositeOpRegistry.cpp:186
 #, kde-format
 msgctxt "Blending mode - Saturation HSV"
 msgid "Saturation HSV"
 msgstr "Saturiĝo HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:179
+#: libs/pigment/KoCompositeOpRegistry.cpp:187
 #, kde-format
 msgctxt "Blending mode - Value HSV"
 msgid "Value"
 msgstr "Valoro"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:180
+#: libs/pigment/KoCompositeOpRegistry.cpp:188
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSV"
 msgid "Decrease Saturation HSV"
 msgstr "Malpliigi Saturadon HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:181
+#: libs/pigment/KoCompositeOpRegistry.cpp:189
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSV"
 msgid "Increase Saturation HSV"
 msgstr "Pliigi Saturadon HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:182
+#: libs/pigment/KoCompositeOpRegistry.cpp:190
 #, kde-format
 msgctxt "Blending mode - Decrease Value HSV"
 msgid "Decrease Value"
 msgstr "Malpliigi Valoron"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:183
+#: libs/pigment/KoCompositeOpRegistry.cpp:191
 #, kde-format
 msgctxt "Blending mode - Increase Value HSV"
 msgid "Increase Value"
 msgstr "Pliigi Valoron"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:185
+#: libs/pigment/KoCompositeOpRegistry.cpp:193
 #, kde-format
 msgctxt "Blending mode - Reflect"
 msgid "Reflect"
 msgstr "Pripensi"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:186
+#: libs/pigment/KoCompositeOpRegistry.cpp:194
 #, kde-format
 msgctxt "Blending mode - Glow"
 msgid "Glow"
 msgstr "Brilas"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:187
+#: libs/pigment/KoCompositeOpRegistry.cpp:195
 #, kde-format
 msgctxt "Blending mode - Freeze"
 msgid "Freeze"
 msgstr "Frosti"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:188
+#: libs/pigment/KoCompositeOpRegistry.cpp:196
 #, kde-format
 msgctxt "Blending mode - Heat"
 msgid "Heat"
 msgstr "Varmo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:189
+#: libs/pigment/KoCompositeOpRegistry.cpp:197
 #, kde-format
 msgctxt "Blending mode - Glow-Heat"
 msgid "Glow-Heat"
 msgstr "Brilo-Varmo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:190
+#: libs/pigment/KoCompositeOpRegistry.cpp:198
 #, kde-format
 msgctxt "Blending mode - Heat-Glow"
 msgid "Heat-Glow"
 msgstr "Varmo-Brilo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:191
+#: libs/pigment/KoCompositeOpRegistry.cpp:199
 #, kde-format
 msgctxt "Blending mode - Reflect-Freeze"
 msgid "Reflect-Freeze"
 msgstr "Reflekti-Frostigi"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:192
+#: libs/pigment/KoCompositeOpRegistry.cpp:200
 #, kde-format
 msgctxt "Blending mode - Freeze-Reflect"
 msgid "Freeze-Reflect"
 msgstr "Frosti-Refleki"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:193
+#: libs/pigment/KoCompositeOpRegistry.cpp:201
 #, kde-format
 msgctxt "Blending mode - Heat-Glow & Freeze-Reflect Hybrid"
 msgid "Heat-Glow & Freeze-Reflect Hybrid"
 msgstr "Varmo-Brilo & Frosto-Reflekta Hibrido"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:217
+#: libs/pigment/KoCompositeOpRegistry.cpp:225
 #, kde-format
 msgid "In"
 msgstr "En"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:219
+#: libs/pigment/KoCompositeOpRegistry.cpp:227
 #, kde-format
 msgid "Out"
 msgstr "Elen"
@@ -24413,7 +24473,7 @@ msgstr "Elen"
 #: libs/pigment/resources/KoColorSet.cpp:1521
 #: libs/pigment/resources/KoColorSet.cpp:1938
 #: libs/ui/actions/KisPasteActionFactories.cpp:324
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:735 libs/ui/KisView.cpp:1173
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:744 libs/ui/KisView.cpp:1173
 #: plugins/dockers/lut/lutdocker_dock.cpp:715
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -24431,7 +24491,7 @@ msgctxt "Automatically created layer name when saving into PSD"
 msgid "Background"
 msgstr "Fono"
 
-#: libs/psd/psd_layer_section.cpp:973 libs/psd/psd_layer_section.cpp:1151
+#: libs/psd/psd_layer_section.cpp:974 libs/psd/psd_layer_section.cpp:1153
 #, kde-format
 msgid "Unnamed Layer"
 msgstr "Nenomita Tavolo"
@@ -24450,9 +24510,9 @@ msgstr "Lokaj Rimedoj"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:113
 #: libs/ui/animation/KisAnimationRender.cpp:199
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:991
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:997
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:1000
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:1016
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:1022
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:1025
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
@@ -24463,15 +24523,15 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1203
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1230
 #: libs/ui/input/kis_tablet_debugger.cpp:121 libs/ui/kis_clipboard.cc:506
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:327
 #: libs/ui/kis_layer_manager.cc:1045 libs/ui/kis_node_manager.cpp:1321
-#: libs/ui/kis_node_manager.cpp:1384 libs/ui/KisApplication.cpp:1230
-#: libs/ui/KisApplication.cpp:1233 libs/ui/KisApplication.cpp:1249
-#: libs/ui/KisApplication.cpp:1281 libs/ui/KisApplication.cpp:1295
-#: libs/ui/KisApplication.cpp:1323 libs/ui/KisDocument.cpp:1060
+#: libs/ui/kis_node_manager.cpp:1384 libs/ui/KisApplication.cpp:1245
+#: libs/ui/KisApplication.cpp:1248 libs/ui/KisApplication.cpp:1264
+#: libs/ui/KisApplication.cpp:1296 libs/ui/KisApplication.cpp:1310
+#: libs/ui/KisApplication.cpp:1338 libs/ui/KisDocument.cpp:1060
 #: libs/ui/KisDocument.cpp:1075 libs/ui/KisDocument.cpp:2042
 #: libs/ui/KisDocument.cpp:2085 libs/ui/KisDocument.cpp:2096
 #: libs/ui/KisMainWindow.cpp:1109 libs/ui/KisMainWindow.cpp:1179
@@ -24484,7 +24544,7 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:689 libs/ui/KisView.cpp:1176
-#: libs/ui/KisWelcomePageWidget.cpp:724 libs/ui/KisWindowLayoutResource.cpp:390
+#: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:390
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #: libs/ui/widgets/kis_custom_image_widget.cc:298
 #: libs/ui/widgets/kis_custom_image_widget.cc:456
@@ -24757,8 +24817,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2385
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2389
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2412
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2416
 #: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:336
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -25588,18 +25648,23 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N/A"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:591
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:597
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Ne donis validan FFmpeg-binarprogramon..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:687
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:636
+#, kde-format
+msgid "ProRes 4444 Video"
+msgstr ""
+
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:696
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr "FFmpeg devas esti almenaŭ versio 4.2+ por ke GIF-travideblo funkciu"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:703
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -25609,20 +25674,20 @@ msgstr ""
 "Viglaj GIF-bildoj ne povas havi bildrapidecon pli altan ol 50. La "
 "bildfrekvenco estos reduktita al 50 bildoj sekunde"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:700
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:709
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FPS beyond 30 are not widely supported."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:705
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:714
 #, kde-format
 msgctxt "ffmpeg warnings checks"
 msgid "Dimensions larger than 1920 pixels are not widely supported."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:712
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2422
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2449
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Warning"
@@ -25631,18 +25696,18 @@ msgid_plural "Warnings:"
 msgstr[0] "Averto"
 msgstr[1] "Averto"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:723
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:732
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "The export may fail and some devices may not be able to play it."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:991
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:1016
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Bonvolu enigi dosiernomon por bildigi."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:997
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:1022
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -25651,7 +25716,7 @@ msgstr ""
 "La FFmpeg, kiun vi donis, ŝajnas esti kunpremita. Bonvolu unue provu "
 "ekstrakti FFmpeg de la arkivo."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:1000
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:1025
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -26008,7 +26073,7 @@ msgstr "Konstanta Indika Faktoro:"
 #. i18n: ectx: property (text), widget (QLabel, presetLabel)
 #: libs/ui/animation/video_export_options_dialog.ui:106
 #: libs/ui/animation/video_export_options_dialog.ui:169
-#: libs/ui/animation/video_export_options_dialog.ui:432
+#: libs/ui/animation/video_export_options_dialog.ui:442
 #: libs/ui/forms/wdgimageproperties.ui:611
 #: libs/ui/widgets/KoFillConfigWidget.ui:297
 #, kde-format
@@ -26052,53 +26117,69 @@ msgstr "Bitrapideco (MBit/s):"
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
 #: libs/ui/animation/video_export_options_dialog.ui:262
-#: libs/ui/animation/video_export_options_dialog.ui:405
+#: libs/ui/animation/video_export_options_dialog.ui:415
 #, kde-format
 msgid "Lossless"
 msgstr "Senperdo"
 
+#. i18n: ectx: property (toolTip), widget (QCheckBox, vp9PreserveTransparency)
+#: libs/ui/animation/video_export_options_dialog.ui:269
+#, kde-format
+msgid ""
+"Preserve the animation's alpha channel in WebM or Matroska video. Hide "
+"opaque background layers before rendering. Playback requires a player that "
+"supports video transparency."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, vp9PreserveTransparency)
+#: libs/ui/animation/video_export_options_dialog.ui:272
+#, fuzzy, kde-format
+#| msgid "Preserve Transparency"
+msgid "Preserve transparency"
+msgstr "Konservi Travideblecon"
+
 #. i18n: ectx: property (text), widget (QCheckBox, gifLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, apngLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLoop)
-#: libs/ui/animation/video_export_options_dialog.ui:285
-#: libs/ui/animation/video_export_options_dialog.ui:372
-#: libs/ui/animation/video_export_options_dialog.ui:442
+#: libs/ui/animation/video_export_options_dialog.ui:295
+#: libs/ui/animation/video_export_options_dialog.ui:382
+#: libs/ui/animation/video_export_options_dialog.ui:452
 #, kde-format
 msgid "Loop Animation"
 msgstr "Buklo Animacio"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifTransDiff)
-#: libs/ui/animation/video_export_options_dialog.ui:292
+#: libs/ui/animation/video_export_options_dialog.ui:302
 #, kde-format
 msgid "Transparency Difference"
 msgstr "Travidebleco Diferenco"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/animation/video_export_options_dialog.ui:299
+#: libs/ui/animation/video_export_options_dialog.ui:309
 #, kde-format
 msgid "Auto-generate 8bit Palette:"
 msgstr "Aŭtomate generi 8-bitan paleton:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:309
+#: libs/ui/animation/video_export_options_dialog.ui:319
 #, kde-format
 msgid "Dithering:"
 msgstr "Dithering:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseBayerScaleGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:319
+#: libs/ui/animation/video_export_options_dialog.ui:329
 #, kde-format
 msgid "Bayer Scale:"
 msgstr "Bayer-skalo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDiffModeGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:336
+#: libs/ui/animation/video_export_options_dialog.ui:346
 #, kde-format
 msgid "Difference Mode:"
 msgstr "Diferenca Reĝimo:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:346
+#: libs/ui/animation/video_export_options_dialog.ui:356
 #, no-c-format, kde-format
 msgid ""
 "<html><head/><body><p>GIF format supports up to 256 colors per frame/image. "
@@ -26132,37 +26213,45 @@ msgstr ""
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:349
+#: libs/ui/animation/video_export_options_dialog.ui:359
 #, kde-format
 msgid "Preserve Transparency"
 msgstr "Konservi Travideblecon"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredAPNG)
-#: libs/ui/animation/video_export_options_dialog.ui:379
+#: libs/ui/animation/video_export_options_dialog.ui:389
 #, kde-format
 msgid "Prediction Mode:"
 msgstr "Antaŭdira reĝimo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompressWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:412
+#: libs/ui/animation/video_export_options_dialog.ui:422
 #, kde-format
 msgid "Compression Level:"
 msgstr "Kunprema Nivelo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQscaleWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:422
+#: libs/ui/animation/video_export_options_dialog.ui:432
 #, kde-format
 msgid "Image Quality:"
 msgstr "Bilda Kvalito:"
 
+#. i18n: ectx: property (text), widget (QLabel, lblProResTransparency)
+#: libs/ui/animation/video_export_options_dialog.ui:463
+#, kde-format
+msgid ""
+"ProRes 4444 preserves transparency in MOV video. Hide opaque background "
+"layers before rendering."
+msgstr ""
+
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:456
+#: libs/ui/animation/video_export_options_dialog.ui:480
 #, kde-format
 msgid "Custom options"
 msgstr "Propraj opcioj"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:465
+#: libs/ui/animation/video_export_options_dialog.ui:489
 #, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
@@ -26176,7 +26265,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
-#: libs/ui/animation/video_export_options_dialog.ui:472
+#: libs/ui/animation/video_export_options_dialog.ui:496
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:140
@@ -26539,62 +26628,69 @@ msgctxt "kilo-bits-per-second, video bitrate suffix"
 msgid "kbps"
 msgstr "kbps"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:289
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:300
 #, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
 msgstr "OpenH264"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:290
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:301
 #, kde-format
 msgctxt "h264 codec name, check simplescreenrecorder for standard translations"
 msgid "H.264, MPEG-4 Part 10"
 msgstr "H.264, MPEG-4 Part 10"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:291
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:302
 #, kde-format
 msgctxt "h265 codec name, check simplescreenrecorder for standard translations"
 msgid "H.265, MPEG-H Part 2 (HEVC)"
 msgstr "H.265, MPEG-H Part 2 (HEVC)"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:294
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:305
 #, kde-format
 msgctxt "VP9 codec name"
 msgid "VP9"
 msgstr "VP9"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:299
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:310
+#, fuzzy, kde-format
+#| msgid "Grayscale (without transparency)"
+msgctxt "ProRes codec name"
+msgid "ProRes 4444 (with transparency)"
+msgstr "Grizskalo (sen travidebleco)"
+
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:313
 #, kde-format
 msgctxt ""
 "theora codec name, check simplescreenrecorder for standard translations"
 msgid "Theora"
 msgstr "Theora"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:302
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:316
 #, kde-format
 msgctxt "WEBP codec name"
 msgid "WEBP"
 msgstr "WEBP"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:305
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:319
 #, kde-format
 msgctxt "APNG codec name"
 msgid "APNG"
 msgstr "APNG"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:308
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:322
 #, kde-format
 msgctxt "GIF codec name"
 msgid "GIF"
 msgstr "GIF"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:572
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:598
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
 msgstr "Eksportita animacia formato ne subtenas HDR"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:574
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:600
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
@@ -26613,8 +26709,8 @@ msgstr "Video Animacia Importo"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:24
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2690
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2692
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2717
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2719
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -26636,7 +26732,7 @@ msgstr "Video-dosiero:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
-#: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:343
+#: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:348
 #: libs/widgetutils/KisPreviewFileDialog.cpp:96
 #, kde-format
 msgid "No Preview"
@@ -27577,13 +27673,13 @@ msgstr "Ecoj de Tavolo"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1487
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1490
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1493
-#: libs/ui/dialogs/kis_dlg_preferences.cc:344
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1911
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1915
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2004
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2473
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2531 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:345
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1946
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2031
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2500
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2558 libs/ui/kis_paintop_box.cc:280
 #: libs/ui/kis_paintop_box.cc:281
 #: libs/ui/widgets/kis_custom_image_widget.cc:105
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
@@ -27738,77 +27834,77 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "Multoblaj Algluaj Fontoj Detektis"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:252
+#: libs/ui/dialogs/kis_dlg_preferences.cc:253
 #, kde-format
 msgid "No Cursor"
 msgstr "Neniu Kursoro"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:253
+#: libs/ui/dialogs/kis_dlg_preferences.cc:254
 #, kde-format
 msgid "Tool Icon"
 msgstr "Ilpiktogramo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:254
+#: libs/ui/dialogs/kis_dlg_preferences.cc:255
 #, kde-format
 msgid "Arrow"
 msgstr "Sago"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:255
+#: libs/ui/dialogs/kis_dlg_preferences.cc:256
 #, kde-format
 msgid "Small Circle"
 msgstr "Malgranda Rondo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:256
+#: libs/ui/dialogs/kis_dlg_preferences.cc:257
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:467
 #, kde-format
 msgid "Crosshair"
 msgstr "Kruc-haro"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:257
+#: libs/ui/dialogs/kis_dlg_preferences.cc:258
 #, kde-format
 msgid "Triangle Righthanded"
 msgstr "Triangulo Righthanded"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:258
+#: libs/ui/dialogs/kis_dlg_preferences.cc:259
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr "Triangulo Maldekstramana"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:259
+#: libs/ui/dialogs/kis_dlg_preferences.cc:260
 #, kde-format
 msgid "Black Pixel"
 msgstr "Nigra Rastrumero"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:260
+#: libs/ui/dialogs/kis_dlg_preferences.cc:261
 #, kde-format
 msgid "White Pixel"
 msgstr "Blanka Rastrumero"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:263
+#: libs/ui/dialogs/kis_dlg_preferences.cc:264
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "Neniu Skizo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:264
+#: libs/ui/dialogs/kis_dlg_preferences.cc:265
 #, kde-format
 msgid "Circle Outline"
 msgstr "Cirkla Skizo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:265
+#: libs/ui/dialogs/kis_dlg_preferences.cc:266
 #, kde-format
 msgid "Preview Outline"
 msgstr "Antaŭrigardo Skizo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:266
+#: libs/ui/dialogs/kis_dlg_preferences.cc:267
 #, kde-format
 msgid "Tilt Outline"
 msgstr "Inklina Skizo"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:290
+#: libs/ui/dialogs/kis_dlg_preferences.cc:291
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
@@ -27816,56 +27912,56 @@ msgid "Eraser"
 msgstr "Skrapgumo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolCenter)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:337
+#: libs/ui/dialogs/kis_dlg_preferences.cc:338
 #: plugins/tools/tool_crop/kis_tool_crop.cc:114
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:69
 #, kde-format
 msgid "Center"
 msgstr "Centrigita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:338
+#: libs/ui/dialogs/kis_dlg_preferences.cc:339
 #, fuzzy, kde-format
 #| msgctxt "toolbar position string"
 #| msgid "Top"
 msgid "Top"
 msgstr "Supre"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:339
+#: libs/ui/dialogs/kis_dlg_preferences.cc:340
 #, fuzzy, kde-format
 #| msgctxt "JPEG-XL encoder options"
 #| msgid "Top left"
 msgid "Top Left"
 msgstr "Supre maldekstre"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:340
+#: libs/ui/dialogs/kis_dlg_preferences.cc:341
 #, fuzzy, kde-format
 #| msgctxt "JPEG-XL encoder options"
 #| msgid "Top right"
 msgid "Top Right"
 msgstr "Supre dekstre"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:411
+#: libs/ui/dialogs/kis_dlg_preferences.cc:412
 #, fuzzy, kde-format
 #| msgid "Cut Off Disabled"
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
 msgstr "Fortranĉita Malŝaltita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:412
+#: libs/ui/dialogs/kis_dlg_preferences.cc:413
 #, fuzzy, kde-format
 #| msgid "Enabled"
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
 msgstr "Ebligita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:413
+#: libs/ui/dialogs/kis_dlg_preferences.cc:414
 #, fuzzy, kde-format
 #| msgid "Enabled"
 msgctxt "touch painting"
 msgid "Enabled"
 msgstr "Ebligita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:414
+#: libs/ui/dialogs/kis_dlg_preferences.cc:415
 #, fuzzy, kde-format
 #| msgctxt "JPEG-XL encoder options"
 #| msgid "Disabled"
@@ -27873,81 +27969,81 @@ msgctxt "touch painting"
 msgid "Disabled"
 msgstr "Malebligita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:428
+#: libs/ui/dialogs/kis_dlg_preferences.cc:429
 #, kde-format
 msgid "On Touch Drag"
 msgstr "Sur Tuŝo-Trenado"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:429
+#: libs/ui/dialogs/kis_dlg_preferences.cc:430
 #, kde-format
 msgid "On Click Drag"
 msgstr "Sur Klako Treni"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:430
+#: libs/ui/dialogs/kis_dlg_preferences.cc:431
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "Sur Meza-Alklako Trenado"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:482
+#: libs/ui/dialogs/kis_dlg_preferences.cc:483
 #, kde-format
 msgid "All Supported Files"
 msgstr "Ĉiuj Subtenataj Dosieroj"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:517
+#: libs/ui/dialogs/kis_dlg_preferences.cc:518
 #, kde-format
 msgid "Open default window"
 msgstr "Malfermi defaŭltan fenestron"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:518
+#: libs/ui/dialogs/kis_dlg_preferences.cc:519
 #, kde-format
 msgid "Load previous session"
 msgstr "Ŝargi antaŭan seancon"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:519
+#: libs/ui/dialogs/kis_dlg_preferences.cc:520
 #, kde-format
 msgid "Show session manager"
 msgstr "Montri seancan administranton"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:573
+#: libs/ui/dialogs/kis_dlg_preferences.cc:578
 #: plugins/dockers/layerdocker/NodeToolTip.cpp:48
 #, kde-format
 msgid "Yes"
 msgstr "Jes"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:574
+#: libs/ui/dialogs/kis_dlg_preferences.cc:579
 #: plugins/dockers/layerdocker/NodeToolTip.cpp:48
 #, kde-format
 msgid "No"
 msgstr "Ne"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:596
+#: libs/ui/dialogs/kis_dlg_preferences.cc:601
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "Noto: Vi devos restarti Krita por ke la ŝanĝoj efektiviĝu."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:602
+#: libs/ui/dialogs/kis_dlg_preferences.cc:607
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 "Konservado ĉe loko elektita el la File-Picker povas malrapidigi la startigon!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:634
+#: libs/ui/dialogs/kis_dlg_preferences.cc:639
 #, kde-format
 msgid "Internal Storage"
 msgstr "Interna Konservejo:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:636
+#: libs/ui/dialogs/kis_dlg_preferences.cc:641
 #, kde-format
 msgid "SD-Card"
 msgstr "SD-Karto"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:674
+#: libs/ui/dialogs/kis_dlg_preferences.cc:679
 #, kde-format
 msgid "Choose Manually"
 msgstr "Elekti Permane"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:739
+#: libs/ui/dialogs/kis_dlg_preferences.cc:744
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -27972,60 +28068,60 @@ msgstr ""
 "<br/>\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1155
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1182
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "Neniu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1156
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1183
 #, fuzzy, kde-format
 #| msgid "Circle"
 msgctxt "Preview option for a circular/ring-shaped color sampler"
 msgid "Circle"
 msgstr "Cirklo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1157
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1184
 #, fuzzy, kde-format
 #| msgid "Rectangle"
 msgctxt "Preview option for a rectangular color sampler left of the cursor"
 msgid "Rectangle Left"
 msgstr "Ortangulo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1158
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1185
 #, fuzzy, kde-format
 #| msgid "Rectangle"
 msgctxt "Preview option for a rectangular color sampler right of the cursor"
 msgid "Rectangle Right"
 msgstr "Ortangulo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1159
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1186
 #, fuzzy, kde-format
 #| msgid "Rectangle Tool"
 msgctxt "Preview option for a rectangular color sampler above the cursor"
 msgid "Rectangle Above"
 msgstr "Ortangul-Ilo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1191
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1218
 #, kde-format
 msgid "Select a Background Image"
 msgstr "Elekti Fonan Bildon"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1203
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1230
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 ne estas valida bilddosiero!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1223
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1250
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>Averto:</b> ĉi tiu loko ne estas skribebla."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1355
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1665
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1382
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1692
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -28033,18 +28129,18 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "Ekrano %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1376
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1403
 #, kde-format
 msgid "Display's color space is managed by the operating system"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1383
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1410
 #, fuzzy, kde-format
 #| msgid "Color Management"
 msgid "Enable canvas color management"
 msgstr "Koloradministrado"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1386
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1413
 #, kde-format
 msgid ""
 "<p>Enabling canvas color management automatically creates a separate native "
@@ -28056,47 +28152,47 @@ msgid ""
 "\",         i.e. paper white proofing will become impossible</li></ol></p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1406
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1433
 #, fuzzy, kde-format
 #| msgid "Uncalibrated color space"
 msgid "Canvas surface color space:"
 msgstr "Nekalibrita kolorspaco"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1409
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1436
 #, kde-format
 msgid "Preferred by operating system"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1410
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1437
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1411
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1438
 #, kde-format
 msgid "Rec 709 Linear"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1412
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1439
 #, fuzzy, kde-format
 #| msgctxt "Color space name"
 #| msgid "Rec 2100 PQ"
 msgid "Rec 2020 PQ"
 msgstr "Rec 2100 PQ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1413
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1440
 #, kde-format
 msgid "Unmanaged (testing only)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1416
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1443
 #, kde-format
 msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
 "Use \"preferred\" space unless you know what you are doing</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1423
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1450
 #, fuzzy, kde-format
 #| msgid "CMYK blending mode (needs restart):"
 msgid "Canvas surface bit depth (needs restart):"
@@ -28105,7 +28201,7 @@ msgstr "CMYK-miksreĝimo (bezonas restarton):"
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1426
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1453
 #: libs/ui/widgets/KisDitherWidget.ui:119
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:244
@@ -28113,19 +28209,19 @@ msgstr "CMYK-miksreĝimo (bezonas restarton):"
 msgid "Auto"
 msgstr "Aŭtomate"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1427
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1435
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1462
 #, kde-format
 msgid "8-bit"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1428
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1435
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1455
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1462
 #, kde-format
 msgid "10-bit"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1431
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1458
 #, kde-format
 msgid ""
 "<p>The bit depth of the color that is passed to the window compositor. You "
@@ -28133,64 +28229,64 @@ msgid ""
 "display</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1436
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1463
 #, fuzzy, kde-format
 #| msgid "Uncalibrated color space"
 msgid "Current canvas surface bit depth:"
 msgstr "Nekalibrita kolorspaco"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1444
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1471
 #, kde-format
 msgid ""
 "Color space preferred by the operating system:\n"
 "%1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1450
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1477
 #, fuzzy, kde-format
 #| msgid "Emboss Diagonal"
 msgid "Diagram:"
 msgstr "Reliefigi Diagonale"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1453
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1480
 #, fuzzy, kde-format
 #| msgid "Preferred Output Format:"
 msgctxt "@info:radiobutton"
 msgid "Preferred Space"
 msgstr "Preferata Eligformato:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1455
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1482
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the space preferred by the operating system."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1458
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1485
 #, fuzzy, kde-format
 #| msgid "Current Display Format"
 msgctxt "@info:radiobutton"
 msgid "Current Display"
 msgstr "Nuna Ekranformato"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1461
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1488
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the space representing the currently active display."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1558
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1585
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:799
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "Instali Kolorajn Profilojn"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1805
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1832
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1819
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1846
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -28199,7 +28295,7 @@ msgstr ""
 "Uzu tabulmarkojn por tabuleta rapido (povas kaŭzi severajn artefaktojn kiam "
 "vi uzas WinTab-tabulo-API)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1821
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1848
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "Uzi tabuletpelilajn tempomarkojn por penikla rapideco"
@@ -28207,7 +28303,7 @@ msgstr "Uzi tabuletpelilajn tempomarkojn por penikla rapideco"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1851
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1878
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -28217,14 +28313,14 @@ msgstr[1] "Maksimuma penikorapideco: {n} px/ms:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1860
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1887
 #, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "Penikrapideca Glatigado: {n} specimeno"
 msgstr[1] "Penikrapideca Glatigado: {n} specimenoj"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1867
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1894
 #, fuzzy, kde-format
 #| msgctxt "Context: dynamic sensors"
 #| msgid "Tilt direction"
@@ -28232,13 +28328,13 @@ msgid "Pen tilt direction offset: "
 msgstr "Inklina direkto"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1965
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1992
 #: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2013
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -28247,80 +28343,80 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " sek"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1989
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2016
 #, kde-format
 msgid " fps"
 msgstr " fps"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2255
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2256
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Programaro Reprezentilo (tre malrapida)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2260
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 per ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2234
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2261
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "OpenGL per ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2236
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2263
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2243
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2270
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Nekonata"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2263
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2290
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Aŭtomata (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2322
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2349
 #, fuzzy, kde-format
 #| msgid "Current"
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
 msgstr "Aktuala"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2323
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2350
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2324
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2351
 #, fuzzy, kde-format
 #| msgid "Current"
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
 msgstr "Aktuala"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2325
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2352
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2331
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2358
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -28328,78 +28424,78 @@ msgid ""
 "switching between EGL and GLX</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2371
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2398
 #, kde-format
 msgid "Display Id: %1"
 msgstr "Montra Identigilo: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2372
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2399
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Afiŝnomo: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2373
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2400
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Min Lumeco: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2374
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2401
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Maksimuma Lumineco: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2375
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2402
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Maksimuma Plenkadra Lumo: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2376
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2403
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Ruĝa Ĉefa: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2377
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2404
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Verda Ĉefa: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2378
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2405
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Blua Ĉefa: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2379
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2406
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Blanka Punkto: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2560
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2587
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Averto:</b> nuna ekrano ne subtenas HDR-bildigon"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2683
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2710
 #, kde-format
 msgid "Configure Krita"
 msgstr "Agordi Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2700
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2727
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Klavaraj ŝparvojoj"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2702
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2729
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Ŝparvojoj"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2712
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2739
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Canvas Enigo Agordoj"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2713
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2740
 #, kde-format
 msgid "Canvas Input"
 msgstr "Canvas Enigo"
@@ -28407,8 +28503,8 @@ msgstr "Canvas Enigo"
 #. i18n: ectx: attribute (title), widget (QWidget, Display)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2720
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2722
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2747
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2749
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -28416,65 +28512,65 @@ msgstr "Canvas Enigo"
 msgid "Display"
 msgstr "Montrado"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2730
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2757
 #: plugins/dockers/logdocker/LogDockerDock.cpp:324
 #, kde-format
 msgid "Color Management"
 msgstr "Koloradministrado"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2732
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2759
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Koloro"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2740
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2742
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2767
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2769
 #: plugins/dockers/logdocker/LogDockerDock.cpp:320
 #, kde-format
 msgid "Performance"
 msgstr "Rendimento"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2750
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2777
 #, kde-format
 msgid "Tablet settings"
 msgstr "Agordoj de la tabuleto"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2752
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2779
 #, kde-format
 msgid "Tablet"
 msgstr "Tabulo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2760
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2787
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Nur kanvasaj agordoj"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2762
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2789
 #, kde-format
 msgid "Canvas-only"
 msgstr "Tolo-nur"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2770
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2772
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2797
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2799
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Ŝprucfenestra Paletro"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2780
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2807
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Aŭtoro"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2782
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2809
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, kde-format
 msgid "Author"
 msgstr "Aŭtoro"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2789
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2816
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -29022,6 +29118,68 @@ msgstr "Alinomi seancon"
 msgid "New name:"
 msgstr "Nova nomo:"
 
+#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
+#. i18n: ectx: property (text), widget (QPushButton, m_btnSupport)
+#: libs/ui/dialogs/KisSplashSourceDialog.cpp:24
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:363
+#: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:173
+#, kde-format
+msgid "Support Krita"
+msgstr "Subteni Krita"
+
+#: libs/ui/dialogs/KisSplashSourceDialog.cpp:24
+#, fuzzy, kde-format
+#| msgid "Do not show the splash screen"
+msgid "Become a supporter to change the splash screen."
+msgstr "Ne montri la plaŭdan ekranon"
+
+#: libs/ui/dialogs/KisSplashSourceDialog.cpp:34
+#, kde-format
+msgid ""
+"Changing the splash screen is only available for supporters through the Play "
+"Store."
+msgstr ""
+
+#: libs/ui/dialogs/KisSplashSourceDialog.cpp:37
+#, kde-format
+msgid ""
+"Purchase Krita to change the splash screen and receive automatic updates."
+msgstr ""
+
+#: libs/ui/dialogs/KisSplashSourceDialog.cpp:40
+#, kde-format
+msgid "Get Krita on Steam"
+msgstr ""
+
+#: libs/ui/dialogs/KisSplashSourceDialog.cpp:42
+#, kde-format
+msgid "Get Krita on the Epic Games Store"
+msgstr ""
+
+#: libs/ui/dialogs/KisSplashSourceDialog.cpp:43
+#, kde-format
+msgid "Get Krita on the Microsoft Store"
+msgstr ""
+
+#: libs/ui/dialogs/KisSplashSourceDialog.cpp:46
+#, kde-format
+msgid "Get Krita on the App Store"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, KisSplashSourceDialog)
+#: libs/ui/dialogs/KisSplashSourceDialog.ui:14
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Change parameter"
+msgid "Change Splash Screen"
+msgstr "Ŝanĝi parametron"
+
+#. i18n: ectx: property (text), widget (QLabel, m_explanationLabel)
+#: libs/ui/dialogs/KisSplashSourceDialog.ui:23
+#, kde-format
+msgid "Explanation goes here."
+msgstr ""
+
 #: libs/ui/flake/kis_shape_controller.cpp:237
 #, kde-format
 msgid "Vector Layer %1"
@@ -29150,14 +29308,6 @@ msgstr "Komunumo"
 #, kde-format
 msgid "User Manual"
 msgstr "Uzanto Manlibro"
-
-#. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#. i18n: ectx: property (text), widget (QPushButton, m_btnSupport)
-#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:363
-#: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:173
-#, kde-format
-msgid "Support Krita"
-msgstr "Subteni Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
 #: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:372
@@ -29334,7 +29484,7 @@ msgid "Manage Supporter Benefits"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
-#: libs/ui/forms/KisWelcomePage.ui:1846 libs/ui/KisWelcomePageWidget.cpp:843
+#: libs/ui/forms/KisWelcomePage.ui:1846 libs/ui/KisWelcomePageWidget.cpp:845
 #, fuzzy, kde-format
 #| msgid "Support Krita"
 msgid "Support Krita!"
@@ -30984,7 +31134,7 @@ msgstr "Menuo de cepoj feloj"
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/forms/wdggeneralsettings.ui:552
-#: libs/ui/forms/wdggeneralsettings.ui:1655
+#: libs/ui/forms/wdggeneralsettings.ui:1665
 #, kde-format
 msgid "(Needs restart)"
 msgstr "(Necesas rekomenci)"
@@ -31018,7 +31168,7 @@ msgstr "Ebligi frakcian skalfaktoron"
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:659
-#: libs/ui/forms/wdggeneralsettings.ui:1808
+#: libs/ui/forms/wdggeneralsettings.ui:1818
 #, kde-format
 msgid "(needs restart)"
 msgstr "(bezonas rekomencon)"
@@ -31465,33 +31615,50 @@ msgstr "Ebligi denaskajn dosierajn dialogojn"
 msgid "(Warning: may not work correctly on some systems)"
 msgstr "(Averto: eble ne funkcias ĝuste en iuj sistemoj)"
 
-#. i18n: ectx: property (text), widget (QLabel, label_9)
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkIgnoreHighFunctionKeys)
 #: libs/ui/forms/wdggeneralsettings.ui:1589
+#, kde-format
+msgid ""
+"Some applications may emulate presses of function keys with high numbers (e."
+"g. F22) to bring themselves to the foreground. This may break Krita's "
+"shortcuts and actions system. If you have a keyboard with F13 or higher "
+"function keys, and you wish to use them, try disabling this option, but take "
+"this potential problem into account."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
+#: libs/ui/forms/wdggeneralsettings.ui:1592
+#, kde-format
+msgid "Ignore high function keys (F13-F24)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: libs/ui/forms/wdggeneralsettings.ui:1599
 #, kde-format
 msgid "Maximum brush size:"
 msgstr "Maksimuma penikograndeco:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1617
+#: libs/ui/forms/wdggeneralsettings.ui:1627
 #, kde-format
 msgid "The maximum diameter of a brush in pixels."
 msgstr "La maksimuma diametro de peniko en rastrumeroj."
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1620
+#: libs/ui/forms/wdggeneralsettings.ui:1630
 #, kde-format
 msgctxt "pixel"
 msgid "px"
 msgstr "px"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1665
+#: libs/ui/forms/wdggeneralsettings.ui:1675
 #, kde-format
 msgid "Font DPI Workaround"
 msgstr "Tiparo DPI-solucio"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1680
+#: libs/ui/forms/wdggeneralsettings.ui:1690
 #, kde-format
 msgid ""
 "In some Krita versions before 5.0 text size could be dependent on the "
@@ -31521,7 +31688,7 @@ msgstr ""
 "estos bezonataj plu."
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1683
+#: libs/ui/forms/wdggeneralsettings.ui:1693
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:71
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:183
 #, kde-format
@@ -31529,7 +31696,7 @@ msgid "DPI:"
 msgstr "DPI:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1692
+#: libs/ui/forms/wdggeneralsettings.ui:1702
 #, kde-format
 msgid ""
 "In some versions of Krita before 4.4.3 text size could be dependent on the "
@@ -31547,68 +31714,64 @@ msgstr ""
 "por tiparoj enigante ĝin en ĉi tiu kampo."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
-#: libs/ui/forms/wdggeneralsettings.ui:1705
+#: libs/ui/forms/wdggeneralsettings.ui:1715
 #, kde-format
 msgid "Automatic layer naming"
 msgstr "Aŭtomata tavolnomumado"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1711
+#: libs/ui/forms/wdggeneralsettings.ui:1721
 #, kde-format
 msgid "Append \"Merged\" to merged group layers"
 msgstr "Aldoni \"Fandita\" al kunfanditaj gruptavoloj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1718
+#: libs/ui/forms/wdggeneralsettings.ui:1728
 #, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
 msgstr "Aldoni \"(algluita)\" al algluitaj tavoloj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1725
+#: libs/ui/forms/wdggeneralsettings.ui:1735
 #, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
 msgstr "Aldoni \"(Kopio de)\" al duplikitaj tavoloj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableLongPress)
-#: libs/ui/forms/wdggeneralsettings.ui:1735
+#: libs/ui/forms/wdggeneralsettings.ui:1745
 #, kde-format
 msgid "Long-press to open context menus"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
-#: libs/ui/forms/wdggeneralsettings.ui:1742
+#: libs/ui/forms/wdggeneralsettings.ui:1752
 #, kde-format
 msgid "Kinetic Scrolling (needs restart)"
 msgstr "Kinetika Scrolling (bezonas rekomenci)"
 
 #. i18n: ectx: property (text), widget (QLabel, labelKineticScrollingSensitivity)
-#: libs/ui/forms/wdggeneralsettings.ui:1757
+#: libs/ui/forms/wdggeneralsettings.ui:1767
 #, kde-format
 msgid "Sensitivity:"
 msgstr "Sentemeco:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
-#: libs/ui/forms/wdggeneralsettings.ui:1782
+#: libs/ui/forms/wdggeneralsettings.ui:1792
 #, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr "Kaŝi docker-rulumbretojn se kinetika rulumo estas ebligita"
 
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1834
-#, kde-format
-msgid ""
-"Some applications may emulate presses of function keys with high numbers (e."
-"g. F22) to bring themselves to the foreground. This may break Krita's "
-"shortcuts and actions system. If you have a keyboard with F13 or higher "
-"function keys, and you wish to use them, try disabling this option, but take "
-"this potential problem into account."
-msgstr ""
+#. i18n: ectx: property (text), widget (QPushButton, m_btnChangeSplash)
+#: libs/ui/forms/wdggeneralsettings.ui:1856
+#, fuzzy, kde-format
+#| msgid "Channel"
+msgid "Change…"
+msgstr "Kanalo"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkIgnoreHighFunctionKeys)
-#: libs/ui/forms/wdggeneralsettings.ui:1837
+#. i18n: ectx: property (text), widget (QLabel, m_lblSplashTitle)
+#: libs/ui/forms/wdggeneralsettings.ui:1878
 #, kde-format
-msgid "Ignore high function keys (F13-F24)"
+msgid "Splash screen:"
 msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgGeometryOptions)
@@ -35947,17 +36110,47 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Elekti Maldiafanon"
 
-#: libs/ui/kis_splash_screen.cpp:134
-#, kde-format
-msgctxt "Normal splash artist name"
-msgid "Tyson Tan"
-msgstr ""
+#: libs/ui/kis_splash_screen.cpp:48
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "This is appended to the color profile which is the default for the given "
+#| "colorspace and bit-depth"
+#| msgid "(Default)"
+msgctxt "Splash image default"
+msgid "%1 (default)"
+msgstr "(Defaŭlte)"
 
-#: libs/ui/kis_splash_screen.cpp:155
+#: libs/ui/kis_splash_screen.cpp:53
+#, fuzzy, kde-format
+#| msgid "No picture available."
+msgctxt "Splash image unavailable"
+msgid "%1 (not available)"
+msgstr "Neniu bildo uzebla."
+
+#: libs/ui/kis_splash_screen.cpp:62
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
 msgstr "Artaĵo de: %1"
+
+#: libs/ui/kis_splash_screen.cpp:195
+#, kde-format
+msgctxt "Splash screen option showing Kiki"
+msgid "Mascot"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:197
+#, kde-format
+msgctxt "Splash artist name"
+msgid "Tyson Tan"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:203
+#, fuzzy, kde-format
+#| msgid "Find Text"
+msgctxt "Splash screen option without Kiki"
+msgid "Plain"
+msgstr "Trovi Tekston"
 
 #: libs/ui/kis_statusbar.cc:231
 #, kde-format
@@ -36218,20 +36411,20 @@ msgstr "Mimetype ne trovita, provu uzi la -mimetype opcion"
 msgid "Failed to render animation frames!"
 msgstr "Malsukcesis bildigi animaciajn kadrojn!"
 
-#: libs/ui/KisApplication.cpp:817 libs/ui/KisApplication.cpp:1089
+#: libs/ui/KisApplication.cpp:817 libs/ui/KisApplication.cpp:1104
 #, kde-format
 msgid "File layer"
 msgstr "Dosiera tavolo"
 
 #: libs/ui/KisApplication.cpp:825 libs/ui/KisApplication.cpp:830
-#: libs/ui/KisApplication.cpp:1083 libs/ui/KisApplication.cpp:1097
-#: libs/ui/KisApplication.cpp:1102
+#: libs/ui/KisApplication.cpp:1098 libs/ui/KisApplication.cpp:1112
+#: libs/ui/KisApplication.cpp:1117
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita:Averto"
 
-#: libs/ui/KisApplication.cpp:826 libs/ui/KisApplication.cpp:1098
+#: libs/ui/KisApplication.cpp:826 libs/ui/KisApplication.cpp:1113
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Ne povas aldoni %1 kiel dosiertavolon: la dosiero ne ekzistas."
@@ -36268,32 +36461,32 @@ msgstr ""
 "Vi povas aŭ krei novan dosieron uzante la opcion --new-image, aŭ vi povas "
 "malfermi ekzistantan dosieron."
 
-#: libs/ui/KisApplication.cpp:1084
+#: libs/ui/KisApplication.cpp:1099
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Ne eblis malfermi la dosieron %1"
 
-#: libs/ui/KisApplication.cpp:1103
+#: libs/ui/KisApplication.cpp:1118
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Ne povas aldoni la dosiertavolon: neniu dokumento estas malfermita."
 
-#: libs/ui/KisApplication.cpp:1231
+#: libs/ui/KisApplication.cpp:1246
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Neniu ŝablono trovita por: %1"
 
-#: libs/ui/KisApplication.cpp:1234
+#: libs/ui/KisApplication.cpp:1249
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Tro da ŝablonoj trovitaj por: %1"
 
-#: libs/ui/KisApplication.cpp:1250
+#: libs/ui/KisApplication.cpp:1265
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Ŝablono %1 malsukcesis ŝargi."
 
-#: libs/ui/KisApplication.cpp:1282
+#: libs/ui/KisApplication.cpp:1297
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -36308,7 +36501,7 @@ msgstr ""
 "\n"
 "Rekomencu Krita por ke ŝanĝoj efektiviĝu."
 
-#: libs/ui/KisApplication.cpp:1296
+#: libs/ui/KisApplication.cpp:1311
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -36319,7 +36512,7 @@ msgstr ""
 "\n"
 "Bonvolu certigi, ke neniu alia programo uzas la dosieron kaj provu denove."
 
-#: libs/ui/KisApplication.cpp:1324
+#: libs/ui/KisApplication.cpp:1339
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ĉu vi volas forigi la agordan dosieron?"
@@ -37697,32 +37890,32 @@ msgstr "Anglaj novaĵoj ĉiam estas ĝisdatigitaj."
 msgid "Forget \"%1\""
 msgstr "Forgesi \"%1\""
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:747
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Nova versio de Krita disponeblas."
 
-#: libs/ui/KisWelcomePageWidget.cpp:776
+#: libs/ui/KisWelcomePageWidget.cpp:778
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Eraro okazis dum la ĝisdatigo"
 
-#: libs/ui/KisWelcomePageWidget.cpp:783
+#: libs/ui/KisWelcomePageWidget.cpp:785
 #, kde-format
 msgid "Restart is required."
 msgstr "Rekomenco estas bezonata."
 
-#: libs/ui/KisWelcomePageWidget.cpp:842
+#: libs/ui/KisWelcomePageWidget.cpp:844
 #, kde-format
 msgid "Become a Supporter!"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:846
+#: libs/ui/KisWelcomePageWidget.cpp:848
 #, kde-format
 msgid "Supporters get brush packs and more."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:847
+#: libs/ui/KisWelcomePageWidget.cpp:849
 #, kde-format
 msgid "Contributions keep development going."
 msgstr ""
@@ -38848,8 +39041,9 @@ msgid "Brush Size: %1 px"
 msgstr "Peniko Grandeco: %1 px"
 
 #: libs/ui/tool/kis_tool_utils.cpp:426
-#, kde-format
-msgid "Layer can be painted in Wash Mode only."
+#, fuzzy, kde-format
+#| msgid "Layer can be painted in Wash Mode only."
+msgid "Layer can't be painted in Build Up mode."
 msgstr "Tavolo povas esti pentrita nur en Lava Reĝimo."
 
 #: libs/ui/tool/kis_tool_utils.cpp:428
@@ -40405,7 +40599,7 @@ msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
 msgstr "%1 Motoro"
 
-#: libs/ui/widgets/kis_preset_live_preview_view.cpp:220
+#: libs/ui/widgets/kis_preset_live_preview_view.cpp:266
 #, kde-format
 msgid "No Preview for this engine"
 msgstr "Neniu Antaŭrigardo por ĉi tiu motoro"
@@ -40807,7 +41001,7 @@ msgctxt ""
 msgid "Amount:"
 msgstr "Kvanto:"
 
-#: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:320
+#: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:325
 #, fuzzy, kde-format
 #| msgid "Loading Pages..."
 msgid "Loading..."
@@ -61904,52 +62098,54 @@ msgid "Filter Settings"
 msgstr "Filtrilaj Agordoj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpIncremental)
-#: plugins/paintops/libpaintop/forms/wdgincremental.ui:24
+#: plugins/paintops/libpaintop/forms/wdgincremental.ui:33
 #, kde-format
 msgid "Painting mode"
 msgstr "Pentrareĝimo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBuildup)
-#: plugins/paintops/libpaintop/forms/wdgincremental.ui:36
+#: plugins/paintops/libpaintop/forms/wdgincremental.ui:45
 #, kde-format
 msgid "Build up"
 msgstr "Konstrui"
 
+#. i18n: ectx: property (text), widget (QLabel, lblBuildup)
+#: plugins/paintops/libpaintop/forms/wdgincremental.ui:52
+#, kde-format
+msgid ""
+"Applies strokes directly, building up opacity on the layer unless you use a "
+"blend mode that prevents it, such as Marker or Greater. Not available with "
+"masked brushes."
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
-#: plugins/paintops/libpaintop/forms/wdgincremental.ui:43
+#: plugins/paintops/libpaintop/forms/wdgincremental.ui:62
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2328
 #, kde-format
 msgid "Wash"
 msgstr "Lavi"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, label)
-#: plugins/paintops/libpaintop/forms/wdgincremental.ui:54
+#. i18n: ectx: property (text), widget (QLabel, lblWash)
+#: plugins/paintops/libpaintop/forms/wdgincremental.ui:72
 #, kde-format
 msgid ""
-"<html>\n"
-"<p><b>Note:</b> this is the same thing as the \"incremental\" option in the "
-"Krita 1.6 freehand tool options.</p></html>"
+"Maintains uniform opacity within each stroke, even when it overlaps itself."
 msgstr ""
-"<html>\n"
-"<p><b>Noto:</b> ĉi tio estas la sama afero kiel la opcio \"incremental\" en "
-"la elektoj de libermanaj iloj de Krita 1.6.</p></html>"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/paintops/libpaintop/forms/wdgincremental.ui:58
+#. i18n: ectx: property (text), widget (QRadioButton, radioClamp)
+#: plugins/paintops/libpaintop/forms/wdgincremental.ui:82
+#, kde-format
+msgid "Clamp"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lblClamp)
+#: plugins/paintops/libpaintop/forms/wdgincremental.ui:89
 #, kde-format
 msgid ""
-"<html>\n"
-"<p><b>Painting mode</b>: Krita offers a choice between two painting modes: "
-"<i>buildup</i> and <i>wash</i>. The first choice builds up color while "
-"painting in one stroke, the second choices gives you an even color in one "
-"stroke even if you go over the same place again and again.</p></html>"
+"Prevents opacity from building up at all during a stroke, keeping edges soft "
+"and not compounding textures. Also known as \"Soft\" in other software."
 msgstr ""
-"<html>\n"
-"<p><b>Pintrareĝimo</b>: Krita ofertas elekton inter du pentrarmanieroj: "
-"<i>konstruo</i> kaj <i>lavo</i>. La unua elekto konstruas koloron dum "
-"pentrado per unu streko, la duaj elektoj donas al vi ebenan koloron per unu "
-"streko eĉ se vi refoje transiras la saman lokon.</p></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
@@ -62128,7 +62324,7 @@ msgstr "Inversa Ŝablono"
 msgid "Auto Invert For Eraser"
 msgstr ""
 
-#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
+#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:263
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
 #, fuzzy, kde-format
 #| msgid "Auto Spacing"
@@ -62651,9 +62847,11 @@ msgid "Vertically"
 msgstr "Vertikale"
 
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:29
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Only wash mode is possible when using a masked brush."
 msgctxt "@info:tooltip"
-msgid "Only wash mode is possible when using a masked brush."
+msgid "Build up mode is not available when using a masked brush."
 msgstr "Nur lava reĝimo estas ebla kiam oni uzas maskitan penikon."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
@@ -71956,6 +72154,29 @@ msgstr ""
 "Ŝanĝu inter plena gamo kaj subintervalo.\n"
 "Plena gamo: [%1, %2]\n"
 "Subgamo: [%3, %4]"
+
+#~ msgid ""
+#~ "<html>\n"
+#~ "<p><b>Note:</b> this is the same thing as the \"incremental\" option in "
+#~ "the Krita 1.6 freehand tool options.</p></html>"
+#~ msgstr ""
+#~ "<html>\n"
+#~ "<p><b>Noto:</b> ĉi tio estas la sama afero kiel la opcio \"incremental\" "
+#~ "en la elektoj de libermanaj iloj de Krita 1.6.</p></html>"
+
+#~ msgid ""
+#~ "<html>\n"
+#~ "<p><b>Painting mode</b>: Krita offers a choice between two painting "
+#~ "modes: <i>buildup</i> and <i>wash</i>. The first choice builds up color "
+#~ "while painting in one stroke, the second choices gives you an even color "
+#~ "in one stroke even if you go over the same place again and again.</p></"
+#~ "html>"
+#~ msgstr ""
+#~ "<html>\n"
+#~ "<p><b>Pintrareĝimo</b>: Krita ofertas elekton inter du pentrarmanieroj: "
+#~ "<i>konstruo</i> kaj <i>lavo</i>. La unua elekto konstruas koloron dum "
+#~ "pentrado per unu streko, la duaj elektoj donas al vi ebenan koloron per "
+#~ "unu streko eĉ se vi refoje transiras la saman lokon.</p></html>"
 
 #~ msgid ""
 #~ "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"

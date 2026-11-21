@@ -114,6 +114,12 @@ class comicsExporter():
 
         path = Path(self.projectURL)
         if path.exists():
+            # Return a failure if we don't have any pages to export
+            if "pages" not in self.configDictionary:
+                QMessageBox.warning(None, i18n("Export not Possible"), i18n("No pages to export."), QMessageBox.StandardButton.Ok)
+                print("CPMT: No pages to export")
+                return False
+
             # Make a meta-data folder so we keep the export folder nice and clean.
             exportPath = path / self.configDictionary["exportLocation"]
             if Path(exportPath / "metadata").exists() is False:

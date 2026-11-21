@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 03:09+0000\n"
-"PO-Revision-Date: 2026-11-07 21:50+0200\n"
+"PO-Revision-Date: 2026-11-20 11:46+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -21007,7 +21007,7 @@ msgstr "Krita: Вътрешна грешка"
 #: libs/global/kis_dom_utils.cpp:128
 #, kde-format
 msgid "Could not find \"%1\" XML tag in \"%2\""
-msgstr "Не е намерен XML таг \"%1\" в \"%2\""
+msgstr "Не е намерен XML таг „%1“ в „%2“"
 
 #: libs/global/kis_dom_utils.cpp:158
 #, kde-format
@@ -27787,7 +27787,7 @@ msgstr "Инсталиране на цветни профили"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1651
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
-msgstr "API за вход от таблет (актуален API: \"%1\")"
+msgstr "API за вход от таблет (актуален API: „%1“)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1665
 #, kde-format
@@ -34765,7 +34765,7 @@ msgstr "Слойят е заключен"
 #: libs/ui/kis_node_manager.cpp:490 libs/ui/kis_node_manager.cpp:515
 #, kde-format
 msgid "Layer \"%1\" is locked"
-msgstr "Слой \"%1\" е заключен"
+msgstr "Слой „%1“ е заключен"
 
 #: libs/ui/kis_node_manager.cpp:543
 msgctxt "(qtundo-format)"
@@ -34863,7 +34863,7 @@ msgstr "Вертикално огледално обръщане на всичк
 #: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Export \"%1\""
-msgstr "Експортиране \"%1\""
+msgstr "Експортиране „%1“"
 
 #: libs/ui/kis_node_manager.cpp:1319
 #, kde-format
@@ -34937,13 +34937,12 @@ msgstr "Маска на слой"
 #: libs/ui/kis_node_manager.cpp:1707
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
-msgstr ""
-"Невъзможно е преместването на слой \"%1\" в нов родителски елемент \"%2\""
+msgstr "Невъзможно е преместването на слой „%1“ в нов родителски елемент „%2“"
 
 #: libs/ui/kis_node_manager.cpp:1710
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
-msgstr "Слой \"%1\" не може да бъде преместен в основния слой"
+msgstr "Слой „%1“ не може да бъде преместен в основния слой"
 
 #: libs/ui/kis_node_manager.cpp:1718
 msgctxt "(qtundo-format)"
@@ -36418,7 +36417,7 @@ msgid ""
 "please select a space to convert to for editing: \n"
 msgstr ""
 "Изображението има прикачен профил, в който Krita не може да редактира "
-"изображения (\"%1\"). Моля, изберете цветово пространство за конвертиране за "
+"изображения („%1“). Моля, изберете цветово пространство за конвертиране за "
 "редактиране:\n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:31
@@ -36858,7 +36857,7 @@ msgstr "Използване на новия шаблон при всеки ст
 #: libs/ui/KisTemplateCreateDia.cpp:285
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
-msgstr "Наистина ли искате съществуващият шаблон \"%1\" да бъде презаписан?"
+msgstr "Наистина ли искате съществуващият шаблон „%1“ да бъде презаписан?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:379
 #, kde-format
@@ -36947,7 +36946,7 @@ msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr ""
-"<p>Документът <b>\"%1\"</b> е променен.</p><p>Искате ли промените да бъдат "
+"<p>Документът <b>„%1“</b> е променен.</p><p>Искате ли промените да бъдат "
 "записани?</p>"
 
 #: libs/ui/KisView.cpp:1245
@@ -37111,7 +37110,7 @@ msgstr "Английските новини са винаги актуални."
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
-msgstr "Забравяне на \"%1\"?"
+msgstr "Забравяне на „%1“?"
 
 #: libs/ui/KisWelcomePageWidget.cpp:749
 #, kde-format
@@ -38313,7 +38312,7 @@ msgstr "Завъртане на върха на четката обратно н
 #, kde-format
 msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
-msgstr "Филтър \"%1\""
+msgstr "Филтър „%1“"
 
 #: libs/ui/toolbox/KoToolBox.cpp:349 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
@@ -41352,12 +41351,12 @@ msgid ""
 msgstr ""
 "<html><b>KDE</b> е световна мрежа от софтуерни инженери, художници, "
 "писатели, преводачи и фасилитатори, които са ангажирани с  развитието на<a "
-"href=\"%1\">Свободен софтуер</a>. Тази общност е създала стотици приложения "
-"за свободен софтуер като част от системи на KDE, работни пространства и "
+"href=„%1“>Свободен софтуер</a>. Тази общност е създала стотици приложения за "
+"свободен софтуер като част от системи на KDE, работни пространства и "
 "приложения.<br /><br />KDE е кооперативно предприятие в, в което нито едно "
 "лице не контролира усилията или продуктите на KDE , изключвайки другите. "
 "Всеки е добре дошъл да се присъедини и да допринася за KDE, включително и "
-"вие.<br /><br />Посетете <a href=\"%2\">%2</a> за повече информация относно "
+"вие.<br /><br />Посетете <a href=„%2“>%2</a> за повече информация относно "
 "общността на KDE и софтуера, който създаваме.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:72
@@ -41374,7 +41373,7 @@ msgstr ""
 "<html> Софтуерът винаги може да бъде подобрен и екипът на KDE е готов да го "
 "направи.Вие - потребителят - обаче трябва да ни кажете, когато нещо не "
 "работи както е очаквано или може да се направи по-добре. <br /> <br /> KDE "
-"има система за проследяване на грешки. Посещаване на <a href=\"%1\"> %1 </a> "
+"има система за проследяване на грешки. Посещаване на <a href=„%1“> %1 </a> "
 "или използвайте диалоговия прозорец\"Подаване на сигнал за грешка...\"от "
 "меню \"Помощ\" за докладване на грешки. <br /> <br /> Ако имате предложение "
 "за подобрение, тогава можете да използвате системата за проследяване на "
@@ -41395,11 +41394,11 @@ msgstr ""
 "<html> Не е необходимо да сте разработчик на софтуер, за да сте член на KDE "
 "екип. Можете да се присъедините към националните екипи, които превеждат "
 "програмни интерфейси. Вие може да предоставите графики, теми, звуци и "
-"подобрена документация. Вие решавате!<br /> <br /> Посещаване на <a href="
-"\"%1\"> %1 </a> за информация относно някои проекти, в които можете да "
+"подобрена документация. Вие решавате!<br /> <br /> Посещаване на <a "
+"href=„%1“> %1 </a> за информация относно някои проекти, в които можете да "
 "участвате. <br /> <br /> Ако имате нужда от повече информация или "
-"документация, след това посещение на <a href=\"%2\"> %2 </a> ще ви "
-"предостави това, от което се нуждаете. </html>"
+"документация, след това посещение на <a href=„%2“> %2 </a> ще ви предостави "
+"това, от което се нуждаете. </html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:115
 #, kde-format
@@ -41413,8 +41412,8 @@ msgstr ""
 "<p>Софтуерът на KDE е и винаги ще бъде безплатен, но създаването му не е "
 "безплатно.<br /><br />За подкрепа на разработката общността на KDE създаде "
 "KDE e.V., неприхослова организация, основана законно в Германия. KDE e.V. "
-"представлява общността на KDE по правни и финансови въпроси. Вижте <a href="
-"\"%1\">%1</a> за информация относно KDE e.V.</p>"
+"представлява общността на KDE по правни и финансови въпроси. Вижте <a "
+"href=„%1“>%1</a> за информация относно KDE e.V.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:121
 #, kde-format
@@ -41436,7 +41435,7 @@ msgid ""
 "donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
 msgstr ""
 "<p>Бихме искали да Ви насърчим да подпомогнете нашите усилия с финансово "
-"дарение, използвайки един от описаните начини на <a href=\"%1\">%1</a>.</p>"
+"дарение, използвайки един от описаните начини на <a href=„%1“>%1</a>.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:134
 #, kde-format
@@ -41814,7 +41813,7 @@ msgid_plural ""
 "Do you want to assign an empty shortcut to these actions?\n"
 "%3"
 msgstr[0] ""
-"Клавишната комбинация \"%2\" съвпада със следната клавишна комбинация.\n"
+"Клавишната комбинация „%2“ съвпада със следната клавишна комбинация.\n"
 "Искате ли да присвоите празна клавишна комбинация към това действие?\n"
 "%3"
 msgstr[1] ""
@@ -50870,7 +50869,7 @@ msgid ""
 "More than one resource share the same file name '%1'. Please export them in "
 "separate bundles."
 msgstr ""
-"Повече от един ресурс споделят един и също име на файл \"%1\". Моля, "
+"Повече от един ресурс споделят един и също име на файл „%1“. Моля, "
 "експортирайте ги в отделен пакет."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:319
@@ -50900,7 +50899,7 @@ msgstr "Искате ли съществуващият пакет да бъде 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:251
 #, kde-format
 msgid "Could not open '%1' for saving."
-msgstr "Не може да се отвори \"%1\" за запазване"
+msgstr "Не може да се отвори „%1“ за запазване"
 
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:61
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:56
@@ -54972,7 +54971,7 @@ msgstr "Изображението EXR беше модифицирано"
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
-msgstr "%1 (вид: \"%2\")"
+msgstr "%1 (вид: „%2“)"
 
 #: plugins/impex/exr/exr_converter.cc:1358
 #, kde-format
@@ -57086,7 +57085,7 @@ msgid ""
 "\n"
 "Do you want to locate it manually?"
 msgstr ""
-"Файлът с аудиоканал \"%1\" не съществува!\n"
+"Файлът с аудиоканал „%1“ не съществува!\n"
 "\n"
 "Очакван път:\n"
 "%2\n"
@@ -57099,8 +57098,8 @@ msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
 "\"%2\" is deactivated"
 msgstr ""
-"Намерени са две глобални маски за селекция в активно състояние. \"%1\" "
-"остава активна, \"%2\" се деактивира"
+"Намерени са две глобални маски за селекция в активно състояние. „%1“ остава "
+"активна, „%2“ се деактивира"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
 #, kde-format
@@ -57130,7 +57129,7 @@ msgid ""
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
-"Слой \"%1\" има режим на смесване \"%2\", чието поведение за CMYK цветове е "
+"Слой „%1“ има режим на смесване „%2“, чието поведение за CMYK цветове е "
 "променено в Krita 5.2. Моля, проверете резултата и обмислете активирането на "
 "стария алгоритъм \"Additive\" в Настройки->Конфигуриране на Krita->Общи-"
 ">Инструменти->Режим на смесване за CMYK"
@@ -57146,7 +57145,7 @@ msgid ""
 "\n"
 "Do you want to locate it manually?"
 msgstr ""
-"Файлът, свързан със слой-файл с име \"%1\", не е намерен.\n"
+"Файлът, свързан със слой-файл с име „%1“, не е намерен.\n"
 "\n"
 "Очакван път:\n"
 "%2\n"
@@ -57366,7 +57365,7 @@ msgstr "Грешка при създаване на файла за запис"
 #: plugins/impex/libkra/kra_converter.cpp:226
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr "Грешка при запис на \"%1\". Да не би дялът да е пълен?"
+msgstr "Грешка при запис на „%1“. Да не би дялът да е пълен?"
 
 #: plugins/impex/libkra/kra_converter.cpp:318
 #, kde-format
@@ -58722,7 +58721,7 @@ msgstr "Импортиране на SVG"
 #: plugins/impex/svg/kis_svg_import.cc:49
 #, kde-format
 msgid "Enter preferred resolution (PPI) for \"%1\""
-msgstr "Въвеждане на предпочитана разделителна способност (PPI) за \"%1\""
+msgstr "Въвеждане на предпочитана разделителна способност (PPI) за „%1“"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:37
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:57

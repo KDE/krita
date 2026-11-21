@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 03:09+0000\n"
-"PO-Revision-Date: 2026-11-12 20:04+0100\n"
+"PO-Revision-Date: 2026-11-20 18:28+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -2780,7 +2780,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Texture_hair.kpp"
 msgid "Texture hair"
-msgstr "Textura de cabell"
+msgstr "Textura de cabells"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4686,7 +4686,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "y)_Texture_Hair.kpp"
 msgid "y) Texture Hair"
-msgstr "y) Textura de cabell"
+msgstr "y) Textura de cabells"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -24289,7 +24289,7 @@ msgstr "Emmagatzematge de les lletres"
 #: libs/resources/KisResourceLocator.cpp:1232
 #, kde-format
 msgid "Synchronizing the resources."
-msgstr "S'estan sincronitzat els recursos."
+msgstr "S'estan sincronitzant els recursos."
 
 #: libs/resources/KisResourceLocator.cpp:1245
 #: libs/resources/KisResourceLocator.cpp:1253
@@ -27761,7 +27761,7 @@ msgstr "Pantalla %1 (%2):"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1325
 #, kde-format
 msgid "Display's color space is managed by the operating system"
-msgstr "L'espai de color de la pantalla està gestionat pel sistema operatiu"
+msgstr "L'espai de color de la pantalla és gestionat pel sistema operatiu"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1332
 #, kde-format
@@ -29294,7 +29294,7 @@ msgid ""
 msgstr ""
 "El to i la saturació es mantenen, la claredat se sacrifica per a mantenir la "
 "saturació. El punt blanc es canvia per a obtenir grisos neutres. Orientat a "
-"gràfiques comercials (diagrames acolorits, gràfiques, despeses generals,...)"
+"gràfiques comercials (diagrames acolorits, gràfiques, despeses generals...)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
@@ -29319,7 +29319,7 @@ msgstr ""
 "saturació es mantenen. Fora de la gamma; el to i la claredat es mantenen, la "
 "saturació se sacrifica. El punt blanc de l'origen i la destinació no es "
 "modifiquen. Orientat a colors directes (Pantone, TruMatch, colors de "
-"logotips,...)"
+"logotips...)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
@@ -29644,8 +29644,7 @@ msgid ""
 msgstr ""
 "El to i la saturació es mantenen, la claredat se sacrifica per a mantenir la "
 "saturació. El punt blanc es canvia per a obtenir grisos neutres. Orientat a "
-"gràfiques comercials (diagrames acolorits, gràfiques, despeses "
-"generals,...)\n"
+"gràfiques comercials (diagrames acolorits, gràfiques, despeses generals...)\n"
 "Si existeix la taula adequada dins del perfil, s'usarà. Si no, es tornarà al "
 "propòsit perceptiu."
 
@@ -29670,7 +29669,7 @@ msgstr ""
 "saturació es mantenen. Fora de la gamma; el to i la claredat es mantenen, la "
 "saturació se sacrifica. El punt blanc de l'origen i la destinació no es "
 "modifiquen. Orientat a colors directes (Pantone, TruMatch, colors de "
-"logotips,...)"
+"logotips...)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
 #: libs/ui/forms/wdgconvertcolorspace.ui:133
@@ -32251,9 +32250,9 @@ msgstr ""
 "crearà el nombre especificat de còpies de la imatge i les treballarà en "
 "paral·lel. Cada còpia requerirà més RAM per al seu emmagatzematge (gairebé "
 "el 20% de la mida de la imatge), per tant, augmenteu aquest límit només si "
-"hi ha suficient RAM instal·lada.</p><p><br/></p><p><span style=\" font-"
-"weight:600;\">Valor recomanat:</span> fixeu el límit de clons al nombre de "
-"nuclis <span style=\" text-decoration: underline;\">físics</span> (sense "
+"hi ha prou RAM instal·lada.</p><p><br/></p><p><span style=\" font-weight:600;"
+"\">Valor recomanat:</span> fixeu el límit de clons al nombre de nuclis <span "
+"style=\" text-decoration: underline;\">físics</span> (sense "
 "«HyperThreading») de la CPU</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -32393,9 +32392,9 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>La memòria cau dels fotogrames de l'animació "
 "s'emmagatzemarà completament a la RAM sense cap limitació</p><p><span style="
-"\" font-weight:600;\">AVÍS:</span> assegureu-vos que l'ordinador tingui "
-"suficient RAM <span style=\" text-decoration: underline;\">per sobre</span> "
-"de la quantitat que s'ha requerit a la pestanya General. Altrament, podríeu "
+"\" font-weight:600;\">AVÍS:</span> assegureu-vos que l'ordinador tingui prou "
+"RAM <span style=\" text-decoration: underline;\">per sobre</span> de la "
+"quantitat que s'ha requerit a la pestanya General. Altrament, podríeu "
 "experimentar congelacions del sistema.</p><p>* per a 1 segon de vídeo en "
 "FullHD@25fps es necessiten 200 MiB extres de memòria</p><p>* per a 1 segon "
 "de vídeo 4K UltraHD@25fps es necessiten 800 MiB extres de memòria</p></"
@@ -37240,7 +37239,7 @@ msgstr "Convertiu-vos en seguidor!"
 #: libs/ui/KisWelcomePageWidget.cpp:847
 #, kde-format
 msgid "Supporters get brush packs and more."
-msgstr "El seguidors obtenen paquets de pinzells i altres."
+msgstr "Els seguidors obtenen paquets de pinzells i altres."
 
 #: libs/ui/KisWelcomePageWidget.cpp:848
 #, kde-format
@@ -46838,9 +46837,9 @@ msgid ""
 "current text. The first font family is the primary font used, while each "
 "font family after that is used for fallback."
 msgstr ""
-"La família de lletra permet seleccionar una llista de lletres que s'han "
-"d'utilitzar al text actual. La primera família de lletra és la lletra "
-"principal utilitzada, mentre que cada família de lletra després d'això "
+"La família de lletres permet seleccionar una llista de lletres que s'han "
+"d'utilitzar al text actual. La primera família de lletres és la lletra "
+"principal utilitzada, mentre que cada família de lletres després d'això "
 "s'utilitza com a reserva."
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:21
@@ -46849,7 +46848,7 @@ msgctxt ""
 "comma separated search terms for the font-family property, matching is case-"
 "insensitive"
 msgid "font-family, typeface, font, fallback"
-msgstr "família de lletra, família tipogràfica, lletra, reserva"
+msgstr "família de lletres, família tipogràfica, lletra, reserva"
 
 #: plugins/dockers/textproperties/qml/FontFamily.qml:153
 #, kde-format
@@ -47222,14 +47221,14 @@ msgstr "No es fan ajustos particulars a l'algorisme de salt de línia"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Loose"
-msgstr "Laxe"
+msgstr "Lax"
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:80
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "While typically defines a looser algorithm, currently same as auto."
 msgstr ""
-"Tot i que normalment defineix un algorisme més laxe, actualment és el mateix "
+"Tot i que normalment defineix un algorisme més lax, actualment és el mateix "
 "que automàtic."
 
 #: plugins/dockers/textproperties/qml/LineBreak.qml:82
@@ -55467,8 +55466,8 @@ msgid ""
 "Unable to calculate an appropriate height. File does not contain enough "
 "pixels to form a rectangle."
 msgstr ""
-"No s'ha pogut calcular una altura adequada. El fitxer no conté els píxels "
-"suficients per a formar un rectangle."
+"No s'ha pogut calcular una altura adequada. El fitxer no conté prou píxels "
+"per a formar un rectangle."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:207
 #, kde-format
@@ -55481,8 +55480,8 @@ msgid ""
 "Unable to calculate an appropriate width. File does not contain enough "
 "pixels to form a rectangle."
 msgstr ""
-"No s'ha pogut calcular una amplada adequada. El fitxer no conté els píxels "
-"suficients per a formar un rectangle."
+"No s'ha pogut calcular una amplada adequada. El fitxer no conté prou píxels "
+"per a formar un rectangle."
 
 #. i18n: ectx: property (text), widget (QLabel, fileSizeDescLabel)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:33
@@ -56111,13 +56110,13 @@ msgstr ""
 "underline;\">Avançat</span></p><p>L'opció «Predeterminada (tria el "
 "codificador)» és habitual. Això significa que el codificador selecciona "
 "automàticament la configuració de compromís de qualitat/velocitat. Aquesta "
-"opció és recomana a la majoria dels usuaris.</p><p><span style=\" font-"
+"opció es recomana a la majoria dels usuaris.</p><p><span style=\" font-"
 "size:14pt; text-decoration: underline;\">Paràmetres del codificador:</span></"
 "p><p>paràmetres generals que s'apliquen a tot el procés de codificació JPEG "
 "XL, independentment del mètode de compressió que s'utilitzi.</p><p><span "
 "style=\" font-size:14pt; text-decoration: underline;\">Paràmetres de la "
-"VarDCT:</span></p><p>Transformada cosinus discreta variable (optimitzada per "
-"a contingut fotogràfic)</p><p>Aquesta es troba en la mateixa família de "
+"VarDCT:</span></p><p>Transformada de cosinus variable discreta (optimitzada "
+"per a contingut fotogràfic)</p><p>Aquesta es troba en la mateixa família de "
 "tècniques de compressió que utilitza el JPEG original, i per tant millor per "
 "a imatges «naturals», com ara fotografies i imatges amb molts degradats i "
 "textures.</p><p><span style=\" font-size:14pt; text-decoration: underline;"
@@ -56738,8 +56737,8 @@ msgid ""
 "encoding time.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Activa la càrrega progressiva utilitzant la "
-"quantificació per a comprimir detalls fins. Resulta en mides de fitxer més "
-"petites però requereix més temps de codificació.</p></body></html>"
+"quantificació per a comprimir detalls fins. Dona com a resultat mides de "
+"fitxer més petites però requereix més temps de codificació.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
@@ -67825,7 +67824,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "No glyph alternates available."
-msgstr "No hi ha cap alternatives de glifs disponibles."
+msgstr "No hi ha cap alternativa de glifs disponible."
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:32
 #, kde-format
@@ -68552,7 +68551,7 @@ msgstr "Edita el codi font de SVG"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the currently selected text as SVG XML."
-msgstr "Edita el text actualment seleccionat coma a XML de SVG."
+msgstr "Edita el text actualment seleccionat com a XML de SVG."
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:221
 #, kde-format

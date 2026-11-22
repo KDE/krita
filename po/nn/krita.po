@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-21 01:08+0000\n"
+"POT-Creation-Date: 2026-11-22 01:02+0000\n"
 "PO-Revision-Date: 2026-10-10 12:35+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@nuug.no>\n"
@@ -13451,12 +13451,18 @@ msgstr ""
 msgid "Brushes and Stuff"
 msgstr "Penslar og anna"
 
-#: krita/krita5.xmlgui:463
+#. i18n: ectx: attribute (title), widget (QWidget, Animation)
+#: krita/krita5.xmlgui:463 libs/ui/forms/wdggeneralsettings.ui:1249
+#, kde-format
+msgid "Animation"
+msgstr "Animasjon"
+
+#: krita/krita5.xmlgui:476
 #, kde-format
 msgid "Custom toolbar 1"
 msgstr ""
 
-#: krita/krita5.xmlgui:466
+#: krita/krita5.xmlgui:479
 #, kde-format
 msgid "Custom toolbar 2"
 msgstr ""
@@ -30927,12 +30933,6 @@ msgstr ""
 msgid "Enable Selection Actions Bar"
 msgstr ""
 
-#. i18n: ectx: attribute (title), widget (QWidget, Animation)
-#: libs/ui/forms/wdggeneralsettings.ui:1249
-#, kde-format
-msgid "Animation"
-msgstr "Animasjon"
-
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
 #: libs/ui/forms/wdggeneralsettings.ui:1255
 #, kde-format
@@ -43498,7 +43498,7 @@ msgid "Zoom vertically"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:134
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:148
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Gjennomskinsmodus-meny"
@@ -43509,25 +43509,25 @@ msgid "Audio menu"
 msgstr "Lydmeny"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:187
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Animasjonsval-meny"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:199
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:199
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
 #, kde-format
 msgid "Clip Start: "
 msgstr "Klippstart: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:203
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:217
 #, kde-format
 msgid "Clip End: "
 msgstr "Klippslutt: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:208
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:208
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:222
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Bilete per sekund: "
@@ -43593,67 +43593,67 @@ msgstr[0] "Juster nøkkelbilete"
 msgstr[1] "Juster %1 nøkkelbilete"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:62
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:301
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:315
 #, kde-format
 msgid "Animation Timeline"
 msgstr "Animasjons­tidslinje"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:156
 #, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:158
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Fjern lyd"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:160
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:153
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
 #, kde-format
 msgctxt ""
 "@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
 msgid "Volume: {n}%"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:173
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
 #, kde-format
 msgid "Animation audio menu"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:216
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:230
 #, kde-format
 msgid "AutoKey Blank"
 msgstr "Autonøkkelbilete tomt"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:218
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:232
 #, kde-format
 msgid "AutoKey Duplicate"
 msgstr "Autonøkkelbilete duplikat"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:627
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:641
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Slå på for å sikra rett avspelingsfart."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:637
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:651
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Effektive bilete/s:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:638
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:652
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Ekte bilete/s:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:639
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:653
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Animasjonsbilete hoppa over:\t%1 %"
@@ -70959,26 +70959,3 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
-
-#~ msgid ""
-#~ "<html>\n"
-#~ "<p><b>Note:</b> this is the same thing as the \"incremental\" option in "
-#~ "the Krita 1.6 freehand tool options.</p></html>"
-#~ msgstr ""
-#~ "<html>\n"
-#~ "<p><b>Merk:</b> Dette er det same som valet «inkrementell» i "
-#~ "frihandsverktøyet i Krita 1.6.</p></html>"
-
-#~ msgid ""
-#~ "<html>\n"
-#~ "<p><b>Painting mode</b>: Krita offers a choice between two painting "
-#~ "modes: <i>buildup</i> and <i>wash</i>. The first choice builds up color "
-#~ "while painting in one stroke, the second choices gives you an even color "
-#~ "in one stroke even if you go over the same place again and again.</p></"
-#~ "html>"
-#~ msgstr ""
-#~ "<html>\n"
-#~ "<p><b>Teiknemodus</b>: Du kan velja mellom to teiknemodusar: "
-#~ "<i>oppbygging</i> og <i>lasur</i>. Ved oppbygging vert fargen bygd opp "
-#~ "mens du teiknar strøket, mens i lasurmodus får du ein jamn farge, sjølv "
-#~ "om du måler over same område i løpet av strøket.</p></html>"

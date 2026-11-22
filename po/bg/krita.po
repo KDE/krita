@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-21 01:08+0000\n"
+"POT-Creation-Date: 2026-11-22 01:02+0000\n"
 "PO-Revision-Date: 2026-11-20 11:47+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -13420,12 +13420,18 @@ msgstr "Редактиране"
 msgid "Brushes and Stuff"
 msgstr "Четки и материали"
 
-#: krita/krita5.xmlgui:463
+#. i18n: ectx: attribute (title), widget (QWidget, Animation)
+#: krita/krita5.xmlgui:463 libs/ui/forms/wdggeneralsettings.ui:1249
+#, kde-format
+msgid "Animation"
+msgstr "Анимация"
+
+#: krita/krita5.xmlgui:476
 #, kde-format
 msgid "Custom toolbar 1"
 msgstr "Потребителска лента с инструменти 1"
 
-#: krita/krita5.xmlgui:466
+#: krita/krita5.xmlgui:479
 #, kde-format
 msgid "Custom toolbar 2"
 msgstr "Потребителска лента с инструменти 2"
@@ -31111,12 +31117,6 @@ msgstr ""
 msgid "Enable Selection Actions Bar"
 msgstr "Активиране на лентата с действия при seleção"
 
-#. i18n: ectx: attribute (title), widget (QWidget, Animation)
-#: libs/ui/forms/wdggeneralsettings.ui:1249
-#, kde-format
-msgid "Animation"
-msgstr "Анимация"
-
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
 #: libs/ui/forms/wdggeneralsettings.ui:1255
 #, kde-format
@@ -43799,7 +43799,7 @@ msgid "Zoom vertically"
 msgstr "Вертикално мащабиране"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:134
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:148
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Меню за лукови слоеве"
@@ -43810,25 +43810,25 @@ msgid "Audio menu"
 msgstr "Меню „Аудио“"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:187
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Меню с настройки на анимацията"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:199
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:199
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
 #, kde-format
 msgid "Clip Start: "
 msgstr "Начало на клип:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:203
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:217
 #, kde-format
 msgid "Clip End: "
 msgstr "Край на клип:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:208
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:208
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:222
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Честота на кадрите: "
@@ -43894,67 +43894,67 @@ msgstr[0] "Коригиране на ключов кадър"
 msgstr[1] "Коригиране на %1 ключови кадъра"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:62
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:301
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:315
 #, kde-format
 msgid "Animation Timeline"
 msgstr "Времева линия на анимацията"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:156
 #, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Импортиране на аудио..."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:158
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Премахване на аудиото"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:160
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Заглушаване"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:153
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
 #, kde-format
 msgctxt ""
 "@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
 msgid "Volume: {n}%"
 msgstr "Сила на звука: {n}%"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:173
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
 #, kde-format
 msgid "Animation audio menu"
 msgstr "Меню за аудио на анимацията"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:216
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:230
 #, kde-format
 msgid "AutoKey Blank"
 msgstr "Празен автоматичен ключ"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:218
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:232
 #, kde-format
 msgid "AutoKey Duplicate"
 msgstr "Дублиране на AutoKey"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:627
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:641
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Включване за запазване на времето на възпроизвеждане."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:637
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:651
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Ефективни FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:638
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:652
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Реални FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:639
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:653
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Пропуснати кадри: %1%"

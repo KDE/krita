@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-21 01:08+0000\n"
+"POT-Creation-Date: 2026-11-22 01:02+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -13435,13 +13435,19 @@ msgstr "Edit"
 msgid "Brushes and Stuff"
 msgstr "Kuas dan Hal-hal"
 
-#: krita/krita5.xmlgui:463
+#. i18n: ectx: attribute (title), widget (QWidget, Animation)
+#: krita/krita5.xmlgui:463 libs/ui/forms/wdggeneralsettings.ui:1249
+#, kde-format
+msgid "Animation"
+msgstr "Animasi"
+
+#: krita/krita5.xmlgui:476
 #, fuzzy, kde-format
 #| msgid "Custom color"
 msgid "Custom toolbar 1"
 msgstr "Warna kustom"
 
-#: krita/krita5.xmlgui:466
+#: krita/krita5.xmlgui:479
 #, fuzzy, kde-format
 #| msgid "Custom color"
 msgid "Custom toolbar 2"
@@ -31331,12 +31337,6 @@ msgstr ""
 msgid "Enable Selection Actions Bar"
 msgstr ""
 
-#. i18n: ectx: attribute (title), widget (QWidget, Animation)
-#: libs/ui/forms/wdggeneralsettings.ui:1249
-#, kde-format
-msgid "Animation"
-msgstr "Animasi"
-
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
 #: libs/ui/forms/wdggeneralsettings.ui:1255
 #, fuzzy, kde-format
@@ -43920,7 +43920,7 @@ msgid "Zoom vertically"
 msgstr "Secara Vertikal"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:134
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:148
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Menu onion skin"
@@ -43931,25 +43931,25 @@ msgid "Audio menu"
 msgstr "Menu audio"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:187
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Menu pengaturan animasi"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:199
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:199
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
 #, kde-format
 msgid "Clip Start: "
 msgstr "Awal Klip: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:203
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:217
 #, kde-format
 msgid "Clip End: "
 msgstr "Akhir Klip: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:208
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:208
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:222
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Laju Frame: "
@@ -44034,19 +44034,19 @@ msgstr[0] "Potong Keyframes"
 msgstr[1] "Potong Keyframes"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:62
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:301
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:315
 #, kde-format
 msgid "Animation Timeline"
 msgstr "Linimasa Animasi"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:156
 #, fuzzy, kde-format
 #| msgid "&Import..."
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "&Impor..."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:158
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Remove Guide"
@@ -44054,13 +44054,13 @@ msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Hapus Panduan"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:160
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:153
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "The pattern 'scale' spinbox in fill tool options; {n} is the number "
@@ -44071,38 +44071,38 @@ msgctxt ""
 msgid "Volume: {n}%"
 msgstr "Skala: {n}%"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:173
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
 #, kde-format
 msgid "Animation audio menu"
 msgstr "Menu audio animasi"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:216
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:230
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:218
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:232
 #, fuzzy, kde-format
 #| msgid "Duplicate"
 msgid "AutoKey Duplicate"
 msgstr "Duplikat"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:627
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:641
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Fungsikan untuk mempertahankan timing pemutaran."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:637
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:651
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:638
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:652
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:639
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:653
 #, fuzzy, kde-format
 #| msgctxt "video importer: video file statistics"
 #| msgid "Frames: %1"

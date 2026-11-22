@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-21 01:08+0000\n"
+"POT-Creation-Date: 2026-11-22 01:02+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -13929,13 +13929,20 @@ msgstr "Қўшиш..."
 msgid "Brushes and Stuff"
 msgstr "&Бўйига"
 
-#: krita/krita5.xmlgui:463
+#. i18n: ectx: attribute (title), widget (QWidget, Animation)
+#: krita/krita5.xmlgui:463 libs/ui/forms/wdggeneralsettings.ui:1249
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Animation"
+msgstr "Жойлашиши"
+
+#: krita/krita5.xmlgui:476
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Custom toolbar 1"
 msgstr "Бошқа"
 
-#: krita/krita5.xmlgui:466
+#: krita/krita5.xmlgui:479
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Custom toolbar 2"
@@ -32101,13 +32108,6 @@ msgstr ""
 msgid "Enable Selection Actions Bar"
 msgstr "&Танлаш"
 
-#. i18n: ectx: attribute (title), widget (QWidget, Animation)
-#: libs/ui/forms/wdggeneralsettings.ui:1249
-#, fuzzy, kde-format
-#| msgid "Position"
-msgid "Animation"
-msgstr "Жойлашиши"
-
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
 #: libs/ui/forms/wdggeneralsettings.ui:1255
 #, fuzzy, kde-format
@@ -44859,7 +44859,7 @@ msgid "Zoom vertically"
 msgstr "&Энига"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:134
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:148
 #, fuzzy, kde-format
 #| msgid "Document Information"
 msgid "Onion skins menu"
@@ -44872,28 +44872,28 @@ msgid "Audio menu"
 msgstr "Жойлашиши"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:187
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Animation settings menu"
 msgstr "Жойлашиши"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:199
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:199
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
 #, fuzzy, kde-format
 #| msgid "Street"
 msgid "Clip Start: "
 msgstr "Кўча"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:203
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:217
 #, fuzzy, kde-format
 #| msgid "Street"
 msgid "Clip End: "
 msgstr "Кўча"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:208
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:208
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:222
 #, fuzzy, kde-format
 msgid "Frame Rate: "
 msgstr "Сана:"
@@ -44969,31 +44969,31 @@ msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "Матнни қўйиш"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:62
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:301
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:315
 #, fuzzy, kde-format
 #| msgid "Guide Lines"
 msgid "Animation Timeline"
 msgstr "Ёрдамчи чизиқлар"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:156
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Услубларни импорт қилиш"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:158
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Боғни олиб ташлаш"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:160
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:153
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
 #, fuzzy, kde-format
 #| msgid "Columns:"
 msgctxt ""
@@ -45001,40 +45001,40 @@ msgctxt ""
 msgid "Volume: {n}%"
 msgstr "Устунлар:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:173
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Animation audio menu"
 msgstr "Жойлашиши"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:216
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:230
 #, fuzzy, kde-format
 #| msgid "Location:"
 msgid "AutoKey Blank"
 msgstr "Манзили:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:218
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:232
 #, fuzzy, kde-format
 #| msgid "Location:"
 msgid "AutoKey Duplicate"
 msgstr "Манзили:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:627
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:641
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:637
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:651
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:638
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:652
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:639
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:653
 #, fuzzy, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Матнни қўйиш"

@@ -82,8 +82,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-21 01:08+0000\n"
-"PO-Revision-Date: 2026-11-18 08:53+0200\n"
+"POT-Creation-Date: 2026-11-22 01:02+0000\n"
+"PO-Revision-Date: 2026-11-21 07:59+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
@@ -13498,12 +13498,18 @@ msgstr "Правка"
 msgid "Brushes and Stuff"
 msgstr "Кисти и другие инструменты"
 
-#: krita/krita5.xmlgui:463
+#. i18n: ectx: attribute (title), widget (QWidget, Animation)
+#: krita/krita5.xmlgui:463 libs/ui/forms/wdggeneralsettings.ui:1249
+#, kde-format
+msgid "Animation"
+msgstr "Анимация"
+
+#: krita/krita5.xmlgui:476
 #, kde-format
 msgid "Custom toolbar 1"
 msgstr "Пользовательская панель инструментов 1"
 
-#: krita/krita5.xmlgui:466
+#: krita/krita5.xmlgui:479
 #, kde-format
 msgid "Custom toolbar 2"
 msgstr "Пользовательская панель инструментов 2"
@@ -23802,14 +23808,13 @@ msgstr "Лёгкое затемнение"
 #, kde-format
 msgctxt "Blending mode - Burn (SAI)"
 msgid "Burn (SAI)"
-msgstr ""
+msgstr "Затемнение (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:70
-#, fuzzy, kde-format
-#| msgid "Shade (IFS_Illusions)"
+#, kde-format
 msgctxt "Blending mode - Shade (SAI)"
 msgid "Shade (SAI)"
-msgstr "Тень (IFS Illusions)"
+msgstr "Тень (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
@@ -23962,12 +23967,10 @@ msgid "Luminosity/Shine (SAI)"
 msgstr "Яркость/Блеск (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Dodge"
+#, kde-format
 msgctxt "Blending mode - Dodge (SAI)"
 msgid "Dodge (SAI)"
-msgstr "Осветление"
+msgstr "Осветление (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:99
 #, kde-format
@@ -24012,12 +24015,10 @@ msgid "Difference"
 msgstr "Разница"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Difference"
-#| msgid "Difference"
+#, kde-format
 msgctxt "Blending mode - Difference (SAI)"
 msgid "Difference (SAI)"
-msgstr "Разница"
+msgstr "Разница (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:108
 #, kde-format
@@ -24092,11 +24093,10 @@ msgid "Alpha Darken"
 msgstr "Затемнение альфа-канала"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:122
-#, fuzzy, kde-format
-#| msgid "Alpha Darken"
+#, kde-format
 msgctxt "Blending mode - Alpha Darken Clamp"
 msgid "Alpha Darken Clamp"
-msgstr "Затемнение альфа-канала"
+msgstr "Затемнение альфа-канала с ограничением"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:123
 #, kde-format
@@ -24129,12 +24129,10 @@ msgid "Hard Mix Softer (Photoshop)"
 msgstr "Жёсткое смешивание — мягче (Photoshop)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Hard Mix"
-#| msgid "Hard Mix"
+#, kde-format
 msgctxt "Blending mode - Hard Mix (SAI)"
 msgid "Hard Mix (SAI)"
-msgstr "Жёсткое смешивание"
+msgstr "Жёсткое смешивание (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:129
 #, kde-format
@@ -24230,14 +24228,13 @@ msgstr "Полутень D"
 #, kde-format
 msgctxt "Blending mode - Burn/Dodge (SAI)"
 msgid "Burn/Dodge (SAI)"
-msgstr ""
+msgstr "Затемнение/Осветление (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:145
-#, fuzzy, kde-format
-#| msgid "Luminosity/Shine (SAI)"
+#, kde-format
 msgctxt "Blending mode - Shade/Shine (SAI)"
 msgid "Shade/Shine (SAI)"
-msgstr "Яркость/Блеск (SAI)"
+msgstr "Тень/Блеск (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:147
 #, kde-format
@@ -25747,7 +25744,7 @@ msgstr "Не найден корректный исполняемый файл F
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:636
 #, kde-format
 msgid "ProRes 4444 Video"
-msgstr ""
+msgstr "Видео ProRes 4444"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:696
 #, kde-format
@@ -26212,11 +26209,13 @@ msgid ""
 "opaque background layers before rendering. Playback requires a player that "
 "supports video transparency."
 msgstr ""
+"Сохраняет альфа-канал анимации в видео WebM или Matroska. Перед рендерингом "
+"скройте непрозрачные фоновые слои. Для воспроизведения требуется "
+"проигрыватель с поддержкой прозрачности видео."
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9PreserveTransparency)
 #: libs/ui/animation/video_export_options_dialog.ui:272
-#, fuzzy, kde-format
-#| msgid "Preserve Transparency"
+#, kde-format
 msgid "Preserve transparency"
 msgstr "Сохранить прозрачность"
 
@@ -26327,6 +26326,8 @@ msgid ""
 "ProRes 4444 preserves transparency in MOV video. Hide opaque background "
 "layers before rendering."
 msgstr ""
+"ProRes 4444 сохраняет прозрачность в видео MOV. Перед рендерингом скройте "
+"непрозрачные фоновые слои."
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:480
@@ -26732,11 +26733,10 @@ msgid "VP9"
 msgstr "VP9"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:310
-#, fuzzy, kde-format
-#| msgid "Grayscale (without transparency)"
+#, kde-format
 msgctxt "ProRes codec name"
 msgid "ProRes 4444 (with transparency)"
-msgstr "Оттенки серого без прозрачности"
+msgstr "ProRes 4444 (с прозрачностью)"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:313
 #, kde-format
@@ -29197,10 +29197,9 @@ msgid "Support Krita"
 msgstr "Поддержать Krita"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:24
-#, fuzzy, kde-format
-#| msgid "Do not show the splash screen"
+#, kde-format
 msgid "Become a supporter to change the splash screen."
-msgstr "Не показывать экран приветствия"
+msgstr "Чтобы менять экран приветствия, станьте спонсором."
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:34
 #, kde-format
@@ -29208,48 +29207,47 @@ msgid ""
 "Changing the splash screen is only available for supporters through the Play "
 "Store."
 msgstr ""
+"Изменение экрана приветствия доступно через Play Store только спонсорам."
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:37
 #, kde-format
 msgid ""
 "Purchase Krita to change the splash screen and receive automatic updates."
 msgstr ""
+"Купите Krita, чтобы менять экран приветствия и получать автоматические "
+"обновления."
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:40
 #, kde-format
 msgid "Get Krita on Steam"
-msgstr ""
+msgstr "Получить Krita в Steam"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:42
 #, kde-format
 msgid "Get Krita on the Epic Games Store"
-msgstr ""
+msgstr "Получить Krita в Epic Games Store"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:43
 #, kde-format
 msgid "Get Krita on the Microsoft Store"
-msgstr ""
+msgstr "Получить Krita в Microsoft Store"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:46
 #, kde-format
 msgid "Get Krita on the App Store"
-msgstr ""
+msgstr "Получить Krita в App Store"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisSplashSourceDialog)
 #: libs/ui/dialogs/KisSplashSourceDialog.ui:14
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "Change Splash Screen"
-msgstr ""
-"Изменение параметра\n"
-"изменение параметра"
+msgstr "Изменение экрана приветствия"
 
 #. i18n: ectx: property (text), widget (QLabel, m_explanationLabel)
 #: libs/ui/dialogs/KisSplashSourceDialog.ui:23
 #, kde-format
 msgid "Explanation goes here."
-msgstr ""
+msgstr "Здесь будет пояснение."
 
 #: libs/ui/flake/kis_shape_controller.cpp:237
 #, kde-format
@@ -31534,12 +31532,6 @@ msgstr ""
 msgid "Enable Selection Actions Bar"
 msgstr "Включить панель действий выделения"
 
-#. i18n: ectx: attribute (title), widget (QWidget, Animation)
-#: libs/ui/forms/wdggeneralsettings.ui:1249
-#, kde-format
-msgid "Animation"
-msgstr "Анимация"
-
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnimation)
 #: libs/ui/forms/wdggeneralsettings.ui:1255
 #, kde-format
@@ -31858,17 +31850,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnChangeSplash)
 #: libs/ui/forms/wdggeneralsettings.ui:1856
-#, fuzzy, kde-format
-#| msgid "Change Log"
+#, kde-format
 msgid "Change…"
-msgstr "Список изменений"
+msgstr "Изменить…"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblSplashTitle)
 #: libs/ui/forms/wdggeneralsettings.ui:1878
-#, fuzzy, kde-format
-#| msgid "Screen"
+#, kde-format
 msgid "Splash screen:"
-msgstr "Осветление"
+msgstr "Экран приветствия:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgGeometryOptions)
 #: libs/ui/forms/wdggeometryoptions.ui:18
@@ -36290,22 +36280,16 @@ msgstr ""
 "выделение непрозрачной области"
 
 #: libs/ui/kis_splash_screen.cpp:48
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "This is appended to the color profile which is the default for the given "
-#| "colorspace and bit-depth"
-#| msgid "(Default)"
+#, kde-format
 msgctxt "Splash image default"
 msgid "%1 (default)"
-msgstr "(По умолчанию)"
+msgstr "%1 (по умолчанию)"
 
 #: libs/ui/kis_splash_screen.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "in-app purchases, a bundle that the user can't acquire"
-#| msgid "Not available."
+#, kde-format
 msgctxt "Splash image unavailable"
 msgid "%1 (not available)"
-msgstr "Недоступен."
+msgstr "%1 (недоступно)"
 
 #: libs/ui/kis_splash_screen.cpp:62
 #, kde-format
@@ -36317,19 +36301,16 @@ msgstr "Художественное оформление: %1"
 #, kde-format
 msgctxt "Splash screen option showing Kiki"
 msgid "Mascot"
-msgstr ""
+msgstr "Маскот"
 
 #: libs/ui/kis_splash_screen.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "Normal splash artist name"
-#| msgid "Tyson Tan"
+#, kde-format
 msgctxt "Splash artist name"
 msgid "Tyson Tan"
 msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:203
-#, fuzzy, kde-format
-#| msgid "Plain"
+#, kde-format
 msgctxt "Splash screen option without Kiki"
 msgid "Plain"
 msgstr "Простая"
@@ -39267,10 +39248,9 @@ msgid "Brush Size: %1 px"
 msgstr "Размер кисти: %1 px"
 
 #: libs/ui/tool/kis_tool_utils.cpp:426
-#, fuzzy, kde-format
-#| msgid "Layer can be painted in Wash Mode only."
+#, kde-format
 msgid "Layer can't be painted in Build Up mode."
-msgstr "Слой возможно нарисовать только в режиме смывания."
+msgstr "На этом слое нельзя рисовать в режиме накопления."
 
 #: libs/ui/tool/kis_tool_utils.cpp:428
 #, kde-format
@@ -44338,7 +44318,7 @@ msgid "Zoom vertically"
 msgstr "Масштабировать вертикально"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:134
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:148
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Меню луковой кожи"
@@ -44349,25 +44329,25 @@ msgid "Audio menu"
 msgstr "Меню звука"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:187
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Меню параметров анимации"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:199
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:199
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
 #, kde-format
 msgid "Clip Start: "
 msgstr "Начало клипа: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:203
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:217
 #, kde-format
 msgid "Clip End: "
 msgstr "Конец клипа: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:208
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:208
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:222
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Частота кадров: "
@@ -44453,67 +44433,67 @@ msgstr[3] ""
 "настройку ключевого кадра"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:62
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:301
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:315
 #, kde-format
 msgid "Animation Timeline"
 msgstr "Временная шкала анимации"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:156
 #, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Импорт аудио…"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:158
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Удалить аудио"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:160
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Выключить звук"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:153
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
 #, kde-format
 msgctxt ""
 "@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
 msgid "Volume: {n}%"
 msgstr "Громкость: {n}%"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:173
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
 #, kde-format
 msgid "Animation audio menu"
 msgstr "Меню аудио анимации"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:216
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:230
 #, kde-format
 msgid "AutoKey Blank"
 msgstr "Пустой AutoKey"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:218
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:232
 #, kde-format
 msgid "AutoKey Duplicate"
 msgstr "Дубликат AutoKey"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:627
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:641
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Включить для сохранения времени воспроизведения."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:637
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:651
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Эффективная частота кадров:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:638
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:652
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Реальная частота кадров:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:639
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:653
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Кадров пропущено:\t%1 %"
@@ -62425,6 +62405,9 @@ msgid ""
 "blend mode that prevents it, such as Marker or Greater. Not available with "
 "masked brushes."
 msgstr ""
+"Наносит мазки непосредственно на слой с накоплением непрозрачности, если "
+"этому не препятствует режим наложения, например «Маркер» или «Больше». "
+"Недоступно для маскированных кистей."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
@@ -62440,12 +62423,14 @@ msgstr "Равномерный"
 msgid ""
 "Maintains uniform opacity within each stroke, even when it overlaps itself."
 msgstr ""
+"Обеспечивает равномерную непрозрачность в пределах каждого мазка, даже если "
+"он перекрывает сам себя."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioClamp)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:82
 #, kde-format
 msgid "Clamp"
-msgstr ""
+msgstr "Ограничение"
 
 #. i18n: ectx: property (text), widget (QLabel, lblClamp)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:89
@@ -62454,6 +62439,9 @@ msgid ""
 "Prevents opacity from building up at all during a stroke, keeping edges soft "
 "and not compounding textures. Also known as \"Soft\" in other software."
 msgstr ""
+"Полностью предотвращает накопление непрозрачности во время мазка, сохраняя "
+"мягкие края и не наслаивая текстуры. В других программах этот режим также "
+"называется «Мягким» (Soft)."
 
 #. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
@@ -63137,14 +63125,10 @@ msgid "Vertically"
 msgstr "Вертикально"
 
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Only wash mode is possible when using a masked brush."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Build up mode is not available when using a masked brush."
-msgstr ""
-"При использовании маскированной кисти можно пользоваться только режимом "
-"смывания."
+msgstr "При использовании маскированной кисти режим накопления недоступен."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format

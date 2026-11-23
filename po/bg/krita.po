@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 03:09+0000\n"
-"PO-Revision-Date: 2026-11-20 11:46+0100\n"
+"PO-Revision-Date: 2026-11-22 12:58+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -1103,7 +1103,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Nice_sketch."
 "gbr"
 msgid "A_Nice Sketch"
-msgstr "Приятен скиц했고"
+msgstr "Приятна скица"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1111,7 +1111,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Nice_sketch2."
 "gbr"
 msgid "A_Nice Sketch2"
-msgstr "Приятен скицiar 2"
+msgstr "Приятна скица2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -23288,7 +23288,7 @@ msgstr "По-тъмен цвят"
 #, kde-format
 msgctxt "Blending mode - Shade (IFS Illusions)"
 msgid "Shade (IFS Illusions)"
-msgstr "Сенкиране (IFS илюзии)"
+msgstr "Засенчване (IFS илюзии)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:67
 #, kde-format
@@ -50654,7 +50654,7 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "<p><application>%1</application>: Unexpected module's version format"
 msgstr ""
-"<p><application>%1</application>: Неочакван формат на версията на модула</p>"
+"<p><application>%1</application>: Неочакван формат на версията на модула"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:232
 #, kde-format

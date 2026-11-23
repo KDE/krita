@@ -89,11 +89,14 @@ namespace KisToolUtils {
         
         // Color blending.
         if (!pure && blendColor && blend < 100) {
+            KoColor effectiveBlendColor = *blendColor;
+            effectiveBlendColor.convertTo(dev->colorSpace());
+
             //Scale from 0..100% to 0..255 range for mixOp weights.
             quint8 blendScaled = static_cast<quint8>(blend * 2.55f);
 
             const quint8 *colors[2];
-            colors[0] = blendColor->data();
+            colors[0] = effectiveBlendColor.data();
             colors[1] = sampledColor.data();
             qint16 weights[2];
             weights[0] = 255 - blendScaled;

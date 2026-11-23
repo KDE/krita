@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-22 01:02+0000\n"
-"PO-Revision-Date: 2026-11-20 11:47+0100\n"
+"PO-Revision-Date: 2026-11-22 12:58+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -1103,7 +1103,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Nice_sketch."
 "gbr"
 msgid "A_Nice Sketch"
-msgstr "Приятен скиц했고"
+msgstr "Приятна скица"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1111,7 +1111,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Nice_sketch2."
 "gbr"
 msgid "A_Nice Sketch2"
-msgstr "Приятен скицiar 2"
+msgstr "Приятна скица2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -23412,7 +23412,7 @@ msgstr "По-тъмен цвят"
 #, kde-format
 msgctxt "Blending mode - Shade (IFS Illusions)"
 msgid "Shade (IFS Illusions)"
-msgstr "Сенкиране (IFS илюзии)"
+msgstr "Засенчване (IFS илюзии)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:67
 #, kde-format
@@ -23430,15 +23430,13 @@ msgstr "Леко изгаряне"
 #, kde-format
 msgctxt "Blending mode - Burn (SAI)"
 msgid "Burn (SAI)"
-msgstr ""
+msgstr "Потъмняване (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:70
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Shade (IFS Illusions)"
-#| msgid "Shade (IFS Illusions)"
+#, kde-format
 msgctxt "Blending mode - Shade (SAI)"
 msgid "Shade (SAI)"
-msgstr "Сенкиране (IFS илюзии)"
+msgstr "Засенчване (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
@@ -23591,12 +23589,10 @@ msgid "Luminosity/Shine (SAI)"
 msgstr "Яркост/Блясък (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Dodge"
+#, kde-format
 msgctxt "Blending mode - Dodge (SAI)"
 msgid "Dodge (SAI)"
-msgstr "Осветляване"
+msgstr "Осветляване (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:99
 #, kde-format
@@ -23641,12 +23637,10 @@ msgid "Difference"
 msgstr "Разлика"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Difference"
-#| msgid "Difference"
+#, kde-format
 msgctxt "Blending mode - Difference (SAI)"
 msgid "Difference (SAI)"
-msgstr "Разлика"
+msgstr "Разлика (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:108
 #, kde-format
@@ -23721,12 +23715,10 @@ msgid "Alpha Darken"
 msgstr "Алфа затъмняване"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Alpha Darken"
-#| msgid "Alpha Darken"
+#, kde-format
 msgctxt "Blending mode - Alpha Darken Clamp"
 msgid "Alpha Darken Clamp"
-msgstr "Алфа затъмняване"
+msgstr "Ограничено алфа потъмняване"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:123
 #, kde-format
@@ -23759,12 +23751,10 @@ msgid "Hard Mix Softer (Photoshop)"
 msgstr "Меко смесване (Photoshop)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Hard Mix"
-#| msgid "Hard Mix"
+#, kde-format
 msgctxt "Blending mode - Hard Mix (SAI)"
 msgid "Hard Mix (SAI)"
-msgstr "Твърдо смесване"
+msgstr "Твърдо смесване (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:129
 #, kde-format
@@ -23860,15 +23850,13 @@ msgstr "Полусенче D"
 #, kde-format
 msgctxt "Blending mode - Burn/Dodge (SAI)"
 msgid "Burn/Dodge (SAI)"
-msgstr ""
+msgstr "Потъмняване/Изсветляване (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:145
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Luminosity/Shine (SAI)"
-#| msgid "Luminosity/Shine (SAI)"
+#, kde-format
 msgctxt "Blending mode - Shade/Shine (SAI)"
 msgid "Shade/Shine (SAI)"
-msgstr "Яркост/Блясък (SAI)"
+msgstr "Засенчване/Блясък (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:147
 #, kde-format
@@ -25359,7 +25347,7 @@ msgstr "Не е подаден валиден FFmpeg бинарен файл..."
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:636
 #, kde-format
 msgid "ProRes 4444 Video"
-msgstr ""
+msgstr "Видео ProRes 4444"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:696
 #, kde-format
@@ -25827,11 +25815,13 @@ msgid ""
 "opaque background layers before rendering. Playback requires a player that "
 "supports video transparency."
 msgstr ""
+"Запазване на алфа-канала на анимацията във видео формат WebM или Matroska. "
+"Скриване на непрозрачните фонови слоеве преди рендиране. Възпроизвеждането "
+"изисква плеър, поддържащ видео прозрачност."
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9PreserveTransparency)
 #: libs/ui/animation/video_export_options_dialog.ui:272
-#, fuzzy, kde-format
-#| msgid "Preserve Transparency"
+#, kde-format
 msgid "Preserve transparency"
 msgstr "Запазване на прозрачността"
 
@@ -25941,6 +25931,8 @@ msgid ""
 "ProRes 4444 preserves transparency in MOV video. Hide opaque background "
 "layers before rendering."
 msgstr ""
+"ProRes 4444 запазва прозрачността в MOV видео. Скриване на непрозрачните "
+"фонови слоеве преди рендиране."
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:480
@@ -26346,11 +26338,10 @@ msgid "VP9"
 msgstr "VP9"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:310
-#, fuzzy, kde-format
-#| msgid "Grayscale (without transparency)"
+#, kde-format
 msgctxt "ProRes codec name"
 msgid "ProRes 4444 (with transparency)"
-msgstr "Сиво (без прозрачност)"
+msgstr "ProRes 4444 (с прозрачност)"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:313
 #, kde-format
@@ -27078,7 +27069,7 @@ msgid ""
 "text-decoration: underline;\">Scripting API</span></a></p>"
 msgstr ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
-"text-decoration: underline;\">API за скриптове</span></span></a></p>"
+"text-decoration: underline;\">API за скриптове</span></a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:70
 #, kde-format
@@ -28791,10 +28782,9 @@ msgid "Support Krita"
 msgstr "Подкрепете Krita"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:24
-#, fuzzy, kde-format
-#| msgid "Do not show the splash screen"
+#, kde-format
 msgid "Become a supporter to change the splash screen."
-msgstr "Без показване на начален екран"
+msgstr "Станете поддръжник, за да промените началния екран."
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:34
 #, kde-format
@@ -28802,46 +28792,47 @@ msgid ""
 "Changing the splash screen is only available for supporters through the Play "
 "Store."
 msgstr ""
+"Промяната на началния екран е налична само за поддържащи чрез Play Store."
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:37
 #, kde-format
 msgid ""
 "Purchase Krita to change the splash screen and receive automatic updates."
 msgstr ""
+"Купете Krita за промяна на началния екран и получаване на автоматични "
+"актуализации."
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:40
 #, kde-format
 msgid "Get Krita on Steam"
-msgstr ""
+msgstr "Krita в Steam"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:42
 #, kde-format
 msgid "Get Krita on the Epic Games Store"
-msgstr ""
+msgstr "Вземете Krita от Epic Games Store"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:43
 #, kde-format
 msgid "Get Krita on the Microsoft Store"
-msgstr ""
+msgstr "Изтегляне на Krita от Microsoft Store"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:46
 #, kde-format
 msgid "Get Krita on the App Store"
-msgstr ""
+msgstr "Изтегляне на Krita от App Store"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisSplashSourceDialog)
 #: libs/ui/dialogs/KisSplashSourceDialog.ui:14
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "Change Splash Screen"
-msgstr "Промяна на параметър"
+msgstr "Промяна на начален екран"
 
 #. i18n: ectx: property (text), widget (QLabel, m_explanationLabel)
 #: libs/ui/dialogs/KisSplashSourceDialog.ui:23
 #, kde-format
 msgid "Explanation goes here."
-msgstr ""
+msgstr "Тук се извежда обяснението."
 
 #: libs/ui/flake/kis_shape_controller.cpp:237
 #, kde-format
@@ -31436,16 +31427,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnChangeSplash)
 #: libs/ui/forms/wdggeneralsettings.ui:1856
-#, fuzzy, kde-format
-#| msgid "Channel"
+#, kde-format
 msgid "Change…"
-msgstr "Канал"
+msgstr "Промяна…"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblSplashTitle)
 #: libs/ui/forms/wdggeneralsettings.ui:1878
 #, kde-format
 msgid "Splash screen:"
-msgstr ""
+msgstr "Начален екран:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgGeometryOptions)
 #: libs/ui/forms/wdggeometryoptions.ui:18
@@ -34568,7 +34558,7 @@ msgid ""
 "The <i>Temporary Straight Ruler</i> action creates a transient ruler for "
 "constrained painting."
 msgstr ""
-"Действието <i>Временен права линийка/i> създава временно линийка за "
+"Действието <i>Временна права линийка</i> създава временно линийка за "
 "ограничаване на рисуването."
 
 #: libs/ui/input/kis_temporary_straight_ruler_action.cpp:63
@@ -35770,22 +35760,16 @@ msgid "Select Opaque"
 msgstr "Селектиране на непрозрачна област"
 
 #: libs/ui/kis_splash_screen.cpp:48
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "This is appended to the color profile which is the default for the given "
-#| "colorspace and bit-depth"
-#| msgid "(Default)"
+#, kde-format
 msgctxt "Splash image default"
 msgid "%1 (default)"
-msgstr "(По подразбиране)"
+msgstr "%1 (по подразбиране)"
 
 #: libs/ui/kis_splash_screen.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "in-app purchases, a bundle that the user can't acquire"
-#| msgid "Not available."
+#, kde-format
 msgctxt "Splash image unavailable"
 msgid "%1 (not available)"
-msgstr "Неналично."
+msgstr "%1 (неналично)"
 
 #: libs/ui/kis_splash_screen.cpp:62
 #, kde-format
@@ -35797,23 +35781,19 @@ msgstr "Художествено оформление от: %1"
 #, kde-format
 msgctxt "Splash screen option showing Kiki"
 msgid "Mascot"
-msgstr ""
+msgstr "Талисман"
 
 #: libs/ui/kis_splash_screen.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "Normal splash artist name"
-#| msgid "Tyson Tan"
+#, kde-format
 msgctxt "Splash artist name"
 msgid "Tyson Tan"
 msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:203
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Plain Text"
+#, kde-format
 msgctxt "Splash screen option without Kiki"
 msgid "Plain"
-msgstr "Обикновен текст"
+msgstr "Обикновен"
 
 #: libs/ui/kis_statusbar.cc:231
 #, kde-format
@@ -38724,10 +38704,9 @@ msgid "Brush Size: %1 px"
 msgstr "Размер на четката: %1 px"
 
 #: libs/ui/tool/kis_tool_utils.cpp:426
-#, fuzzy, kde-format
-#| msgid "Layer can be painted in Wash Mode only."
+#, kde-format
 msgid "Layer can't be painted in Build Up mode."
-msgstr "Слойът може да се рисува само в режим „Wash“."
+msgstr "Слоят не може да се рисува в режим „Build Up“."
 
 #: libs/ui/tool/kis_tool_utils.cpp:428
 #, kde-format
@@ -51316,7 +51295,7 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "<p><application>%1</application>: Unexpected module's version format"
 msgstr ""
-"<p><application>%1</application>: Неочакван формат на версията на модула</p>"
+"<p><application>%1</application>: Неочакван формат на версията на модула"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:258
 #, kde-format
@@ -61699,6 +61678,9 @@ msgid ""
 "blend mode that prevents it, such as Marker or Greater. Not available with "
 "masked brushes."
 msgstr ""
+"Нанася щрихите директно, като натрупва непрозрачност върху слоя, освен ако "
+"не използвате режим на смесване, който предотвратява това, като например "
+"Маркер или По-голямо. Не е налично при маскирани четки."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
@@ -61713,13 +61695,13 @@ msgstr "Промиване"
 #, kde-format
 msgid ""
 "Maintains uniform opacity within each stroke, even when it overlaps itself."
-msgstr ""
+msgstr "Поддържа еднаква непрозрачност във всеки щрих, дори при застъпване."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioClamp)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:82
 #, kde-format
 msgid "Clamp"
-msgstr ""
+msgstr "Ограничаване"
 
 #. i18n: ectx: property (text), widget (QLabel, lblClamp)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:89
@@ -61728,6 +61710,9 @@ msgid ""
 "Prevents opacity from building up at all during a stroke, keeping edges soft "
 "and not compounding textures. Also known as \"Soft\" in other software."
 msgstr ""
+"Предотвратяване на натрупване на непрозрачност по време на щриха, за "
+"запазване на меки ръбове и избягване на наслояване на текстури. Известно още "
+"като „Меко“ в друг софтуер."
 
 #. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
@@ -62407,12 +62392,10 @@ msgid "Vertically"
 msgstr "Вертикално"
 
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Only wash mode is possible when using a masked brush."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Build up mode is not available when using a masked brush."
-msgstr "Възможен е само режим на измиване при използване на маскирана четка."
+msgstr "Режимът за натрупване не е наличен при използване на маскирана четка."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
@@ -71521,27 +71504,3 @@ msgstr ""
 "Превключване между пълен обхват и подмножество.\n"
 "Пълен обхват: [%1, %2]\n"
 "Подмножество: [%3, %4]"
-
-#~ msgid ""
-#~ "<html>\n"
-#~ "<p><b>Note:</b> this is the same thing as the \"incremental\" option in "
-#~ "the Krita 1.6 freehand tool options.</p></html>"
-#~ msgstr ""
-#~ "<html>\n"
-#~ "<p><b>Бележка:</b> това е същото като опцията \"нарастващо\" в Опции на "
-#~ "инструмента за свободна ръка в Krita 1.6.</p></html>"
-
-#~ msgid ""
-#~ "<html>\n"
-#~ "<p><b>Painting mode</b>: Krita offers a choice between two painting "
-#~ "modes: <i>buildup</i> and <i>wash</i>. The first choice builds up color "
-#~ "while painting in one stroke, the second choices gives you an even color "
-#~ "in one stroke even if you go over the same place again and again.</p></"
-#~ "html>"
-#~ msgstr ""
-#~ "<html>\n"
-#~ "<p><b>Режим на рисуване</b>: Krita предлага избор между два режима на "
-#~ "рисуване: <i>наслояване</i> и <i>заливане</i>. Първият вариант наслоява "
-#~ "цвета при рисуване с един замах, докато вторият осигурява равномерен цвят "
-#~ "с един замах, дори и при многократно преминаване през едно и също място.</"
-#~ "p></html>"

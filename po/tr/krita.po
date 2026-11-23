@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-22 01:02+0000\n"
-"PO-Revision-Date: 2026-11-19 19:18+0300\n"
+"PO-Revision-Date: 2026-11-22 19:05+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23412,15 +23412,13 @@ msgstr "Basit Yakma"
 #, kde-format
 msgctxt "Blending mode - Burn (SAI)"
 msgid "Burn (SAI)"
-msgstr ""
+msgstr "Yak (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:70
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Shade (IFS Illusions)"
-#| msgid "Shade (IFS Illusions)"
+#, kde-format
 msgctxt "Blending mode - Shade (SAI)"
 msgid "Shade (SAI)"
-msgstr "Gölge (IFS Yanılsamaları)"
+msgstr "Gölge (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
@@ -23573,12 +23571,10 @@ msgid "Luminosity/Shine (SAI)"
 msgstr "Parlaklık Gücü/Parla (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Dodge"
+#, kde-format
 msgctxt "Blending mode - Dodge (SAI)"
 msgid "Dodge (SAI)"
-msgstr "Soldur"
+msgstr "Soldur (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:99
 #, kde-format
@@ -23623,12 +23619,10 @@ msgid "Difference"
 msgstr "Fark"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Difference"
-#| msgid "Difference"
+#, kde-format
 msgctxt "Blending mode - Difference (SAI)"
 msgid "Difference (SAI)"
-msgstr "Fark"
+msgstr "Fark (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:108
 #, kde-format
@@ -23703,12 +23697,10 @@ msgid "Alpha Darken"
 msgstr "Alfa Karart"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Alpha Darken"
-#| msgid "Alpha Darken"
+#, kde-format
 msgctxt "Blending mode - Alpha Darken Clamp"
 msgid "Alpha Darken Clamp"
-msgstr "Alfa Karart"
+msgstr "Alfa Karart Kıskaç"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:123
 #, kde-format
@@ -23741,12 +23733,10 @@ msgid "Hard Mix Softer (Photoshop)"
 msgstr "Yumuşakça Sert Karışım (Photoshop)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Hard Mix"
-#| msgid "Hard Mix"
+#, kde-format
 msgctxt "Blending mode - Hard Mix (SAI)"
 msgid "Hard Mix (SAI)"
-msgstr "Sert Karışım"
+msgstr "Sert Karışım (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:129
 #, kde-format
@@ -23842,15 +23832,13 @@ msgstr "Yazı Gölge D"
 #, kde-format
 msgctxt "Blending mode - Burn/Dodge (SAI)"
 msgid "Burn/Dodge (SAI)"
-msgstr ""
+msgstr "Yak/Soldur (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:145
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Luminosity/Shine (SAI)"
-#| msgid "Luminosity/Shine (SAI)"
+#, kde-format
 msgctxt "Blending mode - Shade/Shine (SAI)"
 msgid "Shade/Shine (SAI)"
-msgstr "Parlaklık Gücü/Parla (SAI)"
+msgstr "Gölge/Parla (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:147
 #, kde-format
@@ -25342,7 +25330,7 @@ msgstr "Geçerli bir FFmpeg ikilisi verilmedi…"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:636
 #, kde-format
 msgid "ProRes 4444 Video"
-msgstr ""
+msgstr "ProRes 4444 Video"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:696
 #, kde-format
@@ -25806,11 +25794,13 @@ msgid ""
 "opaque background layers before rendering. Playback requires a player that "
 "supports video transparency."
 msgstr ""
+"Canlandırmanın alfa kanalını WebM veya Matroska videosunda koruyun. Görüntü "
+"almadan önce mat arka plan katmanlarını gizleyin. Oynatma, video "
+"saydamlığını destekleyen bir oynatıcı gerektirir."
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9PreserveTransparency)
 #: libs/ui/animation/video_export_options_dialog.ui:272
-#, fuzzy, kde-format
-#| msgid "Preserve Transparency"
+#, kde-format
 msgid "Preserve transparency"
 msgstr "Saydamlığı koru"
 
@@ -25919,6 +25909,8 @@ msgid ""
 "ProRes 4444 preserves transparency in MOV video. Hide opaque background "
 "layers before rendering."
 msgstr ""
+"ProRes 4444, MOV videodaki saydamlığı korur. Görüntü almadan önce mat arka "
+"plan katmanlarını gizleyin."
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:480
@@ -26324,11 +26316,10 @@ msgid "VP9"
 msgstr "VP9"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:310
-#, fuzzy, kde-format
-#| msgid "Grayscale (without transparency)"
+#, kde-format
 msgctxt "ProRes codec name"
 msgid "ProRes 4444 (with transparency)"
-msgstr "Gri tonlama (saydamlık olmadan)"
+msgstr "ProRes 4444 (saydamlık ile)"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:313
 #, kde-format
@@ -28754,10 +28745,9 @@ msgid "Support Krita"
 msgstr "Krita’yı Destekle"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:24
-#, fuzzy, kde-format
-#| msgid "Do not show the splash screen"
+#, kde-format
 msgid "Become a supporter to change the splash screen."
-msgstr "Açılış ekranını gösterme"
+msgstr "Açılış ekranını değiştirmek için bir destekçi olun."
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:34
 #, kde-format
@@ -28765,46 +28755,48 @@ msgid ""
 "Changing the splash screen is only available for supporters through the Play "
 "Store."
 msgstr ""
+"Açılış ekranını değiştirmek, yalnızca Play Store aracılığıyla destekçi olan "
+"kullanıcılarımız içindir."
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:37
 #, kde-format
 msgid ""
 "Purchase Krita to change the splash screen and receive automatic updates."
 msgstr ""
+"Otomatik güncellemeler almak ve açılış ekranını değiştirebilmek için "
+"Krita’yı satın alın."
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:40
 #, kde-format
 msgid "Get Krita on Steam"
-msgstr ""
+msgstr "Krita’yı Steam’dan Al"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:42
 #, kde-format
 msgid "Get Krita on the Epic Games Store"
-msgstr ""
+msgstr "Krita’yı Epic Games Store’dan Al"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:43
 #, kde-format
 msgid "Get Krita on the Microsoft Store"
-msgstr ""
+msgstr "Krita’yı Microsoft Store’dan Al"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:46
 #, kde-format
 msgid "Get Krita on the App Store"
-msgstr ""
+msgstr "Krita’yı App Store’dan Al"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisSplashSourceDialog)
 #: libs/ui/dialogs/KisSplashSourceDialog.ui:14
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "Change Splash Screen"
-msgstr "Parametreyi Değiştir"
+msgstr "Açılış Ekranını Değiştir"
 
 #. i18n: ectx: property (text), widget (QLabel, m_explanationLabel)
 #: libs/ui/dialogs/KisSplashSourceDialog.ui:23
 #, kde-format
 msgid "Explanation goes here."
-msgstr ""
+msgstr "Açıklama buraya gelir."
 
 #: libs/ui/flake/kis_shape_controller.cpp:237
 #, kde-format
@@ -31383,16 +31375,15 @@ msgstr "Devinimsel sarma etkinse panel sarma çubuklarını gizle"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnChangeSplash)
 #: libs/ui/forms/wdggeneralsettings.ui:1856
-#, fuzzy, kde-format
-#| msgid "Channel"
+#, kde-format
 msgid "Change…"
-msgstr "Kanal"
+msgstr "Değiştir…"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblSplashTitle)
 #: libs/ui/forms/wdggeneralsettings.ui:1878
 #, kde-format
 msgid "Splash screen:"
-msgstr ""
+msgstr "Açılış ekranı:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgGeometryOptions)
 #: libs/ui/forms/wdggeometryoptions.ui:18
@@ -35691,22 +35682,16 @@ msgid "Select Opaque"
 msgstr "Matlığı Seç"
 
 #: libs/ui/kis_splash_screen.cpp:48
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "This is appended to the color profile which is the default for the given "
-#| "colorspace and bit-depth"
-#| msgid "(Default)"
+#, kde-format
 msgctxt "Splash image default"
 msgid "%1 (default)"
-msgstr "(Öntanımlı)"
+msgstr "%1 (Öntanımlı)"
 
 #: libs/ui/kis_splash_screen.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "in-app purchases, a bundle that the user can't acquire"
-#| msgid "Not available."
+#, kde-format
 msgctxt "Splash image unavailable"
 msgid "%1 (not available)"
-msgstr "Kullanılamaz"
+msgstr "%1 (Kullanılabilir değil)"
 
 #: libs/ui/kis_splash_screen.cpp:62
 #, kde-format
@@ -35718,23 +35703,19 @@ msgstr "Çizer: %1"
 #, kde-format
 msgctxt "Splash screen option showing Kiki"
 msgid "Mascot"
-msgstr ""
+msgstr "Maskot"
 
 #: libs/ui/kis_splash_screen.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "Normal splash artist name"
-#| msgid "Tyson Tan"
+#, kde-format
 msgctxt "Splash artist name"
 msgid "Tyson Tan"
 msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:203
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Plain Text"
+#, kde-format
 msgctxt "Splash screen option without Kiki"
 msgid "Plain"
-msgstr "Düz metin"
+msgstr "Düz"
 
 #: libs/ui/kis_statusbar.cc:231
 #, kde-format
@@ -38629,10 +38610,9 @@ msgid "Brush Size: %1 px"
 msgstr "Fırça boyutu: %1 pks"
 
 #: libs/ui/tool/kis_tool_utils.cpp:426
-#, fuzzy, kde-format
-#| msgid "Layer can be painted in Wash Mode only."
+#, kde-format
 msgid "Layer can't be painted in Build Up mode."
-msgstr "Katman yalnızca Yıkama kipinde boyanabilir."
+msgstr "Katman, “Doluluk Artır” kipinde boyanamaz."
 
 #: libs/ui/tool/kis_tool_utils.cpp:428
 #, kde-format
@@ -61471,6 +61451,9 @@ msgid ""
 "blend mode that prevents it, such as Marker or Greater. Not available with "
 "masked brushes."
 msgstr ""
+"İşaretçi veya Daha Büyük gibi bunu engelleyen bir harmanlama kipi "
+"kullanmadığınız sürece, katmanda matlık oluşturarak vuruşları doğrudan "
+"uygular. Maskeli fırçalarla kullanılamaz."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
@@ -61485,13 +61468,13 @@ msgstr "Yıka"
 #, kde-format
 msgid ""
 "Maintains uniform opacity within each stroke, even when it overlaps itself."
-msgstr ""
+msgstr "Kendisiyle örtüştüğünde bile her vuruşta eşit matlığı korur."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioClamp)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:82
 #, kde-format
 msgid "Clamp"
-msgstr ""
+msgstr "Kıskaç"
 
 #. i18n: ectx: property (text), widget (QLabel, lblClamp)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:89
@@ -61500,6 +61483,9 @@ msgid ""
 "Prevents opacity from building up at all during a stroke, keeping edges soft "
 "and not compounding textures. Also known as \"Soft\" in other software."
 msgstr ""
+"Çizim sırasında matlığın oluşmasını tamamen engeller, kenarları yumuşak "
+"tutar ve dokuların birbirine karışmasını önler. Diğer yazılımlarda “Yumuşak” "
+"olarak da bilinir."
 
 #. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
@@ -62178,12 +62164,10 @@ msgid "Vertically"
 msgstr "Dikey"
 
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Only wash mode is possible when using a masked brush."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Build up mode is not available when using a masked brush."
-msgstr "Maskeli fırça kullanılırken yalnızca yıkama kipi kullanılabilir."
+msgstr "“Doluluk Artır” kipi, yalnızca maskeli bir fırça ile kullanılabilir."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format

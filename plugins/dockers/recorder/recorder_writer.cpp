@@ -812,6 +812,10 @@ void RecorderWriterManager::onToolPrimaryActionActivated(bool activated)
 //Need to save the region, so that there are no jumps when stopping and resuming the recording
 void RecorderWriterManager::saveRegion()
 {
+    if (!d->outputDir.exists()) {
+        return;
+    }
+
     const QString filename = RecorderConst::recorderMetaDataName;
     auto config = KSharedConfig ::openConfig(d->outputDir.filePath(RecorderConst::recorderMetaDataName));
     KConfigGroup cfg = KConfigGroup(config, "");
@@ -821,6 +825,10 @@ void RecorderWriterManager::saveRegion()
 
 void RecorderWriterManager::tryRestoreRegion()
 {
+    if (!d->outputDir.exists()) {
+        return;
+    }
+
     auto config = KSharedConfig ::openConfig(d->outputDir.filePath(RecorderConst::recorderMetaDataName));
     KConfigGroup cfg = KConfigGroup(config, "");
 
@@ -829,6 +837,10 @@ void RecorderWriterManager::tryRestoreRegion()
 
 void RecorderWriterManager::saveState()
 {
+    if (!d->outputDir.exists()) {
+        return;
+    }
+
     saveRegion();
 
     // Capture some tail frames, but only if we're zoomed in, and if some frames were captured
@@ -859,6 +871,10 @@ void RecorderWriterManager::saveState()
 
 void RecorderWriterManager::restoreState()
 {
+    if (!d->outputDir.exists()) {
+        return;
+    }
+
     tryRestoreRegion();
     auto config = KSharedConfig ::openConfig(d->outputDir.filePath(RecorderConst::recorderMetaDataName));
     KConfigGroup cfg = KConfigGroup(config, "");

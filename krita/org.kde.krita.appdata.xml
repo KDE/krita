@@ -639,7 +639,7 @@
     <id>org.kde.krita.desktop</id>
   </provides>
   <content_rating type="oars-1.1"/>
-  <bundle type="appimage">krita-5.3.4.1</bundle>
+  <bundle type="appimage">krita-6.0.5</bundle>
   <releases>
     <!-- Note: website infrastructure uses the appstream file from the master branch
                to determine the last release, so this entry must always reflect the

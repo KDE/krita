@@ -134,6 +134,7 @@ void KoBasicU8HistogramProducer::addRegionToBin(const quint8 * pixels, const qui
             nPixels--;
         }
     }
+    delete[] dstPixels;
 }
 
 // ------------ U16 ---------------------
@@ -206,6 +207,7 @@ void KoBasicU16HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
             nPixels--;
         }
     }
+    delete[] dstPixels;
 }
 
 // ------------ Float32 ---------------------
@@ -279,6 +281,7 @@ void KoBasicF32HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
 
         }
     }
+    delete[] dstPixels;
 }
 
 #ifdef HAVE_OPENEXR
@@ -352,6 +355,7 @@ void KoBasicF16HalfHistogramProducer::addRegionToBin(const quint8 * pixels, cons
             nPixels--;
         }
     }
+    delete[] dstPixels;
 }
 #endif
 
@@ -364,6 +368,12 @@ KoGenericRGBHistogramProducer::KoGenericRGBHistogramProducer()
     m_channelsList.append(new KoChannelInfo(i18n("R"), 0, 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255, 0, 0)));
     m_channelsList.append(new KoChannelInfo(i18n("G"), 1, 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 255, 0)));
     m_channelsList.append(new KoChannelInfo(i18n("B"), 2, 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 0, 255)));
+}
+KoGenericRGBHistogramProducer::~KoGenericRGBHistogramProducer()
+{
+    delete m_channelsList[0];
+    delete m_channelsList[1];
+    delete m_channelsList[2];
 }
 
 QList<KoChannelInfo *> KoGenericRGBHistogramProducer::channels()

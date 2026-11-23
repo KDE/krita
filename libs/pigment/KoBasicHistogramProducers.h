@@ -180,7 +180,7 @@ class KRITAPIGMENT_EXPORT KoGenericRGBHistogramProducer : public KoBasicHistogra
 {
 public:
     KoGenericRGBHistogramProducer();
-    ~KoGenericRGBHistogramProducer() override {}
+    ~KoGenericRGBHistogramProducer() override;
     void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
     QString positionToString(qreal pos) const override;
     qreal maximalZoom() const override;

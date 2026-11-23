@@ -529,7 +529,10 @@ void KisCanvas2::gridSize(QPointF *offset, QSizeF *spacing) const
     QTransform transform = coordinatesConverter()->imageToDocumentTransform();
 
     const QPoint intSpacing = m_d->view->document()->gridConfig().spacing();
-    const QPoint intOffset = m_d->view->document()->gridConfig().offset();
+    QPoint intOffset;
+    if (m_d->view->document()->gridConfig().offsetActive()) {
+        intOffset = m_d->view->document()->gridConfig().offset();
+    }
 
     QPointF size = transform.map(QPointF(intSpacing));
     spacing->rwidth() = size.x();

@@ -53,6 +53,10 @@ inline void inverseOver(const int numChannels, const int *channelIndex,
                         channel_type *dst, const channel_type *baseColor,
                         qreal dstOpacity)
 {
+    if (qFuzzyIsNull(dstOpacity)) {
+        return;
+    }
+
     for (int i = 0; i < numChannels; i++) {
         const int idx = channelIndex[i];
         dst[idx] =

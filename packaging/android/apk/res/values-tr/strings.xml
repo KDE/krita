@@ -35,6 +35,6 @@
   <string name="product_onetime_description">&lt;p&gt;Bu pakette, %2$d fırça içeren %1$d özkaynak demetini alacaksınız (Sayısal Atölye demeti de dâhil). Bu, &lt;strong&gt;tek kerelik bir satın alımdır&lt;/strong&gt;, başka bir şeye abone olmazsınız.&lt;/p&gt;</string>
   <string name="show_this_dialog_when_krita_starts">Krita başlarken bu iletişim kutusunu göster</string>
   <string name="ok">Tamam</string>
-  <string name="interface_scale_default">Arayüz ölçeği: %%%d (öntanımlı)</string>
+  <string name="interface_scale_default">Arayüz ölçeği: %%%d (varsayılan)</string>
   <string name="interface_scale">Arayüz ölçeği: %%%d</string>
 </resources>

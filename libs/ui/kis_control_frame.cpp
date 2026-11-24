@@ -124,11 +124,6 @@ void KisControlFrame::setup(QWidget *parent)
     connect(action, SIGNAL(triggered()), m_dual, SLOT(openBackgroundDialog()));
 
     createDockerBox(m_viewManager);
-
-    action = new QWidgetAction(this);
-    action->setText(i18n("&Docker Box"));
-    m_viewManager->actionCollection()->addAction("dockerBox", action);
-    action->setDefaultWidget(m_dockerPopupButton);
 }
 
 void KisControlFrame::slotUpdateDisplayRenderer()
@@ -298,4 +293,6 @@ void KisControlFrame::createDockerBox(KisViewManager * view)
     view->actionCollection()->addAction("docker_box", action);
     connect(action, SIGNAL(triggered()), m_dockerPopupButton, SLOT(showPopupWidget()));
     m_dockerPopup->addAction(action);
+
+    action->setDefaultWidget(m_dockerPopupButton);
 }

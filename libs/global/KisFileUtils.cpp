@@ -70,4 +70,23 @@ QString deduplicateFileName(const QString &fileName,
 
     return proposedFileName;
 }
+
+bool isSubPath(const QString &baseDir, const QString &targetPath)
+{
+    auto normalize = [](const QString &path) -> QString {
+        QFileInfo info(path);
+        QString canonical = info.canonicalFilePath();
+        // if path exists, use canonicalFilePath (which will handle symlinks),
+        // if not, generate a normalized version of the path using
+        // QDir::cleanPath, which doesn't require the path to be a real one.
+        return canonical.isEmpty() ? QDir::cleanPath(info.absoluteFilePath()) : canonical;
+    };
+
+    const QString cleanBase = normalize(baseDir);
+    const QString cleanTarget = normalize(targetPath);
+
+    const QString rel = QDir(cleanBase).relativeFilePath(cleanTarget);
+
+    return !rel.isEmpty() && rel != "." && !rel.startsWith("..") && !QDir::isAbsolutePath(rel);
+}
 }

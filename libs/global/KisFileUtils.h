@@ -27,6 +27,14 @@ QString KRITAGLOBAL_EXPORT resolveAbsoluteFilePath(const QString &baseDir, const
 QString KRITAGLOBAL_EXPORT deduplicateFileName(const QString &fileName,
                                                const QString &separator,
                                                std::function<bool(QString)> fileAllowedCallback);
+
+/**
+ * Checks if a file or directory at \p targetPath belongs to \p baseDir
+ *
+ * If any of the paths contain symlinks, the symlinks will be resolved
+ * using QFileInfo::canonicalFilePath().
+ */
+bool KRITAGLOBAL_EXPORT isSubPath(const QString &baseDir, const QString &targetPath);
 }
 
 #endif // KISFILEUTILS_H

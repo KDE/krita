@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-18 03:09+0000\n"
+"POT-Creation-Date: 2026-11-24 03:42+0000\n"
 "PO-Revision-Date: 2026-11-14 17:11+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -22756,7 +22756,7 @@ msgstr "الخفة"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:33
-#: libs/pigment/KoBasicHistogramProducers.cpp:438
+#: libs/pigment/KoBasicHistogramProducers.cpp:448
 #: plugins/color/lcms2engine/colorspaces/lab_f32/LabF32ColorSpace.cpp:28
 #: plugins/color/lcms2engine/colorspaces/lab_u16/LabColorSpace.cpp:23
 #: plugins/color/lcms2engine/colorspaces/lab_u8/LabU8ColorSpace.cpp:23
@@ -22767,7 +22767,7 @@ msgstr "a*"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:34
-#: libs/pigment/KoBasicHistogramProducers.cpp:439
+#: libs/pigment/KoBasicHistogramProducers.cpp:449
 #: plugins/color/lcms2engine/colorspaces/lab_f32/LabF32ColorSpace.cpp:29
 #: plugins/color/lcms2engine/colorspaces/lab_u16/LabColorSpace.cpp:24
 #: plugins/color/lcms2engine/colorspaces/lab_u8/LabU8ColorSpace.cpp:24
@@ -22852,40 +22852,40 @@ msgstr "عمليّة غير معرّفة في الفضاء اللونيّ %1"
 msgid "Simple Color Conversion Engine"
 msgstr "محرك تحويل ألوان بسيط"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:360
-#: libs/pigment/KoBasicHistogramProducers.cpp:427
+#: libs/pigment/KoBasicHistogramProducers.cpp:364
+#: libs/pigment/KoBasicHistogramProducers.cpp:437
 #, kde-format
 msgid "Generic RGB Histogram"
 msgstr "مدرج RGB الشامل"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:364
+#: libs/pigment/KoBasicHistogramProducers.cpp:368
 #, kde-format
 msgid "R"
 msgstr "ح"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:365
+#: libs/pigment/KoBasicHistogramProducers.cpp:369
 #, kde-format
 msgid "G"
 msgstr "خ"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:366
+#: libs/pigment/KoBasicHistogramProducers.cpp:370
 #, kde-format
 msgid "B"
 msgstr "ز"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:433
+#: libs/pigment/KoBasicHistogramProducers.cpp:443
 #, kde-format
 msgid "L*a*b* Histogram"
 msgstr "L*a*b* مدرج"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/pigment/KoBasicHistogramProducers.cpp:437
+#: libs/pigment/KoBasicHistogramProducers.cpp:447
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:179
 #, kde-format
 msgid "L*"
 msgstr "L*"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:511
+#: libs/pigment/KoBasicHistogramProducers.cpp:521
 #, kde-format
 msgid "Generic L*a*b* Histogram"
 msgstr "مخطط بياني L*a*b* عام"
@@ -26592,7 +26592,7 @@ msgstr "إصدار FFmpeg:"
 msgid "None"
 msgstr "لا شيء"
 
-#: libs/ui/canvas/kis_canvas2.cpp:1535
+#: libs/ui/canvas/kis_canvas2.cpp:1538
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
@@ -36664,17 +36664,17 @@ msgstr "استخدم هذا القالب"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "لا يمكنك سحب وإسقاط الألوان على نوع الطّبقة المحدّدة"
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:419
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:422
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "الطّبقة مقفلة ومخفيّة."
 
-#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:421
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:424
 #, kde-format
 msgid "Layer is locked."
 msgstr "الطّبقة مقفلة."
 
-#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:423
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:426
 #, kde-format
 msgid "Layer is invisible."
 msgstr "الطّبقة مخفيّة."
@@ -37990,23 +37990,23 @@ msgstr ""
 "س: %1 بكسل\n"
 "ص: %2 بكسل"
 
-#: libs/ui/tool/kis_tool_utils.cpp:213 libs/ui/tool/kis_tool_utils.cpp:225
+#: libs/ui/tool/kis_tool_utils.cpp:216 libs/ui/tool/kis_tool_utils.cpp:228
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "المسح"
 
-#: libs/ui/tool/kis_tool_utils.cpp:322
+#: libs/ui/tool/kis_tool_utils.cpp:325
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr "حجم الفرشاة: %1 بكسل"
 
-#: libs/ui/tool/kis_tool_utils.cpp:425
+#: libs/ui/tool/kis_tool_utils.cpp:428
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr "يمكن طلاء الطبقة في وضع الغسيل فقط."
 
-#: libs/ui/tool/kis_tool_utils.cpp:427
+#: libs/ui/tool/kis_tool_utils.cpp:430
 #, kde-format
 msgid "Group not editable."
 msgstr "لا تقبل المجموعة التّحرير."
@@ -62701,15 +62701,28 @@ msgstr "يوحنا"
 msgid "Doe"
 msgstr "دو"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:138
+#: plugins/python/comics_project_management_tools/comics_exporter.py:119
+#: plugins/python/comics_project_management_tools/comics_exporter.py:179
+#: plugins/python/comics_project_management_tools/comics_exporter.py:213
+#: plugins/python/comics_project_management_tools/comics_exporter.py:372
+msgid "Export not Possible"
+msgstr "لا يمكن التصدير"
+
+#: plugins/python/comics_project_management_tools/comics_exporter.py:119
+#, fuzzy
+#| msgid "No frames to export."
+msgid "No pages to export."
+msgstr "لا إطارات للتصدير."
+
+#: plugins/python/comics_project_management_tools/comics_exporter.py:144
 msgid "Preparing export."
 msgstr "إعداد التصدير."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:139
+#: plugins/python/comics_project_management_tools/comics_exporter.py:145
 msgid "Exporting Comic..."
 msgstr "تصدير القصة المصوّرة..."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:157
+#: plugins/python/comics_project_management_tools/comics_exporter.py:163
 msgid ""
 "Saving out ACBF and\n"
 "ACBF standalone"
@@ -62717,21 +62730,15 @@ msgstr ""
 "حفظ ACBF و\n"
 "ACBF مستقل"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:168
+#: plugins/python/comics_project_management_tools/comics_exporter.py:174
 msgid "Saving out EPUB"
 msgstr "حفظ EPUB"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
-#: plugins/python/comics_project_management_tools/comics_exporter.py:207
-#: plugins/python/comics_project_management_tools/comics_exporter.py:366
-msgid "Export not Possible"
-msgstr "لا يمكن التصدير"
-
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
+#: plugins/python/comics_project_management_tools/comics_exporter.py:179
 msgid "Nothing to export, URL not set."
 msgstr "لا شيء للتصدير، URL غير مضبوط."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:186
+#: plugins/python/comics_project_management_tools/comics_exporter.py:192
 msgid ""
 "Saving out CoMet\n"
 "metadata file"
@@ -62739,7 +62746,7 @@ msgstr ""
 "حفظ ملف\n"
 "البيانات الوصفية CoMet"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:191
+#: plugins/python/comics_project_management_tools/comics_exporter.py:197
 msgid ""
 "Saving out Comicrack\n"
 "metadata file"
@@ -62747,11 +62754,11 @@ msgstr ""
 "حفظ ملف\n"
 "البيانات الوصفية Comicrack"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:207
+#: plugins/python/comics_project_management_tools/comics_exporter.py:213
 msgid "Export failed because there's no export settings configured."
 msgstr "فشل التصدير بسبب عدم ضبط إعدادات التصدير."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:224
+#: plugins/python/comics_project_management_tools/comics_exporter.py:230
 #, python-brace-format
 msgid ""
 "Time passed: {passedString}\n"
@@ -62760,29 +62767,29 @@ msgstr ""
 "الوقت المنقضي: {passedString}\n"
 " التقديري: {estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_exporter.py:233
 #, python-brace-format
 msgid "{pages} of {pagesTotal} done."
 msgstr "أكمل {pages} من {pagesTotal}."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:238
+#: plugins/python/comics_project_management_tools/comics_exporter.py:244
 msgid "Opening next page"
 msgstr "فتح الصفحة التالية"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:246
+#: plugins/python/comics_project_management_tools/comics_exporter.py:252
 msgid "Cleaning up page"
 msgstr "تنظيف الصفحة"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:280
+#: plugins/python/comics_project_management_tools/comics_exporter.py:286
 #, python-brace-format
 msgid "Exporting for {key}"
 msgstr "تصدير لـ {key}"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:366
+#: plugins/python/comics_project_management_tools/comics_exporter.py:372
 msgid "Export not happening because there are no pages."
 msgstr "لا يحدث التصدير لأنه لا توجد صفحات."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:643
+#: plugins/python/comics_project_management_tools/comics_exporter.py:649
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
@@ -62790,7 +62797,7 @@ msgstr ""
 "حفظ ملف معلومات\n"
 "البيانات الوصفية للقصص المصوّرة"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:653
+#: plugins/python/comics_project_management_tools/comics_exporter.py:659
 msgid "Packaging CBZ"
 msgstr "تغليف CBZ"
 

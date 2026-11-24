@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-22 01:02+0000\n"
+"POT-Creation-Date: 2026-11-24 01:01+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -24565,7 +24565,7 @@ msgstr "Heledus"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:33
-#: libs/pigment/KoBasicHistogramProducers.cpp:438
+#: libs/pigment/KoBasicHistogramProducers.cpp:448
 #: plugins/color/lcms2engine/colorspaces/lab_f32/LabF32ColorSpace.cpp:28
 #: plugins/color/lcms2engine/colorspaces/lab_u16/LabColorSpace.cpp:23
 #: plugins/color/lcms2engine/colorspaces/lab_u8/LabU8ColorSpace.cpp:23
@@ -24576,7 +24576,7 @@ msgstr "a*"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:34
-#: libs/pigment/KoBasicHistogramProducers.cpp:439
+#: libs/pigment/KoBasicHistogramProducers.cpp:449
 #: plugins/color/lcms2engine/colorspaces/lab_f32/LabF32ColorSpace.cpp:29
 #: plugins/color/lcms2engine/colorspaces/lab_u16/LabColorSpace.cpp:24
 #: plugins/color/lcms2engine/colorspaces/lab_u8/LabU8ColorSpace.cpp:24
@@ -24661,40 +24661,40 @@ msgstr "Tundmatu toiming %1 värviruumis"
 msgid "Simple Color Conversion Engine"
 msgstr "Lihtne värviteisenduse mootor"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:360
-#: libs/pigment/KoBasicHistogramProducers.cpp:427
+#: libs/pigment/KoBasicHistogramProducers.cpp:364
+#: libs/pigment/KoBasicHistogramProducers.cpp:437
 #, kde-format
 msgid "Generic RGB Histogram"
 msgstr "Üldine RGB histogramm"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:364
+#: libs/pigment/KoBasicHistogramProducers.cpp:368
 #, kde-format
 msgid "R"
 msgstr "R"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:365
+#: libs/pigment/KoBasicHistogramProducers.cpp:369
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:366
+#: libs/pigment/KoBasicHistogramProducers.cpp:370
 #, kde-format
 msgid "B"
 msgstr "B"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:433
+#: libs/pigment/KoBasicHistogramProducers.cpp:443
 #, kde-format
 msgid "L*a*b* Histogram"
 msgstr "L*a*b* histogramm"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/pigment/KoBasicHistogramProducers.cpp:437
+#: libs/pigment/KoBasicHistogramProducers.cpp:447
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:179
 #, kde-format
 msgid "L*"
 msgstr "L*"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:511
+#: libs/pigment/KoBasicHistogramProducers.cpp:521
 #, kde-format
 msgid "Generic L*a*b* Histogram"
 msgstr "Üldine L*a*b* histogramm"
@@ -28658,7 +28658,7 @@ msgstr "ICC versioon:"
 msgid "None"
 msgstr "Puudub"
 
-#: libs/ui/canvas/kis_canvas2.cpp:1540
+#: libs/ui/canvas/kis_canvas2.cpp:1543
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
@@ -39436,17 +39436,17 @@ msgstr "Kasuta seda malli"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Seda tööriista ei saa valitud kihitüübi puhul kasutada"
 
-#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:420
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:423
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Kiht on lukustatud ja nähtamatu."
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:422
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:425
 #, kde-format
 msgid "Layer is locked."
 msgstr "Kiht on lukustatud."
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:424
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:427
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Kiht on nähtamatu."
@@ -40737,24 +40737,24 @@ msgid ""
 "Y: %2 px"
 msgstr "X: %1 px, Y: %2 px"
 
-#: libs/ui/tool/kis_tool_utils.cpp:214 libs/ui/tool/kis_tool_utils.cpp:226
+#: libs/ui/tool/kis_tool_utils.cpp:217 libs/ui/tool/kis_tool_utils.cpp:229
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "Puhastamine"
 
-#: libs/ui/tool/kis_tool_utils.cpp:323
+#: libs/ui/tool/kis_tool_utils.cpp:326
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush Size: %1 px"
 msgstr "Pintsli suurus"
 
-#: libs/ui/tool/kis_tool_utils.cpp:426
+#: libs/ui/tool/kis_tool_utils.cpp:429
 #, kde-format
 msgid "Layer can't be painted in Build Up mode."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:428
+#: libs/ui/tool/kis_tool_utils.cpp:431
 #, kde-format
 msgid "Group not editable."
 msgstr "Rühm ei ole muudetav."
@@ -67152,15 +67152,29 @@ msgstr "Juhan"
 msgid "Doe"
 msgstr "Juurikas"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:138
+#: plugins/python/comics_project_management_tools/comics_exporter.py:119
+#: plugins/python/comics_project_management_tools/comics_exporter.py:179
+#: plugins/python/comics_project_management_tools/comics_exporter.py:213
+#: plugins/python/comics_project_management_tools/comics_exporter.py:372
+msgid "Export not Possible"
+msgstr "Eksport ei ole võimalik"
+
+#: plugins/python/comics_project_management_tools/comics_exporter.py:119
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Copy frames to clipboard"
+msgid "No pages to export."
+msgstr "Kopeeri kaadrid lõikepuhvrisse"
+
+#: plugins/python/comics_project_management_tools/comics_exporter.py:144
 msgid "Preparing export."
 msgstr "Valmistumine ekspordiks."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:139
+#: plugins/python/comics_project_management_tools/comics_exporter.py:145
 msgid "Exporting Comic..."
 msgstr "Koomiksi eksport ..."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:157
+#: plugins/python/comics_project_management_tools/comics_exporter.py:163
 msgid ""
 "Saving out ACBF and\n"
 "ACBF standalone"
@@ -67168,21 +67182,15 @@ msgstr ""
 "ACBF ja autonoomse\n"
 "ACBF salvestamine"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:168
+#: plugins/python/comics_project_management_tools/comics_exporter.py:174
 msgid "Saving out EPUB"
 msgstr "EPUB-i salvestamine"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
-#: plugins/python/comics_project_management_tools/comics_exporter.py:207
-#: plugins/python/comics_project_management_tools/comics_exporter.py:366
-msgid "Export not Possible"
-msgstr "Eksport ei ole võimalik"
-
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
+#: plugins/python/comics_project_management_tools/comics_exporter.py:179
 msgid "Nothing to export, URL not set."
 msgstr "Pole midagi eksportida, URL-i pole määratud."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:186
+#: plugins/python/comics_project_management_tools/comics_exporter.py:192
 msgid ""
 "Saving out CoMet\n"
 "metadata file"
@@ -67190,7 +67198,7 @@ msgstr ""
 "CoMet metaandmete\n"
 "faili salvestamine"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:191
+#: plugins/python/comics_project_management_tools/comics_exporter.py:197
 msgid ""
 "Saving out Comicrack\n"
 "metadata file"
@@ -67198,11 +67206,11 @@ msgstr ""
 "Comicrack'i metaandmete\n"
 "faili salvestamine"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:207
+#: plugins/python/comics_project_management_tools/comics_exporter.py:213
 msgid "Export failed because there's no export settings configured."
 msgstr "Eksport nurjus, sest ühtegi ekspordiseadistust pole määratud."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:224
+#: plugins/python/comics_project_management_tools/comics_exporter.py:230
 #, python-brace-format
 msgid ""
 "Time passed: {passedString}\n"
@@ -67211,29 +67219,29 @@ msgstr ""
 "Aega kulunud: {passedString}\n"
 " Hinnang: {estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_exporter.py:233
 #, python-brace-format
 msgid "{pages} of {pagesTotal} done."
 msgstr "{pages} / {pagesTotal} valmis."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:238
+#: plugins/python/comics_project_management_tools/comics_exporter.py:244
 msgid "Opening next page"
 msgstr "Järgmise lehekülje avamine"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:246
+#: plugins/python/comics_project_management_tools/comics_exporter.py:252
 msgid "Cleaning up page"
 msgstr "Lehekülje puhastamine"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:280
+#: plugins/python/comics_project_management_tools/comics_exporter.py:286
 #, python-brace-format
 msgid "Exporting for {key}"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:366
+#: plugins/python/comics_project_management_tools/comics_exporter.py:372
 msgid "Export not happening because there are no pages."
 msgstr "Eksport ei ole võimalik, sest leheküljed puuduvad."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:643
+#: plugins/python/comics_project_management_tools/comics_exporter.py:649
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
@@ -67241,7 +67249,7 @@ msgstr ""
 "Comicbook'i teabe metaandmete\n"
 "faili salvestamine"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:653
+#: plugins/python/comics_project_management_tools/comics_exporter.py:659
 msgid "Packaging CBZ"
 msgstr "CBZ pakkimine"
 

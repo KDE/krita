@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-22 01:02+0000\n"
+"POT-Creation-Date: 2026-11-24 01:01+0000\n"
 "PO-Revision-Date: 2026-05-02 13:49+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
 "Language-Team: Irish <http://weblate.amgelocalnet.duckdns.org/projects/kde-"
@@ -23154,7 +23154,7 @@ msgstr "Éadromacht"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:33
-#: libs/pigment/KoBasicHistogramProducers.cpp:438
+#: libs/pigment/KoBasicHistogramProducers.cpp:448
 #: plugins/color/lcms2engine/colorspaces/lab_f32/LabF32ColorSpace.cpp:28
 #: plugins/color/lcms2engine/colorspaces/lab_u16/LabColorSpace.cpp:23
 #: plugins/color/lcms2engine/colorspaces/lab_u8/LabU8ColorSpace.cpp:23
@@ -23165,7 +23165,7 @@ msgstr "a*"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:34
-#: libs/pigment/KoBasicHistogramProducers.cpp:439
+#: libs/pigment/KoBasicHistogramProducers.cpp:449
 #: plugins/color/lcms2engine/colorspaces/lab_f32/LabF32ColorSpace.cpp:29
 #: plugins/color/lcms2engine/colorspaces/lab_u16/LabColorSpace.cpp:24
 #: plugins/color/lcms2engine/colorspaces/lab_u8/LabU8ColorSpace.cpp:24
@@ -23250,41 +23250,41 @@ msgstr "Oibríocht neamhshainithe sa spás datha %1"
 msgid "Simple Color Conversion Engine"
 msgstr "Inneall Comhshó Dathanna Simplí"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:360
-#: libs/pigment/KoBasicHistogramProducers.cpp:427
+#: libs/pigment/KoBasicHistogramProducers.cpp:364
+#: libs/pigment/KoBasicHistogramProducers.cpp:437
 #, kde-format
 msgid "Generic RGB Histogram"
 msgstr "Histeagram Ginearálta RGB"
 
 # ok as is; RGB is international
-#: libs/pigment/KoBasicHistogramProducers.cpp:364
+#: libs/pigment/KoBasicHistogramProducers.cpp:368
 #, kde-format
 msgid "R"
 msgstr "R"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:365
+#: libs/pigment/KoBasicHistogramProducers.cpp:369
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:366
+#: libs/pigment/KoBasicHistogramProducers.cpp:370
 #, kde-format
 msgid "B"
 msgstr "B"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:433
+#: libs/pigment/KoBasicHistogramProducers.cpp:443
 #, kde-format
 msgid "L*a*b* Histogram"
 msgstr "Histeagram L*a*b*"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/pigment/KoBasicHistogramProducers.cpp:437
+#: libs/pigment/KoBasicHistogramProducers.cpp:447
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:179
 #, kde-format
 msgid "L*"
 msgstr "L*"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:511
+#: libs/pigment/KoBasicHistogramProducers.cpp:521
 #, kde-format
 msgid "Generic L*a*b* Histogram"
 msgstr "Histeagram Ginearálta L*a*b*"
@@ -26993,7 +26993,7 @@ msgstr "Leagan FFmpeg:"
 msgid "None"
 msgstr "Dada"
 
-#: libs/ui/canvas/kis_canvas2.cpp:1540
+#: libs/ui/canvas/kis_canvas2.cpp:1543
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
@@ -37678,17 +37678,17 @@ msgstr ""
 "Ní féidir leat dathanna a tharraingt agus a scaoileadh ar an gcineál sraithe "
 "roghnaithe."
 
-#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:420
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:423
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Tá an ciseal faoi ghlas agus dofheicthe."
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:422
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:425
 #, kde-format
 msgid "Layer is locked."
 msgstr "Tá an ciseal faoi ghlas."
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:424
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:427
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Tá an ciseal dofheicthe."
@@ -39010,24 +39010,24 @@ msgstr ""
 "X: %1 px\n"
 "Y: %2 px"
 
-#: libs/ui/tool/kis_tool_utils.cpp:214 libs/ui/tool/kis_tool_utils.cpp:226
+#: libs/ui/tool/kis_tool_utils.cpp:217 libs/ui/tool/kis_tool_utils.cpp:229
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "Glan"
 
-#: libs/ui/tool/kis_tool_utils.cpp:323
+#: libs/ui/tool/kis_tool_utils.cpp:326
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr "Méid Scuaibe: %1 px"
 
-#: libs/ui/tool/kis_tool_utils.cpp:426
+#: libs/ui/tool/kis_tool_utils.cpp:429
 #, fuzzy, kde-format
 #| msgid "Layer can be painted in Wash Mode only."
 msgid "Layer can't be painted in Build Up mode."
 msgstr "Ní féidir an ciseal a phéinteáil ach i Mód Nigh."
 
-#: libs/ui/tool/kis_tool_utils.cpp:428
+#: libs/ui/tool/kis_tool_utils.cpp:431
 #, kde-format
 msgid "Group not editable."
 msgstr "Ní féidir an grúpa a chur in eagar."
@@ -64682,15 +64682,28 @@ msgstr "John"
 msgid "Doe"
 msgstr "Doe"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:138
+#: plugins/python/comics_project_management_tools/comics_exporter.py:119
+#: plugins/python/comics_project_management_tools/comics_exporter.py:179
+#: plugins/python/comics_project_management_tools/comics_exporter.py:213
+#: plugins/python/comics_project_management_tools/comics_exporter.py:372
+msgid "Export not Possible"
+msgstr "Ní féidir onnmhairiú a dhéanamh"
+
+#: plugins/python/comics_project_management_tools/comics_exporter.py:119
+#, fuzzy
+#| msgid "No frames to export."
+msgid "No pages to export."
+msgstr "Gan aon frámaí le honnmhairiú."
+
+#: plugins/python/comics_project_management_tools/comics_exporter.py:144
 msgid "Preparing export."
 msgstr "Ag ullmhú easpórtála."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:139
+#: plugins/python/comics_project_management_tools/comics_exporter.py:145
 msgid "Exporting Comic..."
 msgstr "Ag easpórtáil greannán..."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:157
+#: plugins/python/comics_project_management_tools/comics_exporter.py:163
 msgid ""
 "Saving out ACBF and\n"
 "ACBF standalone"
@@ -64698,21 +64711,15 @@ msgstr ""
 "ACBF agus ACBF\n"
 "neamhspleách a shábháil"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:168
+#: plugins/python/comics_project_management_tools/comics_exporter.py:174
 msgid "Saving out EPUB"
 msgstr "Sábháil amach EPUB"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
-#: plugins/python/comics_project_management_tools/comics_exporter.py:207
-#: plugins/python/comics_project_management_tools/comics_exporter.py:366
-msgid "Export not Possible"
-msgstr "Ní féidir onnmhairiú a dhéanamh"
-
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
+#: plugins/python/comics_project_management_tools/comics_exporter.py:179
 msgid "Nothing to export, URL not set."
 msgstr "Níl aon rud le honnmhairiú, níl an URL socraithe."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:186
+#: plugins/python/comics_project_management_tools/comics_exporter.py:192
 msgid ""
 "Saving out CoMet\n"
 "metadata file"
@@ -64720,7 +64727,7 @@ msgstr ""
 "Ag sábháil comhad\n"
 "meiteashonraí CoMet"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:191
+#: plugins/python/comics_project_management_tools/comics_exporter.py:197
 msgid ""
 "Saving out Comicrack\n"
 "metadata file"
@@ -64728,12 +64735,12 @@ msgstr ""
 "Ag sábháil comhad\n"
 "meiteashonraí Comicrack"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:207
+#: plugins/python/comics_project_management_tools/comics_exporter.py:213
 msgid "Export failed because there's no export settings configured."
 msgstr ""
 "Theip ar an easpórtáil mar nach bhfuil aon socruithe easpórtála cumraithe."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:224
+#: plugins/python/comics_project_management_tools/comics_exporter.py:230
 #, python-brace-format
 msgid ""
 "Time passed: {passedString}\n"
@@ -64742,29 +64749,29 @@ msgstr ""
 "Am caite: {passedString}\n"
 "Meastachán: {estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_exporter.py:233
 #, python-brace-format
 msgid "{pages} of {pagesTotal} done."
 msgstr "{pages} de {pagesTotal} déanta."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:238
+#: plugins/python/comics_project_management_tools/comics_exporter.py:244
 msgid "Opening next page"
 msgstr "Ag oscailt an chéad leathanach eile"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:246
+#: plugins/python/comics_project_management_tools/comics_exporter.py:252
 msgid "Cleaning up page"
 msgstr "Glanadh an leathanaigh"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:280
+#: plugins/python/comics_project_management_tools/comics_exporter.py:286
 #, python-brace-format
 msgid "Exporting for {key}"
 msgstr "Ag easpórtáil le haghaidh {key}"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:366
+#: plugins/python/comics_project_management_tools/comics_exporter.py:372
 msgid "Export not happening because there are no pages."
 msgstr "Ní tharlaíonn an easpórtáil mar nach bhfuil aon leathanaigh ann."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:643
+#: plugins/python/comics_project_management_tools/comics_exporter.py:649
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
@@ -64772,7 +64779,7 @@ msgstr ""
 "Ag sábháil comhad meiteashonraí Comicbook\n"
 "info"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:653
+#: plugins/python/comics_project_management_tools/comics_exporter.py:659
 msgid "Packaging CBZ"
 msgstr "Pacáistiú CBZ"
 

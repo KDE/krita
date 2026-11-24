@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-22 01:02+0000\n"
-"PO-Revision-Date: 2026-11-22 19:05+0300\n"
+"POT-Creation-Date: 2026-11-24 01:01+0000\n"
+"PO-Revision-Date: 2026-11-23 18:15+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -551,7 +551,7 @@ msgstr "02b KumaşMendil"
 #, kde-format
 msgctxt "./krita/data/patterns/03_default-paper.png"
 msgid "03 default-paper"
-msgstr "03 öntanımlı kağıt"
+msgstr "03 varsayılan kağıt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -745,7 +745,7 @@ msgstr "a) Yuvarlak Silgi"
 #, kde-format
 msgctxt "./krita/data/paintoppresets/b)_Basic-5_Size_default.kpp"
 msgid "b) Basic-5 Size default"
-msgstr "b) Temel-5 Boyut-öntanımlı"
+msgstr "b) Temel-5 Boyut-varsayılan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -873,7 +873,7 @@ msgstr "Büyük Vektör"
 #, kde-format
 msgctxt "./krita/data/workspaces/Default.kws"
 msgid "Default"
-msgstr "Öntanımlı"
+msgstr "Varsayılan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1824,7 +1824,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_tip_default.kpp"
 msgid "Basic tip default"
-msgstr "Temel uç öntanımlı"
+msgstr "Temel uç varsayılan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2847,7 +2847,7 @@ msgstr "Büyük Vektör"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Default.kws"
 msgid "Default"
-msgstr "Öntanımlı"
+msgstr "Varsayılan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2901,7 +2901,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/03_default-"
 "paper.png"
 msgid "03 default-paper"
-msgstr "03 öntanımlı kağıt"
+msgstr "03 varsayılan kağıt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3914,7 +3914,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-5_Size_default.kpp"
 msgid "b) Basic-5 Size default"
-msgstr "b) Temel 4 Boyut-öntanımlı"
+msgstr "b) Temel 4 Boyut-varsayılan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4917,7 +4917,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/03_default-"
 "paper.png"
 msgid "03 default-paper"
-msgstr "03 öntanımlı kağıt"
+msgstr "03 varsayılan kağıt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -6637,7 +6637,7 @@ msgstr "Konsept-kurabiye"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/default.gpl"
 msgid "Default"
-msgstr "Öntanımlı"
+msgstr "Varsayılan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/gradient.gpl:2
@@ -7127,7 +7127,7 @@ msgstr "Konsept-kurabiye"
 #, kde-format
 msgctxt "./krita/data/palettes/default.gpl"
 msgid "Default"
-msgstr "Öntanımlı"
+msgstr "Varsayılan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/gradient.gpl:2
@@ -14650,7 +14650,7 @@ msgstr "Görüntüyü Sıfırla"
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
 msgstr ""
-"Yakınlaştırma, döndürme ve yansıtma değerlerini öntanımlı değerlerine "
+"Yakınlaştırma, döndürme ve yansıtma değerlerini varsayılan değerlerine "
 "sıfırlayın."
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
@@ -16068,7 +16068,7 @@ msgstr "Tüm Ayarları Sıfırla"
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings to Default"
-msgstr "Tüm Ayarları Öntanımlılara Sıfırla"
+msgstr "Tüm Ayarları Varsayılanlara Sıfırla"
 
 #. i18n: context: iconText @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1900
@@ -21085,7 +21085,7 @@ msgstr "Fırça işletkeleri"
 #: libs/image/brushengine/kis_paintop_registry.cc:126
 #, kde-format
 msgid "default"
-msgstr "öntanımlı"
+msgstr "varsayılan"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgRectangleConstraints)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:34
@@ -21470,7 +21470,7 @@ msgstr "<%1> (gömülü)"
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
-msgstr "Öntanımlı"
+msgstr "Varsayılan"
 
 #: libs/image/kis_base_mask_generator.h:23
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:53
@@ -22986,7 +22986,7 @@ msgstr "Açıklık"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:33
-#: libs/pigment/KoBasicHistogramProducers.cpp:438
+#: libs/pigment/KoBasicHistogramProducers.cpp:448
 #: plugins/color/lcms2engine/colorspaces/lab_f32/LabF32ColorSpace.cpp:28
 #: plugins/color/lcms2engine/colorspaces/lab_u16/LabColorSpace.cpp:23
 #: plugins/color/lcms2engine/colorspaces/lab_u8/LabU8ColorSpace.cpp:23
@@ -22997,7 +22997,7 @@ msgstr "a*"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:34
-#: libs/pigment/KoBasicHistogramProducers.cpp:439
+#: libs/pigment/KoBasicHistogramProducers.cpp:449
 #: plugins/color/lcms2engine/colorspaces/lab_f32/LabF32ColorSpace.cpp:29
 #: plugins/color/lcms2engine/colorspaces/lab_u16/LabColorSpace.cpp:24
 #: plugins/color/lcms2engine/colorspaces/lab_u8/LabU8ColorSpace.cpp:24
@@ -23082,40 +23082,40 @@ msgstr "%1 renk uzayında tanımlanmamış işlem"
 msgid "Simple Color Conversion Engine"
 msgstr "Basit Renk Dönüşüm İşletkesi"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:360
-#: libs/pigment/KoBasicHistogramProducers.cpp:427
+#: libs/pigment/KoBasicHistogramProducers.cpp:364
+#: libs/pigment/KoBasicHistogramProducers.cpp:437
 #, kde-format
 msgid "Generic RGB Histogram"
 msgstr "Genel RGB Sütun Grafiği"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:364
+#: libs/pigment/KoBasicHistogramProducers.cpp:368
 #, kde-format
 msgid "R"
 msgstr "R"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:365
+#: libs/pigment/KoBasicHistogramProducers.cpp:369
 #, kde-format
 msgid "G"
 msgstr "G"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:366
+#: libs/pigment/KoBasicHistogramProducers.cpp:370
 #, kde-format
 msgid "B"
 msgstr "B"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:433
+#: libs/pigment/KoBasicHistogramProducers.cpp:443
 #, kde-format
 msgid "L*a*b* Histogram"
 msgstr "L*a*b* Sütun Grafiği"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/pigment/KoBasicHistogramProducers.cpp:437
+#: libs/pigment/KoBasicHistogramProducers.cpp:447
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:179
 #, kde-format
 msgid "L*"
 msgstr "L*"
 
-#: libs/pigment/KoBasicHistogramProducers.cpp:511
+#: libs/pigment/KoBasicHistogramProducers.cpp:521
 #, kde-format
 msgid "Generic L*a*b* Histogram"
 msgstr "Genel  L*a*b* Sütun Grafiği"
@@ -26180,7 +26180,7 @@ msgstr "karışık"
 #, kde-format
 msgctxt "webp preset option name"
 msgid "default"
-msgstr "öntanımlı"
+msgstr "varsayılan"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:85
 #, kde-format
@@ -26793,7 +26793,7 @@ msgstr "FFmpeg sürümü:"
 msgid "None"
 msgstr "Yok"
 
-#: libs/ui/canvas/kis_canvas2.cpp:1540
+#: libs/ui/canvas/kis_canvas2.cpp:1543
 #, kde-format
 msgid ""
 "WARNING: HDR mode was activated on surface working in 8-bit mode!\n"
@@ -27608,7 +27608,7 @@ msgstr "Desteklenen tüm dosyalar"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:518
 #, kde-format
 msgid "Open default window"
-msgstr "Öntanımlı pencereyi aç"
+msgstr "Varsayılan pencereyi aç"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:519
 #, kde-format
@@ -28188,7 +28188,7 @@ msgstr "Çizer"
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
-msgstr "Öntanımlıları Geri Yükle"
+msgstr "Varsayılanları Geri Yükle"
 
 #: libs/ui/dialogs/kis_dlg_stroke_selection_properties.cpp:51
 #, kde-format
@@ -29500,7 +29500,7 @@ msgstr "Renk Ayarları"
 #: libs/ui/forms/wdgcolorsettings.ui:46
 #, kde-format
 msgid "Use Default color model for new images"
-msgstr "Yeni görseller için öntanımlı renk modelini kullan"
+msgstr "Yeni görseller için varsayılan renk modelini kullan"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpPasteFrom)
 #. i18n: ectx: property (title), widget (QGroupBox, grpPasteBehaviour)
@@ -30491,7 +30491,7 @@ msgstr "Her "
 #: libs/ui/forms/wdggeneralsettings.ui:96
 #, kde-format
 msgid "Unnamed autosave files are hidden by default"
-msgstr "Adsız kendiliğinden kayıt dosyaları öntanımlı olarak gizlidir"
+msgstr "Adsız kendiliğinden kayıt dosyaları varsayılan olarak gizlidir"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_backupFileCheckBox)
 #: libs/ui/forms/wdggeneralsettings.ui:109
@@ -30591,7 +30591,7 @@ msgstr "Canlandırmaları içe aktarırken kareleri kırp"
 #: libs/ui/forms/wdggeneralsettings.ui:230
 #, kde-format
 msgid "Default Export Filetype: "
-msgstr "Öntanımlı dışa aktarma dosya türü:"
+msgstr "Varsayılan dışa aktarma dosya türü:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Pasting)
 #: libs/ui/forms/wdggeneralsettings.ui:244
@@ -32010,7 +32010,7 @@ msgstr "Görsel Boyutu"
 #: libs/ui/forms/wdgnewimage.ui:60
 #, kde-format
 msgid "P&redefined:"
-msgstr "Ön&tanımlı:"
+msgstr "&Varsayılan:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWidth)
 #: libs/ui/forms/wdgnewimage.ui:70
@@ -33857,7 +33857,7 @@ msgstr "Bu eylem için olan son kısayol siliniyor!"
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:113
 #, kde-format
 msgid "It is not allowed to erase some default shortcuts. Modify it instead."
-msgstr "Kimi öntanımlı kısayolları silemezsiniz fakat değiştirebilirsiniz."
+msgstr "Kimi varsayılan kısayolları silemezsiniz fakat değiştirebilirsiniz."
 
 #. i18n: ectx: property (text), widget (QLabel, descriptionLabel)
 #: libs/ui/input/config/kis_input_configuration_page_item.ui:39
@@ -35685,7 +35685,7 @@ msgstr "Matlığı Seç"
 #, kde-format
 msgctxt "Splash image default"
 msgid "%1 (default)"
-msgstr "%1 (Öntanımlı)"
+msgstr "%1 (Varsayılan)"
 
 #: libs/ui/kis_splash_screen.cpp:53
 #, kde-format
@@ -37211,7 +37211,7 @@ msgstr "&Seç…"
 #: libs/ui/KisTemplateCreateDia.cpp:150
 #, kde-format
 msgid "Use the new template as default"
-msgstr "Yeni şablonu öntanımlı olarak kullan"
+msgstr "Yeni şablonu varsayılan olarak kullan"
 
 #: libs/ui/KisTemplateCreateDia.cpp:153
 #, kde-format
@@ -37288,17 +37288,17 @@ msgstr "Bu Şablonu Kullan"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Seçili katman türüne renkleri sürükleyip bırakamazsınız."
 
-#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:420
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:423
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Katman kilitlendi ve görünmez."
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:422
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:425
 #, kde-format
 msgid "Layer is locked."
 msgstr "Katman kilitli."
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:424
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:427
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Katman görünmez."
@@ -38472,8 +38472,8 @@ msgid ""
 "work properly."
 msgstr ""
 "Intel grafik sürücüleri OpenGL ile ilgili sorunlara sahip olma "
-"eğilimindedir, dolayısıyla ANGLE öntanımlı olarak kullanılır. OpenGL’ye elle "
-"geçebilirsiniz, ancak düzgün çalışacağı garanti edilmez."
+"eğilimindedir, dolayısıyla ANGLE varsayılan olarak kullanılır. OpenGL’ye "
+"elle geçebilirsiniz, ancak düzgün çalışacağı garanti edilmez."
 
 #: libs/ui/opengl/kis_opengl.cpp:1174
 #, kde-format
@@ -38598,23 +38598,23 @@ msgstr ""
 "X: %1 pks\n"
 "Y: %2 pks"
 
-#: libs/ui/tool/kis_tool_utils.cpp:214 libs/ui/tool/kis_tool_utils.cpp:226
+#: libs/ui/tool/kis_tool_utils.cpp:217 libs/ui/tool/kis_tool_utils.cpp:229
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "Temizle"
 
-#: libs/ui/tool/kis_tool_utils.cpp:323
+#: libs/ui/tool/kis_tool_utils.cpp:326
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr "Fırça boyutu: %1 pks"
 
-#: libs/ui/tool/kis_tool_utils.cpp:426
+#: libs/ui/tool/kis_tool_utils.cpp:429
 #, kde-format
 msgid "Layer can't be painted in Build Up mode."
 msgstr "Katman, “Doluluk Artır” kipinde boyanamaz."
 
-#: libs/ui/tool/kis_tool_utils.cpp:428
+#: libs/ui/tool/kis_tool_utils.cpp:431
 #, kde-format
 msgid "Group not editable."
 msgstr "Grup düzenlenebilir değil."
@@ -38669,7 +38669,7 @@ msgstr "Seçimi Taşı"
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
-msgstr "Öntanımlı"
+msgstr "Varsayılan"
 
 #: libs/ui/toolbox/KoToolBox.cpp:378
 #, kde-format
@@ -39133,7 +39133,7 @@ msgctxt ""
 "This is appended to the color profile which is the default for the given "
 "colorspace and bit-depth"
 msgid "(Default)"
-msgstr "(Öntanımlı)"
+msgstr "(Varsayılan)"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:155
 #, kde-format
@@ -39364,7 +39364,7 @@ msgid ""
 "to the power of the number of channels. Recommended to use for images "
 "intended for the web, or otherwise simple images."
 msgstr ""
-"<b>8 bit tam sayı</b>: Kanal başına öntanımlı renk miktarı. Her kanalın 256 "
+"<b>8 bit tam sayı</b>: Kanal başına varsayılan renk miktarı. Her kanalın 256 "
 "değeri olup toplamda 256 * kanal miktarı vardır. Web için tasarlanmış "
 "görseller veya başka basit görsellere yöneliktir."
 
@@ -40113,7 +40113,7 @@ msgstr "Vuruşlar ve Küçük Görseller"
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
 #, kde-format
 msgid "The settings for this preset have changed from their default."
-msgstr "Bu önayarın ayarları öntanımlılardan değiştirildi."
+msgstr "Bu önayarın ayarları varsayılanlardan değiştirildi."
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:105
 #, kde-format
@@ -41013,7 +41013,7 @@ msgstr "Yüklemek için bir dizin seçin…"
 #, kde-format
 msgctxt "Name for default swatch group"
 msgid "Default"
-msgstr "Öntanımlı"
+msgstr "Varsayılan"
 
 #: libs/widgets/kis_palette_view.cpp:147
 #, kde-format
@@ -41923,7 +41923,7 @@ msgid ""
 "Do you really want to reset all toolbars of this application to their "
 "default? The changes will be applied immediately."
 msgstr ""
-"Bu uygulamanın tüm araç çubuklarını öntanımlı ayarlarına döndürmek "
+"Bu uygulamanın tüm araç çubuklarını varsayılan ayarlarına döndürmek "
 "istediğinizden emin misiniz? Değişiklikler hemen uygulanacaktır."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:677
@@ -42026,7 +42026,7 @@ msgstr "Simgeleri Süz…"
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:50
 #, kde-format
 msgid "Default:"
-msgstr "Öntanımlı:"
+msgstr "Varsayılan:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
@@ -43196,7 +43196,7 @@ msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
 "values are set to 'rec 709'."
 msgstr ""
-"Luma (Y’), ayarlanabilir katsayıları ile ağırlıklandırılır. Öntanımlı "
+"Luma (Y’), ayarlanabilir katsayıları ile ağırlıklandırılır. Varsayılan "
 "değerler “rec 709” olarak ayarlanmıştır."
 
 #: plugins/dockers/advancedcolorselector/kis_common_colors.cpp:36
@@ -43295,7 +43295,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Bu, doğrusal hale getirilmiş HSY Parlaklık Gücü ile "
 "birlikte gama değerini ayarlar. 1 seçiciyi tamamen doğrusal yapar, 2,2 de "
-"pratik bir öntanımlı değerdir.</p></body></html>"
+"pratik bir varsayılan değerdir.</p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, useCustomColorForBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:211
@@ -44212,7 +44212,7 @@ msgstr "Doygunluğu Tersine Çevir"
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:157
 #, kde-format
 msgid "Reset to default"
-msgstr "Öntanımlılara sıfırla"
+msgstr "Varsayılanlara sıfırla"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
 #, kde-format
@@ -44344,7 +44344,7 @@ msgstr "Sayısal Renk Karıştırıcı"
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
 #, kde-format
 msgid "Return to default settings"
-msgstr "Öntanımlı ayarlara dön"
+msgstr "Varsayılan ayarlara dön"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnMaskNew)
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:52
@@ -46961,7 +46961,7 @@ msgid ""
 "ensure the style will maintain the same pixel size across different "
 "documents."
 msgstr ""
-"Öntanımlı olarak stiller nokta türünden saklanır; bu, piksel türünden "
+"Varsayılan olarak stiller nokta türünden saklanır; bu, piksel türünden "
 "boyutların belge yazdırma çözünürlüğüne bağlı olarak farklı olacağı anlamına "
 "gelir. Stilin farklı belgelerde aynı piksel boyutunu korumasını sağlamak "
 "için bu seçeneği açın."
@@ -47102,7 +47102,7 @@ msgid ""
 msgstr ""
 "Baskın taban çizgisi, farklı boyutlardaki metin bölümlerinin nasıl "
 "hizalanacağını belirtir; aynı zamanda hizalama taban çizgisi için de "
-"öntanımlı değerdir."
+"varsayılan değerdir."
 
 #: plugins/dockers/textproperties/qml/DominantBaseline.qml:18
 #, kde-format
@@ -48285,7 +48285,7 @@ msgstr "Yapılandır"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Default Visibility:"
-msgstr "Öntanımlı görünürlük:"
+msgstr "Varsayılan görünürlük:"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:46
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:107
@@ -48312,7 +48312,7 @@ msgstr "Her zaman göster"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Follow Default"
-msgstr "Öntanımlıyı izle"
+msgstr "Varsayılanı izle"
 
 #: plugins/dockers/textproperties/qml/TextPropertyConfigDialog.qml:110
 #, kde-format
@@ -56323,7 +56323,8 @@ msgstr "Canlandırma 240 FPS’ten daha fazla bir kare hızı beyan eder."
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Flatten the image and save as single layer image (default)"
-msgstr "Görseli düzleştir ve tek katmanlı bir görsel olarak kaydet (öntanımlı)"
+msgstr ""
+"Görseli düzleştir ve tek katmanlı bir görsel olarak kaydet (varsayılan)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
 #, kde-format
@@ -56357,7 +56358,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (only for low quality)"
-msgstr "Öntanımlı (yalnızca düşük kalite için)"
+msgstr "Varsayılan (yalnızca düşük kalite için)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:31
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:37
@@ -56410,7 +56411,7 @@ msgstr "8 × 8 aşağı örnekleme"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (encoder chooses)"
-msgstr "Öntanımlı (kodlayıcı seçer)"
+msgstr "Varsayılan (kodlayıcı seçer)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:45
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:51
@@ -56635,7 +56636,7 @@ msgid ""
 "compression.</p><p><br/></p><p><br/></p></body></html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-size:18pt; text-decoration: "
-"underline;\">Gelişmiş</span></p><p>“Öntanımlı (kodlayıcı seçer)” seçeneği "
+"underline;\">Gelişmiş</span></p><p>“Varsayılan (kodlayıcı seçer)” seçeneği "
 "yaygın olarak kullanılır. Bu, kalite/hız ödününüze bağlı olarak kodlayıcının "
 "en iyi ayarları kendiliğinden seçeceği anlamına gelir. Çoğu kullanıcı için "
 "bu seçenek önerilir.</p><p><span style=\" font-size:14pt; text-decoration: "
@@ -56718,7 +56719,7 @@ msgid ""
 "Default: 90 (visually lossless)."
 msgstr ""
 "JPEG-XL dışa aktarmasının kayıplı kalitesini seç.\n"
-"Öntanımlı: 90 (görsel olarak kayıpsız)."
+"Varsayılan: 90 (görsel olarak kayıpsız)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:140
@@ -56736,9 +56737,9 @@ msgid ""
 "(e.g. for non-photographic images).\n"
 "Default: disabled."
 msgstr ""
-"Kayıplı sıkıştırma için öntanımlı VarDCT yerine modüler kodlama kullan\n"
+"Kayıplı sıkıştırma için varsayılan VarDCT yerine modüler kodlama kullan\n"
 "(örn. fotoğrafsal olmayan görseller için).\n"
-"Öntanımlı: Devre dışı."
+"Varsayılan: Devre dışı."
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceModular)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:154
@@ -56798,7 +56799,7 @@ msgstr ""
 "Geçerli değerler, daha hızlıdan daha yavaş hıza doğru: 1:yıldırım 2:gök "
 "gürültüsü 3:şahin 4:çita 5:yabantavşanı 6:vombat 7:sincap 8:yavru kedi 9:"
 "kaplumbağa.\n"
-"Öntanımlı: sincap (7)."
+"Varsayılan: sincap (7)."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:220
@@ -56830,7 +56831,7 @@ msgstr ""
 "Sağlanan seçenekler için kod çözme hızı katmanını ayarlar.\n"
 "Minimum 0 (en yavaş kod çözme, en iyi kalite/yoğunluk) ve maksimum 4 (bir "
 "miktar kalite/yoğunluk pahasına kod çözme en hızlı).\n"
-"Öntanımlı 0’dır."
+"Varsayılan 0’dır."
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorProfileGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:286
@@ -56988,7 +56989,7 @@ msgstr ""
 "kadar yüksek olursa görsel o kadar taneli olur.\n"
 "Örnek olarak, 100 değeri düşük gürültü verirken, 3200 değeri çok fazla "
 "gürültü ekler.\n"
-"Öntanımlı değer 0’dır."
+"Varsayılan değer 0’dır."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblDots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:439
@@ -57071,7 +57072,7 @@ msgstr "Güçlü"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:510
 #, kde-format
 msgid "<html><head/><body><p>Default (encoder chooses)</p></body></html>"
-msgstr "<html><head/><body><p>Öntanımlı (kodlayıcı seçer)</p></body></html>"
+msgstr "<html><head/><body><p>Varsayılan (kodlayıcı seçer)</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:513
@@ -57087,7 +57088,7 @@ msgid ""
 "Edge preserving filter level, -1 to 3. Use -1 for the default (encoder "
 "chooses), 0 to 3 to set a strength."
 msgstr ""
-"Kenar koruyucu süzgeç düzeyi, −1 ile 3 arası. Öntanımlı olarak −1’i "
+"Kenar koruyucu süzgeç düzeyi, −1 ile 3 arası. Varsayılan olarak −1’i "
 "(kodlayıcı seçer), bir güç ayarlamak için 0 ila 3’ü kullanın."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
@@ -57353,7 +57354,7 @@ msgid ""
 "Used for modular encoding."
 msgstr ""
 "Renk miktarı erimin bu yüzdesinden küçükse Global kanal paletini kullanın.\n"
-"Belirgin bir yüzde ayarlamak için 0–100, kodlayıcı öntanımlısını kullanmak "
+"Belirgin bir yüzde ayarlamak için 0–100, kodlayıcı varsayılanını kullanmak "
 "için −1 kullanın.\n"
 "Modüler kodlama için kullanılır."
 
@@ -57386,7 +57387,7 @@ msgid ""
 msgstr ""
 "Renk miktarı bu erim yüzdesinden küçükse Yerel (grup başına) kanal paletini "
 "kullanın.\n"
-"Belirgin bir yüzde ayarlamak için 0–100, kodlayıcı öntanımlısını kullanmak "
+"Belirgin bir yüzde ayarlamak için 0–100, kodlayıcı varsayılanını kullanmak "
 "için −1 kullanın.\n"
 "Modüler kodlama için kullanılır."
 
@@ -57417,7 +57418,7 @@ msgid ""
 "Used for modular encoding."
 msgstr ""
 "Renk miktarı bu miktardan küçük veya ona eşitse renk paletini veya kodlayıcı "
-"öntanımlısını kullanmak için −1’i kullanın.\n"
+"varsayılanını kullanmak için −1’i kullanın.\n"
 "Modüler kodlama için kullanılır."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblLossyPalette)
@@ -57525,7 +57526,7 @@ msgid ""
 "Higher values use more encoder memory."
 msgstr ""
 "MA ağaçlarını yüzde olarak öğrenmek için kullanılan piksel oranı.\n"
-"−1 = öntanımlı, 0 = MA yok ve hızlı kod çözme, 50 = öntanımlı değer, 100 = "
+"−1 = varsayılan, 0 = MA yok ve hızlı kod çözme, 50 = varsayılan değer, 100 = "
 "tümü.\n"
 "Daha yüksek değerler daha fazla kodlayıcı belleği kullanır."
 
@@ -58455,7 +58456,7 @@ msgid ""
 "AHD quality method.</p>"
 msgstr ""
 "<title>RGB’yi dört renk olarak ekle</title><p>Tüm yeşil piksellerin aynı "
-"olduğunu varsaymak öntanımlıdır. Çift satır yeşil pikselleri bile "
+"olduğunu varsaymak varsayılandır. Çift satır yeşil pikselleri bile "
 "ultraviyole ışınlara tek satırdan daha hassassa bu fark çıktıda kafes deseni "
 "oluşmasına yol açar; bu seçeneği kullanmak bu problemi en az ayrıntı "
 "kaybıyla çözer.</p><p> Sürdürmek için bu seçenek görseli biraz "
@@ -58611,7 +58612,7 @@ msgstr ""
 "adıdır. RAW görsellerin mozaiğinin giderilmesi için aşağıdaki yöntemler "
 "kullanılabilir:</p><p><ul><li><emphasis strong='true'>İki yönlü</emphasis>: "
 "Yüksek hızlı; ancak düşük kaliteli iki yönlü aradeğerleme kullanın "
-"(öntanımlı — yavaş bilgisayarlar için). Bu yöntemde, kırmızı olmayan bir "
+"(varsayılan — yavaş bilgisayarlar için). Bu yöntemde, kırmızı olmayan bir "
 "pikselin kırmızı değeri, komşu kırmızı piksellerin ortalaması olarak "
 "hesaplanır ve benzer şekilde mavi ve yeşil için de yapılır.</"
 "li><li><emphasis strong='true'>VNG</emphasis>: Değişken Gradyan Sayısı "
@@ -58705,7 +58706,7 @@ msgstr "Yöntem:"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Default D65"
-msgstr "Öntanımlı D65"
+msgstr "Varsayılan D65"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:463
 #, kde-format
@@ -58739,10 +58740,10 @@ msgid ""
 "emphasis>: Set a custom temperature and green level values.</li></ul></p>"
 msgstr ""
 "<title>Beyaz Dengesi</title><p>Çiğ beyaz dengesini yapılandır:</"
-"p><p><ul><li><emphasis strong='true'>öntanımlı D65</emphasis>: Standart gün "
+"p><p><ul><li><emphasis strong='true'>varsayılan D65</emphasis>: Standart gün "
 "ışığı D65 beyaz dengesini kullanın.</li><li><emphasis strong='true'>Kamera</"
 "emphasis>: Kamera tarafından belirlenen beyaz dengesini kullanın. "
-"Kullanılabilir değilse öntanımlı beyaz dengesine geri döner.</"
+"Kullanılabilir değilse varsayılan beyaz dengesine geri döner.</"
 "li><li><emphasis strong='true'>Kendiliğinden</emphasis>: Tüm görselin "
 "ortalamasını alarak otomatik beyaz dengesini hesaplar.</li><li><emphasis "
 "strong='true'>Elle</emphasis>: Özel sıcaklık ve yeşil dengesi değerlerini "
@@ -58937,7 +58938,7 @@ msgid ""
 "The default value is 1.0 (works in 8-bit mode only).</p>"
 msgstr ""
 "<title>Parlaklık</title><p>Çıktı görselinin parlaklık düzeyini belirleyin. "
-"Öntanımlı değer 1,0 (yalnızca 8 bit kipinde çalışır).</p>"
+"Varsayılan değer 1,0 (yalnızca 8 bit kipinde çalışır).</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:565
 #, kde-format
@@ -59078,7 +59079,7 @@ msgid ""
 "green and blue-yellow axis by the given factors (automatic by default).</p>"
 msgstr ""
 "<title>Kromatik Görüntü Bozulması düzeltmesini etkinleştir</title><p>Verilen "
-"etmenlere göre (öntanımlı: kendiliğinden) ham kırmızı–yeşil ve mavi–sarı "
+"etmenlere göre (varsayılan: kendiliğinden) ham kırmızı–yeşil ve mavi–sarı "
 "eksenleri genişletin.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:671
@@ -59329,7 +59330,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reset to default value"
-msgstr "Ögeleri öntanımlı değere döndür"
+msgstr "Ögeleri varsayılan değere döndür"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rwidgetutils.cpp:362
 #, kde-format
@@ -59570,7 +59571,7 @@ msgstr "Küçük"
 #, kde-format
 msgctxt "WebP presets"
 msgid "Default"
-msgstr "Öntanımlı"
+msgstr "Varsayılan"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:36
 #, kde-format
@@ -59839,7 +59840,7 @@ msgid ""
 "lossless). Default is 1."
 msgstr ""
 "Alfa düzlemini kodlamak için algoritma (0 = Yok, 1 = WebP kayıpsız ile "
-"sıkıştırılmış). Öntanımlı 0’dır."
+"sıkıştırılmış). Varsayılan 0’dır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaCompression)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:422
@@ -59868,7 +59869,7 @@ msgstr "Hızlı"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:490
 #, kde-format
 msgid "0 = smallest size, 100 = lossless. Default is 100."
-msgstr "0 = en küçük boyut, 100 = kayıpsız. Öntanımlı 100’dür."
+msgstr "0 = en küçük boyut, 100 = kayıpsız. Varsayılan 100’dür."
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaQuality)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:483
@@ -59925,7 +59926,7 @@ msgid ""
 "progressive decoding."
 msgstr ""
 "log2(jeton bölüntülerin sayısı) 0 ile 3 arası. Daha kolay aşamalı kod çözümü "
-"için öntanımlı değer 0’dır."
+"için varsayılan değer 0’dır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitions)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:574
@@ -60020,7 +60021,7 @@ msgstr "Bellek Kullanımını Azalt"
 #, kde-format
 msgid "Near lossless encoding: 0 = max loss, 100 = off. Default is 100."
 msgstr ""
-"Kayıpsıza yakın kodlama: 0 = en çok kayıp, 100 = kapalı. Öntanımlı 100’dür."
+"Kayıpsıza yakın kodlama: 0 = en çok kayıp, 100 = kapalı. Varsayılan 100’dür."
 
 #. i18n: ectx: property (text), widget (QLabel, lblNearLossless)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:701
@@ -60039,7 +60040,7 @@ msgid ""
 "The default is disabled."
 msgstr ""
 "Etkinleştirilmişse tam RGB değerini saydam alanlar altında koru. Aksi "
-"takdirde bu görünmez RGB bilgisini daha iyi sıkıştırmak için at. Öntanımlı "
+"takdirde bu görünmez RGB bilgisini daha iyi sıkıştırmak için at. Varsayılan "
 "olarak devre dışıdır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblExact)
@@ -60069,7 +60070,7 @@ msgstr "Keskin YUV Kullan"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:774
 #, kde-format
 msgid "Minimum permissible quality factor. Default is 0."
-msgstr "En düşük izin verilebilir kalite çarpanı. Öntanımlı 0’dır."
+msgstr "En düşük izin verilebilir kalite çarpanı. Varsayılan 0’dır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMin)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:767
@@ -60083,7 +60084,7 @@ msgstr "En Düşük Kalite"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:797
 #, kde-format
 msgid "Maximum permissible quality factor. Default is 100."
-msgstr "En yüksek izin verilebilir kalite çarpanı. Öntanımlı 100’dür."
+msgstr "En yüksek izin verilebilir kalite çarpanı. Varsayılan 100’dür."
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMax)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:790
@@ -61251,7 +61252,7 @@ msgid ""
 msgstr ""
 "İşaretlenmişse ızgara fırça her parçacık arka planını arka plan rengi ile "
 "doldurur. Parçacıkların arka planı ızgara genişlik ve yüksekliğinin "
-"dikdörtgenidir ve öntanımlı olarak saydamdır."
+"dikdörtgenidir ve varsayılan olarak saydamdır."
 
 #. i18n: ectx: property (text), widget (QCheckBox, fillBackgroundCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:154
@@ -61343,7 +61344,7 @@ msgstr ""
 "<html><head/><body>\n"
 "<p>Eğri hesaplama kipi, 2 veya daha fazla eğrinin birlikte çalışma şeklini "
 "değiştirir<br/></p>\n"
-"<p> çarp (öntanımlı): eğrilerdeki tüm değerleri çarpar</p><p>(0,8 basınç) * "
+"<p> çarp (varsayılan): eğrilerdeki tüm değerleri çarpar</p><p>(0,8 basınç) * "
 "(0,5 hız) = 0,4 <br/></p>\n"
 "<p> toplama: eğrilerdeki tüm değerleri toplar</p><p>(0,6 basınç) + (0,3 hız) "
 "= 0.9<br/></p>\n"
@@ -61839,7 +61840,7 @@ msgid ""
 " Brightness: 0%\n"
 " Contrast: 0%"
 msgstr ""
-"Tüm ayarlamaları öntanımlı değerlere sıfırlar:\n"
+"Tüm ayarlamaları varsayılan değerlere sıfırlar:\n"
 "  Tarafsız Nokta: 127\n"
 "  Parlaklık: %​0\n"
 "  Karşıtlık: %​0"
@@ -63787,7 +63788,7 @@ msgid ""
 "whether it has been rated. Of course, the UUID can be changed into something "
 "else by manually changing the JSON, but this is advanced usage."
 msgstr ""
-"Öntanımlı olarak bu, oluşturulan evrensel eşsiz bir tanımlayıcı ile "
+"Varsayılan olarak bu, oluşturulan evrensel eşsiz bir tanımlayıcı ile "
 "doldurulacaktır. Kimlik tek başına yalnızca çizgi roman kitaplık yönetim "
 "programlarının bu özel çizgi romanın kendi veri tabanında olup olmadığını ve "
 "derecelendirilip derecelendirilmediğini anlayabilmesi içindir. Elbette, UUID "
@@ -63924,15 +63925,28 @@ msgstr "Mustafa"
 msgid "Doe"
 msgstr "Akgül"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:138
+#: plugins/python/comics_project_management_tools/comics_exporter.py:119
+#: plugins/python/comics_project_management_tools/comics_exporter.py:179
+#: plugins/python/comics_project_management_tools/comics_exporter.py:213
+#: plugins/python/comics_project_management_tools/comics_exporter.py:372
+msgid "Export not Possible"
+msgstr "Dışa Aktarmak Olanaklı Değil"
+
+#: plugins/python/comics_project_management_tools/comics_exporter.py:119
+#, fuzzy
+#| msgid "No frames to export."
+msgid "No pages to export."
+msgstr "Kareleri panoya kopyalayın."
+
+#: plugins/python/comics_project_management_tools/comics_exporter.py:144
 msgid "Preparing export."
 msgstr "Dışa aktar için hazırlanıyor."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:139
+#: plugins/python/comics_project_management_tools/comics_exporter.py:145
 msgid "Exporting Comic..."
 msgstr "Çizgi Roman Dışa Aktarılıyor…"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:157
+#: plugins/python/comics_project_management_tools/comics_exporter.py:163
 msgid ""
 "Saving out ACBF and\n"
 "ACBF standalone"
@@ -63940,21 +63954,15 @@ msgstr ""
 "ACBF ve\n"
 "ACBF bağımsız kaydediliyor"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:168
+#: plugins/python/comics_project_management_tools/comics_exporter.py:174
 msgid "Saving out EPUB"
 msgstr "EPUB Kaydediliyor"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
-#: plugins/python/comics_project_management_tools/comics_exporter.py:207
-#: plugins/python/comics_project_management_tools/comics_exporter.py:366
-msgid "Export not Possible"
-msgstr "Dışa Aktarmak Olanaklı Değil"
-
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
+#: plugins/python/comics_project_management_tools/comics_exporter.py:179
 msgid "Nothing to export, URL not set."
 msgstr "Dışa aktaracak bir şey yok, URL ayarlanmamış."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:186
+#: plugins/python/comics_project_management_tools/comics_exporter.py:192
 msgid ""
 "Saving out CoMet\n"
 "metadata file"
@@ -63962,7 +63970,7 @@ msgstr ""
 "CoMet üst veri dosyası\n"
 "kaydediliyor"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:191
+#: plugins/python/comics_project_management_tools/comics_exporter.py:197
 msgid ""
 "Saving out Comicrack\n"
 "metadata file"
@@ -63970,12 +63978,12 @@ msgstr ""
 "Comicrack üst veri dosyası\n"
 "kaydediliyor"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:207
+#: plugins/python/comics_project_management_tools/comics_exporter.py:213
 msgid "Export failed because there's no export settings configured."
 msgstr ""
 "Dışa aktarım başarısız oldu çünkü dışa aktar ayarları yapılandırılmadı."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:224
+#: plugins/python/comics_project_management_tools/comics_exporter.py:230
 #, python-brace-format
 msgid ""
 "Time passed: {passedString}\n"
@@ -63984,29 +63992,29 @@ msgstr ""
 "Geçen süre: {passedString}\n"
 " Tahmini: {estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_exporter.py:233
 #, python-brace-format
 msgid "{pages} of {pagesTotal} done."
 msgstr "{pagesTotal} sayfanın {pages} sayfası tamamlandı."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:238
+#: plugins/python/comics_project_management_tools/comics_exporter.py:244
 msgid "Opening next page"
 msgstr "Sonraki sayfaya açılıyor"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:246
+#: plugins/python/comics_project_management_tools/comics_exporter.py:252
 msgid "Cleaning up page"
 msgstr "Sayfa temizleniyor"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:280
+#: plugins/python/comics_project_management_tools/comics_exporter.py:286
 #, python-brace-format
 msgid "Exporting for {key}"
 msgstr "{key} için dışa aktarılıyor"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:366
+#: plugins/python/comics_project_management_tools/comics_exporter.py:372
 msgid "Export not happening because there are no pages."
 msgstr "Dışa aktarılamıyor çünkü sayfa yok."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:643
+#: plugins/python/comics_project_management_tools/comics_exporter.py:649
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
@@ -64014,7 +64022,7 @@ msgstr ""
 "Comicrack bilgisi, üst veri\n"
 "dosyasına kaydediliyor"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:653
+#: plugins/python/comics_project_management_tools/comics_exporter.py:659
 msgid "Packaging CBZ"
 msgstr "CBZ Paketleniyor"
 
@@ -64614,7 +64622,7 @@ msgstr "Çeviri klasörü:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:133
 msgid "Default template:"
-msgstr "Öntanımlı şablon:"
+msgstr "Varsayılan şablon:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:134
 msgid "Extra keys folder:"
@@ -65276,7 +65284,7 @@ msgid ""
 "name of the script. </p></body></html>"
 msgstr ""
 "<html><head/><body><p>Araçlar-&gt;Betikler menüsünde görünmesini istediğiniz "
-"şey. Bunu boş bırakırsanız betiğin adına göre öntanımlı bir giriş "
+"şey. Bunu boş bırakırsanız betiğin adına göre varsayılan bir giriş "
 "oluşturulur.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -66950,7 +66958,7 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:580
 #, kde-format
 msgid "Reset the options to their default values"
-msgstr "Seçenekleri öntanımlı değerlerine sıfırla"
+msgstr "Seçenekleri varsayılan değerlerine sıfırla"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:684
 #, kde-format
@@ -69197,7 +69205,7 @@ msgstr "Çift yönlü metin için görsel sırayı kullanın."
 #, kde-format
 msgctxt "@option:check"
 msgid "Paste Rich Text by Default"
-msgstr "Öntanımlı olarak zengin metin yapıştır"
+msgstr "Varsayılan olarak zengin metin yapıştır"
 
 #: plugins/tools/svgtexttool/SvgTextToolOptions.qml:168
 #, kde-format
@@ -70301,7 +70309,7 @@ msgstr "Bir katmanı veya seçimi dönüştür"
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:88
 #, kde-format
 msgid "Default (Affine)"
-msgstr "Öntanımlı (Afin)"
+msgstr "Varsayılan (Afin)"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:89
 #, kde-format

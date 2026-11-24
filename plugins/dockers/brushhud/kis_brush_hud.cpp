@@ -72,6 +72,7 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
     m_d->lblPresetIcon->setScaledContents(true);
 
     m_d->lblPresetName = new KisElidedLabel("<Preset Name>", Qt::ElideMiddle, this);
+    m_d->lblPresetName->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred));
 
     m_d->btnReloadPreset = new QToolButton(this);
     m_d->btnReloadPreset->setAutoRaise(true);

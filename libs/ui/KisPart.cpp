@@ -66,6 +66,7 @@
 #include "kis_image.h"
 #include "KisTranslateLayerNamesVisitor.h"
 
+#include <KisFileUtils.h>
 #include <KisCursorOverrideLock.h>
 #include "kis_action.h"
 #include "kis_action_registry.h"
@@ -579,14 +580,14 @@ void KisPart::addRecentURLToAllMainWindows(QUrl url, QUrl oldUrl)
             QString path = url.adjusted(QUrl::StripTrailingSlash).toLocalFile();
             const QStringList tmpDirs = QStandardPaths::locateAll(QStandardPaths::TempLocation, "", QStandardPaths::LocateDirectory);
             for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it) {
-                if (path.contains(*it)) {
+                if (KritaUtils::isSubPath(*it, path)) {
                     ok = false; // it's in the tmp resource
                 }
             }
 
             const QStringList templateDirs = KoResourcePaths::findDirs("templates");
             for (QStringList::ConstIterator it = templateDirs.begin() ; ok && it != templateDirs.end() ; ++it) {
-                if (path.contains(*it)) {
+                if (KritaUtils::isSubPath(*it, path)) {
                     ok = false; // it's in the templates directory.
                     break;
                 }

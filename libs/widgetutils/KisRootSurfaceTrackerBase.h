@@ -38,6 +38,13 @@ class KRITAWIDGETUTILS_EXPORT KisRootSurfaceTrackerBase : public QObject
 {
     Q_OBJECT
 public:
+    enum UpdateHierarchyFlag {
+        None = 0x0,
+        AllowDeadParents = 0x1
+    };
+    Q_DECLARE_FLAGS(UpdateHierarchyFlags, UpdateHierarchyFlag);
+
+public:
     KisRootSurfaceTrackerBase(QWidget *watched, QObject *parent = nullptr);
     ~KisRootSurfaceTrackerBase();
 
@@ -52,12 +59,12 @@ private:
 
     bool eventFilter(QObject *watched, QEvent *event) override;
 
-    void tryUpdateHierarchy();
+    void tryUpdateHierarchy(UpdateHierarchyFlags flags = None);
     void tryReconnectToNativeWindow();
 
     QVector<QPointer<QObject>> getCurrentHierarchy(QWidget *wdg);
 
-    void reconnectToHierarchy(const QVector<QPointer<QObject>> newHierarchy);
+    void reconnectToHierarchy(const QVector<QPointer<QObject>> newHierarchy, bool allowDeadParents);
 
 private:
     QWidget *m_watched {nullptr};
@@ -68,5 +75,7 @@ private:
     QPointer<QWindow> m_topLevelNativeWindow;
     QPointer<QObject> m_childChangedFilter;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisRootSurfaceTrackerBase::UpdateHierarchyFlags);
 
 #endif /* KISROOTSURFACETRACKERBASE_H */

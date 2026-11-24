@@ -773,11 +773,7 @@ void KisPaintopBox::slotUpdateOptionsWidgetPopup()
 
 void KisPaintopBox::togglePresetEditor()
 {
-    if (m_brushEditorPopupButton->isPopupWidgetVisible()) {
-        m_brushEditorPopupButton->hidePopupWidget();
-    } else {
-        m_brushEditorPopupButton->showPopupWidget();
-    }
+    m_brushEditorPopupButton->showPopupWidget();
 }
 
 KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)

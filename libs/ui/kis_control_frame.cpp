@@ -44,6 +44,7 @@
 #include "widgets/kis_iconwidget.h"
 
 #include "widgets/gradient/KisGradientChooser.h"
+#include "KisMainWindow.h"
 #include "KisViewManager.h"
 #include "kis_config.h"
 #include "kis_paintop_box.h"
@@ -358,6 +359,14 @@ void KisControlFrame::createDockerBox(KisViewManager * view)
     m_dockerPopupButton->setArrowVisible(false);
 
     m_dockerPopup = new KisDockerHud(i18n("Toolbar Docker Box"), "toolbar");
+
+    /**
+     * Explicitly set the parent of the docker box popup to make sure it
+     * can be positioned even when the button is hidden and the popup is
+     * requested via a shortcut.
+     */
+    m_dockerPopup->setParent(m_viewManager->mainWindow());
+
     // Set a reasonable minimum size so that dockers capable of being tiny are not,
     // but are not too big either
     m_dockerPopup->setMinimumHeight(300);

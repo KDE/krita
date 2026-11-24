@@ -21,6 +21,17 @@
 #include "kis_global.h"
 #include <kis_debug.h>
 
+// for HAVE_WAYLAND
+#include <KoConfig.h>
+
+#if defined HAVE_WAYLAND && QT_VERSION >= QT_VERSION_CHECK(6, 11, 0)
+#define HAVE_QT_PRIVATE_TOOLTIP_POSITION_API
+#endif
+
+#ifdef HAVE_QT_PRIVATE_TOOLTIP_POSITION_API
+#include <QtWaylandClient/private/qwaylandwindow_p.h>
+#endif
+
 
 class KisPopupButtonFrame : public QFrame
 {
@@ -126,10 +137,6 @@ void KisPopupButton::setPopupWidgetDetached(bool detach)
         if (wasVisible) {
             // Setting the window flags closes the widget, so make it visible again.
             setPopupWidgetVisible(true);
-            if (detach) {
-                m_d->isDetachedGeometrySet = true;
-            }
-            adjustPosition();
         }
     }
 }
@@ -139,10 +146,12 @@ void KisPopupButton::setPopupWidget(QWidget* widget)
     if (widget) {
         delete m_d->frame;
 
+        QWidget *effectiveParent = widget->parentWidget() ? widget->parentWidget() : this->window();
+
         // Bit wonky to assign a popup menu to a popup widget, so they need
         // extra coddling to make them work properly.
         QMenu *menu = qobject_cast<QMenu *>(widget);
-        m_d->frame = new KisPopupButtonFrame(this->window(), m_d->isPopupDetached, menu);
+        m_d->frame = new KisPopupButtonFrame(effectiveParent, m_d->isPopupDetached, menu);
         m_d->frame->setWindowTitle(widget->windowTitle());
 
         m_d->popupWidget = widget;
@@ -160,21 +169,9 @@ void KisPopupButton::setPopupWidget(QWidget* widget)
     }
 }
 
-void KisPopupButton::setPopupWidgetWidth(int w)
-{
-    m_d->frame->resize(w, m_d->frame->height());
-}
-
 void KisPopupButton::showPopupWidget()
 {
-    if (m_d->popupWidget && !m_d->frame->isVisible()) {
-        setPopupWidgetVisible(true);
-        if (!m_d->isPopupDetached) {
-            adjustPosition();
-        }
-    } else {
-        hidePopupWidget();
-    }
+    setPopupWidgetVisible(!m_d->frame->isVisible());
 }
 
 void KisPopupButton::hidePopupWidget()
@@ -186,15 +183,7 @@ void KisPopupButton::setPopupWidgetVisible(bool visible)
 {
     if (m_d->popupWidget) {
         if (visible) {
-            if (m_d->isPopupDetached) {
-                // Force layout sizing before positioning
-                m_d->popupWidget->adjustSize();
-                m_d->frame->adjustSize();
-                adjustPosition();
-            }
-            m_d->frame->raise();
-            m_d->frame->show();
-            m_d->frame->activateWindow();
+            adjustPositionAndShow();
             Q_EMIT sigPopupWidgetShown();
         } else {
             m_d->frame->setVisible(false);
@@ -228,55 +217,79 @@ void KisPopupButton::paintPopupArrow()
     p.drawPrimitive(QStyle::PE_IndicatorArrowDown, option);
 }
 
-void KisPopupButton::adjustPosition()
+void KisPopupButton::adjustPositionAndShow()
 {
-    QScreen *currentScreen = nullptr;
-    auto getCurrentScreen = [this, &currentScreen] {
-        if (!currentScreen) {
-            QWindow *mainWinHandle = window()->windowHandle();
-            if (mainWinHandle) {
-                currentScreen = mainWinHandle->screen();
+    const QSize popupSize = m_d->frame->sizeHint();
+    QRect popupRect(QPoint(), popupSize);
+
+    // resize **must** come before `setParentControlGeometry()`, otherwise
+    // compositor will place the window incorrectly!
+    m_d->frame->resize(popupSize);
+
+    // make sure that all the platform-specific structures for the window
+    // are created (i.e. QWaylandWindow) before trying to request them
+    // via `windowHandle()->handle()`
+    m_d->frame->winId();
+
+#ifdef HAVE_QT_PRIVATE_TOOLTIP_POSITION_API
+    if (auto waylandWindow = dynamic_cast<QNativeInterface::Private::QWaylandWindow *>(m_d->frame->windowHandle()->handle())) {
+        if (m_d->isPopupDetached) {
+            // one cannot control dialog position on Wayland, sorry :(
+        } else {
+            if (this->isVisible()) {
+                QWidget *parentWidget = m_d->frame->parentWidget();
+
+                const QRect gravityRect(parentWidget->window()->mapFromGlobal(mapToGlobal(QPoint())), size());
+
+                waylandWindow->setParentControlGeometry(gravityRect);
+                waylandWindow->setExtendedWindowType(QNativeInterface::Private::QWaylandWindow::ComboBox);
             } else {
-                currentScreen = QApplication::primaryScreen();
+                QWidget *parentWidget = m_d->frame->parentWidget();
+                const QPoint parentPos = parentWidget->window()->mapFromGlobal(QCursor::pos());
+                const QRect gravityRect(parentPos.x() - popupSize.width() / 2, parentPos.y() - popupSize.height() / 2, popupSize.width(), popupSize.height());
+
+                waylandWindow->setParentControlGeometry(gravityRect);
+                waylandWindow->setExtendedWindowType(QNativeInterface::Private::QWaylandWindow::Default);
             }
         }
-        return currentScreen;
-    };
 
-    // If popup is not detached, or if its detached geometry hasn't been set,
-    // we first move the popup to the "current" screen.
-    if (!m_d->isPopupDetached || !m_d->isDetachedGeometrySet) {
-        QWindow *winHandle = m_d->frame->windowHandle();
-        if (winHandle) {
-            winHandle->setScreen(getCurrentScreen());
-        }
-    }
+        m_d->frame->show();
+    } else
+#endif /* HAVE_QT_PRIVATE_TOOLTIP_POSITION_API */
 
-    // Attach to the button if it's visible, else attach to the cursor.
-    QPoint pos = this->isVisible() ? this->mapToGlobal(QPoint(0, this->size().height())) : QCursor().pos();
-    QSize popSize = m_d->popupWidget->size();
-    QRect popupRect(pos, popSize);
+    {
+        // Get the available geometry of the screen which contains the popup.
+        QScreen *screen = this->parentWidget() ? this->screen() : qApp->screenAt(QCursor::pos());
+        const QRect screenRect = screen ? screen->availableGeometry() : QRect();
 
-    // Get the available geometry of the screen which contains the popup.
-    QScreen *screen = [this, &getCurrentScreen]() {
-        QWindow *winHandle = m_d->frame->windowHandle();
-        if (winHandle && winHandle->screen()) {
-            return winHandle->screen();
-        }
-        return getCurrentScreen();
-    }();
-    QRect screenRect = screen->availableGeometry();
-    if (m_d->isPopupDetached) {
-        if (m_d->isDetachedGeometrySet) {
-            popupRect.moveTo(m_d->frame->geometry().topLeft());
+        if (m_d->isPopupDetached) {
+
+            if (m_d->isDetachedGeometrySet) {
+                popupRect.moveTo(m_d->frame->geometry().topLeft());
+            } else {
+                popupRect.moveTo(this->window()->geometry().center() - QRect(QPoint(0, 0), popupSize).center());
+                m_d->isDetachedGeometrySet = true;
+            }
         } else {
-            popupRect.moveTo(this->window()->geometry().center() - QRect(QPoint(0, 0), popSize).center());
-            m_d->isDetachedGeometrySet = true;
+            // Attach to the button if it's visible, else attach to the cursor.
+            if (this->isVisible()) {
+                popupRect.moveTo(this->mapToGlobal(rect().bottomLeft()));
+            } else {
+                popupRect.moveCenter(QCursor::pos());
+            }
         }
-    }
-    popupRect = kisEnsureInRect(popupRect, screenRect);
 
-    m_d->frame->setGeometry(popupRect);
+        if (!screenRect.isEmpty()) {
+            popupRect = kisEnsureInRect(popupRect, screenRect);
+        }
+
+        /**
+         * On non-wayland platforms we first show the widget and only then
+         * apply geometry, otherwise the settings are not applied properly
+         */
+        m_d->frame->show();
+        m_d->frame->setGeometry(popupRect);
+    }
 }
 
 void KisPopupButton::setArrowVisible (bool v)

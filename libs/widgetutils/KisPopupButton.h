@@ -28,21 +28,21 @@ public:
     /**
      * Set the popup widget, the KisPopupButton becomes
      * the owner and parent of the widget.
+     *
+     * If a widget does already have a parent, then this parent
+     * becomes a parent of the internal popup frame. That might
+     * be useful for popup buttons attaches to actions, which may
+     * be not visible or attached to anything, e.g the "Docker Box"
+     * action.
      */
     void setPopupWidget(QWidget* widget);
-
-    /**
-     * Set the width of the popup widget.
-     * @return new width of the popup widget
-     */
-    void setPopupWidgetWidth(int w);
 
     /**
      * @brief adjustPosition
      * adjusts the position of the popup widget based on the position
      * of this button and the size of the widget
      */
-    void adjustPosition();
+    void adjustPositionAndShow();
 
     /**
      * This function allows to show or hide the arrow.

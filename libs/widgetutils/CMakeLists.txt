@@ -177,6 +177,7 @@ if (QT_MAJOR_VERSION STREQUAL "6")
     if (HAVE_WAYLAND)
         set_source_files_properties(
             KoItemToolTip.cpp
+            KisPopupButton.cpp
             PROPERTIES
             INCLUDE_DIRECTORIES
             "${Qt6WaylandGlobalPrivate_INCLUDE_DIRS};${Qt6WaylandClient_PRIVATE_INCLUDE_DIRS};${Qt6Gui_PRIVATE_INCLUDE_DIRS}"

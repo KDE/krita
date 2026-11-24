@@ -70,7 +70,7 @@ void KisRootSurfaceTrackerBase::initialize()
 bool KisRootSurfaceTrackerBase::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::ParentChange && m_watchedHierarchy.contains(watched)) {
-        tryUpdateHierarchy();
+        tryUpdateHierarchy(AllowDeadParents);
     }
 
     if (event->type() == QEvent::PlatformSurface) {
@@ -86,11 +86,11 @@ bool KisRootSurfaceTrackerBase::eventFilter(QObject *watched, QEvent *event)
     return false;
 }
 
-void KisRootSurfaceTrackerBase::tryUpdateHierarchy()
+void KisRootSurfaceTrackerBase::tryUpdateHierarchy(KisRootSurfaceTrackerBase::UpdateHierarchyFlags flags)
 {
     auto newHierarchy = getCurrentHierarchy(m_watched);
     if (newHierarchy != m_watchedHierarchy) {
-        reconnectToHierarchy(newHierarchy);
+        reconnectToHierarchy(newHierarchy, flags.testFlag(AllowDeadParents));
         QWidget *topLevel = static_cast<QWidget *>(newHierarchy.last().data());
         if (topLevel != m_topLevelWidgetWithSurface) {
             m_topLevelWidgetWithSurface = topLevel;
@@ -153,9 +153,16 @@ QVector<QPointer<QObject>> KisRootSurfaceTrackerBase::getCurrentHierarchy(QWidge
     return result;
 }
 
-void KisRootSurfaceTrackerBase::reconnectToHierarchy(const QVector<QPointer<QObject>> newHierarchy)
+void KisRootSurfaceTrackerBase::reconnectToHierarchy(const QVector<QPointer<QObject>> newHierarchy, bool allowDeadParents)
 {
     Q_FOREACH (QPointer<QObject> widget, m_watchedHierarchy) {
+        /**
+         * When a parent of a widget is changed, some of its
+         * early parents may already be dead when we receive
+         * a ParentChange event.
+         */
+        if (allowDeadParents && !widget) continue;
+
         KIS_SAFE_ASSERT_RECOVER(widget) continue;
         widget->removeEventFilter(this);
     }

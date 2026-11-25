@@ -90,4 +90,9 @@ void KisConfigNotifier::notifyUseIgnoreHistoricTabletEventsWorkaroundChanged(boo
 {
     Q_EMIT sigUseIgnoreHistoricTabletEventsWorkaroundChanged(enabled);
 }
+
+void KisConfigNotifier::notifyHideTouchAndStylusCursorsWorkaroundChanged(bool enabled)
+{
+    Q_EMIT sigHideTouchAndStylusCursorsWorkaroundChanged(enabled);
+}
 #endif

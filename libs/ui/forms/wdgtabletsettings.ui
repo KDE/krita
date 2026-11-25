@@ -210,6 +210,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="chkHideTouchAndStylusCursorsWorkaround">
+     <property name="text">
+      <string>Hide stylus cursor (workaround for Wacom and XP-PEN devices)</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="KisSliderSpinBox" name="intMaxAllowedBrushSpeed" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">

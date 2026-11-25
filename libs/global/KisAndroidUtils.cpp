@@ -48,6 +48,40 @@ bool looksLikeXiaomiDevice()
     return result;
 }
 
+bool looksLikeBrokenCursorDevice()
+{
+    static bool checked;
+    static bool result;
+    if (!checked) {
+        checked = true;
+        result = QJniObject::callStaticMethod<jboolean>("org/krita/android/MainActivity",
+                                                        "looksLikeBrokenCursorDevice",
+                                                        "()Z");
+    }
+    return result;
+}
+
+bool canHideTouchAndStylusCursors()
+{
+    static bool checked;
+    static bool result;
+    if (!checked) {
+        checked = true;
+        result = QJniObject::callStaticMethod<jboolean>("org/krita/android/MainActivity",
+                                                        "canHideTouchAndStylusCursors",
+                                                        "()Z");
+    }
+    return result;
+}
+
+void setHideTouchAndStylusCursors(bool hide)
+{
+    QJniObject::callStaticMethod<void>("org/krita/android/MainActivity",
+                                       "setHideTouchAndStylusCursors",
+                                       "(Z)V",
+                                       jboolean(hide));
+}
+
 bool isLowMemoryKillReportSupported()
 {
     // The support is device-bound and will never change, so cache the JNI call.

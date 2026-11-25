@@ -460,6 +460,9 @@ public:
     bool useIgnoreHistoricTabletEventsWorkaround(bool defaultValue = false) const;
     void setUseIgnoreHistoricTabletEventsWorkaround(bool value);
 
+    bool hideTouchAndStylusCursorsWorkaround(bool defaultValue = false) const;
+    void setHideTouchAndStylusCursorsWorkaround(bool value);
+
     qreal androidScalingLastInitialScale(bool defaultValue = false) const;
     void setAndroidScalingLastInitialScale(qreal value);
 

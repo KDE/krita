@@ -122,6 +122,10 @@
 #include "KisWindowsPackageUtils.h"
 #endif
 
+#ifdef Q_OS_ANDROID
+#include <KisAndroidUtils.h>
+#endif
+
 /**
  * HACK ALERT: this is a function from a private Qt's header qfont_p.h,
  * we don't include the whole header, because it is painful in the
@@ -1799,6 +1803,12 @@ void TabletSettingsTab::setDefault()
     m_page->chkUseIgnoreHistoricTabletEventsWorkaround->setChecked(cfg.useIgnoreHistoricTabletEventsWorkaround(true));
 #endif
 
+#ifdef Q_OS_ANDROID
+    if (KisAndroidUtils::canHideTouchAndStylusCursors()) {
+        m_page->chkHideTouchAndStylusCursorsWorkaround->setChecked(cfg.hideTouchAndStylusCursorsWorkaround(true));
+    }
+#endif
+
     m_page->chkUseTimestampsForBrushSpeed->setChecked(false);
     m_page->intMaxAllowedBrushSpeed->setValue(30);
     m_page->intBrushSpeedSmoothing->setValue(3);
@@ -1867,6 +1877,16 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
     m_page->chkUseIgnoreHistoricTabletEventsWorkaround->setChecked(cfg.useIgnoreHistoricTabletEventsWorkaround());
 #else
     m_page->chkUseIgnoreHistoricTabletEventsWorkaround->hide();
+#endif
+
+#ifdef Q_OS_ANDROID
+    if (KisAndroidUtils::canHideTouchAndStylusCursors()) {
+        m_page->chkHideTouchAndStylusCursorsWorkaround->setChecked(cfg.hideTouchAndStylusCursorsWorkaround());
+    } else {
+        m_page->chkHideTouchAndStylusCursorsWorkaround->hide();
+    }
+#else
+    m_page->chkHideTouchAndStylusCursorsWorkaround->hide();
 #endif
 
     m_page->intMaxAllowedBrushSpeed->setRange(1, 100);
@@ -3242,6 +3262,13 @@ bool KisDlgPreferences::editPreferences(std::optional<PageDesc>page)
 #if KRITA_QT_HAS_ANDROID_IGNORE_HISTORIC_TABLET_EVENTS
         cfg.setUseIgnoreHistoricTabletEventsWorkaround(
             m_tabletSettings->m_page->chkUseIgnoreHistoricTabletEventsWorkaround->isChecked());
+#endif
+
+#ifdef Q_OS_ANDROID
+        if (KisAndroidUtils::canHideTouchAndStylusCursors()) {
+            cfg.setHideTouchAndStylusCursorsWorkaround(
+                m_tabletSettings->m_page->chkHideTouchAndStylusCursorsWorkaround->isChecked());
+        }
 #endif
 
         cfg.writeEntry<int>("maxAllowedSpeedValue", m_tabletSettings->m_page->intMaxAllowedBrushSpeed->value());

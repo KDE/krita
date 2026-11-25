@@ -46,6 +46,7 @@ public:
     void notifyUsePageUpDownMouseButtonEmulationWorkaroundChanged(bool enabled);
     void notifyUseHighFunctionKeyMouseButtonEmulationWorkaroundChanged(bool enabled);
     void notifyUseIgnoreHistoricTabletEventsWorkaroundChanged(bool enabled);
+    void notifyHideTouchAndStylusCursorsWorkaroundChanged(bool enabled);
 #endif
 
 Q_SIGNALS:
@@ -64,6 +65,7 @@ Q_SIGNALS:
     void sigUsePageUpDownMouseButtonEmulationWorkaroundChanged(bool enabled);
     void sigUseHighFunctionKeyMouseButtonEmulationWorkaroundChanged(bool enabled);
     void sigUseIgnoreHistoricTabletEventsWorkaroundChanged(bool enabled);
+    void sigHideTouchAndStylusCursorsWorkaroundChanged(bool enabled);
 #endif
 
 private:

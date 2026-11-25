@@ -1732,6 +1732,22 @@ void KisConfig::setUseIgnoreHistoricTabletEventsWorkaround(bool value)
     KisConfigNotifier::instance()->notifyUseIgnoreHistoricTabletEventsWorkaroundChanged(value);
 }
 
+bool KisConfig::hideTouchAndStylusCursorsWorkaround(bool defaultValue) const
+{
+    bool fallback = KisAndroidUtils::looksLikeBrokenCursorDevice();
+    if (defaultValue) {
+        return fallback;
+    } else {
+        return m_cfg.readEntry("hideTouchAndStylusCursorsWorkaround", fallback);
+    }
+}
+
+void KisConfig::setHideTouchAndStylusCursorsWorkaround(bool value)
+{
+    m_cfg.writeEntry("hideTouchAndStylusCursorsWorkaround", value);
+    KisConfigNotifier::instance()->notifyHideTouchAndStylusCursorsWorkaroundChanged(value);
+}
+
 qreal KisConfig::androidScalingLastInitialScale(bool defaultValue) const
 {
     if (defaultValue) {

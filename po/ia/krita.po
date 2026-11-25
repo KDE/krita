@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 01:01+0000\n"
+"POT-Creation-Date: 2026-11-25 01:23+0000\n"
 "PO-Revision-Date: 2026-10-30 11:56+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -24751,7 +24751,7 @@ msgstr "Crea insimul de Ressources"
 #: libs/ui/KisMainWindow.cpp:2167 libs/ui/KisMainWindow.cpp:2176
 #: libs/ui/KisMainWindow.cpp:2315 libs/ui/KisMainWindow.cpp:2376
 #: libs/ui/KisMainWindow.cpp:2395 libs/ui/KisMainWindow.cpp:3038
-#: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:554 libs/ui/KisPart.cpp:557
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -37641,7 +37641,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Nove gruppo %1"
 
-#: libs/ui/KisPart.cpp:553
+#: libs/ui/KisPart.cpp:554
 #, fuzzy, kde-format
 #| msgid "Could not create the output document"
 msgid ""
@@ -37649,7 +37649,7 @@ msgid ""
 "%1"
 msgstr "Il non pote crear le documento de exito"
 
-#: libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:557
 #, fuzzy, kde-format
 msgid ""
 "Could not create document from template\n"

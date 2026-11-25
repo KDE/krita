@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 01:01+0000\n"
-"PO-Revision-Date: 2026-11-21 04:25-0300\n"
+"POT-Creation-Date: 2026-11-25 01:23+0000\n"
+"PO-Revision-Date: 2026-11-24 05:29-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@kde.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -24255,7 +24255,7 @@ msgstr "Recursos locais"
 #: libs/ui/KisMainWindow.cpp:2167 libs/ui/KisMainWindow.cpp:2176
 #: libs/ui/KisMainWindow.cpp:2315 libs/ui/KisMainWindow.cpp:2376
 #: libs/ui/KisMainWindow.cpp:2395 libs/ui/KisMainWindow.cpp:3038
-#: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:554 libs/ui/KisPart.cpp:557
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -37183,7 +37183,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Novo grupo %1"
 
-#: libs/ui/KisPart.cpp:553
+#: libs/ui/KisPart.cpp:554
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -37192,7 +37192,7 @@ msgstr ""
 "Não foi possível criar o documento a partir do modelo\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:557
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -64132,10 +64132,8 @@ msgid "Export not Possible"
 msgstr "Não é possível Exportar"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:119
-#, fuzzy
-#| msgid "No frames to export."
 msgid "No pages to export."
-msgstr "Sem quadros para exportar."
+msgstr "Nenhuma página para exportar."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:144
 msgid "Preparing export."

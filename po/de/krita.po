@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 01:01+0000\n"
+"POT-Creation-Date: 2026-11-25 01:23+0000\n"
 "PO-Revision-Date: 2026-08-01 13:51+0200\n"
 "Last-Translator: Alexander Becker <alex-at-kde-l10n-de@freenet.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -25428,7 +25428,7 @@ msgstr "Lokale Ressourcen"
 #: libs/ui/KisMainWindow.cpp:2167 libs/ui/KisMainWindow.cpp:2176
 #: libs/ui/KisMainWindow.cpp:2315 libs/ui/KisMainWindow.cpp:2376
 #: libs/ui/KisMainWindow.cpp:2395 libs/ui/KisMainWindow.cpp:3038
-#: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:554 libs/ui/KisPart.cpp:557
 #: libs/ui/KisReferenceImage.cpp:197 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -38541,7 +38541,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Neue Gruppe %1"
 
-#: libs/ui/KisPart.cpp:553
+#: libs/ui/KisPart.cpp:554
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -38550,7 +38550,7 @@ msgstr ""
 "Das Dokument kann nicht aus der Vorlage erstellt werden\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:557
 #, kde-format
 msgid ""
 "Could not create document from template\n"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 03:42+0000\n"
+"POT-Creation-Date: 2026-11-25 03:24+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -24380,7 +24380,7 @@ msgstr "Sumber Daya Lokal"
 #: libs/ui/KisMainWindow.cpp:2166 libs/ui/KisMainWindow.cpp:2175
 #: libs/ui/KisMainWindow.cpp:2314 libs/ui/KisMainWindow.cpp:2375
 #: libs/ui/KisMainWindow.cpp:2394 libs/ui/KisMainWindow.cpp:3040
-#: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:554 libs/ui/KisPart.cpp:557
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -36899,7 +36899,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Kelompok Baru %1"
 
-#: libs/ui/KisPart.cpp:553
+#: libs/ui/KisPart.cpp:554
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not render animation:\n"
@@ -36911,7 +36911,7 @@ msgstr ""
 "Tidak bisa merender animasi:\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:557
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save %1\n"

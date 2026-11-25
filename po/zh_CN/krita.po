@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 03:42+0000\n"
+"POT-Creation-Date: 2026-11-25 03:24+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -23893,7 +23893,7 @@ msgstr "本地资源"
 #: libs/ui/KisMainWindow.cpp:2166 libs/ui/KisMainWindow.cpp:2175
 #: libs/ui/KisMainWindow.cpp:2314 libs/ui/KisMainWindow.cpp:2375
 #: libs/ui/KisMainWindow.cpp:2394 libs/ui/KisMainWindow.cpp:3040
-#: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:554 libs/ui/KisPart.cpp:557
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -36283,7 +36283,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "新色块组 %1"
 
-#: libs/ui/KisPart.cpp:553
+#: libs/ui/KisPart.cpp:554
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -36292,7 +36292,7 @@ msgstr ""
 "无法用模板新建图像\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:557
 #, kde-format
 msgid ""
 "Could not create document from template\n"

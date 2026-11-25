@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 03:42+0000\n"
+"POT-Creation-Date: 2026-11-25 03:24+0000\n"
 "PO-Revision-Date: 2025-03-30 23:35+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -24333,7 +24333,7 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/KisMainWindow.cpp:2166 libs/ui/KisMainWindow.cpp:2175
 #: libs/ui/KisMainWindow.cpp:2314 libs/ui/KisMainWindow.cpp:2375
 #: libs/ui/KisMainWindow.cpp:2394 libs/ui/KisMainWindow.cpp:3040
-#: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:554 libs/ui/KisPart.cpp:557
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:40
 #: libs/ui/KisRemoteFileFetcher.cpp:64 libs/ui/KisRemoteFileFetcher.cpp:91
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -36974,7 +36974,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Nova Grupo %1"
 
-#: libs/ui/KisPart.cpp:553
+#: libs/ui/KisPart.cpp:554
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -36983,7 +36983,7 @@ msgstr ""
 "Ne eblis krei dokumenton el ŝablono\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:557
 #, kde-format
 msgid ""
 "Could not create document from template\n"

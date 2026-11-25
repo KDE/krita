@@ -45,6 +45,7 @@ public:
 #ifdef Q_OS_ANDROID
     void notifyUsePageUpDownMouseButtonEmulationWorkaroundChanged(bool enabled);
     void notifyUseIgnoreHistoricTabletEventsWorkaroundChanged(bool enabled);
+    void notifyHideTouchAndStylusCursorsWorkaroundChanged(bool enabled);
 #endif
 
 Q_SIGNALS:
@@ -62,6 +63,7 @@ Q_SIGNALS:
 #ifdef Q_OS_ANDROID
     void sigUsePageUpDownMouseButtonEmulationWorkaroundChanged(bool enabled);
     void sigUseIgnoreHistoricTabletEventsWorkaroundChanged(bool enabled);
+    void sigHideTouchAndStylusCursorsWorkaroundChanged(bool enabled);
 #endif
 
 private:

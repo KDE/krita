@@ -138,8 +138,11 @@
 
 #endif /* KRITA_USE_SURFACE_COLOR_MANAGEMENT_API */
 
-#if defined(Q_OS_ANDROID) && KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT
+#ifdef Q_OS_ANDROID
+#include <KisAndroidUtils.h>
+#if KRITA_QT_HAS_ANDROID_QPLATFORMSCREEN_DENSITY_ADJUSTMENT
 #include <KisAndroidScaling.h>
+#endif
 #endif
 
 namespace {
@@ -710,6 +713,22 @@ bool KisApplication::start(const KisApplicationArguments &args)
             this,
             setIgnoreHistoricTabletEventsWorkaround);
     setIgnoreHistoricTabletEventsWorkaround(cfg.useIgnoreHistoricTabletEventsWorkaround());
+#endif
+
+    // Wacom and XPPEN workaround: these devices have broken cursors for stylus
+    // events, which will show up when hovering the stylus and disappear when
+    // pressing it down. Support for this is in Java code, so no #if.
+#ifdef Q_OS_ANDROID
+    if (KisAndroidUtils::canHideTouchAndStylusCursors()) {
+        auto setHideTouchAndStylusCursorsWorkaround = [](bool enabled) {
+            KisAndroidUtils::setHideTouchAndStylusCursors(enabled);
+        };
+        connect(cfgNotifier,
+                &KisConfigNotifier::sigHideTouchAndStylusCursorsWorkaroundChanged,
+                this,
+                setHideTouchAndStylusCursorsWorkaround);
+        setHideTouchAndStylusCursorsWorkaround(cfg.hideTouchAndStylusCursorsWorkaround());
+    }
 #endif
 
     // Create a new image, if needed

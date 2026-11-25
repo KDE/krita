@@ -131,13 +131,13 @@ endif()
 #######################
 ######################
 if (BUILD_WITH_QT6)
-set(KRITA_VERSION_STRING "6.0.5")
+set(KRITA_VERSION_STRING "6.0.5.1")
 set(KRITA_STABLE_VERSION_MAJOR 6)
 set(KRITA_STABLE_VERSION_MINOR 0)
 else()
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "5.3.5")
+set(KRITA_VERSION_STRING "5.3.5.1")
 # Major version: 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MAJOR 5)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
@@ -150,16 +150,16 @@ set(KRITA_VERSION_RELEASE 5)
 # - [Pre-]Alpha: Starts from 0, increment 1 per release
 # - Beta: Starts from 50, increment 1 per release
 # - Stable: Set to 100, bump to 101 if emergency update is needed
-set(KRITA_VERSION_REVISION 0)
+set(KRITA_VERSION_REVISION 1)
 
 # This version does **not** correspond to the patch version
 # of Krita. Instead, it is just incremented for every public
 # (including alpha and beta) release of KRITA_STABLE_VERSION_MINOR
 # branch
 #
-# Note: 5.3.5 was released with version '12', increment on releasing
+# Note: 5.3.5.1 was released with version '13', increment on releasing
 #
-set(KRITA_APK_VERSION_TRANSITIONAL 12)
+set(KRITA_APK_VERSION_TRANSITIONAL 13)
 
 # In MSI packages we cannot use the fourth digit for release numbering,
 # since this digit is used by Microsoft Store internally. Hence we cannot

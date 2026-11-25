@@ -65,6 +65,8 @@ OverviewDockerPage::OverviewDockerPage(QWidget *parent, const char *name, Qt::Wi
     KConfigGroup config = KSharedConfig::openConfig()->group("OverviewDocker");
     m_pinControls = config.readEntry("pinControls", true);
     m_areControlsHidden = !m_pinControls;
+    m_grayscale = config.readEntry("grayscale", false);
+    m_overviewWidget->setGrayscale(m_grayscale);
 
     setEnabled(false);
 }
@@ -73,6 +75,7 @@ OverviewDockerPage::~OverviewDockerPage()
 {
     KConfigGroup config = KSharedConfig::openConfig()->group("OverviewDocker");
     config.writeEntry("pinControls", m_pinControls);
+    config.writeEntry("grayscale", m_grayscale);
 }
 
 void OverviewDockerPage::setCanvas(KoCanvasBase * canvas)
@@ -110,6 +113,12 @@ void OverviewDockerPage::setCanvas(KoCanvasBase * canvas)
         m_controlsSecondRowLayout->removeWidget(m_pinControlsButton);
         delete m_pinControlsButton;
         m_pinControlsButton = nullptr;
+    }
+
+    if (m_grayscaleButton) {
+        m_controlsSecondRowLayout->removeWidget(m_grayscaleButton);
+        delete m_grayscaleButton;
+        m_grayscaleButton = nullptr;
     }
 
     // Delete the stretch
@@ -162,11 +171,22 @@ void OverviewDockerPage::setCanvas(KoCanvasBase * canvas)
         m_pinControlsButton->setAutoRaise(true);
         connect(m_pinControlsButton, SIGNAL(toggled(bool)), SLOT(setPinControls(bool)));
 
+        m_grayscaleButton = new QToolButton;
+        m_grayscaleButton->setCheckable(true);
+        m_grayscaleButton->setChecked(m_grayscale);
+        m_grayscaleButton->setToolTip(
+            i18nc("Show the overview docker preview in shades of gray", "Grayscale preview")
+        );
+        m_grayscaleButton->setIcon(KisIconUtils::loadIcon("saturation-decrease"));
+        m_grayscaleButton->setAutoRaise(true);
+        connect(m_grayscaleButton, SIGNAL(toggled(bool)), SLOT(setGrayscale(bool)));
+
         m_controlsSecondRowLayout = new QHBoxLayout();
 
         m_controlsSecondRowLayout->addWidget(m_rotateAngleSelector);
         m_controlsSecondRowLayout->addStretch();
         m_controlsSecondRowLayout->addWidget(m_mirrorCanvas);
+        m_controlsSecondRowLayout->addWidget(m_grayscaleButton);
         m_controlsSecondRowLayout->addStretch();
         m_controlsSecondRowLayout->addWidget(m_pinControlsButton);
         m_controlsLayout->addLayout(m_controlsSecondRowLayout);
@@ -221,6 +241,12 @@ void OverviewDockerPage::updateRotationSlider(qreal angle)
 void OverviewDockerPage::setPinControls(bool pin)
 {
     m_pinControls = pin;
+}
+
+void OverviewDockerPage::setGrayscale(bool grayscale)
+{
+    m_grayscale = grayscale;
+    m_overviewWidget->setGrayscale(grayscale);
 }
 
 void OverviewDockerPage::resizeEvent(QResizeEvent*)

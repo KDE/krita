@@ -33,6 +33,7 @@ public Q_SLOTS:
     void rotateCanvasView(qreal rotation);
     void updateRotationSlider(qreal rotation);
     void setPinControls(bool pin);
+    void setGrayscale(bool grayscale);
 
 protected:
     void resizeEvent(QResizeEvent*) override;
@@ -62,8 +63,10 @@ private:
     KisAngleSelector *m_rotateAngleSelector {nullptr};
     QToolButton *m_mirrorCanvas {nullptr};
     QToolButton *m_pinControlsButton {nullptr};
+    QToolButton *m_grayscaleButton {nullptr};
     QPointer<KisCanvas2> m_canvas;
     bool m_pinControls {true};
+    bool m_grayscale {false};
     bool m_cursorIsHover {false};
     bool m_isTouching {false};
     bool m_isDraggingWithTouch {false};

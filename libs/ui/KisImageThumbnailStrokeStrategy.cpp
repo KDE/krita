@@ -87,8 +87,18 @@ void KisImageThumbnailStrokeStrategyBase::initStrokeCallback()
     runnableJobsInterface()->addRunnableJobs(jobs);
 }
 
+void KisImageThumbnailStrokeStrategy::setGrayscale(bool value)
+{
+    m_grayscale = value;
+}
+
 void KisImageThumbnailStrokeStrategy::reportThumbnailGenerationCompleted(KisPaintDeviceSP device, const QRect &rect)
 {
+    if (m_grayscale) {
+        // device is the thumbnail's own scaled copy, so converting it in place is safe
+        device->convertTo(KoColorSpaceRegistry::instance()->graya8());
+    }
+
     QImage overviewImage;
     overviewImage = device->convertToQImage(m_profile,
                                             rect,

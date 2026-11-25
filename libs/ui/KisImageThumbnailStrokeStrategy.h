@@ -60,6 +60,8 @@ class KRITAUI_EXPORT KisImageThumbnailStrokeStrategy : public KisImageThumbnailS
 public:
     using KisImageThumbnailStrokeStrategyBase::KisImageThumbnailStrokeStrategyBase;
 
+    /// Render the thumbnail in shades of gray
+    void setGrayscale(bool value);
 
 protected:
     virtual void reportThumbnailGenerationCompleted(KisPaintDeviceSP device, const QRect &rect);
@@ -67,6 +69,9 @@ protected:
 Q_SIGNALS:
     //Emitted when thumbnail is updated and overviewImage is fully generated.
     void thumbnailUpdated(QImage pixmap);
+
+private:
+    bool m_grayscale {false};
 };
 
 #endif // KISIMAGETHUMBNAILSTROKESTRATEGY_H

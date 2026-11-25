@@ -94,6 +94,7 @@ KisIdleTasksManager::TaskGuard OverviewWidget::registerIdleTask(KisCanvas2 *canv
 
             KisImageThumbnailStrokeStrategy *strategy =
                 new KisImageThumbnailStrokeStrategy(image->projection(), image->bounds(), thumbnailSize, isPixelArt(), config.profile, config.intent, config.conversionFlags);
+            strategy->setGrayscale(m_grayscale);
 
             connect(strategy, SIGNAL(thumbnailUpdated(QImage)), this, SLOT(updateThumbnail(QImage)));
 
@@ -143,6 +144,13 @@ QTransform OverviewWidget::canvasToPreviewTransform()
 
 void OverviewWidget::startUpdateCanvasProjection()
 {
+    triggerCacheUpdate();
+}
+
+void OverviewWidget::setGrayscale(bool value)
+{
+    if (m_grayscale == value) return;
+    m_grayscale = value;
     triggerCacheUpdate();
 }
 

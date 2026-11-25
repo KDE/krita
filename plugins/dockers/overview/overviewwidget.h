@@ -39,6 +39,7 @@ public Q_SLOTS:
     void startUpdateCanvasProjection();
     void updateThumbnail(QImage pixmap);
     void slotThemeChanged();
+    void setGrayscale(bool value);
 
 Q_SIGNALS:
     void signalDraggingStarted();
@@ -83,6 +84,7 @@ private:
     QSize m_previewSize {QSize(100, 100)};
 
     bool m_dragging {false};
+    bool m_grayscale {false};
     QPointF m_lastPos {QPointF(0, 0)};
 
     QColor m_outlineColor;

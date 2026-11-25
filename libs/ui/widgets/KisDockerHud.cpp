@@ -177,8 +177,24 @@ void KisDockerHud::returnDocker(bool beingTaken) {
     }
 
     QWidget* dockerInside = m_d->dockerLayout->takeAt(0)->widget();
-    m_d->oldDockerParent->setWidget(dockerInside);
-    dockerInside->setParent(m_d->oldDockerParent);
+
+    {
+        /**
+         * Block resizing of the old parent. It might happen that the "preferred" and
+         * "minimum" size of `dockerInside` are different. If the user manually
+         * adjusts the docker to its "minimum" size before borrowing, then
+         * returing it back will reset the docker to its "preferred" size, growing
+         * the entire dockers panel. That is not what we want, hence we just temporarily
+         * block resizing of the parent docker by setting its size policy to "Fixed".
+         */
+        QSizePolicy oldSizePolicy = m_d->oldDockerParent->sizePolicy();
+        m_d->oldDockerParent->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+
+        m_d->oldDockerParent->setWidget(dockerInside);
+        dockerInside->setParent(m_d->oldDockerParent);
+
+        m_d->oldDockerParent->setSizePolicy(oldSizePolicy);
+    }
 
     m_d->oldDockerParent = nullptr;
     m_d->isBorrowing = false;

@@ -29,6 +29,8 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 import org.krita.R;
@@ -230,11 +232,40 @@ public class MainActivity extends QtActivity {
     }
 
     public static boolean looksLikeXiaomiDevice() {
-        return containsXiaomi(Build.BRAND) || containsXiaomi(Build.MANUFACTURER);
+        return looksLikeBrandDevice("xiaomi");
     }
 
-    private static boolean containsXiaomi(String s) {
-        return s != null && s.toLowerCase().contains("xiaomi");
+    public static boolean looksLikeBrokenCursorDevice() {
+        return looksLikeBrandDevice("wacom") || looksLikeBrandDevice("xppen");
+    }
+
+    private static boolean looksLikeBrandDevice(String brand) {
+        return containsBrand(brand, Build.BRAND) || containsBrand(brand, Build.MANUFACTURER);
+    }
+
+    private static boolean containsBrand(String brand, String s) {
+        return s != null && s.toLowerCase().contains(brand);
+    }
+
+    public static boolean canHideTouchAndStylusCursors() {
+        try {
+            Class<?> clazz = Class.forName("org.qtproject.qt5.android.QtSurface");
+            Method method = clazz.getDeclaredMethod("setHideTouchAndStylusCursors", boolean.class);
+            return Modifier.isStatic(method.getModifiers());
+        } catch (Exception e) {
+            Log.e(TAG, "Exception looking for setHideTouchAndStylusCursors", e);
+            return false;
+        }
+    }
+
+    public static void setHideTouchAndStylusCursors(boolean hide) {
+        try {
+            Class<?> clazz = Class.forName("org.qtproject.qt5.android.QtSurface");
+            Method method = clazz.getDeclaredMethod("setHideTouchAndStylusCursors", boolean.class);
+            method.invoke(null, hide);
+        } catch (Exception e) {
+            Log.e(TAG, "Exception calling setHideTouchAndStylusCursors", e);
+        }
     }
 
     public ApplicationExitInfo getLastApplicationExitInfo() {

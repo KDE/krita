@@ -21,6 +21,21 @@ KRITAGLOBAL_EXPORT void performInitialSetup();
 // on what's actually needed.
 KRITAGLOBAL_EXPORT bool looksLikeXiaomiDevice();
 
+// Check whether we seem to be running a device with broken stylus cursors that
+// show up while hovering and then disappear when pressing them down, which is
+// immensely annoying and needs to be worked around. We consider this to be the
+// case for Wacom and XPPEN devices.
+KRITAGLOBAL_EXPORT bool looksLikeBrokenCursorDevice();
+
+// Checks whether the below setHideTouchAndStylusCursors is supported on this
+// patched version of Qt.
+KRITAGLOBAL_EXPORT bool canHideTouchAndStylusCursors();
+
+// Hides cursors on touch and stylus events made with internal devices. If the
+// method doesn't exist, such as when using an outdated patched Qt, this will
+// do nothing. Use the above canHideTouchAndStylusCursors to check in advance.
+KRITAGLOBAL_EXPORT void setHideTouchAndStylusCursors(bool hide);
+
 // Check whether the device supports reporting low-memory situations as an exit
 // reason. Devices that don't will instead report a SIGKILL.
 KRITAGLOBAL_EXPORT bool isLowMemoryKillReportSupported();

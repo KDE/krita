@@ -166,9 +166,9 @@ void KisToolPaint::activate(const QSet<KoShape*> &shapes)
 
     if (canvas() && canvas()->canvasController()) {
         connect(canvas()->canvasController()->proxyObject,
-                SIGNAL(canvasOffsetChanged()),
+                SIGNAL(canvasStateChanged()),
                 this,
-                SLOT(slotCanvasOffsetChanged()),
+                SLOT(slotCanvasStateChanged()),
                 Qt::UniqueConnection);
     }
     
@@ -205,15 +205,15 @@ void KisToolPaint::deactivate()
 
     if (canvas() && canvas()->canvasController()) {
         disconnect(canvas()->canvasController()->proxyObject,
-                   SIGNAL(canvasOffsetChanged()),
+                   SIGNAL(canvasStateChanged()),
                    this,
-                   SLOT(slotCanvasOffsetChanged()));
+                   SLOT(slotCanvasStateChanged()));
     }
 
     KisTool::deactivate();
 }
 
-void KisToolPaint::slotCanvasOffsetChanged()
+void KisToolPaint::slotCanvasStateChanged()
 {
     if (!isActive() || !isOutlineEnabled())
         return;

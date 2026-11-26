@@ -115,9 +115,12 @@ bool KisNodePropertyListCommand::mergeWith(const KUndo2Command *command)
         const QSet<QString> changedInTheMeantime =
             changedProperties(m_newPropertyList, other->m_oldPropertyList);
 
-        KIS_SAFE_ASSERT_RECOVER_NOOP(changedInTheMeantime.isEmpty() ||
-                                     (changedInTheMeantime.size() == 1 &&
-                                      *changedInTheMeantime.begin() == KisLayerPropertiesIcons::colorOverlay.id()));
+        // stateless properties change without an undo command, so they may differ between two mergeable commands
+        bool onlyStatelessChanged = true;
+        Q_FOREACH (const QString &id, changedInTheMeantime) {
+            onlyStatelessChanged &= KisLayerPropertiesIcons::isStatelessProperty(id);
+        }
+        KIS_SAFE_ASSERT_RECOVER_NOOP(onlyStatelessChanged);
 
         m_newPropertyList = other->m_newPropertyList;
         return true;

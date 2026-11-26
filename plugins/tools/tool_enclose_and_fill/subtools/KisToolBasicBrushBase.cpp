@@ -212,8 +212,12 @@ void KisToolBasicBrushBase::endAlternateAction(KoPointerEvent *event, AlternateA
         return;
     }
 
-    KisToolUtils::setCursorPos(m_changeSizeInitialGestureGlobalPoint);
-    requestUpdateOutline(m_changeSizeInitialGestureDocPoint, 0);
+    if (KisToolUtils::platformSupportsSetCursorPos()) {
+        KisToolUtils::setCursorPos(m_changeSizeInitialGestureGlobalPoint);
+        requestUpdateOutline(m_changeSizeInitialGestureDocPoint, 0);
+    } else {
+        requestUpdateOutline(event->point, event);
+    }
 
     setMode(HOVER_MODE);
 }

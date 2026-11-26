@@ -99,6 +99,14 @@ bool KRITAUI_EXPORT selectShapeCrossLayer(KoCanvasBase *canvas, const QPointF &p
  */
 bool KRITAUI_EXPORT clearImage(KisImageSP image, KisNodeList nodes, KisSelectionSP selection);
 
+
+/**
+ * Return true if platform supports QCursor::setPos() call
+ *
+ * All platforms except Wayland support that
+ */
+bool KRITAUI_EXPORT platformSupportsSetCursorPos();
+
 /**
  * Moves the cursor (hot spot) of the primary screen to the global screen position (x, y).
  *

@@ -308,6 +308,11 @@ namespace KisToolUtils {
         blend = props.getInt("blend", 100);
     }
 
+    bool KRITAUI_EXPORT platformSupportsSetCursorPos()
+    {
+        return qApp->platformName() != "wayland";
+    }
+
     void KRITAUI_EXPORT setCursorPos(const QPoint &point)
     {
         // https://bugreports.qt.io/browse/QTBUG-99009

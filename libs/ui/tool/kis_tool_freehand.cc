@@ -527,8 +527,12 @@ void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction 
         return;
     }
 
-    KisToolUtils::setCursorPos(m_initialGestureGlobalPoint);
-    requestUpdateOutline(m_initialGestureDocPoint, 0);
+    if (KisToolUtils::platformSupportsSetCursorPos()) {
+        KisToolUtils::setCursorPos(m_initialGestureGlobalPoint);
+        requestUpdateOutline(m_initialGestureDocPoint, 0);
+    } else {
+        requestUpdateOutline(event->point, event);
+    }
 
     setMode(HOVER_MODE);
 

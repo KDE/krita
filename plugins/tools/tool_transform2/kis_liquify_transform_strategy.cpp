@@ -259,7 +259,9 @@ bool KisLiquifyTransformStrategy::endAlternateAction(KoPointerEvent *event, KisT
     m_d->lastDocPos = event->point;
 
     if (action == KisTool::ChangeSize || action == KisTool::ChangeSizeSnap) {
-        KisToolUtils::setCursorPos(m_d->startResizeGlobalCursorPos);
+        if (KisToolUtils::platformSupportsSetCursorPos()) {
+            KisToolUtils::setCursorPos(m_d->startResizeGlobalCursorPos);
+        }
         return true;
     } else if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
                action == KisTool::SampleFgGroup || action == KisTool::SampleBgGroup ||

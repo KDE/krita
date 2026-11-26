@@ -157,9 +157,9 @@ set(KRITA_VERSION_REVISION 0)
 # (including alpha and beta) release of KRITA_STABLE_VERSION_MINOR
 # branch
 #
-# Note: 5.3.5 was released with version '12', increment on releasing
+# Note: 5.3.5.1 was released with version '13', increment on releasing
 #
-set(KRITA_APK_VERSION_TRANSITIONAL 12)
+set(KRITA_APK_VERSION_TRANSITIONAL 13)
 
 # In MSI packages we cannot use the fourth digit for release numbering,
 # since this digit is used by Microsoft Store internally. Hence we cannot

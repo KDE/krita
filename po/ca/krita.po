@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:23+0000\n"
+"POT-Creation-Date: 2026-11-26 01:01+0000\n"
 "PO-Revision-Date: 2026-11-24 09:19+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -35039,62 +35039,57 @@ msgstr ""
 msgid "Favorites"
 msgstr "Preferits"
 
-#: libs/ui/kis_control_frame.cpp:67
+#: libs/ui/kis_control_frame.cpp:68
 #, kde-format
 msgid "Fill Patterns"
 msgstr "Patrons de l'emplenat"
 
-#: libs/ui/kis_control_frame.cpp:71
+#: libs/ui/kis_control_frame.cpp:72
 #, kde-format
 msgid "Fill Gradients"
 msgstr "Emplena els degradats"
 
-#: libs/ui/kis_control_frame.cpp:81
+#: libs/ui/kis_control_frame.cpp:82
 #, kde-format
 msgid "&Patterns"
 msgstr "&Patrons"
 
-#: libs/ui/kis_control_frame.cpp:88
+#: libs/ui/kis_control_frame.cpp:89
 #, kde-format
 msgid "&Gradients"
 msgstr "De&gradats"
 
-#: libs/ui/kis_control_frame.cpp:104
+#: libs/ui/kis_control_frame.cpp:105
 #, kde-format
 msgid "&Choose foreground and background colors"
 msgstr "Es&colliu els colors de primer pla i de fons"
 
-#: libs/ui/kis_control_frame.cpp:122
+#: libs/ui/kis_control_frame.cpp:123
 #, kde-format
 msgid "&Choose foreground colour"
 msgstr "Tria el &color de primer pla"
 
-#: libs/ui/kis_control_frame.cpp:141
+#: libs/ui/kis_control_frame.cpp:142
 #, kde-format
 msgid "&Choose background colour"
 msgstr "Tria el &color de fons"
 
-#: libs/ui/kis_control_frame.cpp:160
+#: libs/ui/kis_control_frame.cpp:161
 #, kde-format
 msgid "&Swap Foreground and Background Colors"
 msgstr "&Intercanvia els colors de primer pla i de fons"
 
-#: libs/ui/kis_control_frame.cpp:179
+#: libs/ui/kis_control_frame.cpp:180
 #, kde-format
 msgid "&reset Foreground and Background Colors"
 msgstr "&Reinicia els colors de primer pla i de fons"
 
-#: libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:196
 #, kde-format
 msgid "&Painter's Tools"
 msgstr "Eines de &pintura"
 
-#: libs/ui/kis_control_frame.cpp:203
-#, kde-format
-msgid "&Docker Box"
-msgstr "&Quadre acoblador"
-
-#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:426
+#: libs/ui/kis_control_frame.cpp:268 libs/ui/KisApplication.cpp:426
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -35103,12 +35098,12 @@ msgstr "&Quadre acoblador"
 msgid "Patterns"
 msgstr "Patrons"
 
-#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
+#: libs/ui/kis_control_frame.cpp:271 libs/ui/kis_control_frame.cpp:272
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Patró personalitzat"
 
-#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:411
+#: libs/ui/kis_control_frame.cpp:320 libs/ui/KisApplication.cpp:411
 #: libs/ui/KisApplication.cpp:412
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -35117,12 +35112,12 @@ msgstr "Patró personalitzat"
 msgid "Gradients"
 msgstr "Degradats"
 
-#: libs/ui/kis_control_frame.cpp:359
+#: libs/ui/kis_control_frame.cpp:355
 #, kde-format
 msgid "Docker box"
 msgstr "Quadre acoblador"
 
-#: libs/ui/kis_control_frame.cpp:365
+#: libs/ui/kis_control_frame.cpp:361
 #, kde-format
 msgid "Toolbar Docker Box"
 msgstr "Barra d'eines del quadre acoblador"
@@ -35688,8 +35683,8 @@ msgstr "Escull l'espai de treball"
 msgid "Brush composite"
 msgstr "Composició del pinzell"
 
-#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
-#: libs/ui/kis_paintop_box.cc:1384
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, kde-format
 msgid ""
 "%1\n"
@@ -40851,25 +40846,25 @@ msgstr "Avall"
 msgid "Configure docker panel"
 msgstr "Configuració del plafó de l'acoblador"
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr "L'acoblador està obert a %1. Tanqueu %1 per a mostrar-lo aquí."
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "Configuració dels acobladors de %1"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Available dockers"
 msgstr "Acobladors disponibles"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Current dockers"
 msgstr "Acobladors actuals"
@@ -44459,12 +44454,12 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "Editor de pinzells en el llenç"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, kde-format
 msgid "Reload Original Preset"
 msgstr "Torna a carregar el predefinit original"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, kde-format
 msgid "Configure the on-canvas brush editor"
 msgstr "Configura l'editor de pinzells en el llenç"
@@ -71658,6 +71653,9 @@ msgstr ""
 "Commuta entre interval complet i subinterval.\n"
 "Interval complet: [%1, %2]\n"
 "Subinterval: [%3, %4]"
+
+#~ msgid "&Docker Box"
+#~ msgstr "&Quadre acoblador"
 
 #~ msgid ""
 #~ "<html>\n"

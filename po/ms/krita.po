@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:23+0000\n"
+"POT-Creation-Date: 2026-11-26 01:01+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -34647,63 +34647,58 @@ msgstr "Tidak dapat tambah lapisan ke imej."
 msgid "Favorites"
 msgstr "Penapis"
 
-#: libs/ui/kis_control_frame.cpp:67
+#: libs/ui/kis_control_frame.cpp:68
 #, fuzzy, kde-format
 msgid "Fill Patterns"
 msgstr "Corak"
 
-#: libs/ui/kis_control_frame.cpp:71
+#: libs/ui/kis_control_frame.cpp:72
 #, fuzzy, kde-format
 #| msgid "Edit Gradient"
 msgid "Fill Gradients"
 msgstr "Edit Kecerunan"
 
-#: libs/ui/kis_control_frame.cpp:81
+#: libs/ui/kis_control_frame.cpp:82
 #, fuzzy, kde-format
 msgid "&Patterns"
 msgstr "Corak"
 
-#: libs/ui/kis_control_frame.cpp:88
+#: libs/ui/kis_control_frame.cpp:89
 #, fuzzy, kde-format
 msgid "&Gradients"
 msgstr "Kecerunan"
 
-#: libs/ui/kis_control_frame.cpp:104
+#: libs/ui/kis_control_frame.cpp:105
 #, fuzzy, kde-format
 msgid "&Choose foreground and background colors"
 msgstr "Warna latar depan"
 
-#: libs/ui/kis_control_frame.cpp:122
+#: libs/ui/kis_control_frame.cpp:123
 #, fuzzy, kde-format
 msgid "&Choose foreground colour"
 msgstr "Warna latar depan"
 
-#: libs/ui/kis_control_frame.cpp:141
+#: libs/ui/kis_control_frame.cpp:142
 #, fuzzy, kde-format
 msgid "&Choose background colour"
 msgstr "Saat"
 
-#: libs/ui/kis_control_frame.cpp:160
+#: libs/ui/kis_control_frame.cpp:161
 #, fuzzy, kde-format
 msgid "&Swap Foreground and Background Colors"
 msgstr "Warna latar depan"
 
-#: libs/ui/kis_control_frame.cpp:179
+#: libs/ui/kis_control_frame.cpp:180
 #, fuzzy, kde-format
 msgid "&reset Foreground and Background Colors"
 msgstr "Warna latar depan"
 
-#: libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:196
 #, fuzzy, kde-format
 msgid "&Painter's Tools"
 msgstr "Alat Lukisan"
 
-#: libs/ui/kis_control_frame.cpp:203
-#, fuzzy, kde-format
-msgid "&Docker Box"
-msgstr "Batuan"
-
-#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:426
+#: libs/ui/kis_control_frame.cpp:268 libs/ui/KisApplication.cpp:426
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34712,12 +34707,12 @@ msgstr "Batuan"
 msgid "Patterns"
 msgstr "Corak"
 
-#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
+#: libs/ui/kis_control_frame.cpp:271 libs/ui/kis_control_frame.cpp:272
 #, fuzzy, kde-format
 msgid "Custom Pattern"
 msgstr "Corak"
 
-#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:411
+#: libs/ui/kis_control_frame.cpp:320 libs/ui/KisApplication.cpp:411
 #: libs/ui/KisApplication.cpp:412
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -34726,12 +34721,12 @@ msgstr "Corak"
 msgid "Gradients"
 msgstr "Kecerunan"
 
-#: libs/ui/kis_control_frame.cpp:359
+#: libs/ui/kis_control_frame.cpp:355
 #, fuzzy, kde-format
 msgid "Docker box"
 msgstr "Batuan"
 
-#: libs/ui/kis_control_frame.cpp:365
+#: libs/ui/kis_control_frame.cpp:361
 #, fuzzy, kde-format
 msgid "Toolbar Docker Box"
 msgstr "Pelet"
@@ -35318,8 +35313,8 @@ msgstr "Ruang &warna:"
 msgid "Brush composite"
 msgstr "Saiz berus"
 
-#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
-#: libs/ui/kis_paintop_box.cc:1384
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, fuzzy, kde-format
 msgid ""
 "%1\n"
@@ -40136,25 +40131,25 @@ msgstr "Bawah"
 msgid "Configure docker panel"
 msgstr "Kontrak..."
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr ""
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, fuzzy, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "Kontrak..."
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 msgid "Available dockers"
 msgstr "Ciri Imej"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 msgid "Current dockers"
 msgstr "Ubah Lapisan Semasa"
@@ -43661,13 +43656,13 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "Saiz berus"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, fuzzy, kde-format
 #| msgid "Remove Segment"
 msgid "Reload Original Preset"
 msgstr "Alih Keluar Segmen"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, fuzzy, kde-format
 msgid "Configure the on-canvas brush editor"
 msgstr "Saiz berus"
@@ -70315,6 +70310,10 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~ msgid "&Docker Box"
+#~ msgstr "Batuan"
 
 #, fuzzy
 #~ msgid "Add Color To Palette"

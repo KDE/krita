@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:23+0000\n"
+"POT-Creation-Date: 2026-11-26 01:01+0000\n"
 "PO-Revision-Date: 2026-05-09 16:03+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
@@ -35472,70 +35472,65 @@ msgstr ""
 msgid "Favorites"
 msgstr "Ulubione"
 
-#: libs/ui/kis_control_frame.cpp:67
+#: libs/ui/kis_control_frame.cpp:68
 #, kde-format
 msgid "Fill Patterns"
 msgstr "Wypełnij wzorcami"
 
-#: libs/ui/kis_control_frame.cpp:71
+#: libs/ui/kis_control_frame.cpp:72
 #, kde-format
 msgid "Fill Gradients"
 msgstr "Gradienty wypełniające"
 
-#: libs/ui/kis_control_frame.cpp:81
+#: libs/ui/kis_control_frame.cpp:82
 #, kde-format
 msgid "&Patterns"
 msgstr "&Wzorce"
 
-#: libs/ui/kis_control_frame.cpp:88
+#: libs/ui/kis_control_frame.cpp:89
 #, kde-format
 msgid "&Gradients"
 msgstr "&Gradienty"
 
-#: libs/ui/kis_control_frame.cpp:104
+#: libs/ui/kis_control_frame.cpp:105
 #, kde-format
 msgid "&Choose foreground and background colors"
 msgstr "&Wybierz barwy pierwszo- i drugoplanowe"
 
-#: libs/ui/kis_control_frame.cpp:122
+#: libs/ui/kis_control_frame.cpp:123
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "&Choose Foreground Color"
 msgid "&Choose foreground colour"
 msgstr "Wybierz &barwę pierwszoplanową"
 
-#: libs/ui/kis_control_frame.cpp:141
+#: libs/ui/kis_control_frame.cpp:142
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "&Choose Background Color"
 msgid "&Choose background colour"
 msgstr "Wybierz &barwę drugoplanową"
 
-#: libs/ui/kis_control_frame.cpp:160
+#: libs/ui/kis_control_frame.cpp:161
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Swap Foreground and Background Colors"
 msgid "&Swap Foreground and Background Colors"
 msgstr "Zamień barwy pierwszo- z drugoplanowymi"
 
-#: libs/ui/kis_control_frame.cpp:179
+#: libs/ui/kis_control_frame.cpp:180
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format) action"
 #| msgid "Reset Foreground and Background Color"
 msgid "&reset Foreground and Background Colors"
 msgstr "Wyzeruj barwę pierwszoplanową i barwę tła"
 
-#: libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:196
 #, kde-format
 msgid "&Painter's Tools"
 msgstr "Narzędzia &malarza"
 
-#: libs/ui/kis_control_frame.cpp:203
-#, kde-format
-msgid "&Docker Box"
-msgstr "Pole &doku"
-
-#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:426
+#: libs/ui/kis_control_frame.cpp:268 libs/ui/KisApplication.cpp:426
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -35544,12 +35539,12 @@ msgstr "Pole &doku"
 msgid "Patterns"
 msgstr "Wzorce"
 
-#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
+#: libs/ui/kis_control_frame.cpp:271 libs/ui/kis_control_frame.cpp:272
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Własny wzorzec"
 
-#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:411
+#: libs/ui/kis_control_frame.cpp:320 libs/ui/KisApplication.cpp:411
 #: libs/ui/KisApplication.cpp:412
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -35558,12 +35553,12 @@ msgstr "Własny wzorzec"
 msgid "Gradients"
 msgstr "Gradienty"
 
-#: libs/ui/kis_control_frame.cpp:359
+#: libs/ui/kis_control_frame.cpp:355
 #, kde-format
 msgid "Docker box"
 msgstr "Pole doku"
 
-#: libs/ui/kis_control_frame.cpp:365
+#: libs/ui/kis_control_frame.cpp:361
 #, kde-format
 msgid "Toolbar Docker Box"
 msgstr "Pole doku paska narzędzi"
@@ -36135,8 +36130,8 @@ msgstr "Wybierz przestrzeń pracy"
 msgid "Brush composite"
 msgstr "Kompozyt pędzla"
 
-#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
-#: libs/ui/kis_paintop_box.cc:1384
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, kde-format
 msgid ""
 "%1\n"
@@ -41335,25 +41330,25 @@ msgstr "W dół"
 msgid "Configure docker panel"
 msgstr "Ustawienia panelu dokera"
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr "Dok jest otwarty w %1. Zamknij %1, aby pokazać tutaj."
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "Ustawienia %1 doków"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Available dockers"
 msgstr "Dostępne doki"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Current dockers"
 msgstr "Bieżące doki"
@@ -44966,12 +44961,12 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "Edytor pędzli na płótnie"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, kde-format
 msgid "Reload Original Preset"
 msgstr "Wczytaj ponownie pierwotną nastawę"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, kde-format
 msgid "Configure the on-canvas brush editor"
 msgstr "Ustawienia edytora pędzli na-płótnie"
@@ -72543,6 +72538,9 @@ msgstr ""
 "Przełącz pomiędzy pełnym zakresem, a podzakresem.\n"
 "Pełny zakres: [%1, %2]\n"
 "Podzakres: [%3, %4]"
+
+#~ msgid "&Docker Box"
+#~ msgstr "Pole &doku"
 
 #~ msgid ""
 #~ "<html>\n"

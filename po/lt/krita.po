@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:23+0000\n"
+"POT-Creation-Date: 2026-11-26 01:01+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -35341,66 +35341,61 @@ msgstr ""
 msgid "Favorites"
 msgstr "Mėgstamiausi"
 
-#: libs/ui/kis_control_frame.cpp:67
+#: libs/ui/kis_control_frame.cpp:68
 #, fuzzy, kde-format
 msgid "Fill Patterns"
 msgstr "Šablonai"
 
-#: libs/ui/kis_control_frame.cpp:71
+#: libs/ui/kis_control_frame.cpp:72
 #, fuzzy, kde-format
 #| msgid "Gradient"
 msgid "Fill Gradients"
 msgstr "Perėjimas"
 
-#: libs/ui/kis_control_frame.cpp:81
+#: libs/ui/kis_control_frame.cpp:82
 #, kde-format
 msgid "&Patterns"
 msgstr "Ša&blonai"
 
-#: libs/ui/kis_control_frame.cpp:88
+#: libs/ui/kis_control_frame.cpp:89
 #, kde-format
 msgid "&Gradients"
 msgstr "&Gradientai"
 
-#: libs/ui/kis_control_frame.cpp:104
+#: libs/ui/kis_control_frame.cpp:105
 #, fuzzy, kde-format
 msgid "&Choose foreground and background colors"
 msgstr "Priekinio plano spalva"
 
-#: libs/ui/kis_control_frame.cpp:122
+#: libs/ui/kis_control_frame.cpp:123
 #, fuzzy, kde-format
 #| msgid "Foreground Color"
 msgid "&Choose foreground colour"
 msgstr "Priekinio plano spalva"
 
-#: libs/ui/kis_control_frame.cpp:141
+#: libs/ui/kis_control_frame.cpp:142
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Set Background Color"
 msgid "&Choose background colour"
 msgstr "Nustatyti fono spalvą"
 
-#: libs/ui/kis_control_frame.cpp:160
+#: libs/ui/kis_control_frame.cpp:161
 #, fuzzy, kde-format
 msgid "&Swap Foreground and Background Colors"
 msgstr "Priekinio plano spalva"
 
-#: libs/ui/kis_control_frame.cpp:179
+#: libs/ui/kis_control_frame.cpp:180
 #, fuzzy, kde-format
 msgid "&reset Foreground and Background Colors"
 msgstr "Priekinio plano spalva"
 
-#: libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:196
 #, kde-format
 msgid "&Painter's Tools"
 msgstr "&Dailinko įrankiai"
 
-#: libs/ui/kis_control_frame.cpp:203
-#, fuzzy, kde-format
-msgid "&Docker Box"
-msgstr "Užrakinta"
-
-#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:426
+#: libs/ui/kis_control_frame.cpp:268 libs/ui/KisApplication.cpp:426
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -35409,12 +35404,12 @@ msgstr "Užrakinta"
 msgid "Patterns"
 msgstr "Šablonai"
 
-#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
+#: libs/ui/kis_control_frame.cpp:271 libs/ui/kis_control_frame.cpp:272
 #, fuzzy, kde-format
 msgid "Custom Pattern"
 msgstr "Šablonas"
 
-#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:411
+#: libs/ui/kis_control_frame.cpp:320 libs/ui/KisApplication.cpp:411
 #: libs/ui/KisApplication.cpp:412
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -35423,12 +35418,12 @@ msgstr "Šablonas"
 msgid "Gradients"
 msgstr "Gradientai"
 
-#: libs/ui/kis_control_frame.cpp:359
+#: libs/ui/kis_control_frame.cpp:355
 #, fuzzy, kde-format
 msgid "Docker box"
 msgstr "Užrakinta"
 
-#: libs/ui/kis_control_frame.cpp:365
+#: libs/ui/kis_control_frame.cpp:361
 #, fuzzy, kde-format
 msgid "Toolbar Docker Box"
 msgstr "Nuo&statos"
@@ -36033,8 +36028,8 @@ msgstr "Pasirinkite darbo erdvę"
 msgid "Brush composite"
 msgstr "Nuostatos"
 
-#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
-#: libs/ui/kis_paintop_box.cc:1384
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, fuzzy, kde-format
 msgid ""
 "%1\n"
@@ -40957,25 +40952,25 @@ msgstr ""
 msgid "Configure docker panel"
 msgstr "Konfigūracija:"
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr ""
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, fuzzy, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "Konfigūracija:"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 msgid "Available dockers"
 msgstr "Sluoksnio savybės"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 #| msgid "Current Layer"
 msgid "Current dockers"
@@ -44610,13 +44605,13 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "Pažymėjimas"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, fuzzy, kde-format
 #| msgid "Current brush preset"
 msgid "Reload Original Preset"
 msgstr "Dabartinis teptuko ruošinys"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, fuzzy, kde-format
 msgid "Configure the on-canvas brush editor"
 msgstr "Pažymėjimas"
@@ -72175,6 +72170,10 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~ msgid "&Docker Box"
+#~ msgstr "Užrakinta"
 
 #, fuzzy
 #~ msgid "Add Color To Palette"

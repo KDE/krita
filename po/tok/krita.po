@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:23+0000\n"
+"POT-Creation-Date: 2026-11-26 01:01+0000\n"
 "PO-Revision-Date: 2022-07-08 04:45+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Toki Pona <http://weblate.blackquill.cc/projects/ante-toki-pi-"
@@ -34359,72 +34359,67 @@ msgstr ""
 msgid "Favorites"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:67
+#: libs/ui/kis_control_frame.cpp:68
 #, kde-format
 msgid "Fill Patterns"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:71
+#: libs/ui/kis_control_frame.cpp:72
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Fill Tool"
 msgid "Fill Gradients"
 msgstr "ilo pi pana kule mute"
 
-#: libs/ui/kis_control_frame.cpp:81
+#: libs/ui/kis_control_frame.cpp:82
 #, kde-format
 msgid "&Patterns"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:88
+#: libs/ui/kis_control_frame.cpp:89
 #, fuzzy, kde-format
 #| msgctxt "NAME OF TRANSLATORS"
 #| msgid "Your names"
 msgid "&Gradients"
 msgstr "kulupu pi ante toki pi toki pona"
 
-#: libs/ui/kis_control_frame.cpp:104
+#: libs/ui/kis_control_frame.cpp:105
 #, kde-format
 msgid "&Choose foreground and background colors"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:122
+#: libs/ui/kis_control_frame.cpp:123
 #, fuzzy, kde-format
 #| msgid "Select All"
 msgid "&Choose foreground colour"
 msgstr "o suli e wile tawa ijo ale"
 
-#: libs/ui/kis_control_frame.cpp:141
+#: libs/ui/kis_control_frame.cpp:142
 #, fuzzy, kde-format
 #| msgid "Select All"
 msgid "&Choose background colour"
 msgstr "o suli e wile tawa ijo ale"
 
-#: libs/ui/kis_control_frame.cpp:160
+#: libs/ui/kis_control_frame.cpp:161
 #, fuzzy, kde-format
 #| msgid "Select All"
 msgid "&Swap Foreground and Background Colors"
 msgstr "o suli e wile tawa ijo ale"
 
-#: libs/ui/kis_control_frame.cpp:179
+#: libs/ui/kis_control_frame.cpp:180
 #, fuzzy, kde-format
 #| msgid "Select All"
 msgid "&reset Foreground and Background Colors"
 msgstr "o suli e wile tawa ijo ale"
 
-#: libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:196
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Line Tool"
 msgid "&Painter's Tools"
 msgstr "ilo linja"
 
-#: libs/ui/kis_control_frame.cpp:203
-#, kde-format
-msgid "&Docker Box"
-msgstr ""
-
-#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:426
+#: libs/ui/kis_control_frame.cpp:268 libs/ui/KisApplication.cpp:426
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34433,13 +34428,13 @@ msgstr ""
 msgid "Patterns"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
+#: libs/ui/kis_control_frame.cpp:271 libs/ui/kis_control_frame.cpp:272
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Custom Pattern"
 msgstr "sitelen Emosi sina"
 
-#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:411
+#: libs/ui/kis_control_frame.cpp:320 libs/ui/KisApplication.cpp:411
 #: libs/ui/KisApplication.cpp:412
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -34450,12 +34445,12 @@ msgstr "sitelen Emosi sina"
 msgid "Gradients"
 msgstr "kulupu pi ante toki pi toki pona"
 
-#: libs/ui/kis_control_frame.cpp:359
+#: libs/ui/kis_control_frame.cpp:355
 #, kde-format
 msgid "Docker box"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:365
+#: libs/ui/kis_control_frame.cpp:361
 #, kde-format
 msgid "Toolbar Docker Box"
 msgstr ""
@@ -35040,8 +35035,8 @@ msgstr ""
 msgid "Brush composite"
 msgstr ""
 
-#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
-#: libs/ui/kis_paintop_box.cc:1384
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, kde-format
 msgid ""
 "%1\n"
@@ -39802,25 +39797,25 @@ msgstr ""
 msgid "Configure docker panel"
 msgstr ""
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr ""
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr ""
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Available dockers"
 msgstr ""
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Current dockers"
 msgstr ""
@@ -43339,12 +43334,12 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr ""
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, kde-format
 msgid "Reload Original Preset"
 msgstr ""
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, kde-format
 msgid "Configure the on-canvas brush editor"
 msgstr ""

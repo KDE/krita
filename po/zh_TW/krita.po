@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:23+0000\n"
+"POT-Creation-Date: 2026-11-26 01:01+0000\n"
 "PO-Revision-Date: 2026-06-11 17:03+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -35153,71 +35153,65 @@ msgstr ""
 msgid "Favorites"
 msgstr "首選"
 
-#: libs/ui/kis_control_frame.cpp:67
+#: libs/ui/kis_control_frame.cpp:68
 #, kde-format
 msgid "Fill Patterns"
 msgstr "圖案填充"
 
-#: libs/ui/kis_control_frame.cpp:71
+#: libs/ui/kis_control_frame.cpp:72
 #, kde-format
 msgid "Fill Gradients"
 msgstr "填充漸變"
 
-#: libs/ui/kis_control_frame.cpp:81
+#: libs/ui/kis_control_frame.cpp:82
 #, kde-format
 msgid "&Patterns"
 msgstr "圖案(&P)"
 
-#: libs/ui/kis_control_frame.cpp:88
+#: libs/ui/kis_control_frame.cpp:89
 #, kde-format
 msgid "&Gradients"
 msgstr "漸變(&G)"
 
-#: libs/ui/kis_control_frame.cpp:104
+#: libs/ui/kis_control_frame.cpp:105
 #, kde-format
 msgid "&Choose foreground and background colors"
 msgstr "選取前景色和背景色(&C)"
 
-#: libs/ui/kis_control_frame.cpp:122
+#: libs/ui/kis_control_frame.cpp:123
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "&Choose Foreground Color"
 msgid "&Choose foreground colour"
 msgstr "選取前景色(&C)"
 
-#: libs/ui/kis_control_frame.cpp:141
+#: libs/ui/kis_control_frame.cpp:142
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "&Choose Background Color"
 msgid "&Choose background colour"
 msgstr "最取背景色(&C)"
 
-#: libs/ui/kis_control_frame.cpp:160
+#: libs/ui/kis_control_frame.cpp:161
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Swap Foreground and Background Colors"
 msgid "&Swap Foreground and Background Colors"
 msgstr "交換前景色和背景色"
 
-#: libs/ui/kis_control_frame.cpp:179
+#: libs/ui/kis_control_frame.cpp:180
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Swap Foreground and Background Colors"
 msgid "&reset Foreground and Background Colors"
 msgstr "交換前景色和背景色"
 
-#: libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:196
 #, kde-format
 msgid "&Painter's Tools"
 msgstr "繪畫工具(&P)"
 
-#: libs/ui/kis_control_frame.cpp:203
-#, fuzzy, kde-format
-#| msgid "&Docker"
-msgid "&Docker Box"
-msgstr "工具面板(&D)"
-
-#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:426
+#: libs/ui/kis_control_frame.cpp:268 libs/ui/KisApplication.cpp:426
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -35226,12 +35220,12 @@ msgstr "工具面板(&D)"
 msgid "Patterns"
 msgstr "圖案"
 
-#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
+#: libs/ui/kis_control_frame.cpp:271 libs/ui/kis_control_frame.cpp:272
 #, kde-format
 msgid "Custom Pattern"
 msgstr "自訂圖案"
 
-#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:411
+#: libs/ui/kis_control_frame.cpp:320 libs/ui/KisApplication.cpp:411
 #: libs/ui/KisApplication.cpp:412
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -35240,13 +35234,13 @@ msgstr "自訂圖案"
 msgid "Gradients"
 msgstr "漸變"
 
-#: libs/ui/kis_control_frame.cpp:359
+#: libs/ui/kis_control_frame.cpp:355
 #, fuzzy, kde-format
 #| msgid "Docker:"
 msgid "Docker box"
 msgstr "工具面板："
 
-#: libs/ui/kis_control_frame.cpp:365
+#: libs/ui/kis_control_frame.cpp:361
 #, fuzzy, kde-format
 #| msgid "Toolbox and dockers"
 msgid "Toolbar Docker Box"
@@ -35817,8 +35811,8 @@ msgstr "選擇作業空間"
 msgid "Brush composite"
 msgstr "筆刷分量"
 
-#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
-#: libs/ui/kis_paintop_box.cc:1384
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, kde-format
 msgid ""
 "%1\n"
@@ -40859,26 +40853,26 @@ msgstr "下移"
 msgid "Configure docker panel"
 msgstr "設定工具面板"
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr ""
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "設定 %1 工具面板"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 #| msgid "Available properties:"
 msgid "Available dockers"
 msgstr "可用屬性："
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 #| msgid "Current Layer"
 msgid "Current dockers"
@@ -44416,12 +44410,12 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "筆刷編輯器"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, kde-format
 msgid "Reload Original Preset"
 msgstr "重新載入原始預設"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, kde-format
 msgid "Configure the on-canvas brush editor"
 msgstr "設定畫布上的筆刷編輯器"
@@ -71614,6 +71608,11 @@ msgstr ""
 "在全範圍與子範圍之間切換。\n"
 "全範圍：[%1, %2]\n"
 "子範圍：[%3, %4]"
+
+#, fuzzy
+#~| msgid "&Docker"
+#~ msgid "&Docker Box"
+#~ msgstr "工具面板(&D)"
 
 #~ msgid ""
 #~ "<html>\n"

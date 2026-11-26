@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:23+0000\n"
-"PO-Revision-Date: 2026-11-05 05:26+0100\n"
+"POT-Creation-Date: 2026-11-26 01:01+0000\n"
+"PO-Revision-Date: 2026-11-25 13:57+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -23363,12 +23363,10 @@ msgid "Burn (SAI)"
 msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:70
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Shade (IFS Illusions)"
-#| msgid "Shade (IFS Illusions)"
+#, kde-format
 msgctxt "Blending mode - Shade (SAI)"
 msgid "Shade (SAI)"
-msgstr "ჩრდილი (IFS Illusions)"
+msgstr "დაჩრდილვა (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
@@ -23521,12 +23519,10 @@ msgid "Luminosity/Shine (SAI)"
 msgstr "განათებულობა/ბრწყინვა (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:97
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Dodge"
+#, kde-format
 msgctxt "Blending mode - Dodge (SAI)"
 msgid "Dodge (SAI)"
-msgstr "გაღიავება"
+msgstr "აცილება (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:99
 #, kde-format
@@ -23571,12 +23567,10 @@ msgid "Difference"
 msgstr "სხვაობა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Difference"
-#| msgid "Difference"
+#, kde-format
 msgctxt "Blending mode - Difference (SAI)"
 msgid "Difference (SAI)"
-msgstr "სხვაობა"
+msgstr "სხვაობა (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:108
 #, kde-format
@@ -23651,12 +23645,10 @@ msgid "Alpha Darken"
 msgstr "ალფა-არხის გამუქება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Alpha Darken"
-#| msgid "Alpha Darken"
+#, kde-format
 msgctxt "Blending mode - Alpha Darken Clamp"
 msgid "Alpha Darken Clamp"
-msgstr "ალფა-არხის გამუქება"
+msgstr "ალფა გამუქება ჭახრაკი"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:123
 #, kde-format
@@ -23689,12 +23681,10 @@ msgid "Hard Mix Softer (Photoshop)"
 msgstr "მყარი შერევა უფრო რბილად (Photoshop)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Hard Mix"
-#| msgid "Hard Mix"
+#, kde-format
 msgctxt "Blending mode - Hard Mix (SAI)"
 msgid "Hard Mix (SAI)"
-msgstr "უხეში შერევა"
+msgstr "უხეში შერევა (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:129
 #, kde-format
@@ -23793,12 +23783,10 @@ msgid "Burn/Dodge (SAI)"
 msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:145
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Luminosity/Shine (SAI)"
-#| msgid "Luminosity/Shine (SAI)"
+#, kde-format
 msgctxt "Blending mode - Shade/Shine (SAI)"
 msgid "Shade/Shine (SAI)"
-msgstr "განათებულობა/ბრწყინვა (SAI)"
+msgstr "დაჩრდილვა/ბრწყინვა (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:147
 #, kde-format
@@ -25758,8 +25746,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9PreserveTransparency)
 #: libs/ui/animation/video_export_options_dialog.ui:272
-#, fuzzy, kde-format
-#| msgid "Preserve Transparency"
+#, kde-format
 msgid "Preserve transparency"
 msgstr "გამჭვირვალობის შენარჩუნება"
 
@@ -26259,11 +26246,10 @@ msgid "VP9"
 msgstr "VP9"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:310
-#, fuzzy, kde-format
-#| msgid "Grayscale (without transparency)"
+#, kde-format
 msgctxt "ProRes codec name"
 msgid "ProRes 4444 (with transparency)"
-msgstr "ნაცრისფერი (გამჭვირვალობის გარეშე)"
+msgstr "ProRes 4444 (გამჭვირვალობით)"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:313
 #, kde-format
@@ -28634,10 +28620,9 @@ msgid "Support Krita"
 msgstr "Krita-ის მხარდაჭერა"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:24
-#, fuzzy, kde-format
-#| msgid "Do not show the splash screen"
+#, kde-format
 msgid "Become a supporter to change the splash screen."
-msgstr "მისალმების ეკრანი ნაჩვენები არ იქნება"
+msgstr "გახდით მხარდამჭერი მისალმების ეკრანის შესაცვლელად."
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:34
 #, kde-format
@@ -28674,11 +28659,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisSplashSourceDialog)
 #: libs/ui/dialogs/KisSplashSourceDialog.ui:14
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "Change Splash Screen"
-msgstr "პარამეტრის შეცვლა"
+msgstr "მისალმების ფანჯრის შეცვლა"
 
 #. i18n: ectx: property (text), widget (QLabel, m_explanationLabel)
 #: libs/ui/dialogs/KisSplashSourceDialog.ui:23
@@ -28918,7 +28901,7 @@ msgstr ""
 #: libs/ui/forms/KisWelcomePage.ui:1611 libs/ui/KisWelcomePageWidget.cpp:151
 #, kde-format
 msgid "Automatically check for updates"
-msgstr ""
+msgstr "განახლების ავტომატური შემოწმება"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, checkNowButton)
 #: libs/ui/forms/KisWelcomePage.ui:1631
@@ -28930,7 +28913,7 @@ msgstr ""
 #: libs/ui/forms/KisWelcomePage.ui:1634
 #, kde-format
 msgid "Check Now"
-msgstr ""
+msgstr "ახლა შემოწმება"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1756
@@ -31172,16 +31155,15 @@ msgstr "ხელსაწყოთა პანელების დამა�
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnChangeSplash)
 #: libs/ui/forms/wdggeneralsettings.ui:1856
-#, fuzzy, kde-format
-#| msgid "Channel"
+#, kde-format
 msgid "Change…"
-msgstr "არხი"
+msgstr "ცვლილება…"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblSplashTitle)
 #: libs/ui/forms/wdggeneralsettings.ui:1878
 #, kde-format
 msgid "Splash screen:"
-msgstr ""
+msgstr "მისალმების ფანჯარა:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgGeometryOptions)
 #: libs/ui/forms/wdggeometryoptions.ui:18
@@ -34587,62 +34569,57 @@ msgstr ""
 msgid "Favorites"
 msgstr "სანიშნები"
 
-#: libs/ui/kis_control_frame.cpp:67
+#: libs/ui/kis_control_frame.cpp:68
 #, kde-format
 msgid "Fill Patterns"
 msgstr "შაბლონების შევსება"
 
-#: libs/ui/kis_control_frame.cpp:71
+#: libs/ui/kis_control_frame.cpp:72
 #, kde-format
 msgid "Fill Gradients"
 msgstr "გრადიენტების შევსება"
 
-#: libs/ui/kis_control_frame.cpp:81
+#: libs/ui/kis_control_frame.cpp:82
 #, kde-format
 msgid "&Patterns"
 msgstr "&შაბლონები"
 
-#: libs/ui/kis_control_frame.cpp:88
+#: libs/ui/kis_control_frame.cpp:89
 #, kde-format
 msgid "&Gradients"
 msgstr "&გრადაციები"
 
-#: libs/ui/kis_control_frame.cpp:104
+#: libs/ui/kis_control_frame.cpp:105
 #, kde-format
 msgid "&Choose foreground and background colors"
 msgstr "წინა &პლანისა და ფონის ფერების არჩევა"
 
-#: libs/ui/kis_control_frame.cpp:122
+#: libs/ui/kis_control_frame.cpp:123
 #, kde-format
 msgid "&Choose foreground colour"
 msgstr "აირჩიეთ წინა პლანის &ფერი"
 
-#: libs/ui/kis_control_frame.cpp:141
+#: libs/ui/kis_control_frame.cpp:142
 #, kde-format
 msgid "&Choose background colour"
 msgstr "აი&რჩიეთ ფონის ფერი"
 
-#: libs/ui/kis_control_frame.cpp:160
+#: libs/ui/kis_control_frame.cpp:161
 #, kde-format
 msgid "&Swap Foreground and Background Colors"
 msgstr "წინა პლანის და ფონის ფერების მიმოცვლა"
 
-#: libs/ui/kis_control_frame.cpp:179
+#: libs/ui/kis_control_frame.cpp:180
 #, kde-format
 msgid "&reset Foreground and Background Colors"
 msgstr "წინა პლანის და ფონის ფერების ჩამოყ&რა"
 
-#: libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:196
 #, kde-format
 msgid "&Painter's Tools"
 msgstr "&მხატვრის ხელსაწყოები"
 
-#: libs/ui/kis_control_frame.cpp:203
-#, kde-format
-msgid "&Docker Box"
-msgstr "&მიმაგრების ჩარჩო"
-
-#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:426
+#: libs/ui/kis_control_frame.cpp:268 libs/ui/KisApplication.cpp:426
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34651,12 +34628,12 @@ msgstr "&მიმაგრების ჩარჩო"
 msgid "Patterns"
 msgstr "შაბლონები"
 
-#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
+#: libs/ui/kis_control_frame.cpp:271 libs/ui/kis_control_frame.cpp:272
 #, kde-format
 msgid "Custom Pattern"
 msgstr "მორგებული ნიმუში"
 
-#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:411
+#: libs/ui/kis_control_frame.cpp:320 libs/ui/KisApplication.cpp:411
 #: libs/ui/KisApplication.cpp:412
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -34665,12 +34642,12 @@ msgstr "მორგებული ნიმუში"
 msgid "Gradients"
 msgstr "გრადაციები"
 
-#: libs/ui/kis_control_frame.cpp:359
+#: libs/ui/kis_control_frame.cpp:355
 #, kde-format
 msgid "Docker box"
 msgstr "მიმაგრების ჩარჩო"
 
-#: libs/ui/kis_control_frame.cpp:365
+#: libs/ui/kis_control_frame.cpp:361
 #, kde-format
 msgid "Toolbar Docker Box"
 msgstr "ხელსაწყოთა პანელის მიმაგრების ველი"
@@ -35239,8 +35216,8 @@ msgstr "აირჩიეთ სამუშაო სივრცე"
 msgid "Brush composite"
 msgstr "შედგენილი ფუნჯი"
 
-#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
-#: libs/ui/kis_paintop_box.cc:1384
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, kde-format
 msgid ""
 "%1\n"
@@ -35412,22 +35389,16 @@ msgid "Select Opaque"
 msgstr "გაუმჭვირვალობის მონიშვნა"
 
 #: libs/ui/kis_splash_screen.cpp:48
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "This is appended to the color profile which is the default for the given "
-#| "colorspace and bit-depth"
-#| msgid "(Default)"
+#, kde-format
 msgctxt "Splash image default"
 msgid "%1 (default)"
-msgstr "(ნაგულისხმევი)"
+msgstr "%1 (ნაგულისხმევი)"
 
 #: libs/ui/kis_splash_screen.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "in-app purchases, a bundle that the user can't acquire"
-#| msgid "Not available."
+#, kde-format
 msgctxt "Splash image unavailable"
 msgid "%1 (not available)"
-msgstr "ხელმისაწვდომი არაა."
+msgstr "%1 (ხელმისაწვდომი არაა)"
 
 #: libs/ui/kis_splash_screen.cpp:62
 #, kde-format
@@ -35442,20 +35413,16 @@ msgid "Mascot"
 msgstr ""
 
 #: libs/ui/kis_splash_screen.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "Normal splash artist name"
-#| msgid "Tyson Tan"
+#, kde-format
 msgctxt "Splash artist name"
 msgid "Tyson Tan"
 msgstr "Tyson Tan"
 
 #: libs/ui/kis_splash_screen.cpp:203
-#, fuzzy, kde-format
-#| msgctxt "@label:inlistbox"
-#| msgid "Plain Text"
+#, kde-format
 msgctxt "Splash screen option without Kiki"
 msgid "Plain"
-msgstr "უბრალო ტექსტი"
+msgstr "უბრალო"
 
 #: libs/ui/kis_statusbar.cc:231
 #, kde-format
@@ -38312,10 +38279,9 @@ msgid "Brush Size: %1 px"
 msgstr "ფუნჯის ზომა: %1 პქს"
 
 #: libs/ui/tool/kis_tool_utils.cpp:429
-#, fuzzy, kde-format
-#| msgid "Layer can be painted in Wash Mode only."
+#, kde-format
 msgid "Layer can't be painted in Build Up mode."
-msgstr "ფენის დახატვა, მხოლოდ, გარეცხვის რეჟიმში შეგიძლიათ."
+msgstr "ფენის დახატვა აგების რეჟიმში შეუძლებელია."
 
 #: libs/ui/tool/kis_tool_utils.cpp:431
 #, kde-format
@@ -38385,11 +38351,9 @@ msgid "Toolbox"
 msgstr "ხელსაწყოები"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:190
-#, fuzzy, kde-format
-#| msgctxt "Set the gradient chooser to show custom size items"
-#| msgid "Custom size items"
+#, kde-format
 msgid "Customize Disabled Tools"
-msgstr "ელემენტების ზომის ხელით მითითება"
+msgstr "გამორთული ხელსაწყოების მორგება"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:194
 #, kde-format
@@ -38454,23 +38418,19 @@ msgid "&Vertical"
 msgstr "&ვერტიკალური"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:344
-#, fuzzy, kde-format
-#| msgid "Custom color"
+#, kde-format
 msgid "Customize Toolbox"
-msgstr "ფერის არჩევა"
+msgstr "ხელსაწყოთა პანელის მორგება"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:345
-#, fuzzy, kde-format
-#| msgid "Enabled: false"
+#, kde-format
 msgid "Enabled tools"
-msgstr "ჩართულია: ცრუ"
+msgstr "ჩართული ხელსაწყოები"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:346
-#, fuzzy, kde-format
-#| msgctxt "touch painting"
-#| msgid "Disabled"
+#, kde-format
 msgid "Disabled tools"
-msgstr "გამორთულია"
+msgstr "გამორთული ხელსაწყოები"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format
@@ -39592,17 +39552,14 @@ msgstr "ესკიზები"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgid "Strokes"
-msgstr "გამოძრავება"
+msgstr "შტრიხები"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
-#, fuzzy, kde-format
-#| msgid "Large Thumbnail"
+#, kde-format
 msgid "Strokes and Thumbnails"
-msgstr "დიდი მინიატურა"
+msgstr "შტრიხები და მინიატურები"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
@@ -39631,10 +39588,9 @@ msgid "Rename the brush preset"
 msgstr "ფუნჯის პრესეტის სახელის გადარქმევა"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
-#, fuzzy, kde-format
-#| msgid "Thumbnail Size"
+#, kde-format
 msgid "Thumbnails and Strokes"
-msgstr "მინიატურის ზომა"
+msgstr "მინიატურები და შტრიხები"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:218
 #, kde-format
@@ -40047,10 +40003,9 @@ msgid "Amount:"
 msgstr "რაოდენობა:"
 
 #: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:325
-#, fuzzy, kde-format
-#| msgid "Loading Pages..."
+#, kde-format
 msgid "Loading..."
-msgstr "გვერდების ჩატვირთვა..."
+msgstr "იტვირთება..."
 
 #: libs/ui/widgets/KisDitherWidget.cpp:45
 #, kde-format
@@ -40130,25 +40085,25 @@ msgstr "ქვემოთ"
 msgid "Configure docker panel"
 msgstr "პანელის მორგება"
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr "პანელი ღიაა %1-ში. დახურეთ %1 აქ საჩვენებლად."
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "%1 მიმაგრების მორგება"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Available dockers"
 msgstr "ხელმისაწვდომი პანელები"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Current dockers"
 msgstr "მიმდინარე პანელები"
@@ -43681,12 +43636,12 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "ტილოზე მდებარე ფუნჯის რედაქტორი"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, kde-format
 msgid "Reload Original Preset"
 msgstr "საწყისი პრესეტის თავიდან ჩატვირთვა"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, kde-format
 msgid "Configure the on-canvas brush editor"
 msgstr "ტილოზე მდებარე ფუნჯის რედაქტორის მორგება"
@@ -60556,7 +60511,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:82
 #, kde-format
 msgid "Clamp"
-msgstr ""
+msgstr "ჭახრაკი"
 
 #. i18n: ectx: property (text), widget (QLabel, lblClamp)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:89
@@ -61247,13 +61202,10 @@ msgid "Vertically"
 msgstr "ვერტიკალურად"
 
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:29
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Only wash mode is possible when using a masked brush."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Build up mode is not available when using a masked brush."
-msgstr ""
-"შენიღბული ფუნჯის გამოყენებისას შესაძლებელია, მხოლოდ, ჩამორეცხვის რეჟიმი."
+msgstr "შენიღბული ფუნჯის გამოყენება აგების რეჟიმში ხელმისაწვდომი არაა."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
 #, kde-format
@@ -62974,10 +62926,8 @@ msgid "Export not Possible"
 msgstr "გატანა შეუძლებელია"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:119
-#, fuzzy
-#| msgid "No frames to export."
 msgid "No pages to export."
-msgstr "გასატანი კადრების გარეშე."
+msgstr "გასატანი გვერდების გარეშე."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:144
 msgid "Preparing export."
@@ -70219,6 +70169,9 @@ msgstr ""
 "გადართვა სრულ შუალედსა და ქვეშუალედს შორის.\n"
 "სრული შუალედი: [%1, %2]\n"
 "ქვეშუალედი: [%3, %4]"
+
+#~ msgid "&Docker Box"
+#~ msgstr "&მიმაგრების ჩარჩო"
 
 #~ msgid ""
 #~ "<html>\n"

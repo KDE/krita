@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:23+0000\n"
+"POT-Creation-Date: 2026-11-26 01:01+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -36070,68 +36070,61 @@ msgstr ""
 msgid "Favorites"
 msgstr "Omiljeno"
 
-#: libs/ui/kis_control_frame.cpp:67
+#: libs/ui/kis_control_frame.cpp:68
 #, kde-format
 msgid "Fill Patterns"
 msgstr "Obrasci popune"
 
-#: libs/ui/kis_control_frame.cpp:71
+#: libs/ui/kis_control_frame.cpp:72
 #, fuzzy, kde-format
 #| msgid "Edit Gradient"
 msgid "Fill Gradients"
 msgstr "Izmijeni Gradijent"
 
-#: libs/ui/kis_control_frame.cpp:81
+#: libs/ui/kis_control_frame.cpp:82
 #, kde-format
 msgid "&Patterns"
 msgstr "&Obrasci"
 
-#: libs/ui/kis_control_frame.cpp:88
+#: libs/ui/kis_control_frame.cpp:89
 #, kde-format
 msgid "&Gradients"
 msgstr "&Gradijenti"
 
-#: libs/ui/kis_control_frame.cpp:104
+#: libs/ui/kis_control_frame.cpp:105
 #, fuzzy, kde-format
 msgid "&Choose foreground and background colors"
 msgstr "Resetuj boje iscrtavanja i pozadine"
 
-#: libs/ui/kis_control_frame.cpp:122
+#: libs/ui/kis_control_frame.cpp:123
 #, fuzzy, kde-format
 #| msgid "Foreground Color"
 msgid "&Choose foreground colour"
 msgstr "Boja iscrtavanja"
 
-#: libs/ui/kis_control_frame.cpp:141
+#: libs/ui/kis_control_frame.cpp:142
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Set Background Color"
 msgid "&Choose background colour"
 msgstr "Postavite boju pozadine"
 
-#: libs/ui/kis_control_frame.cpp:160
+#: libs/ui/kis_control_frame.cpp:161
 #, fuzzy, kde-format
 msgid "&Swap Foreground and Background Colors"
 msgstr "Zamijeni boju iscrtavanja i pozadine"
 
-#: libs/ui/kis_control_frame.cpp:179
+#: libs/ui/kis_control_frame.cpp:180
 #, fuzzy, kde-format
 msgid "&reset Foreground and Background Colors"
 msgstr "Resetuj boje iscrtavanja i pozadine"
 
-#: libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:196
 #, kde-format
 msgid "&Painter's Tools"
 msgstr "&Slikarevi alati"
 
-#: libs/ui/kis_control_frame.cpp:203
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "&Dockers"
-msgid "&Docker Box"
-msgstr "&Sidrišta"
-
-#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:426
+#: libs/ui/kis_control_frame.cpp:268 libs/ui/KisApplication.cpp:426
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -36140,12 +36133,12 @@ msgstr "&Sidrišta"
 msgid "Patterns"
 msgstr "Uzorci"
 
-#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
+#: libs/ui/kis_control_frame.cpp:271 libs/ui/kis_control_frame.cpp:272
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Posebna šema"
 
-#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:411
+#: libs/ui/kis_control_frame.cpp:320 libs/ui/KisApplication.cpp:411
 #: libs/ui/KisApplication.cpp:412
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -36154,12 +36147,12 @@ msgstr "Posebna šema"
 msgid "Gradients"
 msgstr "Gradijenti"
 
-#: libs/ui/kis_control_frame.cpp:359
+#: libs/ui/kis_control_frame.cpp:355
 #, fuzzy, kde-format
 msgid "Docker box"
 msgstr "&Sidrišta"
 
-#: libs/ui/kis_control_frame.cpp:365
+#: libs/ui/kis_control_frame.cpp:361
 #, fuzzy, kde-format
 #| msgid "Toolbox and palettes"
 msgid "Toolbar Docker Box"
@@ -36787,8 +36780,8 @@ msgstr "Izaberi radnu površinu"
 msgid "Brush composite"
 msgstr "Mješavina četke"
 
-#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
-#: libs/ui/kis_paintop_box.cc:1384
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, fuzzy, kde-format
 #| msgid "Selected"
 msgid ""
@@ -41913,26 +41906,26 @@ msgstr "Nagni prema dolje"
 msgid "Configure docker panel"
 msgstr "Konfiguracija:"
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr ""
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, fuzzy, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "Konfiguracija:"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 #| msgid "Material properties"
 msgid "Available dockers"
 msgstr "Osobine materijala"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 #| msgid "Current Layer"
 msgid "Current dockers"
@@ -45603,12 +45596,12 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "Prikaži istoriju boja"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, fuzzy, kde-format
 msgid "Reload Original Preset"
 msgstr "Ponovo učitaj originalne postavke"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, fuzzy, kde-format
 msgid "Configure the on-canvas brush editor"
 msgstr "Prikaži istoriju boja"
@@ -74022,6 +74015,12 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~| msgctxt "@action:inmenu"
+#~| msgid "&Dockers"
+#~ msgid "&Docker Box"
+#~ msgstr "&Sidrišta"
 
 #~ msgid ""
 #~ "<html>\n"

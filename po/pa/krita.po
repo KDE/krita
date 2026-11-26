@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:23+0000\n"
+"POT-Creation-Date: 2026-11-26 01:01+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -37180,73 +37180,67 @@ msgstr ""
 msgid "Favorites"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: libs/ui/kis_control_frame.cpp:67
+#: libs/ui/kis_control_frame.cpp:68
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgid "Fill Patterns"
 msgstr "ਪਰਤ"
 
-#: libs/ui/kis_control_frame.cpp:71
+#: libs/ui/kis_control_frame.cpp:72
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgid "Fill Gradients"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
-#: libs/ui/kis_control_frame.cpp:81
+#: libs/ui/kis_control_frame.cpp:82
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgid "&Patterns"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
-#: libs/ui/kis_control_frame.cpp:88
+#: libs/ui/kis_control_frame.cpp:89
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgid "&Gradients"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
-#: libs/ui/kis_control_frame.cpp:104
+#: libs/ui/kis_control_frame.cpp:105
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "&Choose foreground and background colors"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: libs/ui/kis_control_frame.cpp:122
+#: libs/ui/kis_control_frame.cpp:123
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "&Choose foreground colour"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: libs/ui/kis_control_frame.cpp:141
+#: libs/ui/kis_control_frame.cpp:142
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "&Choose background colour"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: libs/ui/kis_control_frame.cpp:160
+#: libs/ui/kis_control_frame.cpp:161
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "&Swap Foreground and Background Colors"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: libs/ui/kis_control_frame.cpp:179
+#: libs/ui/kis_control_frame.cpp:180
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "&reset Foreground and Background Colors"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: libs/ui/kis_control_frame.cpp:195
+#: libs/ui/kis_control_frame.cpp:196
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgid "&Painter's Tools"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: libs/ui/kis_control_frame.cpp:203
-#, fuzzy, kde-format
-#| msgid "Document"
-msgid "&Docker Box"
-msgstr "ਡੌਕੂਮੈਂਟ"
-
-#: libs/ui/kis_control_frame.cpp:272 libs/ui/KisApplication.cpp:426
+#: libs/ui/kis_control_frame.cpp:268 libs/ui/KisApplication.cpp:426
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -37256,13 +37250,13 @@ msgstr "ਡੌਕੂਮੈਂਟ"
 msgid "Patterns"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
-#: libs/ui/kis_control_frame.cpp:275 libs/ui/kis_control_frame.cpp:276
+#: libs/ui/kis_control_frame.cpp:271 libs/ui/kis_control_frame.cpp:272
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgid "Custom Pattern"
 msgstr "ਟੂਲ ਚੋਣਾਂ"
 
-#: libs/ui/kis_control_frame.cpp:324 libs/ui/KisApplication.cpp:411
+#: libs/ui/kis_control_frame.cpp:320 libs/ui/KisApplication.cpp:411
 #: libs/ui/KisApplication.cpp:412
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -37272,13 +37266,13 @@ msgstr "ਟੂਲ ਚੋਣਾਂ"
 msgid "Gradients"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
-#: libs/ui/kis_control_frame.cpp:359
+#: libs/ui/kis_control_frame.cpp:355
 #, fuzzy, kde-format
 #| msgid "Document"
 msgid "Docker box"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: libs/ui/kis_control_frame.cpp:365
+#: libs/ui/kis_control_frame.cpp:361
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Toolbar Docker Box"
@@ -37959,8 +37953,8 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 msgid "Brush composite"
 msgstr "ਸ਼ਕਲ"
 
-#: libs/ui/kis_paintop_box.cc:1348 libs/ui/kis_paintop_box.cc:1370
-#: libs/ui/kis_paintop_box.cc:1384
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid ""
@@ -43314,27 +43308,27 @@ msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 msgid "Configure docker panel"
 msgstr "ਸੰਰਚਨਾ"
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr ""
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "ਸੰਰਚਨਾ"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Available dockers"
 msgstr "ਸਥਿਤੀ"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgid "Current dockers"
@@ -47192,13 +47186,13 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, fuzzy, kde-format
 #| msgid "Configure..."
 msgid "Reload Original Preset"
 msgstr "...ਸੰਰਚਨਾ"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, fuzzy, kde-format
 #| msgid "Show master shapes"
 msgid "Configure the on-canvas brush editor"
@@ -76504,6 +76498,11 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgid "&Docker Box"
+#~ msgstr "ਡੌਕੂਮੈਂਟ"
 
 #, fuzzy
 #~| msgid "Import Slideshow"

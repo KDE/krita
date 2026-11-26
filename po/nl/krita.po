@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 03:24+0000\n"
+"POT-Creation-Date: 2026-11-26 03:12+0000\n"
 "PO-Revision-Date: 2026-11-24 23:18+0100\n"
 "Last-Translator: freek <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -34555,12 +34555,7 @@ msgstr "Kiezer van voorgrondkleur &openen"
 msgid "&Open Background color selector"
 msgstr "Kiezer van achtergrondkleur &openen"
 
-#: libs/ui/kis_control_frame.cpp:129
-#, kde-format
-msgid "&Docker Box"
-msgstr "&Vastzetvak"
-
-#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:453
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:453
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34569,12 +34564,12 @@ msgstr "&Vastzetvak"
 msgid "Patterns"
 msgstr "Patronen"
 
-#: libs/ui/kis_control_frame.cpp:199 libs/ui/kis_control_frame.cpp:200
+#: libs/ui/kis_control_frame.cpp:194 libs/ui/kis_control_frame.cpp:195
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Aangepaste patronen"
 
-#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:438
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:438
 #: libs/ui/KisApplication.cpp:439
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -34583,12 +34578,12 @@ msgstr "Aangepaste patronen"
 msgid "Gradients"
 msgstr "Kleurverloop"
 
-#: libs/ui/kis_control_frame.cpp:283
+#: libs/ui/kis_control_frame.cpp:278
 #, kde-format
 msgid "Docker box"
 msgstr "Vastzetvak"
 
-#: libs/ui/kis_control_frame.cpp:289
+#: libs/ui/kis_control_frame.cpp:284
 #, kde-format
 msgid "Toolbar Docker Box"
 msgstr "Werkbladmet vastzetvak"
@@ -40392,25 +40387,25 @@ msgstr "Omlaag"
 msgid "Configure docker panel"
 msgstr "Verankerpaneel configureren"
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr "Vastzetter is open in %1. %1 sluiten om hier te tonen."
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "%1 vastzetters configureren"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Available dockers"
 msgstr "Beschikbare vastzetters"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Current dockers"
 msgstr "Huidige vastzetters"
@@ -43968,12 +43963,12 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "In-werkblad penseelbewerker"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, kde-format
 msgid "Reload Original Preset"
 msgstr "Originele voorinstelling opnieuw laden"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, kde-format
 msgid "Configure the on-canvas brush editor"
 msgstr "Penseelbewerker on-canvas configureren"
@@ -70512,6 +70507,9 @@ msgstr ""
 "Schakelen tussen volledige reeks en subreeks.\n"
 "Volledige reeks: [%1, %2]\n"
 "Subreeks: [%3, %4]"
+
+#~ msgid "&Docker Box"
+#~ msgstr "&Vastzetvak"
 
 #~ msgctxt "action"
 #~ msgid "S-Pen Actions"

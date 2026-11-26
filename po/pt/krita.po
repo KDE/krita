@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 03:24+0000\n"
+"POT-Creation-Date: 2026-11-26 03:12+0000\n"
 "PO-Revision-Date: 2023-07-13 00:28+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -35216,13 +35216,7 @@ msgstr "Abrir &o Selector da Cor Principal"
 msgid "&Open Background color selector"
 msgstr "Abrir &o Selector da Cor de Fundo"
 
-#: libs/ui/kis_control_frame.cpp:129
-#, fuzzy, kde-format
-#| msgid "&Docker"
-msgid "&Docker Box"
-msgstr "Área &Acoplável"
-
-#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:453
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:453
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -35231,12 +35225,12 @@ msgstr "Área &Acoplável"
 msgid "Patterns"
 msgstr "Padrões"
 
-#: libs/ui/kis_control_frame.cpp:199 libs/ui/kis_control_frame.cpp:200
+#: libs/ui/kis_control_frame.cpp:194 libs/ui/kis_control_frame.cpp:195
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Padrão Personalizado"
 
-#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:438
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:438
 #: libs/ui/KisApplication.cpp:439
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -35245,13 +35239,13 @@ msgstr "Padrão Personalizado"
 msgid "Gradients"
 msgstr "Gradientes"
 
-#: libs/ui/kis_control_frame.cpp:283
+#: libs/ui/kis_control_frame.cpp:278
 #, fuzzy, kde-format
 #| msgid "Docker:"
 msgid "Docker box"
 msgstr "Área Acoplável:"
 
-#: libs/ui/kis_control_frame.cpp:289
+#: libs/ui/kis_control_frame.cpp:284
 #, fuzzy, kde-format
 #| msgid "Toolbox and dockers"
 msgid "Toolbar Docker Box"
@@ -41174,27 +41168,27 @@ msgstr "Descer"
 msgid "Configure docker panel"
 msgstr "Configurar o Krita"
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr ""
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, fuzzy, kde-format
 #| msgid "Configure Krita"
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "Configurar o Krita"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 #| msgid "Available properties:"
 msgid "Available dockers"
 msgstr "Propriedades disponíveis:"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 #| msgid "Current Layer"
 msgid "Current dockers"
@@ -44794,12 +44788,12 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "Editor do Pincel"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, kde-format
 msgid "Reload Original Preset"
 msgstr "Recarregar a Predefinição Original"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, kde-format
 msgid "Configure the on-canvas brush editor"
 msgstr "Configurar o editor de pincéis na área de desenho"
@@ -71808,6 +71802,11 @@ msgstr ""
 "Comutar entre a gama completa e uma sub-gama.\n"
 "Gama completa: [%1, %2]\n"
 "Sub-gama: [%3, %4]"
+
+#, fuzzy
+#~| msgid "&Docker"
+#~ msgid "&Docker Box"
+#~ msgstr "Área &Acoplável"
 
 #~ msgctxt "action"
 #~ msgid "S-Pen Actions"

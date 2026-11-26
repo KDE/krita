@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 03:24+0000\n"
+"POT-Creation-Date: 2026-11-26 03:12+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -34330,12 +34330,7 @@ msgstr "Отстрани табулатор"
 msgid "&Open Background color selector"
 msgstr "Отстрани табулатор"
 
-#: libs/ui/kis_control_frame.cpp:129
-#, fuzzy, kde-format
-msgid "&Docker Box"
-msgstr "Насловна линија:"
-
-#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:453
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:453
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34344,12 +34339,12 @@ msgstr "Насловна линија:"
 msgid "Patterns"
 msgstr "Преглед на страна"
 
-#: libs/ui/kis_control_frame.cpp:199 libs/ui/kis_control_frame.cpp:200
+#: libs/ui/kis_control_frame.cpp:194 libs/ui/kis_control_frame.cpp:195
 #, fuzzy, kde-format
 msgid "Custom Pattern"
 msgstr "Одбери слика"
 
-#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:438
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:438
 #: libs/ui/KisApplication.cpp:439
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -34358,12 +34353,12 @@ msgstr "Одбери слика"
 msgid "Gradients"
 msgstr "Отстрани приказ"
 
-#: libs/ui/kis_control_frame.cpp:283
+#: libs/ui/kis_control_frame.cpp:278
 #, fuzzy, kde-format
 msgid "Docker box"
 msgstr "Насловна линија:"
 
-#: libs/ui/kis_control_frame.cpp:289
+#: libs/ui/kis_control_frame.cpp:284
 #, fuzzy, kde-format
 msgid "Toolbar Docker Box"
 msgstr "inch"
@@ -39870,25 +39865,25 @@ msgstr "Отстрани шаблон"
 msgid "Configure docker panel"
 msgstr "Отстрани табулатор"
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr ""
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, fuzzy, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "Отстрани табулатор"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 msgid "Available dockers"
 msgstr "Вертикално"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, fuzzy, kde-format
 msgid "Current dockers"
 msgstr "Создади шаблон"
@@ -43416,12 +43411,12 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "Покажи %1 алатник"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, fuzzy, kde-format
 msgid "Reload Original Preset"
 msgstr "Отстрани шаблон"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, fuzzy, kde-format
 #| msgid "Show %1 Toolbar"
 msgid "Configure the on-canvas brush editor"
@@ -69788,6 +69783,10 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+
+#, fuzzy
+#~ msgid "&Docker Box"
+#~ msgstr "Насловна линија:"
 
 #, fuzzy
 #~ msgctxt "action"

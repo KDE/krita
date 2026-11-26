@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 03:24+0000\n"
+"POT-Creation-Date: 2026-11-26 03:12+0000\n"
 "PO-Revision-Date: 2026-03-31 22:28+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -34440,12 +34440,7 @@ msgstr "Előtérszín-választó &megnyitása"
 msgid "&Open Background color selector"
 msgstr "Háttérszín-választó &megnyitása"
 
-#: libs/ui/kis_control_frame.cpp:129
-#, kde-format
-msgid "&Docker Box"
-msgstr "&Dokkolódoboz"
-
-#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:453
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:453
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34454,12 +34449,12 @@ msgstr "&Dokkolódoboz"
 msgid "Patterns"
 msgstr "Minták"
 
-#: libs/ui/kis_control_frame.cpp:199 libs/ui/kis_control_frame.cpp:200
+#: libs/ui/kis_control_frame.cpp:194 libs/ui/kis_control_frame.cpp:195
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Egyéni minta"
 
-#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:438
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:438
 #: libs/ui/KisApplication.cpp:439
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -34468,12 +34463,12 @@ msgstr "Egyéni minta"
 msgid "Gradients"
 msgstr "Átmenetek"
 
-#: libs/ui/kis_control_frame.cpp:283
+#: libs/ui/kis_control_frame.cpp:278
 #, kde-format
 msgid "Docker box"
 msgstr "Dokkolódoboz"
 
-#: libs/ui/kis_control_frame.cpp:289
+#: libs/ui/kis_control_frame.cpp:284
 #, kde-format
 msgid "Toolbar Docker Box"
 msgstr "Eszköztár dokkolódoboz"
@@ -40247,8 +40242,8 @@ msgstr "Le"
 msgid "Configure docker panel"
 msgstr "Dokkolópanel beállítása"
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
@@ -40256,18 +40251,18 @@ msgstr ""
 "A dokkoló meg van nyitva itt: %1. Zárja be a(z) %1 elemet, hogy itt "
 "megjelenjen."
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "%1 dokkolók beállítása"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Available dockers"
 msgstr "Elérhető dokkolók"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Current dockers"
 msgstr "Jelenlegi dokkolók"
@@ -43822,12 +43817,12 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "Rajzvásznon lévő ecsetszerkesztő"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, kde-format
 msgid "Reload Original Preset"
 msgstr "Eredeti készlet újratöltése"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, kde-format
 msgid "Configure the on-canvas brush editor"
 msgstr "Rajzvásznon lévő ecsetszerkesztő beállítása"
@@ -70303,6 +70298,9 @@ msgstr ""
 "Váltás a teljes tartomány és a részleges tartomány között.\n"
 "Teljes tartomány: [%1, %2]\n"
 "Részleges tartomány: [%3, %4]"
+
+#~ msgid "&Docker Box"
+#~ msgstr "&Dokkolódoboz"
 
 #~ msgctxt "action"
 #~ msgid "S-Pen Actions"

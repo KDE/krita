@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 03:24+0000\n"
+"POT-Creation-Date: 2026-11-26 03:12+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -9038,7 +9038,7 @@ msgstr "重置为预设原始状态"
 #, kde-format
 msgctxt "action"
 msgid "Preserve Alpha"
-msgstr "保持透明度"
+msgstr "保留透明度"
 
 #. i18n: context: text @ Action (disable_pressure), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (disable_pressure), Actions (Painting), ActionCollection (Krita)
@@ -10929,14 +10929,14 @@ msgstr "显示/隐藏绘图纸外观"
 #, kde-format
 msgctxt "action"
 msgid "First Frame"
-msgstr "开始帧编号"
+msgstr "第一帧"
 
 #. i18n: context: text @ Action (last_frame), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2075
 #, kde-format
 msgctxt "action"
 msgid "Last Frame"
-msgstr "结束帧编号"
+msgstr "最后一帧"
 
 #. i18n: context: text @ Action (auto_key), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2086
@@ -11441,117 +11441,98 @@ msgstr "更新播放范围"
 
 #. i18n: context: text @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2527
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Constant"
-msgstr "插值"
+msgstr "不插值"
 
 #. i18n: context: toolTip @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2529
-#, fuzzy, kde-format
-#| msgid "Hold constant value. No interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Hold constant value. No interpolation."
 msgstr "不插值：数值将在下一关键帧前保持不变。"
 
 #. i18n: context: text @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2539
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Linear"
-msgstr "插值"
+msgstr "线性插值"
 
 #. i18n: context: toolTip @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2541
-#, fuzzy, kde-format
-#| msgid "Linear interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Linear interpolation."
 msgstr "线性插值"
 
 #. i18n: context: text @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2551
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Bezier"
-msgstr "插值"
+msgstr "贝塞尔曲线插值"
 
 #. i18n: context: toolTip @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2553
-#, fuzzy, kde-format
-#| msgid "Bezier curve interpolation."
+#, kde-format
 msgctxt "action"
 msgid "Bezier curve interpolation."
 msgstr "贝塞尔曲线插值"
 
 #. i18n: context: text @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2563
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Sharp"
-msgstr "插值"
+msgstr "锐利切点插值"
 
 #. i18n: context: toolTip @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2565
-#, fuzzy, kde-format
-#| msgid "Sharp interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Sharp interpolation tangents."
 msgstr "锐利切点插值"
 
 #. i18n: context: text @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2575
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "action"
 msgid "Interpolate Smooth"
-msgstr "插值"
+msgstr "平滑切点插值"
 
 #. i18n: context: toolTip @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2577
-#, fuzzy, kde-format
-#| msgid "Smooth interpolation tangents."
+#, kde-format
 msgctxt "action"
 msgid "Smooth interpolation tangents."
 msgstr "平滑切点插值"
 
 #. i18n: context: text @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2587
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Range"
-msgstr "缩放视图以适合通道范围"
+msgstr "缩放以适合范围"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2589
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit channel range."
 msgstr "缩放视图以适合通道范围"
 
 #. i18n: context: text @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2599
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom to Fit Curve"
-msgstr "缩放视图以适合曲线"
+msgstr "缩放以适合曲线"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2601
-#, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
+#, kde-format
 msgctxt "action"
 msgid "Zoom view to fit curve."
 msgstr "缩放视图以适合曲线"
@@ -29929,13 +29910,13 @@ msgstr "保存"
 #: libs/ui/forms/wdggeneralsettings.ui:58
 #, kde-format
 msgid "Enable Autosaving"
-msgstr "自动保存图像"
+msgstr "自动保存恢复文件"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeneralsettings.ui:67
 #, kde-format
 msgid "Autosave Interval:"
-msgstr "自动保存频率："
+msgstr "自动保存间隔："
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, m_autosaveSpinBox)
 #: libs/ui/forms/wdggeneralsettings.ui:74
@@ -29955,7 +29936,7 @@ msgstr "每 "
 #: libs/ui/forms/wdggeneralsettings.ui:96
 #, kde-format
 msgid "Unnamed autosave files are hidden by default"
-msgstr "隐藏未命名图像的自动保存文件"
+msgstr "未命名图像的恢复文件保存为隐藏文件"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_backupFileCheckBox)
 #: libs/ui/forms/wdggeneralsettings.ui:109
@@ -31036,7 +31017,7 @@ msgstr "开始于"
 #: libs/ui/forms/wdgimportimagesequence.ui:105
 #, kde-format
 msgid "The frame number for the first image"
-msgstr "首个图像的帧编号"
+msgstr "首张图像的帧编号"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgimportimagesequence.ui:115
@@ -34052,12 +34033,7 @@ msgstr "打开前景色拾色器(&O)"
 msgid "&Open Background color selector"
 msgstr "打开背景色拾色器(&O)"
 
-#: libs/ui/kis_control_frame.cpp:129
-#, kde-format
-msgid "&Docker Box"
-msgstr "面板框(&D)"
-
-#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:453
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:453
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34066,12 +34042,12 @@ msgstr "面板框(&D)"
 msgid "Patterns"
 msgstr "图案"
 
-#: libs/ui/kis_control_frame.cpp:199 libs/ui/kis_control_frame.cpp:200
+#: libs/ui/kis_control_frame.cpp:194 libs/ui/kis_control_frame.cpp:195
 #, kde-format
 msgid "Custom Pattern"
 msgstr "自定义图案"
 
-#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:438
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:438
 #: libs/ui/KisApplication.cpp:439
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -34080,12 +34056,12 @@ msgstr "自定义图案"
 msgid "Gradients"
 msgstr "渐变"
 
-#: libs/ui/kis_control_frame.cpp:283
+#: libs/ui/kis_control_frame.cpp:278
 #, kde-format
 msgid "Docker box"
 msgstr "面板框"
 
-#: libs/ui/kis_control_frame.cpp:289
+#: libs/ui/kis_control_frame.cpp:284
 #, kde-format
 msgid "Toolbar Docker Box"
 msgstr "工具栏面板框"
@@ -35509,28 +35485,28 @@ msgstr "已完成保存 %1"
 #: libs/ui/KisDocument.cpp:1537
 #, kde-format
 msgid "Autosaving... %1"
-msgstr "正在自动保存... %1"
+msgstr "正在自动保存恢复文件... %1"
 
 #: libs/ui/KisDocument.cpp:1545
 #, kde-format
 msgid "Autosaving..."
-msgstr "正在自动保存..."
+msgstr "正在自动保存恢复文件..."
 
 #: libs/ui/KisDocument.cpp:1551
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
-msgstr "自动保存已推迟：图像正被占用..."
+msgstr "自动保存恢复文件已推迟：图像正在进行其他操作..."
 
 #: libs/ui/KisDocument.cpp:1694
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
-msgstr "自动保存 %1 时出错：%2"
+msgstr "自动保存 %1 的恢复文件时出错：%2"
 
 #: libs/ui/KisDocument.cpp:1708
 #, kde-format
 msgid "Finished autosaving %1"
-msgstr "已完成自动保存 %1"
+msgstr "已自动保存恢复文件 %1"
 
 #: libs/ui/KisDocument.cpp:1965
 #, kde-format
@@ -39698,25 +39674,25 @@ msgstr "下移"
 msgid "Configure docker panel"
 msgstr "配置可用面板"
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr "此面板已在%1中打开。关闭%1后将重新显示面板内容。"
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "配置 %1 面板"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Available dockers"
 msgstr "可用面板"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Current dockers"
 msgstr "当前面板"
@@ -43217,12 +43193,12 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "笔刷选项编辑器"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, kde-format
 msgid "Reload Original Preset"
 msgstr "重新加载原始预设"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, kde-format
 msgid "Configure the on-canvas brush editor"
 msgstr "配置弹出面板笔刷编辑器"
@@ -50962,90 +50938,72 @@ msgid "Do nothing"
 msgstr "无操作"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgid "S-Pen Pro Air Actions"
-msgstr "S-Pen 操作"
+msgstr "S-Pen Pro 空中操作"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
-#, fuzzy, kde-format
-#| msgid "S-Pen Actions"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Actions"
-msgstr "S-Pen 操作"
+msgstr "S-Pen Pro 空中操作"
 
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Click"
-msgstr "S-Pen 按钮单击"
+msgstr "S-Pen Pro 空中按钮单击"
 
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Double Click"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Button Double Click"
-msgstr "S-Pen 按钮双击"
+msgstr "S-Pen Pro 空中按钮双击"
 
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Up"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Up"
-msgstr "S-Pen 手势上划"
+msgstr "S-Pen Pro 空中手势上划"
 
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Down"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro AirGesture Swipe Down"
-msgstr "S-Pen 手势下划"
+msgstr "S-Pen Pro 空中手势下划"
 
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Left"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Left"
-msgstr "S-Pen 手势左划"
+msgstr "S-Pen Pro 空中手势左划"
 
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Right"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Right"
-msgstr "S-Pen 手势右划"
+msgstr "S-Pen Pro 空中手势右划"
 
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Clockwise"
-msgstr "S-Pen 手势画圈 (顺时针)"
+msgstr "S-Pen Pro 空中手势画圈 (顺时针)"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Counter-Clockwise"
+#, kde-format
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
-msgstr "S-Pen 手势画圈 (逆时针)"
+msgstr "S-Pen Pro 空中手势画圈 (逆时针)"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:112
@@ -51062,6 +51020,8 @@ msgid ""
 "work. Note that only the S-Pen Pro supports Air Actions, the regular S-Pen "
 "does not. Not all devices support gestures."
 msgstr ""
+"您必须在系统设置中为 Krita 启用空中操作功能才能正常使用它们。请注意，仅 S-"
+"Pen Pro 支持空中操作，普通 S-Pen 不支持。并非所有设备都支持手势操作。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -59660,7 +59620,7 @@ msgstr "宽高比："
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:133
 #, kde-format
 msgid "Preserve alpha"
-msgstr "保持透明度"
+msgstr "保留透明度"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomHSVCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:33
@@ -61886,8 +61846,7 @@ msgstr "笔画方向/笔身倾角混合比例"
 #. i18n: context: text @ Action (assign_profile_to_image), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
-#, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
+#, kde-format
 msgctxt "action"
 msgid "Assign Profile to Image"
 msgstr "图像色彩特性文件分配对话框"
@@ -61910,8 +61869,7 @@ msgstr "图像色彩特性文件分配对话框"
 #. i18n: context: text @ Action (pykrita_channels2layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
-#, fuzzy, kde-format
-#| msgid "Channels to layers"
+#, kde-format
 msgctxt "action"
 msgid "Channels to layers"
 msgstr "颜色通道转换为图层"
@@ -61997,8 +61955,7 @@ msgstr "<b>黑</b>"
 #. i18n: context: text @ Action (color_space), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Space"
 msgstr "色彩空间"
@@ -62317,10 +62274,8 @@ msgid "Export not Possible"
 msgstr "无法导出"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:119
-#, fuzzy
-#| msgid "No frames to export."
 msgid "No pages to export."
-msgstr "没有可供导出的帧。"
+msgstr "没有可导出的页面。"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:144
 msgid "Preparing export."
@@ -63409,8 +63364,7 @@ msgstr "补充文案作者"
 #. i18n: context: text @ Action (document_tools), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
-#, fuzzy, kde-format
-#| msgid "Document Tools"
+#, kde-format
 msgctxt "action"
 msgid "Document Tools"
 msgstr "图像参数编辑工具"
@@ -63458,8 +63412,7 @@ msgstr "所选文档已被修改。"
 #. i18n: context: text @ Action (export_layers), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
-#, fuzzy, kde-format
-#| msgid "Export Layers"
+#, kde-format
 msgctxt "action"
 msgid "Export Layers"
 msgstr "图层导出工具"
@@ -63547,8 +63500,7 @@ msgstr "选择文件夹"
 #. i18n: context: text @ Action (filter_manager), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
-#, fuzzy, kde-format
-#| msgid "Filter Manager"
+#, kde-format
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "图像滤镜管理工具"
@@ -63577,8 +63529,7 @@ msgstr "滤镜："
 #. i18n: context: text @ Action (high_pass_filter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
-#, fuzzy, kde-format
-#| msgid "High Pass"
+#, kde-format
 msgctxt "action"
 msgid "High Pass"
 msgstr "高通滤镜"
@@ -63710,11 +63661,10 @@ msgstr "创建脚本"
 #. i18n: context: text @ Action (Krita Script Starter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/krita_script_starter/krita_script_starter.action:4
 #: plugins/python/krita_script_starter/krita_script_starter.action:8
-#, fuzzy, kde-format
-#| msgid "BBD's Krita Script Starter"
+#, kde-format
 msgctxt "action"
 msgid "Krita Script Starter"
-msgstr "BBD的 Krita 空脚本生成工具"
+msgstr "Krita 空脚本生成工具"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:33
 msgid "Last Documents Docker"
@@ -64043,8 +63993,7 @@ msgstr "调试器"
 #. i18n: context: text @ Action (python_scripter), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
-#, fuzzy, kde-format
-#| msgid "Scripter"
+#, kde-format
 msgctxt "action"
 msgid "Scripter"
 msgstr "脚本调试工具"
@@ -69254,23 +69203,5 @@ msgstr ""
 "全范围：[%1, %2]\n"
 "子范围：[%3, %4]"
 
-#~ msgctxt "action"
-#~ msgid "S-Pen Actions"
-#~ msgstr "S-Pen 操作"
-
-#~ msgid ""
-#~ "Make sure the actions are corresponding to the correct gesture on the "
-#~ "system level. These can be configured under S Pen Settings > Air actions."
-#~ msgstr ""
-#~ "确保操作对应系统级别的手势。这些操作可在 S Pen 设置 > 悬空操作 中进行配"
-#~ "置。"
-
-#~ msgid ""
-#~ "The following buttons are supported on the Note 9, Note 10, Tab S6 and "
-#~ "Tab S9 devices."
-#~ msgstr "以下按钮在 Note 9、Note 10、Tab S6 和 Tab S9 设备上可用。"
-
-#~ msgid ""
-#~ "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
-#~ "devices."
-#~ msgstr "以下手势在 Note 10、Note 、Tab S6 和 Tab S9 设备上可用。"
+#~ msgid "&Docker Box"
+#~ msgstr "面板框(&D)"

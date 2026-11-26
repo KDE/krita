@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 03:24+0000\n"
-"PO-Revision-Date: 2026-10-30 04:45+0100\n"
+"POT-Creation-Date: 2026-11-26 03:12+0000\n"
+"PO-Revision-Date: 2026-11-25 15:41+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -34103,12 +34103,7 @@ msgstr "წინა პლანის ფერის ამრჩევის
 msgid "&Open Background color selector"
 msgstr "&ფონის ფერის ამრჩევის გახსნა"
 
-#: libs/ui/kis_control_frame.cpp:129
-#, kde-format
-msgid "&Docker Box"
-msgstr "&მიმაგრების ჩარჩო"
-
-#: libs/ui/kis_control_frame.cpp:196 libs/ui/KisApplication.cpp:453
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:453
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34117,12 +34112,12 @@ msgstr "&მიმაგრების ჩარჩო"
 msgid "Patterns"
 msgstr "შაბლონები"
 
-#: libs/ui/kis_control_frame.cpp:199 libs/ui/kis_control_frame.cpp:200
+#: libs/ui/kis_control_frame.cpp:194 libs/ui/kis_control_frame.cpp:195
 #, kde-format
 msgid "Custom Pattern"
 msgstr "მორგებული ნიმუში"
 
-#: libs/ui/kis_control_frame.cpp:248 libs/ui/KisApplication.cpp:438
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:438
 #: libs/ui/KisApplication.cpp:439
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
@@ -34131,12 +34126,12 @@ msgstr "მორგებული ნიმუში"
 msgid "Gradients"
 msgstr "გრადაციები"
 
-#: libs/ui/kis_control_frame.cpp:283
+#: libs/ui/kis_control_frame.cpp:278
 #, kde-format
 msgid "Docker box"
 msgstr "მიმაგრების ჩარჩო"
 
-#: libs/ui/kis_control_frame.cpp:289
+#: libs/ui/kis_control_frame.cpp:284
 #, kde-format
 msgid "Toolbar Docker Box"
 msgstr "ხელსაწყოთა პანელის მიმაგრების ველი"
@@ -39635,25 +39630,25 @@ msgstr "ქვემოთ"
 msgid "Configure docker panel"
 msgstr "პანელის მორგება"
 
-#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
-#: libs/ui/widgets/KisDockerHud.cpp:320
+#: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:325
+#: libs/ui/widgets/KisDockerHud.cpp:336
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr "პანელი ღიაა %1-ში. დახურეთ %1 აქ საჩვენებლად."
 
-#: libs/ui/widgets/KisDockerHud.cpp:215
+#: libs/ui/widgets/KisDockerHud.cpp:231
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
 msgstr "%1 მიმაგრების მორგება"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Available dockers"
 msgstr "ხელმისაწვდომი პანელები"
 
-#: libs/ui/widgets/KisDockerHud.cpp:216
+#: libs/ui/widgets/KisDockerHud.cpp:232
 #, kde-format
 msgid "Current dockers"
 msgstr "მიმდინარე პანელები"
@@ -43157,12 +43152,12 @@ msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "ტილოზე მდებარე ფუნჯის რედაქტორი"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:79
 #, kde-format
 msgid "Reload Original Preset"
 msgstr "საწყისი პრესეტის თავიდან ჩატვირთვა"
 
-#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:83
 #, kde-format
 msgid "Configure the on-canvas brush editor"
 msgstr "ტილოზე მდებარე ფუნჯის რედაქტორის მორგება"
@@ -62085,10 +62080,8 @@ msgid "Export not Possible"
 msgstr "გატანა შეუძლებელია"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:119
-#, fuzzy
-#| msgid "No frames to export."
 msgid "No pages to export."
-msgstr "გასატანი კადრების გარეშე."
+msgstr "გასატანი გვერდების გარეშე."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:144
 msgid "Preparing export."
@@ -69077,6 +69070,9 @@ msgstr ""
 "გადართვა სრულ შუალედსა და ქვეშუალედს შორის.\n"
 "სრული შუალედი: [%1, %2]\n"
 "ქვეშუალედი: [%3, %4]"
+
+#~ msgid "&Docker Box"
+#~ msgstr "&მიმაგრების ჩარჩო"
 
 #~ msgctxt "action"
 #~ msgid "S-Pen Actions"

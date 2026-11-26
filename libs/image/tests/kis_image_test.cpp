@@ -18,6 +18,9 @@
 #include "filter/kis_filter_registry.h"
 
 #include "kis_image.h"
+#include <kis_transaction.h>
+#include <kis_image_animation_interface.h>
+#include <kis_paint_device_frames_interface.h>
 #include "kis_node_visitor.h"
 #include "kis_external_layer_iface.h"
 #include "kis_paint_layer.h"
@@ -856,6 +859,121 @@ void KisImageTest::testFlattenLayer()
 
         QCOMPARE(newLayer->alphaChannelDisabled(), true);
     }
+}
+
+void KisImageTest::testSplitAlpha_data()
+{
+    QTest::addColumn<bool>("useFrames");
+
+    QTest::addRow("no-frames") << false;
+    QTest::addRow("multi-frames") << true;
+}
+
+
+void KisImageTest::testSplitAlpha()
+{
+    using TestUtil::checkHole;
+
+    QFETCH(bool, useFrames);
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    const QRect imageRect(0,0,100,100);
+    const QRect fillRect1(20,20,60,60);
+
+    const KoColor imageColor = KoColor::createTransparent(cs);
+    const KoColor fillColor1(Qt::red, cs);
+    const KoColor blackColorRGB(Qt::black, cs);
+    const KoColor blackColorA = KoColor::createTransparent(KoColorSpaceRegistry::instance()->alpha8());
+    const KoColor whiteColorA(Qt::white, KoColorSpaceRegistry::instance()->alpha8());
+
+    TestUtil::MaskParent p(imageRect);
+
+    KisPaintDeviceSP dev = p.layer->paintDevice();
+
+    auto forAllFrames = [&] (auto func) {
+        if (!useFrames) {
+            func();
+        } else {
+            int oldTime = 0;
+            KisImageAnimationInterface *interface = p.image->animationInterface();
+
+            for (int time = 0; time < 3; time++) {
+                interface->saveAndResetCurrentTime(time, &oldTime);
+                func();
+                interface->restoreCurrentTime(&oldTime);
+            }
+        }
+    };
+
+    if (useFrames) {
+        p.layer->enableAnimation();
+        KisKeyframeChannel *channel = p.layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+        for (int time = 0; time < 3; time++) {
+            channel->addKeyframe(time);
+        }
+    }
+
+    forAllFrames([&] () {
+        KisTransaction t(dev);
+        dev->fill(fillRect1, fillColor1);
+        t.commit(p.image->undoAdapter());
+    });
+
+    forAllFrames([&] () {
+        QVERIFY(checkHole(dev, imageRect, imageColor, fillRect1, fillColor1));
+    });
+
+    KisLayerUtils::splitAlphaToMask(p.image, p.layer, "mask");
+    p.image->waitForDone();
+
+    KisMaskSP mask = dynamic_cast<KisMask*>(p.layer->firstChild().data());
+    QVERIFY(mask);
+    KisPaintDeviceSP maskDev = mask->paintDevice();
+    QVERIFY(maskDev);
+
+    if (useFrames) {
+        QCOMPARE(maskDev->framesInterface()->frames().size(), 3);
+    }
+
+    forAllFrames([&] () {
+        QVERIFY(checkHole(dev, imageRect, blackColorRGB, fillRect1, fillColor1));
+        QVERIFY(checkHole(maskDev, imageRect, blackColorA, fillRect1, whiteColorA));
+    });
+
+    p.image->undoAdapter()->undoLastCommand();
+    p.image->waitForDone();
+
+    QCOMPARE(p.layer->childCount(), 0);
+
+    forAllFrames([&] () {
+        QVERIFY(checkHole(dev, imageRect, imageColor, fillRect1, fillColor1));
+    });
+
+    forAllFrames([&] () {
+        p.image->undoAdapter()->undoLastCommand();
+        p.image->waitForDone();
+        QVERIFY(checkHole(dev, imageRect, imageColor, imageRect, imageColor));
+    });
+
+    while (p.undoStore->canRedo()) {
+        p.undoStore->redo();
+        p.image->waitForDone();
+    }
+
+    forAllFrames([&] () {
+        QVERIFY(checkHole(dev, imageRect, blackColorRGB, fillRect1, fillColor1));
+        QVERIFY(checkHole(maskDev, imageRect, blackColorA, fillRect1, whiteColorA));
+    });
+
+    while (p.undoStore->canUndo()) {
+        p.undoStore->undo();
+        p.image->waitForDone();
+    }
+
+    forAllFrames([&] () {
+        QVERIFY(checkHole(dev, imageRect, imageColor, imageRect, imageColor));
+    });
 }
 
 #include <kis_meta_data_merge_strategy_registry.h>

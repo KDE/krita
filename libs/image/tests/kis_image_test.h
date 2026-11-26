@@ -28,6 +28,10 @@ private Q_SLOTS:
     void testLayerComposition();
 
     void testFlattenLayer();
+
+    void testSplitAlpha_data();
+    void testSplitAlpha();
+
     void testMergeDown();
     void testMergeDownDestinationInheritsAlpha();
     void testMergeDownDestinationCustomCompositeOp();

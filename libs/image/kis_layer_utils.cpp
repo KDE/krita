@@ -55,7 +55,7 @@
 #include "KisFutureUtils.h"
 #include "KisBatchUpdateLayerModificationCommand.h"
 #include "commands_new/KisChangeCloneLayersCommand.h"
-
+#include "kis_transaction.h"
 
 namespace KisLayerUtils {
 
@@ -793,18 +793,19 @@ namespace Private {
         SplitAlphaToMaskInfoSP m_info;
     };
 
-    struct SplitAlphaCommand : public KUndo2Command  {
+    struct SplitAlphaCommand : public KisCommandUtils::AggregateCommand  {
         SplitAlphaCommand(SplitAlphaToMaskInfoSP info)
             : m_info(info) {
-            m_cached = new KisPaintDevice(*m_info->node->paintDevice(), KritaUtils::CopyAllFrames);
         }
 
-        void redo() override {
+        void populateChildCommands() override {
             KisPaintDeviceSP srcDevice = m_info->node->paintDevice();
             const KoColorSpace *srcCS = srcDevice->colorSpace();
             const QRect processRect =
                     srcDevice->exactBounds() |
                     srcDevice->defaultBounds()->bounds();
+
+            KisTransaction transaction(srcDevice);
 
             KisSequentialIterator srcIt(srcDevice, processRect);
             KisSequentialIterator dstIt(m_info->getMaskDevice(), processRect);
@@ -816,39 +817,12 @@ namespace Private {
                 *alpha8Ptr = srcCS->opacityU8(srcPtr);
                 srcCS->setOpacity(srcPtr, OPACITY_OPAQUE_U8, 1);
             }
-        }
 
-        void undo() override {
-            KisPaintDeviceSP srcDevice = m_info->node->paintDevice();
-
-            if (srcDevice->framesInterface()) { //Swap contents of all frames to reflect the pre-operation state.
-                KisPaintDeviceSP tempPD = new KisPaintDevice(*m_cached, KritaUtils::CopySnapshot);
-                Q_FOREACH(const int& frame, srcDevice->framesInterface()->frames() ) {
-                    if (m_cached->framesInterface()->frames().contains(frame)) {
-                        m_cached->framesInterface()->writeFrameToDevice(frame, tempPD);
-                        srcDevice->framesInterface()->uploadFrame(frame, tempPD);
-                    }
-                }
-            } else {
-                const QRect processRect =
-                        srcDevice->exactBounds() |
-                        srcDevice->defaultBounds()->bounds();
-
-                const KoColorSpace *srcCS = srcDevice->colorSpace();
-                KisSequentialIterator srcIt(m_cached, processRect);
-                KisSequentialIterator dstIt(srcDevice, processRect);
-
-                while (srcIt.nextPixel() && dstIt.nextPixel()) {
-                    quint8 *srcPtr = srcIt.rawData();
-                    quint8 *dstPtr = dstIt.rawData();
-                    srcCS->setOpacity(dstPtr, srcCS->opacityU8(srcPtr), 1);
-                }
-            }
+            addCommand(transaction.endAndTake());
         }
 
     private:
         SplitAlphaToMaskInfoSP m_info;
-        KisPaintDeviceSP m_cached;
     };
 
     struct UploadProjectionToFrameCommand : public KisCommandUtils::AggregateCommand {
@@ -1340,9 +1314,13 @@ namespace Private {
 
         void populateChildCommands() override {
             KUndo2Command *cmd = new KUndo2Command;
+
             KisNodeSP node = m_node ? m_node : m_mergeInfo->dstNode;
             KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
-            channel->addKeyframe(m_frame, cmd);
+
+            if (!channel->keyframeAt(m_frame)) {
+                channel->addKeyframe(m_frame, cmd);
+            }
 
             if (m_sampledNodes.count() > 0) {
                 applyKeyframeColorLabel(channel->keyframeAt(m_frame), m_sampledNodes);
@@ -2414,7 +2392,7 @@ namespace Private {
         SplitAlphaToMaskInfoSP info( new SplitAlphaToMaskInfo(node->image(), node, maskName) );
 
         KisImageSignalVector emitSignals;
-        KisProcessingApplicator applicator(image, 0,
+        KisProcessingApplicator applicator(image, node,
                                            KisProcessingApplicator::NONE,
                                            emitSignals,
                                            kundo2_i18n("Split Alpha into a Mask"));

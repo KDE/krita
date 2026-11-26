@@ -183,12 +183,11 @@ void OverviewDockerPage::setCanvas(KoCanvasBase * canvas)
 
         m_controlsSecondRowLayout = new QHBoxLayout();
 
-        m_controlsSecondRowLayout->addWidget(m_rotateAngleSelector);
-        m_controlsSecondRowLayout->addStretch();
-        m_controlsSecondRowLayout->addWidget(m_mirrorCanvas);
-        m_controlsSecondRowLayout->addWidget(m_grayscaleButton);
-        m_controlsSecondRowLayout->addStretch();
         m_controlsSecondRowLayout->addWidget(m_pinControlsButton);
+        m_controlsSecondRowLayout->addWidget(m_rotateAngleSelector);
+        m_controlsSecondRowLayout->addWidget(m_mirrorCanvas);
+        m_controlsSecondRowLayout->addStretch();
+        m_controlsSecondRowLayout->addWidget(m_grayscaleButton);
         m_controlsLayout->addLayout(m_controlsSecondRowLayout);
 
         //m_zoomSlider->setVisible(true);

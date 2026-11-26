@@ -15,6 +15,7 @@
 
 #include <KoResource.h>
 #include <KoTestConfig.h>
+#include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -312,6 +313,43 @@ inline bool checkAlphaDeviceFilledWithPixel(KisPaintDeviceSP dev, const QRect &r
         it->nextRow();
     }
     return true;
+}
+
+inline bool checkHole(KisPaintDeviceSP dev,
+                      const QRect &totalRect,
+                      const KoColor &bgColor,
+                      const QRect &holeRect,
+                      const KoColor &holeColor)
+{
+    KisSequentialConstIterator it(dev, totalRect);
+    while (it.nextPixel()) {
+        const KoColor &expectedColor = holeRect.contains(it.x(), it.y()) ? holeColor : bgColor;
+
+        KoColor pixel(it.rawDataConst(), dev->colorSpace());
+
+        if (pixel != expectedColor) {
+            qDebug() << "Failed to compare pixel at" << it.x() << it.y();
+            qDebug() << "    " << ppVar(pixel);
+            qDebug() << "    " << ppVar(expectedColor);
+            qDebug() << "    " << ppVar(totalRect);
+            qDebug() << "    " << ppVar(holeRect);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+inline bool checkHole(const QImage &image,
+                      const QRect &totalRect,
+                      const KoColor &bgColor,
+                      const QRect &holeRect,
+                      const KoColor &holeColor)
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, nullptr);
+    return checkHole(dev, totalRect, bgColor, holeRect, holeColor);
 }
 
 class TestNode : public DefaultNode

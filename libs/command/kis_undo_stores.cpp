@@ -87,6 +87,15 @@ void KisSurrogateUndoStore::redoAll()
     }
 }
 
+bool KisSurrogateUndoStore::canRedo() const
+{
+    return m_undoStack->canRedo();
+}
+
+bool KisSurrogateUndoStore::canUndo() const
+{
+    return m_undoStack->canUndo();
+}
 
 /*****************************************************************/
 /*                KisDumbUndoStore                               */

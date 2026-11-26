@@ -26,43 +26,9 @@
 
 #include <testutil.h>
 
+using TestUtil::checkHole;
+
 namespace {
-bool checkHole(KisPaintDeviceSP dev,
-               const QRect &totalRect,
-               const KoColor &bgColor,
-               const QRect &holeRect,
-               const KoColor &holeColor)
-{
-    KisSequentialIterator it(dev, totalRect);
-    while (it.nextPixel()) {
-        const KoColor &expectedColor = holeRect.contains(it.x(), it.y()) ? holeColor : bgColor;
-
-        KoColor pixel(it.rawDataConst(), dev->colorSpace());
-
-        if (pixel != expectedColor) {
-            qDebug() << "Failed to compare pixel at" << it.x() << it.y();
-            qDebug() << "    " << ppVar(pixel);
-            qDebug() << "    " << ppVar(expectedColor);
-            qDebug() << "    " << ppVar(totalRect);
-            qDebug() << "    " << ppVar(holeRect);
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool checkHole(const QImage &image,
-               const QRect &totalRect,
-               const KoColor &bgColor,
-               const QRect &holeRect,
-               const KoColor &holeColor)
-{
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, nullptr);
-    return checkHole(dev, totalRect, bgColor, holeRect, holeColor);
-}
 
 struct TestImageWrapper
 {

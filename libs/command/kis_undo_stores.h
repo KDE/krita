@@ -40,6 +40,9 @@ public:
 
     void clear();
 
+    bool canRedo() const;
+    bool canUndo() const;
+
 private:
     KUndo2Stack *m_undoStack;
 };

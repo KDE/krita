@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-26 03:12+0000\n"
+"POT-Creation-Date: 2026-11-27 03:06+0000\n"
 "PO-Revision-Date: 2026-05-02 13:49+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
 "Language-Team: Irish <http://weblate.amgelocalnet.duckdns.org/projects/kde-"
@@ -16566,8 +16566,8 @@ msgctxt "@info:credit"
 msgid "© 1999–2026 The Krita Developers"
 msgstr "© 1999–2026 Na Forbróirí Krita"
 
-#: krita/main.cc:825 libs/ui/KisApplication.cpp:523
-#: libs/ui/KisApplication.cpp:848
+#: krita/main.cc:825 libs/ui/KisApplication.cpp:526
+#: libs/ui/KisApplication.cpp:867
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -21244,7 +21244,7 @@ msgstr "Méid"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1483
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1837
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1857
 #: libs/ui/forms/wdgdisplaysettings.ui:379
 #: libs/ui/forms/wdggeneralsettings.ui:361
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -21422,7 +21422,7 @@ msgid "Reselect"
 msgstr "Athroghnaigh"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2097
+#: libs/image/kis_layer_utils.cpp:2075
 #: libs/impex/KisExportCheckRegistry.cpp:129
 #, kde-format
 msgid "Selection Mask"
@@ -21566,7 +21566,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (leabaithe)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:604
+#: libs/ui/dialogs/kis_dlg_preferences.cc:608
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -21996,58 +21996,58 @@ msgstr ""
 msgid "Merged"
 msgstr "Cumaiscthe"
 
-#: libs/image/kis_layer_utils.cpp:1472
+#: libs/image/kis_layer_utils.cpp:1450
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Cumaisc Síos"
 
-#: libs/image/kis_layer_utils.cpp:1744
+#: libs/image/kis_layer_utils.cpp:1722
 #, kde-format
 msgid "Copy of"
 msgstr "Cóip de"
 
-#: libs/image/kis_layer_utils.cpp:1822
+#: libs/image/kis_layer_utils.cpp:1800
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Athraigh dath an teilgean"
 
-#: libs/image/kis_layer_utils.cpp:2048
+#: libs/image/kis_layer_utils.cpp:2026
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Cumaisc na Nóid Roghnaithe"
 
-#: libs/image/kis_layer_utils.cpp:2066
+#: libs/image/kis_layer_utils.cpp:2044
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nua Ó Infheicthe"
 
-#: libs/image/kis_layer_utils.cpp:2067
+#: libs/image/kis_layer_utils.cpp:2045
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Infheicthe"
 
-#: libs/image/kis_layer_utils.cpp:2146
+#: libs/image/kis_layer_utils.cpp:2124
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Cumaisc Mascanna Roghnúcháin"
 
-#: libs/image/kis_layer_utils.cpp:2170
+#: libs/image/kis_layer_utils.cpp:2148
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Sraith Leacaithe"
 
-#: libs/image/kis_layer_utils.cpp:2186
+#: libs/image/kis_layer_utils.cpp:2164
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Íomhá a Leacú"
 
-#: libs/image/kis_layer_utils.cpp:2420
+#: libs/image/kis_layer_utils.cpp:2398
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Scoilt Alfa ina Masc"
 
-#: libs/image/kis_layer_utils.cpp:2446
+#: libs/image/kis_layer_utils.cpp:2424
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Tiontaigh go Sraith Péinteála"
@@ -24176,15 +24176,15 @@ msgstr "Acmhainní Áitiúla"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:702
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:772
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:401
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1152
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1156
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:779
 #: libs/ui/kis_custom_pattern.cc:126 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:326
 #: libs/ui/kis_layer_manager.cc:1044 libs/ui/kis_node_manager.cpp:1318
-#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1249
-#: libs/ui/KisApplication.cpp:1252 libs/ui/KisApplication.cpp:1268
-#: libs/ui/KisApplication.cpp:1300 libs/ui/KisApplication.cpp:1314
-#: libs/ui/KisApplication.cpp:1342 libs/ui/KisDocument.cpp:1055
+#: libs/ui/kis_node_manager.cpp:1381 libs/ui/KisApplication.cpp:1268
+#: libs/ui/KisApplication.cpp:1271 libs/ui/KisApplication.cpp:1287
+#: libs/ui/KisApplication.cpp:1319 libs/ui/KisApplication.cpp:1333
+#: libs/ui/KisApplication.cpp:1361 libs/ui/KisDocument.cpp:1055
 #: libs/ui/KisDocument.cpp:1070 libs/ui/KisDocument.cpp:2037
 #: libs/ui/KisDocument.cpp:2080 libs/ui/KisDocument.cpp:2091
 #: libs/ui/KisMainWindow.cpp:1108 libs/ui/KisMainWindow.cpp:1178
@@ -24467,8 +24467,8 @@ msgstr "Tá roinnt acmhainní ar iarraidh:"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2224
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2244
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2248
 #: libs/ui/forms/wdgdisplaysettings.ui:77 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:336
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -25335,7 +25335,7 @@ msgid "Dimensions larger than 1920 pixels are not widely supported."
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2261
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2281
 #, kde-format
 msgid "Warning(s):"
 msgstr "Rabhadh(anna):"
@@ -26355,8 +26355,8 @@ msgstr "Taispeántas Máistir:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2547
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2549
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2567
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2569
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:234
@@ -26457,8 +26457,8 @@ msgstr "Iompórtáil Beochana Físeáin"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:24
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2517
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2519
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2537
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2539
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:311
 #: libs/ui/forms/wdgperformancesettings.ui:49 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -27389,13 +27389,13 @@ msgstr "Airíonna na Sraithe"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1487
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1490
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1493
-#: libs/ui/dialogs/kis_dlg_preferences.cc:322
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1750
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1754
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1758
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1843
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2312
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2370 libs/ui/kis_paintop_box.cc:279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:326
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1770
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1774
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1778
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1863
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2332
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2390 libs/ui/kis_paintop_box.cc:279
 #: libs/ui/kis_paintop_box.cc:280 libs/ui/widgets/kis_custom_image_widget.cc:96
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -27549,148 +27549,148 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "Braitheadh Ilfhoinsí Greamaithe"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:242
+#: libs/ui/dialogs/kis_dlg_preferences.cc:246
 #, kde-format
 msgid "No Cursor"
 msgstr "Gan Cúrsóir"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:243
+#: libs/ui/dialogs/kis_dlg_preferences.cc:247
 #, kde-format
 msgid "Tool Icon"
 msgstr "Deilbhín Uirlisí"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:244
+#: libs/ui/dialogs/kis_dlg_preferences.cc:248
 #, kde-format
 msgid "Arrow"
 msgstr "Saighead"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:245
+#: libs/ui/dialogs/kis_dlg_preferences.cc:249
 #, kde-format
 msgid "Small Circle"
 msgstr "Ciorcal Beag"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:246
+#: libs/ui/dialogs/kis_dlg_preferences.cc:250
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:467
 #, kde-format
 msgid "Crosshair"
 msgstr "Crosghruaig"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:247
+#: libs/ui/dialogs/kis_dlg_preferences.cc:251
 #, kde-format
 msgid "Triangle Righthanded"
 msgstr "Triantán Deasláimhe"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:248
+#: libs/ui/dialogs/kis_dlg_preferences.cc:252
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr "Triantán Clé-láimhe"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:249
+#: libs/ui/dialogs/kis_dlg_preferences.cc:253
 #, kde-format
 msgid "Black Pixel"
 msgstr "Picteilín Dubh"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:250
+#: libs/ui/dialogs/kis_dlg_preferences.cc:254
 #, kde-format
 msgid "White Pixel"
 msgstr "Picteilín Bán"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:253
+#: libs/ui/dialogs/kis_dlg_preferences.cc:257
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "Gan Imlíne"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:254
+#: libs/ui/dialogs/kis_dlg_preferences.cc:258
 #, kde-format
 msgid "Circle Outline"
 msgstr "Imlíne Ciorcail"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:255
+#: libs/ui/dialogs/kis_dlg_preferences.cc:259
 #, kde-format
 msgid "Preview Outline"
 msgstr "Réamhamharc ar an Achoimre"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:256
+#: libs/ui/dialogs/kis_dlg_preferences.cc:260
 #, kde-format
 msgid "Tilt Outline"
 msgstr "Imlíne Claonta"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:284
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
 msgstr "Scriosán"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:389
+#: libs/ui/dialogs/kis_dlg_preferences.cc:393
 #, kde-format
 msgctxt "touch painting"
 msgid "Auto (Disabled)"
 msgstr "Uathoibríoch (Díchumasaithe)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:390
+#: libs/ui/dialogs/kis_dlg_preferences.cc:394
 #, kde-format
 msgctxt "touch painting"
 msgid "Auto (Enabled)"
 msgstr "Uathoibríoch (Cumasaithe)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:391
+#: libs/ui/dialogs/kis_dlg_preferences.cc:395
 #, kde-format
 msgctxt "touch painting"
 msgid "Enabled"
 msgstr "Cumasaithe"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:392
+#: libs/ui/dialogs/kis_dlg_preferences.cc:396
 #, kde-format
 msgctxt "touch painting"
 msgid "Disabled"
 msgstr "Míchumasaithe"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:406
+#: libs/ui/dialogs/kis_dlg_preferences.cc:410
 #, kde-format
 msgid "On Touch Drag"
 msgstr "Tarraing ar Theagmháil"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:407
+#: libs/ui/dialogs/kis_dlg_preferences.cc:411
 #, kde-format
 msgid "On Click Drag"
 msgstr "Ar Chliceáil Tarraing"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:408
+#: libs/ui/dialogs/kis_dlg_preferences.cc:412
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "Ar Tarraingt Cliceáil Láir"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:460
+#: libs/ui/dialogs/kis_dlg_preferences.cc:464
 #, kde-format
 msgid "All Supported Files"
 msgstr "Gach Comhad Tacaithe"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:495
+#: libs/ui/dialogs/kis_dlg_preferences.cc:499
 #, kde-format
 msgid "Open default window"
 msgstr "Oscail an fhuinneog réamhshocraithe"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:496
+#: libs/ui/dialogs/kis_dlg_preferences.cc:500
 #, kde-format
 msgid "Load previous session"
 msgstr "Luchtaigh an seisiún roimhe seo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:497
+#: libs/ui/dialogs/kis_dlg_preferences.cc:501
 #, kde-format
 msgid "Show session manager"
 msgstr "Taispeáin bainisteoir seisiúin"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:569
+#: libs/ui/dialogs/kis_dlg_preferences.cc:573
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "Beidh ort Krita a atosú le go mbeidh na hathruithe i bhfeidhm."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:575
+#: libs/ui/dialogs/kis_dlg_preferences.cc:579
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
@@ -27698,22 +27698,22 @@ msgstr ""
 "D’fhéadfadh sé go gcuirfeadh sábháil ag Suíomh a roghnaíodh ón Roghnóir "
 "Comhad moill ar an tosaithe!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:607
+#: libs/ui/dialogs/kis_dlg_preferences.cc:611
 #, kde-format
 msgid "Internal Storage"
 msgstr "Stóráil Inmheánach"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:609
+#: libs/ui/dialogs/kis_dlg_preferences.cc:613
 #, kde-format
 msgid "SD-Card"
 msgstr "Cárta SD"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:647
+#: libs/ui/dialogs/kis_dlg_preferences.cc:651
 #, kde-format
 msgid "Choose Manually"
 msgstr "Roghnaigh de Láimh"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:712
+#: libs/ui/dialogs/kis_dlg_preferences.cc:716
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -27739,55 +27739,55 @@ msgstr ""
 "<br/>\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1104
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1108
 #, kde-format
 msgctxt "Preview option for no color sampler"
 msgid "None"
 msgstr "Dada"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1105
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1109
 #, kde-format
 msgctxt "Preview option for a circular/ring-shaped color sampler"
 msgid "Circle"
 msgstr "Ciorcal"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1106
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1110
 #, kde-format
 msgctxt "Preview option for a rectangular color sampler left of the cursor"
 msgid "Rectangle Left"
 msgstr "Dronuilleog Ar Chlé"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1107
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1111
 #, kde-format
 msgctxt "Preview option for a rectangular color sampler right of the cursor"
 msgid "Rectangle Right"
 msgstr "Dronuilleog ar Dheis"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1108
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1112
 #, kde-format
 msgctxt "Preview option for a rectangular color sampler above the cursor"
 msgid "Rectangle Above"
 msgstr "Dronuilleog Thuas"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1140
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1144
 #, kde-format
 msgid "Select a Background Image"
 msgstr "Roghnaigh Íomhá Chúlra"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1152
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1156
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "Ní comhad íomhá bailí é %1!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1172
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1176
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>Rabhadh:</b> ní féidir scríobh sa suíomh seo."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1304
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1581
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1308
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1585
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -27795,18 +27795,18 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "Scáileán %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1325
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1329
 #, kde-format
 msgid "Display's color space is managed by the operating system"
 msgstr ""
 "Déanann an córas oibriúcháin bainistíocht ar spás datha an taispeántais"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1332
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1336
 #, kde-format
 msgid "Enable canvas color management"
 msgstr "Cumasaigh bainistíocht dathanna an chanbháis"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1335
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1339
 #, kde-format
 msgid ""
 "<p>Enabling canvas color management automatically creates a separate native "
@@ -27827,37 +27827,37 @@ msgstr ""
 "taispeána domhanda a úsáid\", i.e. ní bheidh sé indéanta cruthúnas páipéir "
 "bhán a dhéanamh</li></ol></p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1355
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1359
 #, kde-format
 msgid "Canvas surface color space:"
 msgstr "Spás datha dromchla an chanbháis:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1358
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1362
 #, kde-format
 msgid "Preferred by operating system"
 msgstr "Rogha de réir an chórais oibriúcháin"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1359
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1363
 #, kde-format
 msgid "Rec 709 Gamma 2.2"
 msgstr "Rec 709 Gamma 2.2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1360
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1364
 #, kde-format
 msgid "Rec 709 Linear"
 msgstr "Rec 709 Líneach"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1361
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1365
 #, kde-format
 msgid "Rec 2020 PQ"
 msgstr "Rec 2020 PQ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1362
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1366
 #, kde-format
 msgid "Unmanaged (testing only)"
 msgstr "Gan bhainistiú (tástáil amháin)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1365
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1369
 #, kde-format
 msgid ""
 "<p>Color space of the pixels that are transferred to the window compositor. "
@@ -27867,7 +27867,7 @@ msgstr ""
 "Bain úsáid as an spás \"is fearr leat\" mura bhfuil a fhios agat cad atá á "
 "dhéanamh agat</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1372
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1376
 #, kde-format
 msgid "Canvas surface bit depth (needs restart):"
 msgstr "Doimhneacht giotán dhromchla an chanbháis (ní mór atosú a dhéanamh):"
@@ -27875,7 +27875,7 @@ msgstr "Doimhneacht giotán dhromchla an chanbháis (ní mór atosú a dhéanamh
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1375
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1379
 #: libs/ui/widgets/KisDitherWidget.ui:119
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
@@ -27883,19 +27883,19 @@ msgstr "Doimhneacht giotán dhromchla an chanbháis (ní mór atosú a dhéanamh
 msgid "Auto"
 msgstr "Uath"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1376
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1384
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1380
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1388
 #, kde-format
 msgid "8-bit"
 msgstr "8-giotán"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1377
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1384
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1381
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1388
 #, kde-format
 msgid "10-bit"
 msgstr "10-giotán"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1380
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1384
 #, kde-format
 msgid ""
 "<p>The bit depth of the color that is passed to the window compositor. You "
@@ -27906,12 +27906,12 @@ msgstr ""
 "fuinneoige. Ba chóir duit aistriú go mód 10-giotán más mian leat cumais HDR "
 "do thaispeántais a úsáid</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1385
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1389
 #, kde-format
 msgid "Current canvas surface bit depth:"
 msgstr "Doimhneacht giotán dromchla an chanbháis reatha:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1392
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1396
 #, kde-format
 msgid ""
 "Color space preferred by the operating system:\n"
@@ -27920,19 +27920,19 @@ msgstr ""
 "Spás datha is fearr leis an gcóras oibriúcháin:\n"
 "%1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1474
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1478
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "Suiteáil Próifílí Datha"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1651
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1661
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
 msgstr "API Ionchuir Táibléid (API gníomhach faoi láthair: \"%1\")"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1665
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1675
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -27942,7 +27942,7 @@ msgstr ""
 "(d’fhéadfadh sé go mbeadh airteafóidí tromchúiseacha mar thoradh orthu agus "
 "API táibléid WinTab á úsáid)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1667
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1677
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "Úsáid stampaí ama tiománaí táibléid le haghaidh luas scuaibe"
@@ -27950,7 +27950,7 @@ msgstr "Úsáid stampaí ama tiománaí táibléid le haghaidh luas scuaibe"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1690
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1710
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -27963,7 +27963,7 @@ msgstr[4] "Uasluas scuaibe: {n} px/ms"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1699
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1719
 #, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
@@ -27973,19 +27973,19 @@ msgstr[2] "Smúdáil luas scuaibe: {n} samplaí"
 msgstr[3] "Smúdáil luas scuaibe: {n} samplaí"
 msgstr[4] "Smúdáil luas scuaibe: {n} samplaí"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1706
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1726
 #, kde-format
 msgid "Pen tilt direction offset: "
 msgstr "Fritháireamh treo claonta an phinn: "
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1804
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
 #: libs/ui/forms/wdgperformancesettings.ui:214
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1825
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1845
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -27994,78 +27994,78 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " soic"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1828
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1848
 #, kde-format
 msgid " fps"
 msgstr " fps"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2067
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2087
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2068
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2088
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Rindreálaí Bogearraí (an-mhall)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2072
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2092
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 trí ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2073
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2093
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr "OpenGL trí ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2075
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2095
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2082
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2102
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Anaithnid"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2102
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2122
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Uathoibríoch (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2161
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2181
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
 msgstr "GLX (reatha)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2162
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2182
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "GLX"
 msgstr "GLX"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2163
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2183
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
 msgstr "EGL (reatha)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2164
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2184
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "EGL"
 msgstr "EGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2170
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2190
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -28075,141 +28075,141 @@ msgstr ""
 "<p>Má tá Krita á úsáid agat ar X11 nó XWayland agus má bhíonn moill ort, "
 "déan iarracht aistriú idir EGL agus GLX</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2210
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2230
 #, kde-format
 msgid "Display Id: %1"
 msgstr "Aitheantas Taispeána: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2231
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Ainm Taispeána: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2212
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2232
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Íosmhéid Lonrúlachta: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Uasmhéid Lonrúlachta: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2234
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Uasmhéid Lonrúlachta Lánfhráma: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2235
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Príomhúil Dhearg: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2236
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Príomhúil Glas: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2237
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Príomhghorm: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Pointe Bán: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2399
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2419
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Rabhadh:</b> ní thacaíonn an taispeáint reatha le rindreáil HDR"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2510
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2530
 #, kde-format
 msgid "Configure Krita"
 msgstr "Cumraigh Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2527
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2547
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Aicearraí Méarchláir"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2529
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2549
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Aicearraí"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2539
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2559
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Socruithe Ionchuir Canbhás"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2540
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2560
 #, kde-format
 msgid "Canvas Input"
 msgstr "Ionchur Canbhás"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2557
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2577
 #: plugins/dockers/logdocker/LogDockerDock.cpp:204
 #, kde-format
 msgid "Color Management"
 msgstr "Bainisteoireacht na nDathanna"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2559
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2579
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Dath"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2567
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2569
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2587
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2589
 #: plugins/dockers/logdocker/LogDockerDock.cpp:200
 #, kde-format
 msgid "Performance"
 msgstr "Feidhmíocht"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2577
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2597
 #, kde-format
 msgid "Tablet settings"
 msgstr "Socruithe táibléid"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2579
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2599
 #, kde-format
 msgid "Tablet"
 msgstr "Táibléad"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2587
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2607
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Socruithe Canbhás Amháin"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2589
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2609
 #, kde-format
 msgid "Canvas-only"
 msgstr "Canbhás amháin"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2597
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2599
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2617
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2619
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Pailéad Aníos"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2607
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2627
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Údar"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2609
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2629
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:234
 #, kde-format
 msgid "Author"
 msgstr "Údar"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2616
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2636
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -33099,7 +33099,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:457
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:460
 #, kde-format
 msgid "Sessions"
 msgstr "Seisiúin"
@@ -33331,8 +33331,14 @@ msgstr ""
 "Déan neamhaird ar stair shuíomh an táibléid (réiteach seachain línte garbha "
 "le stíleanna Xiaomi)"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkHideTouchAndStylusCursorsWorkaround)
+#: libs/ui/forms/wdgtabletsettings.ui:208
+#, kde-format
+msgid "Hide stylus cursor (workaround for Wacom and XP-PEN devices)"
+msgstr ""
+
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
-#: libs/ui/forms/wdgtabletsettings.ui:214
+#: libs/ui/forms/wdgtabletsettings.ui:221
 #, kde-format
 msgid ""
 "Maximum speed mapped to 1.0 for the speed sensor curve. Should be set to the "
@@ -33343,7 +33349,7 @@ msgstr ""
 "Táibléid"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intBrushSpeedSmoothing)
-#: libs/ui/forms/wdgtabletsettings.ui:227
+#: libs/ui/forms/wdgtabletsettings.ui:234
 #, kde-format
 msgid ""
 "Amount of smoothing Krita should do to speed sensor. This value is very "
@@ -33353,14 +33359,14 @@ msgstr ""
 "Braitheann an luach seo go mór ar an gcrua-earraí"
 
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, tiltDirectionOffsetAngle)
-#: libs/ui/forms/wdgtabletsettings.ui:240
+#: libs/ui/forms/wdgtabletsettings.ui:247
 #, kde-format
 msgid "Angle offset added to the reported pen tilt direction."
 msgstr ""
 "Cuireadh fritháireamh uillinne leis an treo claonta peann a tuairiscíodh."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTabletTest)
-#: libs/ui/forms/wdgtabletsettings.ui:247
+#: libs/ui/forms/wdgtabletsettings.ui:254
 #, kde-format
 msgid "Open Tablet Tester..."
 msgstr "Oscail Tástálaí Táibléid..."
@@ -34632,7 +34638,7 @@ msgstr "&Oscail roghnóir datha an tulra"
 msgid "&Open Background color selector"
 msgstr "&Oscail roghnóir dath an chúlra"
 
-#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:453
+#: libs/ui/kis_control_frame.cpp:191 libs/ui/KisApplication.cpp:456
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:19
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -34646,8 +34652,8 @@ msgstr "Patrúin"
 msgid "Custom Pattern"
 msgstr "Patrún Saincheaptha"
 
-#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:438
-#: libs/ui/KisApplication.cpp:439
+#: libs/ui/kis_control_frame.cpp:243 libs/ui/KisApplication.cpp:441
+#: libs/ui/KisApplication.cpp:442
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:272
@@ -35642,20 +35648,20 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Zúmáil: %1 %"
 
-#: libs/ui/KisApplication.cpp:430
+#: libs/ui/KisApplication.cpp:433
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:266
 #, kde-format
 msgid "Brush presets"
 msgstr "Réamhshocruithe scuaibe"
 
-#: libs/ui/KisApplication.cpp:433 libs/ui/KisApplication.cpp:434
-#: libs/ui/KisApplication.cpp:435 libs/ui/KisApplication.cpp:436
+#: libs/ui/KisApplication.cpp:436 libs/ui/KisApplication.cpp:437
+#: libs/ui/KisApplication.cpp:438 libs/ui/KisApplication.cpp:439
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:267
 #, kde-format
 msgid "Brush tips"
 msgstr "Leideanna scuaibe"
 
-#: libs/ui/KisApplication.cpp:441
+#: libs/ui/KisApplication.cpp:444
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:270
@@ -35663,7 +35669,7 @@ msgstr "Leideanna scuaibe"
 msgid "Palettes"
 msgstr "Pailéid"
 
-#: libs/ui/KisApplication.cpp:454 libs/ui/widgets/kis_workspace_chooser.cpp:90
+#: libs/ui/KisApplication.cpp:457 libs/ui/widgets/kis_workspace_chooser.cpp:90
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:268
@@ -35671,44 +35677,44 @@ msgstr "Pailéid"
 msgid "Workspaces"
 msgstr "Spásanna Oibre"
 
-#: libs/ui/KisApplication.cpp:455
+#: libs/ui/KisApplication.cpp:458
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "Leabharlanna siombailí SVG"
 
-#: libs/ui/KisApplication.cpp:456 libs/ui/widgets/kis_workspace_chooser.cpp:104
+#: libs/ui/KisApplication.cpp:459 libs/ui/widgets/kis_workspace_chooser.cpp:104
 #, kde-format
 msgid "Window layouts"
 msgstr "Leagan amach fuinneog"
 
-#: libs/ui/KisApplication.cpp:458
+#: libs/ui/KisApplication.cpp:461
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:273
 #, kde-format
 msgid "Gamut masks"
 msgstr "Maisc gamut"
 
-#: libs/ui/KisApplication.cpp:460
+#: libs/ui/KisApplication.cpp:463
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "Scripteanna SeExpr"
 
-#: libs/ui/KisApplication.cpp:465
+#: libs/ui/KisApplication.cpp:468
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Stíleanna sraithe"
 
-#: libs/ui/KisApplication.cpp:468
+#: libs/ui/KisApplication.cpp:471
 #, kde-format
 msgid "Font Families"
 msgstr "Teaghlaigh Clónna"
 
-#: libs/ui/KisApplication.cpp:469
+#: libs/ui/KisApplication.cpp:472
 #, kde-format
 msgid "Style Presets"
 msgstr "Réamhshocruithe Stíl"
 
-#: libs/ui/KisApplication.cpp:481
+#: libs/ui/KisApplication.cpp:484
 #, kde-format
 msgid ""
 "%1\n"
@@ -35719,13 +35725,13 @@ msgstr ""
 "\n"
 "Scoirfidh Krita anois."
 
-#: libs/ui/KisApplication.cpp:481 libs/ui/KisApplication.cpp:487
+#: libs/ui/KisApplication.cpp:484 libs/ui/KisApplication.cpp:490
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Earráid mharfach"
 
-#: libs/ui/KisApplication.cpp:487
+#: libs/ui/KisApplication.cpp:490
 #, kde-format
 msgid ""
 "\n"
@@ -35736,7 +35742,7 @@ msgstr ""
 "\n"
 "Scoirfidh Krita anois."
 
-#: libs/ui/KisApplication.cpp:524
+#: libs/ui/KisApplication.cpp:527
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -35747,65 +35753,65 @@ msgstr ""
 "Ní mholtar é seo.\n"
 "Íoslódáil agus suiteáil an leagan x64 ina ionad."
 
-#: libs/ui/KisApplication.cpp:541
+#: libs/ui/KisApplication.cpp:544
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Ag Tosú Comhad Domhanda..."
 
-#: libs/ui/KisApplication.cpp:579
+#: libs/ui/KisApplication.cpp:582
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Cineálacha acmhainní á gcur leis..."
 
-#: libs/ui/KisApplication.cpp:583
+#: libs/ui/KisApplication.cpp:586
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Ag lódáil breiseán..."
 
-#: libs/ui/KisApplication.cpp:589
+#: libs/ui/KisApplication.cpp:592
 #, kde-format
 msgid "Loading resources..."
 msgstr "Ag lódáil acmhainní..."
 
-#: libs/ui/KisApplication.cpp:598
+#: libs/ui/KisApplication.cpp:601
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Ag lódáil an Phríomhfhuinneog..."
 
-#: libs/ui/KisApplication.cpp:630
+#: libs/ui/KisApplication.cpp:633
 #, kde-format
 msgid "Launching..."
 msgstr "Ag seoladh..."
 
-#: libs/ui/KisApplication.cpp:743
+#: libs/ui/KisApplication.cpp:762
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Cineál MIME gan aimsiú, bain triail as an rogha -mimetype"
 
-#: libs/ui/KisApplication.cpp:804
+#: libs/ui/KisApplication.cpp:823
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Theip ar na frámaí beochana a rindreáil!"
 
-#: libs/ui/KisApplication.cpp:829 libs/ui/KisApplication.cpp:1108
+#: libs/ui/KisApplication.cpp:848 libs/ui/KisApplication.cpp:1127
 #, kde-format
 msgid "File layer"
 msgstr "Sraith comhaid"
 
-#: libs/ui/KisApplication.cpp:837 libs/ui/KisApplication.cpp:842
-#: libs/ui/KisApplication.cpp:1102 libs/ui/KisApplication.cpp:1116
-#: libs/ui/KisApplication.cpp:1121
+#: libs/ui/KisApplication.cpp:856 libs/ui/KisApplication.cpp:861
+#: libs/ui/KisApplication.cpp:1121 libs/ui/KisApplication.cpp:1135
+#: libs/ui/KisApplication.cpp:1140
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita:Rabhadh"
 
-#: libs/ui/KisApplication.cpp:838 libs/ui/KisApplication.cpp:1117
+#: libs/ui/KisApplication.cpp:857 libs/ui/KisApplication.cpp:1136
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Ní féidir %1 a chur leis mar shraith comhaid: níl an comhad ann."
 
-#: libs/ui/KisApplication.cpp:843
+#: libs/ui/KisApplication.cpp:862
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35826,7 +35832,7 @@ msgstr ""
 "cheana féin, seiceáil an bosca seiceála \"Ceadaigh cás amháin de Krita\" sna "
 "socruithe (Socruithe -> Ginearálta -> Fuinneog)."
 
-#: libs/ui/KisApplication.cpp:849
+#: libs/ui/KisApplication.cpp:868
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -35837,32 +35843,32 @@ msgstr ""
 "Is féidir leat comhad nua a chruthú ag baint úsáide as an rogha --new-image, "
 "nó is féidir leat comhad atá ann cheana a oscailt."
 
-#: libs/ui/KisApplication.cpp:1103
+#: libs/ui/KisApplication.cpp:1122
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Níorbh fhéidir an comhad %1 a oscailt"
 
-#: libs/ui/KisApplication.cpp:1122
+#: libs/ui/KisApplication.cpp:1141
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Ní féidir an ciseal comhaid a chur leis: níl aon doiciméad oscailte."
 
-#: libs/ui/KisApplication.cpp:1250
+#: libs/ui/KisApplication.cpp:1269
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Níor aimsíodh teimpléad le haghaidh: %1"
 
-#: libs/ui/KisApplication.cpp:1253
+#: libs/ui/KisApplication.cpp:1272
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Aimsíodh an iomarca teimpléad le haghaidh: %1"
 
-#: libs/ui/KisApplication.cpp:1269
+#: libs/ui/KisApplication.cpp:1288
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Theip ar an teimpléad %1 a luchtú."
 
-#: libs/ui/KisApplication.cpp:1301
+#: libs/ui/KisApplication.cpp:1320
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -35877,7 +35883,7 @@ msgstr ""
 "\n"
 "Atosaigh Krita le go dtiocfaidh na hathruithe i bhfeidhm."
 
-#: libs/ui/KisApplication.cpp:1315
+#: libs/ui/KisApplication.cpp:1334
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -35889,7 +35895,7 @@ msgstr ""
 "Cinntigh nach bhfuil aon chlár eile ag baint úsáide as an gcomhad agus déan "
 "iarracht arís."
 
-#: libs/ui/KisApplication.cpp:1343
+#: libs/ui/KisApplication.cpp:1362
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ar mhaith leat an comhad socruithe a ghlanadh?"

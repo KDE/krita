@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-27 01:01+0000\n"
+"POT-Creation-Date: 2026-11-28 01:07+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -32370,7 +32370,7 @@ msgstr "प्रीसेट संपादित करव"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:75
 #: plugins/generators/seexpr/wdgseexpr.ui:172
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:27
 #, fuzzy, kde-format
 msgid "Save"
 msgstr "वेव"
@@ -37330,17 +37330,17 @@ msgstr "ये टैम्प्लेट के उपयोग करव"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:423
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:428
 #, fuzzy, kde-format
 msgid "Layer is locked and invisible."
 msgstr "परत आकार"
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:425
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:430
 #, fuzzy, kde-format
 msgid "Layer is locked."
 msgstr "परत आकार"
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:427
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:432
 #, fuzzy, kde-format
 msgid "Layer is invisible."
 msgstr "परत आकार"
@@ -38621,18 +38621,18 @@ msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "साफ करव"
 
-#: libs/ui/tool/kis_tool_utils.cpp:326
+#: libs/ui/tool/kis_tool_utils.cpp:331
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush Size: %1 px"
 msgstr "ब्रुस आकार"
 
-#: libs/ui/tool/kis_tool_utils.cpp:429
+#: libs/ui/tool/kis_tool_utils.cpp:434
 #, kde-format
 msgid "Layer can't be painted in Build Up mode."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:431
+#: libs/ui/tool/kis_tool_utils.cpp:436
 #, fuzzy, kde-format
 msgid "Group not editable."
 msgstr "परत आकार"
@@ -62724,7 +62724,7 @@ msgstr "बेतरतीब आफसेट"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:46
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:29
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
 #, kde-format
 msgid "Settings"
@@ -65638,7 +65638,7 @@ msgstr "सब्स्क्रिप्ट"
 msgid "Scripter"
 msgstr "सब्स्क्रिप्ट"
 
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:37
 #, fuzzy
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to save the current document?"
@@ -65652,40 +65652,40 @@ msgstr ""
 msgid "Debug Ctrl+D"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:26
 msgid "New"
 msgstr "नवा"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:38
 #, fuzzy
 msgid "The document has been modified."
 msgstr "नवा कागद टैम्प्लेट एखर साथ खोलव"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:39
 #, fuzzy
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to save your changes?"
 msgstr "का आप मन सही मं  अभी हाल के टैम्प्लेट '%1' ल मेटाय के लिखना चाहथो ?"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:29
 #, fuzzy
 msgid "Open"
 msgstr "खोलव (&O)"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:43
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:40
 #, fuzzy
 #| msgid "&Save to Presets"
 msgid "Python Files"
 msgstr "प्रीसेट मं सहेजव (&S)"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:54
 #, fuzzy
 msgid "Invalid File"
 msgstr "फोटू आकार"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:55
 msgid "Open files with .py extension"
 msgstr ""
 
@@ -65724,14 +65724,14 @@ msgstr ""
 msgid "Run Ctrl+R"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:42
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:39
 #, fuzzy
 #| msgid "&Save to Presets"
 msgid "Save Python File"
 msgstr "प्रीसेट मं सहेजव (&S)"
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:27
 #, fuzzy
 msgid "Save As"
 msgstr "मेक्रो चलाव"

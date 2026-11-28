@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-27 01:01+0000\n"
+"POT-Creation-Date: 2026-11-28 01:07+0000\n"
 "PO-Revision-Date: 2007-05-13 00:25+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@nuug.no>\n"
@@ -25079,7 +25079,6 @@ msgstr ""
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2469
 #, fuzzy, kde-format
-#| msgid "Rating:"
 msgid "Warning:"
 msgid_plural "Warnings:"
 msgstr[0] "Árvosánit:"
@@ -30745,7 +30744,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, m_btnChangeSplash)
 #: libs/ui/forms/wdggeneralsettings.ui:1856
 #, fuzzy, kde-format
-#| msgid "Channel"
 msgid "Change…"
 msgstr "Kanála"
 
@@ -31579,7 +31577,7 @@ msgstr ""
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:75
 #: plugins/generators/seexpr/wdgseexpr.ui:172
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:27
 #, kde-format
 msgid "Save"
 msgstr ""
@@ -36389,17 +36387,17 @@ msgstr ""
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:423
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:428
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr ""
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:425
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:430
 #, kde-format
 msgid "Layer is locked."
 msgstr ""
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:427
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:432
 #, kde-format
 msgid "Layer is invisible."
 msgstr ""
@@ -37664,17 +37662,17 @@ msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:326
+#: libs/ui/tool/kis_tool_utils.cpp:331
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:429
+#: libs/ui/tool/kis_tool_utils.cpp:434
 #, kde-format
 msgid "Layer can't be painted in Build Up mode."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:431
+#: libs/ui/tool/kis_tool_utils.cpp:436
 #, kde-format
 msgid "Group not editable."
 msgstr ""
@@ -39375,7 +39373,6 @@ msgstr ""
 
 #: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:325
 #, fuzzy, kde-format
-#| msgid "Autosaving..."
 msgid "Loading..."
 msgstr "Autovurkemin …"
 
@@ -43865,7 +43862,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
 #: plugins/dockers/lut/wdglut.ui:412
 #, fuzzy, kde-format
-#| msgid "Rename..."
 msgid "Bake..."
 msgstr "Bija ođđa nama …"
 
@@ -49597,7 +49593,6 @@ msgstr ""
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:114
 #, fuzzy, kde-format
-#| msgid "ActionList: %1"
 msgctxt "%1 plugin file path"
 msgid "Location: %1"
 msgstr "Doaibmalistu: %1"
@@ -49620,7 +49615,6 @@ msgstr ""
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:119
 #, fuzzy, kde-format
-#| msgid "Error: "
 msgctxt "%1 plugin error message"
 msgid "Error: %1"
 msgstr "Meattáhus: "
@@ -49645,7 +49639,6 @@ msgstr ""
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:87
 #, fuzzy, kde-format
-#| msgid "Not Filled"
 msgctxt "@item:intable plugin status"
 msgid "Not loaded"
 msgstr "Ii deavdejuvvon"
@@ -52802,7 +52795,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:22
 #, fuzzy, kde-format
-#| msgid "Mode"
 msgid "Model:"
 msgstr "Modus"
 
@@ -53288,7 +53280,6 @@ msgstr ""
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:44
 #: plugins/tools/basictools/kis_tool_gradient.cc:270
 #, fuzzy, kde-format
-#| msgid "None"
 msgctxt "The gradient will not be dithered"
 msgid "None"
 msgstr "Ii oktage"
@@ -53296,7 +53287,6 @@ msgstr "Ii oktage"
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:45
 #: plugins/tools/basictools/kis_tool_gradient.cc:271
 #, fuzzy, kde-format
-#| msgid "Noise"
 msgctxt "The gradient will be dithered with Blue Noise"
 msgid "Blue Noise"
 msgstr "Gadja"
@@ -53368,7 +53358,6 @@ msgstr ""
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
 #: plugins/tools/basictools/kis_tool_gradient.cc:267
 #, fuzzy, kde-format
-#| msgid "Other:"
 msgid "Dither:"
 msgstr "Eara:"
 
@@ -59504,7 +59493,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
 #, fuzzy, kde-format
-#| msgid "Created:"
 msgctxt "@action:button create new brushtip"
 msgid "Create New"
 msgstr "Ráhkaduvvon:"
@@ -59746,14 +59734,12 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:80
 #, fuzzy, kde-format
-#| msgid "Source:"
 msgctxt "@label:listbox image source"
 msgid "Source:"
 msgstr "Gáldu:"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
 #, fuzzy, kde-format
-#| msgid "Image"
 msgctxt "@item:inlistbox"
 msgid "Image"
 msgstr "Govva"
@@ -59772,7 +59758,6 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:251
 #, fuzzy, kde-format
-#| msgid "<empty>"
 msgctxt "@info empty image"
 msgid "Empty"
 msgstr "<guorus>"
@@ -59785,7 +59770,6 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:280
 #, fuzzy, kde-format
-#| msgid "&Save"
 msgctxt "@action:button"
 msgid "Save"
 msgstr "&Vurke"
@@ -59833,7 +59817,6 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
 #, fuzzy, kde-format
-#| msgid "Create new document"
 msgid "Create New Brushtip"
 msgstr "Ráhkat ođđa dokumeantta"
 
@@ -61042,7 +61025,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:46
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:29
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
 #, kde-format
 msgid "Settings"
@@ -61541,7 +61524,6 @@ msgstr ""
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
 #, fuzzy, kde-format
-#| msgid "Color Balance"
 msgctxt "action"
 msgid "Color Space"
 msgstr "Ivdnidássedeaddu"
@@ -62914,7 +62896,6 @@ msgstr ""
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
 #, fuzzy, kde-format
-#| msgid "Document Info"
 msgctxt "action"
 msgid "Document Tools"
 msgstr "Dokumeantadieđut"
@@ -62963,7 +62944,6 @@ msgstr ""
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
 #, fuzzy, kde-format
-#| msgid "Layers"
 msgctxt "action"
 msgid "Export Layers"
 msgstr "Laiggahagat"
@@ -63052,7 +63032,6 @@ msgstr ""
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
 #, fuzzy, kde-format
-#| msgid "Alternate"
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Eavttolaš"
@@ -63558,7 +63537,6 @@ msgstr ""
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
 #, fuzzy, kde-format
-#| msgid "Scripts"
 msgctxt "action"
 msgid "Scripter"
 msgstr "Skriptat"
@@ -63568,7 +63546,7 @@ msgstr "Skriptat"
 msgid "Scripter"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:37
 msgid "Do you want to save the current document?"
 msgstr ""
 
@@ -63580,33 +63558,33 @@ msgstr "Dihkeohcan"
 msgid "Debug Ctrl+D"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:26
 msgid "New"
 msgstr "Ođđa"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:38
 msgid "The document has been modified."
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:39
 msgid "Do you want to save your changes?"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:29
 msgid "Open"
 msgstr "Raba"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:43
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:40
 msgid "Python Files"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:54
 msgid "Invalid File"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:55
 msgid "Open files with .py extension"
 msgstr ""
 
@@ -63640,12 +63618,12 @@ msgstr "Vuoje"
 msgid "Run Ctrl+R"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:42
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:39
 msgid "Save Python File"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:27
 msgid "Save As"
 msgstr "Vurke nugo"
 

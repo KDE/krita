@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-27 01:01+0000\n"
+"POT-Creation-Date: 2026-11-28 01:07+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -32848,7 +32848,7 @@ msgstr "Aktuell Vörinstellen"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:75
 #: plugins/generators/seexpr/wdgseexpr.ui:172
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:27
 #, kde-format
 msgid "Save"
 msgstr "Sekern"
@@ -37866,17 +37866,17 @@ msgstr "Disse Vörlaag bruken"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:423
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:428
 #, fuzzy, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Laag-Grött"
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:425
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:430
 #, fuzzy, kde-format
 msgid "Layer is locked."
 msgstr "Laag-Grött"
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:427
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:432
 #, fuzzy, kde-format
 msgid "Layer is invisible."
 msgstr "Laag-Grött"
@@ -39162,18 +39162,18 @@ msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "Leddig maken"
 
-#: libs/ui/tool/kis_tool_utils.cpp:326
+#: libs/ui/tool/kis_tool_utils.cpp:331
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush Size: %1 px"
 msgstr "Pinselgrött"
 
-#: libs/ui/tool/kis_tool_utils.cpp:429
+#: libs/ui/tool/kis_tool_utils.cpp:434
 #, kde-format
 msgid "Layer can't be painted in Build Up mode."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:431
+#: libs/ui/tool/kis_tool_utils.cpp:436
 #, fuzzy, kde-format
 msgid "Group not editable."
 msgstr "Laag-Grött"
@@ -63664,7 +63664,7 @@ msgstr "Tofällig Grött"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:46
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:29
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
 #, kde-format
 msgid "Settings"
@@ -66647,7 +66647,7 @@ msgstr "Daalstellt"
 msgid "Scripter"
 msgstr "Daalstellt"
 
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:37
 #, fuzzy
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to save the current document?"
@@ -66661,41 +66661,41 @@ msgstr ""
 msgid "Debug Ctrl+D"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:26
 msgid "New"
 msgstr "Nieg"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:38
 #, fuzzy
 msgid "The document has been modified."
 msgstr "Nieg Dokment ut Vörlaag opstellen"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:39
 #, fuzzy
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to save your changes?"
 msgstr "Wullt Du de vörhannen Vörlaag \"%1\" redig överschrieven?"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:29
 #, fuzzy
 msgid "Open"
 msgstr "&Opmaken"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:43
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:40
 #, fuzzy
 #| msgid "Save to Palette"
 msgid "Python Files"
 msgstr "Na  Klörensett sekern"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:54
 #, fuzzy
 #| msgid "Invalid value."
 msgid "Invalid File"
 msgstr "Leeg Weert."
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:55
 msgid "Open files with .py extension"
 msgstr ""
 
@@ -66734,14 +66734,14 @@ msgstr ""
 msgid "Run Ctrl+R"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:42
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:39
 #, fuzzy
 #| msgid "Save to Palette"
 msgid "Save Python File"
 msgstr "Na  Klörensett sekern"
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:27
 #, fuzzy
 msgid "Save As"
 msgstr "Makro sekern"

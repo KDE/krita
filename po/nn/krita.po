@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-27 01:01+0000\n"
+"POT-Creation-Date: 2026-11-28 01:07+0000\n"
 "PO-Revision-Date: 2026-10-10 12:35+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@nuug.no>\n"
@@ -7271,8 +7271,6 @@ msgstr "Høgrejuster"
 #: krita/data/actions/InteractionTool.action:26
 #: krita/data/actions/InteractionTool.action:33
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Ungroup shapes"
 msgctxt "action"
 msgid "Ungroup shapes"
 msgstr "Løys opp figurgruppe"
@@ -7280,8 +7278,6 @@ msgstr "Løys opp figurgruppe"
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:28
 #, fuzzy, kde-format
-#| msgctxt "Group as Swatch Group in a Palette"
-#| msgid "Remove selected group"
 msgctxt "action"
 msgid "Remove the selected shape group"
 msgstr "Fjern merkt gruppe"
@@ -7343,8 +7339,6 @@ msgstr "Midtstill loddrett"
 #: krita/data/actions/InteractionTool.action:66
 #: krita/data/actions/InteractionTool.action:73
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
 msgctxt "action"
 msgid "Group shapes"
 msgstr "Grupper figurar"
@@ -7352,8 +7346,6 @@ msgstr "Grupper figurar"
 #. i18n: context: toolTip @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:68
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Create a group layer containing selected layers"
 msgctxt "action"
 msgid "Create a shape group containing selected shapes"
 msgstr "Lag ei laggruppe frå dei gjeldande laga"
@@ -11493,8 +11485,6 @@ msgstr "Oppdater avspelingsområde"
 #. i18n: context: text @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2527
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
 msgctxt "action"
 msgid "Interpolate Constant"
 msgstr "Interpolering"
@@ -11502,7 +11492,6 @@ msgstr "Interpolering"
 #. i18n: context: toolTip @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2529
 #, fuzzy, kde-format
-#| msgid "Hold constant value. No interpolation."
 msgctxt "action"
 msgid "Hold constant value. No interpolation."
 msgstr "Hald konstant verdi. Inga interpolering."
@@ -11510,8 +11499,6 @@ msgstr "Hald konstant verdi. Inga interpolering."
 #. i18n: context: text @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2539
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
 msgctxt "action"
 msgid "Interpolate Linear"
 msgstr "Interpolering"
@@ -11519,7 +11506,6 @@ msgstr "Interpolering"
 #. i18n: context: toolTip @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2541
 #, fuzzy, kde-format
-#| msgid "Linear interpolation."
 msgctxt "action"
 msgid "Linear interpolation."
 msgstr "Lineær interpolering."
@@ -11527,8 +11513,6 @@ msgstr "Lineær interpolering."
 #. i18n: context: text @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2551
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
 msgctxt "action"
 msgid "Interpolate Bezier"
 msgstr "Interpolering"
@@ -11536,7 +11520,6 @@ msgstr "Interpolering"
 #. i18n: context: toolTip @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2553
 #, fuzzy, kde-format
-#| msgid "Bezier curve interpolation."
 msgctxt "action"
 msgid "Bezier curve interpolation."
 msgstr "Interpolering med Bezier-kurve."
@@ -11544,8 +11527,6 @@ msgstr "Interpolering med Bezier-kurve."
 #. i18n: context: text @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2563
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
 msgctxt "action"
 msgid "Interpolate Sharp"
 msgstr "Interpolering"
@@ -11553,7 +11534,6 @@ msgstr "Interpolering"
 #. i18n: context: toolTip @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2565
 #, fuzzy, kde-format
-#| msgid "Sharp interpolation tangents."
 msgctxt "action"
 msgid "Sharp interpolation tangents."
 msgstr "Skarpe interpolerings­tangentar."
@@ -11561,8 +11541,6 @@ msgstr "Skarpe interpolerings­tangentar."
 #. i18n: context: text @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2575
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
 msgctxt "action"
 msgid "Interpolate Smooth"
 msgstr "Interpolering"
@@ -11570,7 +11548,6 @@ msgstr "Interpolering"
 #. i18n: context: toolTip @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2577
 #, fuzzy, kde-format
-#| msgid "Smooth interpolation tangents."
 msgctxt "action"
 msgid "Smooth interpolation tangents."
 msgstr "Glatte interpolerings­tangentar."
@@ -11578,7 +11555,6 @@ msgstr "Glatte interpolerings­tangentar."
 #. i18n: context: text @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2587
 #, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
 msgctxt "action"
 msgid "Zoom to Fit Range"
 msgstr "Forstørr/forminsk til å visa alle kanalverdiane."
@@ -11586,7 +11562,6 @@ msgstr "Forstørr/forminsk til å visa alle kanalverdiane."
 #. i18n: context: toolTip @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2589
 #, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
 msgctxt "action"
 msgid "Zoom view to fit channel range."
 msgstr "Forstørr/forminsk til å visa alle kanalverdiane."
@@ -11594,7 +11569,6 @@ msgstr "Forstørr/forminsk til å visa alle kanalverdiane."
 #. i18n: context: text @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2599
 #, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
 msgctxt "action"
 msgid "Zoom to Fit Curve"
 msgstr "Forstørr/forminsk til å visa heile kurva."
@@ -11602,7 +11576,6 @@ msgstr "Forstørr/forminsk til å visa heile kurva."
 #. i18n: context: toolTip @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2601
 #, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
 msgctxt "action"
 msgid "Zoom view to fit curve."
 msgstr "Forstørr/forminsk til å visa heile kurva."
@@ -13220,8 +13193,6 @@ msgstr "Vel ko&pieringskjelde …"
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3716
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set the source for the selected clone layer(s)."
 msgctxt "action"
 msgid "Set the source for the selected clone layers"
 msgstr "Vel kjelde for vald(e) klonelag"
@@ -20735,13 +20706,11 @@ msgstr "Vis større/mindre"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:38
 #, fuzzy, kde-format
-#| msgid "Zoom In"
 msgid "Zoom in"
 msgstr "Forstørr"
 
 #: libs/flake/tools/KoZoomToolWidget.cpp:40
 #, fuzzy, kde-format
-#| msgid "Zoom Out"
 msgid "Zoom out"
 msgstr "Forminsk"
 
@@ -20758,7 +20727,6 @@ msgstr "Modus"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/flake/tools/KoZoomToolWidget.ui:34
 #, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
 msgid "Zoom to fit:"
 msgstr "Forstørr/forminsk til å visa alle kanalverdiane."
 
@@ -23340,8 +23308,6 @@ msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:70
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Shade (IFS Illusions)"
-#| msgid "Shade (IFS Illusions)"
 msgctxt "Blending mode - Shade (SAI)"
 msgid "Shade (SAI)"
 msgstr "Skugge (IFS Illusions)"
@@ -23498,8 +23464,6 @@ msgstr "Lysenergi/skin (SAI)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:97
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Dodge"
 msgctxt "Blending mode - Dodge (SAI)"
 msgid "Dodge (SAI)"
 msgstr "Lysna"
@@ -23554,8 +23518,6 @@ msgstr "Differanse"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:107
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Difference"
-#| msgid "Difference"
 msgctxt "Blending mode - Difference (SAI)"
 msgid "Difference (SAI)"
 msgstr "Differanse"
@@ -23634,8 +23596,6 @@ msgstr "Mørkare alfa"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:122
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Alpha Darken"
-#| msgid "Alpha Darken"
 msgctxt "Blending mode - Alpha Darken Clamp"
 msgid "Alpha Darken Clamp"
 msgstr "Mørkare alfa"
@@ -23672,8 +23632,6 @@ msgstr "Hard fargeblanding, mjukare (Photoshop)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:128
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Hard Mix"
-#| msgid "Hard Mix"
 msgctxt "Blending mode - Hard Mix (SAI)"
 msgid "Hard Mix (SAI)"
 msgstr "Hard fargeblanding"
@@ -23777,8 +23735,6 @@ msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:145
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Luminosity/Shine (SAI)"
-#| msgid "Luminosity/Shine (SAI)"
 msgctxt "Blending mode - Shade/Shine (SAI)"
 msgid "Shade/Shine (SAI)"
 msgstr "Lysenergi/skin (SAI)"
@@ -25299,8 +25255,6 @@ msgstr ""
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2469
 #, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Warning"
 msgid "Warning:"
 msgid_plural "Warnings:"
 msgstr[0] "Åtvaring"
@@ -25730,7 +25684,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, vp9PreserveTransparency)
 #: libs/ui/animation/video_export_options_dialog.ui:272
 #, fuzzy, kde-format
-#| msgid "Preserve Transparency"
 msgid "Preserve transparency"
 msgstr "Ta vare på gjennomsikt"
 
@@ -26245,7 +26198,6 @@ msgstr "VP9"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:310
 #, fuzzy, kde-format
-#| msgid "Grayscale (without transparency)"
 msgctxt "ProRes codec name"
 msgid "ProRes 4444 (with transparency)"
 msgstr "Gråtonar (utan gjennomsikt)"
@@ -26965,11 +26917,6 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_about_application.cpp:70
 #, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
-#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
-#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-#| "Scripting School</span></a>!</p></body></html>"
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline;;\">Scripting School</span></a></p>"
@@ -28630,7 +28577,6 @@ msgstr "Støtt Krita"
 
 #: libs/ui/dialogs/KisSplashSourceDialog.cpp:24
 #, fuzzy, kde-format
-#| msgid "Do not show the splash screen"
 msgid "Become a supporter to change the splash screen."
 msgstr "Vis ikkje velkomstbiletet."
 
@@ -28670,8 +28616,6 @@ msgstr ""
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisSplashSourceDialog)
 #: libs/ui/dialogs/KisSplashSourceDialog.ui:14
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
 msgid "Change Splash Screen"
 msgstr "Endra parameter"
 
@@ -29527,12 +29471,6 @@ msgstr "Bla gjennom fargerom"
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
 #, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-#| "\"><span style=\" font-weight:600; text-decoration: underline; color:"
-#| "#006e28;\">Color Spaces</span></a>  determine how colors are encoded in "
-#| "your files. Different color spaces have different properties and are used "
-#| "for different purposes.</p></body></html>"
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
 "\"><span style=\" font-weight:600; text-decoration: underline; \">Color "
@@ -31229,7 +31167,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, m_btnChangeSplash)
 #: libs/ui/forms/wdggeneralsettings.ui:1856
 #, fuzzy, kde-format
-#| msgid "Channel"
 msgid "Change…"
 msgstr "Kanal"
 
@@ -32082,7 +32019,7 @@ msgstr "Gjeldande ferdigpensel"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:75
 #: plugins/generators/seexpr/wdgseexpr.ui:172
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:27
 #, kde-format
 msgid "Save"
 msgstr "Lagra"
@@ -33827,13 +33764,11 @@ msgstr "Plukk opp bakgrunnsfarge frå samanslått bilete"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:42
 #, fuzzy, kde-format
-#| msgid "Sample Foreground Color from Current Layer"
 msgid "Sample Foreground Color from Current Group"
 msgstr "Plukk opp framgrunnsfarge frå gjeldande lag"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:43
 #, fuzzy, kde-format
-#| msgid "Sample Background Color from Current Layer"
 msgid "Sample Background Color from Current Group"
 msgstr "Plukk opp bakgrunnsfarge frå gjeldande lag"
 
@@ -35537,10 +35472,6 @@ msgstr "Merk alt ugjennomsiktige"
 
 #: libs/ui/kis_splash_screen.cpp:48
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "This is appended to the color profile which is the default for the given "
-#| "colorspace and bit-depth"
-#| msgid "(Default)"
 msgctxt "Splash image default"
 msgid "%1 (default)"
 msgstr "(standard)"
@@ -35572,7 +35503,6 @@ msgstr ""
 
 #: libs/ui/kis_splash_screen.cpp:203
 #, fuzzy, kde-format
-#| msgid "Plain color"
 msgctxt "Splash screen option without Kiki"
 msgid "Plain"
 msgstr "Rein farge"
@@ -37133,17 +37063,17 @@ msgstr "Bruk denne malen"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Du kan ikkje dra og sleppa fargar på den valde lagtypen."
 
-#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:423
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool_utils.cpp:428
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Laget er låst og usynleg."
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:425
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool_utils.cpp:430
 #, kde-format
 msgid "Layer is locked."
 msgstr "Laget er låst."
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:427
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool_utils.cpp:432
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Laget er usynleg."
@@ -38454,18 +38384,17 @@ msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "Tøm"
 
-#: libs/ui/tool/kis_tool_utils.cpp:326
+#: libs/ui/tool/kis_tool_utils.cpp:331
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr "Penselstorleik: %1 pikslar"
 
-#: libs/ui/tool/kis_tool_utils.cpp:429
+#: libs/ui/tool/kis_tool_utils.cpp:434
 #, fuzzy, kde-format
-#| msgid "Layer can be painted in Wash Mode only."
 msgid "Layer can't be painted in Build Up mode."
 msgstr "Laget kan berre teiknast på i lasurmodus."
 
-#: libs/ui/tool/kis_tool_utils.cpp:431
+#: libs/ui/tool/kis_tool_utils.cpp:436
 #, kde-format
 msgid "Group not editable."
 msgstr "Gruppa er ikkje redigerbar."
@@ -38534,8 +38463,6 @@ msgstr "Verktøykasse"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:190
 #, fuzzy, kde-format
-#| msgctxt "Set the gradient chooser to show custom size items"
-#| msgid "Custom size items"
 msgid "Customize Disabled Tools"
 msgstr "Eigendefinert storleik"
 
@@ -38603,13 +38530,11 @@ msgstr "&Loddrett"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:344
 #, fuzzy, kde-format
-#| msgid "Custom color"
 msgid "Customize Toolbox"
 msgstr "Tilpassa farge"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:345
 #, fuzzy, kde-format
-#| msgid "Enabled"
 msgid "Enabled tools"
 msgstr "Slått på"
 
@@ -39961,14 +39886,11 @@ msgstr "Miniatyrbilete"
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
 #, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
 msgid "Strokes"
 msgstr "Strøk"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:60
 #, fuzzy, kde-format
-#| msgid "Clear Thumbnail"
 msgid "Strokes and Thumbnails"
 msgstr "Fjern miniatyrbilete"
 
@@ -40000,7 +39922,6 @@ msgstr "Endra namn på ferdigpensel"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:173
 #, fuzzy, kde-format
-#| msgid "Thumbnail Size"
 msgid "Thumbnails and Strokes"
 msgstr "Storleik på miniatyrbileta"
 
@@ -40022,8 +39943,6 @@ msgstr "Inga førehandsvising for denne motoren"
 
 #: libs/ui/widgets/kis_selection_options.cc:194
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
 msgctxt "The move-selected-content checkbox in selection tool options"
 msgid "Move Selected Content"
 msgstr "Flytt utval"
@@ -40096,8 +40015,6 @@ msgstr "Symmetrisk differanse"
 
 #: libs/ui/widgets/kis_selection_options.cc:255
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Move Selection"
 msgctxt "@info:tooltip"
 msgid "Move Selected Content"
 msgstr "Flytt utval"
@@ -40417,7 +40334,6 @@ msgstr "Mengd:"
 
 #: libs/ui/widgets/KisBrushStrokePreviewCache.cpp:325
 #, fuzzy, kde-format
-#| msgid "Loading Pages..."
 msgid "Loading..."
 msgstr "Lastar sider …"
 
@@ -42424,7 +42340,6 @@ msgstr "Tilpassa farge"
 #. i18n: ectx: property (text), widget (QLabel, brushPriorityLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:251
 #, fuzzy, kde-format
-#| msgid "Brush Preset History"
 msgid "Brush Priority:"
 msgstr "Ferdigpensel-logg"
 
@@ -44874,8 +44789,6 @@ msgstr "Ingen"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:675
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
 msgctxt "@title:window"
 msgid "Convert to image colorspace?"
 msgstr "Gjer om biletfargerom"
@@ -44890,7 +44803,6 @@ msgstr ""
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:697
 #, fuzzy, kde-format
-#| msgid "Store Softproofing configuration in the image"
 msgctxt "Message for ocio baking progress bar."
 msgid "Baking configuration into image..."
 msgstr "Lagra innstillingar for utskriftssimulering i biletet"
@@ -44994,7 +44906,6 @@ msgstr "Set opp svart- og kvitpunkt for visinga"
 #. i18n: ectx: property (text), widget (QPushButton, m_bakeConfigBtn)
 #: plugins/dockers/lut/wdglut.ui:412
 #, fuzzy, kde-format
-#| msgid "&Wave..."
 msgid "Bake..."
 msgstr "&Bølgjer …"
 
@@ -45010,11 +44921,10 @@ msgid "Pin navigation controls"
 msgstr "Lås fast navigasjonskontrollar"
 
 #: plugins/dockers/overview/overviewdocker_page.cpp:178
-#, fuzzy, kde-format
-#| msgid "RGB Grayscale levels"
+#, kde-format
 msgctxt "Show the overview docker preview in shades of gray"
 msgid "Grayscale preview"
-msgstr "RGB-gråtonar"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, paletteLabel)
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
@@ -45236,7 +45146,6 @@ msgstr " pikslar"
 
 #: plugins/dockers/recorder/recorder_export.cpp:560
 #, fuzzy, kde-format
-#| msgid "frame"
 msgctxt "The suffix after number of frames"
 msgid "frame"
 msgid_plural "frames"
@@ -45634,7 +45543,6 @@ msgstr "0 B"
 
 #: plugins/dockers/recorder/recorder_writer.cpp:631
 #, fuzzy, kde-format
-#| msgid "Start Recording"
 msgid "Stopping recording"
 msgstr "Start opptak"
 
@@ -45769,9 +45677,6 @@ msgstr "Ta opp automatisk"
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxFocusedRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:374
 #, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
 msgid ""
 "<html><head/><body><p>Record only the visible area of the canvas.</p></"
 "body></html>"
@@ -50781,11 +50686,6 @@ msgstr "Feil: Klarte ikkje starta Python-motoren"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:72
 #, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
-#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
-#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-#| "Scripting School</span></a>!</p></body></html>"
 msgid ""
 "<html><head/><body><p>If you want to learn how to write Krita scripts, check "
 "out the <a href=\"https://scripting.krita.org/lessons/introduction\"><span "
@@ -50799,15 +50699,12 @@ msgstr ""
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:51
 #, fuzzy, kde-format
-#| msgctxt "EXIF: exposure - exposure mode"
-#| msgid "Manual"
 msgctxt "@title:tab plugin manual"
 msgid "Manual"
 msgstr "Manuell"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:53
 #, fuzzy, kde-format
-#| msgid "Status"
 msgctxt "@title:tab plugin status"
 msgid "Status"
 msgstr "Status"
@@ -50820,63 +50717,52 @@ msgstr "Python-tillegg"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:114
 #, fuzzy, kde-format
-#| msgid "Location:"
 msgctxt "%1 plugin file path"
 msgid "Location: %1"
 msgstr "Plassering:"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
 #, fuzzy, kde-format
-#| msgid "Enabled"
 msgid "Enabled: false"
 msgstr "Slått på"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:115
 #, fuzzy, kde-format
-#| msgid "Enabled"
 msgid "Enabled: true"
 msgstr "Slått på"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:117
 #, fuzzy, kde-format
-#| msgid "Status"
 msgctxt "%1 plugin status text"
 msgid "Status: %1"
 msgstr "Status"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:119
 #, fuzzy, kde-format
-#| msgid "Error: "
 msgctxt "%1 plugin error message"
 msgid "Error: %1"
 msgstr "Feil: "
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:81
 #, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
 msgctxt "@item:intable plugin status"
 msgid "Broken"
 msgstr "Strøk"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:83
 #, fuzzy, kde-format
-#| msgid "Enabled"
 msgctxt "@item:intable plugin status"
 msgid "Unstable"
 msgstr "Slått på"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:85
 #, fuzzy, kde-format
-#| msgctxt "Load Image as Thumbnail button"
-#| msgid "Load Image"
 msgctxt "@item:intable plugin status"
 msgid "Loaded"
 msgstr "Last inn bilete"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:87
 #, fuzzy, kde-format
-#| msgid "Not Saved"
 msgctxt "@item:intable plugin status"
 msgid "Not loaded"
 msgstr "Ikkje lagra"
@@ -50949,8 +50835,6 @@ msgstr "Feil ved internmotor"
 # skip-rule: passiv
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:386
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Module not loaded:<br/>%1"
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/><code>%1</code>"
 msgstr "Modulen vart ikkje lasta:<br/>%1"
@@ -50969,7 +50853,6 @@ msgstr "Kommentar"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:57
 #, fuzzy, kde-format
-#| msgid "Status"
 msgctxt "@title:column"
 msgid "Status"
 msgstr "Status"
@@ -51949,14 +51832,12 @@ msgstr "Ikkje gjer noko"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, fuzzy, kde-format
-#| msgid "S-Pen Actions"
 msgid "S-Pen Pro Air Actions"
 msgstr "S-penn-handlingar"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
 #, fuzzy, kde-format
-#| msgid "S-Pen Actions"
 msgctxt "action"
 msgid "S-Pen Pro Air Actions"
 msgstr "S-penn-handlingar"
@@ -51964,8 +51845,6 @@ msgstr "S-penn-handlingar"
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Click"
 msgctxt "action"
 msgid "S-Pen Pro Air Button Click"
 msgstr "S-penn: klikk"
@@ -51973,8 +51852,6 @@ msgstr "S-penn: klikk"
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Double Click"
 msgctxt "action"
 msgid "S-Pen Pro Air Button Double Click"
 msgstr "S-penn: dobbeltklikk"
@@ -51982,8 +51859,6 @@ msgstr "S-penn: dobbeltklikk"
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Up"
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Up"
 msgstr "S-penn: sveip opp"
@@ -51991,8 +51866,6 @@ msgstr "S-penn: sveip opp"
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Down"
 msgctxt "action"
 msgid "S-Pen Pro AirGesture Swipe Down"
 msgstr "S-penn: sveip ned"
@@ -52000,8 +51873,6 @@ msgstr "S-penn: sveip ned"
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Left"
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Left"
 msgstr "S-penn: sveip til venstre"
@@ -52009,8 +51880,6 @@ msgstr "S-penn: sveip til venstre"
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Right"
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Right"
 msgstr "S-penn: sveip til høgre"
@@ -52018,8 +51887,6 @@ msgstr "S-penn: sveip til høgre"
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Clockwise"
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Clockwise"
 msgstr "S-penn: sirkel med klokka"
@@ -52027,8 +51894,6 @@ msgstr "S-penn: sirkel med klokka"
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Counter-Clockwise"
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
 msgstr "S-penn: sirkel mot klokka"
@@ -54041,7 +53906,6 @@ msgstr "Terskel&nivå:"
 # Gjer om gråtonar i biletet til tilsvarande nivå i ein fargeovergang.
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:56
 #, fuzzy, kde-format
-#| msgid "&Gradient Map..."
 msgid "Tone/Gamut Map..."
 msgstr "&Avbild til fargeovergang …"
 
@@ -54072,14 +53936,11 @@ msgstr ""
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:162
 #, fuzzy, kde-format
-#| msgctxt "Lightness Map blend mode for brush texture"
-#| msgid "Lightness Map"
 msgid "Use Chroma-Lightness Cusp Map"
 msgstr "Lysstyrke-avbilding"
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.cpp:163
 #, fuzzy, kde-format
-#| msgid "Minimum Quality"
 msgid "Minimum Delta E"
 msgstr "Lågast kvalitet"
 
@@ -54108,37 +53969,30 @@ msgstr ""
 
 #: plugins/filters/tonegamutmap/KisToneGamutMapFilter.h:28
 #, fuzzy, kde-format
-#| msgid "Gamut Masks"
 msgid "Tone/Gamut Map"
 msgstr "Fargeområde-masker"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:22
 #, fuzzy, kde-format
-#| msgctxt "Color model"
-#| msgid "Model:"
 msgid "Model:"
 msgstr "Modell:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkToneMap)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:41
 #, fuzzy, kde-format
-#| msgctxt "Layer name for translation of template"
-#| msgid "Tones"
 msgid "Tone Map"
 msgstr "Tonar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:57
 #, fuzzy, kde-format
-#| msgid "White:"
 msgid "Max White:"
 msgstr "Kvit:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:80
 #, fuzzy, kde-format
-#| msgid "Strength:"
 msgid "Toe Strength:"
 msgstr "Styrke:"
 
@@ -54153,7 +54007,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:103
 #, fuzzy, kde-format
-#| msgid "Length:"
 msgid "Toe Length:"
 msgstr "Lengd:"
 
@@ -54168,7 +54021,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:126
 #, fuzzy, kde-format
-#| msgid "Anc&hor Strength:"
 msgid "Shoulder Strength:"
 msgstr "An&kerstyrke:"
 
@@ -54181,7 +54033,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:149
 #, fuzzy, kde-format
-#| msgid "Smudge Length"
 msgid "Shoulder Length:"
 msgstr "Gnilengd"
 
@@ -54194,15 +54045,12 @@ msgstr ""
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnShoulderLength)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:159
 #, fuzzy, kde-format
-#| msgctxt "Button to edit the selected stop color in the stop gradient editor"
-#| msgid "Edit stop"
 msgid " stops"
 msgstr "Rediger stopp"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:172
 #, fuzzy, kde-format
-#| msgid "Shear angle X:"
 msgid "Shoulder Angle:"
 msgstr "X-vinkel:"
 
@@ -54216,7 +54064,6 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, chkGamutMap)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:210
 #, fuzzy, kde-format
-#| msgid "Gamut Masks"
 msgid "Gamut Map"
 msgstr "Fargeområde-masker"
 
@@ -54224,8 +54071,6 @@ msgstr "Fargeområde-masker"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/filters/tonegamutmap/kistonegamutmapwidget.ui:219
 #, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Workspace"
-#| msgid "Wide Gamut"
 msgid "Target Gamut:"
 msgstr "Wide Gamut"
 
@@ -54612,7 +54457,6 @@ msgstr "Vekslande"
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:44
 #: plugins/tools/basictools/kis_tool_gradient.cc:270
 #, fuzzy, kde-format
-#| msgid "None"
 msgctxt "The gradient will not be dithered"
 msgid "None"
 msgstr "Ingen"
@@ -54620,7 +54464,6 @@ msgstr "Ingen"
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:45
 #: plugins/tools/basictools/kis_tool_gradient.cc:271
 #, fuzzy, kde-format
-#| msgid "Simplex Noise"
 msgctxt "The gradient will be dithered with Blue Noise"
 msgid "Blue Noise"
 msgstr "Simpleks-støy"
@@ -54692,7 +54535,6 @@ msgstr "Relativ"
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
 #: plugins/tools/basictools/kis_tool_gradient.cc:267
 #, fuzzy, kde-format
-#| msgid "&Dither:"
 msgid "Dither:"
 msgstr "&Mønsterspreiing:"
 
@@ -54700,7 +54542,6 @@ msgstr "&Mønsterspreiing:"
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:111
 #: plugins/tools/basictools/kis_tool_gradient.cc:278
 #, fuzzy, kde-format
-#| msgid "&Dither:"
 msgid "Dither steps:"
 msgstr "&Mønsterspreiing:"
 
@@ -55384,8 +55225,6 @@ msgstr "Penselinformasjon for animerte penslar"
 
 #: plugins/impex/brush/KisWdgOptionsBrush.cpp:107
 #, fuzzy, kde-format
-#| msgctxt "video importer: video file statistics"
-#| msgid "Frames: %1"
 msgctxt "@label %1 number of animation frames"
 msgid "Frames: %1"
 msgstr "Animasjonsbilete: %1"
@@ -61215,9 +61054,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, customButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Create shape"
-#| msgid_plural "Create %1 shapes"
 msgctxt "@action:button create new brushtip"
 msgid "Create New"
 msgstr "Lag figur"
@@ -61483,56 +61319,48 @@ msgstr "Tekst"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:80
 #, fuzzy, kde-format
-#| msgid "Source:"
 msgctxt "@label:listbox image source"
 msgid "Source:"
 msgstr "Kjelde:"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:84
 #, fuzzy, kde-format
-#| msgid "Image"
 msgctxt "@item:inlistbox"
 msgid "Image"
 msgstr "Bilete"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:85
 #, fuzzy, kde-format
-#| msgid "Clipboard"
 msgctxt "@item:inlistbox"
 msgid "Clipboard"
 msgstr "Utklippstavle"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:88
 #, fuzzy, kde-format
-#| msgid "Reload File"
 msgctxt "@action:button reload image"
 msgid "Reload"
 msgstr "Last inn fila på nytt"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:251
 #, fuzzy, kde-format
-#| msgid "Empty slot"
 msgctxt "@info empty image"
 msgid "Empty"
 msgstr "Ledig plass"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:278
 #, fuzzy, kde-format
-#| msgid "Overwrite"
 msgctxt "@action:button"
 msgid "Overwrite"
 msgstr "Skriv over"
 
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:280
 #, fuzzy, kde-format
-#| msgid "Save"
 msgctxt "@action:button"
 msgid "Save"
 msgstr "Lagra"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
 #, fuzzy, kde-format
-#| msgid "Creates a brush tip from the image in the clipboard."
 msgid "Creates a brush tip from the current image, selection, or clipboard."
 msgstr "Lagar ein penseltupp frå biletet på utklippstavla."
 
@@ -61581,7 +61409,6 @@ msgstr ""
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:298
 #, fuzzy, kde-format
-#| msgid "Current Brush Tip"
 msgid "Create New Brushtip"
 msgstr "Gjeldande penseltupp"
 
@@ -61901,8 +61728,6 @@ msgstr "Loddrett"
 
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:29
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Only wash mode is possible when using a masked brush."
 msgctxt "@info:tooltip"
 msgid "Build up mode is not available when using a masked brush."
 msgstr "Når du brukar ein pensel med maske, må du bruka lasurmodus."
@@ -62835,7 +62660,7 @@ msgstr "Tilfeldig storleik"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:46
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:29
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
 #, kde-format
 msgid "Settings"
@@ -63234,7 +63059,6 @@ msgstr "Verdi for retning/helling-blanding"
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
 #, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
 msgctxt "action"
 msgid "Assign Profile to Image"
 msgstr "Tildel profil til bilete"
@@ -63258,7 +63082,6 @@ msgstr "Tildel profil til bilete"
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
 #, fuzzy, kde-format
-#| msgid "Channels to layers"
 msgctxt "action"
 msgid "Channels to layers"
 msgstr "Kanalar til lag"
@@ -63345,7 +63168,6 @@ msgstr "<i>Svart</i>"
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
 #, fuzzy, kde-format
-#| msgid "Color Space"
 msgctxt "action"
 msgid "Color Space"
 msgstr "Fargerom"
@@ -63670,7 +63492,6 @@ msgstr "Eksport ikkje mogleg"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:119
 #, fuzzy
-#| msgid "No frames to export."
 msgid "No pages to export."
 msgstr "Ingen animasjonsbilete å eksportera."
 
@@ -64810,7 +64631,6 @@ msgstr "Forfattar av supplementærtekst"
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
 #, fuzzy, kde-format
-#| msgid "Document Tools"
 msgctxt "action"
 msgid "Document Tools"
 msgstr "Dokumentverktøy"
@@ -64860,7 +64680,6 @@ msgstr "Dei valde dokumenta er endra."
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
 #, fuzzy, kde-format
-#| msgid "Export Layers"
 msgctxt "action"
 msgid "Export Layers"
 msgstr "Eksporter lag"
@@ -64950,7 +64769,6 @@ msgstr "Vel mappe"
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
 #, fuzzy, kde-format
-#| msgid "Filter Manager"
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Filterhandsamar"
@@ -64981,7 +64799,6 @@ msgstr "Filter:"
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
 #, fuzzy, kde-format
-#| msgid "High Pass"
 msgctxt "action"
 msgid "High Pass"
 msgstr "Høgpass"
@@ -65117,7 +64934,6 @@ msgstr "Lag skript"
 #: plugins/python/krita_script_starter/krita_script_starter.action:4
 #: plugins/python/krita_script_starter/krita_script_starter.action:8
 #, fuzzy, kde-format
-#| msgid "BBD's Krita Script Starter"
 msgctxt "action"
 msgid "Krita Script Starter"
 msgstr "BBDs Krita-skriptstartar"
@@ -65424,15 +65240,12 @@ msgstr "Snøgginnstillingar"
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:145
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:335
 #, fuzzy
-#| msgid "Preset"
 msgid "Add Preset"
 msgstr "Ferdiginnstilling"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:149
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:397
 #, fuzzy
-#| msgctxt "@info:tooltip"
-#| msgid "Delete resource"
 msgid "Delete Preset"
 msgstr "Slett ressurs"
 
@@ -65442,8 +65255,6 @@ msgstr ""
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:319
 #, fuzzy
-#| msgctxt "@info:tooltip"
-#| msgid "Intersect (%1)"
 msgid "Enter opacity (%):"
 msgstr "Snitt (%1)"
 
@@ -65453,7 +65264,6 @@ msgstr ""
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:398
 #, fuzzy
-#| msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgid "Are you sure you want to delete this preset?"
 msgstr "Er du sikker på at du vil sletta maska <b>«%1»</b>?"
 
@@ -65484,7 +65294,6 @@ msgstr "Feilsøkjar"
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
 #, fuzzy, kde-format
-#| msgid "Scripter"
 msgctxt "action"
 msgid "Scripter"
 msgstr "Skriptkøyrar"
@@ -65494,7 +65303,7 @@ msgstr "Skriptkøyrar"
 msgid "Scripter"
 msgstr "Skriptkøyrar"
 
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:37
 msgid "Do you want to save the current document?"
 msgstr "Vil du lagra gjeldande dokument?"
 
@@ -65506,33 +65315,33 @@ msgstr "Feilsøk"
 msgid "Debug Ctrl+D"
 msgstr "Feilsøk (Ctrl + D)"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:26
 msgid "New"
 msgstr "Nytt"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:38
 msgid "The document has been modified."
 msgstr "Dokumentet er endra."
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:39
 msgid "Do you want to save your changes?"
 msgstr "Vil du lagra endringane?"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:29
 msgid "Open"
 msgstr "Opna"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:43
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:40
 msgid "Python Files"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:54
 msgid "Invalid File"
 msgstr "Ugyldig fil"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:55
 msgid "Open files with .py extension"
 msgstr "Opna filer med etternamnet .py"
 
@@ -65566,12 +65375,12 @@ msgstr "Køyr"
 msgid "Run Ctrl+R"
 msgstr "Køyr (Ctrl + R)"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:42
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:39
 msgid "Save Python File"
 msgstr "Lagra Python-fil"
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:27
 msgid "Save As"
 msgstr "Lagra som"
 
@@ -66448,7 +66257,6 @@ msgstr "Fargeplukkar"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:78
 #, fuzzy, kde-format
-#| msgid "Bounding Box"
 msgctxt "Ellipse tool placement mode"
 msgid "Bounding Box"
 msgstr "Avgrensingsboks"
@@ -66471,7 +66279,6 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:112
 #, fuzzy, kde-format
-#| msgid "Element"
 msgctxt "Ellipse tool placement mode option label"
 msgid "Placement:"
 msgstr "Element"
@@ -67002,7 +66809,6 @@ msgstr "Hent frå alle synlege lag"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:145
 #, fuzzy, kde-format
-#| msgid "Sample Current Layer"
 msgid "Sample Current Group"
 msgstr "Hent berre frå gjeldande lag"
 

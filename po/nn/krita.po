@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-27 03:06+0000\n"
+"POT-Creation-Date: 2026-11-28 03:03+0000\n"
 "PO-Revision-Date: 2026-10-10 12:35+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@nuug.no>\n"
@@ -11484,8 +11484,6 @@ msgstr "Oppdater avspelingsområde"
 #. i18n: context: text @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2527
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
 msgctxt "action"
 msgid "Interpolate Constant"
 msgstr "Interpolering"
@@ -11493,7 +11491,6 @@ msgstr "Interpolering"
 #. i18n: context: toolTip @ Action (interpolation_constant), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2529
 #, fuzzy, kde-format
-#| msgid "Hold constant value. No interpolation."
 msgctxt "action"
 msgid "Hold constant value. No interpolation."
 msgstr "Hald konstant verdi. Inga interpolering."
@@ -11501,8 +11498,6 @@ msgstr "Hald konstant verdi. Inga interpolering."
 #. i18n: context: text @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2539
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
 msgctxt "action"
 msgid "Interpolate Linear"
 msgstr "Interpolering"
@@ -11510,7 +11505,6 @@ msgstr "Interpolering"
 #. i18n: context: toolTip @ Action (interpolation_linear), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2541
 #, fuzzy, kde-format
-#| msgid "Linear interpolation."
 msgctxt "action"
 msgid "Linear interpolation."
 msgstr "Lineær interpolering."
@@ -11518,8 +11512,6 @@ msgstr "Lineær interpolering."
 #. i18n: context: text @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2551
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
 msgctxt "action"
 msgid "Interpolate Bezier"
 msgstr "Interpolering"
@@ -11527,7 +11519,6 @@ msgstr "Interpolering"
 #. i18n: context: toolTip @ Action (interpolation_bezier), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2553
 #, fuzzy, kde-format
-#| msgid "Bezier curve interpolation."
 msgctxt "action"
 msgid "Bezier curve interpolation."
 msgstr "Interpolering med Bezier-kurve."
@@ -11535,8 +11526,6 @@ msgstr "Interpolering med Bezier-kurve."
 #. i18n: context: text @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2563
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
 msgctxt "action"
 msgid "Interpolate Sharp"
 msgstr "Interpolering"
@@ -11544,7 +11533,6 @@ msgstr "Interpolering"
 #. i18n: context: toolTip @ Action (tangents_sharp), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2565
 #, fuzzy, kde-format
-#| msgid "Sharp interpolation tangents."
 msgctxt "action"
 msgid "Sharp interpolation tangents."
 msgstr "Skarpe interpolerings­tangentar."
@@ -11552,8 +11540,6 @@ msgstr "Skarpe interpolerings­tangentar."
 #. i18n: context: text @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2575
 #, fuzzy, kde-format
-#| msgctxt "Blending mode - Interpolation"
-#| msgid "Interpolation"
 msgctxt "action"
 msgid "Interpolate Smooth"
 msgstr "Interpolering"
@@ -11561,7 +11547,6 @@ msgstr "Interpolering"
 #. i18n: context: toolTip @ Action (tangents_smooth), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2577
 #, fuzzy, kde-format
-#| msgid "Smooth interpolation tangents."
 msgctxt "action"
 msgid "Smooth interpolation tangents."
 msgstr "Glatte interpolerings­tangentar."
@@ -11569,7 +11554,6 @@ msgstr "Glatte interpolerings­tangentar."
 #. i18n: context: text @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2587
 #, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
 msgctxt "action"
 msgid "Zoom to Fit Range"
 msgstr "Forstørr/forminsk til å visa alle kanalverdiane."
@@ -11577,7 +11561,6 @@ msgstr "Forstørr/forminsk til å visa alle kanalverdiane."
 #. i18n: context: toolTip @ Action (zoom_to_fit_range), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2589
 #, fuzzy, kde-format
-#| msgid "Zoom view to fit channel range."
 msgctxt "action"
 msgid "Zoom view to fit channel range."
 msgstr "Forstørr/forminsk til å visa alle kanalverdiane."
@@ -11585,7 +11568,6 @@ msgstr "Forstørr/forminsk til å visa alle kanalverdiane."
 #. i18n: context: text @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2599
 #, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
 msgctxt "action"
 msgid "Zoom to Fit Curve"
 msgstr "Forstørr/forminsk til å visa heile kurva."
@@ -11593,7 +11575,6 @@ msgstr "Forstørr/forminsk til å visa heile kurva."
 #. i18n: context: toolTip @ Action (zoom_to_fit_curve), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2601
 #, fuzzy, kde-format
-#| msgid "Zoom view to fit curve."
 msgctxt "action"
 msgid "Zoom view to fit curve."
 msgstr "Forstørr/forminsk til å visa heile kurva."
@@ -15720,8 +15701,6 @@ msgstr "Utvalshandlingar"
 #. i18n: context: text @ Action (configure_sap), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1621
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Cut selection to clipboard"
 msgctxt "action"
 msgid "Configure selection actions bar"
 msgstr "Klipp ut utvalet til utklippstavla"
@@ -16426,7 +16405,6 @@ msgstr "Arbeidsflate"
 #. i18n: context: text @ Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:4
 #, fuzzy, kde-format
-#| msgid "Resources"
 msgctxt "action"
 msgid "Resources"
 msgstr "Ressursar"
@@ -16434,8 +16412,6 @@ msgstr "Ressursar"
 #. i18n: context: text @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:7
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Manage Resources..."
 msgctxt "action"
 msgid "Get More Resources..."
 msgstr "Handsam ressursar …"
@@ -16446,7 +16422,6 @@ msgstr "Handsam ressursar …"
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:9 krita/kritamenu_android.action:10
 #, fuzzy, kde-format
-#| msgid "Storage Resources"
 msgctxt "action"
 msgid "Get More Resources"
 msgstr "Lagringsressursar"
@@ -16454,7 +16429,6 @@ msgstr "Lagringsressursar"
 #. i18n: context: text @ Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:19
 #, fuzzy, kde-format
-#| msgid "LUT Management"
 msgctxt "action"
 msgid "Management"
 msgstr "LUT-handsaming"
@@ -16462,7 +16436,6 @@ msgstr "LUT-handsaming"
 #. i18n: context: text @ Action (manage_donations), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:22
 #, fuzzy, kde-format
-#| msgid "Manage recordings..."
 msgctxt "action"
 msgid "Manage Supporter Benefits..."
 msgstr "Handsam opptak …"
@@ -16480,7 +16453,6 @@ msgstr ""
 #. i18n: context: text @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:34
 #, fuzzy, kde-format
-#| msgid "Manage recordings..."
 msgctxt "action"
 msgid "Manage Subscriptions..."
 msgstr "Handsam opptak …"
@@ -16491,7 +16463,6 @@ msgstr "Handsam opptak …"
 #. i18n: context: iconText @ Action (manage_subscriptions), Actions (Management), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:36 krita/kritamenu_android.action:37
 #, fuzzy, kde-format
-#| msgid "Description"
 msgctxt "action"
 msgid "Manage Subscriptions"
 msgstr "Skildring"
@@ -16499,7 +16470,6 @@ msgstr "Skildring"
 #. i18n: context: text @ Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:46
 #, fuzzy, kde-format
-#| msgid "User Interface"
 msgctxt "action"
 msgid "Interface"
 msgstr "Brukargrensesnitt"
@@ -16507,8 +16477,6 @@ msgstr "Brukargrensesnitt"
 #. i18n: context: text @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:49
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
 msgctxt "action"
 msgid "Change Interface Scale..."
 msgstr "Endra rektangel"
@@ -16519,8 +16487,6 @@ msgstr "Endra rektangel"
 #. i18n: context: iconText @ Action (change_interface_scale), Actions (Interface), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:51 krita/kritamenu_android.action:52
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
 msgctxt "action"
 msgid "Change Interface Scale"
 msgstr "Endra rektangel"
@@ -24946,13 +24912,11 @@ msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:210
 #, fuzzy, kde-format
-#| msgid "%1 (Copy)"
 msgid "%1 (hardware)"
 msgstr "%1 (kopi)"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:212
 #, fuzzy, kde-format
-#| msgid "%1 (Copy)"
 msgid "%1 (software)"
 msgstr "%1 (kopi)"
 
@@ -24970,32 +24934,27 @@ msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
 #, fuzzy, kde-format
-#| msgid "All supported formats"
 msgid "Unsupported format"
 msgstr "Alle støtta format"
 
 # Er snakk om filadresse for lagring av videoen. «Lagra til» er ei kort og grei omsetjing her.
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1261
 #, fuzzy, kde-format
-#| msgid "Video location:"
 msgid "Video encoder:"
 msgstr "Videoplassering:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
 #, fuzzy, kde-format
-#| msgid "Video duration:"
 msgid "Video bitrate:"
 msgstr "Videolengd:"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1269
 #, fuzzy, kde-format
-#| msgid "Audio menu"
 msgid "Audio encoder:"
 msgstr "Lydmeny"
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
 #, fuzzy, kde-format
-#| msgid "Bitrate:"
 msgid "Audio bitrate:"
 msgstr "Bitrate:"
 
@@ -25400,8 +25359,6 @@ msgstr "Lastar inn videodata … %1 animasjonsbilete er undersøkte."
 
 #: libs/ui/animation/KisLibavEncoderContext.h:102
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Intersect (%1)"
 msgid "Internal error (%1)"
 msgstr "Snitt (%1)"
 
@@ -25412,21 +25369,16 @@ msgstr ""
 
 #: libs/ui/animation/KisMediaEncoderFormatPreferencesDialog.cpp:30
 #, fuzzy, kde-format
-#| msgid "Hatching preferences"
 msgid "This format has no preferences."
 msgstr "Skraveringsinnstillingar"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:148
 #, fuzzy, kde-format
-#| msgctxt "Shows up instead of the name when there's no profile"
-#| msgid "No Profile Found"
 msgid "No frame files found"
 msgstr "Fann ikkje nokon profil"
 
 #: libs/ui/animation/KisMediaEncoderWrapper.cpp:208
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Render Animation..."
 msgid "Rendering animation..."
 msgstr "&Teikn opp animasjon …"
 
@@ -25437,8 +25389,6 @@ msgstr ""
 
 #: libs/ui/animation/KisVideoSaver.cpp:110
 #, fuzzy, kde-format
-#| msgctxt "%1 --- failing file name, %2 --- error message"
-#| msgid "Error during saving %1: %2"
 msgid "Error preparing audio file: %1"
 msgstr "Feil ved lagring %1: %2"
 
@@ -26518,14 +26468,12 @@ msgstr "Siste bilete:"
 #. i18n: ectx: property (text), widget (QPushButton, bnExportImages)
 #: libs/ui/animation/wdg_animationrenderer.ui:72
 #, fuzzy, kde-format
-#| msgid "Image"
 msgid "Images"
 msgstr "Bilete"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnExportVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:82
 #, fuzzy, kde-format
-#| msgid "Video FPS:"
 msgid "Video"
 msgstr "Video-FPS:"
 
@@ -27786,7 +27734,6 @@ msgstr "Auto (%1)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2181
 #, fuzzy, kde-format
-#| msgid "Current"
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
 msgstr "Gjeldande"
@@ -27799,7 +27746,6 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2183
 #, fuzzy, kde-format
-#| msgid "Current"
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
 msgstr "Gjeldande"
@@ -28326,13 +28272,11 @@ msgstr "Ikonbibliotek for ferdigpenslar"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:17
 #, fuzzy, kde-format
-#| msgid "Unsupported unit"
 msgid "Supporter Benefits"
 msgstr "Ikkje-støtta eining"
 
 #: libs/ui/dialogs/KisDonationManagementDialog.cpp:27
 #, fuzzy, kde-format
-#| msgid "Description"
 msgid "Manage Subscriptions"
 msgstr "Skildring"
 
@@ -28719,7 +28663,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, bnAndroidSupport)
 #: libs/ui/forms/KisWelcomePage.ui:1717 libs/ui/KisWelcomePageWidget.cpp:844
 #, fuzzy, kde-format
-#| msgid "Support Krita"
 msgid "Support Krita!"
 msgstr "Støtt Krita"
 
@@ -29520,7 +29463,6 @@ msgstr "Føretrekt oppteiknar (krev omstart):"
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredXcbGlApi)
 #: libs/ui/forms/wdgdisplaysettings.ui:111
 #, fuzzy, kde-format
-#| msgid "Preferred Renderer (needs restart):"
 msgid ""
 "Preferred openGL interface\n"
 "(needs restart):"
@@ -31654,7 +31596,7 @@ msgstr "Gjeldande ferdigpensel"
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:27
 #, kde-format
 msgid "Save"
 msgstr "Lagra"
@@ -34993,17 +34935,11 @@ msgstr ""
 
 #: libs/ui/kis_selection_actions_panel.cpp:96
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Cut selection to clipboard"
 msgid "Toggle pin selection actions bar"
 msgstr "Klipp ut utvalet til utklippstavla"
 
 #: libs/ui/kis_selection_actions_panel.cpp:152
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "The 'use selection as boundary' checkbox in fill tool to use selection "
-#| "borders as boundary when filling"
-#| msgid "Use selection as boundary"
 msgid "Disable selection actions bar"
 msgstr "Bruk utval som grense"
 
@@ -35978,7 +35914,6 @@ msgstr ""
 
 #: libs/ui/KisImportExportFilter.cpp:179
 #, fuzzy, kde-format
-#| msgid "The file could not be opened."
 msgid "%1 could not be opened"
 msgstr "Klarte ikkje opna fila."
 
@@ -36688,17 +36623,17 @@ msgstr "Bruk denne malen"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Du kan ikkje dra og sleppa fargar på den valde lagtypen."
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:422
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:427
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Laget er låst og usynleg."
 
-#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:424
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:429
 #, kde-format
 msgid "Layer is locked."
 msgstr "Laget er låst."
 
-#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:426
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:431
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Laget er usynleg."
@@ -38022,17 +37957,17 @@ msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "Tøm"
 
-#: libs/ui/tool/kis_tool_utils.cpp:325
+#: libs/ui/tool/kis_tool_utils.cpp:330
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr "Penselstorleik: %1 pikslar"
 
-#: libs/ui/tool/kis_tool_utils.cpp:428
+#: libs/ui/tool/kis_tool_utils.cpp:433
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr "Laget kan berre teiknast på i lasurmodus."
 
-#: libs/ui/tool/kis_tool_utils.cpp:430
+#: libs/ui/tool/kis_tool_utils.cpp:435
 #, kde-format
 msgid "Group not editable."
 msgstr "Gruppa er ikkje redigerbar."
@@ -39370,9 +39305,6 @@ msgstr ""
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:112
 #, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1\n"
-#| "Reason: %2"
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
@@ -40059,13 +39991,11 @@ msgstr ""
 
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:25
 #, fuzzy, kde-format
-#| msgid "Edit Resource Bundle"
 msgid "Download Resource Bundles"
 msgstr "Rediger ressurssamling"
 
 #: libs/ui/widgets/KisDonationManagementWidget.cpp:30
 #, fuzzy, kde-format
-#| msgid "Description"
 msgid "Manage Subscription"
 msgstr "Skildring"
 
@@ -44652,8 +44582,6 @@ msgstr "Vil du avbryta kodinga av intervallvideoen?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:328
 #, fuzzy, kde-format
-#| msgctxt "Status for the export of the video record"
-#| msgid "Starting FFmpeg..."
 msgctxt "Status for the export of the video record"
 msgid "Starting exporter..."
 msgstr "Startar FFmpeg …"
@@ -44723,7 +44651,6 @@ msgstr "Intervallvideoen vert no koda …"
 
 #: plugins/dockers/recorder/recorder_export.cpp:869
 #, fuzzy, kde-format
-#| msgid "Export failed. FFmpeg message:"
 msgid "Export failed. Error message:"
 msgstr "Feil ved eksport. Feilmelding frå FFmpeg:"
 
@@ -50584,8 +50511,6 @@ msgstr "Kva ressurs vil du importera denne %1-filene som?"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:20
 #, fuzzy, kde-format
-#| msgctxt "In bundle manager; press button to create a new bundle"
-#| msgid "Create Bundle"
 msgid "Supporter Bundles"
 msgstr "Lag ny ressurssamling"
 
@@ -50596,7 +50521,6 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:96
 #, fuzzy, kde-format
-#| msgid "No picture available."
 msgid "No supporter bundles available."
 msgstr "Ingen bilete er tilgjengelege."
 
@@ -50618,7 +50542,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, m_btnRetry)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:106
 #, fuzzy, kde-format
-#| msgid "Symmetry"
 msgid "Retry"
 msgstr "Symmetri"
 
@@ -50629,7 +50552,6 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:84
 #, fuzzy, kde-format
-#| msgid "Invalid File"
 msgid "Invalid checksums file."
 msgstr "Ugyldig fil"
 
@@ -50655,13 +50577,11 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:123
 #, fuzzy, kde-format
-#| msgid "The document has been modified."
 msgid "This service has been discontinued."
 msgstr "Dokumentet er endra."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:125
 #, fuzzy, kde-format
-#| msgid "Unknown error: %1"
 msgid "Unknown service error %1."
 msgstr "Ukjend feil: %1"
 
@@ -50672,33 +50592,26 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:191
 #, fuzzy, kde-format
-#| msgid "Invalid value."
 msgid "Invalid version."
 msgstr "Ugyldig verdi."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:199
 #, fuzzy, kde-format
-#| msgctxt "invalid profile name"
-#| msgid "Invalid name."
 msgid "Invalid checksum."
 msgstr "Ugyldig namn."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:205
 #, fuzzy, kde-format
-#| msgctxt "Warning message"
-#| msgid "Failed to rename the resource."
 msgid "Failed to create directory %1."
 msgstr "Klarte ikkje endra namn på ressursen."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:212
 #, fuzzy, kde-format
-#| msgid "Failed to open %1."
 msgid "Failed to open %1 for writing."
 msgstr "Klarte ikkje opna %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:218
 #, fuzzy, kde-format
-#| msgid "Failed to open %1."
 msgid "Failed to write %1."
 msgstr "Klarte ikkje opna %1."
 
@@ -50709,8 +50622,6 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:322
 #, fuzzy, kde-format
-#| msgctxt "a tooltip shown when a file layer cannot load its linked file"
-#| msgid "Failed to load linked file: %1"
 msgid "Failed to retrieve bundles: %1"
 msgstr "Klarte ikkje lasta inn tilknytt fil: %1"
 
@@ -50723,7 +50634,6 @@ msgstr[1] "Ferdigpenslar"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:32
 #, fuzzy, kde-format
-#| msgid "Brush tips"
 msgid "%1 brush tips"
 msgid_plural "%1 brush tips"
 msgstr[0] "Penseltuppar"
@@ -50731,8 +50641,6 @@ msgstr[1] "Penseltuppar"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:35
 #, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/18_texture-bark.png"
-#| msgid "18 texture-bark"
 msgid "%1 texture patterns"
 msgid_plural "%1 texture patterns"
 msgstr[0] "18 Tekstur, bark"
@@ -50752,27 +50660,23 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:55
 #, fuzzy, kde-format
-#| msgid "%1 (Copy)"
 msgid "%1 (owned)"
 msgstr "%1 (kopi)"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:83
 #, fuzzy, kde-format
-#| msgid "Contrast:"
 msgctxt "in-app purchases, prefix for a list of what a bundle contains"
 msgid "Contains:"
 msgstr "Kontrast:"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:92
 #, fuzzy, kde-format
-#| msgid "No picture available."
 msgctxt "in-app purchases, a bundle that the user can't acquire"
 msgid "Not available."
 msgstr "Ingen bilete er tilgjengelege."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:95
 #, fuzzy, kde-format
-#| msgid "Available"
 msgctxt ""
 "in-app purchases, prefix for a list of which purchases make a bundle "
 "available"
@@ -50792,7 +50696,6 @@ msgstr "%1"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:194
 #, fuzzy, kde-format
-#| msgid "Invalid File"
 msgid "Invalid bundle size"
 msgstr "Ugyldig fil"
 
@@ -50808,27 +50711,22 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:216
 #, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Failed to import the resource"
 msgid "Failed to import bundle"
 msgstr "Klarte ikkje importera ressursen"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:241
 #, fuzzy, kde-format
-#| msgid "Could not load profile: %1."
 msgid "Bundle download failed: %1"
 msgstr "Klarte ikkje lasta profil: %1."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:241
 #, fuzzy, kde-format
-#| msgid "Conversion failed"
 msgid "Download failed"
 msgstr "Feil ved konvertering"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_btnGet)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:147
 #, fuzzy, kde-format
-#| msgid "Down"
 msgid "Download"
 msgstr "Ned"
 
@@ -50978,7 +50876,6 @@ msgstr "Handsam ressursar …"
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:50
 #, fuzzy, kde-format
-#| msgid "Manage Resources..."
 msgid "Get More Resources..."
 msgstr "Handsam ressursar …"
 
@@ -51014,8 +50911,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, bnSupport)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:147
 #, fuzzy, kde-format
-#| msgctxt "In bundle manager; press button to create a new bundle"
-#| msgid "Create Bundle"
 msgid "Get More Bundles"
 msgstr "Lag ny ressurssamling"
 
@@ -51304,14 +51199,12 @@ msgstr "Ikkje gjer noko"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, fuzzy, kde-format
-#| msgid "S-Pen Actions"
 msgid "S-Pen Pro Air Actions"
 msgstr "S-penn-handlingar"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:4
 #, fuzzy, kde-format
-#| msgid "S-Pen Actions"
 msgctxt "action"
 msgid "S-Pen Pro Air Actions"
 msgstr "S-penn-handlingar"
@@ -51319,8 +51212,6 @@ msgstr "S-penn-handlingar"
 #. i18n: context: text @ Action (spen_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:8
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Click"
 msgctxt "action"
 msgid "S-Pen Pro Air Button Click"
 msgstr "S-penn: klikk"
@@ -51328,8 +51219,6 @@ msgstr "S-penn: klikk"
 #. i18n: context: text @ Action (spen_double_click), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:21
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Button Double Click"
 msgctxt "action"
 msgid "S-Pen Pro Air Button Double Click"
 msgstr "S-penn: dobbeltklikk"
@@ -51337,8 +51226,6 @@ msgstr "S-penn: dobbeltklikk"
 #. i18n: context: text @ Action (spen_swipe_up), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:34
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Up"
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Up"
 msgstr "S-penn: sveip opp"
@@ -51346,8 +51233,6 @@ msgstr "S-penn: sveip opp"
 #. i18n: context: text @ Action (spen_swipe_down), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:47
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Down"
 msgctxt "action"
 msgid "S-Pen Pro AirGesture Swipe Down"
 msgstr "S-penn: sveip ned"
@@ -51355,8 +51240,6 @@ msgstr "S-penn: sveip ned"
 #. i18n: context: text @ Action (spen_swipe_left), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:60
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Left"
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Left"
 msgstr "S-penn: sveip til venstre"
@@ -51364,8 +51247,6 @@ msgstr "S-penn: sveip til venstre"
 #. i18n: context: text @ Action (spen_swipe_right), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:73
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Swipe Right"
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Swipe Right"
 msgstr "S-penn: sveip til høgre"
@@ -51373,8 +51254,6 @@ msgstr "S-penn: sveip til høgre"
 #. i18n: context: text @ Action (spen_circle_cw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:86
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Clockwise"
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Clockwise"
 msgstr "S-penn: sirkel med klokka"
@@ -51382,8 +51261,6 @@ msgstr "S-penn: sirkel med klokka"
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "S-Pen Gesture Circle Counter-Clockwise"
 msgctxt "action"
 msgid "S-Pen Pro Air Gesture Circle Counter-Clockwise"
 msgstr "S-penn: sirkel mot klokka"
@@ -57113,9 +56990,6 @@ msgstr "Adam7-linjering"
 #. i18n: ectx: property (text), widget (QLabel, textLabel4_2)
 #: plugins/impex/png/kis_wdg_options_png.ui:143
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "The compression will take a long time; saving the file will be slow."
-#| msgid "Small File Size"
 msgctxt "The compression will take a long time; saving the file will be slow."
 msgid "Small file size"
 msgstr "Liten filstorleik"
@@ -61953,7 +61827,7 @@ msgstr "Tilfeldig storleik"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:46
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:29
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
 #, kde-format
 msgid "Settings"
@@ -62352,7 +62226,6 @@ msgstr "Verdi for retning/helling-blanding"
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:4
 #: plugins/python/assignprofiledialog/assignprofiledialog.action:8
 #, fuzzy, kde-format
-#| msgid "Assign Profile to Image"
 msgctxt "action"
 msgid "Assign Profile to Image"
 msgstr "Tildel profil til bilete"
@@ -62376,7 +62249,6 @@ msgstr "Tildel profil til bilete"
 #: plugins/python/channels2layers/channels2layers.action:4
 #: plugins/python/channels2layers/channels2layers.action:8
 #, fuzzy, kde-format
-#| msgid "Channels to layers"
 msgctxt "action"
 msgid "Channels to layers"
 msgstr "Kanalar til lag"
@@ -62463,7 +62335,6 @@ msgstr "<i>Svart</i>"
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
 #, fuzzy, kde-format
-#| msgid "Color Space"
 msgctxt "action"
 msgid "Color Space"
 msgstr "Fargerom"
@@ -62788,7 +62659,6 @@ msgstr "Eksport ikkje mogleg"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:119
 #, fuzzy
-#| msgid "No frames to export."
 msgid "No pages to export."
 msgstr "Ingen animasjonsbilete å eksportera."
 
@@ -63928,7 +63798,6 @@ msgstr "Forfattar av supplementærtekst"
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
 #, fuzzy, kde-format
-#| msgid "Document Tools"
 msgctxt "action"
 msgid "Document Tools"
 msgstr "Dokumentverktøy"
@@ -63978,7 +63847,6 @@ msgstr "Dei valde dokumenta er endra."
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
 #, fuzzy, kde-format
-#| msgid "Export Layers"
 msgctxt "action"
 msgid "Export Layers"
 msgstr "Eksporter lag"
@@ -64068,7 +63936,6 @@ msgstr "Vel mappe"
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
 #, fuzzy, kde-format
-#| msgid "Filter Manager"
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Filterhandsamar"
@@ -64099,7 +63966,6 @@ msgstr "Filter:"
 #: plugins/python/highpass/highpass.action:4
 #: plugins/python/highpass/highpass.action:8
 #, fuzzy, kde-format
-#| msgid "High Pass"
 msgctxt "action"
 msgid "High Pass"
 msgstr "Høgpass"
@@ -64235,7 +64101,6 @@ msgstr "Lag skript"
 #: plugins/python/krita_script_starter/krita_script_starter.action:4
 #: plugins/python/krita_script_starter/krita_script_starter.action:8
 #, fuzzy, kde-format
-#| msgid "BBD's Krita Script Starter"
 msgctxt "action"
 msgid "Krita Script Starter"
 msgstr "BBDs Krita-skriptstartar"
@@ -64566,7 +64431,6 @@ msgstr "Feilsøkjar"
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
 #, fuzzy, kde-format
-#| msgid "Scripter"
 msgctxt "action"
 msgid "Scripter"
 msgstr "Skriptkøyrar"
@@ -64576,7 +64440,7 @@ msgstr "Skriptkøyrar"
 msgid "Scripter"
 msgstr "Skriptkøyrar"
 
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:37
 msgid "Do you want to save the current document?"
 msgstr "Vil du lagra gjeldande dokument?"
 
@@ -64588,33 +64452,33 @@ msgstr "Feilsøk"
 msgid "Debug Ctrl+D"
 msgstr "Feilsøk (Ctrl + D)"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:26
 msgid "New"
 msgstr "Nytt"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:38
 msgid "The document has been modified."
 msgstr "Dokumentet er endra."
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:39
 msgid "Do you want to save your changes?"
 msgstr "Vil du lagra endringane?"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:29
 msgid "Open"
 msgstr "Opna"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:43
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:40
 msgid "Python Files"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:54
 msgid "Invalid File"
 msgstr "Ugyldig fil"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:55
 msgid "Open files with .py extension"
 msgstr "Opna filer med etternamnet .py"
 
@@ -64648,12 +64512,12 @@ msgstr "Køyr"
 msgid "Run Ctrl+R"
 msgstr "Køyr (Ctrl + R)"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:42
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:39
 msgid "Save Python File"
 msgstr "Lagra Python-fil"
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:27
 msgid "Save As"
 msgstr "Lagra som"
 
@@ -68495,7 +68359,6 @@ msgstr ""
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:47
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:66
 #, fuzzy, kde-format
-#| msgid "Lock the width"
 msgid "Thick gap width"
 msgstr "Lås breidda"
 
@@ -68510,7 +68373,6 @@ msgstr ""
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:91
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:107
 #, fuzzy, kde-format
-#| msgid "Line width"
 msgid "Thin gap width"
 msgstr "Linjebreidd"
 
@@ -68525,10 +68387,6 @@ msgstr ""
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:132
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:148
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Special_dyna_dots.kpp"
-#| msgid "Special dyna dots"
 msgid "Special gap width"
 msgstr "Spesial, dynaprikkar"
 
@@ -68555,7 +68413,6 @@ msgstr ""
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:183
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:193
 #, fuzzy, kde-format
-#| msgid "Horizontal Wave"
 msgid "Horizontal gaps type:"
 msgstr "Vassrett bølgje"
 
@@ -68564,7 +68421,6 @@ msgstr "Vassrett bølgje"
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:203
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:213
 #, fuzzy, kde-format
-#| msgid "Vertical Wave"
 msgid "Vertical gaps type:"
 msgstr "Loddrett bølgje"
 
@@ -68587,8 +68443,6 @@ msgstr ""
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:240
 #: plugins/tools/tool_knife/KisToolKnifeOptionsWidget.ui:250
 #, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Instant preview threshold:"
 msgid "Diagonal type angle threshold:"
 msgstr "Grense for kjapp førehandsvising:"
 

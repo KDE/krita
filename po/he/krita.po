@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-27 03:06+0000\n"
+"POT-Creation-Date: 2026-11-28 03:03+0000\n"
 "PO-Revision-Date: 2026-11-26 10:12+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <kde-l10n-he@kde.org>\n"
@@ -31399,7 +31399,7 @@ msgstr "ערכת המכחולים הנוכחית"
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:27
 #, kde-format
 msgid "Save"
 msgstr "שמירה"
@@ -36313,17 +36313,17 @@ msgstr "להשתמש בתבנית הזאת"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "לא ניתן לגרור צבעים בסוג השכבה הנבחר."
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:422
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:427
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "השכבה נעולה ומוסתרת."
 
-#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:424
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:429
 #, kde-format
 msgid "Layer is locked."
 msgstr "השכבה נעולה."
 
-#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:426
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:431
 #, kde-format
 msgid "Layer is invisible."
 msgstr "השכבה גלויה."
@@ -37620,17 +37620,17 @@ msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "פינוי"
 
-#: libs/ui/tool/kis_tool_utils.cpp:325
+#: libs/ui/tool/kis_tool_utils.cpp:330
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr "גודל מכחול: %1 פיקסלים"
 
-#: libs/ui/tool/kis_tool_utils.cpp:428
+#: libs/ui/tool/kis_tool_utils.cpp:433
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr "אפשר לצבוע על השכבה במצב שטיפה בלבד."
 
-#: libs/ui/tool/kis_tool_utils.cpp:430
+#: libs/ui/tool/kis_tool_utils.cpp:435
 #, kde-format
 msgid "Group not editable."
 msgstr "הקבוצה לא פתוחה לעריכה."
@@ -60659,7 +60659,7 @@ msgstr "גודל אקראי"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:46
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:29
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
 #, kde-format
 msgid "Settings"
@@ -63191,7 +63191,7 @@ msgstr "כתב תחתי"
 msgid "Scripter"
 msgstr "כתב תחתי"
 
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:37
 msgid "Do you want to save the current document?"
 msgstr "לשמור את המסמך הנוכחי?"
 
@@ -63203,33 +63203,33 @@ msgstr "ניפוי שגיאות"
 msgid "Debug Ctrl+D"
 msgstr "ניפוי שגיאות Ctrl+D"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:26
 msgid "New"
 msgstr "חדש"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:38
 msgid "The document has been modified."
 msgstr "המסמך נערך."
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:39
 msgid "Do you want to save your changes?"
 msgstr "לשמור את השינויים שלך?"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:29
 msgid "Open"
 msgstr "פתיחה"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:43
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:40
 msgid "Python Files"
 msgstr "קובצי Python"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:54
 msgid "Invalid File"
 msgstr "קובץ שגוי"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:55
 msgid "Open files with .py extension"
 msgstr "פתיחת קבצים עם סיומת ‎.py"
 
@@ -63263,12 +63263,12 @@ msgstr "הרצה"
 msgid "Run Ctrl+R"
 msgstr "הרצה Ctrl+R"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:42
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:39
 msgid "Save Python File"
 msgstr "שמירת קובץ Python"
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:27
 msgid "Save As"
 msgstr "שמירה בשם"
 

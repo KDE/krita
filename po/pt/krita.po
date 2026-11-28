@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-27 03:06+0000\n"
+"POT-Creation-Date: 2026-11-28 03:03+0000\n"
 "PO-Revision-Date: 2023-07-13 00:28+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -32573,7 +32573,7 @@ msgstr "Predefinição actual do pincel"
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:27
 #, kde-format
 msgid "Save"
 msgstr "Gravar"
@@ -37800,17 +37800,17 @@ msgstr "Usar Este Modelo"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Não pode arrastar e largar cores no tipo de camada seleccionada."
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:422
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:427
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "A camada está bloqueada e invisível."
 
-#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:424
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:429
 #, kde-format
 msgid "Layer is locked."
 msgstr "A camada está bloqueada."
 
-#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:426
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:431
 #, kde-format
 msgid "Layer is invisible."
 msgstr "A camada está invisível."
@@ -39131,17 +39131,17 @@ msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "Limpar"
 
-#: libs/ui/tool/kis_tool_utils.cpp:325
+#: libs/ui/tool/kis_tool_utils.cpp:330
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr "Tamanho do Pincel: %1 px"
 
-#: libs/ui/tool/kis_tool_utils.cpp:428
+#: libs/ui/tool/kis_tool_utils.cpp:433
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr "A camada só pode ser pintada no Modo de Lavagem."
 
-#: libs/ui/tool/kis_tool_utils.cpp:430
+#: libs/ui/tool/kis_tool_utils.cpp:435
 #, kde-format
 msgid "Group not editable."
 msgstr "O grupo não está editável."
@@ -63584,7 +63584,7 @@ msgstr "Tamanho aleatório"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:46
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:29
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
 #, kde-format
 msgid "Settings"
@@ -66224,7 +66224,7 @@ msgstr "Programador"
 msgid "Scripter"
 msgstr "Programador"
 
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:37
 msgid "Do you want to save the current document?"
 msgstr "Deseja gravar o documento actual?"
 
@@ -66236,35 +66236,35 @@ msgstr "Depurar"
 msgid "Debug Ctrl+D"
 msgstr "Depurar Ctrl+D"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:26
 msgid "New"
 msgstr "Novo"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:38
 msgid "The document has been modified."
 msgstr "O documento foi modificado."
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:39
 msgid "Do you want to save your changes?"
 msgstr "Deseja gravar as suas alterações?"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:29
 msgid "Open"
 msgstr "Abrir"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:43
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:40
 #, fuzzy
 #| msgid "Save Python File"
 msgid "Python Files"
 msgstr "Gravar o Ficheiro em Python"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:54
 msgid "Invalid File"
 msgstr "Ficheiro Inválido"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:55
 msgid "Open files with .py extension"
 msgstr "Abrir os ficheiros com a extensão .py"
 
@@ -66298,12 +66298,12 @@ msgstr "Executar"
 msgid "Run Ctrl+R"
 msgstr "Executar Ctrl+R"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:42
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:39
 msgid "Save Python File"
 msgstr "Gravar o Ficheiro em Python"
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:27
 msgid "Save As"
 msgstr "Gravar Como"
 

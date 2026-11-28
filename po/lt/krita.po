@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-27 03:06+0000\n"
+"POT-Creation-Date: 2026-11-28 03:03+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -32285,7 +32285,7 @@ msgstr "Dabartinis teptuko ruošinys"
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:27
 #, kde-format
 msgid "Save"
 msgstr "Išsaugoti"
@@ -37298,18 +37298,18 @@ msgstr "Naudoti šį šabloną"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:422
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:427
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer is locked and invisible."
 msgstr "Sluoksnis yra užrakintas."
 
-#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:424
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:429
 #, kde-format
 msgid "Layer is locked."
 msgstr "Sluoksnis yra užrakintas."
 
-#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:426
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:431
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer is invisible."
@@ -38618,18 +38618,18 @@ msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr "Išvalyti"
 
-#: libs/ui/tool/kis_tool_utils.cpp:325
+#: libs/ui/tool/kis_tool_utils.cpp:330
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush Size: %1 px"
 msgstr "Teptuko dydis"
 
-#: libs/ui/tool/kis_tool_utils.cpp:428
+#: libs/ui/tool/kis_tool_utils.cpp:433
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:430
+#: libs/ui/tool/kis_tool_utils.cpp:435
 #, fuzzy, kde-format
 msgid "Group not editable."
 msgstr "Sluoksnis yra užrakintas."
@@ -62562,7 +62562,7 @@ msgstr "Atsitiktinis dydis"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:46
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:29
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
 #, kde-format
 msgid "Settings"
@@ -65488,7 +65488,7 @@ msgstr "Apatinis indeksas"
 msgid "Scripter"
 msgstr "Apatinis indeksas"
 
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:37
 #, fuzzy
 #| msgid "Do you really want to remove that group?"
 msgid "Do you want to save the current document?"
@@ -65502,39 +65502,39 @@ msgstr ""
 msgid "Debug Ctrl+D"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:26
 msgid "New"
 msgstr "Naujas"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:38
 msgid "The document has been modified."
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:39
 #, fuzzy
 #| msgid "Do you really want to remove that group?"
 msgid "Do you want to save your changes?"
 msgstr "Ar tikrai norite pašalinti šią grupę?"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:29
 #, fuzzy
 msgid "Open"
 msgstr "&Atverti"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:43
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:40
 #, fuzzy
 msgid "Python Files"
 msgstr "Dalintis spalvų profiliu"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:54
 #, fuzzy
 #| msgid "Invalid value."
 msgid "Invalid File"
 msgstr "Neteisinga reikšmė."
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:55
 msgid "Open files with .py extension"
 msgstr ""
 
@@ -65573,13 +65573,13 @@ msgstr ""
 msgid "Run Ctrl+R"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:42
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:39
 #, fuzzy
 msgid "Save Python File"
 msgstr "Dalintis spalvų profiliu"
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:27
 #, fuzzy
 msgid "Save As"
 msgstr "Išsaugoti makro"

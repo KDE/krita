@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-27 03:06+0000\n"
+"POT-Creation-Date: 2026-11-28 03:03+0000\n"
 "PO-Revision-Date: 2007-05-13 00:25+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@nuug.no>\n"
@@ -16334,7 +16334,6 @@ msgstr ""
 #. i18n: context: text @ Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:4
 #, fuzzy, kde-format
-#| msgid "&Resources"
 msgctxt "action"
 msgid "Resources"
 msgstr "&Resurssat"
@@ -16352,7 +16351,6 @@ msgstr ""
 #. i18n: context: iconText @ Action (manage_supporter_bundles), Actions (Resources), ActionCollection (Supporter Benefits)
 #: krita/kritamenu_android.action:9 krita/kritamenu_android.action:10
 #, fuzzy, kde-format
-#| msgid "&Resources"
 msgctxt "action"
 msgid "Get More Resources"
 msgstr "&Resurssat"
@@ -24768,7 +24766,6 @@ msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:364
 #, fuzzy, kde-format
-#| msgid "Unsupported Key"
 msgid "Unsupported format"
 msgstr "Doarjjokeahtes boallu"
 
@@ -24779,7 +24776,6 @@ msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1265
 #, fuzzy, kde-format
-#| msgid "Bitrate:"
 msgid "Video bitrate:"
 msgstr "Bihttáleaktu:"
 
@@ -24790,7 +24786,6 @@ msgstr ""
 
 #: libs/ui/animation/KisAndroidMediaEncoderRunnable.cpp:1273
 #, fuzzy, kde-format
-#| msgid "Bitrate:"
 msgid "Audio bitrate:"
 msgstr "Bihttáleaktu:"
 
@@ -27452,7 +27447,6 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2181
 #, fuzzy, kde-format
-#| msgid "Current"
 msgctxt "@item:inlistbox"
 msgid "GLX (current)"
 msgstr "Dálá"
@@ -27465,7 +27459,6 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2183
 #, fuzzy, kde-format
-#| msgid "Current"
 msgctxt "@item:inlistbox"
 msgid "EGL (current)"
 msgstr "Dálá"
@@ -31160,7 +31153,7 @@ msgstr ""
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:27
 #, kde-format
 msgid "Save"
 msgstr ""
@@ -35950,17 +35943,17 @@ msgstr ""
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:422
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool_utils.cpp:427
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr ""
 
-#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:424
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool_utils.cpp:429
 #, kde-format
 msgid "Layer is locked."
 msgstr ""
 
-#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:426
+#: libs/ui/KisView.cpp:765 libs/ui/tool/kis_tool_utils.cpp:431
 #, kde-format
 msgid "Layer is invisible."
 msgstr ""
@@ -37235,17 +37228,17 @@ msgctxt "(qtundo-format)"
 msgid "Clear"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:325
+#: libs/ui/tool/kis_tool_utils.cpp:330
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:428
+#: libs/ui/tool/kis_tool_utils.cpp:433
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:430
+#: libs/ui/tool/kis_tool_utils.cpp:435
 #, kde-format
 msgid "Group not editable."
 msgstr ""
@@ -38351,9 +38344,6 @@ msgstr ""
 #: libs/ui/widgets/kis_custom_image_widget.cc:434
 #: plugins/dockers/logdocker/LogDockerDock.cpp:112
 #, fuzzy, kde-format
-#| msgid ""
-#| "Could not save %1\n"
-#| "Reason: %2"
 msgid ""
 "Could not save %1.\n"
 "Reason: %2."
@@ -49378,7 +49368,6 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.cpp:96
 #, fuzzy, kde-format
-#| msgid "No picture available."
 msgid "No supporter bundles available."
 msgstr "Eai leat govat olamuttus."
 
@@ -49400,7 +49389,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, m_btnRetry)
 #: plugins/extensions/resourcemanager/KisSupporterBundlesDialog.ui:106
 #, fuzzy, kde-format
-#| msgid "Geometry"
 msgid "Retry"
 msgstr "Geometriija"
 
@@ -49441,7 +49429,6 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:125
 #, fuzzy, kde-format
-#| msgid "Unknown error."
 msgid "Unknown service error %1."
 msgstr "Amas meattáhus."
 
@@ -49452,7 +49439,6 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundlesFetcher.cpp:191
 #, fuzzy, kde-format
-#| msgid "Invalid"
 msgid "Invalid version."
 msgstr "Gustohis"
 
@@ -49526,21 +49512,18 @@ msgstr ""
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:83
 #, fuzzy, kde-format
-#| msgid "Contact:"
 msgctxt "in-app purchases, prefix for a list of what a bundle contains"
 msgid "Contains:"
 msgstr "Oktavuohta:"
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:92
 #, fuzzy, kde-format
-#| msgid "No picture available."
 msgctxt "in-app purchases, a bundle that the user can't acquire"
 msgid "Not available."
 msgstr "Eai leat govat olamuttus."
 
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.cpp:95
 #, fuzzy, kde-format
-#| msgid "A&vailable actions:"
 msgctxt ""
 "in-app purchases, prefix for a list of which purchases make a bundle "
 "available"
@@ -49591,7 +49574,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, m_btnGet)
 #: plugins/extensions/resourcemanager/KisSupporterBundleWidget.ui:147
 #, fuzzy, kde-format
-#| msgid "Down"
 msgid "Download"
 msgstr "Vulos"
 
@@ -60179,7 +60161,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:46
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:29
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
 #, kde-format
 msgid "Settings"
@@ -60678,7 +60660,6 @@ msgstr ""
 #: plugins/python/colorspace/colorspace.action:4
 #: plugins/python/colorspace/colorspace.action:8
 #, fuzzy, kde-format
-#| msgid "Color Balance"
 msgctxt "action"
 msgid "Color Space"
 msgstr "Ivdnidássedeaddu"
@@ -62051,7 +62032,6 @@ msgstr ""
 #: plugins/python/documenttools/documenttools.action:4
 #: plugins/python/documenttools/documenttools.action:8
 #, fuzzy, kde-format
-#| msgid "Document Info"
 msgctxt "action"
 msgid "Document Tools"
 msgstr "Dokumeantadieđut"
@@ -62100,7 +62080,6 @@ msgstr ""
 #: plugins/python/exportlayers/exportlayers.action:4
 #: plugins/python/exportlayers/exportlayers.action:8
 #, fuzzy, kde-format
-#| msgid "Layers"
 msgctxt "action"
 msgid "Export Layers"
 msgstr "Laiggahagat"
@@ -62189,7 +62168,6 @@ msgstr ""
 #: plugins/python/filtermanager/filtermanager.action:4
 #: plugins/python/filtermanager/filtermanager.action:8
 #, fuzzy, kde-format
-#| msgid "Alternate"
 msgctxt "action"
 msgid "Filter Manager"
 msgstr "Eavttolaš"
@@ -62669,7 +62647,6 @@ msgstr ""
 #: plugins/python/scripter/scripter.action:4
 #: plugins/python/scripter/scripter.action:8
 #, fuzzy, kde-format
-#| msgid "Scripts"
 msgctxt "action"
 msgid "Scripter"
 msgstr "Skriptat"
@@ -62679,7 +62656,7 @@ msgstr "Skriptat"
 msgid "Scripter"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:37
 msgid "Do you want to save the current document?"
 msgstr ""
 
@@ -62691,33 +62668,33 @@ msgstr "Dihkeohcan"
 msgid "Debug Ctrl+D"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:26
 msgid "New"
 msgstr "Ođđa"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:36
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:38
 msgid "The document has been modified."
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:39
 msgid "Do you want to save your changes?"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:29
 msgid "Open"
 msgstr "Raba"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:38
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:43
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:40
 msgid "Python Files"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:52
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:54
 msgid "Invalid File"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:53
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:55
 msgid "Open files with .py extension"
 msgstr ""
 
@@ -62751,12 +62728,12 @@ msgstr "Vuoje"
 msgid "Run Ctrl+R"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:37
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:42
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:39
 msgid "Save Python File"
 msgstr ""
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:27
 msgid "Save As"
 msgstr "Vurke nugo"
 
